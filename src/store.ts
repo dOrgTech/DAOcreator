@@ -14,7 +14,8 @@ export function configureStore(history: History, initialState?: any): Store<any>
     initialState,
     composeEnhancers(
       applyMiddleware(
-        routerMiddleware(history)
+        routerMiddleware(history),
+        thunkMiddleware,
       )
     )
   );
