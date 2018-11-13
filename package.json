@@ -4,9 +4,12 @@
   "scripts": {
     "app-start": "react-scripts-ts start",
     "app-build": "react-scripts-ts build",
-    "app-eject": "react-scripts-ts eject"
+    "app-eject": "react-scripts-ts eject",
+    "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
+    "migrate-arc": "npm explore @daostack/arc.js -- npm start migrateContracts"
   },
   "dependencies": {
+    "@daostack/arc.js": "0.0.0-alpha.88",
     "@material-ui/core": "^3.2.2",
     "connected-react-router": "^4.5.0",
     "history": "^4.7.2",
@@ -17,7 +20,7 @@
     "react-router": "^4.3.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^0.20.1"
   },
   "devDependencies": {
     "@types/history": "^4.7.2",
