@@ -1,5 +1,4 @@
-import * as React from "react"
-import { connect } from "react-redux"
+import * as React from "react";
 import {
   withStyles,
   Typography,
@@ -10,26 +9,22 @@ import {
   CardActions,
   Button,
   CardContent,
-} from "@material-ui/core"
-import { push } from "connected-react-router"
+} from "@material-ui/core";
 
-interface Props extends WithStyles<typeof styles> {
-  createDao: () => void
-}
+interface Props extends WithStyles<typeof styles> {};
 
-const Home: React.SFC<Props> = ({ classes, createDao }) => (
+const Home: React.SFC<Props> = ({ classes }) => (
   <>
     <Typography variant="h2" className={classes.header}>
       Testing 1234
     </Typography>
     <Card className={classes.card}>
       <CardContent>
-        <Typography>Something something something.</Typography>
+        <Typography>
+          Something something something.
+        </Typography>
       </CardContent>
       <CardActions>
-        <Button variant="outlined" onClick={createDao}>
-          Create a DAO
-        </Button>
         <Button
           variant="outlined"
           href="https://github.com/dOrgTech"
@@ -40,9 +35,8 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
       </CardActions>
     </Card>
   </>
-)
+);
 
-// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     header: {
@@ -54,24 +48,6 @@ const styles = ({  }: Theme) =>
       margin: "auto",
       marginTop: 100,
     },
-  })
+  });
 
-const componentWithStyles = withStyles(styles)(Home)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    createDao: () => {
-      dispatch(push("/create-dao"))
-    },
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(Home);
