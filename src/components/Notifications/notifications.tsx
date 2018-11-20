@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
   withStyles,
   Snackbar,
@@ -6,14 +6,14 @@ import {
   Theme,
   WithStyles,
   createStyles,
-} from "@material-ui/core";
+} from "@material-ui/core"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
   type: string
   open: boolean
   close: () => void
-};
+}
 
 const Notifications: React.SFC<Props> = ({
   message,
@@ -39,7 +39,7 @@ const Notifications: React.SFC<Props> = ({
       message={<span id="message-id">{message}</span>}
     />
   </Snackbar>
-);
+)
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -49,6 +49,6 @@ const styles = ({ palette }: Theme) =>
     info: {
       backgroundColor: palette.primary.dark,
     },
-  });
+  })
 
-export default withStyles(styles)(Notifications);
+export default withStyles(styles)(Notifications)

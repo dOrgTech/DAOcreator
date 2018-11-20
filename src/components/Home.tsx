@@ -19,25 +19,24 @@ interface Props extends WithStyles<typeof styles> {
 
 const Home: React.SFC<Props> = ({ classes, createDao }) => (
   <>
-    <Typography variant="h2" className={classes.header}>
-      Testing 1234
-    </Typography>
     <Card className={classes.card}>
-      <CardContent>
-        <Typography>Something something something.</Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant="outlined" onClick={createDao}>
+      <CardContent className={classes.cardContent}>
+        <Typography variant="h1" className={classes.header}>
+          dOrg
+        </Typography>
+        <Typography variant="h5" className={classes.header}>
+          Decentralize Your Organization
+        </Typography>
+        <Button variant="raised" className={classes.button}>
+          What is a DAO?
+        </Button>
+        <Button variant="raised" className={classes.button} onClick={createDao}>
           Create a DAO
         </Button>
-        <Button
-          variant="outlined"
-          href="https://github.com/dOrgTech"
-          target="_blank"
-        >
-          Check our GitHub
+        <Button variant="raised" className={classes.button}>
+          View Your DAO
         </Button>
-      </CardActions>
+      </CardContent>
     </Card>
   </>
 )
@@ -45,14 +44,19 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
 // STYLE
 const styles = ({  }: Theme) =>
   createStyles({
-    header: {
-      marginTop: 100,
+    card: {
+      maxWidth: 900,
+      margin: "auto",
+      marginTop: 150,
+    },
+    cardContent: {
       textAlign: "center",
     },
-    card: {
-      maxWidth: 700,
-      margin: "auto",
-      marginTop: 100,
+    header: {
+      margin: 10,
+    },
+    button: {
+      margin: 10,
     },
   })
 

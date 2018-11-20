@@ -1,19 +1,19 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import App from "./App";
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import App from "./App"
 
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ConnectedRouter } from "connected-react-router";
-import { Provider } from "react-redux";
+import { MuiThemeProvider } from "@material-ui/core/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import { ConnectedRouter } from "connected-react-router"
+import { Provider } from "react-redux"
 
-import { configureStore } from "./store";
-import createHashHistory from "history/createHashHistory";
+import { configureStore } from "./store"
+import createHashHistory from "history/createHashHistory"
 
-import theme from "./theme";
+import theme from "./theme"
 
-const history = createHashHistory();
-const store = configureStore(history);
+const history = createHashHistory()
+const store = configureStore(history)
 
 ReactDOM.render(
   <Provider store={store}>
@@ -25,4 +25,4 @@ ReactDOM.render(
     </ConnectedRouter>
   </Provider>,
   document.getElementById("root") as HTMLElement
-);
+)

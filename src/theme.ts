@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme } from "@material-ui/core"
 
 const theme = createMuiTheme({
   typography: {
@@ -17,6 +17,6 @@ const theme = createMuiTheme({
       contrastText: "#1a1a1a",
     },
   },
-});
+})
 
-export default theme;
+export default theme
