@@ -7,7 +7,6 @@ import {
   WithStyles,
   createStyles,
   Card,
-  CardActions,
   Button,
   CardContent,
 } from "@material-ui/core"
@@ -25,7 +24,7 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
           dOrg
         </Typography>
         <Typography variant="h5" className={classes.header}>
-          Decentralize Your Organization
+          Empowering Decentralized Organization
         </Typography>
         <Button variant="raised" className={classes.button}>
           What is a DAO?

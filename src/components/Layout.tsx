@@ -24,7 +24,7 @@ const styles = ({ palette, spacing }: Theme) =>
       padding: spacing.unit * 3,
       minWidth: 0, // So the Typography noWrap works
       paddingTop: 64,
-      backgroundColor: "#fdebd4",
+      backgroundColor: "#000000",
       minHeight: "100vh",
     },
   })
