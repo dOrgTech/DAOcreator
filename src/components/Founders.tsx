@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
   withStyles,
   Typography,
@@ -12,37 +12,35 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  ListItem
-} from "@material-ui/core";
+  ListItem,
+} from "@material-ui/core"
 
-interface Props extends WithStyles<typeof styles> {};
+interface Props extends WithStyles<typeof styles> {}
 
-const Home: React.SFC<Props> = ({ classes }) => (
+const Founders: React.SFC<Props> = ({ classes }) => (
   <>
     <Card className={classes.card}>
       <ListSubheader inset>Saved reports</ListSubheader>
       <ListItem button>
         <ListItemIcon>
-          aaa
+          <Typography>aaa</Typography>
         </ListItemIcon>
         <ListItemText primary="Current month" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
-            bbb
+          <Typography>aaa</Typography>
         </ListItemIcon>
         <ListItemText primary="Last quarter" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
-            ccc
+          <Typography>aaa</Typography>
         </ListItemIcon>
         <ListItemText primary="Year-end sale" />
       </ListItem>
       <CardContent>
-        <Typography>
-          Something something something.
-        </Typography>
+        <Typography>Something something something.</Typography>
       </CardContent>
       <CardActions>
         <Button
@@ -55,7 +53,7 @@ const Home: React.SFC<Props> = ({ classes }) => (
       </CardActions>
     </Card>
   </>
-);
+)
 
 const styles = ({  }: Theme) =>
   createStyles({
@@ -68,7 +66,6 @@ const styles = ({  }: Theme) =>
       margin: "auto",
       marginTop: 100,
     },
-  });
+  })
 
-export default withStyles(styles)(Home);
-
+export default withStyles(styles)(Founders)
