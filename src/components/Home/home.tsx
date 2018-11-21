@@ -1,5 +1,4 @@
 import * as React from "react"
-import { connect } from "react-redux"
 import {
   withStyles,
   Typography,
@@ -10,7 +9,6 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
-import { push } from "connected-react-router"
 
 interface Props extends WithStyles<typeof styles> {
   createDao: () => void
@@ -40,7 +38,6 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
   </>
 )
 
-// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     card: {
@@ -59,22 +56,4 @@ const styles = ({  }: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(Home)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    createDao: () => {
-      dispatch(push("/create-dao/summary"))
-    },
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(Home)

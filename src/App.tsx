@@ -5,8 +5,8 @@ import { Route, Switch } from "react-router"
 import Layout from "./components/Layout"
 import Background from "./components/Background"
 import Home from "./components/Home"
-import SummaryView from "./components/DaoCreator/SummaryView"
-import Founders from "./components/Founders"
+import SummaryView from "./components/DaoCreationWizard/SummaryView"
+import Founders from "./components/DaoCreationWizard/FoundersView"
 import Notifications from "./components/Notifications"
 
 const App: SFC = () => (
