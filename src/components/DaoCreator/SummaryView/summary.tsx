@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core"
 import * as R from "ramda"
 import * as React from "react"
-import { connect } from "react-redux"
 
 interface Props extends WithStyles<typeof styles> {
   onNext: (date: any) => void
@@ -25,7 +24,7 @@ type State = {
   tokenSymbol: string
 }
 
-class CreateDao extends React.Component<Props, State> {
+class Summary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -116,7 +115,6 @@ class CreateDao extends React.Component<Props, State> {
   }
 }
 
-// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     card: {},
@@ -127,24 +125,4 @@ const styles = ({  }: Theme) =>
     nextButton: {},
   })
 
-const componentWithStyles = withStyles(styles)(CreateDao)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onNext: (data: any) => {
-      // 1. save data in the store
-      // 2. navigate to next createDAO view
-      console.log("Next!")
-    },
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(Summary)

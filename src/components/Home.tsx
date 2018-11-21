@@ -27,13 +27,13 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
           Empowering Decentralized Organization
         </Typography>
         <Button variant="raised" className={classes.button}>
-          What is a DAO?
+          What's a DAO?
         </Button>
         <Button variant="raised" className={classes.button} onClick={createDao}>
           Create a DAO
         </Button>
         <Button variant="raised" className={classes.button}>
-          View Your DAO
+          Browse a DAO
         </Button>
       </CardContent>
     </Card>
@@ -69,7 +69,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createDao: () => {
-      dispatch(push("/create-dao"))
+      dispatch(push("/create-dao/summary"))
     },
   }
 }
