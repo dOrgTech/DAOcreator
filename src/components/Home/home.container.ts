@@ -9,7 +9,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createDao: () => {
-      dispatch(push("/create-dao/summary"))
+      dispatch(push("/create-dao"))
     },
   }
 }
