@@ -7,16 +7,19 @@ import {
   WithStyles,
   createStyles,
   Grid,
+  TextField,
   Card,
   CardHeader,
   CardActions,
   Button,
   CardContent,
-  ListItemIcon,
-  ListItemText,
   ListSubheader,
-  ListItem,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
 } from "@material-ui/core"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import AddIcon from "@material-ui/icons/Add"
 
 //Mock data
 const members = [
@@ -24,18 +27,62 @@ const members = [
   "0x4672bad527107471cb5067a887f4656d585a8a31",
 ]
 
+const FounderForm = () => {
+  return (
+    <Grid container spacing={16}>
+      <Grid item xs={6}>
+        <Grid item xs={12}>
+          <TextField
+            id="first-name"
+            label="First Name"
+            margin="normal"
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="last-name"
+            label="Last Name"
+            margin="normal"
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="address"
+            label="Wallet Address"
+            margin="normal"
+            fullWidth
+            required
+          />
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Button variant="outlined" href="" target="_blank">
+          Submit
+        </Button>
+      </Grid>
+    </Grid>
+  )
+}
+
 const ListWrapper = (members: Array<string>) => {
   return (
     <>
       {members.map(addr => {
         const dataURL = blockies.createDataURL({ seed: addr })
         return (
-          <ListItem button>
-            <ListItemIcon>
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <img src={dataURL} />
-            </ListItemIcon>
-            <ListItemText primary={addr} />
-          </ListItem>
+              <Typography>{addr}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <FounderForm />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         )
       })}
     </>
@@ -59,7 +106,7 @@ interface Props extends WithStyles<typeof styles> {}
 /**
  * TODO:
  * - Add state, events, and actions to add addressses to the members array
- * - Create a dropdown animation for each founder to enter more details
+ * - Add more styles and formatting...
  * - Wire 'Next' navigation to DAOCreationWizard
  */
 
@@ -70,6 +117,9 @@ const Founders: React.SFC<Props> = ({ classes }) => (
         Creator&#39;s address: 0xafe8b8f2ef2ac6cb4d263c1a05486a7c5beb27a4
       </ListSubheader>
       {ListWrapper(members)}
+      <Button variant="fab" color="primary" aria-label="Add">
+        <AddIcon />
+      </Button>
       <CardHeader title="Staking Agreement" />
       <CardContent>
         <Typography>
