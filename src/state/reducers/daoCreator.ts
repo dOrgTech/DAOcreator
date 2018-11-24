@@ -1,7 +1,6 @@
 import * as R from "ramda"
 import { STEP_NEXT, STEP_BACK } from "../actions/daoCreator"
 
-// TODO: add a max size based on the number of steps
 const initialState = {
   step: 0,
 }

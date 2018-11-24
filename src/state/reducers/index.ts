@@ -4,7 +4,7 @@ import { combineReducers } from "redux"
 
 const reducer = combineReducers({
   notification: notificationReducer,
-  horizontalStepper: daoCreatorReducer,
+  daoCreator: daoCreatorReducer,
 })
 
 export default reducer
