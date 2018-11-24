@@ -17,7 +17,7 @@ import FoundersStep from "./FoundersStep"
 
 const steps = [
   {
-    title: "Summary",
+    title: "Name",
     content: <NamingStep />,
   },
   {
