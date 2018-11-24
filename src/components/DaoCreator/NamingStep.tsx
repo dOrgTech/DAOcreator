@@ -1,7 +1,5 @@
 import {
-  Button,
   Card,
-  CardActions,
   CardContent,
   createStyles,
   Grid,
@@ -11,12 +9,10 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core"
-import * as R from "ramda"
 import * as React from "react"
+import { connect } from "react-redux"
 
-interface Props extends WithStyles<typeof styles> {
-  onNext: (date: any) => void
-}
+interface Props extends WithStyles<typeof styles> {}
 
 type State = {
   daoName: string
@@ -24,7 +20,7 @@ type State = {
   tokenSymbol: string
 }
 
-class Summary extends React.Component<Props, State> {
+class NamingStep extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -33,17 +29,10 @@ class Summary extends React.Component<Props, State> {
       tokenSymbol: "",
     }
     this.handleChange = this.handleChange.bind(this)
-    this.clickNext = this.clickNext.bind(this)
   }
 
   handleChange = (valueName: string) => (event: any) => {
     this.setState({ [valueName]: event.target.value } as any)
-  }
-
-  clickNext() {
-    this.props.onNext(
-      R.pick(["daoName", "tokenName", "tokenSymbol"], this.state)
-    )
   }
 
   render() {
@@ -99,22 +88,13 @@ class Summary extends React.Component<Props, State> {
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.nextButton}
-              onClick={this.clickNext}
-            >
-              Next
-            </Button>
-          </CardActions>
         </form>
       </Card>
     )
   }
 }
 
+// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     card: {},
@@ -122,7 +102,20 @@ const styles = ({  }: Theme) =>
     daoName: {},
     tokenName: {},
     tokenSymbol: {},
-    nextButton: {},
   })
 
-export default withStyles(styles)(Summary)
+const componentWithStyles = withStyles(styles)(NamingStep)
+
+// STATE
+const mapStateToProps = (state: any) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { connect } from "react-redux"
 import {
   withStyles,
   Theme,
@@ -9,26 +10,25 @@ import {
   Typography,
   Button,
 } from "@material-ui/core"
+import { stepNext, stepBack } from "../../state/actions/daoCreator"
 
 interface Step {
   title: string
-  content: React.FunctionComponent
+  content: React.SFC
 }
 
 interface Props extends WithStyles<typeof styles> {
   step: number
   steps: Step[]
-  stepperNext: () => void
-  stepperBack: () => void
-  stepperReset: () => void
+  stepNext: () => void
+  stepBack: () => void
 }
 
-const HorizontalStepper: React.SFC<Props> = ({
+const SetupStepper: React.SFC<Props> = ({
   step,
   steps,
-  stepperNext,
-  stepperBack,
-  stepperReset,
+  stepNext,
+  stepBack,
   classes,
 }) => (
   <div className={classes.root}>
@@ -40,20 +40,20 @@ const HorizontalStepper: React.SFC<Props> = ({
     <div>
       {step === steps.length ? (
         <div>
-          <Typography className={classes.instructions}>
+          <Typography className={classes.content}>
             All steps completed - you&quot;re finished
           </Typography>
-          <Button onClick={stepperReset} className={classes.button}>
-            Reset
+          <Button onClick={stepBack} className={classes.button}>
+            Back
           </Button>
         </div>
       ) : (
         <div>
-          <div>{steps[0].content}</div>
+          <div className={classes.content}>{steps[step].content}</div>
           <div>
             <Button
               disabled={step === 0}
-              onClick={stepperBack}
+              onClick={stepBack}
               className={classes.button}
             >
               Back
@@ -61,7 +61,7 @@ const HorizontalStepper: React.SFC<Props> = ({
             <Button
               variant="contained"
               color="primary"
-              onClick={stepperNext}
+              onClick={stepNext}
               className={classes.button}
             >
               {step === steps.length - 1 ? "Finish" : "Next"}
@@ -73,6 +73,7 @@ const HorizontalStepper: React.SFC<Props> = ({
   </div>
 )
 
+// STYLE
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -81,10 +82,30 @@ const styles = (theme: Theme) =>
     button: {
       marginRight: theme.spacing.unit,
     },
-    instructions: {
+    content: {
       marginTop: theme.spacing.unit,
       marginBottom: theme.spacing.unit,
     },
   })
 
-export default withStyles(styles)(HorizontalStepper)
+const componentWithStyles = withStyles(styles)(SetupStepper)
+
+// STATE
+const mapStateToProps = (state: any, ownProps: any) => {
+  return {
+    // TODO: find out why state.step is never set.
+    step: state.step ? state.step : 0,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    stepperNext: () => dispatch(stepNext()),
+    stepperBack: () => dispatch(stepBack()),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { connect } from "react-redux"
 import {
   withStyles,
   Snackbar,
@@ -7,6 +8,7 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
+import { closeNotification } from "../state/actions/notifications"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
@@ -41,6 +43,7 @@ const Notifications: React.SFC<Props> = ({
   </Snackbar>
 )
 
+// STYLE
 const styles = ({ palette }: Theme) =>
   createStyles({
     error: {
@@ -51,4 +54,24 @@ const styles = ({ palette }: Theme) =>
     },
   })
 
-export default withStyles(styles)(Notifications)
+const componentWithStyles = withStyles(styles)(Notifications)
+
+// STATE
+const mapStateToProps = (state: any, { match }: any) => {
+  return {
+    message: state.notification.message,
+    type: state.notification.type,
+    open: state.notification.open,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    close: () => dispatch(closeNotification()),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)

@@ -1,4 +1,6 @@
 import * as React from "react"
+import { connect } from "react-redux"
+import { push } from "connected-react-router"
 import {
   withStyles,
   Typography,
@@ -38,6 +40,7 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
   </>
 )
 
+// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     card: {
@@ -56,4 +59,22 @@ const styles = ({  }: Theme) =>
     },
   })
 
-export default withStyles(styles)(Home)
+const componentWithStyles = withStyles(styles)(Home)
+
+// STATE
+const mapStateToProps = (state: any) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createDao: () => {
+      dispatch(push("/dao-creator"))
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)

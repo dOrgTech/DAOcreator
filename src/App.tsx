@@ -5,21 +5,21 @@ import { Route, Switch } from "react-router"
 import Layout from "./components/Layout"
 import Background from "./components/Background"
 import Home from "./components/Home"
-import DaoCreationWizard from "./components/DaoCreationWizard"
+import DaoCreator from "./components/DaoCreator"
 import Notifications from "./components/Notifications"
 
 // TEMP
-import SummaryView from "./components/DaoCreationWizard/SummaryView"
-import FoundersView from "./components/DaoCreationWizard/FoundersView"
+import NamingStep from "./components/DaoCreator/NamingStep"
+import FoundersStep from "./components/DaoCreator/FoundersStep"
 
 const App: SFC = () => (
   <Layout>
     <Background />
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route exact path="/create-dao" component={DaoCreationWizard} />
-      <Route exact path="/create-dao/summary" component={SummaryView} />
-      <Route exact path="/create-dao/founders" component={FoundersView} />
+      <Route exact path="/dao-creator" component={DaoCreator} />
+      <Route exact path="/dao-creator/naming" component={NamingStep} />
+      <Route exact path="/dao-creator/founders" component={FoundersStep} />
     </Switch>
     <Notifications />
   </Layout>

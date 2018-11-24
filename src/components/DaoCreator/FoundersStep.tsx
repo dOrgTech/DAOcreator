@@ -1,4 +1,5 @@
 import * as React from "react"
+import { connect } from "react-redux"
 import {
   withStyles,
   Typography,
@@ -17,7 +18,7 @@ import {
 
 interface Props extends WithStyles<typeof styles> {}
 
-const Founders: React.SFC<Props> = ({ classes }) => (
+const FoundersStep: React.SFC<Props> = ({ classes }) => (
   <>
     <Card className={classes.card}>
       <ListSubheader inset>Saved reports</ListSubheader>
@@ -55,6 +56,7 @@ const Founders: React.SFC<Props> = ({ classes }) => (
   </>
 )
 
+// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
     header: {
@@ -68,4 +70,18 @@ const styles = ({  }: Theme) =>
     },
   })
 
-export default withStyles(styles)(Founders)
+const componentWithStyles = withStyles(styles)(FoundersStep)
+
+// STATE
+const mapStateToProps = (state: any) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)
