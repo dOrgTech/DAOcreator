@@ -7,6 +7,7 @@ import {
   createStyles,
   Stepper,
   Step,
+  StepLabel,
   Typography,
   Button,
 } from "@material-ui/core"
@@ -40,7 +41,9 @@ const daoCreator: React.SFC<Props> = ({
   <div className={classes.root}>
     <Stepper activeStep={step}>
       {steps.map(thisStep => (
-        <Step key={thisStep.title} />
+        <Step key={thisStep.title}>
+          <StepLabel>{thisStep.title}</StepLabel>
+        </Step>
       ))}
     </Stepper>
     <div>
@@ -84,6 +87,8 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "90%",
+      height: "200",
+      margin: "auto",
     },
     button: {
       marginRight: theme.spacing.unit,

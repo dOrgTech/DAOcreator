@@ -3,7 +3,6 @@ import { SFC } from "react"
 import { Route, Switch } from "react-router"
 
 import Layout from "./components/Layout"
-import Background from "./components/Background"
 import Home from "./components/Home"
 import DaoCreator from "./components/DaoCreator"
 import Notifications from "./components/Notifications"
@@ -14,7 +13,6 @@ import FoundersStep from "./components/DaoCreator/FoundersStep"
 
 const App: SFC = () => (
   <Layout>
-    <Background />
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/dao-creator" component={DaoCreator} />

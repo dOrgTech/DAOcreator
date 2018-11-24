@@ -1,12 +1,16 @@
 import * as React from "react"
 import { SFC } from "react"
 import { withStyles, createStyles, Theme, WithStyles } from "@material-ui/core"
+import Background from "./Background"
 
 interface Props extends WithStyles<typeof styles> {}
 
 const Layout: SFC<Props> = ({ classes, children }) => (
   <div className={classes.root}>
-    <main className={classes.content}>{children}</main>
+    <main className={classes.background}>
+      <Background />
+      <div className={classes.content}>{children}</div>
+    </main>
   </div>
 )
 
@@ -19,13 +23,15 @@ const styles = ({ palette, spacing }: Theme) =>
       position: "relative",
       display: "flex",
     },
-    content: {
+    background: {
       flexGrow: 1,
-      padding: spacing.unit * 3,
       minWidth: 0, // So the Typography noWrap works
-      paddingTop: 64,
       backgroundColor: "#000000",
       minHeight: "100vh",
+    },
+    content: {
+      padding: spacing.unit * 3,
+      paddingTop: 64,
     },
   })
 
