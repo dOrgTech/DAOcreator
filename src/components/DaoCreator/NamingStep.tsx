@@ -9,36 +9,21 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core"
-import {
-  setDaoName,
-  setTokenName,
-  setTokenSymbol,
-} from "../../state/actions/daoCreator"
 import * as React from "react"
 import { connect } from "react-redux"
 
 interface Props extends WithStyles<typeof styles> {
+  handleChange: (key: string) => (value: any) => void
   daoName: string
   tokenName: string
   tokenSymbol: string
-  setDaoName: (name: string) => void
-  setTokenName: (name: string) => void
-  setTokenSymbol: (symbol: string) => void
-}
-
-const handleChange = (method: any) => (event: any) => {
-  console.log(`${method}`)
-  console.log(`${event.target.value}`)
-  method(event.target.value)
 }
 
 const NamingStep: React.SFC<Props> = ({
+  handleChange,
   daoName,
   tokenName,
   tokenSymbol,
-  setDaoName,
-  setTokenName,
-  setTokenSymbol,
   classes,
 }) => (
   <Card className={classes.card}>
@@ -55,7 +40,7 @@ const NamingStep: React.SFC<Props> = ({
                 id="daoName"
                 label="DAO Name"
                 value={daoName}
-                onChange={handleChange(setDaoName)}
+                onChange={handleChange("daoName")}
                 margin="normal"
                 fullWidth
                 required
@@ -67,7 +52,7 @@ const NamingStep: React.SFC<Props> = ({
                 id="token-name"
                 label="Token Name"
                 value={tokenName}
-                onChange={handleChange(setTokenName)}
+                onChange={handleChange("tokenName")}
                 margin="normal"
                 fullWidth
                 required
@@ -79,7 +64,7 @@ const NamingStep: React.SFC<Props> = ({
                 id="token-symbol"
                 label="Token Symbol"
                 value={tokenSymbol}
-                onChange={handleChange(setTokenSymbol)}
+                onChange={handleChange("tokenSymbol")}
                 margin="normal"
                 fullWidth
                 required
@@ -105,26 +90,4 @@ const styles = ({  }: Theme) =>
     tokenSymbol: {},
   })
 
-const componentWithStyles = withStyles(styles)(NamingStep)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {
-    daoName: state.daoCreator.daoName,
-    tokenName: state.daoCreator.tokenName,
-    tokenSymbol: state.daoCreator.tokenSymbol,
-  }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setDaoName: (name: string) => dispatch(setDaoName(name)),
-    setTokenName: (name: string) => dispatch(setTokenName(name)),
-    setTokenSymbol: (symbol: string) => dispatch(setTokenSymbol(symbol)),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(NamingStep)

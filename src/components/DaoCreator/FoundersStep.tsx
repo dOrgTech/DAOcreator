@@ -181,18 +181,4 @@ const styles = ({  }: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(FoundersStep)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {}
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(FoundersStep)
