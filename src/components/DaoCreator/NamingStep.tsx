@@ -10,7 +10,6 @@ import {
   WithStyles,
 } from "@material-ui/core"
 import * as React from "react"
-import { connect } from "react-redux"
 
 interface Props extends WithStyles<typeof styles> {
   handleChange: (key: string) => (value: any) => void

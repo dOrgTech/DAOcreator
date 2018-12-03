@@ -9,8 +9,7 @@ const initialState = {
 export const daoCreatorReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case STEP_NEXT:
-      const { data } = action.payload
-      return R.merge(state, { step: state.step + 1, data })
+      return R.merge(state, { step: state.step + 1, data: action.payload })
     case STEP_BACK:
       return R.merge(state, { step: state.step - 1 })
     default:
