@@ -1,4 +1,5 @@
 import * as React from "react"
+import * as R from "ramda"
 import { connect } from "react-redux"
 import {
   withStyles,
@@ -25,26 +26,42 @@ type State = {
   daoName: string
   tokenName: string
   tokenSymbol: string
+  founders: Founder[]
 }
 
 class daoCreator extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
+    this.state = {
+      daoName: "",
+      tokenName: "",
+      tokenSymbol: "",
+      founders: [],
+    }
     this.handleChange = this.handleChange.bind(this)
+    this.handleAddFounder = this.handleAddFounder.bind(this)
   }
 
   handleChange = (valueName: string) => (event: any) => {
     this.setState({ [valueName]: event.target.value } as any)
   }
 
+  handleAddFounder = (newFounder: Founder) => {
+    this.setState({ founders: R.append(newFounder, this.state.founders) })
+  }
+
   steps = [
     {
       title: "Name",
-      content: <NamingStep {...this.state} handleChange={this.handleChange} />,
+      content: (inputProps: any) => (
+        <NamingStep {...inputProps} handleChange={this.handleChange} />
+      ),
     },
     {
       title: "Founders",
-      content: <FoundersStep />,
+      content: (inputProps: any) => (
+        <FoundersStep {...inputProps} addFounder={this.handleAddFounder} />
+      ),
     },
   ]
 
@@ -71,7 +88,9 @@ class daoCreator extends React.Component<Props, State> {
             </div>
           ) : (
             <div>
-              <div className={classes.content}>{this.steps[step].content}</div>
+              <div className={classes.content}>
+                {this.steps[step].content(this.state)}
+              </div>
               <div>
                 <Button
                   disabled={step === 0}
