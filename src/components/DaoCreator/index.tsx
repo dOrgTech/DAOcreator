@@ -15,10 +15,11 @@ import {
 import { stepNext, stepBack } from "../../state/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
+import { createDao } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
-  stepNext: (currentData: any) => void
+  stepNext: (currentData: any, isLastStep: boolean) => void
   stepBack: () => void
 }
 
@@ -67,6 +68,7 @@ class daoCreator extends React.Component<Props, State> {
 
   render() {
     const { step, stepNext, stepBack, classes } = this.props
+    const isLastStep = step === this.steps.length - 1
     return (
       <div className={classes.root}>
         <Stepper activeStep={step}>
@@ -102,10 +104,10 @@ class daoCreator extends React.Component<Props, State> {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => stepNext(this.state)}
+                  onClick={() => stepNext(this.state, isLastStep)}
                   className={classes.button}
                 >
-                  {step === this.steps.length - 1 ? "Finish" : "Next"}
+                  {isLastStep ? "Finish" : "Next"}
                 </Button>
               </div>
             </div>
@@ -144,7 +146,13 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    stepNext: (formData: any) => dispatch(stepNext(formData)),
+    stepNext: (formData: any, isLastStepp: boolean) => {
+      dispatch(stepNext(formData))
+      if (isLastStepp) {
+        // create DAO
+        dispatch(createDao())
+      }
+    },
     stepBack: () => dispatch(stepBack()),
   }
 }
