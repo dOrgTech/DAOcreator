@@ -21,18 +21,14 @@ interface Props extends WithStyles<typeof styles> {
 
 type State = Founder
 
-class FoundersStep extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    // TODO: @Asgeir, how do we eliminate this boiler plate here...
-    this.state = {
-      address: "0x123456789ABCDEF123456789ABCDEF123456789A",
-      tokens: "0",
-      reputation: "0",
-    }
-    this.onAddFounder = this.onAddFounder.bind(this)
-  }
+const initState: State = {
+  address: "",
+  tokens: "",
+  reputation: "",
+}
 
+class FoundersStep extends React.Component<Props, State> {
+  state: Readonly<State> = initState
   // TODO @Asgeir, I think we should move this "cleansing" logic to our Ark code, since it knows
   // we're going to convert our Founder type to the "FounderConfig" in DAOstack
   cleanseAddress = (address: string): boolean => {
@@ -54,14 +50,9 @@ class FoundersStep extends React.Component<Props, State> {
     this.setState({ [valueName]: event.target.value } as any)
   }
 
-  onAddFounder() {
+  onAddFounder = async () => {
     this.props.addFounder(this.state)
-    // ... and here? Make a property named initState = { ... }
-    this.setState({
-      address: "0x123456789ABCDEF123456789ABCDEF123456789A",
-      reputation: "0",
-      tokens: "0",
-    })
+    await this.setState(initState)
   }
 
   render() {
@@ -80,6 +71,7 @@ class FoundersStep extends React.Component<Props, State> {
                   label="Wallet Address"
                   margin="normal"
                   onChange={this.handleChange("address")}
+                  value={this.state.address}
                   fullWidth
                   required
                 />
@@ -90,6 +82,7 @@ class FoundersStep extends React.Component<Props, State> {
                   label="Reputation"
                   margin="normal"
                   onChange={this.handleChange("reputation")}
+                  value={this.state.reputation}
                   fullWidth
                   required
                 />
@@ -100,6 +93,7 @@ class FoundersStep extends React.Component<Props, State> {
                   label="Tokens"
                   margin="normal"
                   onChange={this.handleChange("tokens")}
+                  value={this.state.tokens}
                   fullWidth
                   required
                 />
@@ -130,25 +124,25 @@ class FoundersStep extends React.Component<Props, State> {
       <Grid item xs={6}>
         <Typography>{address}</Typography>
         {this.cleanseAddress(address) ? (
-          <Typography>Error: Please enter a valid address.</Typography>
-        ) : (
           <></>
+        ) : (
+          <Typography>Error: Please enter a valid address.</Typography>
         )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{reputation}</Typography>
         {this.cleanseBigNumber(reputation) ? (
-          <Typography>Error: Please enter a valid number.</Typography>
-        ) : (
           <></>
+        ) : (
+          <Typography>Error: Please enter a valid number.</Typography>
         )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{tokens}</Typography>
         {this.cleanseBigNumber(tokens) ? (
-          <Typography>Error: Please enter a valid number.</Typography>
-        ) : (
           <></>
+        ) : (
+          <Typography>Error: Please enter a valid number.</Typography>
         )}
       </Grid>
     </>

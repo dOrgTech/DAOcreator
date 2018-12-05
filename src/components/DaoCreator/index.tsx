@@ -30,18 +30,15 @@ type State = {
   founders: Founder[]
 }
 
+const initState: State = {
+  daoName: "",
+  tokenName: "",
+  tokenSymbol: "",
+  founders: [],
+}
+
 class daoCreator extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      daoName: "",
-      tokenName: "",
-      tokenSymbol: "",
-      founders: [],
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleAddFounder = this.handleAddFounder.bind(this)
-  }
+  state: Readonly<State> = initState
 
   handleChange = (valueName: string) => (event: any) => {
     this.setState({ [valueName]: event.target.value } as any)
@@ -54,13 +51,13 @@ class daoCreator extends React.Component<Props, State> {
   steps = [
     {
       title: "Name",
-      content: (inputProps: any) => (
+      component: (inputProps: any) => (
         <NamingStep {...inputProps} handleChange={this.handleChange} />
       ),
     },
     {
       title: "Founders",
-      content: (inputProps: any) => (
+      component: (inputProps: any) => (
         <FoundersStep {...inputProps} addFounder={this.handleAddFounder} />
       ),
     },
@@ -91,7 +88,7 @@ class daoCreator extends React.Component<Props, State> {
           ) : (
             <div>
               <div className={classes.content}>
-                {this.steps[step].content(this.state)}
+                {this.steps[step].component(this.state)}
               </div>
               <div>
                 <Button
@@ -147,11 +144,10 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     stepNext: (state: State, isLastStep: boolean) => {
+      dispatch(stepNext(state))
       if (isLastStep) {
         // create DAO
         dispatch(createDao())
-      } else {
-        dispatch(stepNext(state))
       }
     },
     stepBack: () => dispatch(stepBack()),
