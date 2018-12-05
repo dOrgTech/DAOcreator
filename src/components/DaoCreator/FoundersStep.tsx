@@ -50,9 +50,9 @@ class FoundersStep extends React.Component<Props, State> {
     this.setState({ [valueName]: event.target.value } as any)
   }
 
-  onAddFounder = async () => {
+  onAddFounder = () => {
     this.props.addFounder(this.state)
-    await this.setState(initState)
+    this.setState(initState)
   }
 
   render() {
