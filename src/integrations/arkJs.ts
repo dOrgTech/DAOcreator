@@ -13,7 +13,7 @@ export const init = async () => {
   ConfigService.set("txDepthRequiredForConfirmation.kovan", 0)
 
   // TODO: If you use Kovan uncomment this line
-  // ConfigService.set("network", "kovan"); // Set the network used to Kovan
+  // ConfigService.set("network", "kovan") // Set the network used to Kovan
 
   await InitializeArcJs({
     watchForAccountChanges: true,

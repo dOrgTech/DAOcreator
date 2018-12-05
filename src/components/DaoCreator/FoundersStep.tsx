@@ -1,7 +1,5 @@
 import * as R from "ramda"
 import * as React from "react"
-import { connect } from "react-redux"
-import * as blockies from "ethereum-blockies-png"
 import {
   withStyles,
   Typography,
@@ -11,17 +9,10 @@ import {
   Grid,
   TextField,
   Card,
-  CardHeader,
-  CardActions,
   Button,
   CardContent,
-  ListSubheader,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
 } from "@material-ui/core"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import AddIcon from "@material-ui/icons/Add"
+import { BigNumber } from "bignumber.js"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void
@@ -33,29 +24,48 @@ type State = Founder
 class FoundersStep extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
+    // TODO: @Asgeir, how do we eliminate this boiler plate here...
     this.state = {
-      address: "",
-      tokens: 0,
-      reputation: 0,
+      address: "0x123456789ABCDEF123456789ABCDEF123456789A",
+      tokens: "0",
+      reputation: "0",
     }
     this.onAddFounder = this.onAddFounder.bind(this)
   }
 
-  onAddFounder() {
-    this.props.addFounder(this.state)
-    this.setState({
-      address: "",
-      reputation: 0,
-      tokens: 0,
-    })
+  // TODO @Asgeir, I think we should move this "cleansing" logic to our Ark code, since it knows
+  // we're going to convert our Founder type to the "FounderConfig" in DAOstack
+  cleanseAddress = (address: string): boolean => {
+    // TODO
+    return true
   }
+
+  cleanseBigNumber = (number: string): boolean => {
+    try {
+      new BigNumber(number)
+      return true
+    } catch {
+      return false
+    }
+  }
+  /////////////////
 
   handleChange = (valueName: string) => (event: any) => {
     this.setState({ [valueName]: event.target.value } as any)
   }
 
+  onAddFounder() {
+    this.props.addFounder(this.state)
+    // ... and here? Make a property named initState = { ... }
+    this.setState({
+      address: "0x123456789ABCDEF123456789ABCDEF123456789A",
+      reputation: "0",
+      tokens: "0",
+    })
+  }
+
   render() {
-    const { addFounder, classes, founders } = this.props
+    const { classes, founders } = this.props
     return (
       <Card className={classes.card}>
         <form>
@@ -119,12 +129,27 @@ class FoundersStep extends React.Component<Props, State> {
     <>
       <Grid item xs={6}>
         <Typography>{address}</Typography>
+        {this.cleanseAddress(address) ? (
+          <Typography>Error: Please enter a valid address.</Typography>
+        ) : (
+          <></>
+        )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{reputation}</Typography>
+        {this.cleanseBigNumber(reputation) ? (
+          <Typography>Error: Please enter a valid number.</Typography>
+        ) : (
+          <></>
+        )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{tokens}</Typography>
+        {this.cleanseBigNumber(tokens) ? (
+          <Typography>Error: Please enter a valid number.</Typography>
+        ) : (
+          <></>
+        )}
       </Grid>
     </>
   )

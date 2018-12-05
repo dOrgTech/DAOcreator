@@ -1,4 +1,7 @@
 import * as Ark from "../../integrations/arkJs"
+import * as ArkBridge from "../../bridges/arkJs"
+import { NewDaoConfig } from "@daostack/arc.js"
+
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
 export const STEP_BACK = "STEP_BACK"
@@ -19,5 +22,20 @@ export const createDao = () => async (dispatch: any, getState: any) => {
     tokenSymbol,
     founders,
   } = getState().daoCreator.data
-  Ark.createDao({ name: daoName, tokenName, tokenSymbol, founders })
+
+  try {
+    Ark.createDao({
+      name: daoName,
+      // tokenCap?: BigNumber | string,
+      tokenName,
+      tokenSymbol,
+      founders: ArkBridge.toFounderConfigs(founders),
+      // daoCreatorAddress?: Address,
+      // universalController?: boolean,
+      // votingMachineParams?: NewDaoVotingMachineConfig,
+      // schemes?: Array<SchemeConfig>,
+    } as NewDaoConfig)
+  } catch (e) {
+    // TODO @Asgeir: report back errors to the invoking front-end logic. How?
+  }
 }

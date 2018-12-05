@@ -146,11 +146,12 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    stepNext: (formData: any, isLastStepp: boolean) => {
-      dispatch(stepNext(formData))
-      if (isLastStepp) {
+    stepNext: (state: State, isLastStep: boolean) => {
+      if (isLastStep) {
         // create DAO
         dispatch(createDao())
+      } else {
+        dispatch(stepNext(state))
       }
     },
     stepBack: () => dispatch(stepBack()),
