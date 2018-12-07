@@ -12,7 +12,7 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
-import { BigNumber } from "bignumber.js"
+import { cleanseAddress, cleanseBigNumber } from "../../bridges/fromUserInput"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void
@@ -29,22 +29,6 @@ const initState: State = {
 
 class FoundersStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
-  // TODO @Asgeir, I think we should move this "cleansing" logic to our Ark code, since it knows
-  // we're going to convert our Founder type to the "FounderConfig" in DAOstack
-  cleanseAddress = (address: string): boolean => {
-    // TODO
-    return true
-  }
-
-  cleanseBigNumber = (number: string): boolean => {
-    try {
-      new BigNumber(number)
-      return true
-    } catch {
-      return false
-    }
-  }
-  /////////////////
 
   handleChange = (valueName: string) => (event: any) => {
     this.setState({ [valueName]: event.target.value } as any)
@@ -54,6 +38,20 @@ class FoundersStep extends React.Component<Props, State> {
     this.props.addFounder(this.state)
     this.setState(initState)
   }
+
+  addressErrorCheck = (addr: string) =>
+    !cleanseAddress(addr) ? (
+      <Typography>Error: Please enter a valid address.</Typography>
+    ) : (
+      <></>
+    )
+
+  numberErrorCheck = (number: string) =>
+    !cleanseBigNumber(number) ? (
+      <Typography>Error: Please enter a valid number.</Typography>
+    ) : (
+      <></>
+    )
 
   render() {
     const { classes, founders } = this.props
@@ -75,6 +73,7 @@ class FoundersStep extends React.Component<Props, State> {
                   fullWidth
                   required
                 />
+                {this.addressErrorCheck(this.state.address)}
               </Grid>
               <Grid item xs={2}>
                 <TextField
@@ -86,6 +85,7 @@ class FoundersStep extends React.Component<Props, State> {
                   fullWidth
                   required
                 />
+                {this.numberErrorCheck(this.state.tokens)}
               </Grid>
               <Grid item xs={2}>
                 <TextField
@@ -97,6 +97,7 @@ class FoundersStep extends React.Component<Props, State> {
                   fullWidth
                   required
                 />
+                {this.numberErrorCheck(this.state.tokens)}
               </Grid>
               <Grid item xs={2}>
                 <Button
@@ -123,27 +124,12 @@ class FoundersStep extends React.Component<Props, State> {
     <>
       <Grid item xs={6}>
         <Typography>{address}</Typography>
-        {this.cleanseAddress(address) ? (
-          <></>
-        ) : (
-          <Typography>Error: Please enter a valid address.</Typography>
-        )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{reputation}</Typography>
-        {this.cleanseBigNumber(reputation) ? (
-          <></>
-        ) : (
-          <Typography>Error: Please enter a valid number.</Typography>
-        )}
       </Grid>
       <Grid item xs={2}>
         <Typography>{tokens}</Typography>
-        {this.cleanseBigNumber(tokens) ? (
-          <></>
-        ) : (
-          <Typography>Error: Please enter a valid number.</Typography>
-        )}
       </Grid>
     </>
   )

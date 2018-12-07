@@ -1,5 +1,5 @@
 import * as Ark from "../../integrations/arkJs"
-import * as ArkBridge from "../../bridges/arkJs"
+import * as ArkBridge from "../../bridges/toArcJs"
 import { NewDaoConfig } from "@daostack/arc.js"
 
 // Stepper
