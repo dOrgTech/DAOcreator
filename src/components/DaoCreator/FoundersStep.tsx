@@ -12,7 +12,7 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
-import { cleanseAddress, cleanseBigNumber } from "../../integrations/web3"
+import {typeValidation} from "../../integrations/web3"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void
@@ -39,19 +39,19 @@ class FoundersStep extends React.Component<Props, State> {
     this.setState(initState)
   }
 
-  addressErrorCheck = (addr: string) =>
-    addr && !cleanseAddress(addr) ? (
-      <Typography>Error: Please enter a valid address.</Typography>
-    ) : (
-      <></>
-    )
+    addressErrorCheck = (addr: string) =>
+        !R.isEmpty(addr) && !typeValidation.isAddress(addr) ? (
+            <Typography>Error: Please enter a valid address.</Typography>
+        ) : (
+            <></>
+        )
 
-  numberErrorCheck = (number: string) =>
-    number && !cleanseBigNumber(number) ? (
-      <Typography>Error: Please enter a valid number.</Typography>
-    ) : (
-      <></>
-    )
+    numberErrorCheck = (number: string) =>
+        number && !typeValidation.isBigNumber(number) ? (
+            <Typography>Error: Please enter a valid number.</Typography>
+        ) : (
+            <></>
+        )
 
   render() {
     const { classes, founders } = this.props
