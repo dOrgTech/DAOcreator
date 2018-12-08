@@ -12,7 +12,7 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
-import { cleanseAddress, cleanseBigNumber } from "../../bridges/fromUserInput"
+import { cleanseAddress, cleanseBigNumber } from "../../integrations/web3"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void

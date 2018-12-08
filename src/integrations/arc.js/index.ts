@@ -1,3 +1,4 @@
+export * from "./typeConversions"
 import {
   DAO,
   NewDaoConfig,

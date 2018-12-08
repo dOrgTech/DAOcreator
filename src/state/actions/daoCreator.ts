@@ -1,5 +1,4 @@
-import * as Ark from "../../integrations/arkJs"
-import * as ArkBridge from "../../bridges/toArcJs"
+import * as Arc from "../../integrations/arc.js"
 import { NewDaoConfig } from "@daostack/arc.js"
 
 // Stepper
@@ -24,12 +23,12 @@ export const createDao = () => async (dispatch: any, getState: any) => {
   } = getState().daoCreator.data
 
   try {
-    Ark.createDao({
+    Arc.createDao({
       name: daoName,
       // tokenCap?: BigNumber | string,
       tokenName,
       tokenSymbol,
-      founders: ArkBridge.toFounderConfigs(founders),
+      founders: Arc.toFounderConfigs(founders),
       // daoCreatorAddress?: Address,
       // universalController?: boolean,
       // votingMachineParams?: NewDaoVotingMachineConfig,

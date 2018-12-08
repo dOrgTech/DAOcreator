@@ -1,3 +1,4 @@
+export * from "./typeConversions"
 /**
    THIS IS FOR WEB3 V1
 ''
