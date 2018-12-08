@@ -40,14 +40,14 @@ class FoundersStep extends React.Component<Props, State> {
   }
 
   addressErrorCheck = (addr: string) =>
-    !cleanseAddress(addr) ? (
+    addr && !cleanseAddress(addr) ? (
       <Typography>Error: Please enter a valid address.</Typography>
     ) : (
       <></>
     )
 
   numberErrorCheck = (number: string) =>
-    !cleanseBigNumber(number) ? (
+    number && !cleanseBigNumber(number) ? (
       <Typography>Error: Please enter a valid number.</Typography>
     ) : (
       <></>
@@ -85,7 +85,7 @@ class FoundersStep extends React.Component<Props, State> {
                   fullWidth
                   required
                 />
-                {this.numberErrorCheck(this.state.tokens)}
+                {this.numberErrorCheck(this.state.reputation)}
               </Grid>
               <Grid item xs={2}>
                 <TextField
