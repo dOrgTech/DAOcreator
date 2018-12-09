@@ -5,6 +5,8 @@ import { newNotificationError } from "./notifications"
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
 export const STEP_BACK = "STEP_BACK"
+export const ADD_SCHEMA = "ADD_SCHEMA"
+export const REMOVE_SCHEMA = "REMOVE_SCHEMA"
 
 export const stepNext = (data: any) => ({
   type: STEP_NEXT,
@@ -39,3 +41,13 @@ export const createDao = () => async (dispatch: any, getState: any) => {
     newNotificationError("Failed to create DAO. With error: " + e.message)
   }
 }
+
+export const addSchema = (schemaName: string) => ({
+  type: ADD_SCHEMA,
+  payload: schemaName,
+})
+
+export const removeSchema = (schemaName: string) => ({
+  type: REMOVE_SCHEMA,
+  payload: schemaName,
+})

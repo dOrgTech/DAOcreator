@@ -1,7 +1,19 @@
-import { Card, Checkbox, createStyles, FormControl, FormControlLabel, FormGroup, FormLabel, Theme, withStyles, WithStyles } from "@material-ui/core";
-import * as R from "ramda";
-import * as React from "react";
-import { connect } from "react-redux";
+import {
+  Card,
+  Checkbox,
+  createStyles,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Theme,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core"
+import * as R from "ramda"
+import * as React from "react"
+import { connect } from "react-redux"
+import { addSchema, removeSchema } from "../../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addSchema: (schema: string) => void
@@ -18,7 +30,7 @@ const AddSchema: React.SFC<Props> = ({
   removeSchema,
 }) => {
   const handleChange = (schema: string) => (event: any) => {
-    event.target.value == true ? removeSchema(schema) : addSchema(schema)
+    R.contains(schema, addedSchemas) === true ? removeSchema(schema) : addSchema(schema)
   }
 
   return (
@@ -69,14 +81,14 @@ const mapStateToProps = (state: any) => {
       "UpgradeScheme",
       "GlobalConstraintRegistrar",
     ],
-    addedSchemas: [],
+    addedSchemas: state.daoCreator.schemas,
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addSchema: (schema: string) => console.log("add" + schema),
-    removeSchema: (schema: string) => console.log("remove" + schema),
+    addSchema: (schema: string) => dispatch(addSchema(schema)),
+    removeSchema: (schema: string) => dispatch(removeSchema(schema)),
   }
 }
 
