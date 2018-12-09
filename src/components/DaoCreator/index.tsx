@@ -15,6 +15,7 @@ import {
 import { stepNext, stepBack } from "../../state/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
+import ConfigurationStep from "./ConfigurationStep"
 import { createDao } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
@@ -61,6 +62,12 @@ class daoCreator extends React.Component<Props, State> {
         <FoundersStep {...inputProps} addFounder={this.handleAddFounder} />
       ),
     },
+      {
+          title: "Configuration",
+          component: (inputProps: any) => (
+              <ConfigurationStep {...inputProps} />
+          ),
+      },
   ]
 
   render() {
