@@ -13,10 +13,12 @@ import {
   CardContent,
 } from "@material-ui/core"
 import {typeValidation} from "../../integrations/web3"
+import { connect } from "react-redux"
+import {addFounder} from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void
-  founders: Founder[]
+  addedFounders: Founder[]
 }
 
 type State = Founder
@@ -54,7 +56,7 @@ class FoundersStep extends React.Component<Props, State> {
         )
 
   render() {
-    const { classes, founders } = this.props
+    const { classes, addedFounders } = this.props
     return (
       <Card className={classes.card}>
         <form>
@@ -112,7 +114,7 @@ class FoundersStep extends React.Component<Props, State> {
             </Grid>
 
             <Grid container spacing={16}>
-              {R.map(this.addedFounder, founders)}
+              {R.map(this.addedFounder, addedFounders)}
             </Grid>
           </CardContent>
         </form>
@@ -145,4 +147,22 @@ const styles = ({  }: Theme) =>
     headline: {},
   })
 
-export default withStyles(styles)(FoundersStep)
+const componentWithStyles = withStyles(styles)(FoundersStep)
+
+// STATE
+const mapStateToProps = (state: any) => {
+    return {
+        addedFounders: state.daoCreator.founders,
+    }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        addFounder: (founder: Founder) => dispatch(addFounder(founder)),
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(componentWithStyles)
