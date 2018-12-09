@@ -1,5 +1,6 @@
 import * as Arc from "../../integrations/arc.js"
 import { NewDaoConfig } from "@daostack/arc.js"
+import { newNotificationError } from "./notifications"
 
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
@@ -35,6 +36,6 @@ export const createDao = () => async (dispatch: any, getState: any) => {
       // schemes?: Array<SchemeConfig>,
     } as NewDaoConfig)
   } catch (e) {
-    // TODO @Asgeir: report back errors to the invoking front-end logic. How?
+    newNotificationError("Failed to create DAO. With error: " + e.message)
   }
 }
