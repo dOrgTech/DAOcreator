@@ -21,6 +21,7 @@ export const stepBack = () => ({
 })
 
 export const createDao = () => async (dispatch: any, getState: any) => {
+  //TODO: needs to get the data from the store and typeConvert it into something DAOStack understand
   const {
     daoName,
     tokenName,
