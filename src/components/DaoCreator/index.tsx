@@ -20,100 +20,76 @@ import { createDao } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
-  stepNext: (currentData: any, isLastStep: boolean) => void
+  stepNext: (isLastStep: boolean) => void
   stepBack: () => void
 }
 
-type State = {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-}
-
-const initState: State = {
-  daoName: "",
-  tokenName: "",
-  tokenSymbol: "",
-}
-
-class daoCreator extends React.Component<Props, State> {
-  state: Readonly<State> = initState
-
-  handleChange = (valueName: string) => (event: any) => {
-    this.setState({ [valueName]: event.target.value } as any)
-  }
-
-  steps = [
+const daoCreator: React.SFC<Props> = ({
+  classes,
+  step,
+  stepNext,
+  stepBack,
+}) => {
+  const steps = [
     {
       title: "Name",
-      component: (inputProps: any) => (
-        <NamingStep {...inputProps} handleChange={this.handleChange} />
-      ),
+      component: <NamingStep />,
     },
     {
       title: "Founders",
-      component: (inputProps: any) => (
-        <FoundersStep {...inputProps} />
-      ),
+      component: <FoundersStep />,
     },
-      {
-          title: "Configuration",
-          component: (inputProps: any) => (
-              <ConfigurationStep {...inputProps} />
-          ),
-      },
+    {
+      title: "Configuration",
+      component: <ConfigurationStep />,
+    },
   ]
 
-  render() {
-    const { step, stepNext, stepBack, classes } = this.props
-    const isLastStep = step === this.steps.length - 1
-    return (
-      <div className={classes.root}>
-        <Stepper activeStep={step}>
-          {this.steps.map(thisStep => (
-            <Step key={thisStep.title}>
-              <StepLabel>{thisStep.title}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          {step >= this.steps.length ? (
+  const isLastStep = step === steps.length - 1
+  return (
+    <div className={classes.root}>
+      <Stepper activeStep={step}>
+        {steps.map(thisStep => (
+          <Step key={thisStep.title}>
+            <StepLabel>{thisStep.title}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        {step >= steps.length ? (
+          <div>
+            <Typography className={classes.content}>
+              All steps completed - you&quot;re finished
+            </Typography>
+            <Button onClick={stepBack} className={classes.button}>
+              Back
+            </Button>
+          </div>
+        ) : (
+          <div>
+            <div className={classes.content}>{steps[step].component}</div>
             <div>
-              <Typography className={classes.content}>
-                All steps completed - you&quot;re finished
-              </Typography>
-              <Button onClick={stepBack} className={classes.button}>
+              <Button
+                disabled={step === 0}
+                onClick={stepBack}
+                className={classes.button}
+              >
                 Back
               </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => stepNext(isLastStep)}
+                className={classes.button}
+              >
+                {isLastStep ? "Finish" : "Next"}
+              </Button>
             </div>
-          ) : (
-            <div>
-              <div className={classes.content}>
-                {this.steps[step].component(this.state)}
-              </div>
-              <div>
-                <Button
-                  disabled={step === 0}
-                  onClick={stepBack}
-                  className={classes.button}
-                >
-                  Back
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => stepNext(this.state, isLastStep)}
-                  className={classes.button}
-                >
-                  {isLastStep ? "Finish" : "Next"}
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 // STYLE
@@ -144,8 +120,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    stepNext: (state: State, isLastStep: boolean) => {
-      dispatch(stepNext(state))
+    stepNext: (isLastStep: boolean) => {
+      dispatch(stepNext())
       if (isLastStep) {
         // create DAO
         dispatch(createDao())
