@@ -11,6 +11,7 @@ export const ADD_TOKEN_SYMBOL = "ADD_TOKEN_SYMBOL"
 export const ADD_FOUNDER = "ADD_FOUNDER"
 export const ADD_SCHEMA = "ADD_SCHEMA"
 export const REMOVE_SCHEMA = "REMOVE_SCHEMA"
+export const SET_VOTING_MACHINE = "SET_VOTING_MACHINE"
 
 export const stepNext = () => ({
   type: STEP_NEXT,
@@ -74,4 +75,9 @@ export const addSchema = (schemaName: string) => ({
 export const removeSchema = (schemaName: string) => ({
   type: REMOVE_SCHEMA,
   payload: schemaName,
+})
+
+export const setVotingMachine = (votingMachinConfig: VotingMachinConfig) => ({
+  type: SET_VOTING_MACHINE,
+  payload: votingMachinConfig,
 })

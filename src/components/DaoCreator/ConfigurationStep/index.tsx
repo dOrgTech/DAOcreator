@@ -1,6 +1,7 @@
 import { Card, createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
 import * as React from "react";
 import AddSchemas from "./AddSchemas";
+import SetVotingMachine from "./SetVotingMachine"
 
 interface Props extends WithStyles<typeof styles> {}
 
@@ -16,6 +17,7 @@ class ConfigurationStep extends React.Component<Props, State> {
     return (
       <Card className={classes.card}>
         <AddSchemas />
+        <SetVotingMachine/>
       </Card>
     )
   }

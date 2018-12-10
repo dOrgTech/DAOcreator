@@ -8,6 +8,7 @@ import {
   ADD_SCHEMA,
   ADD_FOUNDER,
   REMOVE_SCHEMA,
+  SET_VOTING_MACHINE,
 } from "../actions/daoCreator"
 
 type State = {
@@ -17,18 +18,23 @@ type State = {
   tokenSymbol: string
   founders: Founder[]
   schemas: string[]
+  votingMachine: VotingMachinConfig
 }
 
-const initialState = {
+const initialState: State = {
   step: 0,
   daoName: "",
   tokenName: "",
   tokenSymbol: "",
   founders: [],
   schemas: [],
+  votingMachine: { name: "AbsoluteVote" }, // the default voting machine
 }
 
-export const daoCreatorReducer = (state = initialState, action: any) => {
+export const daoCreatorReducer = (
+  state = initialState,
+  action: ReduxAction
+) => {
   switch (action.type) {
     case STEP_NEXT:
       return R.merge(state, { step: state.step + 1 })
@@ -51,6 +57,10 @@ export const daoCreatorReducer = (state = initialState, action: any) => {
     case REMOVE_SCHEMA:
       return R.merge(state, {
         schemas: R.without([action.payload], state.schemas),
+      })
+    case SET_VOTING_MACHINE:
+      return R.merge(state, {
+        votingMachine: action.payload,
       })
     default:
       return state
