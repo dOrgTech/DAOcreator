@@ -43,6 +43,7 @@ const AddSchema: React.SFC<Props> = ({
           {R.map(schema => {
             return (
               <FormControlLabel
+                  key={"formControlLable-" + schema}
                 control={
                   <Checkbox
                     checked={R.contains(schema, addedSchemas)}
