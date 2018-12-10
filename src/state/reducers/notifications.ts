@@ -11,12 +11,15 @@ const initialState = {
   open: false,
 }
 
-export const notificationReducer = (state = initialState, action: any) => {
+export const notificationReducer = (
+  state = initialState,
+  action: ReduxAction
+) => {
   switch (action.type) {
     case NOTIFICATION_INFO:
-      return { message: action.message, type: "info", open: true }
+      return { message: action.payload, type: "info", open: true }
     case NOTIFICATION_ERROR:
-      return { message: action.message, type: "error", open: true }
+      return { message: action.payload, type: "error", open: true }
     case CLOSE_NOTIFICATION:
       return R.merge(state, { open: false })
     default:

@@ -13,11 +13,11 @@ export const ADD_SCHEMA = "ADD_SCHEMA"
 export const REMOVE_SCHEMA = "REMOVE_SCHEMA"
 export const SET_VOTING_MACHINE = "SET_VOTING_MACHINE"
 
-export const stepNext = () => ({
+export const stepNext = (): ReduxAction => ({
   type: STEP_NEXT,
 })
 
-export const stepBack = () => ({
+export const stepBack = (): ReduxAction => ({
   type: STEP_BACK,
 })
 
@@ -47,37 +47,39 @@ export const createDao = () => async (dispatch: any, getState: any) => {
   }
 }
 
-export const addDaoName = (daoName: string) => ({
+export const addDaoName = (daoName: string): ReduxAction => ({
   type: ADD_DAO_NAME,
   payload: daoName,
 })
 
-export const addTokenName = (tokenName: string) => ({
+export const addTokenName = (tokenName: string): ReduxAction => ({
   type: ADD_TOKEN_NAME,
   payload: tokenName,
 })
 
-export const addTokenSymbol = (tokenSymbol: string) => ({
+export const addTokenSymbol = (tokenSymbol: string): ReduxAction => ({
   type: ADD_TOKEN_SYMBOL,
   payload: tokenSymbol,
 })
 
-export const addFounder = (founder: Founder) => ({
+export const addFounder = (founder: Founder): ReduxAction => ({
   type: ADD_FOUNDER,
   payload: founder,
 })
 
-export const addSchema = (schemaName: string) => ({
+export const addSchema = (schemaName: string): ReduxAction => ({
   type: ADD_SCHEMA,
   payload: schemaName,
 })
 
-export const removeSchema = (schemaName: string) => ({
+export const removeSchema = (schemaName: string): ReduxAction => ({
   type: REMOVE_SCHEMA,
   payload: schemaName,
 })
 
-export const setVotingMachine = (votingMachinConfig: VotingMachinConfig) => ({
+export const setVotingMachine = (
+  votingMachinConfig: VotingMachinConfig
+): ReduxAction => ({
   type: SET_VOTING_MACHINE,
   payload: votingMachinConfig,
 })
