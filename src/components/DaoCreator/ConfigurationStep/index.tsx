@@ -1,6 +1,15 @@
-import { Card, createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
-import * as React from "react";
-import AddSchemas from "./AddSchemas";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  createStyles,
+  Theme,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core"
+import * as React from "react"
+import AddSchemas from "./AddSchemas"
 import SetVotingMachine from "./SetVotingMachine"
 
 interface Props extends WithStyles<typeof styles> {}
@@ -16,8 +25,20 @@ class ConfigurationStep extends React.Component<Props, State> {
     const { classes } = this.props
     return (
       <Card className={classes.card}>
-        <AddSchemas />
-        <SetVotingMachine/>
+        <CardContent>
+          <Typography variant="h5" className={classes.headline} gutterBottom>
+            Configuration
+          </Typography>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <AddSchemas />
+            </Grid>
+
+            <Grid item xs={6}>
+              <SetVotingMachine />
+            </Grid>
+          </Grid>
+        </CardContent>
       </Card>
     )
   }

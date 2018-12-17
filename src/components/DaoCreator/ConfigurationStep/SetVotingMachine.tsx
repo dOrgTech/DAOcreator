@@ -1,5 +1,8 @@
 import {
   Card,
+  Select,
+  InputLabel,
+  MenuItem,
   Checkbox,
   createStyles,
   FormControl,
@@ -28,31 +31,38 @@ const SetVotingMachine: React.SFC<Props> = ({
   avalibleVotingMachines,
 }) => {
   return (
-    <Card className={classes.card}>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Select voting machine</FormLabel>
-        <FormGroup>
-          {R.map(votingMachine => {
-            return (
-              <FormControlLabel
-                key={"formControlLable-" + votingMachine.name}
-                control={
-                  <Checkbox
-                    checked={R.equals(
-                      votingMachine.name,
-                      currentVotingMachineParmas.name
-                    )}
-                    onChange={() => setVotingMachineParams(votingMachine)}
-                    value={votingMachine.name}
-                  />
-                }
-                label={votingMachine.name}
-              />
-            )
-          }, avalibleVotingMachines)}
-        </FormGroup>
-      </FormControl>
-    </Card>
+    <FormControl component="fieldset">
+      <FormLabel component="legend">Select voting machine</FormLabel>
+      <FormGroup>
+        <FormControl>
+          <InputLabel htmlFor="voting-machine">Voting Machine</InputLabel>
+          <Select
+            onChange={(event: any) =>
+              setVotingMachineParams(R.find(
+                votingMachine => votingMachine.name === event.target.value,
+                avalibleVotingMachines
+              ) as any)
+            }
+            value={currentVotingMachineParmas.name}
+            inputProps={{
+              name: "votingMachin",
+              id: "voting-machine",
+            }}
+          >
+            {R.map(votingMachine => {
+              return (
+                <MenuItem
+                  key={`voting-machine-select-${votingMachine.name}`}
+                  value={votingMachine.name}
+                >
+                  {votingMachine.name}
+                </MenuItem>
+              )
+            }, avalibleVotingMachines)}
+          </Select>
+        </FormControl>
+      </FormGroup>
+    </FormControl>
   )
 }
 
@@ -82,8 +92,10 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setVotingMachineParams: (votingMachineConfig: VotingMachinConfig) =>
-      dispatch(setVotingMachine(votingMachineConfig)),
+    setVotingMachineParams: (votingMachineConfig: VotingMachinConfig) => {
+      console.log(votingMachineConfig)
+      return dispatch(setVotingMachine(votingMachineConfig))
+    },
   }
 }
 

@@ -34,7 +34,6 @@ const AddSchema: React.SFC<Props> = ({
   }
 
   return (
-    <Card className={classes.card}>
       <FormControl component="fieldset">
         <FormLabel component="legend">
           Turn on the schemas you want for your DAO
@@ -57,7 +56,6 @@ const AddSchema: React.SFC<Props> = ({
           }, avalibleSchemas)}
         </FormGroup>
       </FormControl>
-    </Card>
   )
 }
 
