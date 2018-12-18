@@ -30,32 +30,32 @@ const AddSchema: React.SFC<Props> = ({
   removeSchema,
 }) => {
   const handleChange = (schema: string) => (event: any) => {
-    R.contains(schema, addedSchemas) === true ? removeSchema(schema) : addSchema(schema)
+    R.contains(schema, addedSchemas) === true
+      ? removeSchema(schema)
+      : addSchema(schema)
   }
 
   return (
-      <FormControl component="fieldset">
-        <FormLabel component="legend">
-          Turn on the schemas you want for your DAO
-        </FormLabel>
-        <FormGroup>
-          {R.map(schema => {
-            return (
-              <FormControlLabel
-                  key={"formControlLable-" + schema}
-                control={
-                  <Checkbox
-                    checked={R.contains(schema, addedSchemas)}
-                    onChange={handleChange(schema)}
-                    value={schema}
-                  />
-                }
-                label={schema}
-              />
-            )
-          }, avalibleSchemas)}
-        </FormGroup>
-      </FormControl>
+    <FormControl>
+      <FormLabel>Governance Schemes</FormLabel>
+      <FormGroup>
+        {R.map(schema => {
+          return (
+            <FormControlLabel
+              key={"formControlLable-" + schema}
+              control={
+                <Checkbox
+                  checked={R.contains(schema, addedSchemas)}
+                  onChange={handleChange(schema)}
+                  value={schema}
+                />
+              }
+              label={schema}
+            />
+          )
+        }, avalibleSchemas)}
+      </FormGroup>
+    </FormControl>
   )
 }
 

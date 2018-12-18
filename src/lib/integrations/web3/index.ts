@@ -1,4 +1,4 @@
-import TypeValidation from "./typeValidation"
+import typeValidation from "./typeValidation"
 import * as rawWeb3 from "web3"
 const Web3 = rawWeb3 as any
 
@@ -10,7 +10,7 @@ if (typeof web3 !== "undefined") {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
 }
 
-export const typeValidation = TypeValidation(web3)
+export const TypeValidation = typeValidation(web3)
 
 /**
    THIS IS FOR WEB3 V1

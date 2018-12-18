@@ -12,9 +12,9 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
-import {typeValidation} from "../../integrations/web3"
+import { TypeValidation } from "../../lib/integrations/web3"
 import { connect } from "react-redux"
-import {addFounder} from "../../state/actions/daoCreator"
+import { addFounder } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void
@@ -41,19 +41,19 @@ class FoundersStep extends React.Component<Props, State> {
     this.setState(initState)
   }
 
-    addressErrorCheck = (addr: string) =>
-        !R.isEmpty(addr) && !typeValidation.isAddress(addr) ? (
-            <Typography>Error: Please enter a valid address.</Typography>
-        ) : (
-            <></>
-        )
+  addressErrorCheck = (addr: string) =>
+    !R.isEmpty(addr) && !TypeValidation.isAddress(addr) ? (
+      <Typography>Error: Please enter a valid address.</Typography>
+    ) : (
+      <></>
+    )
 
-    numberErrorCheck = (number: string) =>
-        number && !typeValidation.isBigNumber(number) ? (
-            <Typography>Error: Please enter a valid number.</Typography>
-        ) : (
-            <></>
-        )
+  numberErrorCheck = (number: string) =>
+    number && !TypeValidation.isBigNumber(number) ? (
+      <Typography>Error: Please enter a valid number.</Typography>
+    ) : (
+      <></>
+    )
 
   render() {
     const { classes, addedFounders } = this.props
@@ -151,18 +151,18 @@ const componentWithStyles = withStyles(styles)(FoundersStep)
 
 // STATE
 const mapStateToProps = (state: any) => {
-    return {
-        addedFounders: state.daoCreator.founders,
-    }
+  return {
+    addedFounders: state.daoCreator.founders,
+  }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
-    return {
-        addFounder: (founder: Founder) => dispatch(addFounder(founder)),
-    }
+  return {
+    addFounder: (founder: Founder) => dispatch(addFounder(founder)),
+  }
 }
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(componentWithStyles)

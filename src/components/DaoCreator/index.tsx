@@ -70,6 +70,8 @@ const daoCreator: React.SFC<Props> = ({
             <div className={classes.content}>{steps[step].component}</div>
             <div>
               <Button
+                variant="contained"
+                color="primary"
                 disabled={step === 0}
                 onClick={stepBack}
                 className={classes.button}

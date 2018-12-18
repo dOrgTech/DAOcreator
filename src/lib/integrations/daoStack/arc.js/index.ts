@@ -1,4 +1,5 @@
 export * from "./typeConversions"
+export * from "./votingMachines"
 import {
   DAO,
   NewDaoConfig,

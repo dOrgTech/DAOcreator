@@ -1,3 +1,6 @@
+import * as R from "ramda"
+import * as React from "react"
+import { connect } from "react-redux"
 import {
   Card,
   Select,
@@ -9,59 +12,65 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Paper,
   Theme,
   withStyles,
   WithStyles,
+  Typography,
 } from "@material-ui/core"
-import * as R from "ramda"
-import * as React from "react"
-import { connect } from "react-redux"
 import { setVotingMachine } from "../../../state/actions/daoCreator"
+import {
+  VotingMachine,
+  votingMachines,
+} from "../../../lib/integrations/daoStack/arc.js"
 
 interface Props extends WithStyles<typeof styles> {
-  setVotingMachineParams: (params: VotingMachinConfig) => void
-  currentVotingMachineParmas: VotingMachinConfig
-  avalibleVotingMachines: VotingMachinConfig[]
+  setVotingMachineParams: (params: VotingMachine) => void
+  currentVotingMachine: VotingMachine
 }
 
 const SetVotingMachine: React.SFC<Props> = ({
   classes,
   setVotingMachineParams,
-  currentVotingMachineParmas,
-  avalibleVotingMachines,
+  currentVotingMachine,
 }) => {
   return (
-    <FormControl component="fieldset">
-      <FormLabel component="legend">Select voting machine</FormLabel>
+    <FormControl>
+      <FormLabel>Voting Machine</FormLabel>
       <FormGroup>
         <FormControl>
-          <InputLabel htmlFor="voting-machine">Voting Machine</InputLabel>
           <Select
             onChange={(event: any) =>
               setVotingMachineParams(R.find(
-                votingMachine => votingMachine.name === event.target.value,
-                avalibleVotingMachines
+                votingMachine =>
+                  votingMachine.displayName === event.target.value,
+                votingMachines
               ) as any)
             }
-            value={currentVotingMachineParmas.name}
+            value={currentVotingMachine.displayName}
             inputProps={{
-              name: "votingMachin",
+              name: "votingMachine",
               id: "voting-machine",
             }}
           >
             {R.map(votingMachine => {
               return (
                 <MenuItem
-                  key={`voting-machine-select-${votingMachine.name}`}
-                  value={votingMachine.name}
+                  key={`voting-machine-select-${votingMachine.typeName}`}
+                  value={votingMachine.displayName}
                 >
-                  {votingMachine.name}
+                  {votingMachine.displayName}
                 </MenuItem>
               )
-            }, avalibleVotingMachines)}
+            }, votingMachines)}
           </Select>
         </FormControl>
       </FormGroup>
+      <Paper>
+        <Typography>
+          {/* TODO fix styling of this */ currentVotingMachine.description}
+        </Typography>
+      </Paper>
     </FormControl>
   )
 }
@@ -81,19 +90,13 @@ const componentWithStyles = withStyles(styles)(SetVotingMachine)
 // STATE
 const mapStateToProps = (state: any) => {
   return {
-    // TODO: fix hardcoded
-    avalibleVotingMachines: [
-      { name: "GenesisProtocol" },
-      { name: "AbsoluteVote" },
-    ],
-    currentVotingMachineParmas: state.daoCreator.votingMachine,
+    currentVotingMachine: state.daoCreator.votingMachine,
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setVotingMachineParams: (votingMachineConfig: VotingMachinConfig) => {
-      console.log(votingMachineConfig)
+    setVotingMachineParams: (votingMachineConfig: VotingMachine) => {
       return dispatch(setVotingMachine(votingMachineConfig))
     },
   }

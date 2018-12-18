@@ -1,6 +1,6 @@
-import * as Arc from "../../integrations/arc.js"
 import { NewDaoConfig } from "@daostack/arc.js"
 import { newNotificationError } from "./notifications"
+import * as Arc from "../../lib/integrations/daoStack/arc.js"
 
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
@@ -78,7 +78,7 @@ export const removeSchema = (schemaName: string): ReduxAction => ({
 })
 
 export const setVotingMachine = (
-  votingMachinConfig: VotingMachinConfig
+  votingMachinConfig: Arc.VotingMachine
 ): ReduxAction => ({
   type: SET_VOTING_MACHINE,
   payload: votingMachinConfig,

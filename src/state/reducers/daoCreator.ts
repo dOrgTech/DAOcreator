@@ -10,6 +10,10 @@ import {
   REMOVE_SCHEMA,
   SET_VOTING_MACHINE,
 } from "../actions/daoCreator"
+import {
+  VotingMachine,
+  votingMachines,
+} from "../../lib/integrations/daoStack/arc.js"
 
 type State = {
   step: number
@@ -18,7 +22,7 @@ type State = {
   tokenSymbol: string
   founders: Founder[]
   schemas: string[]
-  votingMachine: VotingMachinConfig
+  votingMachine: VotingMachine
 }
 
 const initialState: State = {
@@ -28,7 +32,7 @@ const initialState: State = {
   tokenSymbol: "",
   founders: [],
   schemas: [],
-  votingMachine: { name: "AbsoluteVote" }, // the default voting machine
+  votingMachine: votingMachines[0],
 }
 
 export const daoCreatorReducer = (
