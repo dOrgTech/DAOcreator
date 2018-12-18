@@ -1,7 +1,7 @@
 import { NewDaoConfig, FounderConfig, SchemeConfig } from "@daostack/arc.js"
 import { BigNumber } from "bignumber.js"
 import * as R from "ramda"
-import { VotingMachine } from "./votingMachines"
+import { Founder, VotingMachine } from "./types"
 
 const toFounderConfigs = (founders: Founder[]): FounderConfig[] =>
   R.map(

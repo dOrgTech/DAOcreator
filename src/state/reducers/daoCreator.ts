@@ -13,6 +13,7 @@ import {
 import {
   VotingMachine,
   votingMachines,
+  Founder,
 } from "../../lib/integrations/daoStack/arc"
 
 type State = {

@@ -15,6 +15,7 @@ import {
 import { TypeValidation } from "../../lib/integrations/web3"
 import { connect } from "react-redux"
 import { addFounder } from "../../state/actions/daoCreator"
+import { Founder } from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   addFounder: (founder: Founder) => void

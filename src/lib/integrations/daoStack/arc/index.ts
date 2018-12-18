@@ -6,8 +6,9 @@ import {
   ConfigService,
   InitializeArcJs,
 } from "@daostack/arc.js"
-import { VotingMachine } from "./votingMachines"
+import { VotingMachine, Founder } from "./types"
 import { toNewDaoConfig } from "./typeConversions"
+export * from "./types"
 
 let isInitialized = false
 

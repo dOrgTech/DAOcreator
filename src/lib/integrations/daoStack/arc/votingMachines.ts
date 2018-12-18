@@ -5,16 +5,9 @@ import {
   GenesisProtocolFactory,
 } from "@daostack/arc.js"
 
-// type VotingMachineFactory = ContractWrapperFactory<IContractWrapper>
+import { VotingMachine } from "./types"
 
-export type VotingMachine = {
-  typeName: string
-  // TODO: we need an address type...
-  universalAddress: string
-  // factory: VotingMachineFactory
-  displayName: string
-  description: string
-}
+// type VotingMachineFactory = ContractWrapperFactory<IContractWrapper>
 
 export const votingMachines: VotingMachine[] = [
   {
