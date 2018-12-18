@@ -26,13 +26,13 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
         <Typography variant="h5" className={classes.header}>
           Empowering Decentralized Organization
         </Typography>
-        <Button variant="raised" className={classes.button}>
+        <Button variant="contained" className={classes.button}>
           What's a DAO?
         </Button>
-        <Button variant="raised" className={classes.button} onClick={createDao}>
+        <Button variant="contained" className={classes.button} onClick={createDao}>
           Create a DAO
         </Button>
-        <Button variant="raised" className={classes.button}>
+        <Button variant="contained" className={classes.button}>
           Browse a DAO
         </Button>
       </CardContent>
