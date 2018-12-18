@@ -42,15 +42,27 @@ class FoundersStep extends React.Component<Props, State> {
     this.setState(initState)
   }
 
-  addressErrorCheck = (addr: string) =>
-    !R.isEmpty(addr) && !TypeValidation.isAddress(addr) ? (
-      <Typography>Error: Please enter a valid address.</Typography>
-    ) : (
-      <></>
-    )
+  addressErrorCheck = (addr: string) => {
+    if (!R.isEmpty(addr)) {
+      if (!TypeValidation.isAddress(addr)) {
+        return <Typography>Error: Please enter a valid address.</Typography>
+      } else if (
+        R.any(
+          ({ address }) => R.equals(address, addr),
+          this.props.addedFounders
+        )
+      ) {
+        return <Typography>Error: Founder already added</Typography>
+      } else {
+        return <></>
+      }
+    } else {
+      return <></>
+    }
+  }
 
   numberErrorCheck = (number: string) =>
-    number && !TypeValidation.isBigNumber(number) ? (
+    !R.isEmpty(number) && !TypeValidation.isBigNumber(number) ? (
       <Typography>Error: Please enter a valid number.</Typography>
     ) : (
       <></>
@@ -113,10 +125,7 @@ class FoundersStep extends React.Component<Props, State> {
                 </Button>
               </Grid>
             </Grid>
-
-            <Grid container spacing={16}>
-              {R.map(this.addedFounder, addedFounders)}
-            </Grid>
+            {R.map(this.addedFounder, addedFounders)}
           </CardContent>
         </form>
       </Card>
@@ -124,7 +133,7 @@ class FoundersStep extends React.Component<Props, State> {
   }
 
   addedFounder = ({ address, reputation, tokens }: Founder) => (
-    <>
+    <Grid container spacing={16} key={`founder-${address}`}>
       <Grid item xs={6}>
         <Typography>{address}</Typography>
       </Grid>
@@ -134,7 +143,7 @@ class FoundersStep extends React.Component<Props, State> {
       <Grid item xs={2}>
         <Typography>{tokens}</Typography>
       </Grid>
-    </>
+    </Grid>
   )
 }
 
