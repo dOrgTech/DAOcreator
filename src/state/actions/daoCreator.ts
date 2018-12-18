@@ -1,4 +1,3 @@
-import { NewDaoConfig } from "@daostack/arc.js"
 import { newNotificationError } from "./notifications"
 import * as Arc from "../../lib/integrations/daoStack/arc.js"
 
@@ -23,25 +22,10 @@ export const stepBack = (): ReduxAction => ({
 
 export const createDao = () => async (dispatch: any, getState: any) => {
   //TODO: needs to get the data from the store and typeConvert it into something DAOStack understand
-  const {
-    daoName,
-    tokenName,
-    tokenSymbol,
-    founders,
-  } = getState().daoCreator.data
+  const { naming, founders, schemas, votingMachine } = getState().daoCreator
 
   try {
-    Arc.createDao({
-      name: daoName,
-      // tokenCap?: BigNumber | string,
-      tokenName,
-      tokenSymbol,
-      founders: Arc.toFounderConfigs(founders),
-      // daoCreatorAddress?: Address,
-      // universalController?: boolean,
-      // votingMachineParams?: NewDaoVotingMachineConfig,
-      // schemes?: Array<SchemeConfig>,
-    } as NewDaoConfig)
+    Arc.createDao(naming, founders, schemas, votingMachine)
   } catch (e) {
     newNotificationError("Failed to create DAO. With error: " + e.message)
   }

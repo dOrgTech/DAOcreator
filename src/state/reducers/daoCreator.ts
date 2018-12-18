@@ -17,9 +17,11 @@ import {
 
 type State = {
   step: number
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
+  naming: {
+    daoName: string
+    tokenName: string
+    tokenSymbol: string
+  }
   founders: Founder[]
   schemas: string[]
   votingMachine: VotingMachine
@@ -27,9 +29,11 @@ type State = {
 
 const initialState: State = {
   step: 0,
-  daoName: "",
-  tokenName: "",
-  tokenSymbol: "",
+  naming: {
+    daoName: "",
+    tokenName: "",
+    tokenSymbol: "",
+  },
   founders: [],
   schemas: [],
   votingMachine: votingMachines[0],
@@ -45,11 +49,17 @@ export const daoCreatorReducer = (
     case STEP_BACK:
       return R.merge(state, { step: state.step - 1 })
     case ADD_DAO_NAME:
-      return R.merge(state, { daoName: action.payload })
+      return R.merge(state, {
+        naming: R.merge(state.naming, { daoName: action.payload }),
+      })
     case ADD_TOKEN_NAME:
-      return R.merge(state, { tokenName: action.payload })
+      return R.merge(state, {
+        naming: R.merge(state.naming, { tokenName: action.payload }),
+      })
     case ADD_TOKEN_SYMBOL:
-      return R.merge(state, { tokenSymbol: action.payload })
+      return R.merge(state, {
+        naming: R.merge(state.naming, { tokenSymbol: action.payload }),
+      })
     case ADD_FOUNDER:
       return R.merge(state, {
         founders: R.append(action.payload, state.founders),

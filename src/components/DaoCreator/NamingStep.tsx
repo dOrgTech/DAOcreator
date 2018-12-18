@@ -127,9 +127,9 @@ const componentWithStyles = withStyles(styles)(NamingStep)
 // STATE
 const mapStateToProps = (state: any) => {
   return {
-    daoName: state.daoCreator.daoName,
-    tokenName: state.daoCreator.tokenName,
-    tokenSymbol: state.daoCreator.tokenSymbol,
+    daoName: state.daoCreator.naming.daoName,
+    tokenName: state.daoCreator.naming.tokenName,
+    tokenSymbol: state.daoCreator.naming.tokenSymbol,
   }
 }
 
