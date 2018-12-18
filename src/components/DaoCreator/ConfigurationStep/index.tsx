@@ -26,7 +26,7 @@ class ConfigurationStep extends React.Component<Props, State> {
     return (
       <Card className={classes.card}>
         <CardContent>
-          <Typography variant="h5" className={classes.headline} gutterBottom>
+          <Typography variant="h4" className={classes.headline} gutterBottom>
             Configuration
           </Typography>
           <Grid container spacing={16}>

@@ -56,7 +56,7 @@ class NamingStep extends React.Component<Props, State> {
       <Card className={classes.card}>
         <form>
           <CardContent>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
+            <Typography variant="h4" className={classes.headline} gutterBottom>
               Create a DAO
             </Typography>
             <Grid container spacing={16}>

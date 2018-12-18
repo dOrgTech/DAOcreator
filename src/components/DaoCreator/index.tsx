@@ -16,6 +16,7 @@ import { stepNext, stepBack } from "../../state/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import ConfigurationStep from "./ConfigurationStep"
+import ReviewStep from "./ReviewStep"
 import { createDao } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
@@ -42,6 +43,10 @@ const daoCreator: React.SFC<Props> = ({
     {
       title: "Configuration",
       component: <ConfigurationStep />,
+    },
+    {
+      title: "Review",
+      component: <ReviewStep />,
     },
   ]
 
