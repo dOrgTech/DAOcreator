@@ -1,5 +1,5 @@
 # dOrg dApp
-TODO
+dApp for creating and interacting with DAOs.
 
 ## Style Guide
 ### Note on types
