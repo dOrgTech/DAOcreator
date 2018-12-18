@@ -13,7 +13,7 @@ import {
 import {
   VotingMachine,
   votingMachines,
-} from "../../lib/integrations/daoStack/arc.js"
+} from "../../lib/integrations/daoStack/arc"
 
 type State = {
   step: number

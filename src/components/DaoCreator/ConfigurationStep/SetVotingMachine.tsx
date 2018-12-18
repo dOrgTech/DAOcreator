@@ -22,7 +22,7 @@ import { setVotingMachine } from "../../../state/actions/daoCreator"
 import {
   VotingMachine,
   votingMachines,
-} from "../../../lib/integrations/daoStack/arc.js"
+} from "../../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   setVotingMachineParams: (params: VotingMachine) => void

@@ -1,5 +1,5 @@
 import { newNotificationError } from "./notifications"
-import * as Arc from "../../lib/integrations/daoStack/arc.js"
+import * as Arc from "../../lib/integrations/daoStack/arc"
 
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
