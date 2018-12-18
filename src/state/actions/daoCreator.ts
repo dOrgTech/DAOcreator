@@ -1,6 +1,6 @@
 import { newNotificationError } from "./notifications"
 import * as Arc from "../../lib/integrations/daoStack/arc"
-import { Founder } from "../../lib/integrations/daoStack/arc"
+import { Founder, Schema } from "../../lib/integrations/daoStack/arc"
 
 // Stepper
 export const STEP_NEXT = "STEP_NEXT"
@@ -52,14 +52,14 @@ export const addFounder = (founder: Founder): ReduxAction => ({
   payload: founder,
 })
 
-export const addSchema = (schemaName: string): ReduxAction => ({
+export const addSchema = (schema: Schema): ReduxAction => ({
   type: ADD_SCHEMA,
-  payload: schemaName,
+  payload: schema,
 })
 
-export const removeSchema = (schemaName: string): ReduxAction => ({
+export const removeSchema = (schema: Schema): ReduxAction => ({
   type: REMOVE_SCHEMA,
-  payload: schemaName,
+  payload: schema,
 })
 
 export const setVotingMachine = (

@@ -14,22 +14,23 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { addSchema, removeSchema } from "../../../state/actions/daoCreator"
+import {schemas} from "../../../lib/integrations/daoStack/arc/schemas"
+import { Schema } from "src/lib/integrations/daoStack/arc";
+
 
 interface Props extends WithStyles<typeof styles> {
-  addSchema: (schema: string) => void
-  removeSchema: (schema: string) => void
-  avalibleSchemas: string[]
-  addedSchemas: string[]
+  addSchema: (schema: Schema) => void
+  removeSchema: (Schema: Schema) => void
+  addedSchemas: Schema[]
 }
 
 const AddSchema: React.SFC<Props> = ({
   classes,
   addedSchemas,
-  avalibleSchemas,
   addSchema,
   removeSchema,
 }) => {
-  const handleChange = (schema: string) => (event: any) => {
+  const handleChange = (schema: Schema) => (event: any) => {
     R.contains(schema, addedSchemas) === true
       ? removeSchema(schema)
       : addSchema(schema)
@@ -42,18 +43,18 @@ const AddSchema: React.SFC<Props> = ({
         {R.map(schema => {
           return (
             <FormControlLabel
-              key={"formControlLable-" + schema}
+              key={"formControlLable-" + schema.typeName}
               control={
                 <Checkbox
                   checked={R.contains(schema, addedSchemas)}
                   onChange={handleChange(schema)}
-                  value={schema}
+                  value={schema.typeName}
                 />
               }
-              label={schema}
+              label={schema.displayName}
             />
           )
-        }, avalibleSchemas)}
+        }, schemas)}
       </FormGroup>
     </FormControl>
   )
@@ -74,20 +75,14 @@ const componentWithStyles = withStyles(styles)(AddSchema)
 // STATE
 const mapStateToProps = (state: any) => {
   return {
-    // TODO: fix hardcoded
-    avalibleSchemas: [
-      "SchemeRegistrar",
-      "UpgradeScheme",
-      "GlobalConstraintRegistrar",
-    ],
     addedSchemas: state.daoCreator.schemas,
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addSchema: (schema: string) => dispatch(addSchema(schema)),
-    removeSchema: (schema: string) => dispatch(removeSchema(schema)),
+      addSchema: (schema: Schema) => dispatch(addSchema(schema)),
+      removeSchema: (schema: Schema) => dispatch(removeSchema(schema)),
   }
 }
 

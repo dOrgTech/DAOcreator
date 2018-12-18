@@ -14,6 +14,7 @@ import {
   VotingMachine,
   votingMachines,
   Founder,
+  Schema,
 } from "../../lib/integrations/daoStack/arc"
 
 type State = {
@@ -24,7 +25,7 @@ type State = {
     tokenSymbol: string
   }
   founders: Founder[]
-  schemas: string[]
+  schemas: Schema[]
   votingMachine: VotingMachine
 }
 

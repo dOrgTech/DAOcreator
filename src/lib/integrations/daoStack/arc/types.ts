@@ -15,4 +15,9 @@ export type Founder = {
   tokens: string
 }
 
-export type Schema = any
+export type Schema = {
+  typeName: string
+  address?: string
+  displayName: string
+  description: string
+}
