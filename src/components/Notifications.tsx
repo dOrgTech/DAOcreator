@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Dispatch } from "redux"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import {
@@ -10,6 +11,7 @@ import {
   createStyles,
 } from "@material-ui/core"
 import NotificationActions, * as notificationActions from "../redux/actions/notifications"
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
@@ -58,7 +60,7 @@ const styles = ({ palette }: Theme) =>
 const componentWithStyles = withStyles(styles)(Notifications)
 
 // STATE
-const mapStateToProps = (state: any, { match }: any) => {
+const mapStateToProps = (state: AppState, { match }: any) => {
   return {
     message: state.notification.message,
     type: state.notification.type,
@@ -66,7 +68,7 @@ const mapStateToProps = (state: any, { match }: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators(notificationActions, dispatch),
   }
