@@ -20,6 +20,7 @@ interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
+  stepNumber: number
   actions: DaoCreatorActions
 }
 
@@ -53,17 +54,24 @@ class NamingStep extends React.Component<Props, State> {
   handleChange = (event: any) => {
     const { name, value } = event.target
     let formErrors = { ...this.state.formErrors }
+    let valide = true
 
     switch (name) {
       case "daoName":
-        formErrors.daoName =
-          value.length < 3 ? "minimum 3 characaters required" : ""
+        if (value.length < 3) {
+          formErrors.daoName = "minimum 3 characters required"
+          valide = false
+        } else {
+          formErrors.daoName = ""
+        }
         break
       default:
         break
     }
 
     this.setState({ formErrors, [name]: value } as any)
+    // TODO: set form validation state in redux
+    this.props.actions.setStepValidation(this.props.stepNumber, valide)
   }
 
   render() {
@@ -152,6 +160,7 @@ const mapStateToProps = (state: AppState) => {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
+    stepNumber: state.daoCreator.step,
   }
 }
 

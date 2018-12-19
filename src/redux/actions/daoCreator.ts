@@ -17,6 +17,10 @@ export default interface DaoCreatorActions {
     votingMachine: Arc.VotingMachine
   ): (dispatch: Dispatch) => Promise<void>
   createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
+  setStepValidation(
+    step: number,
+    isValide: boolean
+  ): (dispatch: Dispatch) => Promise<void>
 }
 
 export function nextStep(): (dispatch: Dispatch) => Promise<void> {
@@ -111,5 +115,15 @@ export function createDao(): (
       dispatch(Actions.daoCreateNextStep())
       return Promise.reject(e.message)
     }
+  }
+}
+
+export function setStepValidation(
+  step: number,
+  valide: boolean
+): (dispatch: Dispatch) => Promise<void> {
+  return (dispatch: Dispatch) => {
+    dispatch(Actions.daoCreateSetStepValidation({ step, valide }))
+    return Promise.resolve()
   }
 }

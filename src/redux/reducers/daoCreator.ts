@@ -5,6 +5,7 @@ import { votingMachines } from "src/lib/integrations/daoStack/arc"
 
 const initialState: DaoCreatorState = {
   step: 0,
+  stepValidation: [false],
   naming: {
     daoName: "",
     tokenName: "",
@@ -22,7 +23,13 @@ export const reducer = (
 ): DaoCreatorState => {
   switch (action.type) {
     case Actions.DAO_CREATE_NEXT_STEP:
-      return R.merge(state, { step: state.step + 1 })
+      return R.merge(state, {
+        step: state.step + 1,
+        stepValidation:
+          state.stepValidation.length >= state.step + 1
+            ? state.stepValidation
+            : R.append(false, state.stepValidation),
+      })
     case Actions.DAO_CREATE_PREV_STEP:
       return R.merge(state, { step: state.step - 1 })
     case Actions.DAO_CREATE_SET_NAME:
@@ -53,6 +60,14 @@ export const reducer = (
       return R.merge(state, { votingMachine: action.payload })
     case Actions.DAO_CREATE_SET_DEPLOYED_DAO:
       return R.merge(state, { deployedDao: action.payload })
+    case Actions.DAO_CREATE_SET_STEP_VALIDATION:
+      return R.merge(state, {
+        stepValidation: R.update(
+          action.payload.step,
+          action.payload.valide,
+          state.stepValidation
+        ),
+      })
     default:
       return state
   }

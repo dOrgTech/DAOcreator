@@ -10,6 +10,7 @@ export enum Actions {
   DAO_CREATE_REM_SCHEMA = "DAO_CREATE_REM_SCHEMA",
   DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
   DAO_CREATE_SET_DEPLOYED_DAO = "DAO_CREATE_SET_DEPLOYED_DAO",
+  DAO_CREATE_SET_STEP_VALIDATION = "DAO_CREATE_SET_STEP_VALIDATION",
 
   // Notifications
   NOTIFICATION_INFO = "NOTIFICATION_INFO",
@@ -101,6 +102,14 @@ export const daoCreateAddVoteMachine = createPayloadAction<
   DaoCreateAddVoteMachine
 >(Actions.DAO_CREATE_ADD_VOTE_MACHINE)
 
+export interface DaoCreateSetStepValidation
+  extends PayloadAction<string, { step: number; valide: boolean }> {
+  type: Actions.DAO_CREATE_SET_STEP_VALIDATION
+}
+export const daoCreateSetStepValidation = createPayloadAction<
+  DaoCreateSetStepValidation
+>(Actions.DAO_CREATE_SET_STEP_VALIDATION)
+
 // Notifications
 export interface NotificationInfo extends PayloadAction<string, string> {
   type: Actions.NOTIFICATION_INFO
@@ -134,6 +143,7 @@ export type AnyAction =
   | DaoCreateRemSchema
   | DaoCreateAddVoteMachine
   | DaoCreateSetDeployedDao
+  | DaoCreateSetStepValidation
   | NotificationInfo
   | NotificationError
   | NotificationClose

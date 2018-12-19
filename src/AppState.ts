@@ -8,6 +8,7 @@ import * as Arc from "./lib/integrations/daoStack/arc"
 export interface DaoCreatorState {
   // TODO: Add layer 2 types that make up this state
   step: number
+  stepValidation: boolean[]
   naming: {
     daoName: string
     tokenName: string
