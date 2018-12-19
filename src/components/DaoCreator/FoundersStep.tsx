@@ -12,14 +12,16 @@ import {
   Button,
   CardContent,
 } from "@material-ui/core"
+import { bindActionCreators, Dispatch } from "redux"
+import { AppState } from "src/AppState"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 import { TypeValidation } from "../../lib/integrations/web3"
 import { connect } from "react-redux"
-import { addFounder } from "../../state/actions/daoCreator"
 import { Founder } from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
-  addFounder: (founder: Founder) => void
   addedFounders: Founder[]
+    actions: DaoCreatorActions
 }
 
 type State = Founder
@@ -38,7 +40,7 @@ class FoundersStep extends React.Component<Props, State> {
   }
 
   onAddFounder = () => {
-    this.props.addFounder(this.state)
+    this.props.actions.addFounder(this.state)
     this.setState(initState)
   }
 
@@ -166,10 +168,10 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    addFounder: (founder: Founder) => dispatch(addFounder(founder)),
-  }
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        actions: bindActionCreators(daoCreatorActions, dispatch),
+    }
 }
 
 export default connect(

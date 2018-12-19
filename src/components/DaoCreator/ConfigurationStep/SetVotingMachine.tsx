@@ -1,6 +1,7 @@
 import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
+import { bindActionCreators, Dispatch } from "redux"
 import {
   Card,
   Select,
@@ -18,21 +19,22 @@ import {
   WithStyles,
   Typography,
 } from "@material-ui/core"
-import { setVotingMachine } from "../../../state/actions/daoCreator"
+import DaoCreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import {
   VotingMachine,
   votingMachines,
 } from "../../../lib/integrations/daoStack/arc"
+import { AppState } from "src/AppState";
 
 interface Props extends WithStyles<typeof styles> {
-  setVotingMachineParams: (params: VotingMachine) => void
   currentVotingMachine: VotingMachine
+  actions: DaoCreatorActions
 }
 
 const SetVotingMachine: React.SFC<Props> = ({
   classes,
-  setVotingMachineParams,
   currentVotingMachine,
+    actions,
 }) => {
   return (
     <FormControl>
@@ -41,7 +43,7 @@ const SetVotingMachine: React.SFC<Props> = ({
         <FormControl>
           <Select
             onChange={(event: any) =>
-              setVotingMachineParams(R.find(
+              actions.setVotingMachine(R.find(
                 votingMachine =>
                   votingMachine.displayName === event.target.value,
                 votingMachines
@@ -88,17 +90,15 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(SetVotingMachine)
 
 // STATE
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
   return {
     currentVotingMachine: state.daoCreator.votingMachine,
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setVotingMachineParams: (votingMachineConfig: VotingMachine) => {
-      return dispatch(setVotingMachine(votingMachineConfig))
-    },
+      actions: bindActionCreators(daoCreatorActions, dispatch),
   }
 }
 

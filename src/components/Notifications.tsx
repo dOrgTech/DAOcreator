@@ -1,5 +1,7 @@
 import * as React from "react"
+import { Dispatch } from "redux"
 import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import {
   withStyles,
   Snackbar,
@@ -8,20 +10,21 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import { closeNotification } from "../state/actions/notifications"
+import NotificationActions, * as notificationActions from "../redux/actions/notifications"
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
   type: string
   open: boolean
-  close: () => void
+  actions: NotificationActions
 }
 
 const Notifications: React.SFC<Props> = ({
   message,
   type,
   open,
-  close,
+  actions,
   classes,
 }) => (
   <Snackbar
@@ -31,7 +34,7 @@ const Notifications: React.SFC<Props> = ({
     }}
     open={open}
     autoHideDuration={10000}
-    onClose={close}
+    onClose={async () => await actions.closeNotification()}
     ContentProps={{
       "aria-describedby": "message-id",
     }}
@@ -57,7 +60,7 @@ const styles = ({ palette }: Theme) =>
 const componentWithStyles = withStyles(styles)(Notifications)
 
 // STATE
-const mapStateToProps = (state: any, { match }: any) => {
+const mapStateToProps = (state: AppState, { match }: any) => {
   return {
     message: state.notification.message,
     type: state.notification.type,
@@ -65,9 +68,9 @@ const mapStateToProps = (state: any, { match }: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    close: () => dispatch(closeNotification()),
+    actions: bindActionCreators(notificationActions, dispatch),
   }
 }
 

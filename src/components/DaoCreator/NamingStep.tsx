@@ -11,19 +11,15 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
-import {
-  addDaoName,
-  addTokenName,
-  addTokenSymbol,
-} from "../../state/actions/daoCreator"
+import { bindActionCreators, Dispatch } from "redux"
+import { AppState } from "src/AppState"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
-  addDaoName: (daoName: string) => void
-  addTokenName: (tokenName: string) => void
-  addTokenSymbol: (tokenSymbol: string) => void
+  actions: DaoCreatorActions
 }
 
 type State = {
@@ -48,7 +44,8 @@ class NamingStep extends React.Component<Props, State> {
   }
 
   render() {
-    const { addDaoName, addTokenName, addTokenSymbol, classes } = this.props
+    const { classes } = this.props
+    const actions = this.props.actions
 
     const { daoName, tokenName, tokenSymbol } = this.state
 
@@ -69,7 +66,7 @@ class NamingStep extends React.Component<Props, State> {
                     value={daoName}
                     onChange={this.handleChange("daoName")}
                     margin="normal"
-                    onBlur={() => addDaoName(daoName)}
+                    onBlur={() => actions.setName(daoName)}
                     fullWidth
                     required
                   />
@@ -81,7 +78,7 @@ class NamingStep extends React.Component<Props, State> {
                     label="Token Name"
                     value={tokenName}
                     onChange={this.handleChange("tokenName")}
-                    onBlur={() => addTokenName(tokenName)}
+                    onBlur={() => actions.setTokenName(tokenName)}
                     margin="normal"
                     fullWidth
                     required
@@ -94,7 +91,7 @@ class NamingStep extends React.Component<Props, State> {
                     label="Token Symbol"
                     value={tokenSymbol}
                     onChange={this.handleChange("tokenSymbol")}
-                    onBlur={() => addTokenSymbol(tokenSymbol)}
+                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
                     margin="normal"
                     fullWidth
                     required
@@ -125,7 +122,7 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(NamingStep)
 
 // STATE
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
   return {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,
@@ -133,12 +130,9 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    addDaoName: (daoName: string) => dispatch(addDaoName(daoName)),
-    addTokenName: (tokenName: string) => dispatch(addTokenName(tokenName)),
-    addTokenSymbol: (tokenSymbol: string) =>
-      dispatch(addTokenSymbol(tokenSymbol)),
+    actions: bindActionCreators(daoCreatorActions, dispatch),
   }
 }
 

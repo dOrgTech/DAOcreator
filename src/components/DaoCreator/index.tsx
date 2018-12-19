@@ -1,6 +1,7 @@
 import * as React from "react"
 import * as R from "ramda"
 import { connect } from "react-redux"
+import { bindActionCreators, Dispatch } from "redux"
 import {
   withStyles,
   Theme,
@@ -12,25 +13,18 @@ import {
   Typography,
   Button,
 } from "@material-ui/core"
-import { stepNext, stepBack } from "../../state/actions/daoCreator"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import ConfigurationStep from "./ConfigurationStep"
 import ReviewStep from "./ReviewStep"
-import { createDao } from "../../state/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
-  stepNext: (isLastStep: boolean) => void
-  stepBack: () => void
+  actions: DaoCreatorActions
 }
 
-const daoCreator: React.SFC<Props> = ({
-  classes,
-  step,
-  stepNext,
-  stepBack,
-}) => {
+const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
   const steps = [
     {
       title: "Name",
@@ -66,7 +60,7 @@ const daoCreator: React.SFC<Props> = ({
             <Typography className={classes.content}>
               All steps completed - you&quot;re finished
             </Typography>
-            <Button onClick={stepBack} className={classes.button}>
+            <Button onClick={actions.prevStep} className={classes.button}>
               Back
             </Button>
           </div>
@@ -78,7 +72,7 @@ const daoCreator: React.SFC<Props> = ({
                 variant="contained"
                 color="primary"
                 disabled={step === 0}
-                onClick={stepBack}
+                onClick={actions.prevStep}
                 className={classes.button}
               >
                 Back
@@ -86,7 +80,7 @@ const daoCreator: React.SFC<Props> = ({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => stepNext(isLastStep)}
+                onClick={isLastStep ? actions.createDao :actions.nextStep}
                 className={classes.button}
               >
                 {isLastStep ? "Finish" : "Next"}
@@ -125,16 +119,9 @@ const mapStateToProps = (state: any, ownProps: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    stepNext: (isLastStep: boolean) => {
-      dispatch(stepNext())
-      if (isLastStep) {
-        // create DAO
-        dispatch(createDao())
-      }
-    },
-    stepBack: () => dispatch(stepBack()),
+    actions: bindActionCreators(daoCreatorActions, dispatch),
   }
 }
 
