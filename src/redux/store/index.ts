@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose, Store } from "redux"
 import thunkMiddleware from "redux-thunk"
-import reducer from "./state/reducers"
+import reducer from "../reducers"
 import { connectRouter, routerMiddleware } from "connected-react-router"
 import { History } from "history"
 

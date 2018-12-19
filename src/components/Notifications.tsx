@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import {
   withStyles,
   Snackbar,
@@ -8,20 +9,20 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import { closeNotification } from "../state/actions/notifications"
+import NotificationActions, * as notificationActions from "../redux/actions/notifications"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
   type: string
   open: boolean
-  close: () => void
+  actions: NotificationActions
 }
 
 const Notifications: React.SFC<Props> = ({
   message,
   type,
   open,
-  close,
+  actions,
   classes,
 }) => (
   <Snackbar
@@ -31,7 +32,7 @@ const Notifications: React.SFC<Props> = ({
     }}
     open={open}
     autoHideDuration={10000}
-    onClose={close}
+    onClose={async () => await actions.closeNotification()}
     ContentProps={{
       "aria-describedby": "message-id",
     }}
@@ -67,7 +68,7 @@ const mapStateToProps = (state: any, { match }: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    close: () => dispatch(closeNotification()),
+    actions: bindActionCreators(notificationActions, dispatch),
   }
 }
 

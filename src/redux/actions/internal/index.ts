@@ -1,0 +1,129 @@
+export enum Actions {
+  // DAO Creator
+  DAO_CREATE_NEXT_STEP = "DAO_CREATE_NEXT_STEP",
+  DAO_CREATE_PREV_STEP = "DAO_CREATE_PREV_STEP",
+  DAO_CREATE_SET_NAME = "DAO_CREATE_SET_NAME",
+  DAO_CREATE_SET_TOKEN = "DAO_CREATE_SET_TOKEN",
+  DAO_CREATE_SET_TOKEN_SYM = "DAO_CREATE_SET_TOKEN_SYM",
+  DAO_CREATE_ADD_FOUNDER = "DAO_CREATE_ADD_FOUNDER",
+  DAO_CREATE_ADD_SCHEMA = "DAO_CREATE_ADD_SCHEMA",
+  DAO_CREATE_REM_SCHEMA = "DAO_CREATE_REM_SCHEMA",
+  DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
+
+  // Notifications
+  NOTIFICATION_INFO = "NOTIFICATION_INFO",
+  NOTIFICATION_ERROR = "NOTIFICATION_ERROR",
+  NOTIFICATION_CLOSE = "NOTIFICATION_CLOSE",
+}
+
+import {
+  Action,
+  createAction,
+  PayloadAction,
+  createPayloadAction,
+} from "./typeSafety"
+
+// TODO: get layer 2 types instead? or UI types? I think layer 2 makes most sense...
+import * as Arc from "../../../lib/integrations/daoStack/arc"
+
+// DAO Creator
+export interface DaoCreateNextStep extends Action<string> {
+  type: Actions.DAO_CREATE_NEXT_STEP
+}
+export const daoCreateNextStep = createAction<DaoCreateNextStep>(
+  Actions.DAO_CREATE_NEXT_STEP
+)
+
+export interface DaoCreatePrevStep extends Action<string> {
+  type: Actions.DAO_CREATE_PREV_STEP
+}
+export const daoCreatePrevStep = createAction<DaoCreatePrevStep>(
+  Actions.DAO_CREATE_PREV_STEP
+)
+
+export interface DaoCreateSetName extends PayloadAction<string, string> {
+  type: Actions.DAO_CREATE_SET_NAME
+}
+export const daoCreateSetName = createPayloadAction<DaoCreateSetName>(
+  Actions.DAO_CREATE_SET_NAME
+)
+
+export interface DaoCreateSetToken extends PayloadAction<string, string> {
+  type: Actions.DAO_CREATE_SET_TOKEN
+}
+export const daoCreateSetToken = createPayloadAction<DaoCreateSetToken>(
+  Actions.DAO_CREATE_SET_TOKEN
+)
+
+export interface DaoCreateSetTokenSym extends PayloadAction<string, string> {
+  type: Actions.DAO_CREATE_SET_TOKEN_SYM
+}
+export const daoCreateSetTokenSym = createPayloadAction<DaoCreateSetTokenSym>(
+  Actions.DAO_CREATE_SET_TOKEN_SYM
+)
+
+export interface DaoCreateAddFounder
+  extends PayloadAction<string, Arc.Founder> {
+  type: Actions.DAO_CREATE_ADD_FOUNDER
+}
+export const daoCreateAddFounder = createPayloadAction<DaoCreateAddFounder>(
+  Actions.DAO_CREATE_ADD_FOUNDER
+)
+
+export interface DaoCreateAddSchema extends PayloadAction<string, Arc.Schema> {
+  type: Actions.DAO_CREATE_ADD_SCHEMA
+}
+export const daoCreateAddSchema = createPayloadAction<DaoCreateAddSchema>(
+  Actions.DAO_CREATE_ADD_SCHEMA
+)
+
+export interface DaoCreateRemSchema extends PayloadAction<string, Arc.Schema> {
+  type: Actions.DAO_CREATE_REM_SCHEMA
+}
+export const daoCreateRemSchema = createPayloadAction<DaoCreateRemSchema>(
+  Actions.DAO_CREATE_REM_SCHEMA
+)
+
+export interface DaoCreateAddVoteMachine
+  extends PayloadAction<string, Arc.VotingMachine> {
+  type: Actions.DAO_CREATE_ADD_VOTE_MACHINE
+}
+export const daoCreateAddVoteMachine = createPayloadAction<
+  DaoCreateAddVoteMachine
+>(Actions.DAO_CREATE_ADD_VOTE_MACHINE)
+
+// Notifications
+export interface NotificationInfo extends PayloadAction<string, string> {
+  type: Actions.NOTIFICATION_INFO
+}
+export const notificationInfo = createPayloadAction<NotificationInfo>(
+  Actions.NOTIFICATION_INFO
+)
+
+export interface NotificationError extends PayloadAction<string, string> {
+  type: Actions.NOTIFICATION_ERROR
+}
+export const notificationError = createPayloadAction<NotificationError>(
+  Actions.NOTIFICATION_ERROR
+)
+
+export interface NotificationClose extends Action<string> {
+  type: Actions.NOTIFICATION_CLOSE
+}
+export const NotificationClose = createAction<NotificationClose>(
+  Actions.NOTIFICATION_CLOSE
+)
+
+export type AnyAction =
+  | DaoCreateNextStep
+  | DaoCreatePrevStep
+  | DaoCreateSetName
+  | DaoCreateSetToken
+  | DaoCreateSetTokenSym
+  | DaoCreateAddFounder
+  | DaoCreateAddSchema
+  | DaoCreateRemSchema
+  | DaoCreateAddVoteMachine
+  | NotificationInfo
+  | NotificationError
+  | NotificationClose
