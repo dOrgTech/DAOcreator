@@ -2,9 +2,6 @@
 
 export type VotingMachine = {
   typeName: string
-  // TODO: we need an address type...
-  universalAddress: string
-  // factory: VotingMachineFactory
   displayName: string
   description: string
 }

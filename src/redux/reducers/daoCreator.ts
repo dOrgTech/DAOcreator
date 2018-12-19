@@ -24,7 +24,7 @@ export const reducer = (
     case Actions.DAO_CREATE_NEXT_STEP:
       return R.merge(state, { step: state.step + 1 })
     case Actions.DAO_CREATE_PREV_STEP:
-      return R.merge(state, { step: state.step + 1 })
+      return R.merge(state, { step: state.step - 1 })
     case Actions.DAO_CREATE_SET_NAME:
       return R.merge(state, {
         naming: R.merge(state.naming, { daoName: action.payload }),

@@ -1,3 +1,4 @@
+import * as R from "ramda"
 import {
   Card,
   CardContent,
@@ -26,12 +27,22 @@ type State = {
   daoName: string
   tokenName: string
   tokenSymbol: string
+  formErrors: {
+    daoName: string
+    tokenName: string
+    tokenSymbol: string
+  }
 }
 
 const initState: State = {
   daoName: "",
   tokenName: "",
   tokenSymbol: "",
+  formErrors: {
+    daoName: "",
+    tokenName: "",
+    tokenSymbol: "",
+  },
 }
 
 // TODO: Reduxify all the things!!
@@ -39,15 +50,27 @@ const initState: State = {
 class NamingStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
-  handleChange = (valueName: string) => (event: any) => {
-    this.setState({ [valueName]: event.target.value } as any)
+  handleChange = (event: any) => {
+    const { name, value } = event.target
+    let formErrors = { ...this.state.formErrors }
+
+    switch (name) {
+      case "daoName":
+        formErrors.daoName =
+          value.length < 3 ? "minimum 3 characaters required" : ""
+        break
+      default:
+        break
+    }
+
+    this.setState({ formErrors, [name]: value } as any)
   }
 
   render() {
     const { classes } = this.props
     const actions = this.props.actions
 
-    const { daoName, tokenName, tokenSymbol } = this.state
+    const { daoName, tokenName, tokenSymbol, formErrors } = this.state
 
     return (
       <Card className={classes.card}>
@@ -61,23 +84,25 @@ class NamingStep extends React.Component<Props, State> {
                 <Grid item xs={12}>
                   <TextField
                     className={classes.daoName}
-                    id="daoName"
+                    name="daoName"
                     label="DAO Name"
                     value={daoName}
-                    onChange={this.handleChange("daoName")}
+                    onChange={this.handleChange}
                     margin="normal"
                     onBlur={() => actions.setName(daoName)}
                     fullWidth
                     required
+                    error={!R.isEmpty(formErrors.daoName)}
+                    helperText={formErrors.daoName}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     className={classes.tokenName}
-                    id="token-name"
+                    name="tokenName"
                     label="Token Name"
                     value={tokenName}
-                    onChange={this.handleChange("tokenName")}
+                    onChange={this.handleChange}
                     onBlur={() => actions.setTokenName(tokenName)}
                     margin="normal"
                     fullWidth
@@ -87,10 +112,10 @@ class NamingStep extends React.Component<Props, State> {
                 <Grid item xs={12}>
                   <TextField
                     className={classes.tokenSymbol}
-                    id="token-symbol"
+                    name="tokenSymbol"
                     label="Token Symbol"
                     value={tokenSymbol}
-                    onChange={this.handleChange("tokenSymbol")}
+                    onChange={this.handleChange}
                     onBlur={() => actions.setTokenSymbol(tokenSymbol)}
                     margin="normal"
                     fullWidth
