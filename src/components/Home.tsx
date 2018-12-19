@@ -1,4 +1,6 @@
-import * as React from "react";
+import * as React from "react"
+import { connect } from "react-redux"
+import { push } from "connected-react-router"
 import {
   withStyles,
   Typography,
@@ -6,48 +8,73 @@ import {
   WithStyles,
   createStyles,
   Card,
-  CardActions,
   Button,
   CardContent,
-} from "@material-ui/core";
+} from "@material-ui/core"
 
-interface Props extends WithStyles<typeof styles> {};
+interface Props extends WithStyles<typeof styles> {
+  createDao: () => void
+}
 
-const Home: React.SFC<Props> = ({ classes }) => (
+const Home: React.SFC<Props> = ({ classes, createDao }) => (
   <>
-    <Typography variant="h2" className={classes.header}>
-      Testing 1234
-    </Typography>
     <Card className={classes.card}>
-      <CardContent>
-        <Typography>
-          Something something something.
+      <CardContent className={classes.cardContent}>
+        <Typography variant="h1" className={classes.header}>
+          dOrg
         </Typography>
-      </CardContent>
-      <CardActions>
-        <Button
-          variant="outlined"
-          href="https://github.com/dOrgTech"
-          target="_blank"
-        >
-          Check our GitHub
+        <Typography variant="h5" className={classes.header}>
+          Empowering Decentralized Organization
+        </Typography>
+        <Button variant="contained" className={classes.button}>
+          What's a DAO?
         </Button>
-      </CardActions>
+        <Button variant="contained" className={classes.button} onClick={createDao}>
+          Create a DAO
+        </Button>
+        <Button variant="contained" className={classes.button}>
+          Browse a DAO
+        </Button>
+      </CardContent>
     </Card>
   </>
-);
+)
 
+// STYLE
 const styles = ({  }: Theme) =>
   createStyles({
-    header: {
-      marginTop: 100,
+    card: {
+      maxWidth: 900,
+      margin: "auto",
+      marginTop: 150,
+    },
+    cardContent: {
       textAlign: "center",
     },
-    card: {
-      maxWidth: 700,
-      margin: "auto",
-      marginTop: 100,
+    header: {
+      margin: 10,
     },
-  });
+    button: {
+      margin: 10,
+    },
+  })
 
-export default withStyles(styles)(Home);
+const componentWithStyles = withStyles(styles)(Home)
+
+// STATE
+const mapStateToProps = (state: any) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createDao: () => {
+      dispatch(push("/dao-creator"))
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles)
