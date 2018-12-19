@@ -18,6 +18,7 @@ import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import ConfigurationStep from "./ConfigurationStep"
 import ReviewStep from "./ReviewStep"
+import LiveDao from "./LiveDao"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
@@ -39,11 +40,16 @@ const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
       component: <ConfigurationStep />,
     },
     {
-      title: "Review",
+      title: "Review & Deploy",
       component: <ReviewStep />,
+    },
+    {
+      title: "Live DAO",
+      component: <LiveDao />,
     },
   ]
 
+  const isDeployStep = step === steps.length - 2
   const isLastStep = step === steps.length - 1
   return (
     <div className={classes.root}>
@@ -55,18 +61,11 @@ const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
         ))}
       </Stepper>
       <div>
-        {step >= steps.length ? (
-          <div>
-            <Typography className={classes.content}>
-              All steps completed - you&quot;re finished
-            </Typography>
-            <Button onClick={actions.prevStep} className={classes.button}>
-              Back
-            </Button>
-          </div>
-        ) : (
-          <div>
-            <div className={classes.content}>{steps[step].component}</div>
+        <div>
+          <div className={classes.content}>{steps[step].component}</div>
+          {isLastStep ? (
+            <></>
+          ) : (
             <div>
               <Button
                 variant="contained"
@@ -80,13 +79,14 @@ const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={isLastStep ? actions.createDao :actions.nextStep}
+                onClick={isDeployStep ? actions.createDao : actions.nextStep}
                 className={classes.button}
               >
-                {isLastStep ? "Finish" : "Next"}
+                {isDeployStep ? "Deploy DAO" : "Next"}
               </Button>
             </div>
-          </div>
+          )}
+        </div>
         )}
       </div>
     </div>

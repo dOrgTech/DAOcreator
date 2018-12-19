@@ -102,11 +102,14 @@ export function createDao(): (
     const { naming, founders, schemas, votingMachine } = getState().daoCreator
 
     try {
-      await Arc.createDao(naming, founders, schemas, votingMachine)
+      const dao = await Arc.createDao(naming, founders, schemas, votingMachine)
+      dispatch(Actions.daoCreateSetDeployedDao(dao))
+      dispatch(Actions.daoCreateNextStep())
       return Promise.resolve("Success!")
     } catch (e) {
       newNotificationInfo("Failed to create DAO. Error: " + e.message)
-      return Promise.resolve(e.message)
+      dispatch(Actions.daoCreateNextStep())
+      return Promise.reject(e.message)
     }
   }
 }

@@ -1,4 +1,9 @@
-import { NewDaoConfig, FounderConfig, SchemeConfig } from "@daostack/arc.js"
+import {
+  NewDaoConfig,
+  FounderConfig,
+  SchemeConfig,
+  DAO as ArcDAO,
+} from "@daostack/arc.js"
 import { BigNumber } from "bignumber.js"
 import * as R from "ramda"
 import { Founder, VotingMachine, Schema } from "./types"
@@ -41,3 +46,11 @@ export const toNewDaoConfig = (
     schemes: toSchemasConfig(schemas),
   }
 }
+
+export const fromDao = async (arkDao: ArcDAO) => ({
+  avatarAddress: arkDao.avatar.address,
+  controllerAddress: arkDao.controller.address,
+  tokenName: arkDao.token.name,
+  tokenSymbol: await arkDao.token.getTokenSymbol(),
+  name: arkDao.name,
+})

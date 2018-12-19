@@ -7,7 +7,7 @@ import {
   InitializeArcJs,
 } from "@daostack/arc.js"
 import { VotingMachine, Founder, Schema } from "./types"
-import { toNewDaoConfig } from "./typeConversions"
+import { toNewDaoConfig, fromDao } from "./typeConversions"
 export * from "./types"
 
 let isInitialized = false
@@ -41,6 +41,16 @@ export const createDao = async (
     schemas,
     votingMachine
   )
-  await DAO.new(newDaoConfig)
-  console.log("DAO CREATED!")
+  try {
+    const rawDao = await DAO.new(newDaoConfig)
+    console.log("DAO created")
+    console.log(rawDao)
+    const dao = await fromDao(rawDao)
+    console.log(dao)
+    return dao
+  } catch (e) {
+    console.log("Error while deploying DAO:")
+    console.log(e)
+    return Promise.reject(e)
+  }
 }

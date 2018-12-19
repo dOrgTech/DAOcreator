@@ -13,6 +13,7 @@ const initialState: DaoCreatorState = {
   founders: [],
   schemas: [],
   votingMachine: votingMachines[0],
+  deployedDao: undefined,
 }
 
 export const reducer = (
@@ -50,6 +51,8 @@ export const reducer = (
       })
     case Actions.DAO_CREATE_ADD_VOTE_MACHINE:
       return R.merge(state, { votingMachine: action.payload })
+    case Actions.DAO_CREATE_SET_DEPLOYED_DAO:
+      return R.merge(state, { deployedDao: action.payload })
     default:
       return state
   }

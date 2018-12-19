@@ -21,3 +21,11 @@ export type Schema = {
   displayName: string
   description: string
 }
+
+export type DAO = {
+  avatarAddress: string
+  controllerAddress: string
+  tokenName: string
+  tokenSymbol: string
+  name: string
+}

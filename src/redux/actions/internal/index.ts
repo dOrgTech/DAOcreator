@@ -9,6 +9,7 @@ export enum Actions {
   DAO_CREATE_ADD_SCHEMA = "DAO_CREATE_ADD_SCHEMA",
   DAO_CREATE_REM_SCHEMA = "DAO_CREATE_REM_SCHEMA",
   DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
+  DAO_CREATE_SET_DEPLOYED_DAO = "DAO_CREATE_SET_DEPLOYED_DAO",
 
   // Notifications
   NOTIFICATION_INFO = "NOTIFICATION_INFO",
@@ -84,6 +85,14 @@ export const daoCreateRemSchema = createPayloadAction<DaoCreateRemSchema>(
   Actions.DAO_CREATE_REM_SCHEMA
 )
 
+export interface DaoCreateSetDeployedDao
+  extends PayloadAction<string, Arc.DAO> {
+  type: Actions.DAO_CREATE_SET_DEPLOYED_DAO
+}
+export const daoCreateSetDeployedDao = createPayloadAction<
+  DaoCreateSetDeployedDao
+>(Actions.DAO_CREATE_SET_DEPLOYED_DAO)
+
 export interface DaoCreateAddVoteMachine
   extends PayloadAction<string, Arc.VotingMachine> {
   type: Actions.DAO_CREATE_ADD_VOTE_MACHINE
@@ -124,6 +133,7 @@ export type AnyAction =
   | DaoCreateAddSchema
   | DaoCreateRemSchema
   | DaoCreateAddVoteMachine
+  | DaoCreateSetDeployedDao
   | NotificationInfo
   | NotificationError
   | NotificationClose
