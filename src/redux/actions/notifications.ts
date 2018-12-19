@@ -2,9 +2,9 @@ import { Dispatch } from "redux"
 import * as Actions from "./internal"
 
 export default interface NotificationActions {
-  newNotificationInfo(message: string): Promise<void>
-  newNotificationError(message: string): Promise<void>
-  closeNotification(): Promise<void>
+  newNotificationInfo(message: string): (dispatch: Dispatch) => Promise<void>
+  newNotificationError(message: string): (dispatch: Dispatch) => Promise<void>
+  closeNotification(): (dispatch: Dispatch) => Promise<void>
 }
 
 export function newNotificationInfo(

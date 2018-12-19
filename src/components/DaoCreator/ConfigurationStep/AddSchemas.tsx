@@ -10,30 +10,26 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core"
+import { bindActionCreators, Dispatch } from "redux"
 import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
-import { addSchema, removeSchema } from "../../../state/actions/daoCreator"
-import {schemas} from "../../../lib/integrations/daoStack/arc/schemas"
-import { Schema } from "src/lib/integrations/daoStack/arc";
-
+import DaoCreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+import { schemas } from "../../../lib/integrations/daoStack/arc/schemas"
+import { Schema } from "src/lib/integrations/daoStack/arc"
+import { AnyAction } from "src/redux/actions";
+import { AppState } from "src/AppState";
 
 interface Props extends WithStyles<typeof styles> {
-  addSchema: (schema: Schema) => void
-  removeSchema: (Schema: Schema) => void
   addedSchemas: Schema[]
+  actions: DaoCreatorActions
 }
 
-const AddSchema: React.SFC<Props> = ({
-  classes,
-  addedSchemas,
-  addSchema,
-  removeSchema,
-}) => {
+const AddSchema: React.SFC<Props> = ({ classes, addedSchemas, actions }) => {
   const handleChange = (schema: Schema) => (event: any) => {
     R.contains(schema, addedSchemas) === true
-      ? removeSchema(schema)
-      : addSchema(schema)
+      ? actions.remSchema(schema)
+      : actions.addSchema(schema)
   }
 
   return (
@@ -73,16 +69,15 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(AddSchema)
 
 // STATE
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
   return {
     addedSchemas: state.daoCreator.schemas,
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-      addSchema: (schema: Schema) => dispatch(addSchema(schema)),
-      removeSchema: (schema: Schema) => dispatch(removeSchema(schema)),
+    actions: bindActionCreators(daoCreatorActions, dispatch),
   }
 }
 

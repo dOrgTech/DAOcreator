@@ -1,8 +1,14 @@
 import { Actions, AnyAction } from "../actions"
 import { NotificationState } from "../../AppState"
 
+const initialState: NotificationState = {
+  message: "",
+  type: "",
+  open: false,
+}
+
 export const reducer = (
-  state: NotificationState,
+  state: NotificationState = initialState,
   action: AnyAction
 ): NotificationState => {
   switch (action.type) {

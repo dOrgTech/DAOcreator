@@ -1,9 +1,22 @@
 import * as R from "ramda"
 import { Actions, AnyAction } from "../actions"
 import { DaoCreatorState } from "../../AppState"
+import { votingMachines } from "src/lib/integrations/daoStack/arc"
+
+const initialState: DaoCreatorState = {
+  step: 0,
+  naming: {
+    daoName: "",
+    tokenName: "",
+    tokenSymbol: "",
+  },
+  founders: [],
+  schemas: [],
+  votingMachine: votingMachines[0],
+}
 
 export const reducer = (
-  state: DaoCreatorState,
+  state: DaoCreatorState = initialState,
   action: AnyAction
 ): DaoCreatorState => {
   switch (action.type) {

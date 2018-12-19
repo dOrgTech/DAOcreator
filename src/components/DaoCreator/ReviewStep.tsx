@@ -12,11 +12,8 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
-import {
-  addDaoName,
-  addTokenName,
-  addTokenSymbol,
-} from "../../state/actions/daoCreator"
+import { bindActionCreators, Dispatch } from "redux"
+import { AppState } from "src/AppState"
 import {
   Founder,
   Schema,
@@ -157,7 +154,7 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {}
 }
 

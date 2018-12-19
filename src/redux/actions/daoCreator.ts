@@ -2,18 +2,21 @@ import { Dispatch } from "redux"
 import * as Actions from "./internal"
 import { newNotificationInfo } from "./notifications"
 import * as Arc from "../../lib/integrations/daoStack/arc"
+import { AppState } from "src/AppState"
 
 export default interface DaoCreatorActions {
-  nextStep(): Promise<void>
-  prevStep(): Promise<void>
-  setName(name: string): Promise<void>
-  setTokenName(tokenName: string): Promise<void>
-  setTokenSymbol(tokenSymbol: string): Promise<void>
-  addFounder(founder: Arc.Founder): Promise<void>
-  addSchema(schema: Arc.Schema): Promise<void>
-  remSchema(schema: Arc.Schema): Promise<void>
-  addVotingMachine(votingMachine: Arc.VotingMachine): Promise<void>
-  createDao(): Promise<void>
+  nextStep(): (dispatch: Dispatch) => Promise<void>
+  prevStep(): (dispatch: Dispatch) => Promise<void>
+  setName(name: string): (dispatch: Dispatch) => Promise<void>
+  setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
+  setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
+  addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
+  addSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
+  remSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
+  setVotingMachine(
+    votingMachine: Arc.VotingMachine
+  ): (dispatch: Dispatch) => Promise<void>
+  createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
 }
 
 export function nextStep(): (dispatch: Dispatch) => Promise<void> {
@@ -82,7 +85,7 @@ export function remSchema(
   }
 }
 
-export function addVotingMachine(
+export function setVotingMachine(
   votingMachine: Arc.VotingMachine
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
@@ -93,7 +96,7 @@ export function addVotingMachine(
 
 export function createDao(): (
   dispatch: Dispatch,
-  getState: () => any /*TODO: make state type*/
+  getState: () => AppState
 ) => Promise<string> {
   return async (dispatch: Dispatch, getState: () => any) => {
     const { naming, founders, schemas, votingMachine } = getState().daoCreator
