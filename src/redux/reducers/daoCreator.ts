@@ -25,17 +25,17 @@ export const reducer = (
     case Actions.DAO_CREATE_PREV_STEP:
       return R.merge(state, { step: state.step + 1 })
     case Actions.DAO_CREATE_SET_NAME:
-      return R.merge(state, R.merge(state.naming, { daoName: action.payload }))
+      return R.merge(state, {
+        naming: R.merge(state.naming, { daoName: action.payload }),
+      })
     case Actions.DAO_CREATE_SET_TOKEN:
-      return R.merge(
-        state,
-        R.merge(state.naming, { tokenName: action.payload })
-      )
+      return R.merge(state, {
+        naming: R.merge(state.naming, { tokenName: action.payload }),
+      })
     case Actions.DAO_CREATE_SET_TOKEN_SYM:
-      return R.merge(
-        state,
-        R.merge(state.naming, { tokenSymbol: action.payload })
-      )
+      return R.merge(state, {
+        naming: R.merge(state.naming, { tokenSymbol: action.payload }),
+      })
     case Actions.DAO_CREATE_ADD_FOUNDER:
       return R.merge(state, {
         founders: R.append(action.payload, state.founders),
