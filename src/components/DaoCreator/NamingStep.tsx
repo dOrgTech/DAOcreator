@@ -70,8 +70,11 @@ class NamingStep extends React.Component<Props, State> {
     }
 
     this.setState({ formErrors, [name]: value } as any)
-    // TODO: set form validation state in redux
-    this.props.actions.setStepValidation(this.props.stepNumber, valide)
+      // TODO: set form validation state in redux
+
+      const formHasAllValues = !R.isEmpty(this.state.daoName) && !R.isEmpty(this.state.tokenName) && !R.isEmpty(this.state.tokenSymbol)
+
+    this.props.actions.setStepValidation(this.props.stepNumber, valide && formHasAllValues)
   }
 
   render() {

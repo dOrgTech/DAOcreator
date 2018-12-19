@@ -19,13 +19,20 @@ import FoundersStep from "./FoundersStep"
 import ConfigurationStep from "./ConfigurationStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
+  stepValide: boolean
   actions: DaoCreatorActions
 }
 
-const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
+const daoCreator: React.SFC<Props> = ({
+  classes,
+  step,
+  stepValide,
+  actions,
+}) => {
   const steps = [
     {
       title: "Name",
@@ -81,6 +88,7 @@ const daoCreator: React.SFC<Props> = ({ classes, step, actions }) => {
                 color="primary"
                 onClick={isDeployStep ? actions.createDao : actions.nextStep}
                 className={classes.button}
+                disabled={!stepValide}
               >
                 {isDeployStep ? "Deploy DAO" : "Next"}
               </Button>
@@ -103,6 +111,7 @@ const styles = (theme: Theme) =>
     },
     button: {
       marginRight: theme.spacing.unit,
+      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
     },
     content: {
       marginTop: theme.spacing.unit,
@@ -113,9 +122,10 @@ const styles = (theme: Theme) =>
 const componentWithStyles = withStyles(styles)(daoCreator)
 
 // STATE
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: AppState, ownProps: any) => {
   return {
     step: state.daoCreator.step,
+    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
