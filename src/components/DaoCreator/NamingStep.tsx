@@ -15,6 +15,7 @@ import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import { AppState } from "src/AppState"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import * as FormValidation from "../../lib/formValidation"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
@@ -47,34 +48,33 @@ const initState: State = {
   },
 }
 
+const requiredFields = ["daoName", "tokenName", "tokenSymbol"]
+
 class NamingStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
   handleChange = (event: any) => {
     const { name, value } = event.target
-    let formErrors = { ...this.state.formErrors }
-    let valide = true
-
-    if (value.length <= 0) {
-      formErrors[name] = "required"
-      valide = false
-    } else {
-      formErrors[name] = ""
-    }
+    const { hasError, errorMessage } = FormValidation.validate(
+      _ => R.isEmpty(_),
+      "field equired",
+      value
+    )
+    const formErrors = R.assoc(name, errorMessage, this.state.formErrors)
 
     this.setState({ formErrors, [name]: value } as any)
 
-    const formHasAllValues =
-      !R.isEmpty(this.state.daoName) &&
-      !R.isEmpty(this.state.tokenName) &&
-      !R.isEmpty(this.state.tokenSymbol)
+    const formHasAllValues = R.none(
+      field => R.isEmpty(this.state[field]),
+      requiredFields
+    )
 
-    const stepValidation = valide && formHasAllValues
+    const stepValidation = !hasError && formHasAllValues
 
     if (stepValidation != this.props.stepValide) {
       this.props.actions.setStepValidation(
         this.props.stepNumber,
-        valide && formHasAllValues
+        !hasError && formHasAllValues
       )
     }
   }
