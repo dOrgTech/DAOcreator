@@ -19,6 +19,7 @@ import {
   Schema,
   VotingMachine,
 } from "src/lib/integrations/daoStack/arc"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
@@ -27,6 +28,9 @@ interface Props extends WithStyles<typeof styles> {
   founders: Founder[]
   schemas: Schema[]
   votingMachine: VotingMachine
+  stepNumber: number
+  stepValide: boolean
+  actions: DaoCreatorActions
 }
 
 const ReviewStep: React.SFC<Props> = ({
@@ -36,75 +40,84 @@ const ReviewStep: React.SFC<Props> = ({
   founders,
   schemas,
   votingMachine,
+  actions,
+  stepNumber,
+  stepValide,
   classes,
-}) => (
-  <Card className={classes.card}>
-    <CardContent>
-      <Typography variant="h4" className={classes.headline} gutterBottom>
-        Review the DAO
-      </Typography>
-      <Grid container spacing={16}>
-        <Grid item xs={12}>
-          <Typography variant="h5" className={classes.headline} gutterBottom>
-            Naming
-          </Typography>
-          <Typography>
-            <b>DAO Name:</b> {daoName}
-          </Typography>
-          <Typography>
-            <b>Token Name:</b> {tokenName}
-          </Typography>
-          <Typography>
-            <b>Token Symbol:</b> {tokenSymbol}
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h5" className={classes.headline} gutterBottom>
-            Founders
-          </Typography>
-          <Grid container spacing={16} key={`founder-headline`}>
-            <Grid item xs={6}>
-              <Typography>
-                <b>Address</b>
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography>
-                <b>Reputation</b>
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography>
-                <b>Tokens</b>
-              </Typography>
-            </Grid>
+}) => {
+  if (stepValide != true) {
+    actions.setStepValidation(stepNumber, true)
+  }
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="h4" className={classes.headline} gutterBottom>
+          Review the DAO
+        </Typography>
+        <Grid container spacing={16}>
+          <Grid item xs={12}>
+            <Typography variant="h5" className={classes.headline} gutterBottom>
+              Naming
+            </Typography>
+            <Typography>
+              <b>DAO Name:</b> {daoName}
+            </Typography>
+            <Typography>
+              <b>Token Name:</b> {tokenName}
+            </Typography>
+            <Typography>
+              <b>Token Symbol:</b> {tokenSymbol}
+            </Typography>
           </Grid>
-          {R.map(displayFounder, founders)}
-        </Grid>
 
-        <Grid item xs={12}>
-          <Typography variant="h5" className={classes.headline} gutterBottom>
-            Schemas
-          </Typography>
-          {R.map(displaySchema, schemas)}
-        </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h5" className={classes.headline} gutterBottom>
+              Founders
+            </Typography>
+            <Grid container spacing={16} key={`founder-headline`}>
+              <Grid item xs={6}>
+                <Typography>
+                  <b>Address</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography>
+                  <b>Reputation</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography>
+                  <b>Tokens</b>
+                </Typography>
+              </Grid>
+            </Grid>
+            {R.map(displayFounder, founders)}
+          </Grid>
 
-        <Grid item xs={12}>
-          <Typography variant="h5" className={classes.headline} gutterBottom>
-            Voting Machine
-          </Typography>
-          <Typography variant="subtitle1">
-            {votingMachine.displayName}
-          </Typography>
-          <Typography>
-            <i>{votingMachine.description}</i>
-          </Typography>
+          <Grid item xs={12}>
+            <Typography variant="h5" className={classes.headline} gutterBottom>
+              Schemas
+            </Typography>
+            {R.map(displaySchema, schemas)}
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h5" className={classes.headline} gutterBottom>
+              Voting Machine
+            </Typography>
+            <Typography variant="subtitle1">
+              {votingMachine.displayName}
+            </Typography>
+            <Typography>
+              <i>{votingMachine.description}</i>
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-    </CardContent>
-  </Card>
-)
+      </CardContent>
+    </Card>
+  )
+}
+
 const displayFounder = ({ address, reputation, tokens }: Founder) => (
   <Grid container spacing={16} key={`founder-${address}`}>
     <Grid item xs={6}>
@@ -151,11 +164,15 @@ const mapStateToProps = (state: any) => {
     founders: state.daoCreator.founders,
     schemas: state.daoCreator.schemas,
     votingMachine: state.daoCreator.votingMachine,
+      stepNumber: state.daoCreator.step,
+      stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {}
+    return {
+        actions: bindActionCreators(daoCreatorActions, dispatch),
+    }
 }
 
 export default connect(
