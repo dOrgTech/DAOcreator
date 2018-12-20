@@ -21,6 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   stepNumber: number
+  stepValide: boolean
   actions: DaoCreatorActions
 }
 
@@ -46,8 +47,6 @@ const initState: State = {
   },
 }
 
-// TODO: Reduxify all the things!!
-// send to redux onBlure
 class NamingStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
@@ -56,25 +55,28 @@ class NamingStep extends React.Component<Props, State> {
     let formErrors = { ...this.state.formErrors }
     let valide = true
 
-    switch (name) {
-      case "daoName":
-        if (value.length < 3) {
-          formErrors.daoName = "minimum 3 characters required"
-          valide = false
-        } else {
-          formErrors.daoName = ""
-        }
-        break
-      default:
-        break
+    if (value.length <= 0) {
+      formErrors[name] = "required"
+      valide = false
+    } else {
+      formErrors[name] = ""
     }
 
     this.setState({ formErrors, [name]: value } as any)
-      // TODO: set form validation state in redux
 
-      const formHasAllValues = !R.isEmpty(this.state.daoName) && !R.isEmpty(this.state.tokenName) && !R.isEmpty(this.state.tokenSymbol)
+    const formHasAllValues =
+      !R.isEmpty(this.state.daoName) &&
+      !R.isEmpty(this.state.tokenName) &&
+      !R.isEmpty(this.state.tokenSymbol)
 
-    this.props.actions.setStepValidation(this.props.stepNumber, valide && formHasAllValues)
+    const stepValidation = valide && formHasAllValues
+
+    if (stepValidation != this.props.stepValide) {
+      this.props.actions.setStepValidation(
+        this.props.stepNumber,
+        valide && formHasAllValues
+      )
+    }
   }
 
   render() {
@@ -117,6 +119,8 @@ class NamingStep extends React.Component<Props, State> {
                     onBlur={() => actions.setTokenName(tokenName)}
                     margin="normal"
                     fullWidth
+                    error={!R.isEmpty(formErrors.tokenName)}
+                    helperText={formErrors.tokenName}
                     required
                   />
                 </Grid>
@@ -130,6 +134,8 @@ class NamingStep extends React.Component<Props, State> {
                     onBlur={() => actions.setTokenSymbol(tokenSymbol)}
                     margin="normal"
                     fullWidth
+                    error={!R.isEmpty(formErrors.tokenSymbol)}
+                    helperText={formErrors.tokenSymbol}
                     required
                   />
                 </Grid>
@@ -164,6 +170,7 @@ const mapStateToProps = (state: AppState) => {
     tokenName: state.daoCreator.naming.tokenName,
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
     stepNumber: state.daoCreator.step,
+    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
