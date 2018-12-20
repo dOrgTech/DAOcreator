@@ -52,7 +52,7 @@ const requiredFields = ["address", "tokens", "reputation"]
 class FoundersStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
-  handleChange = (event: any) => {
+  handleChange = async (event: any) => {
     const { name, value } = event.target
     let validation = { hasError: false, errorMessage: "" }
 
@@ -100,7 +100,7 @@ class FoundersStep extends React.Component<Props, State> {
 
     const formErrors = R.assoc(name, errorMessage, this.state.formErrors)
 
-    this.setState({ formErrors, [name]: value } as any)
+    await this.setState({ formErrors, [name]: value } as any)
 
     const formHasAllValues = R.none(
       field => R.isEmpty(this.state[field]),

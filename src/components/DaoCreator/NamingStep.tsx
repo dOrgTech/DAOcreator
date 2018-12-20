@@ -51,8 +51,9 @@ class NamingStep extends React.Component<Props, State> {
     },
   }
 
-  handleChange = (event: any) => {
-    const { name, value } = event.target
+  handleChange = async (event: any) => {
+      const { name, value } = event.target
+      console.log(name + " - " + value)
     const { hasError, errorMessage } = FormValidation.checkForError(
       R.isEmpty,
       "field equired",
@@ -60,7 +61,7 @@ class NamingStep extends React.Component<Props, State> {
     )
     const formErrors = R.assoc(name, errorMessage, this.state.formErrors)
 
-    this.setState({ formErrors, [name]: value } as any)
+    await this.setState({ formErrors, [name]: value } as any)
 
     const formHasAllValues = R.none(
       field => R.isEmpty(this.state[field]),
