@@ -52,28 +52,25 @@ class NamingStep extends React.Component<Props, State> {
   }
 
   handleChange = async (event: any) => {
-      const { name, value } = event.target
-      console.log(name + " - " + value)
-    const { hasError, errorMessage } = FormValidation.checkForError(
-      R.isEmpty,
-      "field equired",
-      value
-    )
-    const formErrors = R.assoc(name, errorMessage, this.state.formErrors)
+    const { name, value } = event.target
+    const errorMessage = FormValidation.isRequired(value)
 
-    await this.setState({ formErrors, [name]: value } as any)
+    await this.setState({
+      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
+      [name]: value,
+    } as any)
 
     const formHasAllValues = R.none(
       field => R.isEmpty(this.state[field]),
       requiredFields
     )
 
-    const stepValidation = !hasError && formHasAllValues
+    const stepIsValide = R.isEmpty(errorMessage) && formHasAllValues
 
-    if (stepValidation != this.props.stepValide) {
-      this.props.actions.setStepValidation(
+    if (stepIsValide != this.props.stepValide) {
+      await this.props.actions.setStepValidation(
         this.props.stepNumber,
-        !hasError && formHasAllValues
+        stepIsValide
       )
     }
   }

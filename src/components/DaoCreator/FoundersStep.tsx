@@ -54,61 +54,47 @@ class FoundersStep extends React.Component<Props, State> {
 
   handleChange = async (event: any) => {
     const { name, value } = event.target
-    let validation = { hasError: false, errorMessage: "" }
+      let errorMessage = ""
+
+      console.log(name)
 
     const founderAlreadyPresent = (addr: string) =>
       R.any(({ address }) => R.equals(address, addr), this.props.addedFounders)
 
     switch (name) {
       case "address": {
-        validation = FormValidation.checkForError(
+        errorMessage = FormValidation.checkIfHasError(
           founderAlreadyPresent,
-          "Error: Founder already added.",
-          value
-        )
-        if (!validation.hasError) {
-          validation = FormValidation.checkForError(
-            FormValidation.addressHasError,
-            "Error: Please enter a valid address.",
-            value
-          )
+          "Error: Founder already added."
+        )(value)
+        if (R.isEmpty(errorMessage)) {
+          errorMessage = FormValidation.isValideAddress(value)
         }
-
+        console.log(errorMessage)
         break
       }
       case "tokens": {
-        validation = FormValidation.checkForError(
-          FormValidation.numberHasError,
-          "Error: Please enter a valid number.",
-          value
-        )
+        errorMessage = FormValidation.isBigNumber(value)
         break
       }
       case "reputation": {
-        validation = FormValidation.checkForError(
-          FormValidation.numberHasError,
-          "Error: Please enter a valid number.",
-          value
-        )
+        errorMessage = FormValidation.isBigNumber(value)
         break
       }
     }
-    const { hasError, errorMessage } = validation
-    console.log(
-      `name: ${name}, value: ${value}, hasError: ${hasError}, errorMessage:${errorMessage}`
-    )
-
-    const formErrors = R.assoc(name, errorMessage, this.state.formErrors)
-
-    await this.setState({ formErrors, [name]: value } as any)
+    await this.setState({
+      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
+      [name]: value,
+    } as any)
 
     const formHasAllValues = R.none(
       field => R.isEmpty(this.state[field]),
       requiredFields
     )
 
-    const formValidation = !hasError && formHasAllValues
-    this.setState({ formIsValide: formValidation })
+    const formIsValide = R.isEmpty(errorMessage) && formHasAllValues
+
+    this.setState({ formIsValide })
   }
 
   onAddFounder = () => {
