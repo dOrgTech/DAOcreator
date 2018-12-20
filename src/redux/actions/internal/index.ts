@@ -103,7 +103,7 @@ export const daoCreateAddVoteMachine = createPayloadAction<
 >(Actions.DAO_CREATE_ADD_VOTE_MACHINE)
 
 export interface DaoCreateSetStepValidation
-  extends PayloadAction<string, { step: number; valide: boolean }> {
+  extends PayloadAction<string, { step: number; isValide: boolean }> {
   type: Actions.DAO_CREATE_SET_STEP_VALIDATION
 }
 export const daoCreateSetStepValidation = createPayloadAction<

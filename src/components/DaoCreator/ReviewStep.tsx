@@ -30,7 +30,6 @@ interface Props extends WithStyles<typeof styles> {
   votingMachine: VotingMachine
   stepNumber: number
   stepValide: boolean
-  actions: DaoCreatorActions
 }
 
 const ReviewStep: React.SFC<Props> = ({
@@ -40,14 +39,10 @@ const ReviewStep: React.SFC<Props> = ({
   founders,
   schemas,
   votingMachine,
-  actions,
   stepNumber,
   stepValide,
   classes,
 }) => {
-  if (stepValide != true) {
-    actions.setStepValidation(stepNumber, true)
-  }
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -171,7 +166,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        actions: bindActionCreators(daoCreatorActions, dispatch),
     }
 }
 

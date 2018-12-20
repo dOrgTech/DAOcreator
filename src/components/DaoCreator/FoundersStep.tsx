@@ -23,7 +23,6 @@ import * as FormValidation from "../../lib/formValidation"
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
   actions: DaoCreatorActions
-  stepNumber: number
 }
 
 type State = Founder & {
@@ -52,11 +51,14 @@ const requiredFields = ["address", "tokens", "reputation"]
 class FoundersStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
+  constructor(props: Props) {
+    super(props)
+    this.props.actions.setStepIsValide(false)
+  }
+
   handleChange = async (event: any) => {
     const { name, value } = event.target
-      let errorMessage = ""
-
-      console.log(name)
+    let errorMessage = ""
 
     const founderAlreadyPresent = (addr: string) =>
       R.any(({ address }) => R.equals(address, addr), this.props.addedFounders)
@@ -70,7 +72,6 @@ class FoundersStep extends React.Component<Props, State> {
         if (R.isEmpty(errorMessage)) {
           errorMessage = FormValidation.isValideAddress(value)
         }
-        console.log(errorMessage)
         break
       }
       case "tokens": {
@@ -101,7 +102,7 @@ class FoundersStep extends React.Component<Props, State> {
     this.props.actions.addFounder(this.state)
     this.setState(initState)
 
-    this.props.actions.setStepValidation(this.props.stepNumber, true)
+    this.props.actions.setStepIsValide(true)
   }
 
   render() {
@@ -203,7 +204,6 @@ const componentWithStyles = withStyles(styles)(FoundersStep)
 const mapStateToProps = (state: any) => {
   return {
     addedFounders: state.daoCreator.founders,
-    stepNumber: state.daoCreator.step,
   }
 }
 

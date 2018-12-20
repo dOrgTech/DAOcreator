@@ -17,10 +17,9 @@ export default interface DaoCreatorActions {
     votingMachine: Arc.VotingMachine
   ): (dispatch: Dispatch) => Promise<void>
   createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
-  setStepValidation(
-    step: number,
+  setStepIsValide(
     isValide: boolean
-  ): (dispatch: Dispatch) => Promise<void>
+  ): (dispatch: Dispatch, getState: () => AppState) => Promise<void>
 }
 
 export function nextStep(): (dispatch: Dispatch) => Promise<void> {
@@ -102,7 +101,7 @@ export function createDao(): (
   dispatch: Dispatch,
   getState: () => AppState
 ) => Promise<string> {
-  return async (dispatch: Dispatch, getState: () => any) => {
+  return async (dispatch: Dispatch, getState: () => AppState) => {
     const { naming, founders, schemas, votingMachine } = getState().daoCreator
 
     try {
@@ -118,12 +117,16 @@ export function createDao(): (
   }
 }
 
-export function setStepValidation(
-  step: number,
-  valide: boolean
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Actions.daoCreateSetStepValidation({ step, valide }))
+export function setStepIsValide(
+  isValide: boolean
+): (dispatch: Dispatch, getState: () => AppState) => Promise<void> {
+  return (dispatch: Dispatch, getState: () => AppState) => {
+    dispatch(
+      Actions.daoCreateSetStepValidation({
+        step: getState().daoCreator.step,
+        isValide,
+      })
+    )
     return Promise.resolve()
   }
 }

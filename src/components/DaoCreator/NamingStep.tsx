@@ -21,7 +21,6 @@ interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
-  stepNumber: number
   stepValide: boolean
   actions: DaoCreatorActions
 }
@@ -51,6 +50,11 @@ class NamingStep extends React.Component<Props, State> {
     },
   }
 
+  constructor(props: Props) {
+    super(props)
+    this.props.actions.setStepIsValide(false)
+  }
+
   handleChange = async (event: any) => {
     const { name, value } = event.target
     const errorMessage = FormValidation.isRequired(value)
@@ -68,10 +72,7 @@ class NamingStep extends React.Component<Props, State> {
     const stepIsValide = R.isEmpty(errorMessage) && formHasAllValues
 
     if (stepIsValide != this.props.stepValide) {
-      await this.props.actions.setStepValidation(
-        this.props.stepNumber,
-        stepIsValide
-      )
+      await this.props.actions.setStepIsValide(stepIsValide)
     }
   }
 
@@ -165,7 +166,6 @@ const mapStateToProps = (state: AppState) => {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
-    stepNumber: state.daoCreator.step,
     stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
