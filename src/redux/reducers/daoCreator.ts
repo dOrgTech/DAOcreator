@@ -22,14 +22,16 @@ export const reducer = (
   action: AnyAction
 ): DaoCreatorState => {
   switch (action.type) {
-    case Actions.DAO_CREATE_NEXT_STEP:
+    case Actions.DAO_CREATE_NEXT_STEP: {
+      const newStep = state.step + 1
       return R.merge(state, {
-        step: state.step + 1,
+        step: newStep,
         stepValidation:
-          state.stepValidation.length >= state.step + 1
+          state.stepValidation.length >= newStep + 1
             ? state.stepValidation
             : R.append(false, state.stepValidation),
       })
+    }
     case Actions.DAO_CREATE_PREV_STEP:
       return R.merge(state, { step: state.step - 1 })
     case Actions.DAO_CREATE_SET_NAME:

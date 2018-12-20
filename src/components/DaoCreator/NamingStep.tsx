@@ -37,26 +37,24 @@ type State = {
   }
 }
 
-const initState: State = {
-  daoName: "",
-  tokenName: "",
-  tokenSymbol: "",
-  formErrors: {
-    daoName: "",
-    tokenName: "",
-    tokenSymbol: "",
-  },
-}
-
 const requiredFields = ["daoName", "tokenName", "tokenSymbol"]
 
 class NamingStep extends React.Component<Props, State> {
-  state: Readonly<State> = initState
+  public readonly state: State = {
+    daoName: this.props.daoName,
+    tokenName: this.props.tokenName,
+    tokenSymbol: this.props.tokenSymbol,
+    formErrors: {
+      daoName: "",
+      tokenName: "",
+      tokenSymbol: "",
+    },
+  }
 
   handleChange = (event: any) => {
     const { name, value } = event.target
-    const { hasError, errorMessage } = FormValidation.validate(
-      _ => R.isEmpty(_),
+    const { hasError, errorMessage } = FormValidation.checkForError(
+      R.isEmpty,
       "field equired",
       value
     )
