@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
 import * as Actions from "./internal"
 import { newNotificationInfo } from "./notifications"
-import * as Arc from "../../lib/integrations/daoStack/arc"
+import * as Arc from "src/lib/integrations/daoStack/arc"
 import { AppState } from "src/AppState"
 
 export default interface DaoCreatorActions {

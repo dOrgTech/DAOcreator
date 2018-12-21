@@ -4,7 +4,6 @@ import {
   CardContent,
   createStyles,
   Grid,
-  TextField,
   Theme,
   Typography,
   withStyles,
@@ -12,14 +11,12 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "src/AppState"
+import { Dispatch } from "redux"
 import {
   Founder,
   Schema,
   VotingMachine,
 } from "src/lib/integrations/daoStack/arc"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
@@ -159,14 +156,13 @@ const mapStateToProps = (state: any) => {
     founders: state.daoCreator.founders,
     schemas: state.daoCreator.schemas,
     votingMachine: state.daoCreator.votingMachine,
-      stepNumber: state.daoCreator.step,
-      stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    stepNumber: state.daoCreator.step,
+    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-    }
+  return {}
 }
 
 export default connect(

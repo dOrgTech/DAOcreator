@@ -4,7 +4,7 @@ export interface AppState {
   notification: NotificationState
 }
 
-import * as Arc from "./lib/integrations/daoStack/arc"
+import * as Arc from "src/lib/integrations/daoStack/arc"
 export interface DaoCreatorState {
   // TODO: Add layer 2 types that make up this state
   step: number

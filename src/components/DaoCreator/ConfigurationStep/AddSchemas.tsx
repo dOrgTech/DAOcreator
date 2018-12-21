@@ -1,5 +1,4 @@
 import {
-  Card,
   Checkbox,
   createStyles,
   FormControl,
@@ -14,11 +13,10 @@ import { bindActionCreators, Dispatch } from "redux"
 import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
-import DaoCreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
-import { schemas } from "../../../lib/integrations/daoStack/arc/schemas"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import { schemas } from "src/lib/integrations/daoStack/arc/schemas"
 import { Schema } from "src/lib/integrations/daoStack/arc"
-import { AnyAction } from "src/redux/actions";
-import { AppState } from "src/AppState";
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemas: Schema[]

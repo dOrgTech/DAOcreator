@@ -13,12 +13,10 @@ import {
   CardContent,
 } from "@material-ui/core"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "src/AppState"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
-import { TypeValidation } from "../../lib/integrations/web3"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 import { connect } from "react-redux"
-import { Founder } from "../../lib/integrations/daoStack/arc"
-import * as FormValidation from "../../lib/formValidation"
+import { Founder } from "src/lib/integrations/daoStack/arc"
+import * as FormValidation from "src/lib/formValidation"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]

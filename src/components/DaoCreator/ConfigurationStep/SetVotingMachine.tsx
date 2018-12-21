@@ -3,14 +3,10 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import {
-  Card,
   Select,
-  InputLabel,
   MenuItem,
-  Checkbox,
   createStyles,
   FormControl,
-  FormControlLabel,
   FormGroup,
   FormLabel,
   Paper,
@@ -19,12 +15,12 @@ import {
   WithStyles,
   Typography,
 } from "@material-ui/core"
-import DaoCreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 import {
   VotingMachine,
   votingMachines,
-} from "../../../lib/integrations/daoStack/arc"
-import { AppState } from "src/AppState";
+} from "src/lib/integrations/daoStack/arc"
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   currentVotingMachine: VotingMachine
@@ -34,7 +30,7 @@ interface Props extends WithStyles<typeof styles> {
 const SetVotingMachine: React.SFC<Props> = ({
   classes,
   currentVotingMachine,
-    actions,
+  actions,
 }) => {
   return (
     <FormControl>
@@ -98,7 +94,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-      actions: bindActionCreators(daoCreatorActions, dispatch),
+    actions: bindActionCreators(daoCreatorActions, dispatch),
   }
 }
 

@@ -1,5 +1,5 @@
-import { Actions, AnyAction } from "../actions"
-import { NotificationState } from "../../AppState"
+import { Actions, AnyAction } from "src/redux/actions"
+import { NotificationState } from "src/AppState"
 
 const initialState: NotificationState = {
   message: "",
