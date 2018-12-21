@@ -102,17 +102,24 @@ export function createDao(): (
   getState: () => AppState
 ) => Promise<string> {
   return async (dispatch: Dispatch, getState: () => AppState) => {
+    dispatch(
+      Actions.waitingAnimationOpen({
+        type: "transaction",
+        message: "To create the DAO, please sign the upcoming transaction",
+      })
+    )
     const { naming, founders, schemas, votingMachine } = getState().daoCreator
 
     try {
       const dao = await Arc.createDao(naming, founders, schemas, votingMachine)
       dispatch(Actions.daoCreateSetDeployedDao(dao))
       dispatch(Actions.daoCreateNextStep())
+      dispatch(Actions.waitingAnimationClose())
       return Promise.resolve("Success!")
     } catch (e) {
+      dispatch(Actions.waitingAnimationClose())
       newNotificationInfo("Failed to create DAO. Error: " + e.message)
-      dispatch(Actions.daoCreateNextStep())
-      return Promise.reject(e.message)
+      return Promise.resolve(e.message)
     }
   }
 }
