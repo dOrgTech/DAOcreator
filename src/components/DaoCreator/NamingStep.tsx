@@ -95,7 +95,7 @@ class NamingStep extends React.Component<Props, State> {
               Create a DAO
             </Typography>
             <Grid container spacing={16}>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 <Grid item xs={12}>
                   <TextField
                     className={classes.daoName}
@@ -142,7 +142,7 @@ class NamingStep extends React.Component<Props, State> {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 Avatar?
               </Grid>
             </Grid>
