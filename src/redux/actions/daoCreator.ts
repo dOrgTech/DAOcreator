@@ -118,7 +118,9 @@ export function createDao(): (
       return Promise.resolve("Success!")
     } catch (e) {
       dispatch(Actions.waitingAnimationClose())
-      newNotificationInfo("Failed to create DAO. Error: " + e.message)
+      dispatch(
+        Actions.notificationError("Failed to create DAO. Error: " + e.message)
+      )
       return Promise.resolve(e.message)
     }
   }
