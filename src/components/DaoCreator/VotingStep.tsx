@@ -1,34 +1,29 @@
-import * as R from "ramda"
 import {
   Card,
   CardContent,
   createStyles,
+  FormControl,
+  FormGroup,
+  FormLabel,
   Grid,
-  TextField,
+  MenuItem,
+  Paper,
+  Select,
   Theme,
   Typography,
   withStyles,
   WithStyles,
-  Select,
-  InputLabel,
-  MenuItem,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Paper,
 } from "@material-ui/core"
+import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import { AppState } from "src/AppState"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
-import * as FormValidation from "../../lib/formValidation"
 import {
   VotingMachine,
   votingMachines,
 } from "../../lib/integrations/daoStack/arc"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   currentVotingMachine: VotingMachine
@@ -124,18 +119,18 @@ const componentWithStyles = withStyles(styles)(VotingStep)
 
 // STATE
 const mapStateToProps = (state: AppState) => {
-    return {
-        currentVotingMachine: state.daoCreator.votingMachine,
-    }
+  return {
+    currentVotingMachine: state.daoCreator.votingMachine,
+  }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        actions: bindActionCreators(daoCreatorActions, dispatch),
-    }
+  return {
+    actions: bindActionCreators(daoCreatorActions, dispatch),
+  }
 }
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(componentWithStyles)
