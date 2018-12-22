@@ -16,7 +16,8 @@ import {
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
-import ConfigurationStep from "./ConfigurationStep"
+import FeatureStep from "./FeaturesStep"
+import VotingStep from "./VotingStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
 import { AppState } from "src/AppState"
@@ -43,8 +44,12 @@ const daoCreator: React.SFC<Props> = ({
       component: <FoundersStep />,
     },
     {
-      title: "Configuration",
-      component: <ConfigurationStep />,
+      title: "Features",
+      component: <FeatureStep />,
+    },
+    {
+      title: "Voting",
+      component: <VotingStep />,
     },
     {
       title: "Review & Deploy",
