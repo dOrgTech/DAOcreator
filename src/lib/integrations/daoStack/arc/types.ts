@@ -4,9 +4,15 @@ export type VotingMachine = {
   typeName: string
   displayName: string
   description: string
-  params?: {
-    [param: string]: "boolean" | "string" | "number" | "Address" | "BigNumber"
-  }
+  params: VotingMachineParam[]
+}
+
+export type VotingMachineParam = {
+  typeName: string
+  valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
+  displayName: string
+  description: string
+  defaultValue: string | number | boolean
 }
 
 export type Founder = {
