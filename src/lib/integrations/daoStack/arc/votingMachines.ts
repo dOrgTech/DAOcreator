@@ -84,14 +84,6 @@ export const votingMachines: VotingMachine[] = [
         defaultValue: 5,
       },
       {
-        typeName: "proposingRepRewardConstA",
-        valueType: "number",
-        displayName: "Proposing Rep Reward Const A",
-        description:
-          "Constant A in the calculation of the proposer's reputation reward. Must be between 0 and 100000000. Default is 5.",
-        defaultValue: 5,
-      },
-      {
         typeName: "proposingRepRewardConstB",
         valueType: "number",
         displayName: "Proposing Rep Reward Const B",

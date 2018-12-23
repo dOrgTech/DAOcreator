@@ -18,6 +18,8 @@ import {
   Founder,
   Schema,
   VotingMachine,
+  votingMachines,
+  VotingMachineConfiguration,
 } from "src/lib/integrations/daoStack/arc"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
@@ -27,7 +29,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenSymbol: string
   founders: Founder[]
   schemas: Schema[]
-  votingMachine: VotingMachine
+  votingMachineConfiguration: VotingMachineConfiguration
   stepNumber: number
   stepValide: boolean
 }
@@ -38,11 +40,16 @@ const ReviewStep: React.SFC<Props> = ({
   tokenSymbol,
   founders,
   schemas,
-  votingMachine,
+  votingMachineConfiguration,
   stepNumber,
   stepValide,
   classes,
 }) => {
+  const votingMachine = R.find(
+    votingMachine =>
+      votingMachine.typeName === votingMachineConfiguration.typeName,
+    votingMachines
+  ) as VotingMachine
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -158,15 +165,14 @@ const mapStateToProps = (state: any) => {
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
     founders: state.daoCreator.founders,
     schemas: state.daoCreator.schemas,
-    votingMachine: state.daoCreator.votingMachine,
-      stepNumber: state.daoCreator.step,
-      stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    votingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
+    stepNumber: state.daoCreator.step,
+    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-    }
+  return {}
 }
 
 export default connect(

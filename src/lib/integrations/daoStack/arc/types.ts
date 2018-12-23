@@ -1,5 +1,10 @@
 // types exported by this integration
 
+export type VotingMachineConfiguration = {
+  typeName: string
+  params: { [paramName: string]: string | number }
+}
+
 export type VotingMachine = {
   typeName: string
   displayName: string

@@ -6,7 +6,12 @@ import {
   ConfigService,
   InitializeArcJs,
 } from "@daostack/arc.js"
-import { VotingMachine, Founder, Schema } from "./types"
+import {
+  VotingMachine,
+  Founder,
+  Schema,
+  VotingMachineConfiguration,
+} from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
 export * from "./types"
 
@@ -30,7 +35,7 @@ export const createDao = async (
   naming: any,
   founders: Founder[],
   schemas: Schema[],
-  votingMachine: VotingMachine
+  votingMachine: VotingMachineConfiguration
 ) => {
   if (!isInitialized) {
     await init()

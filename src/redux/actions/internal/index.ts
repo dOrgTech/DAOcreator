@@ -99,7 +99,7 @@ export const daoCreateSetDeployedDao = createPayloadAction<
 >(Actions.DAO_CREATE_SET_DEPLOYED_DAO)
 
 export interface DaoCreateAddVoteMachine
-  extends PayloadAction<string, Arc.VotingMachine> {
+  extends PayloadAction<string, Arc.VotingMachineConfiguration> {
   type: Actions.DAO_CREATE_ADD_VOTE_MACHINE
 }
 export const daoCreateAddVoteMachine = createPayloadAction<

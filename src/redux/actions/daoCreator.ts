@@ -14,7 +14,7 @@ export default interface DaoCreatorActions {
   addSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
   remSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
   setVotingMachine(
-    votingMachine: Arc.VotingMachine
+    votingMachine: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
   createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
   setStepIsValide(
@@ -89,10 +89,11 @@ export function remSchema(
 }
 
 export function setVotingMachine(
-  votingMachine: Arc.VotingMachine
+  votingMachineConfiguration: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Actions.daoCreateAddVoteMachine(votingMachine))
+    console.log(votingMachineConfiguration)
+    dispatch(Actions.daoCreateAddVoteMachine(votingMachineConfiguration))
     return Promise.resolve()
   }
 }
@@ -108,10 +109,20 @@ export function createDao(): (
         message: "To create the DAO, please sign the upcoming transaction",
       })
     )
-    const { naming, founders, schemas, votingMachine } = getState().daoCreator
+    const {
+      naming,
+      founders,
+      schemas,
+      votingMachineConfiguration,
+    } = getState().daoCreator
 
     try {
-      const dao = await Arc.createDao(naming, founders, schemas, votingMachine)
+      const dao = await Arc.createDao(
+        naming,
+        founders,
+        schemas,
+        votingMachineConfiguration
+      )
       dispatch(Actions.daoCreateSetDeployedDao(dao))
       dispatch(Actions.daoCreateNextStep())
       dispatch(Actions.waitingAnimationClose())

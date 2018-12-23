@@ -17,7 +17,7 @@ export interface DaoCreatorState {
   }
   founders: Arc.Founder[]
   schemas: Arc.Schema[]
-  votingMachine: Arc.VotingMachine
+  votingMachineConfiguration: Arc.VotingMachineConfiguration
   deployedDao: Arc.DAO | undefined
 }
 

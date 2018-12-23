@@ -1,4 +1,5 @@
 import {
+  TextField,
   Card,
   CardContent,
   createStyles,
@@ -22,11 +23,12 @@ import { AppState } from "src/AppState"
 import {
   VotingMachine,
   votingMachines,
+  VotingMachineConfiguration,
 } from "../../lib/integrations/daoStack/arc"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
-  currentVotingMachine: VotingMachine
+  currentVotingMachineConfiguration: VotingMachineConfiguration
   actions: DaoCreatorActions
 }
 
@@ -34,7 +36,12 @@ type State = {
   formErrors: {}
 }
 
+const initState: State = {
+  formErrors: {},
+}
+
 class VotingStep extends React.Component<Props, State> {
+  state: Readonly<State> = initState
   handleChange = async (event: any) => {
     const { name, value } = event.target
 
@@ -44,30 +51,40 @@ class VotingStep extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, currentVotingMachine, actions } = this.props
+    const { classes, currentVotingMachineConfiguration, actions } = this.props
+    const currentVotingMachine = R.find(
+      votingMachine =>
+        votingMachine.typeName === currentVotingMachineConfiguration.typeName,
+      votingMachines
+    ) as VotingMachine
+      console.log("1:")
+      console.log(currentVotingMachine)
 
     return (
       <Card className={classes.card}>
         <form>
           <CardContent>
             <Typography variant="h4" className={classes.headline} gutterBottom>
-              Create a DAO
+              Voting Configurations
             </Typography>
             <Grid container spacing={16}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12}>
+                <Typography gutterBottom>
+                  Select and configurate voting machine
+                </Typography>
                 <FormControl>
                   <FormLabel>Voting Machine</FormLabel>
                   <FormGroup>
                     <FormControl>
                       <Select
                         onChange={(event: any) =>
-                          actions.setVotingMachine(R.find(
-                            votingMachine =>
-                              votingMachine.displayName === event.target.value,
-                            votingMachines
-                          ) as any)
+                          actions.setVotingMachine({
+                            typeName:
+                              event.target.value,
+                            params: R.omit(["formErrors"], this.state),
+                          })
                         }
-                        value={currentVotingMachine.displayName}
+                        value={currentVotingMachine.typeName}
                         inputProps={{
                           name: "votingMachine",
                           id: "voting-machine",
@@ -79,7 +96,7 @@ class VotingStep extends React.Component<Props, State> {
                               key={`voting-machine-select-${
                                 votingMachine.typeName
                               }`}
-                              value={votingMachine.displayName}
+                              value={votingMachine.typeName}
                             >
                               {votingMachine.displayName}
                             </MenuItem>
@@ -88,14 +105,38 @@ class VotingStep extends React.Component<Props, State> {
                       </Select>
                     </FormControl>
                   </FormGroup>
-                  <Paper>
-                    <Typography>
-                      {
-                        /* TODO fix styling of this */ currentVotingMachine.description
-                      }
-                    </Typography>
-                  </Paper>
                 </FormControl>
+              </Grid>
+            </Grid>
+            <Grid container spacing={16}>
+              <Grid item xs={12}>
+                {R.map(
+                  param => (
+                    <Grid item xs={6} key={`text-field-${param.typeName}`}>
+                      <TextField
+                        name={param.typeName}
+                        label={param.displayName}
+                        margin="normal"
+                        onChange={this.handleChange}
+                        value={R.pathOr(
+                          param.defaultValue,
+                          [param.typeName],
+                          this.state
+                        )}
+                        fullWidth
+                        error={
+                          !R.isEmpty(this.state.formErrors[param.typeName])
+                        }
+                        helperText={this.state.formErrors[param.typeName]}
+                        required
+                      />
+                      <Typography gutterBottom>
+                        <i>{param.description}</i>
+                      </Typography>
+                    </Grid>
+                  ),
+                  currentVotingMachine.params
+                )}
               </Grid>
             </Grid>
           </CardContent>
@@ -120,7 +161,7 @@ const componentWithStyles = withStyles(styles)(VotingStep)
 // STATE
 const mapStateToProps = (state: AppState) => {
   return {
-    currentVotingMachine: state.daoCreator.votingMachine,
+      currentVotingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
   }
 }
 
