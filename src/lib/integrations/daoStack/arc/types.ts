@@ -18,6 +18,7 @@ export type VotingMachineParam = {
   displayName: string
   description: string
   defaultValue: string | number | boolean
+  optional?: boolean
 }
 
 export type Founder = {

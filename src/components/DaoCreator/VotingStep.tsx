@@ -127,12 +127,19 @@ class VotingStep extends React.Component<Props, State> {
                         margin="normal"
                         onChange={this.handleChange}
                         value={this.state[param.typeName]}
+                        onBlur={() =>
+                          actions.setVotingMachine({
+                            typeName: currentVotingMachine.typeName,
+                            params: R.omit(["formErrors"], this.state),
+                          })
+                        }
                         fullWidth
                         error={
+                          R.has(param.typeName, this.state.formErrors) &&
                           !R.isEmpty(this.state.formErrors[param.typeName])
                         }
                         helperText={this.state.formErrors[param.typeName]}
-                        required
+                        required={!R.pathOr(false, ["optional"], param)}
                       />
                       <Typography gutterBottom>
                         <i>{param.description}</i>

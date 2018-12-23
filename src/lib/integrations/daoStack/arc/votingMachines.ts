@@ -145,6 +145,7 @@ export const votingMachines: VotingMachine[] = [
         description:
           "optional, to always vote on behalf of the given account.  Otherwise is `msg.sender`.",
         defaultValue: "",
+        optional: true,
       },
       {
         typeName: "votersGainRepRatioFromLostRep",
