@@ -92,7 +92,6 @@ export function setVotingMachine(
   votingMachineConfiguration: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    console.log(votingMachineConfiguration)
     dispatch(Actions.daoCreateAddVoteMachine(votingMachineConfiguration))
     return Promise.resolve()
   }

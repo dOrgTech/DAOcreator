@@ -1,4 +1,19 @@
 import { VotingMachine } from "./types"
+import * as R from "ramda"
+
+export const getVotingMachineDefaultParams = (
+  votingMachineTypeName: string
+) => {
+  const votingMachine = R.find(
+    votingMachine => votingMachine.typeName === votingMachineTypeName,
+    votingMachines
+  ) as VotingMachine
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    votingMachine.params
+  )
+}
 
 export const votingMachines: VotingMachine[] = [
   {

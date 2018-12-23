@@ -24,6 +24,7 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
+  getVotingMachineDefaultParams,
 } from "../../lib/integrations/daoStack/arc"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
@@ -41,7 +42,13 @@ const initState: State = {
 }
 
 class VotingStep extends React.Component<Props, State> {
-  state: Readonly<State> = initState
+  public readonly state: State = {
+    ...initState,
+    ...getVotingMachineDefaultParams(
+      this.props.currentVotingMachineConfiguration.typeName
+    ),
+  }
+
   handleChange = async (event: any) => {
     const { name, value } = event.target
 
@@ -57,8 +64,6 @@ class VotingStep extends React.Component<Props, State> {
         votingMachine.typeName === currentVotingMachineConfiguration.typeName,
       votingMachines
     ) as VotingMachine
-      console.log("1:")
-      console.log(currentVotingMachine)
 
     return (
       <Card className={classes.card}>
@@ -77,13 +82,16 @@ class VotingStep extends React.Component<Props, State> {
                   <FormGroup>
                     <FormControl>
                       <Select
-                        onChange={(event: any) =>
+                        onChange={async (event: any) => {
+                          await this.setState(
+                            getVotingMachineDefaultParams(event.target.value)
+                          )
+
                           actions.setVotingMachine({
-                            typeName:
-                              event.target.value,
+                            typeName: event.target.value,
                             params: R.omit(["formErrors"], this.state),
                           })
-                        }
+                        }}
                         value={currentVotingMachine.typeName}
                         inputProps={{
                           name: "votingMachine",
@@ -118,11 +126,7 @@ class VotingStep extends React.Component<Props, State> {
                         label={param.displayName}
                         margin="normal"
                         onChange={this.handleChange}
-                        value={R.pathOr(
-                          param.defaultValue,
-                          [param.typeName],
-                          this.state
-                        )}
+                        value={this.state[param.typeName]}
                         fullWidth
                         error={
                           !R.isEmpty(this.state.formErrors[param.typeName])
@@ -161,7 +165,8 @@ const componentWithStyles = withStyles(styles)(VotingStep)
 // STATE
 const mapStateToProps = (state: AppState) => {
   return {
-      currentVotingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
+    currentVotingMachineConfiguration:
+      state.daoCreator.votingMachineConfiguration,
   }
 }
 
