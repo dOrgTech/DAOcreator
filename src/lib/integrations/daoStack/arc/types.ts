@@ -1,9 +1,24 @@
 // types exported by this integration
 
+export type VotingMachineConfiguration = {
+  typeName: string
+  params: { [paramName: string]: string | number }
+}
+
 export type VotingMachine = {
   typeName: string
   displayName: string
   description: string
+  params: VotingMachineParam[]
+}
+
+export type VotingMachineParam = {
+  typeName: string
+  valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
+  displayName: string
+  description: string
+  defaultValue: string | number | boolean
+  optional?: boolean
 }
 
 export type Founder = {

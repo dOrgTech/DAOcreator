@@ -16,6 +16,10 @@ export enum Actions {
   NOTIFICATION_INFO = "NOTIFICATION_INFO",
   NOTIFICATION_ERROR = "NOTIFICATION_ERROR",
   NOTIFICATION_CLOSE = "NOTIFICATION_CLOSE",
+
+  // Waiting Animation
+  WAITING_ANIMATION_OPEN = "OPEN_WAITING_ANIMATION",
+  WAITING_ANIMATION_CLOSE = "CLOSE_WAITING_ANIMATION",
 }
 
 import {
@@ -95,7 +99,7 @@ export const daoCreateSetDeployedDao = createPayloadAction<
 >(Actions.DAO_CREATE_SET_DEPLOYED_DAO)
 
 export interface DaoCreateAddVoteMachine
-  extends PayloadAction<string, Arc.VotingMachine> {
+  extends PayloadAction<string, Arc.VotingMachineConfiguration> {
   type: Actions.DAO_CREATE_ADD_VOTE_MACHINE
 }
 export const daoCreateAddVoteMachine = createPayloadAction<
@@ -132,6 +136,21 @@ export const NotificationClose = createAction<NotificationClose>(
   Actions.NOTIFICATION_CLOSE
 )
 
+export interface WaitingAnimationOpen
+  extends PayloadAction<string, { type: string; message: string }> {
+  type: Actions.WAITING_ANIMATION_OPEN
+}
+export const waitingAnimationOpen = createPayloadAction<WaitingAnimationOpen>(
+  Actions.WAITING_ANIMATION_OPEN
+)
+
+export interface WaitingAnimationClose extends Action<string> {
+  type: Actions.WAITING_ANIMATION_CLOSE
+}
+export const waitingAnimationClose = createAction<WaitingAnimationClose>(
+  Actions.WAITING_ANIMATION_CLOSE
+)
+
 export type AnyAction =
   | DaoCreateNextStep
   | DaoCreatePrevStep
@@ -147,3 +166,5 @@ export type AnyAction =
   | NotificationInfo
   | NotificationError
   | NotificationClose
+  | WaitingAnimationOpen
+  | WaitingAnimationClose

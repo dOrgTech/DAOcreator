@@ -13,10 +13,10 @@ import {
   CardContent,
 } from "@material-ui/core"
 import { bindActionCreators, Dispatch } from "redux"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 import { connect } from "react-redux"
 import { Founder } from "src/lib/integrations/daoStack/arc"
 import * as FormValidation from "src/lib/formValidation"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
@@ -91,7 +91,12 @@ class FoundersStep extends React.Component<Props, State> {
       requiredFields
     )
 
-    const formIsValide = R.isEmpty(errorMessage) && formHasAllValues
+    const formIsValide =
+      formHasAllValues &&
+      R.none(
+        key => !R.isEmpty(this.state.formErrors[key]),
+        R.keys(this.state.formErrors)
+      )
 
     this.setState({ formIsValide })
   }

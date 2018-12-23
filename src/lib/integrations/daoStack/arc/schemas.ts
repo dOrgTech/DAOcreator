@@ -16,4 +16,19 @@ export const schemas: Schema[] = [
     displayName: "Global Constraint Registrar",
     description: "Global Constraint Registrar: useful description TODO",
   },
+  {
+    typeName: "ContributionReward",
+    displayName: "Contribution Reward",
+    description: "Contribution Reward: useful description TODO",
+  },
+  {
+    typeName: "VestingScheme",
+    displayName: "Vesting Scheme",
+    description: "Vesting Scheme: useful description TODO",
+  },
+  {
+    typeName: "VoteInOrganizationScheme",
+    displayName: "Vote In Organization Scheme",
+    description: "Vote In Organization Scheme: useful description TODO",
+  },
 ]

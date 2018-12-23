@@ -6,6 +6,7 @@ import Layout from "./components/Layout"
 import Home from "./components/Home"
 import DaoCreator from "./components/DaoCreator"
 import Notifications from "./components/Notifications"
+import WaitingAnimation from "./components/WaitingAnimation"
 
 // TEMP
 import NamingStep from "./components/DaoCreator/NamingStep"
@@ -19,6 +20,7 @@ const App: SFC = () => (
       <Route exact path="/dao-creator/naming" component={NamingStep} />
       <Route exact path="/dao-creator/founders" component={FoundersStep} />
     </Switch>
+    <WaitingAnimation />
     <Notifications />
   </Layout>
 )

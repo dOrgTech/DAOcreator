@@ -69,7 +69,12 @@ class NamingStep extends React.Component<Props, State> {
       requiredFields
     )
 
-    const stepIsValide = R.isEmpty(errorMessage) && formHasAllValues
+    const stepIsValide =
+      formHasAllValues &&
+      R.none(
+        key => !R.isEmpty(this.state.formErrors[key]),
+        R.keys(this.state.formErrors)
+      )
 
     if (stepIsValide != this.props.stepValide) {
       await this.props.actions.setStepIsValide(stepIsValide)
@@ -90,7 +95,7 @@ class NamingStep extends React.Component<Props, State> {
               Create a DAO
             </Typography>
             <Grid container spacing={16}>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 <Grid item xs={12}>
                   <TextField
                     className={classes.daoName}
@@ -137,7 +142,7 @@ class NamingStep extends React.Component<Props, State> {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 Avatar?
               </Grid>
             </Grid>

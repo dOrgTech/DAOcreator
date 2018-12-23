@@ -2,6 +2,7 @@ export interface AppState {
   daoCreator: DaoCreatorState
   daoController: DaoControllerState
   notification: NotificationState
+  waitingAnimation: WaitingAnimationState
 }
 
 import * as Arc from "src/lib/integrations/daoStack/arc"
@@ -16,7 +17,7 @@ export interface DaoCreatorState {
   }
   founders: Arc.Founder[]
   schemas: Arc.Schema[]
-  votingMachine: Arc.VotingMachine
+  votingMachineConfiguration: Arc.VotingMachineConfiguration
   deployedDao: Arc.DAO | undefined
 }
 
@@ -25,6 +26,12 @@ export interface DaoControllerState {
 }
 
 export interface NotificationState {
+  message: string
+  type: string
+  open: boolean
+}
+
+export interface WaitingAnimationState {
   message: string
   type: string
   open: boolean

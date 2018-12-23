@@ -1,22 +1,26 @@
 import {
+  Card,
+  CardContent,
   Checkbox,
   createStyles,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Grid,
   Theme,
+  Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core"
-import { bindActionCreators, Dispatch } from "redux"
 import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import { bindActionCreators, Dispatch } from "redux"
 import { schemas } from "src/lib/integrations/daoStack/arc/schemas"
 import { Schema } from "src/lib/integrations/daoStack/arc"
 import { AppState } from "src/AppState"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemas: Schema[]
@@ -31,26 +35,37 @@ const AddSchema: React.SFC<Props> = ({ classes, addedSchemas, actions }) => {
   }
 
   return (
-    <FormControl>
-      <FormLabel>Governance Schemes</FormLabel>
-      <FormGroup>
-        {R.map(schema => {
-          return (
-            <FormControlLabel
-              key={"formControlLable-" + schema.typeName}
-              control={
-                <Checkbox
-                  checked={R.contains(schema, addedSchemas)}
-                  onChange={handleChange(schema)}
-                  value={schema.typeName}
-                />
-              }
-              label={schema.displayName}
-            />
-          )
-        }, schemas)}
-      </FormGroup>
-    </FormControl>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="h4" className={classes.headline} gutterBottom>
+          DAO Features
+        </Typography>
+        <Grid container spacing={16}>
+          <Grid item xs={12}>
+            <FormControl>
+              <FormLabel>Features</FormLabel>
+              <FormGroup>
+                {R.map(schema => {
+                  return (
+                    <FormControlLabel
+                      key={"formControlLable-" + schema.typeName}
+                      control={
+                        <Checkbox
+                          checked={R.contains(schema, addedSchemas)}
+                          onChange={handleChange(schema)}
+                          value={schema.typeName}
+                        />
+                      }
+                      label={schema.displayName}
+                    />
+                  )
+                }, schemas)}
+              </FormGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   )
 }
 
