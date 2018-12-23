@@ -1,5 +1,4 @@
 import * as React from "react"
-import * as R from "ramda"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import {
@@ -10,10 +9,9 @@ import {
   Stepper,
   Step,
   StepLabel,
-  Typography,
   Button,
 } from "@material-ui/core"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import FeatureStep from "./FeaturesStep"

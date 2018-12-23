@@ -1,10 +1,8 @@
-import * as R from "ramda"
 import {
   Card,
   CardContent,
   createStyles,
   Grid,
-  TextField,
   Theme,
   Typography,
   withStyles,
@@ -12,14 +10,9 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
+import { Dispatch } from "redux"
 import { AppState } from "src/AppState"
-import {
-  Founder,
-  Schema,
-  VotingMachine,
-  DAO,
-} from "src/lib/integrations/daoStack/arc"
+import { Founder, Schema, DAO } from "src/lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   dao: DAO

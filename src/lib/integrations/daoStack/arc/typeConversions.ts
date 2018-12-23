@@ -1,9 +1,4 @@
-import {
-  NewDaoConfig,
-  FounderConfig,
-  SchemeConfig,
-  DAO as ArcDAO,
-} from "@daostack/arc.js"
+import { FounderConfig, SchemeConfig, DAO as ArcDAO } from "@daostack/arc.js"
 import { BigNumber } from "bignumber.js"
 import * as R from "ramda"
 import {

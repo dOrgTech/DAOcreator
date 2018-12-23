@@ -14,8 +14,8 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import { AppState } from "src/AppState"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
-import * as FormValidation from "../../lib/formValidation"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import * as FormValidation from "src/lib/formValidation"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string

@@ -10,7 +10,7 @@ import { Provider } from "react-redux"
 import { configureStore } from "./redux/store"
 import createHashHistory from "history/createHashHistory"
 
-import theme from "./theme"
+import theme from "./style/theme"
 
 const history = createHashHistory()
 const store = configureStore(history)

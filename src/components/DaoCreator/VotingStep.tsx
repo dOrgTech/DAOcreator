@@ -25,8 +25,8 @@ import {
   votingMachines,
   VotingMachineConfiguration,
   getVotingMachineDefaultParams,
-} from "../../lib/integrations/daoStack/arc"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+} from "src/lib/integrations/daoStack/arc"
+import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   currentVotingMachineConfiguration: VotingMachineConfiguration

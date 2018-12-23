@@ -1,6 +1,6 @@
 import * as R from "ramda"
-import { Actions, AnyAction } from "../actions"
-import { DaoCreatorState } from "../../AppState"
+import { Actions, AnyAction } from "src/redux/actions"
+import { DaoCreatorState } from "src/AppState"
 import { votingMachines } from "src/lib/integrations/daoStack/arc"
 
 const initialState: DaoCreatorState = {

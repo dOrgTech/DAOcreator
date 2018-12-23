@@ -4,7 +4,7 @@ Still very WIP
 
 ## Project Architecture
 
-TODO
+TODO: Describe folder structure & tools
 
 ## 3 Layers Of Data Types
 
@@ -18,7 +18,7 @@ We want to avoid as many **run-time type related errors** as possible, so each l
 
 These definitions can be found in:
 
-1. `src/ui/components/**.ts`
+1. `src/components/**.ts`
 2. `src/lib/types/*.ts`
 3. `src/lib/integrations/**/types/*.ts`
 

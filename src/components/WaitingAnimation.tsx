@@ -12,7 +12,7 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import { AppState } from "../AppState"
+import { AppState } from "src/AppState"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
