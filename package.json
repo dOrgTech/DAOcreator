@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "app-start": "react-scripts start",
-    "app-build": "react-scripts build",
+    "app-build": "react-scripts build && echo 'dorg.tech' > build/CNAME",
     "app-eject": "react-scripts eject",
     "app-test": "react-scripts test",
     "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
