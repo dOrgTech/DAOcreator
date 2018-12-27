@@ -14,9 +14,9 @@ import {
 } from "@material-ui/core"
 import { bindActionCreators, Dispatch } from "redux"
 import { connect } from "react-redux"
-import { Founder } from "src/lib/integrations/daoStack/arc"
-import * as FormValidation from "src/lib/formValidation"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import { Founder } from "../../lib/integrations/daoStack/arc"
+import * as FormValidation from "../../lib/formValidation"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
@@ -87,7 +87,7 @@ class FoundersStep extends React.Component<Props, State> {
     } as any)
 
     const formHasAllValues = R.none(
-      field => R.isEmpty(this.state[field]),
+      field => R.isEmpty(R.prop(field, this.state as any)),
       requiredFields
     )
 

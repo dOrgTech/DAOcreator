@@ -18,7 +18,7 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
-} from "src/lib/integrations/daoStack/arc"
+} from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
