@@ -18,22 +18,31 @@ export const getVotingMachineDefaultParams = (
 // TODO: add QuorumVote https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
 export const votingMachines: VotingMachine[] = [
   {
+    typeName: "QuorumVote",
+    displayName: "Quorum Vote",
+    description:
+      "Every member has one vote and a quorum is reached based on a ratio of the total number of possible participants",
+    params: [], //TODO: add params for ratio
+  },
+  {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
-    description: "Absolute Vote: useful description TODO",
+    description:
+      "This system counts one person one vote and a majority is determined by a percentage.",
     params: [
       {
         typeName: "ownerVote",
         valueType: "boolean",
-        displayName: "Owner Vote",
-        description: "",
+        displayName: "Proposer",
+        description: "The participant who called the voting mechanism",
         defaultValue: true,
       },
       {
         typeName: "votePerc",
         valueType: "number",
-        displayName: "Vote Perc",
-        description: "",
+        displayName: "Majority Percentage",
+        description:
+          "The percenatge of voters necessary to reach a valid decision. Default: 50%",
         defaultValue: 50,
       },
     ],
@@ -41,7 +50,8 @@ export const votingMachines: VotingMachine[] = [
   {
     typeName: "GenesisProtocol",
     displayName: "Genesis Protocol",
-    description: "Genesis Protocol: useful description TODO",
+    description:
+      "This is the first iteration of the GenesisDAO (link to alchemy) protocol. This voting machine reflects the rules for staking and boosting proposals where voters lose or gain REP depending on the outcome.",
     params: [
       {
         typeName: "boostedVotePeriodLimit",
