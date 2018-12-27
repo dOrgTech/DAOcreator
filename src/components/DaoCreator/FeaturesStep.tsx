@@ -17,21 +17,21 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { schemas } from "src/lib/integrations/daoStack/arc/schemas"
-import { Schema } from "src/lib/integrations/daoStack/arc"
+import { schemes } from "src/lib/integrations/daoStack/arc/schemes"
+import { Scheme } from "src/lib/integrations/daoStack/arc"
 import { AppState } from "src/AppState"
 import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
-  addedSchemas: Schema[]
+  addedSchemes: Scheme[]
   actions: DaoCreatorActions
 }
 
-const AddSchema: React.SFC<Props> = ({ classes, addedSchemas, actions }) => {
-  const handleChange = (schema: Schema) => (event: any) => {
-    R.contains(schema, addedSchemas) === true
-      ? actions.remSchema(schema)
-      : actions.addSchema(schema)
+const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
+  const handleChange = (scheme: Scheme) => (event: any) => {
+    R.contains(scheme, addedSchemes) === true
+      ? actions.remScheme(scheme)
+      : actions.addScheme(scheme)
   }
 
   return (
@@ -45,21 +45,21 @@ const AddSchema: React.SFC<Props> = ({ classes, addedSchemas, actions }) => {
             <FormControl>
               <FormLabel>Features</FormLabel>
               <FormGroup>
-                {R.map(schema => {
+                {R.map(scheme => {
                   return (
                     <FormControlLabel
-                      key={"formControlLable-" + schema.typeName}
+                      key={"formControlLable-" + scheme.typeName}
                       control={
                         <Checkbox
-                          checked={R.contains(schema, addedSchemas)}
-                          onChange={handleChange(schema)}
-                          value={schema.typeName}
+                          checked={R.contains(scheme, addedSchemes)}
+                          onChange={handleChange(scheme)}
+                          value={scheme.typeName}
                         />
                       }
-                      label={schema.displayName}
+                      label={scheme.displayName}
                     />
                   )
-                }, schemas)}
+                }, schemes)}
               </FormGroup>
             </FormControl>
           </Grid>
@@ -79,12 +79,12 @@ const styles = ({  }: Theme) =>
     headline: {},
   })
 
-const componentWithStyles = withStyles(styles)(AddSchema)
+const componentWithStyles = withStyles(styles)(AddScheme)
 
 // STATE
 const mapStateToProps = (state: AppState) => {
   return {
-    addedSchemas: state.daoCreator.schemas,
+    addedSchemes: state.daoCreator.schemes,
   }
 }
 

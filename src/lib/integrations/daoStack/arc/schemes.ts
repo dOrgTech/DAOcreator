@@ -1,6 +1,6 @@
-import { Schema } from "./types"
+import { Scheme } from "./types"
 
-export const schemas: Schema[] = [
+export const schemes: Scheme[] = [
   {
     typeName: "SchemeRegistrar",
     displayName: "Scheme Registrar",

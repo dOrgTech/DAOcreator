@@ -4,7 +4,7 @@ import * as R from "ramda"
 import {
   Founder,
   VotingMachine,
-  Schema,
+  Scheme,
   VotingMachineConfiguration,
 } from "./types"
 
@@ -18,8 +18,8 @@ const toFounderConfigs = (founders: Founder[]): FounderConfig[] =>
     founders
   )
 
-const toSchemasConfig = (schemas: Schema[]): SchemeConfig[] =>
-  R.map(schame => ({ name: schame.typeName }), schemas)
+const toSchemeConfigs = (schemes: Scheme[]): SchemeConfig[] =>
+  R.map(scheme => ({ name: scheme.typeName }), schemes)
 
 const toVotingMachineParams = (
   votingMachineConfiguration: VotingMachineConfiguration
@@ -33,7 +33,7 @@ const toVotingMachineParams = (
 export const toNewDaoConfig = (
   naming: any,
   founders: Founder[],
-  schemas: Schema[],
+  schemes: Scheme[],
   votingMachineConfiguration: VotingMachineConfiguration
 ) => {
   const { daoName, tokenName, tokenSymbol } = naming
@@ -46,7 +46,7 @@ export const toNewDaoConfig = (
     // daoCreatorAddress?: Address,
     // universalController?: boolean,
     votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
-    schemes: toSchemasConfig(schemas),
+    schemes: toSchemeConfigs(schemes),
   }
 }
 

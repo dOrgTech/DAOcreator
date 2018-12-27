@@ -6,8 +6,8 @@ export enum Actions {
   DAO_CREATE_SET_TOKEN = "DAO_CREATE_SET_TOKEN",
   DAO_CREATE_SET_TOKEN_SYM = "DAO_CREATE_SET_TOKEN_SYM",
   DAO_CREATE_ADD_FOUNDER = "DAO_CREATE_ADD_FOUNDER",
-  DAO_CREATE_ADD_SCHEMA = "DAO_CREATE_ADD_SCHEMA",
-  DAO_CREATE_REM_SCHEMA = "DAO_CREATE_REM_SCHEMA",
+  DAO_CREATE_ADD_SCHEME = "DAO_CREATE_ADD_SCHEME",
+  DAO_CREATE_REM_SCHEME = "DAO_CREATE_REM_SCHEME",
   DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
   DAO_CREATE_SET_DEPLOYED_DAO = "DAO_CREATE_SET_DEPLOYED_DAO",
   DAO_CREATE_SET_STEP_VALIDATION = "DAO_CREATE_SET_STEP_VALIDATION",
@@ -76,18 +76,18 @@ export const daoCreateAddFounder = createPayloadAction<DaoCreateAddFounder>(
   Actions.DAO_CREATE_ADD_FOUNDER
 )
 
-export interface DaoCreateAddSchema extends PayloadAction<string, Arc.Schema> {
-  type: Actions.DAO_CREATE_ADD_SCHEMA
+export interface DaoCreateAddScheme extends PayloadAction<string, Arc.Scheme> {
+  type: Actions.DAO_CREATE_ADD_SCHEME
 }
-export const daoCreateAddSchema = createPayloadAction<DaoCreateAddSchema>(
-  Actions.DAO_CREATE_ADD_SCHEMA
+export const daoCreateAddScheme = createPayloadAction<DaoCreateAddScheme>(
+  Actions.DAO_CREATE_ADD_SCHEME
 )
 
-export interface DaoCreateRemSchema extends PayloadAction<string, Arc.Schema> {
-  type: Actions.DAO_CREATE_REM_SCHEMA
+export interface DaoCreateRemScheme extends PayloadAction<string, Arc.Scheme> {
+  type: Actions.DAO_CREATE_REM_SCHEME
 }
-export const daoCreateRemSchema = createPayloadAction<DaoCreateRemSchema>(
-  Actions.DAO_CREATE_REM_SCHEMA
+export const daoCreateRemScheme = createPayloadAction<DaoCreateRemScheme>(
+  Actions.DAO_CREATE_REM_SCHEME
 )
 
 export interface DaoCreateSetDeployedDao
@@ -158,8 +158,8 @@ export type AnyAction =
   | DaoCreateSetToken
   | DaoCreateSetTokenSym
   | DaoCreateAddFounder
-  | DaoCreateAddSchema
-  | DaoCreateRemSchema
+  | DaoCreateAddScheme
+  | DaoCreateRemScheme
   | DaoCreateAddVoteMachine
   | DaoCreateSetDeployedDao
   | DaoCreateSetStepValidation

@@ -14,7 +14,7 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
   Founder,
-  Schema,
+  Scheme,
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
@@ -25,7 +25,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   founders: Founder[]
-  schemas: Schema[]
+  schemes: Scheme[]
   votingMachineConfiguration: VotingMachineConfiguration
   stepNumber: number
   stepValide: boolean
@@ -36,7 +36,7 @@ const ReviewStep: React.SFC<Props> = ({
   tokenName,
   tokenSymbol,
   founders,
-  schemas,
+  schemes,
   votingMachineConfiguration,
   stepNumber,
   stepValide,
@@ -95,9 +95,9 @@ const ReviewStep: React.SFC<Props> = ({
 
           <Grid item xs={12}>
             <Typography variant="h5" className={classes.headline} gutterBottom>
-              Schemas
+              Schemes
             </Typography>
-            {R.map(displaySchema, schemas)}
+            {R.map(displayScheme, schemes)}
           </Grid>
 
           <Grid item xs={12}>
@@ -131,7 +131,7 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displaySchema = ({ displayName, description, typeName }: Schema) => (
+const displayScheme = ({ displayName, description, typeName }: Scheme) => (
   <Grid container spacing={16} key={`founder-${typeName}`}>
     <Grid item xs={12}>
       <Typography variant="subtitle1">{displayName}</Typography>
@@ -161,7 +161,7 @@ const mapStateToProps = (state: any) => {
     tokenName: state.daoCreator.naming.tokenName,
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
     founders: state.daoCreator.founders,
-    schemas: state.daoCreator.schemas,
+    schemes: state.daoCreator.schemes,
     votingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
     stepNumber: state.daoCreator.step,
     stepValide: state.daoCreator.stepValidation[state.daoCreator.step],

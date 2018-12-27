@@ -12,7 +12,7 @@ const initialState: DaoCreatorState = {
     tokenSymbol: "",
   },
   founders: [],
-  schemas: [],
+  schemes: [],
   votingMachineConfiguration: {
     typeName: votingMachines[0].typeName,
     params: {},
@@ -53,13 +53,13 @@ export const reducer = (
       return R.merge(state, {
         founders: R.append(action.payload, state.founders),
       })
-    case Actions.DAO_CREATE_ADD_SCHEMA:
+    case Actions.DAO_CREATE_ADD_SCHEME:
       return R.merge(state, {
-        schemas: R.append(action.payload, state.schemas),
+        schemes: R.append(action.payload, state.schemes),
       })
-    case Actions.DAO_CREATE_REM_SCHEMA:
+    case Actions.DAO_CREATE_REM_SCHEME:
       return R.merge(state, {
-        schemas: R.without([action.payload], state.schemas),
+        schemes: R.without([action.payload], state.schemes),
       })
     case Actions.DAO_CREATE_ADD_VOTE_MACHINE:
       return R.merge(state, { votingMachineConfiguration: action.payload })

@@ -1,3 +1,0 @@
-type Agent = {
-  address: string
-}

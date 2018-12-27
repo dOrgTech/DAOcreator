@@ -1,6 +1,5 @@
 import { Dispatch } from "redux"
 import * as Actions from "./internal"
-import { newNotificationInfo } from "./notifications"
 import * as Arc from "src/lib/integrations/daoStack/arc"
 import { AppState } from "src/AppState"
 
@@ -11,8 +10,8 @@ export default interface DaoCreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
-  addSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
-  remSchema(schema: Arc.Schema): (dispatch: Dispatch) => Promise<void>
+  addScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
+  remScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
   setVotingMachine(
     votingMachine: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
@@ -70,20 +69,20 @@ export function addFounder(
   }
 }
 
-export function addSchema(
-  schema: Arc.Schema
+export function addScheme(
+  scheme: Arc.Scheme
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Actions.daoCreateAddSchema(schema))
+    dispatch(Actions.daoCreateAddScheme(scheme))
     return Promise.resolve()
   }
 }
 
-export function remSchema(
-  schema: Arc.Schema
+export function remScheme(
+  scheme: Arc.Scheme
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Actions.daoCreateRemSchema(schema))
+    dispatch(Actions.daoCreateRemScheme(scheme))
     return Promise.resolve()
   }
 }
@@ -111,7 +110,7 @@ export function createDao(): (
     const {
       naming,
       founders,
-      schemas,
+      schemes,
       votingMachineConfiguration,
     } = getState().daoCreator
 
@@ -119,7 +118,7 @@ export function createDao(): (
       const dao = await Arc.createDao(
         naming,
         founders,
-        schemas,
+        schemes,
         votingMachineConfiguration
       )
       dispatch(Actions.daoCreateSetDeployedDao(dao))

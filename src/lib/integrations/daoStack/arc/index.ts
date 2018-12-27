@@ -9,7 +9,7 @@ import {
 import {
   VotingMachine,
   Founder,
-  Schema,
+  Scheme,
   VotingMachineConfiguration,
 } from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
@@ -34,7 +34,7 @@ export const init = async () => {
 export const createDao = async (
   naming: any,
   founders: Founder[],
-  schemas: Schema[],
+  schemes: Scheme[],
   votingMachine: VotingMachineConfiguration
 ) => {
   if (!isInitialized) {
@@ -43,7 +43,7 @@ export const createDao = async (
   const newDaoConfig: NewDaoConfig = toNewDaoConfig(
     naming,
     founders,
-    schemas,
+    schemes,
     votingMachine
   )
   try {
