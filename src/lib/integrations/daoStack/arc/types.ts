@@ -32,6 +32,7 @@ export type Scheme = {
   address?: string
   displayName: string
   description: string
+  toggleDefault: boolean
 }
 
 export type DAO = {

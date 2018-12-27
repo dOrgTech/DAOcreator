@@ -1,7 +1,7 @@
 import * as R from "ramda"
 import { Actions, AnyAction } from "src/redux/actions"
 import { DaoCreatorState } from "src/AppState"
-import { votingMachines } from "src/lib/integrations/daoStack/arc"
+import { schemes, votingMachines } from "src/lib/integrations/daoStack/arc"
 
 const initialState: DaoCreatorState = {
   step: 0,
@@ -12,7 +12,7 @@ const initialState: DaoCreatorState = {
     tokenSymbol: "",
   },
   founders: [],
-  schemes: [],
+  schemes: R.filter(scheme => scheme.toggleDefault, schemes),
   votingMachineConfiguration: {
     typeName: votingMachines[0].typeName,
     params: {},

@@ -15,6 +15,7 @@ export const getVotingMachineDefaultParams = (
   )
 }
 
+// TODO: add QuorumVote https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
 export const votingMachines: VotingMachine[] = [
   {
     typeName: "AbsoluteVote",

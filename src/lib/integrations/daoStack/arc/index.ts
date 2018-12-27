@@ -1,5 +1,8 @@
+export * from "./types"
 export * from "./typeConversions"
+export * from "./schemes"
 export * from "./votingMachines"
+
 import {
   DAO,
   NewDaoConfig,
@@ -13,7 +16,6 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
-export * from "./types"
 
 let isInitialized = false
 
