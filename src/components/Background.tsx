@@ -1,8 +1,7 @@
 import * as React from "react"
 import { withStyles, Theme, WithStyles, createStyles } from "@material-ui/core"
 // import Particles from "react-particles-js"
-import Unity from "react-unity-webgl"
-var UnityContent = require("react-unity-webgl/source/UnityContent")
+import Unity, { UnityContent } from "react-unity-webgl"
 
 interface Props extends WithStyles<typeof styles> {}
 
