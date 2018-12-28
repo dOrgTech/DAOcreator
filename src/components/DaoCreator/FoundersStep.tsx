@@ -116,62 +116,83 @@ class FoundersStep extends React.Component<Props, State> {
           <Typography variant="h4" className={classes.headline} gutterBottom>
             Add Founders
           </Typography>
-          <Typography variant="h6">
-            Set the initial set of reputation and token holders in the DAO
-          </Typography>
           <Grid container spacing={16}>
-            <Grid item xs={6}>
-              <TextField
-                name="address"
-                label="Wallet Address"
-                margin="normal"
-                onChange={this.handleChange}
-                value={this.state.address}
-                fullWidth
-                error={!R.isEmpty(this.state.formErrors.address)}
-                helperText={this.state.formErrors.address}
-                required
-              />
+            <Grid item xs={12} md={6} alignContent="center" alignItems="center">
+              <Typography className={classes.guideText} variant="body2">
+                Here we set the initial set of reputation and token holders in
+                the DAO.
+                <br />
+              </Typography>
             </Grid>
-            <Grid item xs={2}>
-              <TextField
-                name="reputation"
-                label="Reputation"
-                margin="normal"
-                onChange={this.handleChange}
-                value={this.state.reputation}
-                fullWidth
-                error={!R.isEmpty(this.state.formErrors.reputation)}
-                helperText={this.state.formErrors.reputation}
-                required
-              />
+            <Grid container xs={12} md={6} spacing={16}>
+              <Grid item>
+                Piechart showing the initial distribution of tokens and
+                reputation?
+                <br />
+                Display total rep and total tokens
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              <TextField
-                name="tokens"
-                label="Tokens"
-                margin="normal"
-                onChange={this.handleChange}
-                value={this.state.tokens}
-                fullWidth
-                error={!R.isEmpty(this.state.formErrors.tokens)}
-                helperText={this.state.formErrors.tokens}
-                required
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Button
-                onClick={this.onAddFounder}
-                className={classes.addButton}
-                color="primary"
-                aria-label="Add"
-                disabled={!this.state.formIsValide}
+            <Grid container xs={12} spacing={16}>
+              <Grid item xs={6}>
+                <TextField
+                  name="address"
+                  label="Wallet Address"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  value={this.state.address}
+                  fullWidth
+                  error={!R.isEmpty(this.state.formErrors.address)}
+                  helperText={this.state.formErrors.address}
+                  required
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  name="reputation"
+                  label="Reputation"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  value={this.state.reputation}
+                  fullWidth
+                  error={!R.isEmpty(this.state.formErrors.reputation)}
+                  helperText={this.state.formErrors.reputation}
+                  required
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  name="tokens"
+                  label="Tokens"
+                  margin="normal"
+                  onChange={this.handleChange}
+                  value={this.state.tokens}
+                  fullWidth
+                  error={!R.isEmpty(this.state.formErrors.tokens)}
+                  helperText={this.state.formErrors.tokens}
+                  required
+                />
+              </Grid>
+              <Grid
+                item
+                xs={2}
+                alignContent="flex-end"
+                alignItems="flex-end"
+                className={classes.addButtonWrapper}
               >
-                Add founder
-              </Button>
+                <Button
+                  onClick={this.onAddFounder}
+                  className={classes.addButton}
+                  color="primary"
+                  variant="contained"
+                  aria-label="Add"
+                  disabled={!this.state.formIsValide}
+                >
+                  Add
+                </Button>
+              </Grid>
             </Grid>
+            {R.map(this.addedFounder, addedFounders)}
           </Grid>
-          {R.map(this.addedFounder, addedFounders)}
         </CardContent>
       </Card>
     )
@@ -197,9 +218,21 @@ const styles = ({  }: Theme) =>
   createStyles({
     header: {},
     card: {},
-    addButton: {},
+    addButton: { float: "right" },
+    addButtonWrapper: {
+      marginTop: "auto",
+    },
     subheader: {},
     headline: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(FoundersStep)
