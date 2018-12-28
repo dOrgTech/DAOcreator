@@ -1,12 +1,25 @@
-import { Card, CardContent, createStyles, Grid, List, ListItem, ListItemText, Switch, Theme, Typography, withStyles, WithStyles } from "@material-ui/core";
-import * as R from "ramda";
-import * as React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
-import { AppState } from "../../AppState";
-import { Scheme } from "../../lib/integrations/daoStack/arc";
-import { schemes } from "../../lib/integrations/daoStack/arc/schemes";
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator";
+import {
+  Card,
+  CardContent,
+  createStyles,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Switch,
+  Theme,
+  Typography,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core"
+import * as R from "ramda"
+import * as React from "react"
+import { connect } from "react-redux"
+import { bindActionCreators, Dispatch } from "redux"
+import { AppState } from "../../AppState"
+import { Scheme } from "../../lib/integrations/daoStack/arc"
+import { schemes } from "../../lib/integrations/daoStack/arc/schemes"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemes: Scheme[]
