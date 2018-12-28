@@ -53,25 +53,60 @@ const ReviewStep: React.SFC<Props> = ({
         <Typography variant="h4" className={classes.headline} gutterBottom>
           Review the DAO
         </Typography>
-        <Typography variant="h6">
-            Look over this summary of the DAO you are about to create
-        </Typography>
         <Grid container spacing={16}>
-          <Grid item xs={12}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Naming
-            </Typography>
-            <Typography>
-              <b>DAO Name:</b> {daoName}
-            </Typography>
-            <Typography>
-              <b>Token Name:</b> {tokenName}
-            </Typography>
-            <Typography>
-              <b>Token Symbol:</b> {tokenSymbol}
+          <Grid item xs={12} md={5}>
+            <Typography className={classes.guideText} variant="body2">
+              Look over this summary of the DAO you are about to create
             </Typography>
           </Grid>
-
+          <Grid item xs={12} md={7} />
+          <Grid item xs={12} md={5}>
+            <Grid item xs={12}>
+              <Typography
+                variant="h5"
+                className={classes.headline}
+                gutterBottom
+              >
+                Naming
+              </Typography>
+              <Typography>
+                <b>DAO Name:</b> {daoName}
+              </Typography>
+              <Typography>
+                <b>Token Name:</b> {tokenName}
+              </Typography>
+              <Typography>
+                <b>Token Symbol:</b> {tokenSymbol}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="h5"
+                className={classes.headline}
+                gutterBottom
+              >
+                Voting
+              </Typography>
+              <Typography variant="subtitle1">
+                {votingMachine.displayName}
+              </Typography>
+              <Typography>
+                <i>{votingMachine.description}</i>
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container xs={12} md={7} spacing={16}>
+            <Grid item xs={12}>
+              <Typography
+                variant="h5"
+                className={classes.headline}
+                gutterBottom
+              >
+                Features
+              </Typography>
+              {R.map(displayScheme, schemes)}
+            </Grid>
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="h5" className={classes.headline} gutterBottom>
               Founders
@@ -82,37 +117,18 @@ const ReviewStep: React.SFC<Props> = ({
                   <b>Address</b>
                 </Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <Typography>
                   <b>Reputation</b>
                 </Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <Typography>
                   <b>Tokens</b>
                 </Typography>
               </Grid>
             </Grid>
             {R.map(displayFounder, founders)}
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Features
-            </Typography>
-            {R.map(displayScheme, schemes)}
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Voting
-            </Typography>
-            <Typography variant="subtitle1">
-              {votingMachine.displayName}
-            </Typography>
-            <Typography>
-              <i>{votingMachine.description}</i>
-            </Typography>
           </Grid>
         </Grid>
       </CardContent>
@@ -125,10 +141,10 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
     <Grid item xs={6}>
       <Typography>{address}</Typography>
     </Grid>
-    <Grid item xs={2}>
+    <Grid item xs={3}>
       <Typography>{reputation}</Typography>
     </Grid>
-    <Grid item xs={2}>
+    <Grid item xs={3}>
       <Typography>{tokens}</Typography>
     </Grid>
   </Grid>
@@ -149,10 +165,19 @@ const displayScheme = ({ displayName, description, typeName }: Scheme) => (
 const styles = ({  }: Theme) =>
   createStyles({
     card: {},
-    headline: {},
+    headline: {
+      paddingTop: 20,
+    },
     daoName: {},
     tokenName: {},
     tokenSymbol: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      addingTop: 50,
+      paddingBottom: 20,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(ReviewStep)
