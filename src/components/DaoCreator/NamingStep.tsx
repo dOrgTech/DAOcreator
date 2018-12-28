@@ -65,7 +65,7 @@ class NamingStep extends React.Component<Props, State> {
     } as any)
 
     const formHasAllValues = R.none(
-        field => R.isEmpty(R.prop(field, this.state as any)),
+      field => R.isEmpty(R.prop(field, this.state as any)),
       requiredFields
     )
 
@@ -92,7 +92,10 @@ class NamingStep extends React.Component<Props, State> {
         <form>
           <CardContent>
             <Typography variant="h4" className={classes.headline} gutterBottom>
-              Create a DAO
+              Name the DAO
+            </Typography>
+            <Typography variant="h6">
+                Give the DAO and ts native token a name
             </Typography>
             <Grid container spacing={16}>
               <Grid item xs={12} md={6}>

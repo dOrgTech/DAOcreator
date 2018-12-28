@@ -37,7 +37,10 @@ const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h4" className={classes.headline} gutterBottom>
-          DAO Features
+          Select Features
+        </Typography>
+        <Typography variant="h6">
+          Select the initial set of features for the DAO
         </Typography>
         <Grid container spacing={16}>
           <Grid item xs={12}>

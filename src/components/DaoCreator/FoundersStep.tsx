@@ -112,66 +112,67 @@ class FoundersStep extends React.Component<Props, State> {
     const { classes, addedFounders } = this.props
     return (
       <Card className={classes.card}>
-        <form>
-          <CardContent>
-            <Typography variant="h4" className={classes.headline} gutterBottom>
-              Add Founders
-            </Typography>
-            <Grid container spacing={16}>
-              <Grid item xs={6}>
-                <TextField
-                  name="address"
-                  label="Wallet Address"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.address}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.address)}
-                  helperText={this.state.formErrors.address}
-                  required
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  name="reputation"
-                  label="Reputation"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.reputation}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.reputation)}
-                  helperText={this.state.formErrors.reputation}
-                  required
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  name="tokens"
-                  label="Tokens"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.tokens}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.tokens)}
-                  helperText={this.state.formErrors.tokens}
-                  required
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Button
-                  onClick={this.onAddFounder}
-                  className={classes.addButton}
-                  color="primary"
-                  aria-label="Add"
-                  disabled={!this.state.formIsValide}
-                >
-                  Add founder
-                </Button>
-              </Grid>
+        <CardContent>
+          <Typography variant="h4" className={classes.headline} gutterBottom>
+            Add Founders
+          </Typography>
+          <Typography variant="h6">
+            Set the initial set of reputation and token holders in the DAO
+          </Typography>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <TextField
+                name="address"
+                label="Wallet Address"
+                margin="normal"
+                onChange={this.handleChange}
+                value={this.state.address}
+                fullWidth
+                error={!R.isEmpty(this.state.formErrors.address)}
+                helperText={this.state.formErrors.address}
+                required
+              />
             </Grid>
-            {R.map(this.addedFounder, addedFounders)}
-          </CardContent>
-        </form>
+            <Grid item xs={2}>
+              <TextField
+                name="reputation"
+                label="Reputation"
+                margin="normal"
+                onChange={this.handleChange}
+                value={this.state.reputation}
+                fullWidth
+                error={!R.isEmpty(this.state.formErrors.reputation)}
+                helperText={this.state.formErrors.reputation}
+                required
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <TextField
+                name="tokens"
+                label="Tokens"
+                margin="normal"
+                onChange={this.handleChange}
+                value={this.state.tokens}
+                fullWidth
+                error={!R.isEmpty(this.state.formErrors.tokens)}
+                helperText={this.state.formErrors.tokens}
+                required
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                onClick={this.onAddFounder}
+                className={classes.addButton}
+                color="primary"
+                aria-label="Add"
+                disabled={!this.state.formIsValide}
+              >
+                Add founder
+              </Button>
+            </Grid>
+          </Grid>
+          {R.map(this.addedFounder, addedFounders)}
+        </CardContent>
       </Card>
     )
   }

@@ -70,15 +70,14 @@ class VotingStep extends React.Component<Props, State> {
         <form>
           <CardContent>
             <Typography variant="h4" className={classes.headline} gutterBottom>
-              Voting Configurations
+              Configure Voting
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              Configure how to do voting in the DAO
             </Typography>
             <Grid container spacing={16}>
               <Grid item xs={12}>
-                <Typography gutterBottom>
-                  Select and configurate voting machine
-                </Typography>
                 <FormControl>
-                  <FormLabel>Voting Machine</FormLabel>
                   <FormGroup>
                     <FormControl>
                       <Select
@@ -118,9 +117,12 @@ class VotingStep extends React.Component<Props, State> {
             </Grid>
             <Grid container spacing={16}>
               <Grid item xs={12}>
+                <Typography gutterBottom>
+                    {currentVotingMachine.description}
+                </Typography>
                 {R.map(
                   param => (
-                    <Grid item xs={6} key={`text-field-${param.typeName}`}>
+                    <Grid item xs={12} key={`text-field-${param.typeName}`}>
                       <TextField
                         name={param.typeName}
                         label={param.displayName}
@@ -136,9 +138,12 @@ class VotingStep extends React.Component<Props, State> {
                         fullWidth
                         error={
                           R.has(param.typeName, this.state.formErrors) &&
-                          !R.isEmpty(R.prop(param.typeName, this.state.formErrors as any))
+                          !R.isEmpty(
+                            R.prop(param.typeName, this.state.formErrors as any)
+                          )
                         }
-                        helperText={R.prop(param.typeName, this.state.formErrors as any)}
+                        helperText={R.prop(param.typeName, this.state
+                          .formErrors as any)}
                         required={!R.pathOr(false, ["optional"], param)}
                       />
                       <Typography gutterBottom>

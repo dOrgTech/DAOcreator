@@ -53,6 +53,9 @@ const ReviewStep: React.SFC<Props> = ({
         <Typography variant="h4" className={classes.headline} gutterBottom>
           Review the DAO
         </Typography>
+        <Typography variant="h6">
+            Look over this summary of the DAO you are about to create
+        </Typography>
         <Grid container spacing={16}>
           <Grid item xs={12}>
             <Typography variant="h5" className={classes.headline} gutterBottom>
@@ -95,14 +98,14 @@ const ReviewStep: React.SFC<Props> = ({
 
           <Grid item xs={12}>
             <Typography variant="h5" className={classes.headline} gutterBottom>
-              Schemes
+              Features
             </Typography>
             {R.map(displayScheme, schemes)}
           </Grid>
 
           <Grid item xs={12}>
             <Typography variant="h5" className={classes.headline} gutterBottom>
-              Voting Machine
+              Voting
             </Typography>
             <Typography variant="subtitle1">
               {votingMachine.displayName}

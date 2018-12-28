@@ -37,7 +37,10 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h4" className={classes.headline} gutterBottom>
-            Live DAO
+              Live DAO
+          </Typography>
+          <Typography variant="h6">
+              The DAO is now deployed. Here are some useful information about it
           </Typography>
           <Grid container spacing={16}>
             <Grid item xs={6}>

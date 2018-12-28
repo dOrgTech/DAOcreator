@@ -18,13 +18,6 @@ export const getVotingMachineDefaultParams = (
 // TODO: add QuorumVote https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
 export const votingMachines: VotingMachine[] = [
   {
-    typeName: "QuorumVote",
-    displayName: "Quorum Vote",
-    description:
-      "Every member has one vote and a quorum is reached based on a ratio of the total number of possible participants",
-    params: [], //TODO: add params for ratio
-  },
-  {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
     description:
@@ -175,5 +168,12 @@ export const votingMachines: VotingMachine[] = [
         defaultValue: 1,
       },
     ],
+  },
+  {
+    typeName: "QuorumVote",
+    displayName: "Quorum Vote",
+    description:
+      "Every member has one vote and a quorum is reached based on a ratio of the total number of possible participants",
+    params: [], //TODO: add params for ratio
   },
 ]
