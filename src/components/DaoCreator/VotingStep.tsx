@@ -122,9 +122,13 @@ class VotingStep extends React.Component<Props, State> {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography gutterBottom>
+                  <Typography
+                    gutterBottom
+                    className={classes.votingMachineDescription}
+                  >
                     {currentVotingMachine.description}
                   </Typography>
+                  <Typography variant="h6">Configuration parameters</Typography>
                   {R.map(
                     param => (
                       <Grid item xs={12} key={`text-field-${param.typeName}`}>
@@ -177,6 +181,10 @@ const styles = ({  }: Theme) =>
     daoName: {},
     tokenName: {},
     tokenSymbol: {},
+    votingMachineDescription: {
+      marginBottom: 25,
+      fontSize: 16,
+    },
     guideText: {
       fontSize: 18,
       maxWidth: 450,
