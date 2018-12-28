@@ -95,7 +95,7 @@ const ReviewStep: React.SFC<Props> = ({
               </Typography>
             </Grid>
           </Grid>
-          <Grid container xs={12} md={7} spacing={16}>
+          <Grid item xs={12} md={7}>
             <Grid item xs={12}>
               <Typography
                 variant="h5"
@@ -176,7 +176,6 @@ const styles = ({  }: Theme) =>
       maxWidth: 450,
       addingTop: 50,
       paddingBottom: 20,
-      margin: "auto",
     },
   })
 

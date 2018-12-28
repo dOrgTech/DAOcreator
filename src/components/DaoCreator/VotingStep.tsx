@@ -82,7 +82,7 @@ class VotingStep extends React.Component<Props, State> {
                   Select a voting mechanism to read more about it.
                 </Typography>
               </Grid>
-              <Grid container xs={12} md={7} spacing={16}>
+              <Grid item xs={12} md={7}>
                 <Grid item xs={12} md={7}>
                   <FormControl>
                     <FormGroup>

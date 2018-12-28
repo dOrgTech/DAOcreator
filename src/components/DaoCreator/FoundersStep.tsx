@@ -117,22 +117,22 @@ class FoundersStep extends React.Component<Props, State> {
             Add Founders
           </Typography>
           <Grid container spacing={16}>
-            <Grid item xs={12} md={6} alignContent="center" alignItems="center">
+            <Grid item xs={12} md={6}>
               <Typography className={classes.guideText} variant="body2">
                 Here we set the initial set of reputation and token holders in
                 the DAO.
                 <br />
               </Typography>
             </Grid>
-            <Grid container xs={12} md={6} spacing={16}>
-              <Grid item>
+            <Grid item xs={12} md={6}>
+              <Grid item xs={12}>
                 Piechart showing the initial distribution of tokens and
                 reputation?
                 <br />
                 Display total rep and total tokens
               </Grid>
             </Grid>
-            <Grid container xs={12} spacing={16}>
+            <Grid container spacing={16}>
               <Grid item xs={6}>
                 <TextField
                   name="address"
@@ -175,8 +175,6 @@ class FoundersStep extends React.Component<Props, State> {
               <Grid
                 item
                 xs={2}
-                alignContent="flex-end"
-                alignItems="flex-end"
                 className={classes.addButtonWrapper}
               >
                 <Button
