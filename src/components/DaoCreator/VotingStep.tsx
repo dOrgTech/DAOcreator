@@ -72,87 +72,94 @@ class VotingStep extends React.Component<Props, State> {
             <Typography variant="h4" className={classes.headline} gutterBottom>
               Configure Voting
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Configure how to do voting in the DAO
-            </Typography>
             <Grid container spacing={16}>
-              <Grid item xs={12}>
-                <FormControl>
-                  <FormGroup>
-                    <FormControl>
-                      <Select
-                        onChange={async (event: any) => {
-                          await this.setState(
-                            getVotingMachineDefaultParams(event.target.value)
-                          )
-
-                          actions.setVotingMachine({
-                            typeName: event.target.value,
-                            params: R.omit(["formErrors"], this.state),
-                          })
-                        }}
-                        value={currentVotingMachine.typeName}
-                        inputProps={{
-                          name: "votingMachine",
-                          id: "voting-machine",
-                        }}
-                      >
-                        {R.map(votingMachine => {
-                          return (
-                            <MenuItem
-                              key={`voting-machine-select-${
-                                votingMachine.typeName
-                              }`}
-                              value={votingMachine.typeName}
-                            >
-                              {votingMachine.displayName}
-                            </MenuItem>
-                          )
-                        }, votingMachines)}
-                      </Select>
-                    </FormControl>
-                  </FormGroup>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid container spacing={16}>
-              <Grid item xs={12}>
-                <Typography gutterBottom>
-                    {currentVotingMachine.description}
+              <Grid item xs={12} md={5}>
+                <Typography className={classes.guideText} variant="body2">
+                  Set up how you want voting to be handled in the DAO. Voting is
+                  the mechanism used in the DAO for deciding if a proposal will
+                  pass or not. <br />
+                  <br />
+                  Select a voting mechanism to read more about it.
                 </Typography>
-                {R.map(
-                  param => (
-                    <Grid item xs={12} key={`text-field-${param.typeName}`}>
-                      <TextField
-                        name={param.typeName}
-                        label={param.displayName}
-                        margin="normal"
-                        onChange={this.handleChange}
-                        value={R.prop(param.typeName, this.state as any)}
-                        onBlur={() =>
-                          actions.setVotingMachine({
-                            typeName: currentVotingMachine.typeName,
-                            params: R.omit(["formErrors"], this.state),
-                          })
-                        }
-                        fullWidth
-                        error={
-                          R.has(param.typeName, this.state.formErrors) &&
-                          !R.isEmpty(
-                            R.prop(param.typeName, this.state.formErrors as any)
-                          )
-                        }
-                        helperText={R.prop(param.typeName, this.state
-                          .formErrors as any)}
-                        required={!R.pathOr(false, ["optional"], param)}
-                      />
-                      <Typography gutterBottom>
-                        <i>{param.description}</i>
-                      </Typography>
-                    </Grid>
-                  ),
-                  currentVotingMachine.params
-                )}
+              </Grid>
+              <Grid container xs={12} md={7} spacing={16}>
+                <Grid item xs={12} md={7}>
+                  <FormControl>
+                    <FormGroup>
+                      <FormControl>
+                        <Select
+                          onChange={async (event: any) => {
+                            await this.setState(
+                              getVotingMachineDefaultParams(event.target.value)
+                            )
+
+                            actions.setVotingMachine({
+                              typeName: event.target.value,
+                              params: R.omit(["formErrors"], this.state),
+                            })
+                          }}
+                          value={currentVotingMachine.typeName}
+                          inputProps={{
+                            name: "votingMachine",
+                            id: "voting-machine",
+                          }}
+                        >
+                          {R.map(votingMachine => {
+                            return (
+                              <MenuItem
+                                key={`voting-machine-select-${
+                                  votingMachine.typeName
+                                }`}
+                                value={votingMachine.typeName}
+                              >
+                                {votingMachine.displayName}
+                              </MenuItem>
+                            )
+                          }, votingMachines)}
+                        </Select>
+                      </FormControl>
+                    </FormGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography gutterBottom>
+                    {currentVotingMachine.description}
+                  </Typography>
+                  {R.map(
+                    param => (
+                      <Grid item xs={12} key={`text-field-${param.typeName}`}>
+                        <TextField
+                          name={param.typeName}
+                          label={param.displayName}
+                          margin="normal"
+                          onChange={this.handleChange}
+                          value={R.prop(param.typeName, this.state as any)}
+                          onBlur={() =>
+                            actions.setVotingMachine({
+                              typeName: currentVotingMachine.typeName,
+                              params: R.omit(["formErrors"], this.state),
+                            })
+                          }
+                          fullWidth
+                          error={
+                            R.has(param.typeName, this.state.formErrors) &&
+                            !R.isEmpty(
+                              R.prop(param.typeName, this.state
+                                .formErrors as any)
+                            )
+                          }
+                          helperText={R.prop(param.typeName, this.state
+                            .formErrors as any)}
+                          required={!R.pathOr(false, ["optional"], param)}
+                        />
+                        <Typography gutterBottom>
+                          <i>{param.description}</i>
+                        </Typography>
+                      </Grid>
+                    ),
+                    currentVotingMachine.params
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>
@@ -170,6 +177,15 @@ const styles = ({  }: Theme) =>
     daoName: {},
     tokenName: {},
     tokenSymbol: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(VotingStep)

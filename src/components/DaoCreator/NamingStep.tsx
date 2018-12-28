@@ -95,7 +95,7 @@ class NamingStep extends React.Component<Props, State> {
                         Name the DAO
                     </Typography>
                     <Grid container spacing={16}>
-                        <Grid item xs={12} md={6} alignContent="center" alignItems="center">
+                        <Grid item xs={12} md={5}>
                             <Typography className={classes.guideText} variant="body2">
                                 Welcome!
                                 <br />
@@ -107,7 +107,7 @@ class NamingStep extends React.Component<Props, State> {
                                 <br />
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid container xs={12} md={7} spacing={16}>
                             <Grid item xs={12}>
                                 <TextField
                                     className={classes.daoName}
@@ -167,7 +167,8 @@ const styles = ({  }: Theme) =>
   createStyles({
     card: {},
     headline: {},
-    daoName: {},
+      daoName: {
+      },
     tokenName: {},
     tokenSymbol: {},
     guideText: {

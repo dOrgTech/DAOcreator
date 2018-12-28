@@ -39,11 +39,17 @@ const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
         <Typography variant="h4" className={classes.headline} gutterBottom>
           Select Features
         </Typography>
-        <Typography variant="h6">
-          Select the initial set of features for the DAO
-        </Typography>
         <Grid container spacing={16}>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={5}>
+            <Typography className={classes.guideText} variant="body2">
+              Let's select the features for the DAO at creation time.
+              <br />
+              <br />
+              If the "Scheme Registrar" feature is added, it will be possible to
+              add and remove features at any time after the DAO is created.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={7}>
             <List>
               {R.map(scheme => {
                 return (
@@ -76,6 +82,15 @@ const styles = ({  }: Theme) =>
     addButton: {},
     subheader: {},
     headline: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(AddScheme)
