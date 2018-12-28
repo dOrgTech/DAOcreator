@@ -19,14 +19,14 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "src/AppState"
+import { AppState } from "../../AppState"
 import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
   getVotingMachineDefaultParams,
-} from "src/lib/integrations/daoStack/arc"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+} from "../../lib/integrations/daoStack/arc"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   currentVotingMachineConfiguration: VotingMachineConfiguration
@@ -126,7 +126,7 @@ class VotingStep extends React.Component<Props, State> {
                         label={param.displayName}
                         margin="normal"
                         onChange={this.handleChange}
-                        value={this.state[param.typeName]}
+                        value={R.prop(param.typeName, this.state as any)}
                         onBlur={() =>
                           actions.setVotingMachine({
                             typeName: currentVotingMachine.typeName,
@@ -136,9 +136,9 @@ class VotingStep extends React.Component<Props, State> {
                         fullWidth
                         error={
                           R.has(param.typeName, this.state.formErrors) &&
-                          !R.isEmpty(this.state.formErrors[param.typeName])
+                          !R.isEmpty(R.prop(param.typeName, this.state.formErrors as any))
                         }
-                        helperText={this.state.formErrors[param.typeName]}
+                        helperText={R.prop(param.typeName, this.state.formErrors as any)}
                         required={!R.pathOr(false, ["optional"], param)}
                       />
                       <Typography gutterBottom>

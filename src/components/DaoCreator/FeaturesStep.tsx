@@ -17,10 +17,10 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { schemes } from "src/lib/integrations/daoStack/arc/schemes"
-import { Scheme } from "src/lib/integrations/daoStack/arc"
-import { AppState } from "src/AppState"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import { schemas } from "../../lib/integrations/daoStack/arc/schemas"
+import { Schema } from "../../lib/integrations/daoStack/arc"
+import { AppState } from "../../AppState"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemes: Scheme[]

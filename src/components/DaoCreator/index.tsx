@@ -11,14 +11,14 @@ import {
   StepLabel,
   Button,
 } from "@material-ui/core"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import FeatureStep from "./FeaturesStep"
 import VotingStep from "./VotingStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
-import { AppState } from "src/AppState"
+import { AppState } from "../../AppState"
 
 interface Props extends WithStyles<typeof styles> {
   step: number

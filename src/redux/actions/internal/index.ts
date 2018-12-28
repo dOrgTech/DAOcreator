@@ -24,13 +24,14 @@ export enum Actions {
 
 import {
   Action,
+  AnyAction,
   createAction,
   PayloadAction,
   createPayloadAction,
 } from "./typeSafety"
 
 // TODO: get layer 2 types instead? or UI types? I think layer 2 makes most sense...
-import * as Arc from "src/lib/integrations/daoStack/arc"
+import * as Arc from "../../../lib/integrations/daoStack/arc"
 
 // DAO Creator
 export interface DaoCreateNextStep extends Action<string> {
@@ -137,7 +138,7 @@ export const NotificationClose = createAction<NotificationClose>(
 )
 
 export interface WaitingAnimationOpen
-  extends PayloadAction<string, { type: string; message: string }> {
+  extends PayloadAction<string, { type?: "transaction"; message: string }> {
   type: Actions.WAITING_ANIMATION_OPEN
 }
 export const waitingAnimationOpen = createPayloadAction<WaitingAnimationOpen>(
