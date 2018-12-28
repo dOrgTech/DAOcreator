@@ -44,7 +44,7 @@ export const votingMachines: VotingMachine[] = [
     typeName: "GenesisProtocol",
     displayName: "Genesis Protocol",
     description:
-      "This is the first iteration of the GenesisDAO (link to alchemy) protocol. This voting machine reflects the rules for staking and boosting proposals where voters lose or gain REP depending on the outcome.",
+      "This is the first iteration of the GenesisDAO protocol. This voting machine reflects the rules for staking and boosting proposals where voters lose or gain REP depending on the outcome.",
     params: [
       {
         typeName: "boostedVotePeriodLimit",
