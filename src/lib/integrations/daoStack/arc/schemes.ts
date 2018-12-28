@@ -15,12 +15,13 @@ export const schemes: Scheme[] = [
       "Add the possibility of creating a proposal for voting on a proposal within another DAO.",
     toggleDefault: true,
   },
-  {
-    typeName: "DAOCreator",
-    displayName: "DAO Creator",
-    description: "Makes it possible for the DAO to create new DAOs.",
-    toggleDefault: true,
-  },
+  // Currently not available. Is this even  scheme?
+  // {
+  //   typeName: "DAOCreator",
+  //   displayName: "DAO Creator",
+  //   description: "Makes it possible for the DAO to create new DAOs.",
+  //   toggleDefault: true,
+  // },
   {
     typeName: "SimpleICO",
     displayName: "Simple ICO",
