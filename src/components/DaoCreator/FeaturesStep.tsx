@@ -1,26 +1,12 @@
-import {
-  Card,
-  CardContent,
-  Checkbox,
-  createStyles,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Grid,
-  Theme,
-  Typography,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import * as R from "ramda"
-import * as React from "react"
-import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
-import { schemes } from "../../lib/integrations/daoStack/arc/schemes"
-import { Scheme } from "../../lib/integrations/daoStack/arc"
-import { AppState } from "../../AppState"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import { Card, CardContent, createStyles, Grid, List, ListItem, ListItemText, Switch, Theme, Typography, withStyles, WithStyles } from "@material-ui/core";
+import * as R from "ramda";
+import * as React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import { AppState } from "../../AppState";
+import { Scheme } from "../../lib/integrations/daoStack/arc";
+import { schemes } from "../../lib/integrations/daoStack/arc/schemes";
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator";
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemes: Scheme[]
@@ -42,26 +28,23 @@ const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
         </Typography>
         <Grid container spacing={16}>
           <Grid item xs={12}>
-            <FormControl>
-              <FormLabel>Features</FormLabel>
-              <FormGroup>
-                {R.map(scheme => {
-                  return (
-                    <FormControlLabel
-                      key={"formControlLable-" + scheme.typeName}
-                      control={
-                        <Checkbox
-                          checked={R.contains(scheme, addedSchemes)}
-                          onChange={handleChange(scheme)}
-                          value={scheme.typeName}
-                        />
-                      }
-                      label={scheme.displayName}
+            <List>
+              {R.map(scheme => {
+                return (
+                  <ListItem key={`list-itiem-${scheme.typeName}`}>
+                    <Switch
+                      checked={R.contains(scheme, addedSchemes)}
+                      onChange={handleChange(scheme)}
+                      value={scheme.typeName}
                     />
-                  )
-                }, schemes)}
-              </FormGroup>
-            </FormControl>
+                    <ListItemText
+                      primary={scheme.displayName}
+                      secondary={scheme.description}
+                    />
+                  </ListItem>
+                )
+              }, schemes)}
+            </List>
           </Grid>
         </Grid>
       </CardContent>
