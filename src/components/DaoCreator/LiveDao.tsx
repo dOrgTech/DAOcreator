@@ -12,7 +12,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { AppState } from "../../AppState"
-import { Founder, Schema, DAO } from "../../lib/integrations/daoStack/arc"
+import { Founder, Scheme, DAO } from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined
