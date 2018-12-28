@@ -1,9 +1,8 @@
-import { Actions, AnyAction } from "src/redux/actions"
-import { WaitingAnimationState } from "src/AppState"
+import { Actions, AnyAction } from "../../redux/actions"
+import { WaitingAnimationState } from "../../AppState"
 
 const initialState: WaitingAnimationState = {
   message: "",
-  type: "",
   open: false,
 }
 
@@ -19,7 +18,7 @@ export const reducer = (
         open: true,
       }
     case Actions.WAITING_ANIMATION_CLOSE:
-      return { message: "", type: "", open: false }
+      return { message: "", open: false }
     default:
       return state
   }

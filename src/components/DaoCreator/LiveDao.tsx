@@ -11,51 +11,73 @@ import {
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { AppState } from "src/AppState"
-import { Founder, Schema, DAO } from "src/lib/integrations/daoStack/arc"
+import { AppState } from "../../AppState"
+import { Founder, Schema, DAO } from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
-  dao: DAO
+  dao: DAO | undefined
 }
 
 const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
-  const { name, tokenName, tokenSymbol, avatarAddress, controllerAddress } = dao
-  return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h4" className={classes.headline} gutterBottom>
-          Live DAO
-        </Typography>
-        <Grid container spacing={16}>
-          <Grid item xs={6}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              DAO
-            </Typography>
-            <Typography>
-              <b>Name:</b> {name}
-            </Typography>
-            <Typography>
-              <b>Token Name:</b> {tokenName}
-            </Typography>
-            <Typography>
-              <b>Token Symbol:</b> {tokenSymbol}
-            </Typography>
+  if (dao == null) {
+    return (
+      <Typography variant="h5" className={classes.headline} gutterBottom>
+        No DAO
+      </Typography>
+    )
+  } else {
+    const {
+      name,
+      tokenName,
+      tokenSymbol,
+      avatarAddress,
+      controllerAddress,
+    } = dao
+    return (
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography variant="h4" className={classes.headline} gutterBottom>
+            Live DAO
+          </Typography>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                className={classes.headline}
+                gutterBottom
+              >
+                DAO
+              </Typography>
+              <Typography>
+                <b>Name:</b> {name}
+              </Typography>
+              <Typography>
+                <b>Token Name:</b> {tokenName}
+              </Typography>
+              <Typography>
+                <b>Token Symbol:</b> {tokenSymbol}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                variant="h5"
+                className={classes.headline}
+                gutterBottom
+              >
+                Locations
+              </Typography>
+              <Typography>
+                <b>Avatar address:</b> {avatarAddress}
+              </Typography>
+              <Typography>
+                <b>Controller address:</b> {controllerAddress}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Locations
-            </Typography>
-            <Typography>
-              <b>Avatar address:</b> {avatarAddress}
-            </Typography>
-            <Typography>
-              <b>Controller address:</b> {controllerAddress}
-            </Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  )
+        </CardContent>
+      </Card>
+    )
+  }
 }
 const displayFounder = ({ address, reputation, tokens }: Founder) => (
   <Grid container spacing={16} key={`founder-${address}`}>

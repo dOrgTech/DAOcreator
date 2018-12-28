@@ -12,11 +12,11 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import { AppState } from "src/AppState"
+import { AppState } from "../AppState"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
-  type: "transaction"
+  type?: "transaction"
   open: boolean
 }
 

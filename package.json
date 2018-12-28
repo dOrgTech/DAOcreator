@@ -2,16 +2,19 @@
   "name": "dOrg-dApp",
   "version": "0.1.0",
   "scripts": {
-    "app-start": "react-scripts-ts start",
-    "app-build": "react-scripts-ts build",
-    "app-eject": "react-scripts-ts eject",
+    "app-start": "react-scripts start",
+    "app-build": "react-scripts build && echo 'dorg.tech' > build/CNAME",
+    "app-eject": "react-scripts eject",
+    "app-test": "react-scripts test",
     "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
     "migrate-arc": "npm explore @daostack/arc.js -- npm start migrateContracts"
   },
   "dependencies": {
-    "@daostack/arc.js": "0.0.0-alpha.88",
+    "@daostack/arc.js": "0.0.0-alpha.89",
     "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10.12.18",
     "bignumber.js": "^5.0.0",
     "connected-react-router": "^4.5.0",
     "ethereum-blockies-png": "^0.1.3",
@@ -31,8 +34,8 @@
     "@types/bignumber.js": "^5.0.0",
     "@types/history": "^4.7.2",
     "@types/ramda": "^0.25.39",
-    "@types/react": "^16.4.18",
-    "@types/react-dom": "^16.0.9",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.9",
     "@types/react-router": "^4.0.32",
     "@types/redux": "^3.6.0",
@@ -41,12 +44,19 @@
     "husky": "^1.1.2",
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
-    "react-scripts-ts": "^3.1.0",
-    "typescript": "^3.1.3"
+    "react-scripts": "^2.1.2",
+    "typescript": "^3.2.2",
+    "webpack": "4.19.1"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

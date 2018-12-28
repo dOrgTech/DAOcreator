@@ -1,5 +1,5 @@
-export { Action } from "redux"
 import { Action } from "redux"
+export * from "redux"
 
 export interface PayloadAction<TType, TPayload> extends Action<TType> {
   payload: TPayload

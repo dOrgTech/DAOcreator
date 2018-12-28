@@ -1,4 +1,3 @@
-import * as R from "ramda"
 import {
   Card,
   CardContent,
@@ -10,12 +9,13 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core"
+import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "src/AppState"
-import DaoCreatorActions, * as daoCreatorActions from "src/redux/actions/daoCreator"
-import * as FormValidation from "src/lib/formValidation"
+import { AppState } from "../../AppState"
+import * as FormValidation from "../../lib/formValidation"
+import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
@@ -65,7 +65,7 @@ class NamingStep extends React.Component<Props, State> {
     } as any)
 
     const formHasAllValues = R.none(
-      field => R.isEmpty(this.state[field]),
+        field => R.isEmpty(R.prop(field, this.state as any)),
       requiredFields
     )
 
