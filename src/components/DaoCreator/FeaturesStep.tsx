@@ -1,13 +1,12 @@
 import {
   Card,
   CardContent,
-  Checkbox,
   createStyles,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Switch,
   Theme,
   Typography,
   withStyles,
@@ -17,51 +16,57 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { schemas } from "../../lib/integrations/daoStack/arc/schemas"
-import { Schema } from "../../lib/integrations/daoStack/arc"
 import { AppState } from "../../AppState"
+import { Scheme } from "../../lib/integrations/daoStack/arc"
+import { schemes } from "../../lib/integrations/daoStack/arc/schemes"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
-  addedSchemas: Schema[]
+  addedSchemes: Scheme[]
   actions: DaoCreatorActions
 }
 
-const AddSchema: React.SFC<Props> = ({ classes, addedSchemas, actions }) => {
-  const handleChange = (schema: Schema) => (event: any) => {
-    R.contains(schema, addedSchemas) === true
-      ? actions.remSchema(schema)
-      : actions.addSchema(schema)
+const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
+  const handleChange = (scheme: Scheme) => (event: any) => {
+    R.contains(scheme, addedSchemes) === true
+      ? actions.remScheme(scheme)
+      : actions.addScheme(scheme)
   }
 
   return (
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h4" className={classes.headline} gutterBottom>
-          DAO Features
+          Select Features
         </Typography>
         <Grid container spacing={16}>
-          <Grid item xs={12}>
-            <FormControl>
-              <FormLabel>Features</FormLabel>
-              <FormGroup>
-                {R.map(schema => {
-                  return (
-                    <FormControlLabel
-                      key={"formControlLable-" + schema.typeName}
-                      control={
-                        <Checkbox
-                          checked={R.contains(schema, addedSchemas)}
-                          onChange={handleChange(schema)}
-                          value={schema.typeName}
-                        />
-                      }
-                      label={schema.displayName}
+          <Grid item xs={12} md={5}>
+            <Typography className={classes.guideText} variant="body2">
+              Let's select the features for the DAO at creation time.
+              <br />
+              <br />
+              If the "Scheme Registrar" feature is added, it will be possible to
+              add and remove features at any time after the DAO is created.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <List>
+              {R.map(scheme => {
+                return (
+                  <ListItem key={`list-itiem-${scheme.typeName}`}>
+                    <Switch
+                      checked={R.contains(scheme, addedSchemes)}
+                      onChange={handleChange(scheme)}
+                      value={scheme.typeName}
                     />
-                  )
-                }, schemas)}
-              </FormGroup>
-            </FormControl>
+                    <ListItemText
+                      primary={scheme.displayName}
+                      secondary={scheme.description}
+                    />
+                  </ListItem>
+                )
+              }, schemes)}
+            </List>
           </Grid>
         </Grid>
       </CardContent>
@@ -77,14 +82,23 @@ const styles = ({  }: Theme) =>
     addButton: {},
     subheader: {},
     headline: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
-const componentWithStyles = withStyles(styles)(AddSchema)
+const componentWithStyles = withStyles(styles)(AddScheme)
 
 // STATE
 const mapStateToProps = (state: AppState) => {
   return {
-    addedSchemas: state.daoCreator.schemas,
+    addedSchemes: state.daoCreator.schemes,
   }
 }
 

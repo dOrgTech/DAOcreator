@@ -112,11 +112,26 @@ class FoundersStep extends React.Component<Props, State> {
     const { classes, addedFounders } = this.props
     return (
       <Card className={classes.card}>
-        <form>
-          <CardContent>
-            <Typography variant="h4" className={classes.headline} gutterBottom>
-              Add Founders
-            </Typography>
+        <CardContent>
+          <Typography variant="h4" className={classes.headline} gutterBottom>
+            Add Founders
+          </Typography>
+          <Grid container spacing={16}>
+            <Grid item xs={12} md={6}>
+              <Typography className={classes.guideText} variant="body2">
+                Here we set the initial set of reputation and token holders in
+                the DAO.
+                <br />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid item xs={12}>
+                Piechart showing the initial distribution of tokens and
+                reputation?
+                <br />
+                Display total rep and total tokens
+              </Grid>
+            </Grid>
             <Grid container spacing={16}>
               <Grid item xs={6}>
                 <TextField
@@ -157,21 +172,26 @@ class FoundersStep extends React.Component<Props, State> {
                   required
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid
+                item
+                xs={2}
+                className={classes.addButtonWrapper}
+              >
                 <Button
                   onClick={this.onAddFounder}
                   className={classes.addButton}
                   color="primary"
+                  variant="contained"
                   aria-label="Add"
                   disabled={!this.state.formIsValide}
                 >
-                  Add founder
+                  Add
                 </Button>
               </Grid>
             </Grid>
             {R.map(this.addedFounder, addedFounders)}
-          </CardContent>
-        </form>
+          </Grid>
+        </CardContent>
       </Card>
     )
   }
@@ -196,9 +216,21 @@ const styles = ({  }: Theme) =>
   createStyles({
     header: {},
     card: {},
-    addButton: {},
+    addButton: { float: "right" },
+    addButtonWrapper: {
+      marginTop: "auto",
+    },
     subheader: {},
     headline: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(FoundersStep)

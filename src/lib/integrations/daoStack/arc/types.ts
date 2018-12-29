@@ -27,11 +27,12 @@ export type Founder = {
   tokens: string
 }
 
-export type Schema = {
+export type Scheme = {
   typeName: string
   address?: string
   displayName: string
   description: string
+  toggleDefault: boolean
 }
 
 export type DAO = {

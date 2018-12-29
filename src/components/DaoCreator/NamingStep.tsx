@@ -65,7 +65,7 @@ class NamingStep extends React.Component<Props, State> {
     } as any)
 
     const formHasAllValues = R.none(
-        field => R.isEmpty(R.prop(field, this.state as any)),
+      field => R.isEmpty(R.prop(field, this.state as any)),
       requiredFields
     )
 
@@ -88,67 +88,76 @@ class NamingStep extends React.Component<Props, State> {
     const { daoName, tokenName, tokenSymbol, formErrors } = this.state
 
     return (
-      <Card className={classes.card}>
-        <form>
-          <CardContent>
-            <Typography variant="h4" className={classes.headline} gutterBottom>
-              Create a DAO
-            </Typography>
-            <Grid container spacing={16}>
-              <Grid item xs={12} md={6}>
-                <Grid item xs={12}>
-                  <TextField
-                    className={classes.daoName}
-                    name="daoName"
-                    label="DAO Name"
-                    value={daoName}
-                    onChange={this.handleChange}
-                    margin="normal"
-                    onBlur={() => actions.setName(daoName)}
-                    fullWidth
-                    required
-                    error={!R.isEmpty(formErrors.daoName)}
-                    helperText={formErrors.daoName}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    className={classes.tokenName}
-                    name="tokenName"
-                    label="Token Name"
-                    value={tokenName}
-                    onChange={this.handleChange}
-                    onBlur={() => actions.setTokenName(tokenName)}
-                    margin="normal"
-                    fullWidth
-                    error={!R.isEmpty(formErrors.tokenName)}
-                    helperText={formErrors.tokenName}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    className={classes.tokenSymbol}
-                    name="tokenSymbol"
-                    label="Token Symbol"
-                    value={tokenSymbol}
-                    onChange={this.handleChange}
-                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
-                    margin="normal"
-                    fullWidth
-                    error={!R.isEmpty(formErrors.tokenSymbol)}
-                    helperText={formErrors.tokenSymbol}
-                    required
-                  />
-                </Grid>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                Avatar?
-              </Grid>
-            </Grid>
-          </CardContent>
-        </form>
-      </Card>
+        <Card className={classes.card}>
+            <form>
+                <CardContent>
+                    <Typography variant="h4" className={classes.headline} gutterBottom>
+                        Name the DAO
+                    </Typography>
+                    <Grid container spacing={16}>
+                        <Grid item xs={12} md={5}>
+                            <Typography className={classes.guideText} variant="body2">
+                                Welcome!
+                                <br />
+                                You're about to start the process of creating a DAO
+                                (Decentralized Autonomous Organization).
+                                <br />
+                                <br />
+                                Let's start by giving a name to the DAO and its token.
+                                <br />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={7}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    className={classes.daoName}
+                                    name="daoName"
+                                    label="DAO Name"
+                                    value={daoName}
+                                    onChange={this.handleChange}
+                                    margin="normal"
+                                    onBlur={() => actions.setName(daoName)}
+                                    fullWidth
+                                    required
+                                    error={!R.isEmpty(formErrors.daoName)}
+                                    helperText={formErrors.daoName}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    className={classes.tokenName}
+                                    name="tokenName"
+                                    label="Token Name"
+                                    value={tokenName}
+                                    onChange={this.handleChange}
+                                    onBlur={() => actions.setTokenName(tokenName)}
+                                    margin="normal"
+                                    fullWidth
+                                    error={!R.isEmpty(formErrors.tokenName)}
+                                    helperText={formErrors.tokenName}
+                                    required
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    className={classes.tokenSymbol}
+                                    name="tokenSymbol"
+                                    label="Token Symbol"
+                                    value={tokenSymbol}
+                                    onChange={this.handleChange}
+                                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
+                                    margin="normal"
+                                    fullWidth
+                                    error={!R.isEmpty(formErrors.tokenSymbol)}
+                                    helperText={formErrors.tokenSymbol}
+                                    required
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </form>
+        </Card>
     )
   }
 }
@@ -158,9 +167,19 @@ const styles = ({  }: Theme) =>
   createStyles({
     card: {},
     headline: {},
-    daoName: {},
+      daoName: {
+      },
     tokenName: {},
     tokenSymbol: {},
+    guideText: {
+        fontSize: 18,
+        maxWidth: 450,
+        paddingLeft: 30,
+        paddingRight:30,
+        paddingTop: 50,
+        paddingBottom: 50, 
+        margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(NamingStep)

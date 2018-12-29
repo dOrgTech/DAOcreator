@@ -7,7 +7,6 @@ export interface AppState {
 
 import * as Arc from "./lib/integrations/daoStack/arc"
 export interface DaoCreatorState {
-  // TODO: Add layer 2 types that make up this state
   step: number
   stepValidation: boolean[]
   naming: {
@@ -16,7 +15,7 @@ export interface DaoCreatorState {
     tokenSymbol: string
   }
   founders: Arc.Founder[]
-  schemas: Arc.Schema[]
+  schemes: Arc.Scheme[]
   votingMachineConfiguration: Arc.VotingMachineConfiguration
   deployedDao: Arc.DAO | undefined
 }

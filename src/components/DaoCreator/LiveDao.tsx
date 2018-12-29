@@ -12,7 +12,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { AppState } from "../../AppState"
-import { Founder, Schema, DAO } from "../../lib/integrations/daoStack/arc"
+import { Founder, Scheme, DAO } from "../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined
@@ -34,48 +34,54 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
       controllerAddress,
     } = dao
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h4" className={classes.headline} gutterBottom>
-            Live DAO
-          </Typography>
-          <Grid container spacing={16}>
-            <Grid item xs={6}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                DAO
-              </Typography>
-              <Typography>
-                <b>Name:</b> {name}
-              </Typography>
-              <Typography>
-                <b>Token Name:</b> {tokenName}
-              </Typography>
-              <Typography>
-                <b>Token Symbol:</b> {tokenSymbol}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Locations
-              </Typography>
-              <Typography>
-                <b>Avatar address:</b> {avatarAddress}
-              </Typography>
-              <Typography>
-                <b>Controller address:</b> {controllerAddress}
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+        <Card className={classes.card}>
+            <CardContent>
+                <Typography variant="h4" className={classes.headline} gutterBottom>
+                    Live DAO
+                </Typography>
+                <Grid container spacing={16}>
+                    <Grid item xs={12} md={5}>
+                        <Typography className={classes.guideText} variant="body2">
+                            Hurray! Your DAO is deployed!
+                            <br/>
+                            Here are some useful information about it.
+                            <br />
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                        <Typography
+                            variant="h5"
+                            className={classes.headline}
+                            gutterBottom
+                        >
+                            DAO
+                        </Typography>
+                        <Typography>
+                            <b>Name:</b> {name}
+                        </Typography>
+                        <Typography>
+                            <b>Token Name:</b> {tokenName}
+                        </Typography>
+                        <Typography>
+                            <b>Token Symbol:</b> {tokenSymbol}
+                        </Typography>
+                        <Typography
+                            variant="h5"
+                            className={classes.headline}
+                            gutterBottom
+                        >
+                            Locations
+                        </Typography>
+                        <Typography>
+                            <b>Avatar address:</b> {avatarAddress}
+                        </Typography>
+                        <Typography>
+                            <b>Controller address:</b> {controllerAddress}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
     )
   }
 }
@@ -93,7 +99,7 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displaySchema = ({ displayName, description, typeName }: Schema) => (
+const displayScheme = ({ displayName, description, typeName }: Scheme) => (
   <Grid container spacing={16} key={`founder-${typeName}`}>
     <Grid item xs={12}>
       <Typography variant="subtitle1">{displayName}</Typography>
@@ -112,6 +118,15 @@ const styles = ({  }: Theme) =>
     daoName: {},
     tokenName: {},
     tokenSymbol: {},
+    guideText: {
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
+    },
   })
 
 const componentWithStyles = withStyles(styles)(LiveDaoStep)
