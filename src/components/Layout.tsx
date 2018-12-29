@@ -30,7 +30,7 @@ const styles = ({ palette, spacing }: Theme) =>
       minHeight: "100vh",
     },
     content: {
-      padding: spacing.unit * 3,
+      padding: spacing.unit,
       paddingTop: 64,
     },
   })

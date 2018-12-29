@@ -167,19 +167,7 @@ class FoundersStep extends React.Component<Props, State> {
               />
             </Grid>
             <Grid container spacing={16} className={classes.addLine}>
-                <Grid item xs={1} className={classes.addButtonWrapper}>
-                    <Button
-                        onClick={this.onAddFounder}
-                        className={classes.addButton}
-                        color="primary"
-                        variant="contained"
-                        aria-label="Add"
-                        disabled={!this.state.formIsValide}
-                    >
-                        Add
-                    </Button>
-                </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={6}>
                 <TextField
                   name="address"
                   label="Wallet Address"
@@ -218,6 +206,18 @@ class FoundersStep extends React.Component<Props, State> {
                   required
                 />
               </Grid>
+              <Grid item xs={2} className={classes.addButtonWrapper}>
+                <Button
+                  onClick={this.onAddFounder}
+                  className={classes.addButton}
+                  color="primary"
+                  variant="contained"
+                  aria-label="Add"
+                  disabled={!this.state.formIsValide}
+                >
+                  Add
+                </Button>
+              </Grid>
             </Grid>
             {R.map(this.addedFounder, addedFounders)}
           </Grid>
@@ -250,7 +250,7 @@ const styles = ({  }: Theme) =>
     header: {},
     card: {},
     addButton: {},
-      addLine: {marginBottom: 10},
+    addLine: { marginBottom: 10 },
     addButtonWrapper: {
       marginTop: "auto",
     },

@@ -4,15 +4,16 @@ export * from "./schemes"
 export * from "./votingMachines"
 
 import {
-  DAO,
+  DAO as ArcDAO,
   NewDaoConfig,
   ConfigService,
   InitializeArcJs,
 } from "@daostack/arc.js"
 import {
-  VotingMachine,
+  DAO,
   Founder,
   Scheme,
+  VotingMachine,
   VotingMachineConfiguration,
 } from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
@@ -30,6 +31,7 @@ export const init = async () => {
   await InitializeArcJs({
     watchForAccountChanges: true,
   })
+
   isInitialized = true
 }
 
@@ -38,22 +40,26 @@ export const createDao = async (
   founders: Founder[],
   schemes: Scheme[],
   votingMachine: VotingMachineConfiguration
-) => {
+): Promise<DAO> => {
   if (!isInitialized) {
     await init()
   }
+
   const newDaoConfig: NewDaoConfig = toNewDaoConfig(
     naming,
     founders,
     schemes,
     votingMachine
   )
+
   try {
-    const rawDao = await DAO.new(newDaoConfig)
+    const rawDao: ArcDAO = await ArcDAO.new(newDaoConfig)
     console.log("DAO created")
     console.log(rawDao)
-    const dao = await fromDao(rawDao)
+
+    const dao: DAO = await fromDao(rawDao)
     console.log(dao)
+
     return dao
   } catch (e) {
     console.log("Error while deploying DAO:")

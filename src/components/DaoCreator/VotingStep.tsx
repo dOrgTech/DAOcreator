@@ -24,7 +24,6 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
-  getVotingMachineDefaultParams,
 } from "../../lib/integrations/daoStack/arc"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
@@ -39,6 +38,19 @@ type State = {
 
 const initState: State = {
   formErrors: {},
+}
+
+const getVotingMachineDefaultParams = (typeName: string): any => {
+  const votingMachine = R.find(
+    votingMachine => votingMachine.typeName === typeName,
+    votingMachines
+  ) as VotingMachine
+
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    votingMachine.params
+  )
 }
 
 class VotingStep extends React.Component<Props, State> {

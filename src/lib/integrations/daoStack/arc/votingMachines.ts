@@ -1,21 +1,5 @@
 import { VotingMachine } from "./types"
-import * as R from "ramda"
 
-export const getVotingMachineDefaultParams = (
-  votingMachineTypeName: string
-) => {
-  const votingMachine = R.find(
-    votingMachine => votingMachine.typeName === votingMachineTypeName,
-    votingMachines
-  ) as VotingMachine
-  return R.reduce(
-    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
-    {},
-    votingMachine.params
-  )
-}
-
-// TODO: add QuorumVote https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
 export const votingMachines: VotingMachine[] = [
   {
     typeName: "AbsoluteVote",
@@ -174,6 +158,7 @@ export const votingMachines: VotingMachine[] = [
     displayName: "Quorum Vote",
     description:
       "Every member has one vote and a quorum is reached based on a ratio of the total number of possible participants",
-    params: [], //TODO: add params for ratio
+    params: [],
+    // TODO: add params https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
   },
 ]
