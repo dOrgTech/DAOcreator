@@ -17,6 +17,7 @@ import { connect } from "react-redux"
 import { Founder } from "../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../lib/formValidation"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import PieChart from "../../lib/integrations/charts"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
@@ -110,6 +111,7 @@ class FoundersStep extends React.Component<Props, State> {
 
   render() {
     const { classes, addedFounders } = this.props
+
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -117,7 +119,7 @@ class FoundersStep extends React.Component<Props, State> {
             Add Founders
           </Typography>
           <Grid container spacing={16}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Typography className={classes.guideText} variant="body2">
                 Here we specify the initial reputation and token distribution in
                 the DAO.
@@ -127,13 +129,41 @@ class FoundersStep extends React.Component<Props, State> {
                 of reputation and tokens for each address.
               </Typography>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Grid item xs={12}>
-                Piechart showing the initial distribution of tokens and
-                reputation?
-                <br />
-                Display total rep and total tokens
-              </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography
+                variant="h6"
+                className={classes.pieChartHeadlines}
+                gutterBottom
+              >
+                Reputation Distribution
+              </Typography>
+              <PieChart
+                data={addedFounders}
+                config={{
+                  hight: 240,
+                  width: 240,
+                  dataKey: "reputation",
+                  nameKey: "address",
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography
+                variant="h6"
+                className={classes.pieChartHeadlines}
+                gutterBottom
+              >
+                Tokens Distribution
+              </Typography>
+              <PieChart
+                data={addedFounders}
+                config={{
+                  hight: 240,
+                  width: 240,
+                  dataKey: "tokens",
+                  nameKey: "address",
+                }}
+              />
             </Grid>
             <Grid container spacing={16}>
               <Grid item xs={6}>
@@ -221,6 +251,7 @@ const styles = ({  }: Theme) =>
     },
     subheader: {},
     headline: {},
+    pieChartHeadlines: { textAlign: "center" },
     guideText: {
       fontSize: 18,
       maxWidth: 450,
