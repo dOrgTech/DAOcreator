@@ -75,11 +75,11 @@ class VotingStep extends React.Component<Props, State> {
             <Grid container spacing={16}>
               <Grid item xs={12} md={5}>
                 <Typography className={classes.guideText} variant="body2">
-                  Set up how you want voting to be handled in the DAO. Voting is
-                  the mechanism used in the DAO for deciding if a proposal will
-                  pass or not. <br />
+                  What type of voting should the DAO support? Votes are used to
+                  form consensus on proposals, determining if they will pass or
+                  fail. <br />
                   <br />
-                  Select a voting mechanism to read more about it.
+                  Select different voting mechanism to learn more.
                 </Typography>
               </Grid>
               <Grid item xs={12} md={7}>
