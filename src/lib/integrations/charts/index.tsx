@@ -1,7 +1,6 @@
 import * as React from "react"
 import * as R from "ramda"
 import { PieChart as RePieChart, Pie, Tooltip, Cell } from "recharts"
-import Blockies from "../../integrations/blockies"
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 

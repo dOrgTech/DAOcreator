@@ -18,7 +18,7 @@ import { Founder } from "../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../lib/formValidation"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 import PieChart from "../../lib/integrations/charts"
-import Blockies from "../../lib/integrations/blockies"
+import EthAddressAvatar from "../../lib/integrations/ethAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
@@ -229,7 +229,7 @@ class FoundersStep extends React.Component<Props, State> {
   addedFounder = ({ address, reputation, tokens }: Founder) => (
     <Grid container spacing={16} key={`founder-${address}`}>
       <Grid item xs={1}>
-        <Blockies address={address} />
+        <EthAddressAvatar address={address} />
       </Grid>
       <Grid item xs={7}>
         <Typography>{address}</Typography>

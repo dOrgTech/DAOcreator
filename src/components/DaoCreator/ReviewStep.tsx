@@ -19,6 +19,7 @@ import {
   votingMachines,
   VotingMachineConfiguration,
 } from "../../lib/integrations/daoStack/arc"
+import EthAddressAvatar from "../../lib/integrations/ethAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
@@ -112,17 +113,18 @@ const ReviewStep: React.SFC<Props> = ({
               Founders
             </Typography>
             <Grid container spacing={16} key={`founder-headline`}>
-              <Grid item xs={6}>
+                <Grid item xs={1}/>
+              <Grid item xs={7}>
                 <Typography>
                   <b>Address</b>
                 </Typography>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>
                   <b>Reputation</b>
                 </Typography>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>
                   <b>Tokens</b>
                 </Typography>
@@ -138,13 +140,16 @@ const ReviewStep: React.SFC<Props> = ({
 
 const displayFounder = ({ address, reputation, tokens }: Founder) => (
   <Grid container spacing={16} key={`founder-${address}`}>
-    <Grid item xs={6}>
+      <Grid item xs={1}>
+          <EthAddressAvatar address={address} />
+      </Grid>
+    <Grid item xs={7}>
       <Typography>{address}</Typography>
     </Grid>
-    <Grid item xs={3}>
+    <Grid item xs={2}>
       <Typography>{reputation}</Typography>
     </Grid>
-    <Grid item xs={3}>
+    <Grid item xs={2}>
       <Typography>{tokens}</Typography>
     </Grid>
   </Grid>
