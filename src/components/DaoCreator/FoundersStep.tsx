@@ -119,9 +119,12 @@ class FoundersStep extends React.Component<Props, State> {
           <Grid container spacing={16}>
             <Grid item xs={12} md={6}>
               <Typography className={classes.guideText} variant="body2">
-                Here we set the initial set of reputation and token holders in
+                Here we specify the initial reputation and token distribution in
                 the DAO.
                 <br />
+                <br />
+                We do this by specifying the addresses together with the amount
+                of reputation and tokens for each address.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -172,11 +175,7 @@ class FoundersStep extends React.Component<Props, State> {
                   required
                 />
               </Grid>
-              <Grid
-                item
-                xs={2}
-                className={classes.addButtonWrapper}
-              >
+              <Grid item xs={2} className={classes.addButtonWrapper}>
                 <Button
                   onClick={this.onAddFounder}
                   className={classes.addButton}
