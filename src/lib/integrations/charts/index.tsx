@@ -1,6 +1,8 @@
 import * as React from "react"
 import * as R from "ramda"
 import { PieChart as RePieChart, Pie, Tooltip, Cell } from "recharts"
+import Blockies from "../../integrations/blockies"
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 
 export type PieChartConfig = {
@@ -17,7 +19,11 @@ export type Props = {
 
 const PieChart: React.SFC<Props> = ({ data, config }) => {
   return (
-      <RePieChart style={{margin: "auto"}} width={config.width} height={config.hight}>
+    <RePieChart
+      style={{ margin: "auto" }}
+      width={config.width}
+      height={config.hight}
+    >
       <Pie
         dataKey={(dataObject: any) => parseInt(dataObject[config.dataKey])}
         nameKey={config.nameKey}
@@ -42,8 +48,8 @@ const renderCustomizedLabel = ({
   midAngle,
   innerRadius,
   outerRadius,
-    percent,
-    name,
+  percent,
+  name,
   index,
 }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5
@@ -58,7 +64,7 @@ const renderCustomizedLabel = ({
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
     >
-      {`...${R.take(5,name)} - ${(percent * 100).toFixed(0)}%`}
+      {`...${R.take(5, name)} - ${(percent * 100).toFixed(0)}%`}
     </text>
   )
 }

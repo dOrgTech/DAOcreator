@@ -24,6 +24,7 @@
     "material-icons": "^0.2.3",
     "ramda": "^0.25.0",
     "react": "^16.5.2",
+    "react-blockies": "^1.4.0",
     "react-dom": "^16.5.2",
     "react-particles-js": "^2.4.0",
     "react-redux": "^5.0.7",
