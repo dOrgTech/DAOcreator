@@ -206,7 +206,7 @@ class FoundersStep extends React.Component<Props, State> {
                   required
                 />
               </Grid>
-              <Grid item xs={2} className={classes.addButtonWrapper}>
+              <Grid item xs={1} className={classes.addButtonWrapper}>
                 <Button
                   onClick={this.onAddFounder}
                   className={classes.addButton}
@@ -245,14 +245,18 @@ class FoundersStep extends React.Component<Props, State> {
 }
 
 // STYLE
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     header: {},
     card: {},
     addButton: {},
-    addLine: { marginBottom: 10 },
+    addLine: {
+      marginBottom: 10,
+      justifyContent: "center",
+    },
     addButtonWrapper: {
       marginTop: "auto",
+      marginRight: theme.spacing.unit,
     },
     subheader: {},
     headline: {},
