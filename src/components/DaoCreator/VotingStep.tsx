@@ -37,6 +37,11 @@ type State = {
 }
 
 const initState: State = {
+  // TODO: this doesn't have a type, and isn't being used...
+  //       this can be fixed with a generalized form component
+  // - pass in array of { name, type, desc, errTxt, onchange, drawOverride? }
+  //   - just use the forms package instead?
+  // - fix the types first though, then work on the forms
   formErrors: {},
 }
 
