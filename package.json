@@ -2,7 +2,7 @@
   "name": "dOrg-dApp",
   "version": "0.1.0",
   "scripts": {
-    "start": "concurrently \"npm:start-ganache\" \"npm:app-start\"",
+    "start": "concurrently \"npm:start-ganache\" \"npm:migrate-arc\" \"npm:app-start\"",
     "app-start": "react-scripts start",
     "app-build": "react-scripts build && echo 'dorg.tech' > build/CNAME",
     "app-eject": "react-scripts eject",
