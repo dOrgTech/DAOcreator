@@ -11,6 +11,9 @@ import WaitingAnimation from "./components/WaitingAnimation"
 // TEMP
 import NamingStep from "./components/DaoCreator/NamingStep"
 import FoundersStep from "./components/DaoCreator/FoundersStep"
+import FeaturesStep from "./components/DaoCreator/FeaturesStep"
+import VotingStep from "./components/DaoCreator/VotingStep"
+import ReviewStep from "./components/DaoCreator/ReviewStep"
 
 const App: SFC = () => (
   <Layout>
@@ -19,6 +22,9 @@ const App: SFC = () => (
       <Route exact path="/dao-creator" component={DaoCreator} />
       <Route exact path="/dao-creator/naming" component={NamingStep} />
       <Route exact path="/dao-creator/founders" component={FoundersStep} />
+      <Route exact path="/dao-creator/features" component={FeaturesStep} />
+      <Route exact path="/dao-creator/voting" component={VotingStep} />
+      <Route exact path="/dao-creator/review" component={ReviewStep} />
     </Switch>
     <WaitingAnimation />
     <Notifications />
