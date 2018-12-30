@@ -8,7 +8,7 @@
     "app-eject": "react-scripts eject",
     "app-test": "react-scripts test",
     "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
-    "migrate-arc": "npm explore @daostack/arc.js -- npm start migrateContracts"
+    "migrate-arc": "wait-on tcp:8545 && npm explore @daostack/arc.js -- npm start migrateContracts"
   },
   "dependencies": {
     "@daostack/arc.js": "0.0.0-alpha.89",
@@ -51,6 +51,7 @@
     "pretty-quick": "^1.8.0",
     "react-scripts": "^2.1.2",
     "typescript": "^3.2.2",
+    "wait-on": "^3.2.0",
     "webpack": "4.19.1"
   },
   "husky": {
