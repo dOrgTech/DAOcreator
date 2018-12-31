@@ -1,5 +1,3 @@
-Still very WIP
-
 # Welcome Fellow Contributors. Today We DAO.
 
 - [Development Guide](./development.md)

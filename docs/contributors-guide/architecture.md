@@ -4,6 +4,8 @@ TODO: Describe folder structure & tools
 
 ## 3 Layers Of Data Types
 
+TODO: Still very WIP
+
 We view the different data types in this project as if they are in 3 buckets:
 
 1. _UI Data_
@@ -59,8 +61,8 @@ type Props = {
 
 #### 2. Lib types
 
-This is the types that are used through the project for internal communication (state, actions, exposed by integration modules etc.).
+These are the types that are used through the project for internal communication (state, actions, exposed by integration modules etc.).
 
 #### 3. Integration types
 
-This is types that are provided by external dependencies. This types should not be accessible to the project as a whole, they should be constrained to the integrations integration module. Everything exposed by an integration module should have (2.) Lib type. This way we can easily exchange the integrations internal package.
+These are the types that are provided by external dependencies. These types should not be accessible to the project as a whole, they should be constrained to the integration's integration module. Everything exposed by an integration module should have (2.) Lib type. This way we can easily exchange the integrations internal package.

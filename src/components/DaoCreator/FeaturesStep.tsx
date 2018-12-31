@@ -45,7 +45,7 @@ const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
               Let's select the features for the DAO at creation time.
               <br />
               <br />
-              If the "Feature Registrar" feature is added, it will be possible
+              If the "Feature Registrar" flag is turned on, it will be possible
               to add and remove features at any time after the DAO is created.
             </Typography>
           </Grid>
