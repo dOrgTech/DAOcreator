@@ -24,7 +24,6 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
-  getVotingMachineDefaultParams,
 } from "../../lib/integrations/daoStack/arc"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
 
@@ -38,7 +37,25 @@ type State = {
 }
 
 const initState: State = {
+  // TODO: this doesn't have a type, and isn't being used...
+  //       this can be fixed with a generalized form component
+  // - pass in array of { name, type, desc, errTxt, onchange, drawOverride? }
+  //   - just use the forms package instead?
+  // - fix the types first though, then work on the forms
   formErrors: {},
+}
+
+const getVotingMachineDefaultParams = (typeName: string): any => {
+  const votingMachine = R.find(
+    votingMachine => votingMachine.typeName === typeName,
+    votingMachines
+  ) as VotingMachine
+
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    votingMachine.params
+  )
 }
 
 class VotingStep extends React.Component<Props, State> {
@@ -75,11 +92,11 @@ class VotingStep extends React.Component<Props, State> {
             <Grid container spacing={16}>
               <Grid item xs={12} md={5}>
                 <Typography className={classes.guideText} variant="body2">
-                  Set up how you want voting to be handled in the DAO. Voting is
-                  the mechanism used in the DAO for deciding if a proposal will
-                  pass or not. <br />
+                  What type of voting should the DAO support? Votes are used to
+                  form consensus on proposals, determining if they will pass or
+                  fail. <br />
                   <br />
-                  Select a voting mechanism to read more about it.
+                  Select different voting mechanism to learn more.
                 </Typography>
               </Grid>
               <Grid item xs={12} md={7}>

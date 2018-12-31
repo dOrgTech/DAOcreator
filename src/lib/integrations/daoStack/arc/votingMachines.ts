@@ -1,21 +1,5 @@
 import { VotingMachine } from "./types"
-import * as R from "ramda"
 
-export const getVotingMachineDefaultParams = (
-  votingMachineTypeName: string
-) => {
-  const votingMachine = R.find(
-    votingMachine => votingMachine.typeName === votingMachineTypeName,
-    votingMachines
-  ) as VotingMachine
-  return R.reduce(
-    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
-    {},
-    votingMachine.params
-  )
-}
-
-// TODO: add QuorumVote https://daostack.github.io/arc/generated_docs/VotingMachines/QuorumVote/
 export const votingMachines: VotingMachine[] = [
   {
     typeName: "AbsoluteVote",
@@ -26,16 +10,15 @@ export const votingMachines: VotingMachine[] = [
       {
         typeName: "ownerVote",
         valueType: "boolean",
-        displayName: "Proposer",
-        description: "The participant who called the voting mechanism",
-        defaultValue: true,
+        displayName: "Proposer Voting",
+        description: "Allow proposers to vote on their own proposals.",
+        defaultValue: false,
       },
       {
         typeName: "votePerc",
         valueType: "number",
         displayName: "Majority Percentage",
-        description:
-          "The percenatge of voters necessary to reach a valid decision. Default: 50%",
+        description: "The percentage of voters necessary to reach consensus.",
         defaultValue: 50,
       },
     ],
@@ -169,11 +152,12 @@ export const votingMachines: VotingMachine[] = [
       },
     ],
   },
-  {
+  // TODO: Add this once there is a wrapper available. Arc.js doesn't have this contract wrapped yet.
+  /*{
     typeName: "QuorumVote",
     displayName: "Quorum Vote",
     description:
       "Every member has one vote and a quorum is reached based on a ratio of the total number of possible participants",
-    params: [], //TODO: add params for ratio
-  },
+    params: [ TODO: Add me ],
+  },*/
 ]

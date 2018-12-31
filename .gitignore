@@ -23,3 +23,6 @@ yarn-error.log*
 ganache-accounts.json
 #/src/contracts/interfaces
 secret.json
+
+# vscode chrome debugger cache
+.vscode/chrome

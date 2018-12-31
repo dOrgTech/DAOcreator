@@ -1,5 +1,4 @@
 {
-  // TODO: no "../" in imports
   // TODO: no unused imports
-  // TODO: multiple imports { foo, bar } on seperate lines
+  // TODO: return types on functions always
 }

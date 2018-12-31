@@ -3,19 +3,20 @@ import { Scheme } from "./types"
 export const schemes: Scheme[] = [
   {
     typeName: "ContributionReward",
-    displayName: "Contribution Reward",
+    displayName: "Contributor Rewards",
     description:
-      "Add the possibility of proposing and rewarding contributions to an organization. An agent can ask to be rewarded with tokens, reputation, or any combination.",
+      "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination.",
     toggleDefault: true,
   },
   {
     typeName: "VoteInOrganizationScheme",
-    displayName: "Vote In Organization",
+    displayName: "DAO to DAO Voting",
     description:
-      "Add the possibility of creating a proposal for voting on a proposal within another DAO.",
+      "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
   },
-  // Currently not available. Is this even  scheme?
+  // Currently not available.
+  // https://daostack.github.io/arc/generated_docs/universalSchemes/DaoCreator/
   // {
   //   typeName: "DAOCreator",
   //   displayName: "DAO Creator",
@@ -24,14 +25,13 @@ export const schemes: Scheme[] = [
   // },
   {
     typeName: "SimpleICO",
-    displayName: "Simple ICO",
-    description:
-      "Add the possibility of the DAO holding an Initial Coin Offering (ICO).",
+    displayName: "Initial Coin Offering (ICO)",
+    description: "DAO run ICOs.",
     toggleDefault: false,
   },
   {
     typeName: "VestingScheme",
-    displayName: "Vesting",
+    displayName: "Token Vesting",
     description: "Add the possibility of creating a token vesting agreement.",
     toggleDefault: false,
   },
@@ -50,9 +50,9 @@ export const schemes: Scheme[] = [
   },
   {
     typeName: "SchemeRegistrar",
-    displayName: "Scheme Registrar",
+    displayName: "Feature Registrar",
     description:
-      " Manages post-creation adding/modifying and removing of features. Schemas are used to add features to a DAO.",
+      "Manages post-creation adding/modifying and removing of features. Features add functionality to the DAO.",
     toggleDefault: true,
   },
   {
