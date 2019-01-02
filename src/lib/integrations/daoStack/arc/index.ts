@@ -63,7 +63,7 @@ export const createDao = async (
     return dao
   } catch (e) {
     console.log("Error while deploying DAO:")
-    console.log(e)
+    console.error(e)
     return Promise.reject(e)
   }
 }
