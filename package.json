@@ -4,7 +4,7 @@
   "scripts": {
     "start": "concurrently \"npm:start-ganache\" \"npm:migrate-arc\" \"npm:app-start\"",
     "app-start": "react-scripts start",
-    "app-build": "react-scripts build && echo 'dorg.tech' > build/CNAME",
+    "app-build": "react-scripts --max_old_space_size=4096 build && echo 'dorg.tech' > build/CNAME",
     "app-eject": "react-scripts eject",
     "app-test": "react-scripts test",
     "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
