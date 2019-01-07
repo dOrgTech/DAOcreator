@@ -4,8 +4,8 @@
 
 `npm run start`
 
-1. Launches Ganache (`npm run start-ganache`)
-2. Deploys Contracts (`npm run migrate-arc`)
+1. Launches Ganache (`npm run eth-ganache-start`)
+2. Deploys Contracts (`npm run eth-arc-migrate`)
 3. Launches App (`npm run app-start`)
 
 ## Debugging

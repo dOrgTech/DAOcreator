@@ -2,13 +2,14 @@
   "name": "dOrg-dApp",
   "version": "0.1.0",
   "scripts": {
-    "start": "concurrently \"npm:start-ganache\" \"npm:migrate-arc\" \"npm:app-start\"",
+    "start": "concurrently \"npm:eth-start\" \"npm:app-start\"",
     "app-start": "react-scripts start",
-    "app-build": "react-scripts build && echo 'dorg.tech' > build/CNAME",
+    "app-build": "react-scripts --max_old_space_size=4096 build && echo 'dorg.tech' > build/CNAME",
     "app-eject": "react-scripts eject",
     "app-test": "react-scripts test",
-    "start-ganache": "npm explore @daostack/arc.js -- npm start ganache",
-    "migrate-arc": "wait-on tcp:8545 && npm explore @daostack/arc.js -- npm start migrateContracts"
+    "eth-start": "concurrently \"npm:eth-ganache-start\" \"npm:eth-arc-migrate\"",
+    "eth-ganache-start": "npm explore @daostack/arc.js -- npm start ganache",
+    "eth-arc-migrate": "wait-on tcp:8545 && npm explore @daostack/arc.js -- npm start migrateContracts"
   },
   "dependencies": {
     "@daostack/arc.js": "0.0.0-alpha.89",
@@ -32,7 +33,7 @@
     "recharts": "^1.4.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "web3": "^0.20.4"
+    "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
     "@types/bignumber.js": "^5.0.0",
