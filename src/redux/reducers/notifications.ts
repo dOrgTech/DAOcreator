@@ -1,4 +1,4 @@
-import { Actions, AnyAction } from "../../redux/actions"
+import { Events, AnyEvent } from "../../redux/actions"
 import { NotificationState } from "../../AppState"
 
 const initialState: NotificationState = {
@@ -9,14 +9,14 @@ const initialState: NotificationState = {
 
 export const reducer = (
   state: NotificationState = initialState,
-  action: AnyAction
+  event: AnyEvent
 ): NotificationState => {
-  switch (action.type) {
-    case Actions.NOTIFICATION_INFO:
-      return { message: action.payload, type: "info", open: true }
-    case Actions.NOTIFICATION_ERROR:
-      return { message: action.payload, type: "error", open: true }
-    case Actions.NOTIFICATION_CLOSE:
+  switch (event.type) {
+    case Events.NOTIFICATION_INFO:
+      return { message: event.payload, type: "info", open: true }
+    case Events.NOTIFICATION_ERROR:
+      return { message: event.payload, type: "error", open: true }
+    case Events.NOTIFICATION_CLOSE:
       return { message: "", type: "info", open: false }
     default:
       return state
