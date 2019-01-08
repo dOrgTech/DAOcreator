@@ -1,5 +1,5 @@
 import * as R from "ramda"
-import { Actions, AnyAction } from "../../redux/actions"
+import { Events, AnyEvent } from "../../redux/actions"
 import { DaoCreatorState } from "../../AppState"
 import { votingMachines, schemes } from "../../lib/integrations/daoStack/arc"
 
@@ -22,10 +22,10 @@ const initialState: DaoCreatorState = {
 
 export const reducer = (
   state: DaoCreatorState = initialState,
-  action: AnyAction
+  event: AnyEvent
 ): DaoCreatorState => {
-  switch (action.type) {
-    case Actions.DAO_CREATE_NEXT_STEP: {
+  switch (event.type) {
+    case Events.DAO_CREATE_NEXT_STEP: {
       const newStep = state.step + 1
       return R.merge(state, {
         step: newStep,
@@ -35,41 +35,41 @@ export const reducer = (
             : R.append(true, state.stepValidation),
       })
     }
-    case Actions.DAO_CREATE_PREV_STEP:
+    case Events.DAO_CREATE_PREV_STEP:
       return R.merge(state, { step: state.step - 1 })
-    case Actions.DAO_CREATE_SET_NAME:
+    case Events.DAO_CREATE_SET_NAME:
       return R.merge(state, {
-        naming: R.merge(state.naming, { daoName: action.payload }),
+        naming: R.merge(state.naming, { daoName: event.payload }),
       })
-    case Actions.DAO_CREATE_SET_TOKEN:
+    case Events.DAO_CREATE_SET_TOKEN:
       return R.merge(state, {
-        naming: R.merge(state.naming, { tokenName: action.payload }),
+        naming: R.merge(state.naming, { tokenName: event.payload }),
       })
-    case Actions.DAO_CREATE_SET_TOKEN_SYM:
+    case Events.DAO_CREATE_SET_TOKEN_SYM:
       return R.merge(state, {
-        naming: R.merge(state.naming, { tokenSymbol: action.payload }),
+        naming: R.merge(state.naming, { tokenSymbol: event.payload }),
       })
-    case Actions.DAO_CREATE_ADD_FOUNDER:
+    case Events.DAO_CREATE_ADD_FOUNDER:
       return R.merge(state, {
-        founders: R.append(action.payload, state.founders),
+        founders: R.append(event.payload, state.founders),
       })
-    case Actions.DAO_CREATE_ADD_SCHEME:
+    case Events.DAO_CREATE_ADD_SCHEME:
       return R.merge(state, {
-        schemes: R.append(action.payload, state.schemes),
+        schemes: R.append(event.payload, state.schemes),
       })
-    case Actions.DAO_CREATE_REM_SCHEME:
+    case Events.DAO_CREATE_REM_SCHEME:
       return R.merge(state, {
-        schemes: R.without([action.payload], state.schemes),
+        schemes: R.without([event.payload], state.schemes),
       })
-    case Actions.DAO_CREATE_ADD_VOTE_MACHINE:
-      return R.merge(state, { votingMachineConfiguration: action.payload })
-    case Actions.DAO_CREATE_SET_DEPLOYED_DAO:
-      return R.merge(state, { deployedDao: action.payload })
-    case Actions.DAO_CREATE_SET_STEP_VALIDATION:
+    case Events.DAO_CREATE_ADD_VOTE_MACHINE:
+      return R.merge(state, { votingMachineConfiguration: event.payload })
+    case Events.DAO_CREATE_SET_DEPLOYED_DAO:
+      return R.merge(state, { deployedDao: event.payload })
+    case Events.DAO_CREATE_SET_STEP_VALIDATION:
       return R.merge(state, {
         stepValidation: R.update(
-          action.payload.step,
-          action.payload.isValide,
+          event.payload.step,
+          event.payload.isValide,
           state.stepValidation
         ),
       })

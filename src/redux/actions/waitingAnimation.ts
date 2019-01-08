@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import * as Actions from "./internal"
+import * as Events from "./events"
 
 export default interface WaitingAnmiationActions {
   openWaitingAnimation(
@@ -14,14 +14,14 @@ export function openWaitingAnimation(
   type?: "transaction"
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Actions.waitingAnimationOpen({ type, message }))
+    dispatch(Events.WAITING_ANIMATION_OPEN({ type, message }))
     return Promise.resolve()
   }
 }
 
 export function closeWaitingAnmiation(): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Actions.waitingAnimationClose())
+    dispatch(Events.WAITING_ANIMATION_CLOSE())
     return Promise.resolve()
   }
 }

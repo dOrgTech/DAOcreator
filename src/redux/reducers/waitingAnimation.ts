@@ -1,4 +1,4 @@
-import { Actions, AnyAction } from "../../redux/actions"
+import { Events, AnyEvent } from "../../redux/actions"
 import { WaitingAnimationState } from "../../AppState"
 
 const initialState: WaitingAnimationState = {
@@ -8,16 +8,16 @@ const initialState: WaitingAnimationState = {
 
 export const reducer = (
   state: WaitingAnimationState = initialState,
-  action: AnyAction
+  event: AnyEvent
 ): WaitingAnimationState => {
-  switch (action.type) {
-    case Actions.WAITING_ANIMATION_OPEN:
+  switch (event.type) {
+    case Events.WAITING_ANIMATION_OPEN:
       return {
-        message: action.payload.message,
-        type: action.payload.type,
+        message: event.payload.message,
+        type: event.payload.type,
         open: true,
       }
-    case Actions.WAITING_ANIMATION_CLOSE:
+    case Events.WAITING_ANIMATION_CLOSE:
       return { message: "", open: false }
     default:
       return state
