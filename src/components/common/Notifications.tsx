@@ -10,8 +10,8 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import NotificationActions, * as notificationActions from "../redux/actions/notifications"
-import { AppState } from "../AppState"
+import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
+import { AppState } from "../../AppState"
 
 interface Props extends WithStyles<typeof styles> {
   message: string

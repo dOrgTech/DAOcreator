@@ -19,7 +19,7 @@ import {
   votingMachines,
   VotingMachineConfiguration,
 } from "../../lib/integrations/daoStack/arc"
-import EthAddressAvatar from "../avatars/EthAddressAvatar"
+import EthAddressAvatar from "../common/EthAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
