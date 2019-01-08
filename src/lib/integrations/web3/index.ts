@@ -1,23 +1,31 @@
-import typeValidation from "./typeValidation"
+import * as typeValidation from "./typeValidation"
 import * as rawWeb3 from "web3"
 const Web3 = rawWeb3 as any
 
-let web3: any
-if (typeof web3 !== "undefined") {
-  web3 = new Web3(web3.currentProvider)
-} else {
-  // TODO: set the provider you want
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
+export const getWeb3 = async () => {
+  const ethereum = (window as any).ethereum
+  const web3 = (window as any).web3
+  if (ethereum) {
+    try {
+      // Request account access if needed
+      await ethereum.enable()
+      // Acccounts now exposed
+      return new Web3(ethereum)
+    } catch (error) {
+      console.log("User denied account access...")
+    }
+  }
+  // Legacy dapp browsers...
+  else if (web3) {
+    return new Web3(web3.currentProvider)
+    // Acccounts always exposed
+  }
+  // Non-dapp browsers...
+  else {
+    console.log(
+      "Non-Ethereum browser detected. You should consider trying MetaMask!"
+    )
+  }
 }
 
-export const TypeValidation = typeValidation(web3)
-
-/**
-   THIS IS FOR WEB3 V1
-''
-import Web3 = require("web3")
-import { Config } from "../config"
-
-var web3 = new Web3(Web3.givenProvider || Config.web3.host)
-console.log("Web3 version: " + web3.version)
-**/
+export const TypeValidation = typeValidation
