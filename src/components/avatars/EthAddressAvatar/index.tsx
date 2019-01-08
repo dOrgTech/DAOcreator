@@ -1,5 +1,6 @@
 import * as React from "react"
 import Blockies from "react-blockies"
+
 export type Props = {
   address: string
 }
