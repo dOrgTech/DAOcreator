@@ -5,8 +5,8 @@ import { Route, Switch } from "react-router"
 import Layout from "./components/Layout"
 import Home from "./components/Home"
 import DaoCreator from "./components/DaoCreator"
-import Notifications from "./components/Notifications"
-import WaitingAnimation from "./components/WaitingAnimation"
+import Notifications from "./components/common/Notifications"
+import WaitingAnimation from "./components/common/WaitingAnimation"
 
 // TEMP
 import NamingStep from "./components/DaoCreator/NamingStep"
