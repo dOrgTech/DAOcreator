@@ -17,8 +17,8 @@ import { connect } from "react-redux"
 import { Founder } from "../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../lib/formValidation"
 import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
-import PieChart from "../PieChart"
-import EthAddressAvatar from "../EthAddressAvatar"
+import PieChart from "../charts/PieChart"
+import EthAddressAvatar from "../avatars/EthAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
