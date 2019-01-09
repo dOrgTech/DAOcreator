@@ -5,7 +5,7 @@ import * as Arc from "../../lib/integrations/daoStack/arc"
 import { AppState } from "../../AppState"
 
 export default interface DaoCreatorActions {
-  init(): (sispatch: Dispatch) => Promise<string>
+  init(): (dispatch: Dispatch) => Promise<string>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
   setName(name: string): (dispatch: Dispatch) => Promise<void>
