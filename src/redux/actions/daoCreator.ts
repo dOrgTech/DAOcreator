@@ -5,6 +5,7 @@ import * as Arc from "../../lib/integrations/daoStack/arc"
 import { AppState } from "../../AppState"
 
 export default interface DaoCreatorActions {
+  init(): (dispatch: Dispatch) => Promise<string>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
   setName(name: string): (dispatch: Dispatch) => Promise<void>
@@ -20,6 +21,27 @@ export default interface DaoCreatorActions {
   setStepIsValide(
     isValide: boolean
   ): (dispatch: Dispatch, getState: () => AppState) => Promise<void>
+}
+
+export function init(): (dispatch: Dispatch) => Promise<string> {
+  return async (dispatch: Dispatch) => {
+    dispatch(
+      Events.WAITING_ANIMATION_OPEN({
+        message: "Initializing Web3",
+      })
+    )
+    try {
+      await Arc.init()
+      dispatch(Events.WAITING_ANIMATION_CLOSE())
+      return Promise.resolve("Success!")
+    } catch (e) {
+      dispatch(Events.WAITING_ANIMATION_CLOSE())
+      dispatch(
+        Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e.message)
+      )
+      return Promise.resolve(e.message)
+    }
+  }
 }
 
 export function nextStep(): (dispatch: Dispatch) => Promise<void> {

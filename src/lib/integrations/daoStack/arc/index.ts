@@ -17,10 +17,13 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
+import { getWeb3 } from "../../web3"
 
 let isInitialized = false
 
 export const init = async () => {
+  ;(global as any).web3 = await getWeb3()
+
   // Initialize the ArcJS library
   ConfigService.set("estimateGas", true)
   ConfigService.set("txDepthRequiredForConfirmation.kovan", 0)

@@ -1,14 +1,14 @@
-export default (web3: any) => ({
-  isAddress: (address: string): boolean => {
-    return web3.utils.isAddress(address)
-  },
+import * as rawWeb3 from "web3"
+const Web3 = rawWeb3 as any
 
-  isBigNumber: (number: string): boolean => {
-    try {
-      web3.utils.toBN(number)
-      return true
-    } catch {
-      return false
-    }
-  },
-})
+export const isAddress = (address: string): boolean =>
+  Web3.utils.isAddress(address)
+
+export const isBigNumber = (number: string): boolean => {
+  try {
+    Web3.utils.toBN(number)
+    return true
+  } catch {
+    return false
+  }
+}

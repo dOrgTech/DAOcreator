@@ -26,82 +26,85 @@ interface Props extends WithStyles<typeof styles> {
   actions: DaoCreatorActions
 }
 
-const daoCreator: React.SFC<Props> = ({
-  classes,
-  step,
-  stepValide,
-  actions,
-}) => {
-  const steps = [
-    {
-      title: "Name",
-      component: <NamingStep />,
-    },
-    {
-      title: "Founders",
-      component: <FoundersStep />,
-    },
-    {
-      title: "Features",
-      component: <FeatureStep />,
-    },
-    {
-      title: "Voting",
-      component: <VotingStep />,
-    },
-    {
-      title: "Review & Deploy",
-      component: <ReviewStep />,
-    },
-    {
-      title: "Live DAO",
-      component: <LiveDao />,
-    },
-  ]
+class DaoCreator extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+    props.actions.init()
+  }
 
-  const isDeployStep = step === steps.length - 2
-  const isLastStep = step === steps.length - 1
-  return (
-    <div className={classes.root}>
-      <Stepper activeStep={step}>
-        {steps.map(thisStep => (
-          <Step key={thisStep.title}>
-            <StepLabel>{thisStep.title}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
+  render() {
+    const { classes, step, stepValide, actions } = this.props
+    const steps = [
+      {
+        title: "Name",
+        component: <NamingStep />,
+      },
+      {
+        title: "Founders",
+        component: <FoundersStep />,
+      },
+      {
+        title: "Features",
+        component: <FeatureStep />,
+      },
+      {
+        title: "Voting",
+        component: <VotingStep />,
+      },
+      {
+        title: "Review & Deploy",
+        component: <ReviewStep />,
+      },
+      {
+        title: "Live DAO",
+        component: <LiveDao />,
+      },
+    ]
+
+    const isDeployStep = step === steps.length - 2
+    const isLastStep = step === steps.length - 1
+    return (
+      <div className={classes.root}>
+        <Stepper activeStep={step}>
+          {steps.map(thisStep => (
+            <Step key={thisStep.title}>
+              <StepLabel>{thisStep.title}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
         <div>
-          <div className={classes.content}>{steps[step].component}</div>
-          {isLastStep ? (
-            <></>
-          ) : (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={step === 0}
-                onClick={actions.prevStep}
-                className={classes.button}
-              >
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={isDeployStep ? actions.createDao : actions.nextStep}
-                className={classes.button}
-                disabled={!stepValide}
-              >
-                {isDeployStep ? "Deploy DAO" : "Next"}
-              </Button>
-            </div>
+          <div>
+            <div className={classes.content}>{steps[step].component}</div>
+            {isLastStep ? (
+              <></>
+            ) : (
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={step === 0}
+                  onClick={actions.prevStep}
+                  className={classes.button}
+                >
+                  Back
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={isDeployStep ? actions.createDao : actions.nextStep}
+                  className={classes.button}
+                  disabled={!stepValide}
+                >
+                  {isDeployStep ? "Deploy DAO" : "Next"}
+                </Button>
+              </div>
+            )}
+          </div>
           )}
         </div>
-        )}
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 // STYLE
@@ -122,7 +125,7 @@ const styles = (theme: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(daoCreator)
+const componentWithStyles = withStyles(styles)(DaoCreator)
 
 // STATE
 const mapStateToProps = (state: AppState, ownProps: any) => {
