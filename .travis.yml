@@ -7,10 +7,12 @@ cache:
 script:
   - npm run app-build
 
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  local_dir: build
-  on:
-    branch: master
+# Deactivated because of issue: "Make it possible to deploy DAOs from the production build #34"
+# TODO: activate once #34 is resolved
+# deploy:
+#   provider: pages
+#   skip-cleanup: true
+#   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+#   local_dir: build
+#   on:
+#     branch: master
