@@ -65,43 +65,38 @@ class DaoCreator extends React.Component<Props> {
     const isLastStep = step === steps.length - 1
     return (
       <div className={classes.root}>
-        <Stepper activeStep={step}>
+        <Stepper className={classes.stepper} activeStep={step}>
           {steps.map(thisStep => (
             <Step key={thisStep.title}>
               <StepLabel>{thisStep.title}</StepLabel>
             </Step>
           ))}
         </Stepper>
-        <div>
+        <div className={classes.content}>{steps[step].component}</div>
+        {isLastStep ? (
+          <></>
+        ) : (
           <div>
-            <div className={classes.content}>{steps[step].component}</div>
-            {isLastStep ? (
-              <></>
-            ) : (
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={step === 0}
-                  onClick={actions.prevStep}
-                  className={classes.button}
-                >
-                  Back
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={isDeployStep ? actions.createDao : actions.nextStep}
-                  className={classes.button}
-                  disabled={!stepValid}
-                >
-                  {isDeployStep ? "Deploy DAO" : "Next"}
-                </Button>
-              </div>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={step === 0}
+              onClick={actions.prevStep}
+              className={classes.button}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={isDeployStep ? actions.createDao : actions.nextStep}
+              className={classes.button}
+              disabled={!stepValid}
+            >
+              {isDeployStep ? "Deploy DAO" : "Next"}
+            </Button>
           </div>
-          )}
-        </div>
+        )}
       </div>
     )
   }
@@ -113,16 +108,23 @@ const styles = (theme: Theme) =>
     root: {
       padding: 30,
       paddingTop: 50,
+      justifySelf: "center",
+      // bring forward (infront of background)
+      position: "relative",
+      pointerEvents: "none",
     },
-    button: {
-      marginRight: theme.spacing.unit,
-      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
+    stepper: {
+      pointerEvents: "all",
     },
     content: {
       marginTop: theme.spacing.unit,
       marginBottom: theme.spacing.unit,
-      // bring forward (infront of background)
-      position: "relative",
+      pointerEvents: "all",
+    },
+    button: {
+      marginRight: theme.spacing.unit,
+      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
+      pointerEvents: "all",
     },
   })
 
