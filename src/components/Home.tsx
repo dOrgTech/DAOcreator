@@ -55,12 +55,12 @@ const minWidth = 450
 const styles = ({  }: Theme) =>
   createStyles({
     root: {
+      width: "100%",
       minWidth: minWidth + padding * 2,
       height: "100vh",
-      overflow: "auto",
-      overflowX: "auto",
     },
     topPadding: {
+      width: "inherit",
       padding: padding,
       paddingTop: padding * 3,
     },
@@ -78,10 +78,13 @@ const styles = ({  }: Theme) =>
       minWidth: minWidth,
       // inherit parent's position
       position: "inherit",
-      // move horizontally left by 50% width
+      // move horizontally left by 50% this el's width
       transform: "translateX(-50%)",
       // enable all pointer events
       pointerEvents: "all",
+    },
+    bottomPadding: {
+      paddingBottom: padding * 3,
     },
     cardContent: {
       textAlign: "center",
@@ -91,9 +94,6 @@ const styles = ({  }: Theme) =>
     },
     button: {
       margin: 10,
-    },
-    bottomPadding: {
-      paddingBottom: padding * 3,
     },
   })
 

@@ -33,10 +33,14 @@ const Background: React.SFC<Props> = ({ classes }) => (
 const styles = ({  }: Theme) =>
   createStyles({
     background: {
-      width: "100%",
-      height: "100%",
       overflow: "hidden",
       position: "fixed",
+      width: "100%",
+      height: "100%",
+      flexGrow: 1,
+      minWidth: 0, // So the Typography noWrap works
+      backgroundColor: "#000000",
+      minHeight: "100vh",
     },
   })
 
