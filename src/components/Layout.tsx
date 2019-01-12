@@ -2,14 +2,15 @@ import * as React from "react"
 import { SFC } from "react"
 import { withStyles, createStyles, Theme, WithStyles } from "@material-ui/core"
 import Background from "./Background"
+import converge from "ramda/es/converge"
 
 interface Props extends WithStyles<typeof styles> {}
 
 const Layout: SFC<Props> = ({ classes, children }) => (
   <div className={classes.root}>
-    <main className={classes.background}>
+    <main className={classes.main}>
       <Background />
-      <div className={classes.content}>{children}</div>
+      <div>{children}</div>
     </main>
   </div>
 )
@@ -23,15 +24,11 @@ const styles = ({ palette, spacing }: Theme) =>
       position: "relative",
       display: "flex",
     },
-    background: {
+    main: {
       flexGrow: 1,
       minWidth: 0, // So the Typography noWrap works
       backgroundColor: "#000000",
       minHeight: "100vh",
-    },
-    content: {
-      padding: spacing.unit,
-      paddingTop: 64,
     },
   })
 

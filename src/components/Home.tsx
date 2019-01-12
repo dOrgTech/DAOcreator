@@ -17,36 +17,60 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const Home: React.SFC<Props> = ({ classes, createDao }) => (
-  <>
-    <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>
-        <Typography variant="h1" className={classes.header}>
-          dOrg
-        </Typography>
-        <Typography variant="h5" className={classes.header}>
-          Empowering Decentralized Organization
-        </Typography>
-        <Button variant="contained" className={classes.button}>
-          What's a DAO?
-        </Button>
-        <Button variant="contained" className={classes.button} onClick={createDao}>
-          Create a DAO
-        </Button>
-        <Button variant="contained" className={classes.button}>
-          Browse a DAO
-        </Button>
-      </CardContent>
-    </Card>
-  </>
+  <div className={classes.cardPadding}>
+    <div className={classes.cardWrapper}>
+      <Card className={classes.card}>
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h1" className={classes.header}>
+            dOrg
+          </Typography>
+          <Typography variant="h5" className={classes.header}>
+            Empowering Decentralized Organization
+          </Typography>
+          <Button variant="contained" className={classes.button}>
+            What's a DAO?
+          </Button>
+          <Button
+            variant="contained"
+            className={classes.button}
+            onClick={createDao}
+          >
+            Create a DAO
+          </Button>
+          <Button variant="contained" className={classes.button}>
+            Browse a DAO
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
 )
 
 // STYLE
 const styles = ({  }: Theme) =>
   createStyles({
+    cardPadding: {
+      padding: 30,
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+    cardWrapper: {
+      // bring forward (infront of background)
+      position: "absolute",
+      // move top-left corner to horizontal middle
+      left: "50%",
+      // disable pointer events, don't block background
+      pointerEvents: "none",
+    },
     card: {
       maxWidth: 900,
-      margin: "auto",
-      marginTop: 150,
+      minWidth: 500,
+      // relative to parent
+      position: "relative",
+      // move top-left corner left by 50% width
+      left: "-50%",
+      // enable all pointer events
+      pointerEvents: "all",
     },
     cardContent: {
       textAlign: "center",
