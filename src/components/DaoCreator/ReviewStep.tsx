@@ -29,7 +29,7 @@ interface Props extends WithStyles<typeof styles> {
   schemes: Scheme[]
   votingMachineConfiguration: VotingMachineConfiguration
   stepNumber: number
-  stepValide: boolean
+  stepValid: boolean
 }
 
 const ReviewStep: React.SFC<Props> = ({
@@ -40,7 +40,7 @@ const ReviewStep: React.SFC<Props> = ({
   schemes,
   votingMachineConfiguration,
   stepNumber,
-  stepValide,
+  stepValid,
   classes,
 }) => {
   const votingMachine = R.find(
@@ -196,7 +196,7 @@ const mapStateToProps = (state: any) => {
     schemes: state.daoCreator.schemes,
     votingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
     stepNumber: state.daoCreator.step,
-    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 

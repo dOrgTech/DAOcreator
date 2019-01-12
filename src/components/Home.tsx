@@ -17,58 +17,69 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const Home: React.SFC<Props> = ({ classes, createDao }) => (
-  <div className={classes.cardPadding}>
+  <div className={classes.root}>
+    <div className={classes.topPadding} />
     <div className={classes.cardWrapper}>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <Typography variant="h1" className={classes.header}>
+          <Typography variant="h2" className={classes.header}>
             dOrg
           </Typography>
-          <Typography variant="h5" className={classes.header}>
+          <Typography variant="subheading" className={classes.header}>
             Empowering Decentralized Organization
           </Typography>
-          <Button variant="contained" className={classes.button}>
+          <Button variant="contained" size="small" className={classes.button}>
             What's a DAO?
           </Button>
           <Button
             variant="contained"
+            size="small"
             className={classes.button}
             onClick={createDao}
           >
             Create a DAO
           </Button>
-          <Button variant="contained" className={classes.button}>
+          <Button variant="contained" size="small" className={classes.button}>
             Browse a DAO
           </Button>
         </CardContent>
       </Card>
     </div>
+    <div className={classes.bottomPadding} />
   </div>
 )
 
 // STYLE
+const padding = 50
+const minWidth = 450
 const styles = ({  }: Theme) =>
   createStyles({
-    cardPadding: {
-      padding: 30,
-      marginLeft: "auto",
-      marginRight: "auto",
+    root: {
+      minWidth: minWidth + padding * 2,
+      height: "100vh",
+      overflow: "auto",
+      overflowX: "auto",
+    },
+    topPadding: {
+      padding: padding,
+      paddingTop: padding * 3,
     },
     cardWrapper: {
+      width: 0,
       // bring forward (infront of background)
-      position: "absolute",
-      // move top-left corner to horizontal middle
+      position: "relative",
+      // move to horizontal middle
       left: "50%",
       // disable pointer events, don't block background
       pointerEvents: "none",
     },
     card: {
       maxWidth: 900,
-      minWidth: 500,
-      // relative to parent
-      position: "relative",
-      // move top-left corner left by 50% width
-      left: "-50%",
+      minWidth: minWidth,
+      // inherit parent's position
+      position: "inherit",
+      // move horizontally left by 50% width
+      transform: "translateX(-50%)",
       // enable all pointer events
       pointerEvents: "all",
     },
@@ -80,6 +91,9 @@ const styles = ({  }: Theme) =>
     },
     button: {
       margin: 10,
+    },
+    bottomPadding: {
+      paddingBottom: padding * 3,
     },
   })
 

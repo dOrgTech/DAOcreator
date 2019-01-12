@@ -21,7 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
-  stepValide: boolean
+  stepValid: boolean
   actions: DaoCreatorActions
 }
 
@@ -52,7 +52,7 @@ class NamingStep extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props)
-    this.props.actions.setStepIsValide(false)
+    this.props.actions.setStepIsValid(false)
   }
 
   handleChange = async (event: any) => {
@@ -69,15 +69,15 @@ class NamingStep extends React.Component<Props, State> {
       requiredFields
     )
 
-    const stepIsValide =
+    const stepIsValid =
       formHasAllValues &&
       R.none(
         key => !R.isEmpty(this.state.formErrors[key]),
         R.keys(this.state.formErrors)
       )
 
-    if (stepIsValide != this.props.stepValide) {
-      await this.props.actions.setStepIsValide(stepIsValide)
+    if (stepIsValid != this.props.stepValid) {
+      await this.props.actions.setStepIsValid(stepIsValid)
     }
   }
 
@@ -88,76 +88,76 @@ class NamingStep extends React.Component<Props, State> {
     const { daoName, tokenName, tokenSymbol, formErrors } = this.state
 
     return (
-        <Card className={classes.card}>
-            <form>
-                <CardContent>
-                    <Typography variant="h4" className={classes.headline} gutterBottom>
-                        Name the DAO
-                    </Typography>
-                    <Grid container spacing={16}>
-                        <Grid item xs={12} md={5}>
-                            <Typography className={classes.guideText} variant="body2">
-                                Welcome!
-                                <br />
-                                You're about to start the process of creating a DAO
-                                (Decentralized Autonomous Organization).
-                                <br />
-                                <br />
-                                Let's start by giving a name to the DAO and its token.
-                                <br />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={7}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    className={classes.daoName}
-                                    name="daoName"
-                                    label="DAO Name"
-                                    value={daoName}
-                                    onChange={this.handleChange}
-                                    margin="normal"
-                                    onBlur={() => actions.setName(daoName)}
-                                    fullWidth
-                                    required
-                                    error={!R.isEmpty(formErrors.daoName)}
-                                    helperText={formErrors.daoName}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    className={classes.tokenName}
-                                    name="tokenName"
-                                    label="Token Name"
-                                    value={tokenName}
-                                    onChange={this.handleChange}
-                                    onBlur={() => actions.setTokenName(tokenName)}
-                                    margin="normal"
-                                    fullWidth
-                                    error={!R.isEmpty(formErrors.tokenName)}
-                                    helperText={formErrors.tokenName}
-                                    required
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    className={classes.tokenSymbol}
-                                    name="tokenSymbol"
-                                    label="Token Symbol"
-                                    value={tokenSymbol}
-                                    onChange={this.handleChange}
-                                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
-                                    margin="normal"
-                                    fullWidth
-                                    error={!R.isEmpty(formErrors.tokenSymbol)}
-                                    helperText={formErrors.tokenSymbol}
-                                    required
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </form>
-        </Card>
+      <Card className={classes.card}>
+        <form>
+          <CardContent>
+            <Typography variant="h4" className={classes.headline} gutterBottom>
+              Name the DAO
+            </Typography>
+            <Grid container spacing={16}>
+              <Grid item xs={12} md={5}>
+                <Typography className={classes.guideText} variant="body2">
+                  Welcome!
+                  <br />
+                  You're about to start the process of creating a DAO
+                  (Decentralized Autonomous Organization).
+                  <br />
+                  <br />
+                  Let's start by giving a name to the DAO and its token.
+                  <br />
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.daoName}
+                    name="daoName"
+                    label="DAO Name"
+                    value={daoName}
+                    onChange={this.handleChange}
+                    margin="normal"
+                    onBlur={() => actions.setName(daoName)}
+                    fullWidth
+                    required
+                    error={!R.isEmpty(formErrors.daoName)}
+                    helperText={formErrors.daoName}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.tokenName}
+                    name="tokenName"
+                    label="Token Name"
+                    value={tokenName}
+                    onChange={this.handleChange}
+                    onBlur={() => actions.setTokenName(tokenName)}
+                    margin="normal"
+                    fullWidth
+                    error={!R.isEmpty(formErrors.tokenName)}
+                    helperText={formErrors.tokenName}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.tokenSymbol}
+                    name="tokenSymbol"
+                    label="Token Symbol"
+                    value={tokenSymbol}
+                    onChange={this.handleChange}
+                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
+                    margin="normal"
+                    fullWidth
+                    error={!R.isEmpty(formErrors.tokenSymbol)}
+                    helperText={formErrors.tokenSymbol}
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </form>
+      </Card>
     )
   }
 }
@@ -167,18 +167,17 @@ const styles = ({  }: Theme) =>
   createStyles({
     card: {},
     headline: {},
-      daoName: {
-      },
+    daoName: {},
     tokenName: {},
     tokenSymbol: {},
     guideText: {
-        fontSize: 18,
-        maxWidth: 450,
-        paddingLeft: 30,
-        paddingRight:30,
-        paddingTop: 50,
-        paddingBottom: 50, 
-        margin: "auto",
+      fontSize: 18,
+      maxWidth: 450,
+      paddingLeft: 30,
+      paddingRight: 30,
+      paddingTop: 50,
+      paddingBottom: 50,
+      margin: "auto",
     },
   })
 
@@ -190,7 +189,7 @@ const mapStateToProps = (state: AppState) => {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
-    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 

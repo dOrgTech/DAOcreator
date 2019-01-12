@@ -22,7 +22,7 @@ import { AppState } from "../../AppState"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
-  stepValide: boolean
+  stepValid: boolean
   actions: DaoCreatorActions
 }
 
@@ -33,7 +33,7 @@ class DaoCreator extends React.Component<Props> {
   }
 
   render() {
-    const { classes, step, stepValide, actions } = this.props
+    const { classes, step, stepValid, actions } = this.props
     const steps = [
       {
         title: "Name",
@@ -93,7 +93,7 @@ class DaoCreator extends React.Component<Props> {
                   color="primary"
                   onClick={isDeployStep ? actions.createDao : actions.nextStep}
                   className={classes.button}
-                  disabled={!stepValide}
+                  disabled={!stepValid}
                 >
                   {isDeployStep ? "Deploy DAO" : "Next"}
                 </Button>
@@ -111,9 +111,8 @@ class DaoCreator extends React.Component<Props> {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "90%",
-      height: "200",
-      margin: "auto",
+      padding: 30,
+      paddingTop: 50,
     },
     button: {
       marginRight: theme.spacing.unit,
@@ -122,6 +121,8 @@ const styles = (theme: Theme) =>
     content: {
       marginTop: theme.spacing.unit,
       marginBottom: theme.spacing.unit,
+      // bring forward (infront of background)
+      position: "relative",
     },
   })
 
@@ -131,7 +132,7 @@ const componentWithStyles = withStyles(styles)(DaoCreator)
 const mapStateToProps = (state: AppState, ownProps: any) => {
   return {
     step: state.daoCreator.step,
-    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 

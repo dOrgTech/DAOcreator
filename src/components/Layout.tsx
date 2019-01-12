@@ -20,7 +20,6 @@ const styles = ({ palette, spacing }: Theme) =>
     root: {
       flexGrow: 1,
       zIndex: 1,
-      overflow: "hidden",
       position: "relative",
       display: "flex",
     },
@@ -29,6 +28,7 @@ const styles = ({ palette, spacing }: Theme) =>
       minWidth: 0, // So the Typography noWrap works
       backgroundColor: "#000000",
       minHeight: "100vh",
+      overflow: "ignore",
     },
   })
 

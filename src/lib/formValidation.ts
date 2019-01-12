@@ -15,7 +15,7 @@ const numberHasError = (number: string) =>
   R.isEmpty(number) || !TypeValidation.isBigNumber(number)
 
 export const isRequired = checkIfHasError(R.isEmpty, "This field is required")
-export const isValideAddress = checkIfHasError(
+export const isValidAddress = checkIfHasError(
   addressHasError,
   "Please enter a valid address."
 )

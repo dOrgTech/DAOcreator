@@ -69,7 +69,7 @@ export const reducer = (
       return R.merge(state, {
         stepValidation: R.update(
           event.payload.step,
-          event.payload.isValide,
+          event.payload.isValid,
           state.stepValidation
         ),
       })
