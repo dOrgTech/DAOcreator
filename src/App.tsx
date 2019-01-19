@@ -2,13 +2,13 @@ import * as React from "react"
 import { SFC } from "react"
 import { Route, Switch } from "react-router"
 
-import Layout from "./components/Layout"
+import Background from "./components/Background"
 import Home from "./components/Home"
 import DaoCreator from "./components/DaoCreator"
 import Notifications from "./components/common/Notifications"
 import WaitingAnimation from "./components/common/WaitingAnimation"
 
-// TEMP
+// TODO: have these within the DAOCreator
 import NamingStep from "./components/DaoCreator/NamingStep"
 import FoundersStep from "./components/DaoCreator/FoundersStep"
 import FeaturesStep from "./components/DaoCreator/FeaturesStep"
@@ -16,7 +16,8 @@ import VotingStep from "./components/DaoCreator/VotingStep"
 import ReviewStep from "./components/DaoCreator/ReviewStep"
 
 const App: SFC = () => (
-  <Layout>
+  <>
+    <Background />
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/dao-creator" component={DaoCreator} />
@@ -28,7 +29,7 @@ const App: SFC = () => (
     </Switch>
     <WaitingAnimation />
     <Notifications />
-  </Layout>
+  </>
 )
 
 export default App

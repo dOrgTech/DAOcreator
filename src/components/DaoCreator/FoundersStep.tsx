@@ -31,7 +31,7 @@ type State = Founder & {
     tokens: string
     reputation: string
   }
-  formIsValide: boolean
+  formIsValid: boolean
 }
 
 const initState: State = {
@@ -43,7 +43,7 @@ const initState: State = {
     tokens: "",
     reputation: "",
   },
-  formIsValide: false,
+  formIsValid: false,
 }
 
 const requiredFields = ["address", "tokens", "reputation"]
@@ -53,7 +53,7 @@ class FoundersStep extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props)
-    this.props.actions.setStepIsValide(false)
+    this.props.actions.setStepIsValid(false)
   }
 
   handleChange = async (event: any) => {
@@ -70,7 +70,7 @@ class FoundersStep extends React.Component<Props, State> {
           "Error: Founder already added."
         )(value)
         if (R.isEmpty(errorMessage)) {
-          errorMessage = FormValidation.isValideAddress(value)
+          errorMessage = FormValidation.isValidAddress(value)
         }
         break
       }
@@ -93,21 +93,21 @@ class FoundersStep extends React.Component<Props, State> {
       requiredFields
     )
 
-    const formIsValide =
+    const formIsValid =
       formHasAllValues &&
       R.none(
         key => !R.isEmpty(this.state.formErrors[key]),
         R.keys(this.state.formErrors)
       )
 
-    this.setState({ formIsValide })
+    this.setState({ formIsValid })
   }
 
   onAddFounder = () => {
     this.props.actions.addFounder(this.state)
     this.setState(initState)
 
-    this.props.actions.setStepIsValide(true)
+    this.props.actions.setStepIsValid(true)
   }
 
   render() {
@@ -213,7 +213,7 @@ class FoundersStep extends React.Component<Props, State> {
                   color="primary"
                   variant="contained"
                   aria-label="Add"
-                  disabled={!this.state.formIsValide}
+                  disabled={!this.state.formIsValid}
                 >
                   Add
                 </Button>

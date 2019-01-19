@@ -1,11 +1,11 @@
 import { Dispatch } from "redux"
 import * as Events from "./events"
-import { newNotificationInfo } from "./notifications"
-import * as Arc from "../../lib/integrations/daoStack/arc"
 import { AppState } from "../../AppState"
+import * as Arc from "../../lib/integrations/daoStack/arc"
+import * as Web3 from "../../lib/integrations/web3"
 
 export default interface DaoCreatorActions {
-  init(): (dispatch: Dispatch) => Promise<string>
+  init(): (dispatch: Dispatch) => Promise<void>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
   setName(name: string): (dispatch: Dispatch) => Promise<void>
@@ -18,29 +18,33 @@ export default interface DaoCreatorActions {
     votingMachine: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
   createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
-  setStepIsValide(
-    isValide: boolean
+  setStepIsValid(
+    isValid: boolean
   ): (dispatch: Dispatch, getState: () => AppState) => Promise<void>
 }
 
-export function init(): (dispatch: Dispatch) => Promise<string> {
-  return async (dispatch: Dispatch) => {
-    dispatch(
-      Events.WAITING_ANIMATION_OPEN({
-        message: "Initializing Web3",
-      })
-    )
-    try {
-      await Arc.init()
-      dispatch(Events.WAITING_ANIMATION_CLOSE())
-      return Promise.resolve("Success!")
-    } catch (e) {
-      dispatch(Events.WAITING_ANIMATION_CLOSE())
+export function init(): (dispatch: Dispatch) => Promise<void> {
+  return (dispatch: Dispatch) => {
+    return new Promise(async (resolve, reject) => {
       dispatch(
-        Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e.message)
+        Events.WAITING_ANIMATION_OPEN({
+          message: "Initializing Web3",
+        })
       )
-      return Promise.resolve(e.message)
-    }
+      return Web3.getWeb3()
+        .then(resolve)
+        .catch(reject)
+    })
+      .then((web3: any) => {
+        return Arc.init(web3)
+      })
+      .catch(e => {
+        dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e))
+        return Promise.resolve()
+      })
+      .finally(() => {
+        dispatch(Events.WAITING_ANIMATION_CLOSE())
+      })
   }
 }
 
@@ -158,14 +162,14 @@ export function createDao(): (
   }
 }
 
-export function setStepIsValide(
-  isValide: boolean
+export function setStepIsValid(
+  isValid: boolean
 ): (dispatch: Dispatch, getState: () => AppState) => Promise<void> {
   return (dispatch: Dispatch, getState: () => AppState) => {
     dispatch(
       Events.DAO_CREATE_SET_STEP_VALIDATION({
         step: getState().daoCreator.step,
-        isValide,
+        isValid,
       })
     )
     return Promise.resolve()

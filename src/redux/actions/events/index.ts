@@ -105,7 +105,7 @@ export const DAO_CREATE_ADD_VOTE_MACHINE = createPayloadEvent<
 >(Events.DAO_CREATE_ADD_VOTE_MACHINE)
 
 interface DAO_CREATE_SET_STEP_VALIDATION
-  extends PayloadEvent<string, { step: number; isValide: boolean }> {
+  extends PayloadEvent<string, { step: number; isValid: boolean }> {
   type: Events.DAO_CREATE_SET_STEP_VALIDATION
 }
 export const DAO_CREATE_SET_STEP_VALIDATION = createPayloadEvent<

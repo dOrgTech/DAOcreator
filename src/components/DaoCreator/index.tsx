@@ -22,7 +22,7 @@ import { AppState } from "../../AppState"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
-  stepValide: boolean
+  stepValid: boolean
   actions: DaoCreatorActions
 }
 
@@ -33,7 +33,7 @@ class DaoCreator extends React.Component<Props> {
   }
 
   render() {
-    const { classes, step, stepValide, actions } = this.props
+    const { classes, step, stepValid, actions } = this.props
     const steps = [
       {
         title: "Name",
@@ -65,43 +65,38 @@ class DaoCreator extends React.Component<Props> {
     const isLastStep = step === steps.length - 1
     return (
       <div className={classes.root}>
-        <Stepper activeStep={step}>
+        <Stepper className={classes.stepper} activeStep={step}>
           {steps.map(thisStep => (
             <Step key={thisStep.title}>
               <StepLabel>{thisStep.title}</StepLabel>
             </Step>
           ))}
         </Stepper>
-        <div>
+        <div className={classes.content}>{steps[step].component}</div>
+        {isLastStep ? (
+          <></>
+        ) : (
           <div>
-            <div className={classes.content}>{steps[step].component}</div>
-            {isLastStep ? (
-              <></>
-            ) : (
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={step === 0}
-                  onClick={actions.prevStep}
-                  className={classes.button}
-                >
-                  Back
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={isDeployStep ? actions.createDao : actions.nextStep}
-                  className={classes.button}
-                  disabled={!stepValide}
-                >
-                  {isDeployStep ? "Deploy DAO" : "Next"}
-                </Button>
-              </div>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={step === 0}
+              onClick={actions.prevStep}
+              className={classes.button}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={isDeployStep ? actions.createDao : actions.nextStep}
+              className={classes.button}
+              disabled={!stepValid}
+            >
+              {isDeployStep ? "Deploy DAO" : "Next"}
+            </Button>
           </div>
-          )}
-        </div>
+        )}
       </div>
     )
   }
@@ -111,17 +106,25 @@ class DaoCreator extends React.Component<Props> {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "90%",
-      height: "200",
-      margin: "auto",
+      padding: 30,
+      paddingTop: 50,
+      justifySelf: "center",
+      // bring forward (infront of background)
+      position: "relative",
+      pointerEvents: "none",
     },
-    button: {
-      marginRight: theme.spacing.unit,
-      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
+    stepper: {
+      pointerEvents: "all",
     },
     content: {
       marginTop: theme.spacing.unit,
       marginBottom: theme.spacing.unit,
+      pointerEvents: "all",
+    },
+    button: {
+      marginRight: theme.spacing.unit,
+      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
+      pointerEvents: "all",
     },
   })
 
@@ -131,7 +134,7 @@ const componentWithStyles = withStyles(styles)(DaoCreator)
 const mapStateToProps = (state: AppState, ownProps: any) => {
   return {
     step: state.daoCreator.step,
-    stepValide: state.daoCreator.stepValidation[state.daoCreator.step],
+    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 
