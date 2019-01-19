@@ -1,5 +1,5 @@
 import { Events, AnyEvent } from "../../redux/actions"
-import { WaitingAnimationState } from "../../AppState"
+import { WaitingAnimationState } from "../../state"
 
 const initialState: WaitingAnimationState = {
   message: "",

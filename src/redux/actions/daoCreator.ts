@@ -1,10 +1,10 @@
 import { Dispatch } from "redux"
 import * as Events from "./events"
-import { AppState } from "../../AppState"
+import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
 import * as Web3 from "../../lib/integrations/web3"
 
-export default interface DaoCreatorActions {
+export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
@@ -17,10 +17,13 @@ export default interface DaoCreatorActions {
   setVotingMachine(
     votingMachine: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
-  createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
+  createDao(): (
+    dispatch: Dispatch,
+    getState: () => RootState
+  ) => Promise<string>
   setStepIsValid(
     isValid: boolean
-  ): (dispatch: Dispatch, getState: () => AppState) => Promise<void>
+  ): (dispatch: Dispatch, getState: () => RootState) => Promise<void>
 }
 
 export function init(): (dispatch: Dispatch) => Promise<void> {
@@ -125,9 +128,9 @@ export function setVotingMachine(
 
 export function createDao(): (
   dispatch: Dispatch,
-  getState: () => AppState
+  getState: () => RootState
 ) => Promise<string> {
-  return async (dispatch: Dispatch, getState: () => AppState) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(
       Events.WAITING_ANIMATION_OPEN({
         type: "transaction",
@@ -164,8 +167,8 @@ export function createDao(): (
 
 export function setStepIsValid(
   isValid: boolean
-): (dispatch: Dispatch, getState: () => AppState) => Promise<void> {
-  return (dispatch: Dispatch, getState: () => AppState) => {
+): (dispatch: Dispatch, getState: () => RootState) => Promise<void> {
+  return (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(
       Events.DAO_CREATE_SET_STEP_VALIDATION({
         step: getState().daoCreator.step,

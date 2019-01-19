@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Dispatch } from "redux"
 import { connect } from "react-redux"
-import { bindActionCreators } from "redux"
 import {
   CircularProgress,
   DialogContent,
@@ -12,7 +11,7 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import { AppState } from "../../AppState"
+import { RootState } from "../../state"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
@@ -36,7 +35,7 @@ const styles = ({ palette }: Theme) =>
 const componentWithStyles = withStyles(styles)(WaitingAnmination)
 
 // STATE
-const mapStateToProps = (state: AppState, { match }: any) => {
+const mapStateToProps = (state: RootState, { match }: any) => {
   return {
     message: state.waitingAnimation.message,
     type: state.waitingAnimation.type,

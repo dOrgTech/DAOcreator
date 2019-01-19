@@ -14,15 +14,15 @@ import {
 } from "@material-ui/core"
 import { bindActionCreators, Dispatch } from "redux"
 import { connect } from "react-redux"
-import { Founder } from "../../lib/integrations/daoStack/arc"
-import * as FormValidation from "../../lib/formValidation"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
-import PieChart from "../common/PieChart"
-import EthAddressAvatar from "../common/EthAddressAvatar"
+import { Founder } from "../../../lib/integrations/daoStack/arc"
+import * as FormValidation from "../../../lib/formValidation"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+import PieChart from "../../common/PieChart"
+import EthAddressAvatar from "../../common/EthAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
 type State = Founder & {

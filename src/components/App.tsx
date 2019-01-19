@@ -2,25 +2,25 @@ import * as React from "react"
 import { SFC } from "react"
 import { Route, Switch } from "react-router"
 
-import Background from "./components/Background"
-import Home from "./components/Home"
-import DaoCreator from "./components/DaoCreator"
-import Notifications from "./components/common/Notifications"
-import WaitingAnimation from "./components/common/WaitingAnimation"
+import Background from "./shell/Background"
+import Home from "./pages/Home"
+import DAOcreator from "./pages/DAOcreator"
+import Notifications from "./common/Notifications"
+import WaitingAnimation from "./common/WaitingAnimation"
 
 // TODO: have these within the DAOCreator
-import NamingStep from "./components/DaoCreator/NamingStep"
-import FoundersStep from "./components/DaoCreator/FoundersStep"
-import FeaturesStep from "./components/DaoCreator/FeaturesStep"
-import VotingStep from "./components/DaoCreator/VotingStep"
-import ReviewStep from "./components/DaoCreator/ReviewStep"
+import NamingStep from "./pages/DAOcreator/NamingStep"
+import FoundersStep from "./pages/DAOcreator/FoundersStep"
+import FeaturesStep from "./pages/DAOcreator/FeaturesStep"
+import VotingStep from "./pages/DAOcreator/VotingStep"
+import ReviewStep from "./pages/DAOcreator/ReviewStep"
 
 const App: SFC = () => (
   <>
     <Background />
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route exact path="/dao-creator" component={DaoCreator} />
+      <Route exact path="/dao-creator" component={DAOcreator} />
       <Route exact path="/dao-creator/naming" component={NamingStep} />
       <Route exact path="/dao-creator/founders" component={FoundersStep} />
       <Route exact path="/dao-creator/features" component={FeaturesStep} />

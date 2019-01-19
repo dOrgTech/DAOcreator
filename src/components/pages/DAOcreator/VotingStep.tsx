@@ -19,17 +19,17 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "../../AppState"
+import { RootState } from "../../../state"
 import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
-} from "../../lib/integrations/daoStack/arc"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+} from "../../../lib/integrations/daoStack/arc"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   currentVotingMachineConfiguration: VotingMachineConfiguration
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
 type State = {
@@ -216,7 +216,7 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(VotingStep)
 
 // STATE
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     currentVotingMachineConfiguration:
       state.daoCreator.votingMachineConfiguration,
