@@ -1,12 +1,12 @@
-export interface AppState {
-  daoCreator: DaoCreatorState
+export interface RootState {
+  daoCreator: DAOcreatorState
   daoController: DaoControllerState
   notification: NotificationState
   waitingAnimation: WaitingAnimationState
 }
 
 import * as Arc from "./lib/integrations/daoStack/arc"
-export interface DaoCreatorState {
+export interface DAOcreatorState {
   step: number
   stepValidation: boolean[]
   naming: {

@@ -16,14 +16,14 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "../../AppState"
-import { Scheme } from "../../lib/integrations/daoStack/arc"
-import { schemes } from "../../lib/integrations/daoStack/arc/schemes"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import { RootState } from "../../../state"
+import { Scheme } from "../../../lib/integrations/daoStack/arc"
+import { schemes } from "../../../lib/integrations/daoStack/arc/schemes"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   addedSchemes: Scheme[]
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
 const AddScheme: React.SFC<Props> = ({ classes, addedSchemes, actions }) => {
@@ -96,7 +96,7 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(AddScheme)
 
 // STATE
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     addedSchemes: state.daoCreator.schemes,
   }

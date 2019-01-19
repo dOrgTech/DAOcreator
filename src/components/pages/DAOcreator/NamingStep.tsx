@@ -13,16 +13,16 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "../../AppState"
-import * as FormValidation from "../../lib/formValidation"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import { RootState } from "../../../state"
+import * as FormValidation from "../../../lib/formValidation"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
   stepValid: boolean
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
 type State = {
@@ -184,7 +184,7 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(NamingStep)
 
 // STATE
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,

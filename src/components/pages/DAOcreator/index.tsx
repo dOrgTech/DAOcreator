@@ -11,22 +11,22 @@ import {
   StepLabel,
   Button,
 } from "@material-ui/core"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import FeatureStep from "./FeaturesStep"
 import VotingStep from "./VotingStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
-import { AppState } from "../../AppState"
+import { RootState } from "../../../state"
 
 interface Props extends WithStyles<typeof styles> {
   step: number
   stepValid: boolean
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
-class DaoCreator extends React.Component<Props> {
+class DAOcreator extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
     props.actions.init()
@@ -128,10 +128,10 @@ const styles = (theme: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(DaoCreator)
+const componentWithStyles = withStyles(styles)(DAOcreator)
 
 // STATE
-const mapStateToProps = (state: AppState, ownProps: any) => {
+const mapStateToProps = (state: RootState, ownProps: any) => {
   return {
     step: state.daoCreator.step,
     stepValid: state.daoCreator.stepValidation[state.daoCreator.step],

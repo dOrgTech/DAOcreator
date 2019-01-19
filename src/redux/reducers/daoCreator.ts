@@ -1,9 +1,9 @@
 import * as R from "ramda"
 import { Events, AnyEvent } from "../../redux/actions"
-import { DaoCreatorState } from "../../AppState"
+import { DAOcreatorState } from "../../state"
 import { votingMachines, schemes } from "../../lib/integrations/daoStack/arc"
 
-const initialState: DaoCreatorState = {
+const initialState: DAOcreatorState = {
   step: 0,
   stepValidation: [true],
   naming: {
@@ -21,9 +21,9 @@ const initialState: DaoCreatorState = {
 }
 
 export const reducer = (
-  state: DaoCreatorState = initialState,
+  state: DAOcreatorState = initialState,
   event: AnyEvent
-): DaoCreatorState => {
+): DAOcreatorState => {
   switch (event.type) {
     case Events.DAO_CREATE_NEXT_STEP: {
       const newStep = state.step + 1

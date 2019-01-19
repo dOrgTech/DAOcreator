@@ -18,9 +18,9 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
-} from "../../lib/integrations/daoStack/arc"
-import PieChart from "../common/PieChart"
-import EthAddressAvatar from "../common/EthAddressAvatar"
+} from "../../../lib/integrations/daoStack/arc"
+import PieChart from "../../common/PieChart"
+import EthAddressAvatar from "../../common/EthAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string

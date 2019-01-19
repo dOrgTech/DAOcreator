@@ -16,7 +16,7 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
   },
   // Currently not available.
-  // https://daostack.github.io/arc/generated_docs/universalSchemes/DaoCreator/
+  // https://daostack.github.io/arc/generated_docs/universalSchemes/DAOcreator/
   // {
   //   typeName: "DAOCreator",
   //   displayName: "DAO Creator",

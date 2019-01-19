@@ -1,5 +1,5 @@
 import { Events, AnyEvent } from "../../redux/actions"
-import { NotificationState } from "../../AppState"
+import { NotificationState } from "../../state"
 
 const initialState: NotificationState = {
   message: "",
