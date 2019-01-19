@@ -17,12 +17,11 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 import { toNewDaoConfig, fromDao } from "./typeConversions"
-import { getWeb3 } from "../../web3"
 
 let isInitialized = false
 
-export const init = async () => {
-  ;(global as any).web3 = await getWeb3()
+export const init = async (web3: any) => {
+  ;(global as any).web3 = web3
 
   // Initialize the ArcJS library
   ConfigService.set("estimateGas", true)
@@ -45,7 +44,10 @@ export const createDao = async (
   votingMachine: VotingMachineConfiguration
 ): Promise<DAO> => {
   if (!isInitialized) {
-    await init()
+    console.log(
+      "Arc Uninitialized: initialize the Arc module before calling createDao."
+    )
+    throw Promise.reject("initialize Arc first")
   }
 
   const newDaoConfig: NewDaoConfig = toNewDaoConfig(
