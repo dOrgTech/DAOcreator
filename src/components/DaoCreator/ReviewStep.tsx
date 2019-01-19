@@ -19,6 +19,7 @@ import {
   votingMachines,
   VotingMachineConfiguration,
 } from "../../lib/integrations/daoStack/arc"
+import PieChart from "../common/PieChart"
 import EthAddressAvatar from "../common/EthAddressAvatar"
 
 interface Props extends WithStyles<typeof styles> {
@@ -133,6 +134,44 @@ const ReviewStep: React.SFC<Props> = ({
             {R.map(displayFounder, founders)}
           </Grid>
         </Grid>
+        <Grid container spacing={16}>
+          <Grid item xs={6} sm={6} md={6}>
+            <Typography
+              variant="h6"
+              className={classes.pieChartHeading}
+              gutterBottom
+            >
+              Reputation Distribution
+            </Typography>
+            <PieChart
+              data={founders}
+              config={{
+                hight: 240,
+                width: 240,
+                dataKey: "reputation",
+                nameKey: "address",
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} sm={6} md={6}>
+            <Typography
+              variant="h6"
+              className={classes.pieChartHeading}
+              gutterBottom
+            >
+              Tokens Distribution
+            </Typography>
+            <PieChart
+              data={founders}
+              config={{
+                hight: 240,
+                width: 240,
+                dataKey: "tokens",
+                nameKey: "address",
+              }}
+            />
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   )
@@ -181,6 +220,9 @@ const styles = ({  }: Theme) =>
       maxWidth: 450,
       addingTop: 50,
       paddingBottom: 20,
+    },
+    pieChartHeading: {
+      textAlign: "center",
     },
   })
 
