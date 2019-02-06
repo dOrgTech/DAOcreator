@@ -15,14 +15,12 @@ export const schemes: Scheme[] = [
       "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
   },
-  // Currently not available.
-  // https://daostack.github.io/arc/generated_docs/universalSchemes/DAOcreator/
-  // {
-  //   typeName: "DAOCreator",
-  //   displayName: "DAO Creator",
-  //   description: "Makes it possible for the DAO to create new DAOs.",
-  //   toggleDefault: true,
-  // },
+  {
+    typeName: "DAOCreator",
+    displayName: "DAO Creator",
+    description: "Makes it possible for the DAO to create new DAOs.",
+    toggleDefault: true,
+  },
   // Currently not available on mainnet
   // {
   //   typeName: "SimpleICO",

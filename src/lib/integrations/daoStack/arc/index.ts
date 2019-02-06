@@ -8,6 +8,7 @@ import {
   NewDaoConfig,
   ConfigService,
   InitializeArcJs,
+  Utils as ArcUtils,
 } from "@daostack/arc.js"
 import {
   DAO,
@@ -24,8 +25,8 @@ export const init = async (web3: any) => {
   ;(global as any).web3 = web3
 
   // Initialize the ArcJS library
-  ConfigService.set("estimateGas", true)
-  ConfigService.set("txDepthRequiredForConfirmation.kovan", 0)
+  ConfigService.set("estimateGas", true);
+  ConfigService.set("txDepthRequiredForConfirmation", { kovan: 0, live: 0});
 
   // TODO: If you use Kovan uncomment this line
   // ConfigService.set("network", "kovan") // Set the network used to Kovan
@@ -57,7 +58,30 @@ export const init = async (web3: any) => {
       },
     },
     watchForAccountChanges: true,
+    filter: {
+      AbsoluteVote: true,
+      ContributionReward: true,
+      DaoCreator: true,
+      GenesisProtocol: true,
+      SchemeRegistrar: true
+}
   })
+
+  ConfigService.set("gasPriceAdjustment", async (defaultGasPrice: any) => {
+    try {
+      const network = await ArcUtils.getNetworkName();
+      if (network.toLowerCase() === 'live') {
+        const response = await fetch('https://ethgasstation.info/json/ethgasAPI.json').then(_ => _.json() as any)
+        // the api gives results if 10*Gwei
+        const gasPrice = response.fast / 10;
+        return web3.toWei(gasPrice, 'gwei');
+      } else {
+        return defaultGasPrice;
+      }
+    } catch (e) {
+      return defaultGasPrice;
+    }
+})
 
   isInitialized = true
 }

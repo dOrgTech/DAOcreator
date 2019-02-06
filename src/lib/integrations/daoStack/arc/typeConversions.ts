@@ -51,8 +51,19 @@ export const toNewDaoConfig = (
     founders: toFounderConfigs(founders),
     // daoCreatorAddress?: Address,
     // universalController?: boolean,
-    votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
-    schemes: toSchemeConfigs(schemes),
+    //votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
+    //schemes: toSchemeConfigs(schemes),
+    schemes: [
+      // TODO: add these
+      // { name: "UpgradeScheme" },
+      // { name: "GlobalConstraintRegistrar" },
+      { name: "SchemeRegistrar" },
+      { name: "ContributionReward" },
+      { name: "GenesisProtocol" },
+    ],
+    votingMachineParams: {
+      votingMachineName: "GenesisProtocol",
+    },
   }
 }
 
