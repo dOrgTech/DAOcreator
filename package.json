@@ -12,7 +12,7 @@
     "eth-arc-migrate": "wait-on tcp:8545 && npm explore @daostack/arc.js -- npm start migrateContracts"
   },
   "dependencies": {
-    "@daostack/arc.js": "0.0.0-alpha.89",
+    "@daostack/arc.js": "0.0.0-alpha.105",
     "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
     "@types/jest": "^23.3.10",
