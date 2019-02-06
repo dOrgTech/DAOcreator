@@ -28,7 +28,7 @@ export const init = async (web3: any) => {
   ;(global as any).web3 = web3
 
   // Initialize the ArcJS library
-  ConfigService.set("estimateGas", true)
+  //ConfigService.set("estimateGas", true)
   ConfigService.set("txDepthRequiredForConfirmation", { kovan: 0, live: 0 })
 
   // TODO: If you use Kovan uncomment this line
