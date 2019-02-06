@@ -23,12 +23,13 @@ export const schemes: Scheme[] = [
   //   description: "Makes it possible for the DAO to create new DAOs.",
   //   toggleDefault: true,
   // },
-  {
-    typeName: "SimpleICO",
-    displayName: "Initial Coin Offering (ICO)",
-    description: "DAO run ICOs.",
-    toggleDefault: false,
-  },
+  // Currently not available on mainnet
+  // {
+  //   typeName: "SimpleICO",
+  //   displayName: "Initial Coin Offering (ICO)",
+  //   description: "DAO run ICOs.",
+  //   toggleDefault: false,
+  // },
   {
     typeName: "VestingScheme",
     displayName: "Token Vesting",
