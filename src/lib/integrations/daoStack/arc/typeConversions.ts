@@ -20,6 +20,10 @@ const toFounderConfigs = (founders: Founder[]): FounderConfig[] =>
       address,
       tokens: new BigNumber(tokens),
       reputation: new BigNumber(reputation),
+      daoAvatarAddress: "",
+      redemptions: [],
+      stakes: [],
+      votes: [],
     }),
     founders
   )
@@ -51,8 +55,21 @@ export const toNewDaoConfig = (
     founders: toFounderConfigs(founders),
     // daoCreatorAddress?: Address,
     // universalController?: boolean,
-    votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
-    schemes: toSchemeConfigs(schemes),
+    //votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
+    //schemes: toSchemeConfigs(schemes),
+    /**
+    schemes: [
+      // TODO: add these
+      // { name: "UpgradeScheme" },
+      // { name: "GlobalConstraintRegistrar" },
+      { name: "SchemeRegistrar" },
+      { name: "ContributionReward" },
+      { name: "GenesisProtocol" },
+    ],
+    votingMachineParams: {
+      votingMachineName: "GenesisProtocol",
+    },
+    */
   }
 }
 
