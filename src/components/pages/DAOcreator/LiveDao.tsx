@@ -26,13 +26,7 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
       </Typography>
     )
   } else {
-    const {
-      name,
-      tokenName,
-      tokenSymbol,
-      avatarAddress,
-      controllerAddress,
-    } = dao
+    const { name, tokenName, tokenSymbol, avatar, daoToken, reputation } = dao
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -73,10 +67,13 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
                 Locations
               </Typography>
               <Typography>
-                <b>Avatar address:</b> {avatarAddress}
+                <b>Avatar:</b> {avatar}
               </Typography>
               <Typography>
-                <b>Controller address:</b> {controllerAddress}
+                <b>DAO Token:</b> {daoToken}
+              </Typography>
+              <Typography>
+                <b>Reputation:</b> {reputation}
               </Typography>
             </Grid>
           </Grid>

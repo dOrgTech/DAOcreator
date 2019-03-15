@@ -38,9 +38,7 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
         .then(resolve)
         .catch(reject)
     })
-      .then((web3: any) => {
-        return Arc.init(web3)
-      })
+      .then((web3: any) => Arc.init(web3))
       .catch(e => {
         dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e))
         return Promise.resolve()
@@ -145,7 +143,8 @@ export function createDao(): (
     } = getState().daoCreator
 
     try {
-      const dao = await Arc.createDao(
+      const web3 = await Web3.getWeb3()
+      const dao = await Arc.createDao(web3)(
         naming,
         founders,
         schemes,

@@ -1,9 +1,3 @@
-import {
-  FounderConfig,
-  SchemeConfig,
-  NewDaoConfig,
-  DAO as ArcDAO,
-} from "@daostack/arc.js"
 import { BigNumber } from "bignumber.js"
 import * as R from "ramda"
 import {
@@ -14,7 +8,7 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 
-const toFounderConfigs = (founders: Founder[]): FounderConfig[] =>
+const toFounderConfigs = (founders: Founder[]): any[] =>
   R.map(
     ({ address, tokens, reputation }) => ({
       address,
@@ -28,9 +22,6 @@ const toFounderConfigs = (founders: Founder[]): FounderConfig[] =>
     founders
   )
 
-const toSchemeConfigs = (schemes: Scheme[]): SchemeConfig[] =>
-  R.map(scheme => ({ name: scheme.typeName }), schemes)
-
 const toVotingMachineParams = (
   votingMachineConfiguration: VotingMachineConfiguration
 ) => ({
@@ -38,45 +29,4 @@ const toVotingMachineParams = (
     votingMachineName: votingMachineConfiguration.typeName,
     ...votingMachineConfiguration.params,
   },
-})
-
-export const toNewDaoConfig = (
-  naming: any,
-  founders: Founder[],
-  schemes: Scheme[],
-  votingMachineConfiguration: VotingMachineConfiguration
-): NewDaoConfig => {
-  const { daoName, tokenName, tokenSymbol } = naming
-  return {
-    name: daoName,
-    // tokenCap?: BigNumber | string,
-    tokenName,
-    tokenSymbol,
-    founders: toFounderConfigs(founders),
-    // daoCreatorAddress?: Address,
-    // universalController?: boolean,
-    //votingMachineParams: toVotingMachineParams(votingMachineConfiguration),
-    //schemes: toSchemeConfigs(schemes),
-    /**
-    schemes: [
-      // TODO: add these
-      // { name: "UpgradeScheme" },
-      // { name: "GlobalConstraintRegistrar" },
-      { name: "SchemeRegistrar" },
-      { name: "ContributionReward" },
-      { name: "GenesisProtocol" },
-    ],
-    votingMachineParams: {
-      votingMachineName: "GenesisProtocol",
-    },
-    */
-  }
-}
-
-export const fromDao = async (arkDao: ArcDAO): Promise<DAO> => ({
-  avatarAddress: arkDao.avatar.address,
-  controllerAddress: arkDao.controller.address,
-  tokenName: arkDao.token.name,
-  tokenSymbol: await arkDao.token.getTokenSymbol(),
-  name: arkDao.name,
 })

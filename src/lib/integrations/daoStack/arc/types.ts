@@ -41,9 +41,10 @@ export type Scheme = {
 }
 
 export type DAO = {
-  avatarAddress: string
-  controllerAddress: string
+  avatar: string
   tokenName: string
   tokenSymbol: string
   name: string
+  daoToken: string
+  reputation: string
 }
