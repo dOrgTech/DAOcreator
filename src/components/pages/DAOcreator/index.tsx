@@ -43,14 +43,14 @@ class DAOcreator extends React.Component<Props> {
         title: "Founders",
         component: <FoundersStep />,
       },
-      {
-        title: "Features",
-        component: <FeatureStep />,
-      },
-      {
-        title: "Voting",
-        component: <VotingStep />,
-      },
+      //      {
+      //        title: "Features",
+      //        component: <FeatureStep />,
+      //      },
+      //      {
+      //        title: "Voting",
+      //        component: <VotingStep />,
+      //      },
       {
         title: "Review & Deploy",
         component: <ReviewStep />,
