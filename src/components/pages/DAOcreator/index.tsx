@@ -112,6 +112,8 @@ const styles = (theme: Theme) =>
       // bring forward (infront of background)
       position: "relative",
       pointerEvents: "none",
+      maxWidth: 1000,
+      margin: "auto",
     },
     stepper: {
       pointerEvents: "all",
