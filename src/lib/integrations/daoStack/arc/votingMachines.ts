@@ -29,6 +29,7 @@ export const votingMachines: VotingMachine[] = [
     description:
       "This is the first iteration of the GenesisDAO protocol. This voting machine reflects the rules for staking and boosting proposals where voters lose or gain REP depending on the outcome.",
     params: [
+      // TODO: the list of params are outdated
       {
         typeName: "boostedVotePeriodLimit",
         valueType: "number",
