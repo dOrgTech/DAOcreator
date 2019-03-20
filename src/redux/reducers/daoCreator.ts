@@ -1,7 +1,6 @@
 import * as R from "ramda"
 import { Events, AnyEvent } from "../../redux/actions"
 import { DAOcreatorState } from "../../state"
-import { votingMachines, schemes } from "../../lib/integrations/daoStack/arc"
 
 const initialState: DAOcreatorState = {
   step: 0,
@@ -12,11 +11,7 @@ const initialState: DAOcreatorState = {
     tokenSymbol: "",
   },
   founders: [],
-  schemes: R.filter(scheme => scheme.toggleDefault, schemes),
-  votingMachineConfiguration: {
-    typeName: votingMachines[0].typeName,
-    params: {},
-  },
+  schemes: [],
   deployedDao: undefined,
 }
 
@@ -53,16 +48,24 @@ export const reducer = (
       return R.merge(state, {
         founders: R.append(event.payload, state.founders),
       })
-    case Events.DAO_CREATE_ADD_SCHEME:
+    case Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME:
       return R.merge(state, {
-        schemes: R.append(event.payload, state.schemes),
+        schemes: R.append(
+          event.payload,
+          R.filter(
+            ({ scheme }) => scheme.typeName !== event.payload.scheme.typeName,
+            state.schemes
+          )
+        ),
       })
+
     case Events.DAO_CREATE_REM_SCHEME:
       return R.merge(state, {
-        schemes: R.without([event.payload], state.schemes),
+        schemes: R.filter(
+          ({ scheme }) => scheme.typeName !== event.payload,
+          state.schemes
+        ),
       })
-    case Events.DAO_CREATE_ADD_VOTE_MACHINE:
-      return R.merge(state, { votingMachineConfiguration: event.payload })
     case Events.DAO_CREATE_SET_DEPLOYED_DAO:
       return R.merge(state, { deployedDao: event.payload })
     case Events.DAO_CREATE_SET_STEP_VALIDATION:

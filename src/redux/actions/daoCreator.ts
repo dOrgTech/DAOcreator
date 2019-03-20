@@ -12,11 +12,11 @@ export default interface DAOcreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
-  addScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
-  remScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
-  setVotingMachine(
+  addOrUpdateScheme(
+    scheme: Arc.Scheme,
     votingMachine: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
+  remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
   createDao(): (
     dispatch: Dispatch,
     getState: () => RootState
@@ -97,29 +97,21 @@ export function addFounder(
   }
 }
 
-export function addScheme(
-  scheme: Arc.Scheme
+export function addOrUpdateScheme(
+  scheme: Arc.Scheme,
+  votingMachine: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME(scheme))
+    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachine }))
     return Promise.resolve()
   }
 }
 
 export function remScheme(
-  scheme: Arc.Scheme
+  schemeTypeName: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_SCHEME(scheme))
-    return Promise.resolve()
-  }
-}
-
-export function setVotingMachine(
-  votingMachineConfiguration: Arc.VotingMachineConfiguration
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_VOTE_MACHINE(votingMachineConfiguration))
+    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeTypeName))
     return Promise.resolve()
   }
 }
@@ -135,21 +127,11 @@ export function createDao(): (
         message: "To create the DAO, please sign the upcoming transaction",
       })
     )
-    const {
-      naming,
-      founders,
-      schemes,
-      votingMachineConfiguration,
-    } = getState().daoCreator
+    const { naming, founders, schemes } = getState().daoCreator
 
     try {
       const web3 = await Web3.getWeb3()
-      const dao = await Arc.createDao(web3)(
-        naming,
-        founders,
-        schemes,
-        votingMachineConfiguration
-      )
+      const dao = await Arc.createDao(web3)(naming, founders, schemes)
       dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao))
       dispatch(Events.DAO_CREATE_NEXT_STEP())
       dispatch(Events.WAITING_ANIMATION_CLOSE())

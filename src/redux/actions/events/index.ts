@@ -6,7 +6,7 @@ export enum Events {
   DAO_CREATE_SET_TOKEN = "DAO_CREATE_SET_TOKEN",
   DAO_CREATE_SET_TOKEN_SYM = "DAO_CREATE_SET_TOKEN_SYM",
   DAO_CREATE_ADD_FOUNDER = "DAO_CREATE_ADD_FOUNDER",
-  DAO_CREATE_ADD_SCHEME = "DAO_CREATE_ADD_SCHEME",
+  DAO_CREATE_ADD_OR_UPDATE_SCHEME = "DAO_CREATE_ADD_SCHEME",
   DAO_CREATE_REM_SCHEME = "DAO_CREATE_REM_SCHEME",
   DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
   DAO_CREATE_SET_DEPLOYED_DAO = "DAO_CREATE_SET_DEPLOYED_DAO",
@@ -75,14 +75,21 @@ export const DAO_CREATE_ADD_FOUNDER = createPayloadEvent<
   DAO_CREATE_ADD_FOUNDER
 >(Events.DAO_CREATE_ADD_FOUNDER)
 
-interface DAO_CREATE_ADD_SCHEME extends PayloadEvent<string, Arc.Scheme> {
-  type: Events.DAO_CREATE_ADD_SCHEME
+interface DAO_CREATE_ADD_SCHEME
+  extends PayloadEvent<
+    string,
+    {
+      scheme: Arc.Scheme
+      votingMachine: Arc.VotingMachineConfiguration
+    }
+  > {
+  type: Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME
 }
 export const DAO_CREATE_ADD_SCHEME = createPayloadEvent<DAO_CREATE_ADD_SCHEME>(
-  Events.DAO_CREATE_ADD_SCHEME
+  Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME
 )
 
-interface DAO_CREATE_REM_SCHEME extends PayloadEvent<string, Arc.Scheme> {
+interface DAO_CREATE_REM_SCHEME extends PayloadEvent<string, string> {
   type: Events.DAO_CREATE_REM_SCHEME
 }
 export const DAO_CREATE_REM_SCHEME = createPayloadEvent<DAO_CREATE_REM_SCHEME>(
@@ -95,14 +102,6 @@ interface DAO_CREATE_SET_DEPLOYED_DAO extends PayloadEvent<string, Arc.DAO> {
 export const DAO_CREATE_SET_DEPLOYED_DAO = createPayloadEvent<
   DAO_CREATE_SET_DEPLOYED_DAO
 >(Events.DAO_CREATE_SET_DEPLOYED_DAO)
-
-interface DAO_CREATE_ADD_VOTE_MACHINE
-  extends PayloadEvent<string, Arc.VotingMachineConfiguration> {
-  type: Events.DAO_CREATE_ADD_VOTE_MACHINE
-}
-export const DAO_CREATE_ADD_VOTE_MACHINE = createPayloadEvent<
-  DAO_CREATE_ADD_VOTE_MACHINE
->(Events.DAO_CREATE_ADD_VOTE_MACHINE)
 
 interface DAO_CREATE_SET_STEP_VALIDATION
   extends PayloadEvent<string, { step: number; isValid: boolean }> {
@@ -158,7 +157,6 @@ export type AnyEvent =
   | DAO_CREATE_ADD_FOUNDER
   | DAO_CREATE_ADD_SCHEME
   | DAO_CREATE_REM_SCHEME
-  | DAO_CREATE_ADD_VOTE_MACHINE
   | DAO_CREATE_SET_DEPLOYED_DAO
   | DAO_CREATE_SET_STEP_VALIDATION
   | NOTIFICATION_INFO
