@@ -27,8 +27,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   founders: Founder[]
-  schemes: Scheme[]
-  votingMachineConfiguration: VotingMachineConfiguration
+  schemes: { scheme: Scheme; votingMachine: VotingMachineConfiguration }[]
   stepNumber: number
   stepValid: boolean
 }
@@ -39,16 +38,10 @@ const ReviewStep: React.SFC<Props> = ({
   tokenSymbol,
   founders,
   schemes,
-  votingMachineConfiguration,
   stepNumber,
   stepValid,
   classes,
 }) => {
-  const votingMachine = R.find(
-    votingMachine =>
-      votingMachine.typeName === votingMachineConfiguration.typeName,
-    votingMachines
-  ) as VotingMachine
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -79,21 +72,6 @@ const ReviewStep: React.SFC<Props> = ({
               </Typography>
               <Typography>
                 <b>Token Symbol:</b> {tokenSymbol}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Voting
-              </Typography>
-              <Typography variant="subtitle1">
-                {votingMachine.displayName}
-              </Typography>
-              <Typography>
-                <i>{votingMachine.description}</i>
               </Typography>
             </Grid>
           </Grid>
@@ -194,16 +172,36 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displayScheme = ({ displayName, description, typeName }: Scheme) => (
-  <Grid container spacing={16} key={`founder-${typeName}`}>
-    <Grid item xs={12}>
-      <Typography variant="subtitle1">{displayName}</Typography>
-      <Typography>
-        <i>{description}</i>
-      </Typography>
+const displayScheme = ({
+  scheme,
+  votingMachine,
+}: {
+  scheme: Scheme
+  votingMachine: VotingMachineConfiguration
+}) => {
+  const votingMachineType = R.find(
+    ({ typeName }) => typeName === votingMachine.typeName,
+    votingMachines
+  ) as VotingMachine
+  return (
+    <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
+      <Grid item xs={12}>
+        <Typography variant="subtitle1">{scheme.displayName}</Typography>
+        <Typography>
+          <i>{scheme.description}</i>
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="subtitle1">
+          {votingMachineType.displayName}
+        </Typography>
+        <Typography>
+          <i>{votingMachineType.description}</i>
+        </Typography>
+      </Grid>
     </Grid>
-  </Grid>
-)
+  )
+}
 
 // STYLE
 const styles = ({  }: Theme) =>
@@ -236,7 +234,6 @@ const mapStateToProps = (state: any) => {
     tokenSymbol: state.daoCreator.naming.tokenSymbol,
     founders: state.daoCreator.founders,
     schemes: state.daoCreator.schemes,
-    votingMachineConfiguration: state.daoCreator.votingMachineConfiguration,
     stepNumber: state.daoCreator.step,
     stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }

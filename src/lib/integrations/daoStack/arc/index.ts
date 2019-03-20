@@ -28,8 +28,10 @@ export const init = async (web3: any) => {
 export const createDao = (web3: any) => async (
   naming: any,
   founders: Founder[],
-  schemes: Scheme[],
-  votingMachine: VotingMachineConfiguration
+  schemes: {
+    scheme: Scheme
+    votingMachine: VotingMachineConfiguration
+  }[]
 ): Promise<DAO> => {
   try {
     const network: string = await web3.eth.net.getNetworkType()

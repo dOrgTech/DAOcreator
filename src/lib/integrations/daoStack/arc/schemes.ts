@@ -7,6 +7,7 @@ export const schemes: Scheme[] = [
     description:
       "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination.",
     toggleDefault: true,
+    // TODO: add parameters (orgNativeTokenFeeGWei)
   },
   {
     typeName: "VoteInOrganizationScheme",

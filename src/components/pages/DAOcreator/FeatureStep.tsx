@@ -24,17 +24,17 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
+  Scheme,
+  schemes,
 } from "../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
-  currentVotingMachineConfiguration: VotingMachineConfiguration
   actions: DAOcreatorActions
+  schemeTypeName: string
 }
 
-type State = {
-  formErrors: {}
-}
+type State = any
 
 const initState: State = {
   // TODO: this doesn't have a type, and isn't being used...
@@ -58,12 +58,26 @@ const getVotingMachineDefaultParams = (typeName: string): any => {
   )
 }
 
-class VotingStep extends React.Component<Props, State> {
-  public readonly state: State = {
-    ...initState,
-    ...getVotingMachineDefaultParams(
-      this.props.currentVotingMachineConfiguration.typeName
-    ),
+class FeatureStep extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    const votingMachineType = votingMachines[0].typeName
+    console.log(props)
+    const scheme = R.find(
+      scheme => scheme.typeName === props.schemeTypeName,
+      schemes
+    ) as Scheme
+
+    this.state = {
+      ...initState,
+      votingMachineType,
+      scheme,
+      ...getVotingMachineDefaultParams(votingMachineType),
+    }
+    props.actions.addOrUpdateScheme(scheme, {
+      typeName: votingMachineType,
+      params: R.omit(["formErrors", "scheme", "votingMachineType"], this.state),
+    })
   }
 
   handleChange = async (event: any) => {
@@ -75,10 +89,11 @@ class VotingStep extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, currentVotingMachineConfiguration, actions } = this.props
+    const { classes, actions } = this.props
+    const { votingMachineType, scheme } = this.state
+
     const currentVotingMachine = R.find(
-      votingMachine =>
-        votingMachine.typeName === currentVotingMachineConfiguration.typeName,
+      votingMachine => votingMachine.typeName === votingMachineType,
       votingMachines
     ) as VotingMachine
 
@@ -87,14 +102,15 @@ class VotingStep extends React.Component<Props, State> {
         <form>
           <CardContent>
             <Typography variant="h4" className={classes.headline} gutterBottom>
-              Configure Voting
+              Configure Voting for {scheme.displayName}
             </Typography>
             <Grid container spacing={16}>
               <Grid item xs={12} md={5}>
                 <Typography className={classes.guideText} variant="body2">
-                  What type of voting should the DAO support? Votes are used to
-                  form consensus on proposals, determining if they will pass or
-                  fail. <br />
+                  What type of voting should be used for this feature? Votes are
+                  used to form consensus around usage the {scheme.displayName}{" "}
+                  feature.
+                  <br />
                   <br />
                   Select different voting mechanism to learn more.
                 </Typography>
@@ -106,16 +122,22 @@ class VotingStep extends React.Component<Props, State> {
                       <FormControl>
                         <Select
                           onChange={async (event: any) => {
-                            await this.setState(
-                              getVotingMachineDefaultParams(event.target.value)
-                            )
+                            await this.setState({
+                              votingMachineType: event.target.value,
+                              ...getVotingMachineDefaultParams(
+                                event.target.value
+                              ),
+                            })
 
-                            actions.setVotingMachine({
+                            actions.addOrUpdateScheme(scheme, {
                               typeName: event.target.value,
-                              params: R.omit(["formErrors"], this.state),
+                              params: R.omit(
+                                ["formErrors", "scheme", "votingMachineType"],
+                                this.state
+                              ),
                             })
                           }}
-                          value={currentVotingMachine.typeName}
+                          value={votingMachineType}
                           inputProps={{
                             name: "votingMachine",
                             id: "voting-machine",
@@ -156,7 +178,7 @@ class VotingStep extends React.Component<Props, State> {
                           onChange={this.handleChange}
                           value={R.prop(param.typeName, this.state as any)}
                           onBlur={() =>
-                            actions.setVotingMachine({
+                            actions.addOrUpdateScheme(scheme, {
                               typeName: currentVotingMachine.typeName,
                               params: R.omit(["formErrors"], this.state),
                             })
@@ -213,14 +235,11 @@ const styles = ({  }: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(VotingStep)
+const componentWithStyles = withStyles(styles)(FeatureStep)
 
 // STATE
 const mapStateToProps = (state: RootState) => {
-  return {
-    currentVotingMachineConfiguration:
-      state.daoCreator.votingMachineConfiguration,
-  }
+  return {}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

@@ -10,8 +10,8 @@ export const createDao = async (
   web3: any,
   deployedContractAddresses: any,
   naming: any,
-  founders: Founder[]
-  // schemes: Scheme[],
+  founders: Founder[],
+  schemesIn: { scheme: Scheme; votingMachine: VotingMachineConfiguration }[]
   // votingMachine: VotingMachineConfiguration
 ): Promise<DAO> => {
   const {
@@ -131,6 +131,10 @@ export const createDao = async (
   console.log("Created new organization.")
   console.log(tx)
   console.log("Setting AbsoluteVote parameters...")
+
+  // TODO: load schemes -> set parameters for voting machine (if it does not match another schemes voting parameters,
+  // then reuse that (i.e. Absolut voting with 50%)) -> set parameters for scheme (How do we know the number of arguments?)
+  //
 
   const absoluteVoteSetParams = absoluteVote.methods.setParameters(
     migrationParam.AbsoluteVote.votePerc,
