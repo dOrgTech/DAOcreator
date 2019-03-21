@@ -39,7 +39,8 @@ export const createDao = (web3: any) => async (
       web3,
       (deployedContractAddresses as any)[network],
       naming,
-      founders
+      founders,
+      schemes
     )
     console.log("DAO created")
     console.log(newDao)

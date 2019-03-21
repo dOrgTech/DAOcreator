@@ -38,6 +38,7 @@ export type Scheme = {
   displayName: string
   description: string
   toggleDefault: boolean
+  permissions: string
 }
 
 export type DAO = {

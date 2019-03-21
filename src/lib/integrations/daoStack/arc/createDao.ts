@@ -6,6 +6,10 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 
+import hash from "object-hash"
+
+import * as R from "ramda"
+
 export const createDao = async (
   web3: any,
   deployedContractAddresses: any,
@@ -14,16 +18,7 @@ export const createDao = async (
   schemesIn: { scheme: Scheme; votingMachine: VotingMachineConfiguration }[]
   // votingMachine: VotingMachineConfiguration
 ): Promise<DAO> => {
-  const {
-    UController,
-    DaoCreator,
-    SchemeRegistrar,
-    GlobalConstraintRegistrar,
-    UpgradeScheme,
-    ContributionReward,
-    GenesisProtocol,
-    AbsoluteVote,
-  } = deployedContractAddresses.base
+  const addresses = deployedContractAddresses.base
 
   const migrationParam = {
     AbsoluteVote: {
@@ -50,7 +45,6 @@ export const createDao = async (
     },
   }
   const gasPrice = web3.utils.fromWei(await web3.eth.getGasPrice(), "gwei")
-
   const block = await web3.eth.getBlock("latest")
 
   const opts = {
@@ -63,37 +57,7 @@ export const createDao = async (
 
   const daoCreator = new web3.eth.Contract(
     require("@daostack/arc/build/contracts/DaoCreator.json").abi,
-    DaoCreator,
-    opts
-  )
-  const schemeRegistrar = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/SchemeRegistrar.json").abi,
-    SchemeRegistrar,
-    opts
-  )
-  const globalConstraintRegistrar = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/GlobalConstraintRegistrar.json").abi,
-    GlobalConstraintRegistrar,
-    opts
-  )
-  const upgradeScheme = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/UpgradeScheme.json").abi,
-    UpgradeScheme,
-    opts
-  )
-  const contributionReward = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/ContributionReward.json").abi,
-    ContributionReward,
-    opts
-  )
-  const genesisProtocol = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/GenesisProtocol.json").abi,
-    GenesisProtocol,
-    opts
-  )
-  const absoluteVote = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/AbsoluteVote.json").abi,
-    AbsoluteVote,
+    addresses.DaoCreator,
     opts
   )
 
@@ -113,7 +77,7 @@ export const createDao = async (
     founders.map(({ address }) => address),
     founders.map(({ tokens }) => web3.utils.toWei(tokens.toString())),
     founders.map(({ reputation }) => web3.utils.toWei(reputation.toString())),
-    UController,
+    addresses.UController,
     "0",
   ]
   const forgeOrg = daoCreator.methods.forgeOrg(
@@ -130,112 +94,123 @@ export const createDao = async (
   let tx = await forgeOrg.send()
   console.log("Created new organization.")
   console.log(tx)
-  console.log("Setting AbsoluteVote parameters...")
 
   // TODO: load schemes -> set parameters for voting machine (if it does not match another schemes voting parameters,
   // then reuse that (i.e. Absolut voting with 50%)) -> set parameters for scheme (How do we know the number of arguments?)
-  //
+  let votingInits: any = {}
+  let schemeInits: any[] = []
 
-  const absoluteVoteSetParams = absoluteVote.methods.setParameters(
-    migrationParam.AbsoluteVote.votePerc,
-    migrationParam.AbsoluteVote.voteOnBehalf
-  )
-  const absoluteVoteParams = await absoluteVoteSetParams.call()
-  tx = await absoluteVoteSetParams.send()
-  console.log("AbsoluteVote parameters set.")
-  console.log(tx)
+  await R.map(async ({ scheme, votingMachine }) => {
+    const contract = new web3.eth.Contract(
+      require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
+      addresses[scheme.typeName],
+      opts
+    )
+    const votingParams = votingMachine.params
+    const votingMachineType = votingMachine.typeName
+    const votingHash = hash({ votingMachineType, votingParams })
+    if (votingInits[votingHash] == null) {
+      const votingMachine = new web3.eth.Contract(
+        require(`@daostack/arc/build/contracts/${votingMachineType}.json`).abi,
+        addresses[votingMachineType],
+        opts
+      )
+      let setParams: any
+      if (votingMachineType === "AbsoluteVote") {
+        if (!R.contains("votePerc", R.keys(votingParams))) {
+          throw new Error(
+            `Missing parameter votePerc in AbsoluteVote voting machine`
+          )
+        }
+        if (!R.contains("voteOnBehalf", R.keys(votingParams))) {
+          throw new Error(
+            `Missing parameter voteOnBehalf in AbsoluteVote voting machine`
+          )
+        }
 
-  console.log("Setting SchemeRegistrar parameters...")
-  const schemeRegistrarSetParams = schemeRegistrar.methods.setParameters(
-    absoluteVoteParams,
-    absoluteVoteParams,
-    AbsoluteVote
-  )
-  const schemeRegistrarParams = await schemeRegistrarSetParams.call()
-  tx = await schemeRegistrarSetParams.send()
-  console.log("SchemeRegistrar parameters set.")
-  console.log(tx)
+        setParams = votingMachine.methods.setParameters(
+          votingParams.votePerc,
+          votingParams.voteOnBehalf
+        )
+      } else if (votingMachineType === "GenesisProtocol") {
+        setParams = votingMachine.methods.setParameters(
+          [
+            migrationParam.GenesisProtocol.queuedVoteRequiredPercentage,
+            migrationParam.GenesisProtocol.queuedVotePeriodLimit,
+            migrationParam.GenesisProtocol.boostedVotePeriodLimit,
+            migrationParam.GenesisProtocol.preBoostedVotePeriodLimit,
+            migrationParam.GenesisProtocol.thresholdConst,
+            migrationParam.GenesisProtocol.quietEndingPeriod,
+            web3.utils.toWei(
+              migrationParam.GenesisProtocol.proposingRepRewardGwei.toString(),
+              "gwei"
+            ),
+            migrationParam.GenesisProtocol.votersReputationLossRatio,
+            web3.utils.toWei(
+              migrationParam.GenesisProtocol.minimumDaoBountyGWei.toString(),
+              "gwei"
+            ),
+            migrationParam.GenesisProtocol.daoBountyConst,
+            migrationParam.GenesisProtocol.activationTime,
+          ],
+          migrationParam.GenesisProtocol.voteOnBehalf
+        )
+      } else {
+        throw new Error(`Unknown voting machine type: ${votingMachineType}`)
+      }
+      votingInits[votingHash] = await setParams.call()
+      const tx = await setParams.send()
+      console.log(`${votingMachineType} parameters set.`)
+      console.log(tx)
+    }
+    schemeInits = R.append(
+      {
+        scheme,
+        contract,
+        votingHash,
+        votingMachineType,
+      },
+      schemeInits
+    )
+  }, schemesIn)
 
-  console.log("Setting GlobalConstraintRegistrar parameters...")
-  const globalConstraintRegistrarSetParams = globalConstraintRegistrar.methods.setParameters(
-    absoluteVoteParams,
-    AbsoluteVote
-  )
-  const globalConstraintRegistrarParams = await globalConstraintRegistrarSetParams.call()
-  tx = await globalConstraintRegistrarSetParams.send()
-  console.log("GlobalConstraintRegistrar parameters set.")
-  console.log(tx)
+  let schemes: any[] = []
+  let params: any[] = []
+  let permissions: any[] = []
+  // Setup schemes
+  await R.map(async ({ scheme, votingMachineType, contract, votingHash }) => {
+    const votingParams = votingInits[votingHash]
+    const votingMachineAddress = addresses[votingMachineType]
+    let setParams: any
 
-  console.log("Setting UpgradeScheme parameters...")
-  const upgradeSchemeSetParams = upgradeScheme.methods.setParameters(
-    absoluteVoteParams,
-    AbsoluteVote
-  )
-  const upgradeSchemeParams = await upgradeSchemeSetParams.call()
-  tx = await upgradeSchemeSetParams.send()
-  console.log("UpgradeScheme parameters set.")
-  console.log(tx)
-
-  console.log("Setting GenesisProtocol parameters...")
-  const genesisProtocolSetParams = genesisProtocol.methods.setParameters(
-    [
-      migrationParam.GenesisProtocol.queuedVoteRequiredPercentage,
-      migrationParam.GenesisProtocol.queuedVotePeriodLimit,
-      migrationParam.GenesisProtocol.boostedVotePeriodLimit,
-      migrationParam.GenesisProtocol.preBoostedVotePeriodLimit,
-      migrationParam.GenesisProtocol.thresholdConst,
-      migrationParam.GenesisProtocol.quietEndingPeriod,
-      web3.utils.toWei(
-        migrationParam.GenesisProtocol.proposingRepRewardGwei.toString(),
-        "gwei"
-      ),
-      migrationParam.GenesisProtocol.votersReputationLossRatio,
-      web3.utils.toWei(
-        migrationParam.GenesisProtocol.minimumDaoBountyGWei.toString(),
-        "gwei"
-      ),
-      migrationParam.GenesisProtocol.daoBountyConst,
-      migrationParam.GenesisProtocol.activationTime,
-    ],
-    migrationParam.GenesisProtocol.voteOnBehalf
-  )
-  const genesisProtocolParams = await genesisProtocolSetParams.call()
-  tx = await genesisProtocolSetParams.send()
-  console.log("GenesisProtocol parameters set.")
-  console.log(tx)
-
-  console.log("Setting 'ContributionReward' parameters...")
-  const contributionRewardSetParams = contributionReward.methods.setParameters(
-    web3.utils.toWei(
-      migrationParam.ContributionReward.orgNativeTokenFeeGWei.toString(),
-      "gwei"
-    ),
-    genesisProtocolParams,
-    GenesisProtocol
-  )
-  const contributionRewardParams = await contributionRewardSetParams.call()
-  tx = await contributionRewardSetParams.send()
-  console.log("ContributionReward parameters set.")
-  console.log(tx)
-
-  const schemes = [
-    SchemeRegistrar,
-    GlobalConstraintRegistrar,
-    UpgradeScheme,
-    ContributionReward,
-  ]
-  const params = [
-    schemeRegistrarParams,
-    globalConstraintRegistrarParams,
-    upgradeSchemeParams,
-    contributionRewardParams,
-  ]
-  const permissions = [
-    "0x0000001F" /* all permissions */,
-    "0x00000004" /* manage global constraints */,
-    "0x0000000A" /* manage schemes + upgrade controller */,
-    "0x00000000" /* no permissions */,
-  ]
+    if (scheme.typeName === "SchemeRegistar") {
+      setParams = contract.methods.setParameters(
+        votingParams,
+        votingParams,
+        votingMachineAddress
+      )
+    } else if (scheme.typeName === "ContributionReward") {
+      setParams = contract.methods.setParameters(
+        web3.utils.toWei(
+          migrationParam.ContributionReward.orgNativeTokenFeeGWei.toString(),
+          "gwei"
+        ),
+        votingParams,
+        votingMachineAddress
+      )
+    } else {
+      setParams = contract.methods.setParameters(
+        votingParams,
+        votingMachineAddress
+      )
+    }
+    params = R.append(await setParams.call(), params)
+    schemes = R.append(addresses[scheme.typeName], schemes)
+    permissions = R.append(scheme.permissions, permissions)
+    const tx = await setParams.send()
+    console.log(`${scheme.typeName} parameters set.`)
+    console.log(tx)
+  }, schemeInits)
 
   console.log("Setting DAO schemes...")
   tx = await daoCreator.methods

@@ -8,11 +8,11 @@ export const votingMachines: VotingMachine[] = [
       "This system counts one person one vote and a majority is determined by a percentage.",
     params: [
       {
-        typeName: "ownerVote",
-        valueType: "boolean",
-        displayName: "Proposer Voting",
-        description: "Allow proposers to vote on their own proposals.",
-        defaultValue: false,
+        typeName: "voteOnBehalf",
+        valueType: "string",
+        displayName: "Vote on behalf",
+        description: "??",
+        defaultValue: "0x0000000000000000000000000000000000000000",
       },
       {
         typeName: "votePerc",
