@@ -30,7 +30,7 @@ export const createDao = (web3: any) => async (
   founders: Founder[],
   schemes: {
     scheme: Scheme
-    votingMachine: VotingMachineConfiguration
+    votingMachineConfig: VotingMachineConfiguration
   }[]
 ): Promise<DAO> => {
   try {

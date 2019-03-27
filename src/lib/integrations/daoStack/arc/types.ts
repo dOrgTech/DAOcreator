@@ -15,6 +15,7 @@ export type VotingMachine = {
   displayName: string
   description: string
   params: VotingMachineParam[]
+  getCallableParamsArray: (config: VotingMachineConfiguration) => any[]
 }
 
 export type VotingMachineParam = {

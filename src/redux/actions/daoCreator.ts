@@ -14,7 +14,7 @@ export default interface DAOcreatorActions {
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
   addOrUpdateScheme(
     scheme: Arc.Scheme,
-    votingMachine: Arc.VotingMachineConfiguration
+    votingMachineConfig: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
   remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
   createDao(): (
@@ -99,10 +99,10 @@ export function addFounder(
 
 export function addOrUpdateScheme(
   scheme: Arc.Scheme,
-  votingMachine: Arc.VotingMachineConfiguration
+  votingMachineConfig: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachine }))
+    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachineConfig }))
     return Promise.resolve()
   }
 }

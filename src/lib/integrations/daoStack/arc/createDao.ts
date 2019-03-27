@@ -6,6 +6,8 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 
+import { votingMachines } from "./votingMachines"
+
 import hash from "object-hash"
 
 import * as R from "ramda"
@@ -15,31 +17,14 @@ export const createDao = async (
   deployedContractAddresses: any,
   naming: any,
   founders: Founder[],
-  schemesIn: { scheme: Scheme; votingMachine: VotingMachineConfiguration }[]
-  // votingMachine: VotingMachineConfiguration
+  schemesIn: {
+    scheme: Scheme
+    votingMachineConfig: VotingMachineConfiguration
+  }[]
 ): Promise<DAO> => {
   const addresses = deployedContractAddresses.base
 
   const migrationParam = {
-    AbsoluteVote: {
-      voteOnBehalf: "0x0000000000000000000000000000000000000000",
-      votePerc: 50,
-    },
-
-    GenesisProtocol: {
-      boostedVotePeriodLimit: 600,
-      daoBountyConst: 10,
-      minimumDaoBountyGWei: 100,
-      queuedVotePeriodLimit: 1800,
-      queuedVoteRequiredPercentage: 50,
-      preBoostedVotePeriodLimit: 600,
-      proposingRepRewardGwei: 5,
-      quietEndingPeriod: 300,
-      thresholdConst: 2000,
-      voteOnBehalf: "0x0000000000000000000000000000000000000000",
-      votersReputationLossRatio: 1,
-      activationTime: 0,
-    },
     ContributionReward: {
       orgNativeTokenFeeGWei: 0,
     },
@@ -100,67 +85,39 @@ export const createDao = async (
   let votingInits: any = {}
   let schemeInits: any[] = []
 
-  await R.map(async ({ scheme, votingMachine }) => {
+  await R.map(async ({ scheme, votingMachineConfig }) => {
     const contract = new web3.eth.Contract(
       require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
       addresses[scheme.typeName],
       opts
     )
-    const votingParams = votingMachine.params
-    const votingMachineType = votingMachine.typeName
-    const votingHash = hash({ votingMachineType, votingParams })
+    const votingMachine = votingMachines[votingMachineConfig.typeName]
+    const callableVotingParams = votingMachine.getCallableParamsArray(
+      votingMachineConfig
+    )
+
+    console.log("About voting - START")
+    console.log(votingMachine)
+    console.log(callableVotingParams)
+    console.log("About voting - END")
+    const votingHash = hash({ callableVotingParams })
+
     if (votingInits[votingHash] == null) {
-      const votingMachine = new web3.eth.Contract(
-        require(`@daostack/arc/build/contracts/${votingMachineType}.json`).abi,
-        addresses[votingMachineType],
+      const votingMachineContract = new web3.eth.Contract(
+        require(`@daostack/arc/build/contracts/${
+          votingMachine.typeName
+        }.json`).abi,
+        addresses[votingMachine.typeName],
         opts
       )
-      let setParams: any
-      if (votingMachineType === "AbsoluteVote") {
-        if (!R.contains("votePerc", R.keys(votingParams))) {
-          throw new Error(
-            `Missing parameter votePerc in AbsoluteVote voting machine`
-          )
-        }
-        if (!R.contains("voteOnBehalf", R.keys(votingParams))) {
-          throw new Error(
-            `Missing parameter voteOnBehalf in AbsoluteVote voting machine`
-          )
-        }
 
-        setParams = votingMachine.methods.setParameters(
-          votingParams.votePerc,
-          votingParams.voteOnBehalf
-        )
-      } else if (votingMachineType === "GenesisProtocol") {
-        setParams = votingMachine.methods.setParameters(
-          [
-            migrationParam.GenesisProtocol.queuedVoteRequiredPercentage,
-            migrationParam.GenesisProtocol.queuedVotePeriodLimit,
-            migrationParam.GenesisProtocol.boostedVotePeriodLimit,
-            migrationParam.GenesisProtocol.preBoostedVotePeriodLimit,
-            migrationParam.GenesisProtocol.thresholdConst,
-            migrationParam.GenesisProtocol.quietEndingPeriod,
-            web3.utils.toWei(
-              migrationParam.GenesisProtocol.proposingRepRewardGwei.toString(),
-              "gwei"
-            ),
-            migrationParam.GenesisProtocol.votersReputationLossRatio,
-            web3.utils.toWei(
-              migrationParam.GenesisProtocol.minimumDaoBountyGWei.toString(),
-              "gwei"
-            ),
-            migrationParam.GenesisProtocol.daoBountyConst,
-            migrationParam.GenesisProtocol.activationTime,
-          ],
-          migrationParam.GenesisProtocol.voteOnBehalf
-        )
-      } else {
-        throw new Error(`Unknown voting machine type: ${votingMachineType}`)
-      }
+      const setParams = votingMachineContract.methods.setParameters.apply(
+        null,
+        callableVotingParams
+      )
       votingInits[votingHash] = await setParams.call()
       const tx = await setParams.send()
-      console.log(`${votingMachineType} parameters set.`)
+      console.log(`${votingMachine.typeName} parameters set.`)
       console.log(tx)
     }
     schemeInits = R.append(
@@ -168,7 +125,7 @@ export const createDao = async (
         scheme,
         contract,
         votingHash,
-        votingMachineType,
+        votingMachineType: votingMachineConfig.typeName,
       },
       schemeInits
     )

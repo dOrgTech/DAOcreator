@@ -27,7 +27,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   founders: Founder[]
-  schemes: { scheme: Scheme; votingMachine: VotingMachineConfiguration }[]
+  schemes: { scheme: Scheme; votingMachineConfig: VotingMachineConfiguration }[]
   stepNumber: number
   stepValid: boolean
 }
@@ -174,15 +174,12 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
 
 const displayScheme = ({
   scheme,
-  votingMachine,
+  votingMachineConfig,
 }: {
   scheme: Scheme
-  votingMachine: VotingMachineConfiguration
+  votingMachineConfig: VotingMachineConfiguration
 }) => {
-  const votingMachineType = R.find(
-    ({ typeName }) => typeName === votingMachine.typeName,
-    votingMachines
-  ) as VotingMachine
+  const votingMachineType = votingMachines[votingMachineConfig.typeName]
   return (
     <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
       <Grid item xs={12}>

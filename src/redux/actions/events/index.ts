@@ -80,7 +80,7 @@ interface DAO_CREATE_ADD_SCHEME
     string,
     {
       scheme: Arc.Scheme
-      votingMachine: Arc.VotingMachineConfiguration
+      votingMachineConfig: Arc.VotingMachineConfiguration
     }
   > {
   type: Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME

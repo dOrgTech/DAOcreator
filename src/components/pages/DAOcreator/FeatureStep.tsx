@@ -46,10 +46,7 @@ const initState: State = {
 }
 
 const getVotingMachineDefaultParams = (typeName: string): any => {
-  const votingMachine = R.find(
-    votingMachine => votingMachine.typeName === typeName,
-    votingMachines
-  ) as VotingMachine
+  const votingMachine = votingMachines[typeName] as VotingMachine
 
   return R.reduce(
     (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
@@ -61,7 +58,7 @@ const getVotingMachineDefaultParams = (typeName: string): any => {
 class FeatureStep extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    const votingMachineType = votingMachines[0].typeName
+    const votingMachineType = R.values(votingMachines)[0].typeName
     console.log(props)
     const scheme = R.find(
       scheme => scheme.typeName === props.schemeTypeName,
@@ -92,10 +89,9 @@ class FeatureStep extends React.Component<Props, State> {
     const { classes, actions } = this.props
     const { votingMachineType, scheme } = this.state
 
-    const currentVotingMachine = R.find(
-      votingMachine => votingMachine.typeName === votingMachineType,
-      votingMachines
-    ) as VotingMachine
+    const currentVotingMachine = votingMachines[
+      votingMachineType
+    ] as VotingMachine
 
     return (
       <Card className={classes.card}>
@@ -154,7 +150,7 @@ class FeatureStep extends React.Component<Props, State> {
                                 {votingMachine.displayName}
                               </MenuItem>
                             )
-                          }, votingMachines)}
+                          }, R.values(votingMachines))}
                         </Select>
                       </FormControl>
                     </FormGroup>
