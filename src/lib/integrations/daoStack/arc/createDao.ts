@@ -5,11 +5,8 @@ import {
   VotingMachine,
   VotingMachineConfiguration,
 } from "./types"
-
 import { votingMachines } from "./votingMachines"
-
 import hash from "object-hash"
-
 import * as R from "ramda"
 
 export const createDao = async (
@@ -24,6 +21,7 @@ export const createDao = async (
 ): Promise<DAO> => {
   const addresses = deployedContractAddresses.base
 
+  // TODO: this is still hardcoded, must fix
   const migrationParam = {
     ContributionReward: {
       orgNativeTokenFeeGWei: 0,
@@ -34,7 +32,7 @@ export const createDao = async (
 
   const opts = {
     from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000,
+    gas: block.gasLimit - 100000, // TODO: fix
     gasPrice: gasPrice
       ? web3.utils.toWei(gasPrice.toString(), "gwei")
       : undefined,
@@ -46,6 +44,7 @@ export const createDao = async (
     opts
   )
 
+  // TODO: clean thus up!
   const [
     orgName,
     tokenName,
@@ -75,13 +74,17 @@ export const createDao = async (
     uController,
     cap
   )
+
   const Avatar = await forgeOrg.call()
   let tx = await forgeOrg.send()
   console.log("Created new organization.")
   console.log(tx)
 
-  // TODO: load schemes -> set parameters for voting machine (if it does not match another schemes voting parameters,
-  // then reuse that (i.e. Absolut voting with 50%)) -> set parameters for scheme (How do we know the number of arguments?)
+  // TODO:
+  // 1. make array of promises out of the votingmachine parameter setting
+  // 2. wait for Promise.all on it
+  // 3. Do not let
+
   let votingInits: any = {}
   let schemeInits: any[] = []
 
@@ -96,10 +99,6 @@ export const createDao = async (
       votingMachineConfig
     )
 
-    console.log("About voting - START")
-    console.log(votingMachine)
-    console.log(callableVotingParams)
-    console.log("About voting - END")
     const votingHash = hash({ callableVotingParams })
 
     if (votingInits[votingHash] == null) {
@@ -131,6 +130,11 @@ export const createDao = async (
     )
   }, schemesIn)
 
+  // TODO:
+  // 0. Make getCallableParamsArray for schemes (like done in voting machines)
+  // 1. make array of promises out of the scheme parameter setting
+  // 2. wait for Promise.all on it
+  // 3. Do not let
   let schemes: any[] = []
   let params: any[] = []
   let permissions: any[] = []
