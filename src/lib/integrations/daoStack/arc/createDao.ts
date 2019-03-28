@@ -85,23 +85,49 @@ export const createDao = async (
   // 2. wait for Promise.all on it
   // 3. Do not let
 
-  let votingInits: any = {}
-  let schemeInits: any[] = []
-
-  await R.map(async ({ scheme, votingMachineConfig }) => {
-    const contract = new web3.eth.Contract(
-      require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
-      addresses[scheme.typeName],
-      opts
-    )
+  //  Array of Promises
+  // Array of promises + votingmachines
+  // Go through all schemes and parameterize the voting machines
+  //
+  const votingMachineConfigToHash = (
+    votingMachineConfig: VotingMachineConfiguration
+  ) => {
     const votingMachine = votingMachines[votingMachineConfig.typeName]
     const callableVotingParams = votingMachine.getCallableParamsArray(
       votingMachineConfig
     )
+    return hash({ callableVotingParams })
+  }
 
-    const votingHash = hash({ callableVotingParams })
+  //
+  // {
+  // scheme,
+  // schemeContract,
+  // VotingMachineHash,
+  // }
+  const initializedSchemes = R.map(({ scheme, votingMachineConfig }) => {
+    return {
+      scheme,
+      schemeContract: new web3.eth.Contract(
+        require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
+        addresses[scheme.typeName],
+        opts
+      ),
+      votingMachineHash: votingMachineConfigToHash(votingMachineConfig),
+    }
+  }, schemesIn)
 
-    if (votingInits[votingHash] == null) {
+  //
+  // {
+  // votingMachineHash: {
+  //   votingMachineContract,
+  //   votingMachineCallableParamsArray,
+  //   votingMachineAddress
+  // }
+  // }
+  const initializedVotingMachines: any = R.reduce(
+    (acc, { votingMachineConfig }) => {
+      const votingMachine = votingMachines[votingMachineConfig.typeName]
       const votingMachineContract = new web3.eth.Contract(
         require(`@daostack/arc/build/contracts/${
           votingMachine.typeName
@@ -109,26 +135,56 @@ export const createDao = async (
         addresses[votingMachine.typeName],
         opts
       )
+      return R.assoc(
+        votingMachineConfigToHash(votingMachineConfig),
+        {
+          votingMachineContract,
+          votingMachineCallableParamsArray: votingMachine.getCallableParamsArray(
+            votingMachineConfig
+          ),
+          votingMachineAddress: addresses[votingMachine.typeName],
+        },
+        acc
+      )
+    },
+    {},
+    schemesIn
+  )
 
+  // Promise
+  // [{
+  // votingMachineHash,
+  // votingMachineParameters (already set)
+  // }]
+  const parameterizedVotingMachines = await Promise.all(
+    R.map(async votingMachineHash => {
+      const {
+        votingMachineContract,
+        votingMachineCallableParamsArray,
+      }: any = initializedVotingMachines[votingMachineHash]
       const setParams = votingMachineContract.methods.setParameters.apply(
         null,
-        callableVotingParams
+        votingMachineCallableParamsArray
       )
-      votingInits[votingHash] = await setParams.call()
+
+      const votingMachineParameters = await setParams.call()
+
       const tx = await setParams.send()
-      console.log(`${votingMachine.typeName} parameters set.`)
+      console.log(`${votingMachineHash.toString()} parameters set.`)
       console.log(tx)
-    }
-    schemeInits = R.append(
-      {
-        scheme,
-        contract,
-        votingHash,
-        votingMachineType: votingMachineConfig.typeName,
-      },
-      schemeInits
-    )
-  }, schemesIn)
+
+      return {
+        votingMachineHash,
+        votingMachineParameters,
+      }
+    }, R.keys(initializedVotingMachines))
+  )
+
+  // Promise
+  //{
+  //
+  // }
+  const parameterizedSchemes = {}
 
   // TODO:
   // 0. Make getCallableParamsArray for schemes (like done in voting machines)
@@ -139,29 +195,35 @@ export const createDao = async (
   let params: any[] = []
   let permissions: any[] = []
   // Setup schemes
-  await R.map(async ({ scheme, votingMachineType, contract, votingHash }) => {
-    const votingParams = votingInits[votingHash]
-    const votingMachineAddress = addresses[votingMachineType]
+  await R.map(async ({ scheme, schemeContract, votingMachineHash }) => {
+    const { votingMachineParameters } = R.find(
+      parameterizedVotingMachine =>
+        parameterizedVotingMachine.votingMachineHash === votingMachineHash,
+      parameterizedVotingMachines
+    ) as any
+    const { votingMachineAddress } = initializedVotingMachines[
+      votingMachineHash
+    ]
     let setParams: any
 
-    if (scheme.typeName === "SchemeRegistar") {
-      setParams = contract.methods.setParameters(
-        votingParams,
-        votingParams,
+    if (scheme.typeName === "SchemeRegistrar") {
+      setParams = schemeContract.methods.setParameters(
+        votingMachineParameters,
+        votingMachineParameters,
         votingMachineAddress
       )
     } else if (scheme.typeName === "ContributionReward") {
-      setParams = contract.methods.setParameters(
+      setParams = schemeContract.methods.setParameters(
         web3.utils.toWei(
           migrationParam.ContributionReward.orgNativeTokenFeeGWei.toString(),
           "gwei"
         ),
-        votingParams,
+        votingMachineParameters,
         votingMachineAddress
       )
     } else {
-      setParams = contract.methods.setParameters(
-        votingParams,
+      setParams = schemeContract.methods.setParameters(
+        votingMachineParameters,
         votingMachineAddress
       )
     }
@@ -171,7 +233,7 @@ export const createDao = async (
     const tx = await setParams.send()
     console.log(`${scheme.typeName} parameters set.`)
     console.log(tx)
-  }, schemeInits)
+  }, initializedSchemes)
 
   console.log("Setting DAO schemes...")
   tx = await daoCreator.methods
