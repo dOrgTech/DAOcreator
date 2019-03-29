@@ -1,4 +1,5 @@
 import { Scheme } from "./types"
+import Web3 from "web3"
 
 export const schemes: Scheme[] = [
   {
@@ -9,6 +10,25 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
     // TODO: add parameters (orgNativeTokenFeeGWei)
+    params: [
+      {
+        typeName: "orgNativeTokenFeeGWei",
+        valueType: "number",
+        displayName: "Org Native Token Fee GWei",
+        description: "??",
+        defaultValue: 0,
+      },
+    ],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [
+        Web3.utils.toWei(this.params[0].defaultValue.toString(), "gwei"), //TODO: let the user spesify this
+        votingMachineParametersKey,
+        votingMachineAddress,
+      ]
+    },
   },
   {
     typeName: "VoteInOrganizationScheme",
@@ -17,6 +37,13 @@ export const schemes: Scheme[] = [
       "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
+    },
   },
   {
     typeName: "DAOCreator",
@@ -24,6 +51,13 @@ export const schemes: Scheme[] = [
     description: "Makes it possible for the DAO to create new DAOs.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return []
+    },
   },
   // Currently not available on mainnet
   // {
@@ -39,6 +73,13 @@ export const schemes: Scheme[] = [
     description: "Add the possibility of creating a token vesting agreement.",
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
+    },
   },
   {
     typeName: "OrganizationRegister",
@@ -47,6 +88,13 @@ export const schemes: Scheme[] = [
       "Makes it possible for the DAO to open a registry. Other DAOs can then add and promote themselves on this registry.",
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return []
+    },
   },
   {
     typeName: "UpgradeScheme",
@@ -54,6 +102,13 @@ export const schemes: Scheme[] = [
     description: "Enables the DAO to upgrade itself.",
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
+    },
   },
   {
     typeName: "SchemeRegistrar",
@@ -62,6 +117,17 @@ export const schemes: Scheme[] = [
       "Manages post-creation adding/modifying and removing of features. Features add functionality to the DAO.",
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [
+        votingMachineParametersKey,
+        votingMachineParametersKey,
+        votingMachineAddress,
+      ]
+    },
   },
   {
     typeName: "GlobalConstraintRegistrar",
@@ -70,5 +136,12 @@ export const schemes: Scheme[] = [
       'Makes it possible to add/modify and remove constraints for the DAO. A constraint defines what "cannot be done" in the DAO. For instance, limit the number of tokens that a DAO can create.',
     toggleDefault: true,
     permissions: "0x00000004" /* manage global constraints */,
+    params: [],
+    getCallableParamsArray: function(
+      votingMachineParametersKey,
+      votingMachineAddress
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
+    },
   },
 ]

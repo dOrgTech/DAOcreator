@@ -1,8 +1,4 @@
-import {
-  VotingMachine,
-  VotingMachineParam,
-  VotingMachineConfiguration,
-} from "./types"
+import { VotingMachine, Param, VotingMachineConfiguration } from "./types"
 import Web3 from "web3"
 import * as R from "ramda"
 
