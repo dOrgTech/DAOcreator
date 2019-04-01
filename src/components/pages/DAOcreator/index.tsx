@@ -15,6 +15,7 @@ import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/da
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
 import FeatureStep from "./FeatureStep"
+import SchemeStep from "./SchemeStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
 import { RootState } from "../../../state"
@@ -43,28 +44,12 @@ class DAOcreator extends React.Component<Props> {
         component: <FoundersStep />,
       },
       {
-        title: "ContributionReward",
+        title: "Features (schemes)",
         component: (
           <div>
-            <FeatureStep schemeTypeName="ContributionReward" />
+            <SchemeStep />
           </div>
         ),
-      },
-      {
-        title: "SchemeRegistrar",
-        component: <FeatureStep schemeTypeName="SchemeRegistrar" />,
-      },
-      {
-        title: "UpgradeScheme",
-        component: (
-          <div>
-            <FeatureStep schemeTypeName="UpgradeScheme" />
-          </div>
-        ),
-      },
-      {
-        title: "GlobalConstraintRegistrar",
-        component: <FeatureStep schemeTypeName="GlobalConstraintRegistrar" />,
       },
       //      {
       //        title: "Voting",
