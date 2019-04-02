@@ -13,7 +13,7 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         typeName: "voteOnBehalf",
         valueType: "string",
         displayName: "Vote on behalf",
-        description: "??",
+        description: "The address of the inital votee",
         defaultValue: "0x0000000000000000000000000000000000000000",
       },
       {
