@@ -7,7 +7,6 @@ const SchemeStep = () => {
       <FeatureStep schemeTypeName="SchemeRegistrar" />
       <FeatureStep schemeTypeName="UpgradeScheme" />
       <FeatureStep schemeTypeName="GlobalConstraintRegistrar" />
-      <FeatureStep schemeTypeName="GenericScheme" />
     </div>
   )
 }
