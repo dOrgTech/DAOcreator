@@ -1,4 +1,5 @@
-# dOrg: The DAO Toolkit
+# DAOcreator
+Wizard for setting up your own DAOstack DAO.
 
 ## Interested?
 
