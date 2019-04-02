@@ -14,9 +14,10 @@ import {
 
 interface Props extends WithStyles<typeof styles> {
   createDao: () => void
+  gotoOverview: () => void
 }
 
-const Home: React.SFC<Props> = ({ classes, createDao }) => (
+const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
   <div className={classes.root}>
     <div className={classes.topPadding} />
     <div className={classes.cardWrapper}>
@@ -28,7 +29,12 @@ const Home: React.SFC<Props> = ({ classes, createDao }) => (
           <Typography variant="subheading" className={classes.header}>
             Empowering Decentralized Organization
           </Typography>
-          <Button variant="contained" size="small" className={classes.button}>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.button}
+            onClick={gotoOverview}
+          >
             What's a DAO?
           </Button>
           <Button
@@ -108,6 +114,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     createDao: () => {
       dispatch(push("/dao-creator"))
+    },
+    gotoOverview: () => {
+      dispatch(push("/overview"))
     },
   }
 }
