@@ -211,7 +211,9 @@ class FeatureStep extends React.Component<Props, State> {
 // STYLE
 const styles = ({  }: Theme) =>
   createStyles({
-    card: {},
+    card: {
+      marginBottom: 50,
+    },
     headline: {},
     daoName: {},
     tokenName: {},
