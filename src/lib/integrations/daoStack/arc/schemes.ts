@@ -15,7 +15,7 @@ export const schemes: Scheme[] = [
         typeName: "orgNativeTokenFeeGWei",
         valueType: "number",
         displayName: "Org Native Token Fee GWei",
-        description: "??",
+        description: "Fee in GWei:",
         defaultValue: 0,
       },
     ],

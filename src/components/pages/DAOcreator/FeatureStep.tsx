@@ -100,6 +100,13 @@ class FeatureStep extends React.Component<Props, State> {
             <Typography variant="h4" className={classes.headline} gutterBottom>
               Configure Voting for {scheme.displayName}
             </Typography>
+            <Typography
+              variant="subheading"
+              className={classes.headline}
+              gutterBottom
+            >
+              {scheme.description}
+            </Typography>
             <Grid container spacing={16}>
               <Grid item xs={12} md={5}>
                 <Typography className={classes.guideText} variant="body2">

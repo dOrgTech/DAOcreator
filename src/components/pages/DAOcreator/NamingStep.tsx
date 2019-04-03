@@ -57,8 +57,32 @@ class NamingStep extends React.Component<Props, State> {
 
   handleChange = async (event: any) => {
     const { name, value } = event.target
-    const errorMessage = FormValidation.isRequired(value)
+    let errorMessage = FormValidation.isRequired(value)
 
+    await this.setState({
+      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
+      [name]: value,
+    } as any)
+
+    const limitTokenSymbols = (tknSym: string) => tknSym.length > 4
+
+    switch (name) {
+      case "tokenSymbol": {
+        errorMessage = FormValidation.checkIfHasError(
+          limitTokenSymbols,
+          "Error: Symbol should be max 4 characters for displays on exchanges"
+        )(value)
+        break
+      }
+      case "tokenName": {
+        errorMessage = FormValidation.isValidName(value)
+        break
+      }
+      case "daoName": {
+        errorMessage = FormValidation.isValidName(value)
+        break
+      }
+    }
     await this.setState({
       formErrors: R.assoc(name, errorMessage, this.state.formErrors),
       [name]: value,

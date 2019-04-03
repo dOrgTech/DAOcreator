@@ -4,15 +4,10 @@ import { Route, Switch } from "react-router"
 
 import Background from "./shell/Background"
 import Home from "./pages/Home"
+import Overview from "./pages/Overview"
 import DAOcreator from "./pages/DAOcreator"
 import Notifications from "./common/Notifications"
 import WaitingAnimation from "./common/WaitingAnimation"
-
-// TODO: have these within the DAOCreator
-import NamingStep from "./pages/DAOcreator/NamingStep"
-import FoundersStep from "./pages/DAOcreator/FoundersStep"
-import FeatureStep from "./pages/DAOcreator/FeatureStep"
-import ReviewStep from "./pages/DAOcreator/ReviewStep"
 
 const App: SFC = () => (
   <>
@@ -20,10 +15,7 @@ const App: SFC = () => (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/dao-creator" component={DAOcreator} />
-      <Route exact path="/dao-creator/naming" component={NamingStep} />
-      <Route exact path="/dao-creator/founders" component={FoundersStep} />
-      <Route exact path="/dao-creator/features" component={FeatureStep} />
-      <Route exact path="/dao-creator/review" component={ReviewStep} />
+      <Route exact path="/overview" component={Overview} />
     </Switch>
     <WaitingAnimation />
     <Notifications />
