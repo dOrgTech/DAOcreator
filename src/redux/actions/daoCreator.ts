@@ -128,10 +128,16 @@ export function createDao(): (
       })
     )
     const { naming, founders, schemes } = getState().daoCreator
+    const waitingDetailsUpdater = (newStatus: string) =>
+      dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus))
 
     try {
       const web3 = await Web3.getWeb3()
-      const dao = await Arc.createDao(web3)(naming, founders, schemes)
+      const dao = await Arc.createDao(web3, waitingDetailsUpdater)(
+        naming,
+        founders,
+        schemes
+      )
       dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao))
       dispatch(Events.DAO_CREATE_NEXT_STEP())
       dispatch(Events.WAITING_ANIMATION_CLOSE())

@@ -1,4 +1,5 @@
 import deployedContractAddresses from "./contractAddresses.json"
+import { Dispatch } from "redux"
 
 export * from "./types"
 export * from "./typeConversions"
@@ -25,7 +26,10 @@ export const init = async (web3: any) => {
   }
 }
 
-export const createDao = (web3: any) => async (
+export const createDao = (
+  web3: any,
+  waitingDetailsUpdater: (message: string) => void
+) => async (
   naming: any,
   founders: Founder[],
   schemes: {
@@ -37,6 +41,7 @@ export const createDao = (web3: any) => async (
     const network: string = await web3.eth.net.getNetworkType()
     const newDao = await createTheDao(
       web3,
+      waitingDetailsUpdater,
       (deployedContractAddresses as any)[network],
       naming,
       founders,

@@ -34,6 +34,7 @@ export interface NotificationState {
 
 export interface WaitingAnimationState {
   message: string
+  details?: string
   type?: "transaction"
   open: boolean
 }
