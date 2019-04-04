@@ -29,8 +29,8 @@ const WaitingAnmination: React.SFC<Props> = ({
 }) => (
   <Dialog aria-labelledby="simple-dialog-title" open={open}>
     <DialogTitle id="simple-dialog-title">{message}</DialogTitle>
-    <DialogContentText>{details}</DialogContentText>
     <DialogContent className={classes.dialogContent}>
+      <DialogContentText>{details}</DialogContentText>
       <CircularProgress size={200} />
     </DialogContent>
   </Dialog>
@@ -44,9 +44,10 @@ const componentWithStyles = withStyles(styles)(WaitingAnmination)
 
 // STATE
 const mapStateToProps = (state: RootState, { match }: any) => {
+  const details = state.waitingAnimation.details
   return {
     message: state.waitingAnimation.message,
-    details: state.waitingAnimation.details,
+    details: details ? details : "",
     type: state.waitingAnimation.type,
     open: state.waitingAnimation.open,
   }

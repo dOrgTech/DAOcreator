@@ -5,6 +5,7 @@ import * as R from "ramda"
 
 export const createDao = async (
   web3: any,
+  updateStatus: (message: string) => void,
   deployedContractAddresses: any,
   naming: any,
   founders: Founder[],
@@ -13,6 +14,9 @@ export const createDao = async (
     votingMachineConfig: VotingMachineConfiguration
   }[]
 ): Promise<DAO> => {
+  updateStatus(
+    "Creating new organization. This requires 1 transaction. \n Step 1 of 4."
+  )
   const addresses = deployedContractAddresses.base
 
   const gasPrice = web3.utils.fromWei(await web3.eth.getGasPrice(), "gwei")
@@ -118,6 +122,17 @@ export const createDao = async (
   console.log(
     "[Waiting for transactions] Setting parameters for voting machines"
   )
+
+  const numberOfVotingMachines = R.keys(initializedVotingMachines).length
+
+  updateStatus(
+    "Initiating voting machine" +
+      (numberOfVotingMachines > 1 ? "s." : ".") +
+      ` This requires ${numberOfVotingMachines} transaction` +
+      (numberOfVotingMachines > 1 ? "s." : ".") +
+      "\n Step 2 of 4"
+  )
+
   const parameterizedVotingMachines = await Promise.all(
     R.map(async votingMachineHash => {
       const {
@@ -152,6 +167,17 @@ export const createDao = async (
   )
 
   console.log("[Waiting for transactions] Setting parameters for schemes")
+
+  const numberOfSchemes = R.keys(initializedSchemes).length
+
+  updateStatus(
+    "Initiating scheme" +
+      (numberOfSchemes > 1 ? "s." : ".") +
+      ` This requires ${numberOfSchemes} transaction` +
+      (numberOfSchemes > 1 ? "s." : ".") +
+      "\n Step 3 of 4"
+  )
+
   const schemeParams = await Promise.all(
     R.map(async ({ scheme, schemeContract, votingMachineHash }) => {
       const { votingMachineParametersKey } = R.find(
@@ -181,6 +207,14 @@ export const createDao = async (
   )
 
   console.log("Setting DAO schemes...")
+
+  updateStatus(
+    "Finalizing the organization by adding scheme" +
+      (numberOfSchemes > 1 ? "s" : "") +
+      " to the organization. This requires 1 transaction." +
+      "\n Step 4 of 4"
+  )
+
   tx = await daoCreator.methods
     .setSchemes(
       Avatar,
