@@ -14,10 +14,11 @@ export type VotingMachine = {
   typeName: string
   displayName: string
   description: string
-  params: VotingMachineParam[]
+  params: Param[]
+  getCallableParamsArray: (config: VotingMachineConfiguration) => any[]
 }
 
-export type VotingMachineParam = {
+export type Param = {
   typeName: string
   valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
   displayName: string
@@ -38,12 +39,19 @@ export type Scheme = {
   displayName: string
   description: string
   toggleDefault: boolean
+  permissions: string
+  getCallableParamsArray: (
+    votingMachineParametersKey: string,
+    votingMachineAddress: string
+  ) => any[]
+  params: Param[]
 }
 
 export type DAO = {
-  avatarAddress: string
-  controllerAddress: string
+  avatar: string
   tokenName: string
   tokenSymbol: string
   name: string
+  daoToken: string
+  reputation: string
 }

@@ -11,7 +11,7 @@ import {
   createStyles,
 } from "@material-ui/core"
 import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
-import { AppState } from "../../AppState"
+import { RootState } from "../../state"
 
 interface Props extends WithStyles<typeof styles> {
   message: string
@@ -60,7 +60,7 @@ const styles = ({ palette }: Theme) =>
 const componentWithStyles = withStyles(styles)(Notifications)
 
 // STATE
-const mapStateToProps = (state: AppState, { match }: any) => {
+const mapStateToProps = (state: RootState, { match }: any) => {
   return {
     message: state.notification.message,
     type: state.notification.type,

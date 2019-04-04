@@ -8,11 +8,19 @@ export function checkIfHasError<ValueType>(
   return (value: ValueType) => (predicate(value) ? errorMessage : "")
 }
 
+const nameHasError = (name: string) =>
+  R.isEmpty(name) || name.length > 70 || /[_\W\d]/.test(name)
+
 const addressHasError = (addr: string) =>
   R.isEmpty(addr) || !TypeValidation.isAddress(addr)
 
 const numberHasError = (number: string) =>
   R.isEmpty(number) || !TypeValidation.isBigNumber(number)
+
+export const isValidName = checkIfHasError(
+  nameHasError,
+  "Error: Name must be less than 70 characters with no numbers or special characters"
+)
 
 export const isRequired = checkIfHasError(R.isEmpty, "This field is required")
 export const isValidAddress = checkIfHasError(

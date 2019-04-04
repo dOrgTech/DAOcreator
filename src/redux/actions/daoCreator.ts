@@ -1,10 +1,10 @@
 import { Dispatch } from "redux"
 import * as Events from "./events"
-import { AppState } from "../../AppState"
+import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
 import * as Web3 from "../../lib/integrations/web3"
 
-export default interface DaoCreatorActions {
+export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
@@ -12,15 +12,18 @@ export default interface DaoCreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
-  addScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
-  remScheme(scheme: Arc.Scheme): (dispatch: Dispatch) => Promise<void>
-  setVotingMachine(
-    votingMachine: Arc.VotingMachineConfiguration
+  addOrUpdateScheme(
+    scheme: Arc.Scheme,
+    votingMachineConfig: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
-  createDao(): (dispatch: Dispatch, getState: () => AppState) => Promise<string>
+  remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
+  createDao(): (
+    dispatch: Dispatch,
+    getState: () => RootState
+  ) => Promise<string>
   setStepIsValid(
     isValid: boolean
-  ): (dispatch: Dispatch, getState: () => AppState) => Promise<void>
+  ): (dispatch: Dispatch, getState: () => RootState) => Promise<void>
 }
 
 export function init(): (dispatch: Dispatch) => Promise<void> {
@@ -35,9 +38,7 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
         .then(resolve)
         .catch(reject)
     })
-      .then((web3: any) => {
-        return Arc.init(web3)
-      })
+      .then((web3: any) => Arc.init(web3))
       .catch(e => {
         dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e))
         return Promise.resolve()
@@ -96,57 +97,46 @@ export function addFounder(
   }
 }
 
-export function addScheme(
-  scheme: Arc.Scheme
+export function addOrUpdateScheme(
+  scheme: Arc.Scheme,
+  votingMachineConfig: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME(scheme))
+    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachineConfig }))
     return Promise.resolve()
   }
 }
 
 export function remScheme(
-  scheme: Arc.Scheme
+  schemeTypeName: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_SCHEME(scheme))
-    return Promise.resolve()
-  }
-}
-
-export function setVotingMachine(
-  votingMachineConfiguration: Arc.VotingMachineConfiguration
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_VOTE_MACHINE(votingMachineConfiguration))
+    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeTypeName))
     return Promise.resolve()
   }
 }
 
 export function createDao(): (
   dispatch: Dispatch,
-  getState: () => AppState
+  getState: () => RootState
 ) => Promise<string> {
-  return async (dispatch: Dispatch, getState: () => AppState) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(
       Events.WAITING_ANIMATION_OPEN({
         type: "transaction",
         message: "To create the DAO, please sign the upcoming transaction",
       })
     )
-    const {
-      naming,
-      founders,
-      schemes,
-      votingMachineConfiguration,
-    } = getState().daoCreator
+    const { naming, founders, schemes } = getState().daoCreator
+    const waitingDetailsUpdater = (newStatus: string) =>
+      dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus))
 
     try {
-      const dao = await Arc.createDao(
+      const web3 = await Web3.getWeb3()
+      const dao = await Arc.createDao(web3, waitingDetailsUpdater)(
         naming,
         founders,
-        schemes,
-        votingMachineConfiguration
+        schemes
       )
       dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao))
       dispatch(Events.DAO_CREATE_NEXT_STEP())
@@ -164,8 +154,8 @@ export function createDao(): (
 
 export function setStepIsValid(
   isValid: boolean
-): (dispatch: Dispatch, getState: () => AppState) => Promise<void> {
-  return (dispatch: Dispatch, getState: () => AppState) => {
+): (dispatch: Dispatch, getState: () => RootState) => Promise<void> {
+  return (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(
       Events.DAO_CREATE_SET_STEP_VALIDATION({
         step: getState().daoCreator.step,

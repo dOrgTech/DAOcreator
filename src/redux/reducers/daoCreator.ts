@@ -1,9 +1,8 @@
 import * as R from "ramda"
 import { Events, AnyEvent } from "../../redux/actions"
-import { DaoCreatorState } from "../../AppState"
-import { votingMachines, schemes } from "../../lib/integrations/daoStack/arc"
+import { DAOcreatorState } from "../../state"
 
-const initialState: DaoCreatorState = {
+const initialState: DAOcreatorState = {
   step: 0,
   stepValidation: [true],
   naming: {
@@ -12,18 +11,14 @@ const initialState: DaoCreatorState = {
     tokenSymbol: "",
   },
   founders: [],
-  schemes: R.filter(scheme => scheme.toggleDefault, schemes),
-  votingMachineConfiguration: {
-    typeName: votingMachines[0].typeName,
-    params: {},
-  },
+  schemes: [],
   deployedDao: undefined,
 }
 
 export const reducer = (
-  state: DaoCreatorState = initialState,
+  state: DAOcreatorState = initialState,
   event: AnyEvent
-): DaoCreatorState => {
+): DAOcreatorState => {
   switch (event.type) {
     case Events.DAO_CREATE_NEXT_STEP: {
       const newStep = state.step + 1
@@ -53,16 +48,24 @@ export const reducer = (
       return R.merge(state, {
         founders: R.append(event.payload, state.founders),
       })
-    case Events.DAO_CREATE_ADD_SCHEME:
+    case Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME:
       return R.merge(state, {
-        schemes: R.append(event.payload, state.schemes),
+        schemes: R.append(
+          event.payload,
+          R.filter(
+            ({ scheme }) => scheme.typeName !== event.payload.scheme.typeName,
+            state.schemes
+          )
+        ),
       })
+
     case Events.DAO_CREATE_REM_SCHEME:
       return R.merge(state, {
-        schemes: R.without([event.payload], state.schemes),
+        schemes: R.filter(
+          ({ scheme }) => scheme.typeName !== event.payload,
+          state.schemes
+        ),
       })
-    case Events.DAO_CREATE_ADD_VOTE_MACHINE:
-      return R.merge(state, { votingMachineConfiguration: event.payload })
     case Events.DAO_CREATE_SET_DEPLOYED_DAO:
       return R.merge(state, { deployedDao: event.payload })
     case Events.DAO_CREATE_SET_STEP_VALIDATION:

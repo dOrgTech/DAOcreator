@@ -13,16 +13,16 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { AppState } from "../../AppState"
-import * as FormValidation from "../../lib/formValidation"
-import DaoCreatorActions, * as daoCreatorActions from "../../redux/actions/daoCreator"
+import { RootState } from "../../../state"
+import * as FormValidation from "../../../lib/formValidation"
+import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
   stepValid: boolean
-  actions: DaoCreatorActions
+  actions: DAOcreatorActions
 }
 
 type State = {
@@ -57,8 +57,32 @@ class NamingStep extends React.Component<Props, State> {
 
   handleChange = async (event: any) => {
     const { name, value } = event.target
-    const errorMessage = FormValidation.isRequired(value)
+    let errorMessage = FormValidation.isRequired(value)
 
+    await this.setState({
+      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
+      [name]: value,
+    } as any)
+
+    const limitTokenSymbols = (tknSym: string) => tknSym.length > 4
+
+    switch (name) {
+      case "tokenSymbol": {
+        errorMessage = FormValidation.checkIfHasError(
+          limitTokenSymbols,
+          "Error: Symbol should be max 4 characters for displays on exchanges"
+        )(value)
+        break
+      }
+      case "tokenName": {
+        errorMessage = FormValidation.isValidName(value)
+        break
+      }
+      case "daoName": {
+        errorMessage = FormValidation.isValidName(value)
+        break
+      }
+    }
     await this.setState({
       formErrors: R.assoc(name, errorMessage, this.state.formErrors),
       [name]: value,
@@ -184,7 +208,7 @@ const styles = ({  }: Theme) =>
 const componentWithStyles = withStyles(styles)(NamingStep)
 
 // STATE
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     daoName: state.daoCreator.naming.daoName,
     tokenName: state.daoCreator.naming.tokenName,

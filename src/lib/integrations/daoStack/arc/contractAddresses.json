@@ -1,0 +1,77 @@
+{
+  "kovan": {
+    "base": {
+      "GEN": "0x543Ff227F64Aa17eA132Bf9886cAb5DB55DCAddf",
+      "ControllerCreator": "0x4e605238e6eaE63c0Edd18C50F0C26606AaBf13F",
+      "DaoCreator": "0x3Fa36CB4cf051cF8B3Ce41427b5d4A8C5C3C5121",
+      "UController": "0x1AF90cCBd3f58C1eB657fD4c12bbF94507996EA1",
+      "GenesisProtocol": "0x3d9F3AFB3729118A239C6992433D3741cBf4fb9A",
+      "SchemeRegistrar": "0xb2097b5Df0b3dF09977623a62e1a308b0c37DF0A",
+      "UpgradeScheme": "0x632EabC30c6465E645Eb16CB14A359428d417Af3",
+      "GlobalConstraintRegistrar": "0x483b3eAf12Ea5C8806E5c8bBB6B898bcD1C13E50",
+      "ContributionReward": "0x5389d899050A221311F0253c68E9D36D26dF1342",
+      "AbsoluteVote": "0x1f342702831891f35671255b28350cc3f4f6d81a",
+      "QuorumVote": "0x5db1FdF3a2212BCa512D4Ee0CbC455738474b44d",
+      "TokenCapGC": "0x55D6166DAcD03f321FC3F3a143959249Ed72Df55",
+      "VestingScheme": "0x786C54F0c31a6af156D1dCC894f3DBD509413917",
+      "VoteInOrganizationScheme": "0xF0760cB988DDea042368029eBeD24A4d02863673",
+      "OrganizationRegister": "0xDf6030B140Ba67b1703C1365C18a4EAc860db825",
+      "Redeemer": "0x2Ece87781b4D20491B92e135bb602a2445323d24",
+      "GenericScheme": "0x131Ed4263bc88Be39dCa50D5F7Ea25cEF9342b92"
+    },
+    "dao": {
+      "name": "Propitious Plumber",
+      "Avatar": "0xa9d36F61Cfba2Ee5A42a5C921AfAA5CE87fFfa14",
+      "DAOToken": "0xEF98e86798AffeeE6a484139568d696EB36a3355",
+      "Reputation": "0x9eE705D1852B4Dd02BC166Fc9ff43c15d2F9bBA2"
+    }
+  },
+  "rinkeby": {
+    "base": {
+      "GEN": "0x543Ff227F64Aa17eA132Bf9886cAb5DB55DCAddf",
+      "ControllerCreator": "0xf050F3C6772Ff35eB174A6900833243fcCD0261F",
+      "DaoCreator": "0xe2Ce9C5E4C875347419525ae1f15813e85a3581A",
+      "UController": "0xeFEa5034FDA5EcD58cDb982A33dC40b57Ccd6C27",
+      "GenesisProtocol": "0x08cC7BBa91b849156e9c44DEd51896B38400f55B",
+      "SchemeRegistrar": "0x5df5D7Bc7dBe5C9aC34201Ea8647d9C229ce0635",
+      "UpgradeScheme": "0x25592ef8f652cfFaDd3D569AEFcE7Df1a88E9f74",
+      "GlobalConstraintRegistrar": "0x2C27710BbBad69793Ce5EAe77093acb28fbe63c8",
+      "ContributionReward": "0x7F24E3bdc640DD1Db413b9e1d68977653AeeDa7e",
+      "AbsoluteVote": "0x59860b8A0A6ee9783Aa95798609069E3A97dFf28",
+      "QuorumVote": "0x6E347cB7A913C5B6B55577eD945255aAdD4E7E93",
+      "TokenCapGC": "0xf00b0573cC25E1a455092c1Cd89a2D2B1Dff5Ada",
+      "VestingScheme": "0x199719EE4d5DCF174B80b80afa1FE4a8e5b0E3A0",
+      "VoteInOrganizationScheme": "0xA69056D140432f335D04FD6bBb6D8C8004bB6B47",
+      "OrganizationRegister": "0x58f6d32FCeeC19866464288FCeA7a0C9CE31f69B",
+      "Redeemer": "0x1331082205301C8188D530E11c2100038448fa2f",
+      "GenericScheme": "0x9777130bAc261B3882444622841AEBCDA93834bA"
+    },
+    "dao": {
+      "name": "Sclerotic Unicorn",
+      "Avatar": "0x4540C0fCFaa97a04080B673C725b95a741d8c594",
+      "DAOToken": "0xBeA662a627237A18077f97FF7109E127bcbA74b0",
+      "Reputation": "0x69CBCCEe820336162B92fCE8365b614c1311Dc4B"
+    }
+  },
+  "main": {
+    "base": {
+      "GEN": "0x543Ff227F64Aa17eA132Bf9886cAb5DB55DCAddf",
+      "ControllerCreator": "0x14801ab171e6D2Cbf49c9Aa9A585ECB7922fDB03",
+      "DaoCreator": "0x7263C2717A4fF3778195106Dda7D5120252D0EE0",
+      "UController": "0x5786A6926328fc54D923F71d702944BcA7E0f2F8",
+      "GenesisProtocol": "0x59d767e793be9fc96b8b2e7039adde96e3d2a09d",
+      "SchemeRegistrar": "0xc440d501b17347ccbc1a671c6164471898af38e7",
+      "UpgradeScheme": "0xb8330A8C732e787f1Eb9c93700cD2Ed70379715f",
+      "GlobalConstraintRegistrar": "0xC277B51e18436cAa6cD69143F4d0D669CfeeEdf8",
+      "ContributionReward": "0x70b5E65102654dEc5efC40d02bb33A4495Ad8a2f",
+      "AbsoluteVote": "0x8535dAcd61DBF539e108978B6759f7FD303d8BE7",
+      "QuorumVote": "0xf98653f28EbaddaF12B2F95Dbc10a243561a6D7b",
+      "TokenCapGC": "0x5E3f80Ed01DA33F63A99C5EA8FC2aBA9C0762cd4",
+      "VestingScheme": "0xf02F5f7C40b530c6e16f43f71239960113a1DAb5",
+      "VoteInOrganizationScheme": "0x9Da8d931291f459356a84680fE5F868188E712FF",
+      "OrganizationRegister": "0x31E9c07c3bE915943eF1dBE92bDc21f73E85b4d9",
+      "Redeemer": "0xEfD4FE0EE9A0838A40CB8f83d9F2f1CF11b8114d",
+      "GenericScheme": "0x325c90dAfe7636b3D465CaAE5Ff9ab1a8F841BEE"
+    }
+  }
+}
