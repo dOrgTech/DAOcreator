@@ -31,7 +31,7 @@ export const reducer = (
 export interface Notification {
   id?: string
   message: string
-  type: "error" | "info"
+  type: "default" | "error" | "success" | "warning" | "info"
   duration?: number // ms it will display. Persist overrides this
   persist?: boolean // displaying until its explicitly closed
 }

@@ -1,6 +1,7 @@
 import * as React from "react"
 import { SFC } from "react"
 import { Route, Switch } from "react-router"
+import { SnackbarProvider } from "notistack"
 
 import Background from "./shell/Background"
 import Home from "./pages/Home"
@@ -10,7 +11,7 @@ import Notifications from "./common/Notifications"
 import WaitingAnimation from "./common/WaitingAnimation"
 
 const App: SFC = () => (
-  <>
+  <SnackbarProvider maxSnack={3}>
     <Background />
     <Switch>
       <Route exact path="/" component={Home} />
@@ -19,7 +20,7 @@ const App: SFC = () => (
     </Switch>
     <WaitingAnimation />
     <Notifications />
-  </>
+  </SnackbarProvider>
 )
 
 export default App

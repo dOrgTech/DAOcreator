@@ -47,13 +47,6 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
             type: "error",
             persist: true,
           })(dispatch)
-          .then(_ =>
-            notificationActions.addNotification({
-              message: "lol",
-              type: "error",
-              persist: true,
-            })(dispatch)
-          )
           .then(_ => Promise.resolve())
       })
       .finally(() => {

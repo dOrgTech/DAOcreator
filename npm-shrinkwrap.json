@@ -11545,6 +11545,15 @@
       "integrity": "sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==",
       "dev": true
     },
+    "notistack": {
+      "version": "0.6.1",
+      "resolved": "https://registry.npmjs.org/notistack/-/notistack-0.6.1.tgz",
+      "integrity": "sha512-tuXmw/0TBmdeHqRjWQwf9Jh298OMEwi18mrnTwxV4IfkxO0n2AplTj/WM9D9kV7aEmMjHTcHixRzllZUou1mAw==",
+      "requires": {
+        "classnames": "^2.2.6",
+        "prop-types": "^15.6.2"
+      }
+    },
     "npm-run-path": {
       "version": "2.0.2",
       "resolved": "https://registry.npmjs.org/npm-run-path/-/npm-run-path-2.0.2.tgz",

@@ -1,71 +1,115 @@
-import * as React from "react"
+import { withSnackbar } from "notistack"
 import * as R from "ramda"
-import { Dispatch } from "redux"
+import * as React from "react"
 import { connect } from "react-redux"
-import { bindActionCreators } from "redux"
-import {
-  withStyles,
-  Snackbar,
-  SnackbarContent,
-  Theme,
-  WithStyles,
-  createStyles,
-} from "@material-ui/core"
-import { RootState } from "../../state"
+import { bindActionCreators, Dispatch } from "redux"
 import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
 import { Notification as NotificationType } from "../../redux/reducers/notifications"
+import { RootState } from "../../state"
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   notifications: NotificationType[]
+  enqueueSnackbar: any
+  closeSnackbar: (key: string) => void
   actions: NotificationActions
 }
 
-const Notifications: React.SFC<Props> = ({
-  notifications,
-  actions,
-  classes,
-}) => {
-  return (
-    <>
-      {R.map(
-        ({ id, message, type, duration, persist }) => (
-          <Snackbar
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-            open={true}
-            autoHideDuration={persist ? undefined : duration}
-            onClose={async () => await actions.removeNotification(id as string)}
-            ContentProps={{
-              "aria-describedby": "message-id",
-            }}
-            key={id}
-          >
-            <SnackbarContent
-              className={classes[type]}
-              message={<span id="message-id">{message}</span>}
-            />
-          </Snackbar>
-        ),
-        notifications
-      )}
-    </>
-  )
+interface State {
+  activeIdToKey: { [id: string]: string }
 }
 
-// STYLE
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    error: {
-      backgroundColor: palette.error.dark,
-    },
-    info: {
-      backgroundColor: palette.primary.dark,
-    },
-  })
+class Notifications extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      activeIdToKey: {}, // holds the id (the notifications id) to key (notistack's internally used id - used for closing) mapping for displaying notifications
+    }
+  }
 
-const componentWithStyles = withStyles(styles)(Notifications)
+  componentDidUpdate(prevProps: Props) {
+    const {
+      notifications,
+      enqueueSnackbar,
+      closeSnackbar,
+      actions,
+    } = this.props
+
+    const { activeIdToKey } = this.state
+    // finds the notifications that are added to the Redux store
+    const notificationsToAdd = getNewNotifications(notifications, activeIdToKey)
+
+    // finds the notifications that are removed from the Redux store
+    const notificationKeysToRemove = getIdOfRemovedNotifications(
+      notifications,
+      activeIdToKey
+    )
+
+    // display the new notifications
+    const newKeys = R.map(
+      notification =>
+        enqueueSnackbar(notification.message, {
+          autoHideDuration: notification.persist
+            ? undefined
+            : notification.duration || 5000, // 5 seconds is the default duration (used if neither duration or persist)
+          persist: notification.persist,
+          variant: notification.type,
+          onClose: () => actions.removeNotification(notification.id as string),
+        }),
+      notificationsToAdd
+    )
+
+    // add new mappings to the activeIdToKey map
+    if (newKeys.length != 0) {
+      this.setState({
+        activeIdToKey: R.merge(
+          activeIdToKey,
+          R.zipObj(R.map(n => n.id as string, notificationsToAdd), newKeys)
+        ),
+      })
+    }
+
+    // hide/remove the notifications that was removed from the store
+    R.forEach(
+      notificationId => closeSnackbar(activeIdToKey[notificationId]),
+      notificationKeysToRemove
+    )
+
+    // remove removed notifications from the activeIdToKey map
+    if (notificationKeysToRemove.length != 0) {
+      this.setState({
+        activeIdToKey: R.omit(notificationKeysToRemove, activeIdToKey),
+      })
+    }
+  }
+
+  render() {
+    return null
+  }
+}
+
+const getNewNotifications = (
+  notifications: NotificationType[],
+  activeIdMap: { [id: string]: string }
+) =>
+  R.filter(
+    notification => !R.has(notification.id as string, activeIdMap),
+    notifications
+  )
+
+const getIdOfRemovedNotifications = (
+  notifications: NotificationType[],
+  activeIdMap: { [id: string]: string }
+) =>
+  R.filter(
+    notificationId =>
+      R.find(
+        notification => notificationId == notification.id,
+        notifications
+      ) === undefined,
+    R.keys(activeIdMap) as string[]
+  )
+
+const componentWithSnackebar = withSnackbar(Notifications as any)
 
 // STATE
 const mapStateToProps = (state: RootState, { match }: any) => {
@@ -83,4 +127,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithSnackebar)
