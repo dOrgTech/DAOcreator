@@ -40,7 +40,7 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
     })
       .then((web3: any) => Arc.init(web3))
       .catch(e => {
-        dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e))
+        dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. " + e))
         return Promise.resolve()
       })
       .finally(() => {
@@ -144,9 +144,7 @@ export function createDao(): (
       return Promise.resolve("Success!")
     } catch (e) {
       dispatch(Events.WAITING_ANIMATION_CLOSE())
-      dispatch(
-        Events.NOTIFICATION_ERROR("Failed to create DAO. Error: " + e.message)
-      )
+      dispatch(Events.NOTIFICATION_ERROR("Failed to create DAO. " + e.message))
       return Promise.resolve(e.message)
     }
   }
