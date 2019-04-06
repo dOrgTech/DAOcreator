@@ -3,6 +3,7 @@ import * as Events from "./events"
 import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
 import * as Web3 from "../../lib/integrations/web3"
+import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
 
 export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>
@@ -40,8 +41,20 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
     })
       .then((web3: any) => Arc.init(web3))
       .catch(e => {
-        dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. " + e))
-        return Promise.resolve()
+        return notificationActions
+          .addNotification({
+            message: "Failed to initialize. " + e,
+            type: "error",
+            persist: true,
+          })(dispatch)
+          .then(_ =>
+            notificationActions.addNotification({
+              message: "lol",
+              type: "error",
+              persist: true,
+            })(dispatch)
+          )
+          .then(_ => Promise.resolve())
       })
       .finally(() => {
         dispatch(Events.WAITING_ANIMATION_CLOSE())
@@ -144,7 +157,12 @@ export function createDao(): (
       return Promise.resolve("Success!")
     } catch (e) {
       dispatch(Events.WAITING_ANIMATION_CLOSE())
-      dispatch(Events.NOTIFICATION_ERROR("Failed to create DAO. " + e.message))
+
+      notificationActions.addNotification({
+        message: "Failed to create DAO. " + e.message,
+        type: "error",
+        persist: true,
+      })(dispatch)
       return Promise.resolve(e.message)
     }
   }

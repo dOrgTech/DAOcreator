@@ -1,4 +1,5 @@
 import * as React from "react"
+import * as R from "ramda"
 import { Dispatch } from "redux"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
@@ -10,41 +11,48 @@ import {
   WithStyles,
   createStyles,
 } from "@material-ui/core"
-import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
 import { RootState } from "../../state"
+import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
+import { Notification as NotificationType } from "../../redux/reducers/notifications"
 
 interface Props extends WithStyles<typeof styles> {
-  message: string
-  type: "error" | "info"
-  open: boolean
+  notifications: NotificationType[]
   actions: NotificationActions
 }
 
 const Notifications: React.SFC<Props> = ({
-  message,
-  type,
-  open,
+  notifications,
   actions,
   classes,
-}) => (
-  <Snackbar
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "left",
-    }}
-    open={open}
-    autoHideDuration={10000}
-    onClose={async () => await actions.closeNotification()}
-    ContentProps={{
-      "aria-describedby": "message-id",
-    }}
-  >
-    <SnackbarContent
-      className={classes[type]}
-      message={<span id="message-id">{message}</span>}
-    />
-  </Snackbar>
-)
+}) => {
+  return (
+    <>
+      {R.map(
+        ({ id, message, type, duration, persist }) => (
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            open={true}
+            autoHideDuration={persist ? undefined : duration}
+            onClose={async () => await actions.removeNotification(id as string)}
+            ContentProps={{
+              "aria-describedby": "message-id",
+            }}
+            key={id}
+          >
+            <SnackbarContent
+              className={classes[type]}
+              message={<span id="message-id">{message}</span>}
+            />
+          </Snackbar>
+        ),
+        notifications
+      )}
+    </>
+  )
+}
 
 // STYLE
 const styles = ({ palette }: Theme) =>
@@ -62,9 +70,7 @@ const componentWithStyles = withStyles(styles)(Notifications)
 // STATE
 const mapStateToProps = (state: RootState, { match }: any) => {
   return {
-    message: state.notification.message,
-    type: state.notification.type,
-    open: state.notification.open,
+    notifications: R.values(state.notification.notifications),
   }
 }
 
