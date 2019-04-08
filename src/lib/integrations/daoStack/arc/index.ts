@@ -1,5 +1,6 @@
 import deployedContractAddresses from "./contractAddresses.json"
 import { Dispatch } from "redux"
+import * as R from "ramda"
 
 export * from "./types"
 export * from "./typeConversions"
@@ -18,11 +19,15 @@ import {
 
 export const init = async (web3: any) => {
   const network: string = await web3.eth.net.getNetworkType()
+  const supportedNetworks = R.keys(deployedContractAddresses)
 
   if ((deployedContractAddresses as any)[network] != null) {
     return
   } else {
-    throw Error("Network not supported")
+    throw Error(
+      "Network not supported. The supported network are: " +
+        supportedNetworks.toString()
+    )
   }
 }
 

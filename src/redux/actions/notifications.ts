@@ -1,33 +1,32 @@
 import { Dispatch } from "redux"
 import * as Events from "./events"
+import { Notification } from "../reducers/notifications"
+import uuid from "uuid"
+import * as R from "ramda"
 
 export default interface NotificationActions {
-  newNotificationInfo(message: string): (dispatch: Dispatch) => Promise<void>
-  newNotificationError(message: string): (dispatch: Dispatch) => Promise<void>
-  closeNotification(): (dispatch: Dispatch) => Promise<void>
+  addNotification(
+    notification: Notification
+  ): (dispatch: Dispatch) => Promise<string>
+  removeNotification(id: string): (dispatch: Dispatch) => Promise<void>
 }
 
-export function newNotificationInfo(
-  message: string
-): (dispatch: Dispatch) => Promise<void> {
+// Adds a notifcation and returns its id
+export function addNotification(
+  notification: Notification
+): (dispatch: Dispatch) => Promise<string> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.NOTIFICATION_INFO(message))
-    return Promise.resolve()
+    const id = uuid()
+    dispatch(Events.NOTIFICATION_ADD(R.assoc("id", id, notification)))
+    return Promise.resolve(id)
   }
 }
 
-export function newNotificationError(
-  message: string
+export function removeNotification(
+  id: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.NOTIFICATION_ERROR(message))
-    return Promise.resolve()
-  }
-}
-
-export function closeNotification(): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.NOTIFICATION_CLOSE())
+    dispatch(Events.NOTIFICATION_REMOVE(id))
     return Promise.resolve()
   }
 }

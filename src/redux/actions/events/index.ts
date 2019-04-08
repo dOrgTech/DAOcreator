@@ -1,3 +1,4 @@
+import { Notification } from "../../reducers/notifications"
 export enum Events {
   // DAO Creator
   DAO_CREATE_NEXT_STEP = "DAO_CREATE_NEXT_STEP",
@@ -13,9 +14,8 @@ export enum Events {
   DAO_CREATE_SET_STEP_VALIDATION = "DAO_CREATE_SET_STEP_VALIDATION",
 
   // Notifications
-  NOTIFICATION_INFO = "NOTIFICATION_INFO",
-  NOTIFICATION_ERROR = "NOTIFICATION_ERROR",
-  NOTIFICATION_CLOSE = "NOTIFICATION_CLOSE",
+  NOTIFICATION_ADD = "NOTIFICATION_ADD",
+  NOTIFICATION_REMOVE = "NOTIFICATION_REMOVE",
 
   // Waiting Animation
   WAITING_ANIMATION_OPEN = "WAITING_ANIMATION_OPEN",
@@ -113,25 +113,18 @@ export const DAO_CREATE_SET_STEP_VALIDATION = createPayloadEvent<
 >(Events.DAO_CREATE_SET_STEP_VALIDATION)
 
 // Notifications
-interface NOTIFICATION_INFO extends PayloadEvent<string, string> {
-  type: Events.NOTIFICATION_INFO
+interface NOTIFICATION_ADD extends PayloadEvent<string, Notification> {
+  type: Events.NOTIFICATION_ADD
 }
-export const NOTIFICATION_INFO = createPayloadEvent<NOTIFICATION_INFO>(
-  Events.NOTIFICATION_INFO
+export const NOTIFICATION_ADD = createPayloadEvent<NOTIFICATION_ADD>(
+  Events.NOTIFICATION_ADD
 )
 
-interface NOTIFICATION_ERROR extends PayloadEvent<string, string> {
-  type: Events.NOTIFICATION_ERROR
+interface NOTIFICATION_REMOVE extends PayloadEvent<string, string> {
+  type: Events.NOTIFICATION_REMOVE
 }
-export const NOTIFICATION_ERROR = createPayloadEvent<NOTIFICATION_ERROR>(
-  Events.NOTIFICATION_ERROR
-)
-
-interface NOTIFICATION_CLOSE extends Event<string> {
-  type: Events.NOTIFICATION_CLOSE
-}
-export const NOTIFICATION_CLOSE = createEvent<NOTIFICATION_CLOSE>(
-  Events.NOTIFICATION_CLOSE
+export const NOTIFICATION_REMOVE = createPayloadEvent<NOTIFICATION_REMOVE>(
+  Events.NOTIFICATION_REMOVE
 )
 
 interface WAITING_ANIMATION_OPEN
@@ -167,9 +160,8 @@ export type AnyEvent =
   | DAO_CREATE_REM_SCHEME
   | DAO_CREATE_SET_DEPLOYED_DAO
   | DAO_CREATE_SET_STEP_VALIDATION
-  | NOTIFICATION_INFO
-  | NOTIFICATION_ERROR
-  | NOTIFICATION_CLOSE
+  | NOTIFICATION_ADD
+  | NOTIFICATION_REMOVE
   | WAITING_ANIMATION_OPEN
   | WAITING_ANIMATION_CLOSE
   | WAITING_ANIMATION_SET_DETAILS
