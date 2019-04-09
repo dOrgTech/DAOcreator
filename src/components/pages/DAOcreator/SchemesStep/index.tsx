@@ -1,29 +1,23 @@
-import * as R from "ramda"
 import {
-  Card,
   Button,
-  CardContent,
+  Card,
   createStyles,
-  Grid,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
   Theme,
   Typography,
   withStyles,
   WithStyles,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import { bindActionCreators, Dispatch } from "redux"
-import {
-  VotingMachine,
-  votingMachines,
-  VotingMachineConfiguration,
-  Scheme,
-  schemes,
-} from "../../../../lib/integrations/daoStack/arc"
 import * as React from "react"
 import { connect } from "react-redux"
+import { bindActionCreators, Dispatch } from "redux"
+import {
+  Scheme,
+  VotingMachineConfiguration,
+} from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
 

@@ -1,21 +1,12 @@
-import * as React from "react"
 import {
+  createStyles,
   Dialog,
   DialogTitle,
-  List,
-  ListItem,
-  Card,
-  CardContent,
-  createStyles,
-  Grid,
   Theme,
-  Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core"
-import { RootState } from "../../../../state"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import * as React from "react"
 
 interface Props extends WithStyles<typeof styles> {
   open: boolean
@@ -32,18 +23,4 @@ const AddSchemeDialog: React.SFC<Props> = ({ open, classes }) => {
 // STYLE
 const styles = ({  }: Theme) => createStyles({})
 
-const componentWithStyles = withStyles(styles)(AddSchemeDialog)
-
-// STATE
-const mapStateToProps = (state: RootState) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {}
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(AddSchemeDialog)
