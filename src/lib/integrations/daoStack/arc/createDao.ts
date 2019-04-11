@@ -1,6 +1,6 @@
 import { DAO, Founder, Scheme, VotingMachineConfiguration } from "./types"
 import { votingMachines } from "./votingMachines"
-import { getVotingMachineDefaultParams } from "./index"
+import { getScheme } from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
 
@@ -84,7 +84,7 @@ export const createDao = async (
 
   const initializedSchemes = R.map(
     ({ schemeTypeName, votingMachineConfig }) => {
-      const scheme = getVotingMachineDefaultParams(schemeTypeName)
+      const scheme = getScheme(schemeTypeName)
       return {
         scheme,
         schemeContract: new web3.eth.Contract(
