@@ -14,7 +14,6 @@ import {
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
 import FoundersStep from "./FoundersStep"
-import FeatureStep from "./FeatureStep"
 import SchemesStep from "./SchemesStep"
 import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"

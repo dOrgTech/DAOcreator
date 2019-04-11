@@ -19,18 +19,21 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { RootState } from "../../../state"
+import { RootState } from "../../../../state"
 import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
   Scheme,
-  schemes,
-} from "../../../lib/integrations/daoStack/arc"
-import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+  getScheme,
+  getVotingMachineDefaultParams,
+} from "../../../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
-  actions: DAOcreatorActions
+  updateScheme: (
+    schemeTypeName: string,
+    votingMachineConfig: VotingMachineConfiguration
+  ) => void
   schemeTypeName: string
 }
 
@@ -45,25 +48,13 @@ const initState: State = {
   formErrors: {},
 }
 
-const getVotingMachineDefaultParams = (typeName: string): any => {
-  const votingMachine = votingMachines[typeName] as VotingMachine
-
-  return R.reduce(
-    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
-    {},
-    votingMachine.params
-  )
-}
-
-class FeatureStep extends React.Component<Props, State> {
+class ConfigureScheme extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     const votingMachineType = R.values(votingMachines)[0].typeName
     console.log(props)
-    const scheme = R.find(
-      scheme => scheme.typeName === props.schemeTypeName,
-      schemes
-    ) as Scheme
+
+    const scheme = getScheme(props.schemeTypeName)
 
     this.state = {
       ...initState,
@@ -71,7 +62,7 @@ class FeatureStep extends React.Component<Props, State> {
       scheme,
       ...getVotingMachineDefaultParams(votingMachineType),
     }
-    props.actions.addOrUpdateScheme(scheme, {
+    props.updateScheme(scheme.typeName, {
       typeName: votingMachineType,
       params: R.omit(["formErrors", "scheme", "votingMachineType"], this.state),
     })
@@ -86,7 +77,7 @@ class FeatureStep extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, actions } = this.props
+    const { classes, updateScheme } = this.props
     const { votingMachineType, scheme } = this.state
 
     const currentVotingMachine = votingMachines[
@@ -132,7 +123,7 @@ class FeatureStep extends React.Component<Props, State> {
                               ),
                             })
 
-                            actions.addOrUpdateScheme(scheme, {
+                            updateScheme(scheme.typeName, {
                               typeName: event.target.value,
                               params: R.omit(
                                 ["formErrors", "scheme", "votingMachineType"],
@@ -181,7 +172,7 @@ class FeatureStep extends React.Component<Props, State> {
                           onChange={this.handleChange}
                           value={R.prop(param.typeName, this.state as any)}
                           onBlur={() =>
-                            actions.addOrUpdateScheme(scheme, {
+                            updateScheme(scheme.typeName, {
                               typeName: currentVotingMachine.typeName,
                               params: R.omit(["formErrors"], this.state),
                             })
@@ -240,20 +231,4 @@ const styles = ({  }: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(FeatureStep)
-
-// STATE
-const mapStateToProps = (state: RootState) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(ConfigureScheme)

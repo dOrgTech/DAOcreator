@@ -1,4 +1,5 @@
 import { Scheme } from "./types"
+import * as R from "ramda"
 import Web3 from "web3"
 
 export const schemes: Scheme[] = [
@@ -160,3 +161,6 @@ export const schemes: Scheme[] = [
     },
   },
 ]
+
+export const getScheme = (typeName: string) =>
+  R.find(scheme => scheme.typeName === typeName, schemes) as Scheme

@@ -14,7 +14,7 @@ export default interface DAOcreatorActions {
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
   addOrUpdateScheme(
-    scheme: Arc.Scheme,
+    schemeType: string,
     votingMachineConfig: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
   remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
@@ -104,11 +104,13 @@ export function addFounder(
 }
 
 export function addOrUpdateScheme(
-  scheme: Arc.Scheme,
+  schemeTypeName: string,
   votingMachineConfig: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachineConfig }))
+    dispatch(
+      Events.DAO_CREATE_ADD_SCHEME({ schemeTypeName, votingMachineConfig })
+    )
     return Promise.resolve()
   }
 }

@@ -7,7 +7,7 @@ export enum Events {
   DAO_CREATE_SET_TOKEN = "DAO_CREATE_SET_TOKEN",
   DAO_CREATE_SET_TOKEN_SYM = "DAO_CREATE_SET_TOKEN_SYM",
   DAO_CREATE_ADD_FOUNDER = "DAO_CREATE_ADD_FOUNDER",
-  DAO_CREATE_ADD_OR_UPDATE_SCHEME = "DAO_CREATE_ADD_SCHEME",
+  DAO_CREATE_ADD_SCHEME = "DAO_CREATE_ADD_SCHEME",
   DAO_CREATE_REM_SCHEME = "DAO_CREATE_REM_SCHEME",
   DAO_CREATE_ADD_VOTE_MACHINE = "DAO_CREATE_ADD_VOTE_MACHINE",
   DAO_CREATE_SET_DEPLOYED_DAO = "DAO_CREATE_SET_DEPLOYED_DAO",
@@ -80,14 +80,14 @@ interface DAO_CREATE_ADD_SCHEME
   extends PayloadEvent<
     string,
     {
-      scheme: Arc.Scheme
+      schemeTypeName: string
       votingMachineConfig: Arc.VotingMachineConfiguration
     }
   > {
-  type: Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME
+  type: Events.DAO_CREATE_ADD_SCHEME
 }
 export const DAO_CREATE_ADD_SCHEME = createPayloadEvent<DAO_CREATE_ADD_SCHEME>(
-  Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME
+  Events.DAO_CREATE_ADD_SCHEME
 )
 
 interface DAO_CREATE_REM_SCHEME extends PayloadEvent<string, string> {

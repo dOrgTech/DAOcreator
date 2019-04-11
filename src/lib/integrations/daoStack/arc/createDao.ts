@@ -1,5 +1,6 @@
 import { DAO, Founder, Scheme, VotingMachineConfiguration } from "./types"
 import { votingMachines } from "./votingMachines"
+import { getVotingMachineDefaultParams } from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
 
@@ -10,7 +11,7 @@ export const createDao = async (
   naming: any,
   founders: Founder[],
   schemesIn: {
-    scheme: Scheme
+    schemeTypeName: string
     votingMachineConfig: VotingMachineConfiguration
   }[]
 ): Promise<DAO> => {
@@ -81,17 +82,21 @@ export const createDao = async (
     return hash({ callableVotingParams })
   }
 
-  const initializedSchemes = R.map(({ scheme, votingMachineConfig }) => {
-    return {
-      scheme,
-      schemeContract: new web3.eth.Contract(
-        require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
-        addresses[scheme.typeName],
-        opts
-      ),
-      votingMachineHash: votingMachineConfigToHash(votingMachineConfig),
-    }
-  }, schemesIn)
+  const initializedSchemes = R.map(
+    ({ schemeTypeName, votingMachineConfig }) => {
+      const scheme = getVotingMachineDefaultParams(schemeTypeName)
+      return {
+        scheme,
+        schemeContract: new web3.eth.Contract(
+          require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
+          addresses[scheme.typeName],
+          opts
+        ),
+        votingMachineHash: votingMachineConfigToHash(votingMachineConfig),
+      }
+    },
+    schemesIn
+  )
 
   const initializedVotingMachines: any = R.reduce(
     (acc, { votingMachineConfig }) => {

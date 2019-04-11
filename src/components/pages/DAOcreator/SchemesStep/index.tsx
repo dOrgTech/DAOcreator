@@ -1,3 +1,4 @@
+import * as R from "ramda"
 import {
   Button,
   Card,
@@ -17,12 +18,16 @@ import { bindActionCreators, Dispatch } from "redux"
 import {
   Scheme,
   VotingMachineConfiguration,
+  getScheme,
 } from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
 
 interface Props extends WithStyles<typeof styles> {
-  schemes: { scheme: Scheme; votingMachineConfig: VotingMachineConfiguration }[]
+  schemes: {
+    schemeTypeName: string
+    votingMachineConfig: VotingMachineConfiguration
+  }[]
   actions: DAOcreatorActions
 }
 
@@ -47,65 +52,66 @@ class SchemesStep extends React.Component<Props, State> {
     })
   }
 
-  openSchemeDialog = () =>
+  addScheme = (
+    schemeType: string,
+    votingMachineConfig: VotingMachineConfiguration
+  ) => {
+    this.props.actions.addOrUpdateScheme(schemeType, votingMachineConfig)
+  }
+
+  setSchemeDialog = (newStatus: boolean) => () =>
     this.setState({
-      addSchemeDialogOpen: true,
+      addSchemeDialogOpen: newStatus,
     })
 
   render() {
-    const { classes } = this.props
+    const { schemes, classes } = this.props
     const { expanded, addSchemeDialogOpen } = this.state
 
     return (
       <Card className={classes.card}>
         <div className={classes.root}>
-          <ExpansionPanel
-            expanded={expanded === "panel1"}
-            onChange={this.handleChange("panel1")}
-          >
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                General settings
-              </Typography>
-              <Typography className={classes.secondaryHeading}>
-                I am an expansion panel
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography>
-                Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-                feugiat. Aliquam eget maximus est, id dignissim quam.
-              </Typography>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel
-            expanded={expanded === "panel2"}
-            onChange={this.handleChange("panel2")}
-          >
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Users</Typography>
-              <Typography className={classes.secondaryHeading}>
-                You are currently not an owner
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography>
-                Donec placerat, lectus sed mattis semper, neque lectus feugiat
-                lectus, varius pulvinar diam eros in elit. Pellentesque
-                convallis laoreet laoreet.
-              </Typography>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          {R.map(({ schemeTypeName, votingMachineConfig }) => {
+            const scheme = getScheme(schemeTypeName)
+            const key =
+              schemeTypeName + votingMachineConfig.typeName + Date.now()
+            return (
+              <ExpansionPanel
+                expanded={expanded === key}
+                onChange={this.handleChange(key)}
+                key={key}
+              >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>
+                    {scheme.displayName}
+                  </Typography>
+                  <Typography className={classes.secondaryHeading}>
+                    {votingMachineConfig.typeName}
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <Typography>
+                    Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
+                    feugiat. Aliquam eget maximus est, id dignissim quam.
+                  </Typography>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            )
+          }, schemes)}
         </div>
         <Button
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={this.openSchemeDialog}
+          onClick={this.setSchemeDialog(true)}
         >
-          Primary
+          Add Scheme
         </Button>
-        <AddSchemeDialog open={addSchemeDialogOpen} />
+        <AddSchemeDialog
+          open={addSchemeDialogOpen}
+          addScheme={this.addScheme}
+          close={this.setSchemeDialog(false)}
+        />
       </Card>
     )
   }
