@@ -1,7 +1,7 @@
-import * as R from "ramda"
 import {
   Button,
   Card,
+  CardContent,
   createStyles,
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -12,13 +12,14 @@ import {
   WithStyles,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import hash from "object-hash"
+import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import {
-  Scheme,
-  VotingMachineConfiguration,
   getScheme,
+  VotingMachineConfiguration,
 } from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
@@ -46,9 +47,9 @@ class SchemesStep extends React.Component<Props, State> {
     super(props)
   }
 
-  handleChange = (panel: any) => (event: any, expanded: boolean) => {
+  handleChange = (panelKey: any) => (event: any, expanded: boolean) => {
     this.setState({
-      expanded: expanded ? panel : false,
+      expanded: expanded ? panelKey : false,
     })
   }
 
@@ -73,8 +74,7 @@ class SchemesStep extends React.Component<Props, State> {
         <div className={classes.root}>
           {R.map(({ schemeTypeName, votingMachineConfig }) => {
             const scheme = getScheme(schemeTypeName)
-            const key =
-              schemeTypeName + votingMachineConfig.typeName + Date.now()
+            const key = hash(schemeTypeName + votingMachineConfig)
             return (
               <ExpansionPanel
                 expanded={expanded === key}
@@ -82,23 +82,41 @@ class SchemesStep extends React.Component<Props, State> {
                 key={key}
               >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography className={classes.heading}>
-                    {scheme.displayName}
-                  </Typography>
-                  <Typography className={classes.secondaryHeading}>
-                    {votingMachineConfig.typeName}
-                  </Typography>
+                  <div className={classes.column}>
+                    <Typography className={classes.heading}>
+                      {scheme.displayName}
+                    </Typography>
+                  </div>
+                  <div className={classes.column}>
+                    <Typography className={classes.secondaryHeading}>
+                      {votingMachineConfig.typeName}
+                    </Typography>
+                  </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  <Typography>
-                    Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-                    feugiat. Aliquam eget maximus est, id dignissim quam.
-                  </Typography>
+                  <div className={classes.column}>
+                    <Typography>
+                      TODO: scheme info (configurations etc.)
+                    </Typography>
+                  </div>
+                  <div className={classes.column}>
+                    <Typography>
+                      TODO: voting machine info (configurations etc.)
+                    </Typography>
+                  </div>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             )
           }, schemes)}
         </div>
+        {schemes.length === 0 ? (
+          <CardContent>
+            <Typography>
+              No schemes added yet. Click the "Add Scheme" button to start
+              adding Schemes.
+            </Typography>
+          </CardContent>
+        ) : null}
         <Button
           variant="contained"
           color="primary"
@@ -126,8 +144,10 @@ const styles = (theme: Theme) =>
     card: {},
     heading: {
       fontSize: theme.typography.pxToRem(15),
-      flexBasis: "33.33%",
       flexShrink: 0,
+    },
+    column: {
+      flexBasis: "50%",
     },
     secondaryHeading: {
       fontSize: theme.typography.pxToRem(15),

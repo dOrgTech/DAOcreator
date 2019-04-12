@@ -237,3 +237,5 @@ export const getVotingMachineDefaultParams = (typeName: string): any => {
     votingMachine.params
   )
 }
+
+export const getVotingMachine = (typeName: string) => votingMachines[typeName]
