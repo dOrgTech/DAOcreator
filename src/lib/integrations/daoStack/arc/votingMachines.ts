@@ -227,3 +227,15 @@ export const votingMachines: { [key: string]: VotingMachine } = {
     params: [ TODO: Add me ],
   },*/
 }
+
+export const getVotingMachineDefaultParams = (typeName: string): any => {
+  const votingMachine = votingMachines[typeName] as VotingMachine
+
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    votingMachine.params
+  )
+}
+
+export const getVotingMachine = (typeName: string) => votingMachines[typeName]

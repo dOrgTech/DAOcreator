@@ -18,6 +18,7 @@ import {
   VotingMachine,
   votingMachines,
   VotingMachineConfiguration,
+  getScheme,
 } from "../../../lib/integrations/daoStack/arc"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -27,7 +28,10 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   founders: Founder[]
-  schemes: { scheme: Scheme; votingMachineConfig: VotingMachineConfiguration }[]
+  schemes: {
+    schemeTypeName: string
+    votingMachineConfig: VotingMachineConfiguration
+  }[]
   stepNumber: number
   stepValid: boolean
 }
@@ -173,13 +177,14 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
 )
 
 const displayScheme = ({
-  scheme,
+  schemeTypeName,
   votingMachineConfig,
 }: {
-  scheme: Scheme
+  schemeTypeName: string
   votingMachineConfig: VotingMachineConfiguration
 }) => {
-  const votingMachineType = votingMachines[votingMachineConfig.typeName]
+  const votingMachine = votingMachines[votingMachineConfig.typeName]
+  const scheme = getScheme(schemeTypeName)
   return (
     <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
       <Grid item xs={12}>
@@ -189,11 +194,9 @@ const displayScheme = ({
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="subtitle1">
-          {votingMachineType.displayName}
-        </Typography>
+        <Typography variant="subtitle1">{votingMachine.displayName}</Typography>
         <Typography>
-          <i>{votingMachineType.description}</i>
+          <i>{votingMachine.description}</i>
         </Typography>
       </Grid>
     </Grid>

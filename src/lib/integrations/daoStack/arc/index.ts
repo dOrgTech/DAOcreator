@@ -38,7 +38,7 @@ export const createDao = (
   naming: any,
   founders: Founder[],
   schemes: {
-    scheme: Scheme
+    schemeTypeName: string
     votingMachineConfig: VotingMachineConfiguration
   }[]
 ): Promise<DAO> => {
