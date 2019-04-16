@@ -4,6 +4,7 @@ import {
   CardContent,
   createStyles,
   ExpansionPanel,
+  ExpansionPanelActions,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Theme,
@@ -105,6 +106,9 @@ class SchemesStep extends React.Component<Props, State> {
                     </Typography>
                   </div>
                 </ExpansionPanelDetails>
+                <ExpansionPanelActions>
+                  <Button className={classes.button}>Delete</Button>
+                </ExpansionPanelActions>
               </ExpansionPanel>
             )
           }, schemes)}
