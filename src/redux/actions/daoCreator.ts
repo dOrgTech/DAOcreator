@@ -1,4 +1,5 @@
 import { Dispatch } from "redux"
+import uuid from "uuid"
 import * as Events from "./events"
 import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
@@ -16,8 +17,8 @@ export default interface DAOcreatorActions {
   addScheme(
     schemeType: string,
     votingMachineConfig: Arc.VotingMachineConfiguration
-  ): (dispatch: Dispatch) => Promise<void>
-  removeScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
+  ): (dispatch: Dispatch) => Promise<string>
+  removeScheme(id: string): (dispatch: Dispatch) => Promise<void>
   createDao(): (
     dispatch: Dispatch,
     getState: () => RootState
@@ -106,20 +107,25 @@ export function addFounder(
 export function addScheme(
   schemeTypeName: string,
   votingMachineConfig: Arc.VotingMachineConfiguration
-): (dispatch: Dispatch) => Promise<void> {
+): (dispatch: Dispatch) => Promise<string> {
+  const schemeId = uuid()
   return (dispatch: Dispatch) => {
     dispatch(
-      Events.DAO_CREATE_ADD_SCHEME({ schemeTypeName, votingMachineConfig })
+      Events.DAO_CREATE_ADD_SCHEME({
+        id: schemeId,
+        schemeTypeName,
+        votingMachineConfig,
+      })
     )
-    return Promise.resolve()
+    return Promise.resolve(schemeId)
   }
 }
 
 export function removeScheme(
-  schemeTypeName: string
+  schemeId: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeTypeName))
+    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeId))
     return Promise.resolve()
   }
 }

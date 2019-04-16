@@ -53,12 +53,9 @@ export const reducer = (
         schemes: R.append(event.payload, state.schemes),
       })
 
-    case Events.DAO_CREATE_REM_SCHEME:
+    case Events.DAO_CREATE_REMOVE_SCHEME:
       return R.merge(state, {
-        schemes: R.filter(
-          ({ schemeTypeName }) => schemeTypeName !== event.payload,
-          state.schemes
-        ),
+        schemes: R.filter(({ id }) => id !== event.payload, state.schemes),
       })
     case Events.DAO_CREATE_SET_DEPLOYED_DAO:
       return R.merge(state, { deployedDao: event.payload })

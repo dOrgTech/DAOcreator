@@ -17,6 +17,7 @@ export interface DAOcreatorState {
   }
   founders: Arc.Founder[]
   schemes: {
+    id: string
     schemeTypeName: string
     votingMachineConfig: Arc.VotingMachineConfiguration
   }[]
