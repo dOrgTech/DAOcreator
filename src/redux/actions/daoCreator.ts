@@ -13,11 +13,11 @@ export default interface DAOcreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
-  addOrUpdateScheme(
+  addScheme(
     schemeType: string,
     votingMachineConfig: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<void>
-  remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
+  removeScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
   createDao(): (
     dispatch: Dispatch,
     getState: () => RootState
@@ -103,7 +103,7 @@ export function addFounder(
   }
 }
 
-export function addOrUpdateScheme(
+export function addScheme(
   schemeTypeName: string,
   votingMachineConfig: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<void> {
@@ -115,7 +115,7 @@ export function addOrUpdateScheme(
   }
 }
 
-export function remScheme(
+export function removeScheme(
   schemeTypeName: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {

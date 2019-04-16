@@ -58,7 +58,7 @@ class SchemesStep extends React.Component<Props, State> {
     schemeType: string,
     votingMachineConfig: VotingMachineConfiguration
   ) => {
-    this.props.actions.addOrUpdateScheme(schemeType, votingMachineConfig)
+    this.props.actions.addScheme(schemeType, votingMachineConfig)
   }
 
   setSchemeDialog = (newStatus: boolean) => () =>
