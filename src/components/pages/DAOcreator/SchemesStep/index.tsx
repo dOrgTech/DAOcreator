@@ -4,6 +4,7 @@ import {
   CardContent,
   createStyles,
   ExpansionPanel,
+  ExpansionPanelActions,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Theme,
@@ -26,6 +27,7 @@ import AddSchemeDialog from "./AddSchemeDialog"
 
 interface Props extends WithStyles<typeof styles> {
   schemes: {
+    id: string
     schemeTypeName: string
     votingMachineConfig: VotingMachineConfiguration
   }[]
@@ -57,7 +59,7 @@ class SchemesStep extends React.Component<Props, State> {
     schemeType: string,
     votingMachineConfig: VotingMachineConfiguration
   ) => {
-    this.props.actions.addOrUpdateScheme(schemeType, votingMachineConfig)
+    this.props.actions.addScheme(schemeType, votingMachineConfig)
   }
 
   setSchemeDialog = (newStatus: boolean) => () =>
@@ -66,20 +68,19 @@ class SchemesStep extends React.Component<Props, State> {
     })
 
   render() {
-    const { schemes, classes } = this.props
+    const { schemes, actions, classes } = this.props
     const { expanded, addSchemeDialogOpen } = this.state
 
     return (
       <Card className={classes.card}>
         <div className={classes.root}>
-          {R.map(({ schemeTypeName, votingMachineConfig }) => {
-            const scheme = getScheme(schemeTypeName)
-            const key = hash(schemeTypeName + votingMachineConfig)
+          {R.map(schemeConfig => {
+            const scheme = getScheme(schemeConfig.schemeTypeName)
             return (
               <ExpansionPanel
-                expanded={expanded === key}
-                onChange={this.handleChange(key)}
-                key={key}
+                expanded={expanded === schemeConfig.id}
+                onChange={this.handleChange(schemeConfig.id)}
+                key={"scheme-" + schemeConfig.id}
               >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                   <div className={classes.column}>
@@ -89,7 +90,7 @@ class SchemesStep extends React.Component<Props, State> {
                   </div>
                   <div className={classes.column}>
                     <Typography className={classes.secondaryHeading}>
-                      {votingMachineConfig.typeName}
+                      {schemeConfig.votingMachineConfig.typeName}
                     </Typography>
                   </div>
                 </ExpansionPanelSummary>
@@ -105,6 +106,14 @@ class SchemesStep extends React.Component<Props, State> {
                     </Typography>
                   </div>
                 </ExpansionPanelDetails>
+                <ExpansionPanelActions>
+                  <Button
+                    onClick={() => actions.removeScheme(schemeConfig.id)}
+                    className={classes.button}
+                  >
+                    Delete
+                  </Button>
+                </ExpansionPanelActions>
               </ExpansionPanel>
             )
           }, schemes)}
