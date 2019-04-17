@@ -20,6 +20,7 @@ import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import {
   getScheme,
+  SchemeConfig,
   VotingMachineConfiguration,
 } from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
@@ -57,9 +58,10 @@ class SchemesStep extends React.Component<Props, State> {
 
   addScheme = (
     schemeType: string,
+    schemeConfig: SchemeConfig,
     votingMachineConfig: VotingMachineConfiguration
   ) => {
-    this.props.actions.addScheme(schemeType, votingMachineConfig)
+    this.props.actions.addScheme(schemeType, schemeConfig, votingMachineConfig)
   }
 
   setSchemeDialog = (newStatus: boolean) => () =>

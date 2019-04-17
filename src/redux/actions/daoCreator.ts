@@ -16,6 +16,7 @@ export default interface DAOcreatorActions {
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
   addScheme(
     schemeType: string,
+    schemeConfig: Arc.SchemeConfig,
     votingMachineConfig: Arc.VotingMachineConfiguration
   ): (dispatch: Dispatch) => Promise<string>
   removeScheme(id: string): (dispatch: Dispatch) => Promise<void>
@@ -106,6 +107,7 @@ export function addFounder(
 
 export function addScheme(
   schemeTypeName: string,
+  schemeConfig: Arc.SchemeConfig,
   votingMachineConfig: Arc.VotingMachineConfiguration
 ): (dispatch: Dispatch) => Promise<string> {
   const schemeId = uuid()
@@ -114,6 +116,7 @@ export function addScheme(
       Events.DAO_CREATE_ADD_SCHEME({
         id: schemeId,
         schemeTypeName,
+        schemeConfig,
         votingMachineConfig,
       })
     )

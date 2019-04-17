@@ -82,6 +82,7 @@ interface DAO_CREATE_ADD_SCHEME
     {
       id: string
       schemeTypeName: string
+      schemeConfig: Arc.SchemeConfig
       votingMachineConfig: Arc.VotingMachineConfiguration
     }
   > {
