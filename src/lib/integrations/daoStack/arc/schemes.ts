@@ -20,14 +20,11 @@ export const schemes: Scheme[] = [
         defaultValue: 0,
       },
     ],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
       return [
         Web3.utils.toWei(this.params[0].defaultValue.toString(), "gwei"), //TODO: let the user spesify this
-        votingMachineParametersKey,
-        votingMachineAddress,
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
       ]
     },
   },
@@ -39,11 +36,11 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
+      return [
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
+      ]
     },
   },
   /** {
@@ -68,10 +65,7 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
       return []
     },
   },
@@ -90,11 +84,11 @@ export const schemes: Scheme[] = [
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
+      return [
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
+      ]
     },
   },
   {
@@ -105,10 +99,7 @@ export const schemes: Scheme[] = [
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
       return []
     },
   },
@@ -119,11 +110,11 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
+      return [
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
+      ]
     },
   },
   {
@@ -134,14 +125,11 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
       return [
-        votingMachineParametersKey,
-        votingMachineParametersKey,
-        votingMachineAddress,
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
       ]
     },
   },
@@ -153,11 +141,11 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000004" /* manage global constraints */,
     params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
+    getCallableParamsArray: function(votingMachineCallableParamsArray) {
+      return [
+        votingMachineCallableParamsArray.params.votingMachineParametersKey,
+        votingMachineCallableParamsArray.params.votingMachineAddress,
+      ]
     },
   },
 ]

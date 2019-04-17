@@ -1,4 +1,10 @@
-import { DAO, Founder, Scheme, VotingMachineConfiguration } from "./types"
+import {
+  DAO,
+  Founder,
+  Scheme,
+  SchemeConfig,
+  VotingMachineConfiguration,
+} from "./types"
 import { votingMachines } from "./votingMachines"
 import { getScheme } from "./index"
 import hash from "object-hash"
@@ -190,16 +196,13 @@ export const createDao = async (
           parameterizedVotingMachine.votingMachineHash === votingMachineHash,
         parameterizedVotingMachines
       ) as any
-      const { votingMachineAddress } = initializedVotingMachines[
-        votingMachineHash
-      ]
+      const {
+        votingMachineCallableParamsArray,
+      }: any = initializedVotingMachines[votingMachineHash]
 
       const setParams = schemeContract.methods.setParameters.apply(
         null,
-        scheme.getCallableParamsArray(
-          votingMachineParametersKey,
-          votingMachineAddress
-        )
+        scheme.getCallableParamsArray(votingMachineCallableParamsArray)
       )
       const schemeParametersKey = await setParams.call()
 

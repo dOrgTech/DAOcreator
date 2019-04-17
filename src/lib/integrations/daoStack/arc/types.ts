@@ -33,6 +33,12 @@ export type Founder = {
   tokens: string
 }
 
+export type SchemeConfig = {
+  id: string
+  typeName: string // not schemeTypeName (that is in use now)
+  params: { [paramName: string]: string | number | VotingMachineConfiguration }
+}
+
 export type Scheme = {
   typeName: string
   address?: string
@@ -40,10 +46,7 @@ export type Scheme = {
   description: string
   toggleDefault: boolean
   permissions: string
-  getCallableParamsArray: (
-    votingMachineParametersKey: string,
-    votingMachineAddress: string
-  ) => any[]
+  getCallableParamsArray: (schemeConfig: SchemeConfig) => any[]
   params: Param[]
 }
 
