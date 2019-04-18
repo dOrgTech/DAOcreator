@@ -39,10 +39,7 @@ export const createDao = (
 ) => async (
   naming: any,
   founders: Founder[],
-  schemes: {
-    schemeTypeName: string
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemes: SchemeConfig[]
 ): Promise<DAO> => {
   try {
     const network: string = await web3.eth.net.getNetworkType()

@@ -27,11 +27,7 @@ import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions
 import AddSchemeDialog from "./AddSchemeDialog"
 
 interface Props extends WithStyles<typeof styles> {
-  schemes: {
-    id: string
-    schemeTypeName: string
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemes: SchemeConfig[]
   actions: DAOcreatorActions
 }
 
@@ -57,11 +53,7 @@ class SchemesStep extends React.Component<Props, State> {
   }
 
   addScheme = (schemeConfig: SchemeConfig) => {
-    this.props.actions.addScheme(
-      schemeConfig.typeName,
-      schemeConfig,
-      schemeConfig.params.votingMachineConfig
-    )
+    this.props.actions.addScheme(schemeConfig)
   }
 
   setSchemeDialog = (newStatus: boolean) => () =>
@@ -77,7 +69,7 @@ class SchemesStep extends React.Component<Props, State> {
       <Card className={classes.card}>
         <div className={classes.root}>
           {R.map(schemeConfig => {
-            const scheme = getScheme(schemeConfig.schemeTypeName)
+            const scheme = getScheme(schemeConfig.typeName)
             return (
               <ExpansionPanel
                 expanded={expanded === schemeConfig.id}
@@ -92,7 +84,7 @@ class SchemesStep extends React.Component<Props, State> {
                   </div>
                   <div className={classes.column}>
                     <Typography className={classes.secondaryHeading}>
-                      {schemeConfig.votingMachineConfig.typeName}
+                      {schemeConfig.params.votingMachineConfig.typeName}
                     </Typography>
                   </div>
                 </ExpansionPanelSummary>

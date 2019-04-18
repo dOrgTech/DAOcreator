@@ -16,10 +16,7 @@ export const createDao = async (
   deployedContractAddresses: any,
   naming: any,
   founders: Founder[],
-  schemesIn: {
-    schemeTypeName: string
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemesIn: SchemeConfig[]
 ): Promise<DAO> => {
   updateStatus(
     "Creating new organization. This requires 1 transaction. \n Step 1 of 4."
@@ -88,25 +85,25 @@ export const createDao = async (
     return hash({ callableVotingParams })
   }
 
-  const initializedSchemes = R.map(
-    ({ schemeTypeName, votingMachineConfig }) => {
-      const scheme = getScheme(schemeTypeName)
-      return {
-        scheme,
-        schemeContract: new web3.eth.Contract(
-          require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
-          addresses[scheme.typeName],
-          opts
-        ),
-        votingMachineHash: votingMachineConfigToHash(votingMachineConfig),
-      }
-    },
-    schemesIn
-  )
+  const initializedSchemes = R.map(schemeConfig => {
+    const scheme = getScheme(schemeConfig.typeName)
+    return {
+      scheme,
+      schemeContract: new web3.eth.Contract(
+        require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
+        addresses[scheme.typeName],
+        opts
+      ),
+      votingMachineHash: votingMachineConfigToHash(
+        schemeConfig.params.votingMachineConfig
+      ),
+    }
+  }, schemesIn)
 
   const initializedVotingMachines: any = R.reduce(
-    (acc, { votingMachineConfig }) => {
-      const votingMachine = votingMachines[votingMachineConfig.typeName]
+    (acc, schemeConfig) => {
+      const votingMachine =
+        votingMachines[schemeConfig.params.votingMachineConfig.typeName]
       const votingMachineContract = new web3.eth.Contract(
         require(`@daostack/arc/build/contracts/${
           votingMachine.typeName
@@ -115,11 +112,11 @@ export const createDao = async (
         opts
       )
       return R.assoc(
-        votingMachineConfigToHash(votingMachineConfig),
+        votingMachineConfigToHash(schemeConfig.params.votingMachineConfig),
         {
           votingMachineContract,
           votingMachineCallableParamsArray: votingMachine.getCallableParamsArray(
-            votingMachineConfig
+            schemeConfig.params.votingMachineConfig
           ),
           votingMachineAddress: addresses[votingMachine.typeName],
         },

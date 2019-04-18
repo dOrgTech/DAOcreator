@@ -16,11 +16,7 @@ export interface DAOcreatorState {
     tokenSymbol: string
   }
   founders: Arc.Founder[]
-  schemes: {
-    id: string
-    schemeTypeName: string
-    votingMachineConfig: Arc.VotingMachineConfiguration
-  }[]
+  schemes: Arc.SchemeConfig[]
   deployedDao: Arc.DAO | undefined
 }
 
