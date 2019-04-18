@@ -30,6 +30,7 @@ import {
   SchemeConfig,
   VotingMachineConfiguration,
   votingMachines,
+  initSchemeConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 
 const styles = (theme: Theme) =>
@@ -64,27 +65,19 @@ const styles = (theme: Theme) =>
 
 interface Props extends WithStyles<typeof styles> {
   open: boolean
-  addScheme: (
-    schemeType: string,
-    schemeConfig: SchemeConfig,
-    votingMachineConfig: VotingMachineConfiguration
-  ) => void
+  addScheme: (schemeConfig: SchemeConfig) => void
   close: () => void
 }
 
 interface State {
   activeStep: number
-  schemeTypeName: string
-  schemeConfig: SchemeConfig | undefined
-  votingMachineConfig: VotingMachineConfiguration | undefined
+  schemeConfig: SchemeConfig
 }
 
 class VerticalLinearStepper extends React.Component<Props, State> {
   public readonly state: State = {
     activeStep: 0,
-    schemeTypeName: "",
-    schemeConfig: undefined,
-    votingMachineConfig: undefined,
+    schemeConfig: initSchemeConfig(),
   }
 
   handleNext = () => {
@@ -99,51 +92,53 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }))
   }
 
+  addOrUpdateSchemeParam = async (paramName: string, value: any) => {
+    const { id, typeName, params } = this.state.schemeConfig
+    await this.setState({
+      schemeConfig: {
+        id,
+        typeName,
+        params: R.assoc(paramName, value, params),
+      },
+    })
+  }
+
   handleSchemeConfigParamsChange = async (event: any) => {
     const { name, value } = event.target
-    if (this.state.schemeConfig != null) {
-      await this.setState({
-        schemeConfig: {
-          id: this.state.schemeTypeName,
-          typeName: this.state.schemeConfig.typeName,
-          params: R.assoc(name, value, this.state.schemeConfig.params),
-        },
-      })
-    }
+    await this.addOrUpdateSchemeParam(name, value)
   }
 
   handleVotingMachineParamsChange = async (event: any) => {
     const { name, value } = event.target
-    if (this.state.votingMachineConfig != null) {
-      await this.setState({
-        votingMachineConfig: {
-          typeName: this.state.votingMachineConfig.typeName,
-          params: R.assoc(name, value, this.state.votingMachineConfig.params),
-        },
-      })
+    const oldVotingMachineConfig = this.state.schemeConfig.params
+      .votingMachineConfig
+    const newVotingMachineConfig: VotingMachineConfiguration = {
+      typeName: oldVotingMachineConfig.typeName,
+      params: R.assoc(name, value, oldVotingMachineConfig.params),
     }
+    await this.addOrUpdateSchemeParam(
+      "votingMachineConfig",
+      newVotingMachineConfig
+    )
+  }
+
+  handleVotingMachineTypeChange = async (event: any) => {
+    const { value: newTypeName } = event.target
+    const { params } = this.state.schemeConfig.params.votingMachineConfig
+    const newVotingMachineConfig: VotingMachineConfiguration = {
+      typeName: newTypeName,
+      params: getVotingMachineDefaultParams(newTypeName),
+    }
+    await this.addOrUpdateSchemeParam(
+      "votingMachineConfig",
+      newVotingMachineConfig
+    )
   }
 
   handleReset = () => {
     this.setState({
       activeStep: 0,
-      schemeTypeName: "",
-      schemeConfig: undefined,
-      votingMachineConfig: undefined,
-    })
-  }
-
-  updateSchemeConfig = (
-    schemeTypeName: string,
-    schemeConfig: SchemeConfig,
-    votingMachineConfig: VotingMachineConfiguration
-  ) => {
-    console.log(schemeTypeName)
-    console.log(votingMachineConfig)
-    this.setState({
-      schemeTypeName,
-      schemeConfig,
-      votingMachineConfig,
+      schemeConfig: initSchemeConfig(),
     })
   }
 
@@ -153,13 +148,14 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   }
 
   handleSave = () => {
-    const { schemeTypeName, votingMachineConfig, schemeConfig } = this.state
+    const { schemeConfig } = this.state
+    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
+    const { votingMachineConfig } = schemeParams
     if (
       !R.isEmpty(schemeTypeName) &&
-      votingMachineConfig != null &&
-      schemeConfig != null
+      !R.isEmpty(votingMachineConfig.typeName)
     ) {
-      this.props.addScheme(schemeTypeName, schemeConfig, votingMachineConfig)
+      this.props.addScheme(schemeConfig)
       this.handleClose()
     } else {
       throw Error(
@@ -168,8 +164,12 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }
   }
 
-  setScheme = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ schemeTypeName: event.target.value })
+  setSchemeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { schemeConfig } = this.state
+    const { id, params } = schemeConfig
+    this.setState({
+      schemeConfig: { id, typeName: event.target.value, params },
+    })
   }
 
   stepControlls = (
@@ -202,7 +202,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
   render() {
     const { classes, open } = this.props
-    const { activeStep, schemeTypeName, votingMachineConfig } = this.state
+    const { activeStep, schemeConfig } = this.state
+    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
+    const { votingMachineConfig } = schemeParams
     const scheme = getScheme(schemeTypeName)
     const votingMachine =
       votingMachineConfig != null
@@ -226,8 +228,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     <InputLabel htmlFor="scheme-select">Scheme</InputLabel>
                     <Select
                       className={classes.select}
-                      value={this.state.schemeTypeName}
-                      onChange={this.setScheme}
+                      value={schemeTypeName}
+                      onChange={this.setSchemeType}
                       inputProps={{
                         name: "Scheme",
                         id: "scheme-select",
@@ -238,7 +240,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                       </MenuItem>
                       {R.map(
                         scheme => (
-                          <MenuItem value={scheme.typeName}>
+                          <MenuItem
+                            value={scheme.typeName}
+                            key={"select-item-" + scheme.typeName}
+                          >
                             {scheme.displayName}
                           </MenuItem>
                         ),
@@ -254,38 +259,43 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   {this.stepControlls(true, false, scheme != null, classes)}
                 </StepContent>
               </Step>
-              <Step>
-                <StepLabel>Configure Scheme</StepLabel>
-                {R.map(
-                  param => (
-                    <div key={`text-field-${param.typeName}`}>
-                      <TextField
-                        name={param.typeName}
-                        label={param.displayName}
-                        margin="normal"
-                        onChange={this.handleVotingMachineParamsChange}
-                        value={
-                          votingMachineConfig != null
-                            ? R.prop(
-                                param.typeName,
-                                votingMachineConfig.params as any
-                              )
-                            : ""
-                        }
-                        onBlur={() => console.log("TODO: validate fields")}
-                        fullWidth
-                        required={!R.pathOr(false, ["optional"], param)}
-                      />
-                      <Typography gutterBottom>
-                        <i>{param.description}</i>
-                      </Typography>
-                    </div>
-                  ),
-                  scheme != null && scheme.params.length > 0
-                    ? scheme.params
-                    : []
-                )}
-              </Step>
+              {scheme != null && scheme.params.length > 0 ? (
+                <Step>
+                  <StepLabel>Configure Scheme</StepLabel>
+                  <StepContent>
+                    {R.map(
+                      param => (
+                        <div key={`text-field-${param.typeName}`}>
+                          <TextField
+                            name={param.typeName}
+                            label={param.displayName}
+                            margin="normal"
+                            onChange={this.handleVotingMachineParamsChange}
+                            value={
+                              votingMachineConfig != null
+                                ? R.prop(
+                                    param.typeName,
+                                    votingMachineConfig.params as any
+                                  )
+                                : ""
+                            }
+                            onBlur={() => console.log("TODO: validate fields")}
+                            fullWidth
+                            required={!R.pathOr(false, ["optional"], param)}
+                          />
+                          <Typography gutterBottom>
+                            <i>{param.description}</i>
+                          </Typography>
+                        </div>
+                      ),
+                      scheme != null && scheme.params.length > 0
+                        ? scheme.params
+                        : []
+                    )}
+                    {this.stepControlls(true, false, scheme != null, classes)}
+                  </StepContent>
+                </Step>
+              ) : null}
               <Step>
                 <StepLabel>Select Voting Machine</StepLabel>
                 <StepContent>
@@ -298,16 +308,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     </InputLabel>
                     <Select
                       className={classes.select}
-                      onChange={async (event: any) => {
-                        await this.setState({
-                          votingMachineConfig: {
-                            typeName: event.target.value,
-                            params: getVotingMachineDefaultParams(
-                              event.target.value
-                            ),
-                          },
-                        })
-                      }}
+                      onChange={this.handleVotingMachineTypeChange}
                       value={
                         votingMachine != null ? votingMachine.typeName : ""
                       }

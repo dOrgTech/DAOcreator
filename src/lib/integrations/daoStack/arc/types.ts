@@ -5,9 +5,13 @@
 //   will be useful. We don't want to bleed UI data into the state (descriptions, display names, etc),
 //   but we also want to keep them consistent between tools (GUI, CLI, etc).
 
+export type ParamConfig = {
+  [paramName: string]: string | number
+}
+
 export type VotingMachineConfiguration = {
   typeName: string
-  params: { [paramName: string]: string | number }
+  params: ParamConfig
 }
 
 export type VotingMachine = {
@@ -36,7 +40,7 @@ export type Founder = {
 export type SchemeConfig = {
   id: string
   typeName: string // not schemeTypeName (that is in use now)
-  params: { [paramName: string]: string | number | VotingMachineConfiguration }
+  params: ParamConfig & { votingMachineConfig: VotingMachineConfiguration }
 }
 
 export type Scheme = {
