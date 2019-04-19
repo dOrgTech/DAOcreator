@@ -206,10 +206,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
     const { votingMachineConfig } = schemeParams
     const scheme = getScheme(schemeTypeName)
-    const votingMachine =
-      votingMachineConfig != null
-        ? getVotingMachine(votingMachineConfig.typeName)
-        : undefined
+    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
 
     return (
       <Dialog open={open}>
@@ -270,15 +267,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                             name={param.typeName}
                             label={param.displayName}
                             margin="normal"
-                            onChange={this.handleVotingMachineParamsChange}
-                            value={
-                              votingMachineConfig != null
-                                ? R.prop(
-                                    param.typeName,
-                                    votingMachineConfig.params as any
-                                  )
-                                : ""
-                            }
+                            onChange={this.handleSchemeConfigParamsChange}
+                            value={R.prop(param.typeName, schemeConfig.params)}
                             onBlur={() => console.log("TODO: validate fields")}
                             fullWidth
                             required={!R.pathOr(false, ["optional"], param)}
