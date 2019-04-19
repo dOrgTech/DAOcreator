@@ -1,4 +1,4 @@
-import { Scheme } from "./types"
+import { Scheme, SchemeConfig } from "./types"
 import * as R from "ramda"
 import Web3 from "web3"
 
@@ -21,11 +21,15 @@ export const schemes: Scheme[] = [
       },
     ],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
       return [
-        Web3.utils.toWei(this.params[0].defaultValue.toString(), "gwei"), //TODO: let the user spesify this
+        Web3.utils.toWei(
+          schemeConfig.params.orgNativeTokenFeeGWei.toString(),
+          "gwei"
+        ),
         votingMachineParametersKey,
         votingMachineAddress,
       ]
@@ -40,8 +44,9 @@ export const schemes: Scheme[] = [
     permissions: "0x00000000" /* no permissions */,
     params: [],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
       return [votingMachineParametersKey, votingMachineAddress]
     },
@@ -61,20 +66,17 @@ export const schemes: Scheme[] = [
       return [votingMachineParametersKey, votingMachineAddress]
     },
   }, */
-  {
-    typeName: "DAOCreator",
-    displayName: "DAO Creator",
-    description: "Makes it possible for the DAO to create new DAOs.",
-    toggleDefault: true,
-    permissions: "0x00000000" /* no permissions */,
-    params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return []
-    },
-  },
+  // {
+  //   typeName: "DAOCreator",
+  //   displayName: "DAO Creator",
+  //   description: "Makes it possible for the DAO to create new DAOs.",
+  //   toggleDefault: true,
+  //   permissions: "0x00000000" /* no permissions */,
+  //   params: [],
+  //   getCallableParamsArray: function(schemeConfig) {
+  //     return []
+  //   },
+  // },
   // Currently not available on mainnet
   // {
   //   typeName: "SimpleICO",
@@ -83,20 +85,21 @@ export const schemes: Scheme[] = [
   //   toggleDefault: false,
   //   permissions: "0x00000000" /* no permissions */,
   // },
-  {
-    typeName: "VestingScheme",
-    displayName: "Token Vesting",
-    description: "Add the possibility of creating a token vesting agreement.",
-    toggleDefault: false,
-    permissions: "0x00000000" /* no permissions */,
-    params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
-    },
-  },
+  // {
+  //   typeName: "VestingScheme",
+  //   displayName: "Token Vesting",
+  //   description: "Add the possibility of creating a token vesting agreement.",
+  //   toggleDefault: false,
+  //   permissions: "0x00000000" /* no permissions */,
+  //   params: [],
+  //   getCallableParamsArray: function(
+  //     schemeConfig,
+  //     votingMachineAddress,
+  //     votingMachineParametersKey
+  //   ) {
+  //     return [votingMachineParametersKey, votingMachineAddress]
+  //   },
+  // },
   {
     typeName: "OrganizationRegister",
     displayName: "Organization Register",
@@ -106,10 +109,11 @@ export const schemes: Scheme[] = [
     permissions: "0x00000000" /* no permissions */,
     params: [],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
-      return []
+      return [] // TODO
     },
   },
   {
@@ -120,8 +124,9 @@ export const schemes: Scheme[] = [
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
     params: [],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
       return [votingMachineParametersKey, votingMachineAddress]
     },
@@ -135,8 +140,9 @@ export const schemes: Scheme[] = [
     permissions: "0x0000001F" /* all permissions */,
     params: [],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
       return [
         votingMachineParametersKey,
@@ -154,8 +160,9 @@ export const schemes: Scheme[] = [
     permissions: "0x00000004" /* manage global constraints */,
     params: [],
     getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
     ) {
       return [votingMachineParametersKey, votingMachineAddress]
     },
@@ -164,3 +171,14 @@ export const schemes: Scheme[] = [
 
 export const getScheme = (typeName: string) =>
   R.find(scheme => scheme.typeName === typeName, schemes) as Scheme
+
+export const getSchemeCallableParamsArray = (
+  schemeConfig: SchemeConfig,
+  votingMachineAddress: string,
+  votingMachineParametersKey: string
+) =>
+  getScheme(schemeConfig.typeName).getCallableParamsArray(
+    schemeConfig,
+    votingMachineAddress,
+    votingMachineParametersKey
+  )

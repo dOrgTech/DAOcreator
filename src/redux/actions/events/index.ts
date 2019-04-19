@@ -76,15 +76,7 @@ export const DAO_CREATE_ADD_FOUNDER = createPayloadEvent<
   DAO_CREATE_ADD_FOUNDER
 >(Events.DAO_CREATE_ADD_FOUNDER)
 
-interface DAO_CREATE_ADD_SCHEME
-  extends PayloadEvent<
-    string,
-    {
-      id: string
-      schemeTypeName: string
-      votingMachineConfig: Arc.VotingMachineConfiguration
-    }
-  > {
+interface DAO_CREATE_ADD_SCHEME extends PayloadEvent<string, Arc.SchemeConfig> {
   type: Events.DAO_CREATE_ADD_SCHEME
 }
 export const DAO_CREATE_ADD_SCHEME = createPayloadEvent<DAO_CREATE_ADD_SCHEME>(

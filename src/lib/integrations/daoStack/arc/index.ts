@@ -1,6 +1,7 @@
 import deployedContractAddresses from "./contractAddresses.json"
 import { Dispatch } from "redux"
 import * as R from "ramda"
+import uuid from "uuid"
 
 export * from "./types"
 export * from "./typeConversions"
@@ -15,6 +16,7 @@ import {
   Scheme,
   VotingMachine,
   VotingMachineConfiguration,
+  SchemeConfig,
 } from "./types"
 
 export const init = async (web3: any) => {
@@ -37,10 +39,7 @@ export const createDao = (
 ) => async (
   naming: any,
   founders: Founder[],
-  schemes: {
-    schemeTypeName: string
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemes: SchemeConfig[]
 ): Promise<DAO> => {
   try {
     const network: string = await web3.eth.net.getNetworkType()
@@ -60,5 +59,21 @@ export const createDao = (
     console.log("Error while deploying DAO:")
     console.error(e)
     return Promise.reject(e)
+  }
+}
+
+export const initSchemeConfig = (
+  id: string = uuid(),
+  typeName: string = "",
+  params: any = {}
+): SchemeConfig => {
+  params["votingMachineConfig"] = R.propOr<VotingMachineConfiguration>(
+    { typeName: "", params: {} },
+    "votingMachineConfig"
+  )(params)
+  return {
+    id,
+    typeName,
+    params,
   }
 }

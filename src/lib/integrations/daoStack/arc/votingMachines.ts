@@ -239,3 +239,10 @@ export const getVotingMachineDefaultParams = (typeName: string): any => {
 }
 
 export const getVotingMachine = (typeName: string) => votingMachines[typeName]
+
+export const getVotingMachineCallableParamsArray = (
+  votingMachineConfig: VotingMachineConfiguration
+) =>
+  getVotingMachine(votingMachineConfig.typeName).getCallableParamsArray(
+    votingMachineConfig
+  )
