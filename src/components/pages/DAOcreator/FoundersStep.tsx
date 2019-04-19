@@ -110,6 +110,13 @@ class FoundersStep extends React.Component<Props, State> {
     this.props.actions.setStepIsValid(true)
   }
 
+  onRemoveFounder = (addr: string) => {
+    this.props.actions.removeFounder(addr)
+    this.setState(initState)
+
+    this.props.actions.setStepIsValid(true)
+  }
+
   render() {
     const { classes, addedFounders } = this.props
 
@@ -234,11 +241,14 @@ class FoundersStep extends React.Component<Props, State> {
       <Grid item xs={7}>
         <Typography>{address}</Typography>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <Typography>{reputation}</Typography>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <Typography>{tokens}</Typography>
+      </Grid>
+      <Grid item xs={2}>
+        <Button onClick={() => this.onRemoveFounder(address)}>Delete</Button>
       </Grid>
     </Grid>
   )

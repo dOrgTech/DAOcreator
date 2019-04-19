@@ -14,6 +14,7 @@ export default interface DAOcreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
+  removeFounder(address: string): (dispatch: Dispatch) => Promise<void>
   addScheme(
     schemeConfig: Arc.SchemeConfig
   ): (dispatch: Dispatch) => Promise<string>
@@ -99,6 +100,15 @@ export function addFounder(
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
     dispatch(Events.DAO_CREATE_ADD_FOUNDER(founder))
+    return Promise.resolve()
+  }
+}
+
+export function removeFounder(
+  address: string
+): (dispatch: Dispatch) => Promise<void> {
+  return (dispatch: Dispatch) => {
+    dispatch(Events.DAO_CREATE_REM_FOUNDER(address))
     return Promise.resolve()
   }
 }
