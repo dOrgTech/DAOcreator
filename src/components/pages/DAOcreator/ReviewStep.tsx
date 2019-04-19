@@ -86,10 +86,7 @@ const ReviewStep: React.SFC<Props> = ({
               >
                 Features
               </Typography>
-              {R.map(schemeConfig => {
-                const scheme = getScheme(schemeConfig.typeName)
-                return scheme.displayName
-              }, schemes)}
+              {R.map(displayScheme, schemes)}
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -177,7 +174,7 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displayScheme = ({ schemeConfig }: { schemeConfig: SchemeConfig }) => {
+const displayScheme = (schemeConfig: SchemeConfig) => {
   const votingMachine =
     votingMachines[schemeConfig.params.votingMachineConfig.typeName]
   const scheme = getScheme(schemeConfig.typeName)
@@ -190,7 +187,7 @@ const displayScheme = ({ schemeConfig }: { schemeConfig: SchemeConfig }) => {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant="subtitle1">{votingMachine.displayName}</Typography>
+        <Typography variant="subtitle2">{votingMachine.displayName}</Typography>
         <Typography>
           <i>{votingMachine.description}</i>
         </Typography>
