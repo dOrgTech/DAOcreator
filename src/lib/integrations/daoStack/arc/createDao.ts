@@ -6,7 +6,11 @@ import {
   VotingMachineConfiguration,
 } from "./types"
 import { votingMachines, getVotingMachine } from "./votingMachines"
-import { getScheme } from "./index"
+import {
+  getScheme,
+  getSchemeCallableParamsArray,
+  getVotingMachineCallableParamsArray,
+} from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
 
@@ -78,21 +82,20 @@ export const createDao = async (
   const votingMachineConfigToHash = (
     votingMachineConfig: VotingMachineConfiguration
   ) => {
-    const votingMachine = votingMachines[votingMachineConfig.typeName]
-    const callableVotingParams = votingMachine.getCallableParamsArray(
+    const callableVotingParams = getVotingMachineCallableParamsArray(
       votingMachineConfig
     )
     return hash({ callableVotingParams })
   }
 
   const initializedSchemes = R.map(schemeConfig => {
-    const scheme = getScheme(schemeConfig.typeName)
     return {
-      scheme,
       schemeConfig,
       schemeContract: new web3.eth.Contract(
-        require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
-        addresses[scheme.typeName],
+        require(`@daostack/arc/build/contracts/${
+          schemeConfig.typeName
+        }.json`).abi,
+        addresses[schemeConfig.typeName],
         opts
       ),
       votingMachineHash: votingMachineConfigToHash(
@@ -104,7 +107,6 @@ export const createDao = async (
   const initializedVotingMachines: any = R.reduce(
     (acc, schemeConfig) => {
       const votingMachineConfig = schemeConfig.params.votingMachineConfig
-      const votingMachine = getVotingMachine(votingMachineConfig.typeName)
       const votingMachineContract = new web3.eth.Contract(
         require(`@daostack/arc/build/contracts/${
           votingMachineConfig.typeName
@@ -116,7 +118,7 @@ export const createDao = async (
         votingMachineConfigToHash(votingMachineConfig),
         {
           votingMachineContract,
-          votingMachineCallableParamsArray: votingMachine.getCallableParamsArray(
+          votingMachineCallableParamsArray: getVotingMachineCallableParamsArray(
             votingMachineConfig
           ),
           votingMachineAddress: addresses[votingMachineConfig.typeName],
@@ -169,11 +171,11 @@ export const createDao = async (
   )
 
   const schemeAddresses = R.map(
-    ({ scheme }) => addresses[scheme.typeName],
+    ({ schemeConfig }) => addresses[schemeConfig.typeName],
     initializedSchemes
   )
   const schemePermissions = R.map(
-    ({ scheme }) => scheme.permissions,
+    ({ schemeConfig }) => getScheme(schemeConfig.typeName).permissions,
     initializedSchemes
   )
 
@@ -190,32 +192,29 @@ export const createDao = async (
   )
 
   const schemeParams = await Promise.all(
-    R.map(
-      async ({ scheme, schemeConfig, schemeContract, votingMachineHash }) => {
-        const { votingMachineAddress, votingMachineParametersKey } = R.find(
-          parameterizedVotingMachine =>
-            parameterizedVotingMachine.votingMachineHash === votingMachineHash,
-          parameterizedVotingMachines
-        ) as any
+    R.map(async ({ schemeConfig, schemeContract, votingMachineHash }) => {
+      const { votingMachineAddress, votingMachineParametersKey } = R.find(
+        parameterizedVotingMachine =>
+          parameterizedVotingMachine.votingMachineHash === votingMachineHash,
+        parameterizedVotingMachines
+      ) as any
 
-        const setParams = schemeContract.methods.setParameters.apply(
-          null,
-          scheme.getCallableParamsArray(
-            schemeConfig,
-            votingMachineAddress,
-            votingMachineParametersKey
-          )
+      const setParams = schemeContract.methods.setParameters.apply(
+        null,
+        getSchemeCallableParamsArray(
+          schemeConfig,
+          votingMachineAddress,
+          votingMachineParametersKey
         )
-        const schemeParametersKey = await setParams.call()
+      )
+      const schemeParametersKey = await setParams.call()
 
-        const tx = await setParams.send()
-        console.log(`${scheme.typeName} parameters set.`)
-        console.log(tx)
+      const tx = await setParams.send()
+      console.log(`${schemeConfig.typeName} parameters set.`)
+      console.log(tx)
 
-        return schemeParametersKey
-      },
-      initializedSchemes
-    )
+      return schemeParametersKey
+    }, initializedSchemes)
   )
 
   console.log("Setting DAO schemes...")
