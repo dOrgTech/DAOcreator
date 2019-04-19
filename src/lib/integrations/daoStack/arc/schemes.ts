@@ -20,12 +20,18 @@ export const schemes: Scheme[] = [
         defaultValue: 0,
       },
     ],
-    getCallableParamsArray: function(schemeConfig) {
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
       return [
-        Web3.utils.toWei(this.params[0].defaultValue.toString(), "gwei"), //TODO: let the user spesify this
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
+        Web3.utils.toWei(
+          schemeConfig.params.orgNativeTokenFeeGWei.toString(),
+          "gwei"
+        ),
+        votingMachineParametersKey,
+        votingMachineAddress,
       ]
     },
   },
@@ -37,12 +43,12 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return [
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
-      ]
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
     },
   },
   /** {
@@ -60,17 +66,17 @@ export const schemes: Scheme[] = [
       return [votingMachineParametersKey, votingMachineAddress]
     },
   }, */
-  {
-    typeName: "DAOCreator",
-    displayName: "DAO Creator",
-    description: "Makes it possible for the DAO to create new DAOs.",
-    toggleDefault: true,
-    permissions: "0x00000000" /* no permissions */,
-    params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return []
-    },
-  },
+  // {
+  //   typeName: "DAOCreator",
+  //   displayName: "DAO Creator",
+  //   description: "Makes it possible for the DAO to create new DAOs.",
+  //   toggleDefault: true,
+  //   permissions: "0x00000000" /* no permissions */,
+  //   params: [],
+  //   getCallableParamsArray: function(schemeConfig) {
+  //     return []
+  //   },
+  // },
   // Currently not available on mainnet
   // {
   //   typeName: "SimpleICO",
@@ -79,21 +85,21 @@ export const schemes: Scheme[] = [
   //   toggleDefault: false,
   //   permissions: "0x00000000" /* no permissions */,
   // },
-  {
-    typeName: "VestingScheme",
-    displayName: "Token Vesting",
-    description: "Add the possibility of creating a token vesting agreement.",
-    toggleDefault: false,
-    permissions: "0x00000000" /* no permissions */,
-    params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return [
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
-      ]
-    },
-  },
+  // {
+  //   typeName: "VestingScheme",
+  //   displayName: "Token Vesting",
+  //   description: "Add the possibility of creating a token vesting agreement.",
+  //   toggleDefault: false,
+  //   permissions: "0x00000000" /* no permissions */,
+  //   params: [],
+  //   getCallableParamsArray: function(
+  //     schemeConfig,
+  //     votingMachineAddress,
+  //     votingMachineParametersKey
+  //   ) {
+  //     return [votingMachineParametersKey, votingMachineAddress]
+  //   },
+  // },
   {
     typeName: "OrganizationRegister",
     displayName: "Organization Register",
@@ -102,8 +108,12 @@ export const schemes: Scheme[] = [
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
     params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return []
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
+      return [] // TODO
     },
   },
   {
@@ -113,12 +123,12 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
     params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return [
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
-      ]
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
     },
   },
   {
@@ -129,13 +139,15 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
     params: [],
-    getCallableParamsArray: function(schemeConfig) {
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
       return [
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
+        votingMachineParametersKey,
+        votingMachineParametersKey,
+        votingMachineAddress,
       ]
     },
   },
@@ -147,12 +159,12 @@ export const schemes: Scheme[] = [
     toggleDefault: true,
     permissions: "0x00000004" /* manage global constraints */,
     params: [],
-    getCallableParamsArray: function(schemeConfig) {
-      return [
-        schemeConfig.params.votingMachineConfig.params
-          .votingMachineParametersKey,
-        schemeConfig.params.votingMachineConfig.params.votingMachineAddress,
-      ]
+    getCallableParamsArray: function(
+      schemeConfig,
+      votingMachineAddress,
+      votingMachineParametersKey
+    ) {
+      return [votingMachineParametersKey, votingMachineAddress]
     },
   },
 ]

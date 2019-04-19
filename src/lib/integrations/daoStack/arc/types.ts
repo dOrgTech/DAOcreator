@@ -50,7 +50,11 @@ export type Scheme = {
   description: string
   toggleDefault: boolean
   permissions: string
-  getCallableParamsArray: (schemeConfig: SchemeConfig) => any[]
+  getCallableParamsArray: (
+    schemeConfig: SchemeConfig,
+    votingMachineAddress: string,
+    votingMachineParametersKey: string
+  ) => any[]
   params: Param[]
 }
 
