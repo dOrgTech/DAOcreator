@@ -107,7 +107,30 @@ export const schemes: Scheme[] = [
       "Makes it possible for the DAO to open a registry. Other DAOs can then add and promote themselves on this registry.",
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
-    params: [],
+    params: [
+      {
+        typeName: "token",
+        valueType: "Address",
+        displayName: "Pay Token",
+        description:
+          "The ERC20 token to pay for register or promotion, an address.",
+        defaultValue: "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359", // DAI. TODO: make this show up nicely in th UI
+      },
+      {
+        typeName: "fee",
+        valueType: "number",
+        displayName: "Registration Fee",
+        description: "Fee for adding something to the register in Wei",
+        defaultValue: 100,
+      },
+      {
+        typeName: "beneficiary",
+        valueType: "Address",
+        displayName: "Beneficiary",
+        description: "The beneficiary payment address",
+        defaultValue: "", // TODO: can we know the DAO's avatar address in advance (CREATE2) in order to set this to the avatar here (before the DAO is created)? Or should we set up the DAO ("forgeOrg") before we start defining schemes? We allready have all the needed information to forg the org.
+      },
+    ],
     getCallableParamsArray: function(
       schemeConfig,
       votingMachineAddress,
