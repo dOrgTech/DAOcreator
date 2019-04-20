@@ -79,6 +79,15 @@ export const createDao = async (
   console.log("Created new organization.")
   console.log(tx)
 
+  const avatar = new web3.eth.Contract(
+    require("@daostack/arc/build/contracts/Avatar.json").abi,
+    Avatar,
+    opts
+  )
+
+  const daoToken = await avatar.methods.nativeToken().call()
+  const reputation = await avatar.methods.nativeReputation().call()
+
   const votingMachineConfigToHash = (
     votingMachineConfig: VotingMachineConfiguration
   ) => {
@@ -200,6 +209,8 @@ export const createDao = async (
     R.map(async ({ schemeConfig, schemeContract, votingMachineHash }) => {
       let deploymentInfo = {
         avatar: Avatar,
+        daoToken,
+        reputation,
       }
 
       if (votingMachineHash != null) {
@@ -213,6 +224,7 @@ export const createDao = async (
           votingMachineParametersKey,
         })
       }
+      console.log(deploymentInfo)
       const setParams = schemeContract.methods.setParameters.apply(
         null,
         getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
@@ -247,15 +259,6 @@ export const createDao = async (
     .send()
   console.log("DAO schemes set.")
   console.log(tx)
-
-  const avatar = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/Avatar.json").abi,
-    Avatar,
-    opts
-  )
-
-  const daoToken = await avatar.methods.nativeToken().call()
-  const reputation = await avatar.methods.nativeReputation().call()
 
   return {
     avatar: Avatar,

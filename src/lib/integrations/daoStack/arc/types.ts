@@ -76,8 +76,8 @@ export type DAO = {
 
 export type DeploymentInfo = {
   avatar: string // address
-  daoToken?: string // address
-  reputation?: string // address
+  daoToken: string // address
+  reputation: string // address
   votingMachineParametersKey?: string // hash
   votingMachineAddress?: string // address
 }
