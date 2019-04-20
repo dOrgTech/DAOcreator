@@ -48,6 +48,13 @@ export const reducer = (
       return R.merge(state, {
         founders: R.append(event.payload, state.founders),
       })
+    case Events.DAO_CREATE_REM_FOUNDER:
+      return R.merge(state, {
+        founders: R.filter(
+          founder => founder.address !== event.payload,
+          state.founders
+        ),
+      })
     case Events.DAO_CREATE_ADD_SCHEME:
       return R.merge(state, {
         schemes: R.append(event.payload, state.schemes),
