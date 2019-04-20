@@ -201,11 +201,10 @@ export const createDao = async (
 
       const setParams = schemeContract.methods.setParameters.apply(
         null,
-        getSchemeCallableParamsArray(
-          schemeConfig,
+        getSchemeCallableParamsArray(schemeConfig, {
           votingMachineAddress,
-          votingMachineParametersKey
-        )
+          votingMachineParametersKey,
+        })
       )
       const schemeParametersKey = await setParams.call()
 

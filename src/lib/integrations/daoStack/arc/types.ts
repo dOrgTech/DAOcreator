@@ -24,10 +24,16 @@ export type VotingMachine = {
 
 export type Param = {
   typeName: string
-  valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
+  valueType:
+    | "boolean"
+    | "string"
+    | "number"
+    | "Address"
+    | "BigNumber"
+    | "VotingMachineConfig"
   displayName: string
   description: string
-  defaultValue: string | number | boolean
+  defaultValue?: string | number | boolean
   optional?: boolean
 }
 
@@ -52,8 +58,7 @@ export type Scheme = {
   permissions: string
   getCallableParamsArray: (
     schemeConfig: SchemeConfig,
-    votingMachineAddress: string,
-    votingMachineParametersKey: string
+    deploymentInfo: any
   ) => any[]
   params: Param[]
 }

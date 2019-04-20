@@ -10,7 +10,6 @@ export const schemes: Scheme[] = [
       "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
-    // TODO: add parameters (orgNativeTokenFeeGWei)
     params: [
       {
         typeName: "orgNativeTokenFeeGWei",
@@ -19,12 +18,18 @@ export const schemes: Scheme[] = [
         description: "Fee in GWei:",
         defaultValue: 0,
       },
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
     ],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
       return [
         Web3.utils.toWei(
           schemeConfig.params.orgNativeTokenFeeGWei.toString(),
@@ -42,12 +47,19 @@ export const schemes: Scheme[] = [
       "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
-    params: [],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
+    params: [
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
+    ],
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
       return [votingMachineParametersKey, votingMachineAddress]
     },
   },
@@ -131,12 +143,9 @@ export const schemes: Scheme[] = [
         defaultValue: "", // TODO: can we know the DAO's avatar address in advance (CREATE2) in order to set this to the avatar here (before the DAO is created)? Or should we set up the DAO ("forgeOrg") before we start defining schemes? We allready have all the needed information to forg the org.
       },
     ],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
-      return [] // TODO
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const { token, fee, beneficiary } = schemeConfig.params
+      return [token, fee, beneficiary] // TODO
     },
   },
   {
@@ -145,12 +154,19 @@ export const schemes: Scheme[] = [
     description: "Enables the DAO to upgrade itself.",
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
-    params: [],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
+    params: [
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
+    ],
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
       return [votingMachineParametersKey, votingMachineAddress]
     },
   },
@@ -161,12 +177,19 @@ export const schemes: Scheme[] = [
       "Manages post-creation adding/modifying and removing of features. Features add functionality to the DAO.",
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
-    params: [],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
+    params: [
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
+    ],
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
       return [
         votingMachineParametersKey,
         votingMachineParametersKey,
@@ -181,12 +204,19 @@ export const schemes: Scheme[] = [
       'Makes it possible to add/modify and remove constraints for the DAO. A constraint defines what "cannot be done" in the DAO. For instance, limit the number of tokens that a DAO can create.',
     toggleDefault: true,
     permissions: "0x00000004" /* manage global constraints */,
-    params: [],
-    getCallableParamsArray: function(
-      schemeConfig,
-      votingMachineAddress,
-      votingMachineParametersKey
-    ) {
+    params: [
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
+    ],
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
       return [votingMachineParametersKey, votingMachineAddress]
     },
   },
@@ -197,11 +227,9 @@ export const getScheme = (typeName: string) =>
 
 export const getSchemeCallableParamsArray = (
   schemeConfig: SchemeConfig,
-  votingMachineAddress: string,
-  votingMachineParametersKey: string
+  deploymentInfo: any = {}
 ) =>
   getScheme(schemeConfig.typeName).getCallableParamsArray(
     schemeConfig,
-    votingMachineAddress,
-    votingMachineParametersKey
+    deploymentInfo
   )

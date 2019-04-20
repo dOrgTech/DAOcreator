@@ -83,9 +83,11 @@ class SchemesStep extends React.Component<Props, State> {
                     </Typography>
                   </div>
                   <div className={classes.column}>
-                    <Typography className={classes.secondaryHeading}>
-                      {schemeConfig.params.votingMachineConfig.typeName}
-                    </Typography>
+                    {schemeConfig.params.votingMachineConfig != null ? (
+                      <Typography className={classes.secondaryHeading}>
+                        {schemeConfig.params.votingMachineConfig.typeName}
+                      </Typography>
+                    ) : null}
                   </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>

@@ -176,7 +176,9 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
 
 const displayScheme = (schemeConfig: SchemeConfig) => {
   const votingMachine =
-    votingMachines[schemeConfig.params.votingMachineConfig.typeName]
+    votingMachines[
+      R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
+    ]
   const scheme = getScheme(schemeConfig.typeName)
   return (
     <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
@@ -186,12 +188,16 @@ const displayScheme = (schemeConfig: SchemeConfig) => {
           <i>{scheme.description}</i>
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        <Typography variant="subtitle2">{votingMachine.displayName}</Typography>
-        <Typography>
-          <i>{votingMachine.description}</i>
-        </Typography>
-      </Grid>
+      {votingMachine != null ? (
+        <Grid item xs={12}>
+          <Typography variant="subtitle2">
+            {votingMachine.displayName}
+          </Typography>
+          <Typography>
+            <i>{votingMachine.description}</i>
+          </Typography>
+        </Grid>
+      ) : null}
     </Grid>
   )
 }
