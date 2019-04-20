@@ -113,10 +113,13 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { name, value } = event.target
     const oldVotingMachineConfig = this.state.schemeConfig.params
       .votingMachineConfig
-    const newVotingMachineConfig: VotingMachineConfiguration = {
-      typeName: oldVotingMachineConfig.typeName,
-      params: R.assoc(name, value, oldVotingMachineConfig.params),
-    }
+    const newVotingMachineConfig =
+      oldVotingMachineConfig != null
+        ? {
+            typeName: oldVotingMachineConfig.typeName,
+            params: R.assoc(name, value, oldVotingMachineConfig.params),
+          }
+        : { typeName: "", params: [] }
     await this.addOrUpdateSchemeParam(
       "votingMachineConfig",
       newVotingMachineConfig
@@ -386,8 +389,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
             scheme.params
           )
         : null
-    const votingMachineConfig: VotingMachineConfiguration = schemeConfig.params
-      .votingMachineConfig || {
+    const votingMachineConfig = schemeConfig.params.votingMachineConfig || {
       typeName: "",
       params: [],
     }
@@ -412,9 +414,12 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
               {scheme != null && shouldHaveVotingMachine
                 ? [
-                    this.selectVotingMachineStep(votingMachineConfig, classes),
+                    this.selectVotingMachineStep(
+                      votingMachineConfig as VotingMachineConfiguration,
+                      classes
+                    ),
                     this.configureVotingMachineStep(
-                      votingMachineConfig,
+                      votingMachineConfig as VotingMachineConfiguration,
                       classes
                     ),
                   ]

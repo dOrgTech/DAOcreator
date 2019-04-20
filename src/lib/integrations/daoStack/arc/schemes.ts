@@ -1,4 +1,4 @@
-import { Scheme, SchemeConfig } from "./types"
+import { Scheme, SchemeConfig, DeploymentInfo } from "./types"
 import * as R from "ramda"
 import Web3 from "web3"
 
@@ -140,7 +140,7 @@ export const schemes: Scheme[] = [
         valueType: "Address",
         displayName: "Beneficiary",
         description: "The beneficiary payment address",
-        defaultValue: "", // TODO: can we know the DAO's avatar address in advance (CREATE2) in order to set this to the avatar here (before the DAO is created)? Or should we set up the DAO ("forgeOrg") before we start defining schemes? We allready have all the needed information to forg the org.
+        defaultValue: "",
       },
     ],
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
@@ -227,7 +227,7 @@ export const getScheme = (typeName: string) =>
 
 export const getSchemeCallableParamsArray = (
   schemeConfig: SchemeConfig,
-  deploymentInfo: any = {}
+  deploymentInfo: DeploymentInfo
 ) =>
   getScheme(schemeConfig.typeName).getCallableParamsArray(
     schemeConfig,

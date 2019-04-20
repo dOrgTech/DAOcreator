@@ -46,7 +46,9 @@ export type Founder = {
 export type SchemeConfig = {
   id: string
   typeName: string // not schemeTypeName (that is in use now)
-  params: ParamConfig & { votingMachineConfig: VotingMachineConfiguration }
+  params: ParamConfig & {
+    votingMachineConfig: VotingMachineConfiguration | null
+  }
 }
 
 export type Scheme = {
@@ -70,4 +72,12 @@ export type DAO = {
   name: string
   daoToken: string
   reputation: string
+}
+
+export type DeploymentInfo = {
+  avatar: string // address
+  daoToken?: string // address
+  reputation?: string // address
+  votingMachineParametersKey?: string // hash
+  votingMachineAddress?: string // address
 }
