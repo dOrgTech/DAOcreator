@@ -53,7 +53,6 @@ class FoundersStep extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props)
-    this.props.actions.setStepIsValid(false)
   }
 
   handleChange = async (event: any) => {
