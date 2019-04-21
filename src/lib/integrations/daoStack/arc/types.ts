@@ -60,7 +60,7 @@ export type Scheme = {
   permissions: string
   getCallableParamsArray: (
     schemeConfig: SchemeConfig,
-    deploymentInfo: any
+    deploymentInfo: DeploymentInfo
   ) => any[]
   params: Param[]
 }
