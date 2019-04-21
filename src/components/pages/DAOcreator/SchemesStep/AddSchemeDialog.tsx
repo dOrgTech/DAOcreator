@@ -172,7 +172,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     })
   }
 
-  stepControlls = (
+  stepControls = (
     firstStep: boolean,
     lastStep: boolean,
     nextEnabled: boolean,
@@ -236,7 +236,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
             {scheme.description}
           </Typography>
         ) : null}
-        {this.stepControlls(true, false, scheme != null, classes)}
+        {this.stepControls(true, false, scheme != null, classes)}
       </StepContent>
     </Step>
   )
@@ -269,7 +269,11 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     label={param.displayName}
                     margin="normal"
                     onChange={this.handleSchemeConfigParamsChange}
-                    value={R.pathOr("", [param.typeName], schemeConfig.params)}
+                    value={R.pathOr(
+                      param.defaultValue,
+                      [param.typeName],
+                      schemeConfig.params
+                    )}
                     onBlur={() => console.log("TODO: validate fields")}
                     fullWidth
                     required={!R.pathOr(false, ["optional"], param)}
@@ -281,7 +285,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
               ),
               schemeParamsWithoutVotingMachineConfig
             )}
-            {this.stepControlls(false, isLastStep, true, classes)}
+            {this.stepControls(false, isLastStep, true, classes)}
           </StepContent>
         </Step>
       )
@@ -327,7 +331,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
               {votingMachine.description}
             </Typography>
           ) : null}
-          {this.stepControlls(false, false, votingMachine != null, classes)}
+          {this.stepControls(false, false, votingMachine != null, classes)}
         </StepContent>
       </Step>
     )
@@ -371,7 +375,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
             ),
             votingMachine != null ? votingMachine.params : []
           )}
-          {this.stepControlls(false, true, true, classes)}
+          {this.stepControls(false, true, true, classes)}
         </StepContent>
       </Step>
     )

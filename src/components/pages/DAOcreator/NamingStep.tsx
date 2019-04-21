@@ -52,7 +52,7 @@ class NamingStep extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props)
-    this.props.actions.setStepIsValid(false)
+    this.props.actions.setStepIsValid(this.props.stepValid)
   }
 
   handleChange = async (event: any) => {

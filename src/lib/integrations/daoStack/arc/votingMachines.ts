@@ -39,14 +39,14 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         typeName: "queuedVoteRequiredPercentage",
         valueType: "number",
         displayName: "Queued Vote Required Percentage",
-        description: "TODO",
+        description: "The minimum percentage for a vote on th queue to pass.",
         defaultValue: 50,
       },
       {
         typeName: "queuedVotePeriodLimit",
         valueType: "number",
         displayName: "Queued Vote Period Limit",
-        description: "TODO",
+        description: "The duration of a voting period.",
         defaultValue: 1800,
       },
       {
@@ -60,14 +60,16 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         typeName: "proposingRepRewardGwei",
         valueType: "number",
         displayName: "Proposing Rep Reward Gwei",
-        description: "TODO",
+        description:
+          "Reputation reward amount to the user that passes a proposal.",
         defaultValue: 5,
       },
       {
         typeName: "minimumDaoBountyGWei",
         valueType: "number",
         displayName: "Minimum Dao Bounty GWei",
-        description: "TODO",
+        description:
+          "The minimum amount you can have as a bounty for a proposal",
         defaultValue: 100,
       },
       {
