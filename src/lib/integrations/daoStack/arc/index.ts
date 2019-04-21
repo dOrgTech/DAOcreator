@@ -67,10 +67,6 @@ export const initSchemeConfig = (
   typeName: string = "",
   params: any = {}
 ): SchemeConfig => {
-  params["votingMachineConfig"] = R.propOr<VotingMachineConfiguration>(
-    { typeName: "", params: {} },
-    "votingMachineConfig"
-  )(params)
   return {
     id,
     typeName,

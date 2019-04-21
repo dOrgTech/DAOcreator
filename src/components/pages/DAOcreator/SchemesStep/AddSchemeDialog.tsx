@@ -27,6 +27,7 @@ import {
   getVotingMachine,
   getVotingMachineDefaultParams,
   schemes,
+  Scheme,
   SchemeConfig,
   VotingMachineConfiguration,
   votingMachines,
@@ -112,10 +113,13 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { name, value } = event.target
     const oldVotingMachineConfig = this.state.schemeConfig.params
       .votingMachineConfig
-    const newVotingMachineConfig: VotingMachineConfiguration = {
-      typeName: oldVotingMachineConfig.typeName,
-      params: R.assoc(name, value, oldVotingMachineConfig.params),
-    }
+    const newVotingMachineConfig =
+      oldVotingMachineConfig != null
+        ? {
+            typeName: oldVotingMachineConfig.typeName,
+            params: R.assoc(name, value, oldVotingMachineConfig.params),
+          }
+        : { typeName: "", params: [] }
     await this.addOrUpdateSchemeParam(
       "votingMachineConfig",
       newVotingMachineConfig
@@ -124,7 +128,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
   handleVotingMachineTypeChange = async (event: any) => {
     const { value: newTypeName } = event.target
-    const { params } = this.state.schemeConfig.params.votingMachineConfig
     const newVotingMachineConfig: VotingMachineConfiguration = {
       typeName: newTypeName,
       params: getVotingMachineDefaultParams(newTypeName),
@@ -151,15 +154,12 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { schemeConfig } = this.state
     const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
     const { votingMachineConfig } = schemeParams
-    if (
-      !R.isEmpty(schemeTypeName) &&
-      !R.isEmpty(votingMachineConfig.typeName)
-    ) {
+    if (!R.isEmpty(schemeTypeName)) {
       this.props.addScheme(schemeConfig)
       this.handleClose()
     } else {
       throw Error(
-        "There is a bug; it should not be possible to call 'handleSave' when 'schemeType' and/or 'votingMAchineCinfig' are undefined"
+        "There is a bug; it should not be possible to call 'handleSave' when 'schemeType' is undefined"
       )
     }
   }
@@ -200,13 +200,199 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     </div>
   )
 
+  selectSchemeStep = (scheme: Scheme | null, classes: any) => (
+    <Step key={"selectSchemeStep"}>
+      <StepLabel>Select Scheme</StepLabel>
+      <StepContent>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="scheme-select">Scheme</InputLabel>
+          <Select
+            className={classes.select}
+            value={scheme != null ? scheme.typeName : ""}
+            onChange={this.setSchemeType}
+            inputProps={{
+              name: "Scheme",
+              id: "scheme-select",
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {R.map(
+              scheme => (
+                <MenuItem
+                  value={scheme.typeName}
+                  key={"select-item-" + scheme.typeName}
+                >
+                  {scheme.displayName}
+                </MenuItem>
+              ),
+              schemes
+            )}
+          </Select>
+        </FormControl>
+        {scheme != null ? (
+          <Typography className={classes.description}>
+            {scheme.description}
+          </Typography>
+        ) : null}
+        {this.stepControlls(true, false, scheme != null, classes)}
+      </StepContent>
+    </Step>
+  )
+  configureSchemeStep = (
+    scheme: Scheme | null,
+    schemeConfig: SchemeConfig,
+    isLastStep: boolean,
+    classes: any
+  ) => {
+    const schemeParamsWithoutVotingMachineConfig =
+      scheme != null
+        ? R.filter(
+            param => param.typeName != "votingMachineConfig",
+            scheme.params
+          )
+        : []
+
+    if (scheme == null || schemeParamsWithoutVotingMachineConfig.length == 0) {
+      return null
+    } else {
+      return (
+        <Step key={"configureSchemeStep"}>
+          <StepLabel>Configure Scheme</StepLabel>
+          <StepContent>
+            {R.map(
+              param => (
+                <div key={`text-field-${param.typeName}`}>
+                  <TextField
+                    name={param.typeName}
+                    label={param.displayName}
+                    margin="normal"
+                    onChange={this.handleSchemeConfigParamsChange}
+                    value={R.pathOr("", [param.typeName], schemeConfig.params)}
+                    onBlur={() => console.log("TODO: validate fields")}
+                    fullWidth
+                    required={!R.pathOr(false, ["optional"], param)}
+                  />
+                  <Typography gutterBottom>
+                    <i>{param.description}</i>
+                  </Typography>
+                </div>
+              ),
+              schemeParamsWithoutVotingMachineConfig
+            )}
+            {this.stepControlls(false, isLastStep, true, classes)}
+          </StepContent>
+        </Step>
+      )
+    }
+  }
+  selectVotingMachineStep = (
+    votingMachineConfig: VotingMachineConfiguration,
+    classes: any
+  ) => {
+    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+    return (
+      <Step key={"selectVotingMachineStep"}>
+        <StepLabel>Select Voting Machine</StepLabel>
+        <StepContent>
+          <Typography className={classes.guidingText}>
+            What type of voting should be used for this scheme?
+          </Typography>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="voting-machine">Voting Machine</InputLabel>
+            <Select
+              className={classes.select}
+              onChange={this.handleVotingMachineTypeChange}
+              value={votingMachine != null ? votingMachine.typeName : ""}
+              inputProps={{
+                name: "votingMachine",
+                id: "voting-machine",
+              }}
+            >
+              {R.map(votingMachine => {
+                return (
+                  <MenuItem
+                    key={`voting-machine-select-${votingMachine.typeName}`}
+                    value={votingMachine.typeName}
+                  >
+                    {votingMachine.displayName}
+                  </MenuItem>
+                )
+              }, R.values(votingMachines))}
+            </Select>
+          </FormControl>
+          {votingMachine != null ? (
+            <Typography className={classes.description}>
+              {votingMachine.description}
+            </Typography>
+          ) : null}
+          {this.stepControlls(false, false, votingMachine != null, classes)}
+        </StepContent>
+      </Step>
+    )
+  }
+  configureVotingMachineStep = (
+    votingMachineConfig: VotingMachineConfiguration,
+    classes: any
+  ) => {
+    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+    return (
+      <Step key={"configureVotingMachineStep"}>
+        <StepLabel>Configure Voting Machine</StepLabel>
+        <StepContent>
+          <Typography className={classes.guidingText}>
+            Specify Voting Machine parameters
+          </Typography>
+          {R.map(
+            param => (
+              <div key={`text-field-${param.typeName}`}>
+                <TextField
+                  name={param.typeName}
+                  label={param.displayName}
+                  margin="normal"
+                  onChange={this.handleVotingMachineParamsChange}
+                  value={
+                    votingMachineConfig != null
+                      ? R.prop(
+                          param.typeName,
+                          votingMachineConfig.params as any
+                        )
+                      : ""
+                  }
+                  onBlur={() => console.log("TODO: validate fields")}
+                  fullWidth
+                  required={!R.pathOr(false, ["optional"], param)}
+                />
+                <Typography gutterBottom>
+                  <i>{param.description}</i>
+                </Typography>
+              </div>
+            ),
+            votingMachine != null ? votingMachine.params : []
+          )}
+          {this.stepControlls(false, true, true, classes)}
+        </StepContent>
+      </Step>
+    )
+  }
+
   render() {
     const { classes, open } = this.props
     const { activeStep, schemeConfig } = this.state
     const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
-    const { votingMachineConfig } = schemeParams
     const scheme = getScheme(schemeTypeName)
-    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+    const shouldHaveVotingMachine =
+      scheme != null
+        ? R.any(
+            param => param.typeName === "votingMachineConfig",
+            scheme.params
+          )
+        : null
+    const votingMachineConfig = schemeConfig.params.votingMachineConfig || {
+      typeName: "",
+      params: [],
+    }
 
     return (
       <Dialog open={open}>
@@ -218,158 +404,26 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           </DialogContentText>
           <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
-              <Step>
-                <StepLabel>Select Scheme</StepLabel>
-                <StepContent>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="scheme-select">Scheme</InputLabel>
-                    <Select
-                      className={classes.select}
-                      value={schemeTypeName}
-                      onChange={this.setSchemeType}
-                      inputProps={{
-                        name: "Scheme",
-                        id: "scheme-select",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {R.map(
-                        scheme => (
-                          <MenuItem
-                            value={scheme.typeName}
-                            key={"select-item-" + scheme.typeName}
-                          >
-                            {scheme.displayName}
-                          </MenuItem>
-                        ),
-                        schemes
-                      )}
-                    </Select>
-                  </FormControl>
-                  {scheme != null ? (
-                    <Typography className={classes.description}>
-                      {scheme.description}
-                    </Typography>
-                  ) : null}
-                  {this.stepControlls(true, false, scheme != null, classes)}
-                </StepContent>
-              </Step>
-              {scheme != null && scheme.params.length > 0 ? (
-                <Step>
-                  <StepLabel>Configure Scheme</StepLabel>
-                  <StepContent>
-                    {R.map(
-                      param => (
-                        <div key={`text-field-${param.typeName}`}>
-                          <TextField
-                            name={param.typeName}
-                            label={param.displayName}
-                            margin="normal"
-                            onChange={this.handleSchemeConfigParamsChange}
-                            value={R.prop(param.typeName, schemeConfig.params)}
-                            onBlur={() => console.log("TODO: validate fields")}
-                            fullWidth
-                            required={!R.pathOr(false, ["optional"], param)}
-                          />
-                          <Typography gutterBottom>
-                            <i>{param.description}</i>
-                          </Typography>
-                        </div>
-                      ),
-                      scheme != null && scheme.params.length > 0
-                        ? scheme.params
-                        : []
-                    )}
-                    {this.stepControlls(true, false, scheme != null, classes)}
-                  </StepContent>
-                </Step>
-              ) : null}
-              <Step>
-                <StepLabel>Select Voting Machine</StepLabel>
-                <StepContent>
-                  <Typography className={classes.guidingText}>
-                    What type of voting should be used for this scheme?
-                  </Typography>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="voting-machine">
-                      Voting Machine
-                    </InputLabel>
-                    <Select
-                      className={classes.select}
-                      onChange={this.handleVotingMachineTypeChange}
-                      value={
-                        votingMachine != null ? votingMachine.typeName : ""
-                      }
-                      inputProps={{
-                        name: "votingMachine",
-                        id: "voting-machine",
-                      }}
-                    >
-                      {R.map(votingMachine => {
-                        return (
-                          <MenuItem
-                            key={`voting-machine-select-${
-                              votingMachine.typeName
-                            }`}
-                            value={votingMachine.typeName}
-                          >
-                            {votingMachine.displayName}
-                          </MenuItem>
-                        )
-                      }, R.values(votingMachines))}
-                    </Select>
-                  </FormControl>
-                  {votingMachine != null ? (
-                    <Typography className={classes.description}>
-                      {votingMachine.description}
-                    </Typography>
-                  ) : null}
-                  {this.stepControlls(
-                    false,
-                    false,
-                    votingMachine != null,
-                    classes
-                  )}
-                </StepContent>
-              </Step>
-              <Step>
-                <StepLabel>Configure Voting Machine</StepLabel>
-                <StepContent>
-                  <Typography className={classes.guidingText}>
-                    Specify Voting Machine parameters
-                  </Typography>
-                  {R.map(
-                    param => (
-                      <div key={`text-field-${param.typeName}`}>
-                        <TextField
-                          name={param.typeName}
-                          label={param.displayName}
-                          margin="normal"
-                          onChange={this.handleVotingMachineParamsChange}
-                          value={
-                            votingMachineConfig != null
-                              ? R.prop(
-                                  param.typeName,
-                                  votingMachineConfig.params as any
-                                )
-                              : ""
-                          }
-                          onBlur={() => console.log("TODO: validate fields")}
-                          fullWidth
-                          required={!R.pathOr(false, ["optional"], param)}
-                        />
-                        <Typography gutterBottom>
-                          <i>{param.description}</i>
-                        </Typography>
-                      </div>
+              {this.selectSchemeStep(scheme, classes)}
+              {this.configureSchemeStep(
+                scheme,
+                schemeConfig,
+                !shouldHaveVotingMachine,
+                classes
+              )}
+
+              {scheme != null && shouldHaveVotingMachine
+                ? [
+                    this.selectVotingMachineStep(
+                      votingMachineConfig as VotingMachineConfiguration,
+                      classes
                     ),
-                    votingMachine != null ? votingMachine.params : []
-                  )}
-                  {this.stepControlls(false, true, true, classes)}
-                </StepContent>
-              </Step>
+                    this.configureVotingMachineStep(
+                      votingMachineConfig as VotingMachineConfiguration,
+                      classes
+                    ),
+                  ]
+                : null}
             </Stepper>
           </div>
         </DialogContent>

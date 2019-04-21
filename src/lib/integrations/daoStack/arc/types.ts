@@ -24,10 +24,16 @@ export type VotingMachine = {
 
 export type Param = {
   typeName: string
-  valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
+  valueType:
+    | "boolean"
+    | "string"
+    | "number"
+    | "Address"
+    | "BigNumber"
+    | "VotingMachineConfig"
   displayName: string
   description: string
-  defaultValue: string | number | boolean
+  defaultValue?: string | number | boolean
   optional?: boolean
 }
 
@@ -40,7 +46,9 @@ export type Founder = {
 export type SchemeConfig = {
   id: string
   typeName: string // not schemeTypeName (that is in use now)
-  params: ParamConfig & { votingMachineConfig: VotingMachineConfiguration }
+  params: ParamConfig & {
+    votingMachineConfig: VotingMachineConfiguration | null
+  }
 }
 
 export type Scheme = {
@@ -52,8 +60,7 @@ export type Scheme = {
   permissions: string
   getCallableParamsArray: (
     schemeConfig: SchemeConfig,
-    votingMachineAddress: string,
-    votingMachineParametersKey: string
+    deploymentInfo: DeploymentInfo
   ) => any[]
   params: Param[]
 }
@@ -65,4 +72,12 @@ export type DAO = {
   name: string
   daoToken: string
   reputation: string
+}
+
+export type DeploymentInfo = {
+  avatar: string // address
+  daoToken: string // address
+  reputation: string // address
+  votingMachineParametersKey?: string // hash
+  votingMachineAddress?: string // address
 }
