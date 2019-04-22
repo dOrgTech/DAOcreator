@@ -33,6 +33,7 @@ import {
   votingMachines,
   initSchemeConfig,
 } from "../../../../lib/integrations/daoStack/arc"
+import * as FormValidation from "../../../../lib/formValidation"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -73,12 +74,16 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   activeStep: number
   schemeConfig: SchemeConfig
+  formErrors: any
+  formIsValid: boolean
 }
 
 class VerticalLinearStepper extends React.Component<Props, State> {
   public readonly state: State = {
     activeStep: 0,
     schemeConfig: initSchemeConfig(),
+    formErrors: {},
+    formIsValid: false,
   }
 
   handleNext = () => {
@@ -93,23 +98,51 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }))
   }
 
-  addOrUpdateSchemeParam = async (paramName: string, value: any) => {
+  addOrUpdateSchemeParam = async (
+    paramName: string,
+    value: any,
+    valueType: string
+  ) => {
     const { id, typeName, params } = this.state.schemeConfig
+    let errorMessage = ""
+
+    switch (valueType) {
+      case "address": {
+        errorMessage = FormValidation.isValidAddress(value)
+        break
+      }
+      case "number": {
+        errorMessage = FormValidation.isBigNumber(value)
+        break
+      }
+      default: {
+        break
+      }
+    }
+
     await this.setState({
       schemeConfig: {
         id,
         typeName,
         params: R.assoc(paramName, value, params),
       },
+      formErrors: R.assoc(paramName, errorMessage, this.state.formErrors),
     })
+
+    const formIsValid = R.none(
+      key => !R.isEmpty(this.state.formErrors[key]),
+      R.keys(this.state.formErrors)
+    )
+
+    this.setState({ formIsValid })
   }
 
-  handleSchemeConfigParamsChange = async (event: any) => {
+  handleSchemeConfigParamsChange = async (event: any, valueType: string) => {
     const { name, value } = event.target
-    await this.addOrUpdateSchemeParam(name, value)
+    await this.addOrUpdateSchemeParam(name, value, valueType)
   }
 
-  handleVotingMachineParamsChange = async (event: any) => {
+  handleVotingMachineParamsChange = async (event: any, valueType: string) => {
     const { name, value } = event.target
     const oldVotingMachineConfig = this.state.schemeConfig.params
       .votingMachineConfig
@@ -122,7 +155,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
         : { typeName: "", params: [] }
     await this.addOrUpdateSchemeParam(
       "votingMachineConfig",
-      newVotingMachineConfig
+      newVotingMachineConfig,
+      valueType
     )
   }
 
@@ -134,7 +168,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }
     await this.addOrUpdateSchemeParam(
       "votingMachineConfig",
-      newVotingMachineConfig
+      newVotingMachineConfig,
+      newTypeName
     )
   }
 
@@ -142,6 +177,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     this.setState({
       activeStep: 0,
       schemeConfig: initSchemeConfig(),
+      formIsValid: false,
     })
   }
 
@@ -268,7 +304,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     name={param.typeName}
                     label={param.displayName}
                     margin="normal"
-                    onChange={this.handleSchemeConfigParamsChange}
+                    onChange={e =>
+                      this.handleSchemeConfigParamsChange(e, param.valueType)
+                    }
                     value={R.pathOr(
                       param.defaultValue,
                       [param.typeName],
@@ -355,7 +393,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   name={param.typeName}
                   label={param.displayName}
                   margin="normal"
-                  onChange={this.handleVotingMachineParamsChange}
+                  error={!R.isEmpty(this.state.formErrors[param.typeName])}
+                  onChange={e =>
+                    this.handleVotingMachineParamsChange(e, param.valueType)
+                  }
                   value={
                     votingMachineConfig != null
                       ? R.prop(
