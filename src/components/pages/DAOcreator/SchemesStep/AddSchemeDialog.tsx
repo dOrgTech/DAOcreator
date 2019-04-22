@@ -312,7 +312,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                       [param.typeName],
                       schemeConfig.params
                     )}
-                    onBlur={() => console.log("TODO: validate fields")}
                     fullWidth
                     required={!R.pathOr(false, ["optional"], param)}
                   />
@@ -405,7 +404,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                         )
                       : ""
                   }
-                  onBlur={() => console.log("TODO: validate fields")}
                   fullWidth
                   required={!R.pathOr(false, ["optional"], param)}
                 />
