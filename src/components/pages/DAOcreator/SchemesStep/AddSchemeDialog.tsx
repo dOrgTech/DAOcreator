@@ -107,15 +107,12 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     let errorMessage = ""
 
     switch (valueType) {
-      case "address": {
+      case "Address": {
         errorMessage = FormValidation.isValidAddress(value)
         break
       }
       case "number": {
         errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-      default: {
         break
       }
     }
@@ -126,7 +123,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
         typeName,
         params: R.assoc(paramName, value, params),
       },
-      formErrors: R.assoc(paramName, errorMessage, this.state.formErrors),
+      formErrors: { [paramName]: errorMessage },
     })
 
     const formIsValid = R.none(
@@ -303,6 +300,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   <TextField
                     name={param.typeName}
                     label={param.displayName}
+                    error={!R.isEmpty(this.state.formErrors[param.typeName])}
                     margin="normal"
                     onChange={e =>
                       this.handleSchemeConfigParamsChange(e, param.valueType)
@@ -323,7 +321,12 @@ class VerticalLinearStepper extends React.Component<Props, State> {
               ),
               schemeParamsWithoutVotingMachineConfig
             )}
-            {this.stepControls(false, isLastStep, true, classes)}
+            {this.stepControls(
+              false,
+              isLastStep,
+              this.state.formIsValid,
+              classes
+            )}
           </StepContent>
         </Step>
       )
