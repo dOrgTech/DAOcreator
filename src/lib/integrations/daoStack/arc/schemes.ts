@@ -96,21 +96,6 @@ export const schemes: Scheme[] = [
       return [votingMachineParametersKey, votingMachineAddress]
     },
   },
-  /** {
-    typeName: "GenericScheme",
-    displayName: "DAO can call external contracts",
-    description:
-      "Proposals that, when passed, can call external functions in a generic manner.",
-    toggleDefault: true,
-    permissions: "0x00000000" /* no permissions ,
-    params: [],
-    getCallableParamsArray: function(
-      votingMachineParametersKey,
-      votingMachineAddress
-    ) {
-      return [votingMachineParametersKey, votingMachineAddress]
-    },
-  }, */
   // {
   //   typeName: "DAOCreator",
   //   displayName: "DAO Creator",
