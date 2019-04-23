@@ -233,3 +233,13 @@ export const getSchemeCallableParamsArray = (
     schemeConfig,
     deploymentInfo
   )
+
+export const getSchemeDefaultParams = (typeName: string): any => {
+  const scheme = getScheme(typeName)
+
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    scheme.params
+  )
+}

@@ -76,7 +76,7 @@ export const createDao = async (
 
   const Avatar = await forgeOrg.call()
   let tx = await forgeOrg.send()
-  console.log("Created new organization.")
+  console.log("Created new organization. With avatar address: " + Avatar)
   console.log(tx)
 
   const avatar = new web3.eth.Contract(
