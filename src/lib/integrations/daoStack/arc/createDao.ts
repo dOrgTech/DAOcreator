@@ -74,19 +74,23 @@ export const createDao = async (
     cap
   )
 
-  const Avatar = await forgeOrg.call()
   let tx = await forgeOrg.send()
   console.log("Created new organization.")
   console.log(tx)
+  const Avatar = tx.events["NewOrg"].returnValues["_avatar"]
+  console.log(Avatar)
 
   const avatar = new web3.eth.Contract(
     require("@daostack/arc/build/contracts/Avatar.json").abi,
     Avatar,
     opts
   )
+  console.log(avatar)
 
   const daoToken = await avatar.methods.nativeToken().call()
+  console.log(daoToken)
   const reputation = await avatar.methods.nativeReputation().call()
+  console.log(reputation)
 
   const votingMachineConfigToHash = (
     votingMachineConfig: VotingMachineConfiguration
@@ -170,11 +174,16 @@ export const createDao = async (
         votingMachineCallableParamsArray
       )
 
-      const votingMachineParametersKey = await setParams.call()
-
       const tx = await setParams.send()
       console.log(`${votingMachineHash.toString()} parameters set.`)
       console.log(tx)
+
+      const getParamsHash = votingMachineContract.methods.getParametersHash.apply(
+        null,
+        votingMachineCallableParamsArray
+      )
+      const votingMachineParametersKey = await getParamsHash.call()
+      console.log(votingMachineParametersKey)
 
       return {
         votingMachineAddress,
@@ -225,15 +234,20 @@ export const createDao = async (
         })
       }
       console.log(deploymentInfo)
-      const setParams = schemeContract.methods.setParameters.apply(
-        null,
-        getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
-      )
-      const schemeParametersKey = await setParams.call()
+      console.log(schemeConfig)
+      const args = getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
+      const setParams = schemeContract.methods.setParameters.apply(null, args)
 
       const tx = await setParams.send()
       console.log(`${schemeConfig.typeName} parameters set.`)
       console.log(tx)
+
+      const getParamsHash = schemeContract.methods.setParameters.apply(
+        null,
+        args
+      )
+      const schemeParametersKey = await getParamsHash.call()
+      console.log(schemeParametersKey)
 
       return schemeParametersKey
     }, initializedSchemes)

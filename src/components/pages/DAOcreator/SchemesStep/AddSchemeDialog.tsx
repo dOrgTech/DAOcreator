@@ -240,6 +240,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       </StepContent>
     </Step>
   )
+
   configureSchemeStep = (
     scheme: Scheme | null,
     schemeConfig: SchemeConfig,
@@ -291,6 +292,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       )
     }
   }
+
   selectVotingMachineStep = (
     votingMachineConfig: VotingMachineConfiguration,
     classes: any
@@ -336,6 +338,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       </Step>
     )
   }
+
   configureVotingMachineStep = (
     votingMachineConfig: VotingMachineConfiguration,
     classes: any
@@ -415,7 +418,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                 !shouldHaveVotingMachine,
                 classes
               )}
-
               {scheme != null && shouldHaveVotingMachine
                 ? [
                     this.selectVotingMachineStep(
