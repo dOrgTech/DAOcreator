@@ -4,6 +4,39 @@ import Web3 from "web3"
 
 export const schemes: Scheme[] = [
   {
+    typeName: "GenericScheme",
+    displayName: "Generic Scheme",
+    description:
+      "A scheme for proposing and executing calls to an arbitrary function on a specific contract on behalf of the organization avatar",
+    toggleDefault: true,
+    permissions: "0x00000010",
+    params: [
+      {
+        typeName: "contractToCall",
+        valueType: "Address",
+        displayName: "Contract Address",
+        description: "Address of the contract to call",
+      },
+      {
+        typeName: "votingMachineConfig",
+        valueType: "VotingMachineConfig",
+        displayName: "Voting Machine Configuration",
+        description: "VotingMachine",
+      },
+    ],
+    getCallableParamsArray: function(schemeConfig, deploymentInfo) {
+      const {
+        votingMachineParametersKey,
+        votingMachineAddress,
+      } = deploymentInfo
+      return [
+        votingMachineParametersKey,
+        votingMachineAddress,
+        schemeConfig.params.contractToCall,
+      ]
+    },
+  },
+  {
     typeName: "ContributionReward",
     displayName: "Contributor Rewards",
     description:
