@@ -24,6 +24,7 @@ import * as R from "ramda"
 import * as React from "react"
 import {
   getScheme,
+  getSchemeDefaultParams,
   getVotingMachine,
   getVotingMachineDefaultParams,
   schemes,
@@ -199,9 +200,11 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
   setSchemeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { schemeConfig } = this.state
-    const { id, params } = schemeConfig
+    const { id } = schemeConfig
+    const schemeTypeName = event.target.value
+    const params = getSchemeDefaultParams(schemeTypeName)
     this.setState({
-      schemeConfig: { id, typeName: event.target.value, params },
+      schemeConfig: { id, typeName: schemeTypeName, params },
     })
   }
 
@@ -305,11 +308,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     onChange={e =>
                       this.handleSchemeConfigParamsChange(e, param.valueType)
                     }
-                    value={R.pathOr(
-                      param.defaultValue,
-                      [param.typeName],
-                      schemeConfig.params
-                    )}
+                    value={R.prop(param.typeName, schemeConfig.params)}
                     fullWidth
                     required={!R.pathOr(false, ["optional"], param)}
                   />
