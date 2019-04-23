@@ -77,7 +77,7 @@ export const createDao = async (
   let tx = await forgeOrg.send()
   console.log("Created new organization.")
   console.log(tx)
-  const Avatar = tx.events["NewOrg"].returnValues["_avatar"]
+  const Avatar = tx.events.NewOrg.returnValues._avatar
   console.log(Avatar)
 
   const avatar = new web3.eth.Contract(
@@ -234,7 +234,6 @@ export const createDao = async (
         })
       }
       console.log(deploymentInfo)
-      console.log(schemeConfig)
       const args = getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
       const setParams = schemeContract.methods.setParameters.apply(null, args)
 
@@ -247,8 +246,6 @@ export const createDao = async (
         args
       )
       const schemeParametersKey = await getParamsHash.call()
-      console.log(schemeParametersKey)
-
       return schemeParametersKey
     }, initializedSchemes)
   )
