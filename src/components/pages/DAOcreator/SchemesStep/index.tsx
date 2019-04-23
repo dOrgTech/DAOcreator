@@ -21,7 +21,7 @@ import { bindActionCreators, Dispatch } from "redux"
 import {
   getScheme,
   SchemeConfig,
-  VotingMachineConfiguration,
+  VotingMachineConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
@@ -83,9 +83,9 @@ class SchemesStep extends React.Component<Props, State> {
                     </Typography>
                   </div>
                   <div className={classes.column}>
-                    {schemeConfig.params.votingMachineConfig != null ? (
+                    {schemeConfig.votingMachineConfig != null ? (
                       <Typography className={classes.secondaryHeading}>
-                        {schemeConfig.params.votingMachineConfig.typeName}
+                        {schemeConfig.votingMachineConfig.typeName}
                       </Typography>
                     ) : null}
                   </div>

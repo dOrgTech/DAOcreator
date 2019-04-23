@@ -14,10 +14,10 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
   Founder,
-  Scheme,
-  VotingMachine,
+  SchemeDefinition,
+  VotingMachineDefinition,
   votingMachines,
-  VotingMachineConfiguration,
+  VotingMachineConfig,
   SchemeConfig,
   getScheme,
 } from "../../../lib/integrations/daoStack/arc"

@@ -1,8 +1,8 @@
-import { Scheme, SchemeConfig, DeploymentInfo } from "./types"
+import { SchemeDefinition, SchemeConfig, DeploymentInfo } from "./types"
 import * as R from "ramda"
 import Web3 from "web3"
 
-export const schemes: Scheme[] = [
+export const schemes: SchemeDefinition[] = [
   {
     typeName: "GenericScheme",
     displayName: "Generic Scheme",
@@ -17,13 +17,8 @@ export const schemes: Scheme[] = [
         displayName: "Contract Address",
         description: "Address of the contract to call",
       },
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
     ],
+    hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -51,13 +46,8 @@ export const schemes: Scheme[] = [
         description: "Fee in GWei:",
         defaultValue: 0,
       },
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
     ],
+    hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -80,14 +70,8 @@ export const schemes: Scheme[] = [
       "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
-    params: [
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
-    ],
+    params: [],
+    hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -161,6 +145,7 @@ export const schemes: Scheme[] = [
         defaultValue: "",
       },
     ],
+    hasVotingMachine: false,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const { token, fee, beneficiary } = schemeConfig.params
       return [token, fee, beneficiary] // TODO
@@ -172,14 +157,8 @@ export const schemes: Scheme[] = [
     description: "Enables the DAO to upgrade itself.",
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
-    params: [
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
-    ],
+    params: [],
+    hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -195,14 +174,8 @@ export const schemes: Scheme[] = [
       "Manages post-creation adding/modifying and removing of features. Features add functionality to the DAO.",
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
-    params: [
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
-    ],
+    hasVotingMachine: true,
+    params: [],
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -221,15 +194,9 @@ export const schemes: Scheme[] = [
     description:
       'Makes it possible to add/modify and remove constraints for the DAO. A constraint defines what "cannot be done" in the DAO. For instance, limit the number of tokens that a DAO can create.',
     toggleDefault: true,
+    hasVotingMachine: true,
     permissions: "0x00000004" /* manage global constraints */,
-    params: [
-      {
-        typeName: "votingMachineConfig",
-        valueType: "VotingMachineConfig",
-        displayName: "Voting Machine Configuration",
-        description: "VotingMachine",
-      },
-    ],
+    params: [],
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
@@ -241,7 +208,7 @@ export const schemes: Scheme[] = [
 ]
 
 export const getScheme = (typeName: string) =>
-  R.find(scheme => scheme.typeName === typeName, schemes) as Scheme
+  R.find(scheme => scheme.typeName === typeName, schemes) as SchemeDefinition
 
 export const getSchemeCallableParamsArray = (
   schemeConfig: SchemeConfig,
