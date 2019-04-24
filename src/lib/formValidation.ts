@@ -35,9 +35,9 @@ export const isBigNumber = checkIfHasError(
 
 export const generateFormErrors = (
   paramTypes: ParamDefinition[],
-  paramValues: ParamConfig
+  paramValues: ParamConfig,
+  formErrors: any
 ) => {
-  let formErrors = {}
   const formErrorObject = R.reduce(
     (acc, paramType) => {
       const value = paramValues[paramType.typeName]

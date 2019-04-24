@@ -97,7 +97,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { params: paramValues } = schemeConfig
     const formErrorObject = FormValidation.generateFormErrors(
       paramTypes,
-      paramValues
+      paramValues,
+      this.state.formErrors
     )
     // check if the form is valide
     const formIsValid = R.none(
@@ -118,7 +119,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       const { params: paramValues } = config
       const formErrorObject = FormValidation.generateFormErrors(
         paramTypes,
-        paramValues
+        paramValues,
+        this.state.formErrors
       )
 
       // check if the form is valide
@@ -207,6 +209,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   ) => async (event: any) => {
     const { value } = event.target
     const oldVotingMachineConfig = this.state.schemeConfig.votingMachineConfig
+    await this.validateParam(paramDefinition, value)
     const newVotingMachineConfig =
       oldVotingMachineConfig != null
         ? {
