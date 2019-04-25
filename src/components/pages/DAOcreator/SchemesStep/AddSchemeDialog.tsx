@@ -504,14 +504,16 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
               {this.selectSchemeStep(scheme, classes)}
-              {this.configureSchemeStep(
-                scheme,
-                schemeConfig,
-                !hasVotingMachine,
-                classes
-              )}
+              {scheme != null && scheme.params.length > 0
+                ? this.configureSchemeStep(
+                    scheme,
+                    schemeConfig,
+                    !hasVotingMachine,
+                    classes
+                  )
+                : null}
 
-              {scheme != null
+              {scheme != null && hasVotingMachine
                 ? [
                     this.selectVotingMachineStep(
                       votingMachineConfig as VotingMachineConfig,
