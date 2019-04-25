@@ -133,6 +133,7 @@ class SchemesStep extends React.Component<Props, State> {
         <AddSchemeDialog
           open={addSchemeDialogOpen}
           addScheme={this.addScheme}
+          addedSchemes={schemes}
           close={this.setSchemeDialog(false)}
         />
       </Card>

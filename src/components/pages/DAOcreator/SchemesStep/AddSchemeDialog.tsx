@@ -40,6 +40,10 @@ import { isNullOrUndefined } from "util"
 
 const styles = (theme: Theme) =>
   createStyles({
+    dialog: {},
+    dialogContent: {
+      width: 600,
+    },
     formControl: {
       minWidth: 120,
     },
@@ -71,6 +75,7 @@ const styles = (theme: Theme) =>
 interface Props extends WithStyles<typeof styles> {
   open: boolean
   addScheme: (schemeConfig: SchemeConfig) => void
+  addedSchemes: SchemeConfig[]
   close: () => void
 }
 
@@ -249,6 +254,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     })
   }
 
+  schemeIsAdded = (typeName: string) =>
+    R.any(scheme => scheme.typeName === typeName, this.props.addedSchemes)
+
   handleClose = () => {
     this.props.close()
     this.handleReset()
@@ -328,14 +336,16 @@ class VerticalLinearStepper extends React.Component<Props, State> {
               <em>None</em>
             </MenuItem>
             {R.map(
-              scheme => (
-                <MenuItem
-                  value={scheme.typeName}
-                  key={"select-item-" + scheme.typeName}
-                >
-                  {scheme.displayName}
-                </MenuItem>
-              ),
+              scheme =>
+                !this.schemeIsAdded(scheme.typeName) ||
+                scheme.daoCanHaveMultiple ? (
+                  <MenuItem
+                    value={scheme.typeName}
+                    key={"select-item-" + scheme.typeName}
+                  >
+                    {scheme.displayName}
+                  </MenuItem>
+                ) : null,
               schemeDefinitions
             )}
           </Select>
@@ -508,12 +518,11 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       schemeDefinition != null ? schemeDefinition.hasVotingMachine : false
 
     return (
-      <Dialog open={open}>
+      <Dialog open={open} className={classes.dialog}>
         <DialogTitle>Select Scheme</DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <DialogContentText>
-            Select a Scheme and configure its voting machine and other
-            parameters.
+            Select a Scheme and configure it parameters.
           </DialogContentText>
           <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
