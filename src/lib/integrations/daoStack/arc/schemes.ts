@@ -38,29 +38,14 @@ export const schemeDefinitions: SchemeDefinition[] = [
       "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
-    params: [
-      {
-        typeName: "orgNativeTokenFeeGWei",
-        valueType: "number",
-        displayName: "Org Native Token Fee GWei",
-        description: "Fee in GWei:",
-        defaultValue: 0,
-      },
-    ],
+    params: [],
     hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
         votingMachineParametersKey,
         votingMachineAddress,
       } = deploymentInfo
-      return [
-        Web3.utils.toWei(
-          schemeConfig.params.orgNativeTokenFeeGWei.toString(),
-          "gwei"
-        ),
-        votingMachineParametersKey,
-        votingMachineAddress,
-      ]
+      return [votingMachineParametersKey, votingMachineAddress]
     },
   },
   {

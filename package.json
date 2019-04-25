@@ -8,7 +8,7 @@
     "app-test": "react-scripts test"
   },
   "dependencies": {
-    "@daostack/arc": "0.0.1-rc.12",
+    "@daostack/arc": "0.0.1-rc.16",
     "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
     "bignumber.js": "^5.0.0",
