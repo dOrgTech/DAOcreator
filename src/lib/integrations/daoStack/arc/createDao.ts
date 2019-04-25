@@ -1,13 +1,16 @@
 import {
   DAO,
   Founder,
-  Scheme,
+  SchemeDefinition,
   SchemeConfig,
-  VotingMachineConfiguration,
+  VotingMachineConfig,
 } from "./types"
-import { votingMachines, getVotingMachine } from "./votingMachines"
 import {
-  getScheme,
+  votingMachineDefinitions,
+  getVotingMachineDefinition,
+} from "./votingMachines"
+import {
+  getSchemeDefinition,
   getSchemeCallableParamsArray,
   getVotingMachineCallableParamsArray,
 } from "./index"
@@ -89,7 +92,7 @@ export const createDao = async (
   const reputation = await avatar.methods.nativeReputation().call()
 
   const votingMachineConfigToHash = (
-    votingMachineConfig: VotingMachineConfiguration
+    votingMachineConfig: VotingMachineConfig
   ) => {
     const callableVotingParams = getVotingMachineCallableParamsArray(
       votingMachineConfig
@@ -108,16 +111,16 @@ export const createDao = async (
         opts
       ),
       votingMachineHash:
-        schemeConfig.params.votingMachineConfig != null
-          ? votingMachineConfigToHash(schemeConfig.params.votingMachineConfig)
+        schemeConfig.votingMachineConfig != null
+          ? votingMachineConfigToHash(schemeConfig.votingMachineConfig)
           : null,
     }
   }, schemesIn)
 
   const initializedVotingMachines: any = R.reduce(
     (acc, schemeConfig) => {
-      if (schemeConfig.params.votingMachineConfig != null) {
-        const votingMachineConfig = schemeConfig.params.votingMachineConfig
+      if (schemeConfig.votingMachineConfig != null) {
+        const votingMachineConfig = schemeConfig.votingMachineConfig
         const votingMachineContract = new web3.eth.Contract(
           require(`@daostack/arc/build/contracts/${
             votingMachineConfig.typeName
@@ -189,7 +192,8 @@ export const createDao = async (
     initializedSchemes
   )
   const schemePermissions = R.map(
-    ({ schemeConfig }) => getScheme(schemeConfig.typeName).permissions,
+    ({ schemeConfig }) =>
+      getSchemeDefinition(schemeConfig.typeName).permissions,
     initializedSchemes
   )
 

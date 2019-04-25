@@ -1,5 +1,6 @@
 import { TypeValidation } from "./integrations/web3"
 import * as R from "ramda"
+import { ParamConfig, ParamDefinition } from "./integrations/daoStack/arc"
 
 export function checkIfHasError<ValueType>(
   predicate: (value: ValueType) => boolean,
@@ -8,13 +9,13 @@ export function checkIfHasError<ValueType>(
   return (value: ValueType) => (predicate(value) ? errorMessage : "")
 }
 
-const nameHasError = (name: string) =>
+const nameHasError = (name: any) =>
   R.isEmpty(name) || name.length > 70 || /[_\W\d]/.test(name)
 
-const addressHasError = (addr: string) =>
+const addressHasError = (addr: any) =>
   R.isEmpty(addr) || !TypeValidation.isAddress(addr)
 
-const numberHasError = (number: string) =>
+const numberHasError = (number: any) =>
   R.isEmpty(number) || !TypeValidation.isBigNumber(number)
 
 export const isValidName = checkIfHasError(
@@ -31,3 +32,24 @@ export const isBigNumber = checkIfHasError(
   numberHasError,
   "Please enter a valid number."
 )
+
+export const generateFormErrors = (
+  paramDefinitions: ParamDefinition[],
+  paramValues: ParamConfig,
+  formErrors: any
+) => {
+  const formErrorObject = R.reduce(
+    (acc, paramType) => {
+      const value = paramValues[paramType.typeName]
+      let errorMessage = ""
+      if (value == null && !paramType.optional) {
+        errorMessage = "Required"
+      }
+      return { ...acc, [paramType.typeName]: errorMessage }
+    },
+    formErrors,
+    paramDefinitions
+  )
+
+  return formErrors
+}

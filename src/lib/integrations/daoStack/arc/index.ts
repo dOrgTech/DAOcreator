@@ -13,9 +13,9 @@ import { createDao as createTheDao } from "./createDao"
 import {
   DAO,
   Founder,
-  Scheme,
-  VotingMachine,
-  VotingMachineConfiguration,
+  SchemeDefinition,
+  VotingMachineDefinition,
+  VotingMachineConfig,
   SchemeConfig,
 } from "./types"
 

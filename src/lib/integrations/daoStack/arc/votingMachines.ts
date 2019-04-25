@@ -1,8 +1,14 @@
-import { VotingMachine, Param, VotingMachineConfiguration } from "./types"
+import {
+  VotingMachineDefinition,
+  ParamDefinition,
+  VotingMachineConfig,
+} from "./types"
 import Web3 from "web3"
 import * as R from "ramda"
 
-export const votingMachines: { [key: string]: VotingMachine } = {
+export const votingMachineDefinitions: {
+  [key: string]: VotingMachineDefinition
+} = {
   AbsoluteVote: {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
@@ -24,7 +30,7 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         defaultValue: 50,
       },
     ],
-    getCallableParamsArray: ({ params }: VotingMachineConfiguration) => {
+    getCallableParamsArray: ({ params }: VotingMachineConfig) => {
       return [params["votePerc"], params["voteOnBehalf"]]
     },
   },
@@ -201,7 +207,7 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         defaultValue: 1,
       },
     ],
-    getCallableParamsArray: ({ params }: VotingMachineConfiguration) => {
+    getCallableParamsArray: ({ params }: VotingMachineConfig) => {
       return [
         [
           params["queuedVoteRequiredPercentage"],
@@ -231,7 +237,9 @@ export const votingMachines: { [key: string]: VotingMachine } = {
 }
 
 export const getVotingMachineDefaultParams = (typeName: string): any => {
-  const votingMachine = votingMachines[typeName] as VotingMachine
+  const votingMachine = votingMachineDefinitions[
+    typeName
+  ] as VotingMachineDefinition
 
   return R.reduce(
     (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
@@ -240,11 +248,12 @@ export const getVotingMachineDefaultParams = (typeName: string): any => {
   )
 }
 
-export const getVotingMachine = (typeName: string) => votingMachines[typeName]
+export const getVotingMachineDefinition = (typeName: string) =>
+  votingMachineDefinitions[typeName]
 
 export const getVotingMachineCallableParamsArray = (
-  votingMachineConfig: VotingMachineConfiguration
+  votingMachineConfig: VotingMachineConfig
 ) =>
-  getVotingMachine(votingMachineConfig.typeName).getCallableParamsArray(
-    votingMachineConfig
-  )
+  getVotingMachineDefinition(
+    votingMachineConfig.typeName
+  ).getCallableParamsArray(votingMachineConfig)

@@ -14,12 +14,12 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
   Founder,
-  Scheme,
-  VotingMachine,
-  votingMachines,
-  VotingMachineConfiguration,
+  SchemeDefinition,
+  VotingMachineDefinition,
+  votingMachineDefinitions,
+  VotingMachineConfig,
   SchemeConfig,
-  getScheme,
+  getSchemeDefinition,
 } from "../../../lib/integrations/daoStack/arc"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -176,16 +176,18 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
 
 const displayScheme = (schemeConfig: SchemeConfig) => {
   const votingMachine =
-    votingMachines[
+    votingMachineDefinitions[
       R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
     ]
-  const scheme = getScheme(schemeConfig.typeName)
+  const schemeDefinition = getSchemeDefinition(schemeConfig.typeName)
   return (
-    <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
+    <Grid container spacing={16} key={`scheme-${schemeDefinition.typeName}`}>
       <Grid item xs={12}>
-        <Typography variant="subtitle1">{scheme.displayName}</Typography>
+        <Typography variant="subtitle1">
+          {schemeDefinition.displayName}
+        </Typography>
         <Typography>
-          <i>{scheme.description}</i>
+          <i>{schemeDefinition.description}</i>
         </Typography>
       </Grid>
       {votingMachine != null ? (

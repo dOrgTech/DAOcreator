@@ -12,7 +12,11 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { RootState } from "../../../state"
-import { Founder, Scheme, DAO } from "../../../lib/integrations/daoStack/arc"
+import {
+  Founder,
+  SchemeDefinition,
+  DAO,
+} from "../../../lib/integrations/daoStack/arc"
 
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined
@@ -96,7 +100,11 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displayScheme = ({ displayName, description, typeName }: Scheme) => (
+const displayScheme = ({
+  displayName,
+  description,
+  typeName,
+}: SchemeDefinition) => (
   <Grid container spacing={16} key={`founder-${typeName}`}>
     <Grid item xs={12}>
       <Typography variant="subtitle1">{displayName}</Typography>
