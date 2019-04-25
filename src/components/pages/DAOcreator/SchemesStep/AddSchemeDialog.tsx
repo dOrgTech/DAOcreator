@@ -360,7 +360,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   <TextField
                     name={param.typeName}
                     label={param.displayName}
-                    error={!R.isEmpty(this.state.formErrors[param.typeName])}
+                    error={
+                      R.has(param.typeName, this.state.formErrors) &&
+                      !R.isEmpty(this.state.formErrors[param.typeName])
+                    }
                     margin="normal"
                     onChange={this.handleSchemeConfigParamsChange(param)}
                     value={R.prop(param.typeName, schemeConfig.params)}
@@ -449,7 +452,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   name={param.typeName}
                   label={param.displayName}
                   margin="normal"
-                  error={!R.isEmpty(this.state.formErrors[param.typeName])}
+                  error={
+                    R.has(param.typeName, this.state.formErrors) &&
+                    !R.isEmpty(this.state.formErrors[param.typeName])
+                  }
                   onChange={this.handleVotingMachineParamsChange(param)}
                   value={
                     votingMachineConfig != null
