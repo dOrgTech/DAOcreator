@@ -10,6 +10,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
       "A scheme for proposing and executing calls to an arbitrary function on a specific contract on behalf of the organization avatar",
     toggleDefault: true,
     permissions: "0x00000010",
+    daoCanHaveMultiple: true,
     params: [
       {
         typeName: "contractToCall",
@@ -38,6 +39,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
       "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
+    daoCanHaveMultiple: false,
     params: [
       {
         typeName: "orgNativeTokenFeeGWei",
@@ -70,6 +72,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
       "Proposals that, when passed, invoke a vote within another DAO.",
     toggleDefault: true,
     permissions: "0x00000000" /* no permissions */,
+    daoCanHaveMultiple: false,
     params: [],
     hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
@@ -121,6 +124,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
       "Makes it possible for the DAO to open a registry. Other DAOs can then add and promote themselves on this registry.",
     toggleDefault: false,
     permissions: "0x00000000" /* no permissions */,
+    daoCanHaveMultiple: false,
     params: [
       {
         typeName: "token",
@@ -157,6 +161,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
     description: "Enables the DAO to upgrade itself.",
     toggleDefault: true,
     permissions: "0x0000000A" /* manage schemes + upgrade controller */,
+    daoCanHaveMultiple: false,
     params: [],
     hasVotingMachine: true,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
@@ -175,6 +180,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
     toggleDefault: true,
     permissions: "0x0000001F" /* all permissions */,
     hasVotingMachine: true,
+    daoCanHaveMultiple: false,
     params: [],
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
@@ -196,6 +202,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
     toggleDefault: true,
     hasVotingMachine: true,
     permissions: "0x00000004" /* manage global constraints */,
+    daoCanHaveMultiple: false,
     params: [],
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
       const {
