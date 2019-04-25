@@ -52,6 +52,7 @@ export type SchemeDefinition = {
   toggleDefault: boolean
   permissions: string
   hasVotingMachine: boolean
+  daoCanHaveMultiple: boolean
   getCallableParamsArray: (
     schemeConfig: SchemeConfig,
     deploymentInfo: DeploymentInfo
