@@ -7,7 +7,7 @@ import {
 } from "./types"
 import { votingMachines, getVotingMachine } from "./votingMachines"
 import {
-  getScheme,
+  getSchemeDefinition,
   getSchemeCallableParamsArray,
   getVotingMachineCallableParamsArray,
 } from "./index"
@@ -189,7 +189,8 @@ export const createDao = async (
     initializedSchemes
   )
   const schemePermissions = R.map(
-    ({ schemeConfig }) => getScheme(schemeConfig.typeName).permissions,
+    ({ schemeConfig }) =>
+      getSchemeDefinition(schemeConfig.typeName).permissions,
     initializedSchemes
   )
 

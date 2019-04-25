@@ -19,7 +19,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import {
-  getScheme,
+  getSchemeDefinition,
   SchemeConfig,
   VotingMachineConfig,
 } from "../../../../lib/integrations/daoStack/arc"
@@ -69,7 +69,7 @@ class SchemesStep extends React.Component<Props, State> {
       <Card className={classes.card}>
         <div className={classes.root}>
           {R.map(schemeConfig => {
-            const scheme = getScheme(schemeConfig.typeName)
+            const scheme = getSchemeDefinition(schemeConfig.typeName)
             return (
               <ExpansionPanel
                 expanded={expanded === schemeConfig.id}

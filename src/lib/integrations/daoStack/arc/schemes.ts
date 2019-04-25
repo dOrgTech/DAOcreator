@@ -207,20 +207,20 @@ export const schemes: SchemeDefinition[] = [
   },
 ]
 
-export const getScheme = (typeName: string) =>
+export const getSchemeDefinition = (typeName: string) =>
   R.find(scheme => scheme.typeName === typeName, schemes) as SchemeDefinition
 
 export const getSchemeCallableParamsArray = (
   schemeConfig: SchemeConfig,
   deploymentInfo: DeploymentInfo
 ) =>
-  getScheme(schemeConfig.typeName).getCallableParamsArray(
+  getSchemeDefinition(schemeConfig.typeName).getCallableParamsArray(
     schemeConfig,
     deploymentInfo
   )
 
 export const getSchemeDefaultParams = (typeName: string): any => {
-  const scheme = getScheme(typeName)
+  const scheme = getSchemeDefinition(typeName)
 
   return R.reduce(
     (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),

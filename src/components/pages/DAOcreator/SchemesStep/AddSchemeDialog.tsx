@@ -23,7 +23,7 @@ import {
 import * as R from "ramda"
 import * as React from "react"
 import {
-  getScheme,
+  getSchemeDefinition,
   getSchemeDefaultParams,
   getVotingMachine,
   getVotingMachineDefaultParams,
@@ -92,7 +92,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   // checks that the form has no errors
   // if so it sets formIsValide to true
   validateForm = async (schemeConfig: SchemeConfig) => {
-    const scheme = getScheme(schemeConfig.typeName)
+    const scheme = getSchemeDefinition(schemeConfig.typeName)
     const { params: paramTypes } = scheme
     const { params: paramValues } = schemeConfig
     const formErrorObject = FormValidation.generateFormErrors(
@@ -112,11 +112,13 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     })
   }
 
-  validateVotingMachine = async (config: VotingMachineConfig | undefined) => {
-    if (config) {
-      const votingMachine = getVotingMachine(config.typeName)
+  validateVotingMachine = async (
+    votingMachineConfig: VotingMachineConfig | undefined
+  ) => {
+    if (votingMachineConfig) {
+      const votingMachine = getVotingMachine(votingMachineConfig.typeName)
       const { params: paramTypes } = votingMachine
-      const { params: paramValues } = config
+      const { params: paramValues } = votingMachineConfig
       const formErrorObject = FormValidation.generateFormErrors(
         paramTypes,
         paramValues,
@@ -136,9 +138,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }
   }
 
-  validateParam = async (param: ParamDefinition, value: string) => {
+  validateParam = async (paramDefinition: ParamDefinition, value: string) => {
     let errorMessage = ""
-    switch (param.valueType) {
+    switch (paramDefinition.valueType) {
       case "Address": {
         errorMessage = FormValidation.isValidAddress(value)
         break
@@ -151,7 +153,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
     this.setState({
       formErrors: R.merge(this.state.formErrors, {
-        [param.typeName]: errorMessage,
+        [paramDefinition.typeName]: errorMessage,
       }),
     })
   }
@@ -168,14 +170,17 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }))
   }
 
-  addOrUpdateSchemeParam = async (param: ParamDefinition, value: any) => {
+  addOrUpdateSchemeParam = async (
+    paramDefinition: ParamDefinition,
+    value: any
+  ) => {
     const { id, typeName, params } = this.state.schemeConfig
-    await this.validateParam(param, value)
+    await this.validateParam(paramDefinition, value)
     await this.setState({
       schemeConfig: {
         id,
         typeName,
-        params: R.assoc(param.typeName, value, params),
+        params: R.assoc(paramDefinition.typeName, value, params),
       },
     })
 
@@ -183,25 +188,25 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   }
 
   addOrUpdateVotingMachineConfig = async (
-    value: VotingMachineConfig | undefined
+    votingMachineConfig: VotingMachineConfig | undefined
   ) => {
     const { id, typeName, params } = this.state.schemeConfig
     await this.setState({
       schemeConfig: {
         id,
         typeName,
-        votingMachineConfig: value,
+        votingMachineConfig: votingMachineConfig,
         params,
       },
     })
-    await this.validateVotingMachine(value)
+    await this.validateVotingMachine(votingMachineConfig)
   }
 
-  handleSchemeConfigParamsChange = (param: ParamDefinition) => async (
+  handleSchemeConfigParamsChange = (paramDefinition: ParamDefinition) => async (
     event: any
   ) => {
     const { value } = event.target
-    await this.addOrUpdateSchemeParam(param, value)
+    await this.addOrUpdateSchemeParam(paramDefinition, value)
   }
 
   handleVotingMachineParamsChange = (
@@ -299,7 +304,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     </div>
   )
 
-  selectSchemeStep = (scheme: SchemeDefinition | null, classes: any) => (
+  selectSchemeStep = (
+    schemeDefinition: SchemeDefinition | null,
+    classes: any
+  ) => (
     <Step key={"selectSchemeStep"}>
       <StepLabel>Select Scheme</StepLabel>
       <StepContent>
@@ -307,7 +315,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           <InputLabel htmlFor="scheme-select">Scheme</InputLabel>
           <Select
             className={classes.select}
-            value={scheme != null ? scheme.typeName : ""}
+            value={schemeDefinition != null ? schemeDefinition.typeName : ""}
             onChange={this.setSchemeType}
             inputProps={{
               name: "Scheme",
@@ -330,24 +338,24 @@ class VerticalLinearStepper extends React.Component<Props, State> {
             )}
           </Select>
         </FormControl>
-        {scheme != null ? (
+        {schemeDefinition != null ? (
           <Typography className={classes.description}>
-            {scheme.description}
+            {schemeDefinition.description}
           </Typography>
         ) : null}
-        {this.stepControls(true, false, scheme != null, classes)}
+        {this.stepControls(true, false, schemeDefinition != null, classes)}
       </StepContent>
     </Step>
   )
   configureSchemeStep = (
-    scheme: SchemeDefinition | null,
+    schemeDefinition: SchemeDefinition | null,
     schemeConfig: SchemeConfig,
     isLastStep: boolean,
     classes: any
   ) => {
     //await this.validateForm(schemeConfig)
 
-    if (scheme == null) {
+    if (schemeDefinition == null) {
       return null
     } else {
       return (
@@ -375,7 +383,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   </Typography>
                 </div>
               ),
-              scheme.params
+              schemeDefinition.params
             )}
             {this.stepControls(
               false,
@@ -485,13 +493,14 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const { classes, open } = this.props
     const { activeStep, schemeConfig } = this.state
     const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
-    const scheme = getScheme(schemeTypeName)
+    const schemeDefinition = getSchemeDefinition(schemeTypeName)
     const votingMachineConfig = schemeConfig.votingMachineConfig || {
       typeName: "",
       params: [],
     }
-    console.log(scheme)
-    const hasVotingMachine = scheme != null ? scheme.hasVotingMachine : false
+    console.log(schemeDefinition)
+    const hasVotingMachine =
+      schemeDefinition != null ? schemeDefinition.hasVotingMachine : false
 
     return (
       <Dialog open={open}>
@@ -503,17 +512,17 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           </DialogContentText>
           <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
-              {this.selectSchemeStep(scheme, classes)}
-              {scheme != null && scheme.params.length > 0
+              {this.selectSchemeStep(schemeDefinition, classes)}
+              {schemeDefinition != null && schemeDefinition.params.length > 0
                 ? this.configureSchemeStep(
-                    scheme,
+                    schemeDefinition,
                     schemeConfig,
                     !hasVotingMachine,
                     classes
                   )
                 : null}
 
-              {scheme != null && hasVotingMachine
+              {schemeDefinition != null && hasVotingMachine
                 ? [
                     this.selectVotingMachineStep(
                       votingMachineConfig as VotingMachineConfig,

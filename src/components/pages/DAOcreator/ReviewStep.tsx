@@ -19,7 +19,7 @@ import {
   votingMachines,
   VotingMachineConfig,
   SchemeConfig,
-  getScheme,
+  getSchemeDefinition,
 } from "../../../lib/integrations/daoStack/arc"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -179,7 +179,7 @@ const displayScheme = (schemeConfig: SchemeConfig) => {
     votingMachines[
       R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
     ]
-  const scheme = getScheme(schemeConfig.typeName)
+  const scheme = getSchemeDefinition(schemeConfig.typeName)
   return (
     <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
       <Grid item xs={12}>
