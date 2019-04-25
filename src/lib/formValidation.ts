@@ -34,7 +34,7 @@ export const isBigNumber = checkIfHasError(
 )
 
 export const generateFormErrors = (
-  paramTypes: ParamDefinition[],
+  paramDefinitions: ParamDefinition[],
   paramValues: ParamConfig,
   formErrors: any
 ) => {
@@ -48,7 +48,7 @@ export const generateFormErrors = (
       return { ...acc, [paramType.typeName]: errorMessage }
     },
     formErrors,
-    paramTypes
+    paramDefinitions
   )
 
   return formErrors

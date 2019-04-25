@@ -25,14 +25,14 @@ import * as React from "react"
 import {
   getSchemeDefinition,
   getSchemeDefaultParams,
-  getVotingMachine,
+  getVotingMachineDefinition,
   getVotingMachineDefaultParams,
-  schemes,
+  schemeDefinitions,
   SchemeDefinition,
   SchemeConfig,
   ParamDefinition,
   VotingMachineConfig,
-  votingMachines,
+  votingMachineDefinitions,
   initSchemeConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../../../lib/formValidation"
@@ -116,7 +116,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     votingMachineConfig: VotingMachineConfig | undefined
   ) => {
     if (votingMachineConfig) {
-      const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+      const votingMachine = getVotingMachineDefinition(
+        votingMachineConfig.typeName
+      )
       const { params: paramTypes } = votingMachine
       const { params: paramValues } = votingMachineConfig
       const formErrorObject = FormValidation.generateFormErrors(
@@ -334,7 +336,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                   {scheme.displayName}
                 </MenuItem>
               ),
-              schemes
+              schemeDefinitions
             )}
           </Select>
         </FormControl>
@@ -400,7 +402,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     votingMachineConfig: VotingMachineConfig,
     classes: any
   ) => {
-    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+    const votingMachine = getVotingMachineDefinition(
+      votingMachineConfig.typeName
+    )
     return (
       <Step key={"selectVotingMachineStep"}>
         <StepLabel>Select Voting Machine</StepLabel>
@@ -428,7 +432,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     {votingMachine.displayName}
                   </MenuItem>
                 )
-              }, R.values(votingMachines))}
+              }, R.values(votingMachineDefinitions))}
             </Select>
           </FormControl>
           {votingMachine != null ? (
@@ -445,7 +449,9 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     votingMachineConfig: VotingMachineConfig,
     classes: any
   ) => {
-    const votingMachine = getVotingMachine(votingMachineConfig.typeName)
+    const votingMachine = getVotingMachineDefinition(
+      votingMachineConfig.typeName
+    )
     return (
       <Step key={"configureVotingMachineStep"}>
         <StepLabel>Configure Voting Machine</StepLabel>
@@ -498,7 +504,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       typeName: "",
       params: [],
     }
-    console.log(schemeDefinition)
     const hasVotingMachine =
       schemeDefinition != null ? schemeDefinition.hasVotingMachine : false
 

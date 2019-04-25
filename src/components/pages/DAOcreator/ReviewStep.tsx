@@ -16,7 +16,7 @@ import {
   Founder,
   SchemeDefinition,
   VotingMachineDefinition,
-  votingMachines,
+  votingMachineDefinitions,
   VotingMachineConfig,
   SchemeConfig,
   getSchemeDefinition,
@@ -176,16 +176,18 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
 
 const displayScheme = (schemeConfig: SchemeConfig) => {
   const votingMachine =
-    votingMachines[
+    votingMachineDefinitions[
       R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
     ]
-  const scheme = getSchemeDefinition(schemeConfig.typeName)
+  const schemeDefinition = getSchemeDefinition(schemeConfig.typeName)
   return (
-    <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
+    <Grid container spacing={16} key={`scheme-${schemeDefinition.typeName}`}>
       <Grid item xs={12}>
-        <Typography variant="subtitle1">{scheme.displayName}</Typography>
+        <Typography variant="subtitle1">
+          {schemeDefinition.displayName}
+        </Typography>
         <Typography>
-          <i>{scheme.description}</i>
+          <i>{schemeDefinition.description}</i>
         </Typography>
       </Grid>
       {votingMachine != null ? (

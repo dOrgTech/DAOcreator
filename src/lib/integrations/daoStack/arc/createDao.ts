@@ -5,7 +5,10 @@ import {
   SchemeConfig,
   VotingMachineConfig,
 } from "./types"
-import { votingMachines, getVotingMachine } from "./votingMachines"
+import {
+  votingMachineDefinitions,
+  getVotingMachineDefinition,
+} from "./votingMachines"
 import {
   getSchemeDefinition,
   getSchemeCallableParamsArray,

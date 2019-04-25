@@ -2,7 +2,7 @@ import { SchemeDefinition, SchemeConfig, DeploymentInfo } from "./types"
 import * as R from "ramda"
 import Web3 from "web3"
 
-export const schemes: SchemeDefinition[] = [
+export const schemeDefinitions: SchemeDefinition[] = [
   {
     typeName: "GenericScheme",
     displayName: "Generic Scheme",
@@ -208,7 +208,10 @@ export const schemes: SchemeDefinition[] = [
 ]
 
 export const getSchemeDefinition = (typeName: string) =>
-  R.find(scheme => scheme.typeName === typeName, schemes) as SchemeDefinition
+  R.find(
+    scheme => scheme.typeName === typeName,
+    schemeDefinitions
+  ) as SchemeDefinition
 
 export const getSchemeCallableParamsArray = (
   schemeConfig: SchemeConfig,
