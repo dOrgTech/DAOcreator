@@ -11546,12 +11546,29 @@
       "dev": true
     },
     "notistack": {
-      "version": "0.6.1",
-      "resolved": "https://registry.npmjs.org/notistack/-/notistack-0.6.1.tgz",
-      "integrity": "sha512-tuXmw/0TBmdeHqRjWQwf9Jh298OMEwi18mrnTwxV4IfkxO0n2AplTj/WM9D9kV7aEmMjHTcHixRzllZUou1mAw==",
+      "version": "0.8.1",
+      "resolved": "https://registry.npmjs.org/notistack/-/notistack-0.8.1.tgz",
+      "integrity": "sha512-oAKHeyfBmnzsRMs1ap/xEGzD2UP4tCwgZCs/nPaDalqmN3iV649auPfDwkFRuSqXojpjiC133q37fWP1SYXOCg==",
       "requires": {
         "classnames": "^2.2.6",
-        "prop-types": "^15.6.2"
+        "hoist-non-react-statics": "^3.3.0",
+        "prop-types": "^15.6.2",
+        "react-is": "^16.8.6"
+      },
+      "dependencies": {
+        "hoist-non-react-statics": {
+          "version": "3.3.0",
+          "resolved": "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz",
+          "integrity": "sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==",
+          "requires": {
+            "react-is": "^16.7.0"
+          }
+        },
+        "react-is": {
+          "version": "16.8.6",
+          "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.8.6.tgz",
+          "integrity": "sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA=="
+        }
       }
     },
     "npm-run-path": {
