@@ -1,5 +1,19 @@
-import { DAO, Founder, Scheme, VotingMachineConfiguration } from "./types"
-import { votingMachines } from "./votingMachines"
+import {
+  DAO,
+  Founder,
+  SchemeDefinition,
+  SchemeConfig,
+  VotingMachineConfig,
+} from "./types"
+import {
+  votingMachineDefinitions,
+  getVotingMachineDefinition,
+} from "./votingMachines"
+import {
+  getSchemeDefinition,
+  getSchemeCallableParamsArray,
+  getVotingMachineCallableParamsArray,
+} from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
 
@@ -9,10 +23,7 @@ export const createDao = async (
   deployedContractAddresses: any,
   naming: any,
   founders: Founder[],
-  schemesIn: {
-    scheme: Scheme
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemesIn: SchemeConfig[]
 ): Promise<DAO> => {
   updateStatus(
     "Creating new organization. This requires 1 transaction. \n Step 1 of 4."
@@ -68,52 +79,69 @@ export const createDao = async (
 
   const Avatar = await forgeOrg.call()
   let tx = await forgeOrg.send()
-  console.log("Created new organization.")
+  console.log("Created new organization. With avatar address: " + Avatar)
   console.log(tx)
 
+  const avatar = new web3.eth.Contract(
+    require("@daostack/arc/build/contracts/Avatar.json").abi,
+    Avatar,
+    opts
+  )
+
+  const daoToken = await avatar.methods.nativeToken().call()
+  const reputation = await avatar.methods.nativeReputation().call()
+
   const votingMachineConfigToHash = (
-    votingMachineConfig: VotingMachineConfiguration
+    votingMachineConfig: VotingMachineConfig
   ) => {
-    const votingMachine = votingMachines[votingMachineConfig.typeName]
-    const callableVotingParams = votingMachine.getCallableParamsArray(
+    const callableVotingParams = getVotingMachineCallableParamsArray(
       votingMachineConfig
     )
     return hash({ callableVotingParams })
   }
 
-  const initializedSchemes = R.map(({ scheme, votingMachineConfig }) => {
+  const initializedSchemes = R.map(schemeConfig => {
     return {
-      scheme,
+      schemeConfig,
       schemeContract: new web3.eth.Contract(
-        require(`@daostack/arc/build/contracts/${scheme.typeName}.json`).abi,
-        addresses[scheme.typeName],
+        require(`@daostack/arc/build/contracts/${
+          schemeConfig.typeName
+        }.json`).abi,
+        addresses[schemeConfig.typeName],
         opts
       ),
-      votingMachineHash: votingMachineConfigToHash(votingMachineConfig),
+      votingMachineHash:
+        schemeConfig.votingMachineConfig != null
+          ? votingMachineConfigToHash(schemeConfig.votingMachineConfig)
+          : null,
     }
   }, schemesIn)
 
   const initializedVotingMachines: any = R.reduce(
-    (acc, { votingMachineConfig }) => {
-      const votingMachine = votingMachines[votingMachineConfig.typeName]
-      const votingMachineContract = new web3.eth.Contract(
-        require(`@daostack/arc/build/contracts/${
-          votingMachine.typeName
-        }.json`).abi,
-        addresses[votingMachine.typeName],
-        opts
-      )
-      return R.assoc(
-        votingMachineConfigToHash(votingMachineConfig),
-        {
-          votingMachineContract,
-          votingMachineCallableParamsArray: votingMachine.getCallableParamsArray(
-            votingMachineConfig
-          ),
-          votingMachineAddress: addresses[votingMachine.typeName],
-        },
-        acc
-      )
+    (acc, schemeConfig) => {
+      if (schemeConfig.votingMachineConfig != null) {
+        const votingMachineConfig = schemeConfig.votingMachineConfig
+        const votingMachineContract = new web3.eth.Contract(
+          require(`@daostack/arc/build/contracts/${
+            votingMachineConfig.typeName
+          }.json`).abi,
+          addresses[votingMachineConfig.typeName],
+          opts
+        )
+        return R.assoc(
+          votingMachineConfigToHash(votingMachineConfig),
+          {
+            votingMachineContract,
+            votingMachineCallableParamsArray: getVotingMachineCallableParamsArray(
+              votingMachineConfig
+            ),
+            votingMachineAddress: addresses[votingMachineConfig.typeName],
+          },
+          acc
+        )
+      } else {
+        return acc
+      }
     },
     {},
     schemesIn
@@ -136,6 +164,7 @@ export const createDao = async (
   const parameterizedVotingMachines = await Promise.all(
     R.map(async votingMachineHash => {
       const {
+        votingMachineAddress,
         votingMachineContract,
         votingMachineCallableParamsArray,
       }: any = initializedVotingMachines[votingMachineHash]
@@ -151,6 +180,7 @@ export const createDao = async (
       console.log(tx)
 
       return {
+        votingMachineAddress,
         votingMachineHash,
         votingMachineParametersKey,
       }
@@ -158,11 +188,12 @@ export const createDao = async (
   )
 
   const schemeAddresses = R.map(
-    ({ scheme }) => addresses[scheme.typeName],
+    ({ schemeConfig }) => addresses[schemeConfig.typeName],
     initializedSchemes
   )
   const schemePermissions = R.map(
-    ({ scheme }) => scheme.permissions,
+    ({ schemeConfig }) =>
+      getSchemeDefinition(schemeConfig.typeName).permissions,
     initializedSchemes
   )
 
@@ -179,27 +210,33 @@ export const createDao = async (
   )
 
   const schemeParams = await Promise.all(
-    R.map(async ({ scheme, schemeContract, votingMachineHash }) => {
-      const { votingMachineParametersKey } = R.find(
-        parameterizedVotingMachine =>
-          parameterizedVotingMachine.votingMachineHash === votingMachineHash,
-        parameterizedVotingMachines
-      ) as any
-      const { votingMachineAddress } = initializedVotingMachines[
-        votingMachineHash
-      ]
+    R.map(async ({ schemeConfig, schemeContract, votingMachineHash }) => {
+      let deploymentInfo = {
+        avatar: Avatar,
+        daoToken,
+        reputation,
+      }
 
+      if (votingMachineHash != null) {
+        const { votingMachineAddress, votingMachineParametersKey } = R.find(
+          parameterizedVotingMachine =>
+            parameterizedVotingMachine.votingMachineHash === votingMachineHash,
+          parameterizedVotingMachines
+        ) as any
+        deploymentInfo = R.merge(deploymentInfo, {
+          votingMachineAddress,
+          votingMachineParametersKey,
+        })
+      }
+      console.log(deploymentInfo)
       const setParams = schemeContract.methods.setParameters.apply(
         null,
-        scheme.getCallableParamsArray(
-          votingMachineParametersKey,
-          votingMachineAddress
-        )
+        getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
       )
       const schemeParametersKey = await setParams.call()
 
       const tx = await setParams.send()
-      console.log(`${scheme.typeName} parameters set.`)
+      console.log(`${schemeConfig.typeName} parameters set.`)
       console.log(tx)
 
       return schemeParametersKey
@@ -226,15 +263,6 @@ export const createDao = async (
     .send()
   console.log("DAO schemes set.")
   console.log(tx)
-
-  const avatar = new web3.eth.Contract(
-    require("@daostack/arc/build/contracts/Avatar.json").abi,
-    Avatar,
-    opts
-  )
-
-  const daoToken = await avatar.methods.nativeToken().call()
-  const reputation = await avatar.methods.nativeReputation().call()
 
   return {
     avatar: Avatar,

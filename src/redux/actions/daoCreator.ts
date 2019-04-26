@@ -1,8 +1,10 @@
 import { Dispatch } from "redux"
+import uuid from "uuid"
 import * as Events from "./events"
 import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
 import * as Web3 from "../../lib/integrations/web3"
+import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
 
 export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>
@@ -12,11 +14,11 @@ export default interface DAOcreatorActions {
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
-  addOrUpdateScheme(
-    scheme: Arc.Scheme,
-    votingMachineConfig: Arc.VotingMachineConfiguration
-  ): (dispatch: Dispatch) => Promise<void>
-  remScheme(schemeTypeName: string): (dispatch: Dispatch) => Promise<void>
+  removeFounder(address: string): (dispatch: Dispatch) => Promise<void>
+  addScheme(
+    schemeConfig: Arc.SchemeConfig
+  ): (dispatch: Dispatch) => Promise<string>
+  removeScheme(id: string): (dispatch: Dispatch) => Promise<void>
   createDao(): (
     dispatch: Dispatch,
     getState: () => RootState
@@ -40,8 +42,13 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
     })
       .then((web3: any) => Arc.init(web3))
       .catch(e => {
-        dispatch(Events.NOTIFICATION_ERROR("Failed to initialize. Error: " + e))
-        return Promise.resolve()
+        return notificationActions
+          .addNotification({
+            message: "Failed to initialize. " + e,
+            type: "error",
+            persist: true,
+          })(dispatch)
+          .then(_ => Promise.resolve())
       })
       .finally(() => {
         dispatch(Events.WAITING_ANIMATION_CLOSE())
@@ -97,21 +104,31 @@ export function addFounder(
   }
 }
 
-export function addOrUpdateScheme(
-  scheme: Arc.Scheme,
-  votingMachineConfig: Arc.VotingMachineConfiguration
+export function removeFounder(
+  address: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME({ scheme, votingMachineConfig }))
+    dispatch(Events.DAO_CREATE_REM_FOUNDER(address))
     return Promise.resolve()
   }
 }
 
-export function remScheme(
-  schemeTypeName: string
+export function addScheme(
+  schemeConfig: Arc.SchemeConfig
+): (dispatch: Dispatch) => Promise<string> {
+  const schemeId = uuid()
+  schemeConfig.id = schemeId
+  return (dispatch: Dispatch) => {
+    dispatch(Events.DAO_CREATE_ADD_SCHEME(schemeConfig))
+    return Promise.resolve(schemeId)
+  }
+}
+
+export function removeScheme(
+  schemeId: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeTypeName))
+    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeId))
     return Promise.resolve()
   }
 }
@@ -144,9 +161,12 @@ export function createDao(): (
       return Promise.resolve("Success!")
     } catch (e) {
       dispatch(Events.WAITING_ANIMATION_CLOSE())
-      dispatch(
-        Events.NOTIFICATION_ERROR("Failed to create DAO. Error: " + e.message)
-      )
+
+      notificationActions.addNotification({
+        message: "Failed to create DAO. " + e.message,
+        type: "error",
+        persist: true,
+      })(dispatch)
       return Promise.resolve(e.message)
     }
   }

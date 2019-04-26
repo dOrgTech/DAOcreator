@@ -1,3 +1,4 @@
+import { Notification } from "./redux/reducers/notifications"
 export interface RootState {
   daoCreator: DAOcreatorState
   daoController: DaoControllerState
@@ -15,10 +16,7 @@ export interface DAOcreatorState {
     tokenSymbol: string
   }
   founders: Arc.Founder[]
-  schemes: {
-    scheme: Arc.Scheme
-    votingMachineConfig: Arc.VotingMachineConfiguration
-  }[]
+  schemes: Arc.SchemeConfig[]
   deployedDao: Arc.DAO | undefined
 }
 
@@ -27,9 +25,7 @@ export interface DaoControllerState {
 }
 
 export interface NotificationState {
-  message: string
-  type: "error" | "info"
-  open: boolean
+  notifications: { [id: string]: Notification }
 }
 
 export interface WaitingAnimationState {

@@ -1,5 +1,7 @@
 import deployedContractAddresses from "./contractAddresses.json"
 import { Dispatch } from "redux"
+import * as R from "ramda"
+import uuid from "uuid"
 
 export * from "./types"
 export * from "./typeConversions"
@@ -11,18 +13,23 @@ import { createDao as createTheDao } from "./createDao"
 import {
   DAO,
   Founder,
-  Scheme,
-  VotingMachine,
-  VotingMachineConfiguration,
+  SchemeDefinition,
+  VotingMachineDefinition,
+  VotingMachineConfig,
+  SchemeConfig,
 } from "./types"
 
 export const init = async (web3: any) => {
   const network: string = await web3.eth.net.getNetworkType()
+  const supportedNetworks = R.keys(deployedContractAddresses)
 
   if ((deployedContractAddresses as any)[network] != null) {
     return
   } else {
-    throw Error("Network not supported")
+    throw Error(
+      "Network not supported. The supported network are: " +
+        supportedNetworks.toString()
+    )
   }
 }
 
@@ -32,10 +39,7 @@ export const createDao = (
 ) => async (
   naming: any,
   founders: Founder[],
-  schemes: {
-    scheme: Scheme
-    votingMachineConfig: VotingMachineConfiguration
-  }[]
+  schemes: SchemeConfig[]
 ): Promise<DAO> => {
   try {
     const network: string = await web3.eth.net.getNetworkType()
@@ -55,5 +59,17 @@ export const createDao = (
     console.log("Error while deploying DAO:")
     console.error(e)
     return Promise.reject(e)
+  }
+}
+
+export const initSchemeConfig = (
+  id: string = uuid(),
+  typeName: string = "",
+  params: any = {}
+): SchemeConfig => {
+  return {
+    id,
+    typeName,
+    params,
   }
 }

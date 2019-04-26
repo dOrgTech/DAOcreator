@@ -1,10 +1,9 @@
 import { Events, AnyEvent } from "../../redux/actions"
 import { NotificationState } from "../../state"
+import * as R from "ramda"
 
 const initialState: NotificationState = {
-  message: "",
-  type: "info",
-  open: false,
+  notifications: {},
 }
 
 export const reducer = (
@@ -12,13 +11,27 @@ export const reducer = (
   event: AnyEvent
 ): NotificationState => {
   switch (event.type) {
-    case Events.NOTIFICATION_INFO:
-      return { message: event.payload, type: "info", open: true }
-    case Events.NOTIFICATION_ERROR:
-      return { message: event.payload, type: "error", open: true }
-    case Events.NOTIFICATION_CLOSE:
-      return { message: "", type: "info", open: false }
+    case Events.NOTIFICATION_ADD:
+      return {
+        notifications: R.assoc(
+          event.payload.id as string,
+          event.payload,
+          state.notifications
+        ),
+      }
+    case Events.NOTIFICATION_REMOVE:
+      return {
+        notifications: R.dissoc(event.payload, state.notifications),
+      }
     default:
       return state
   }
+}
+
+export interface Notification {
+  id?: string
+  message: string
+  type: "default" | "error" | "success" | "warning" | "info"
+  duration?: number // ms it will display. Persist overrides this
+  persist?: boolean // displaying until its explicitly closed
 }

@@ -3,9 +3,9 @@ import * as R from "ramda"
 import {
   DAO,
   Founder,
-  Scheme,
-  VotingMachine,
-  VotingMachineConfiguration,
+  SchemeDefinition,
+  VotingMachineDefinition,
+  VotingMachineConfig,
 } from "./types"
 
 const toFounderConfigs = (founders: Founder[]): any[] =>
@@ -23,7 +23,7 @@ const toFounderConfigs = (founders: Founder[]): any[] =>
   )
 
 const toVotingMachineParams = (
-  votingMachineConfiguration: VotingMachineConfiguration
+  votingMachineConfiguration: VotingMachineConfig
 ) => ({
   votingMachineParams: {
     votingMachineName: votingMachineConfiguration.typeName,

@@ -5,25 +5,29 @@
 //   will be useful. We don't want to bleed UI data into the state (descriptions, display names, etc),
 //   but we also want to keep them consistent between tools (GUI, CLI, etc).
 
-export type VotingMachineConfiguration = {
-  typeName: string
-  params: { [paramName: string]: string | number }
+export type ParamConfig = {
+  [paramName: string]: string | number
 }
 
-export type VotingMachine = {
+export type VotingMachineConfig = {
+  typeName: string
+  params: ParamConfig
+}
+
+export type VotingMachineDefinition = {
   typeName: string
   displayName: string
   description: string
-  params: Param[]
-  getCallableParamsArray: (config: VotingMachineConfiguration) => any[]
+  params: ParamDefinition[]
+  getCallableParamsArray: (config: VotingMachineConfig) => any[]
 }
 
-export type Param = {
+export type ParamDefinition = {
   typeName: string
   valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
   displayName: string
   description: string
-  defaultValue: string | number | boolean
+  defaultValue?: string | number | boolean
   optional?: boolean
 }
 
@@ -33,18 +37,27 @@ export type Founder = {
   tokens: string
 }
 
-export type Scheme = {
+export type SchemeConfig = {
+  id: string
+  typeName: string // not schemeTypeName (that is in use now)
+  votingMachineConfig?: VotingMachineConfig
+  params: ParamConfig
+}
+
+export type SchemeDefinition = {
   typeName: string
   address?: string
   displayName: string
   description: string
   toggleDefault: boolean
   permissions: string
+  hasVotingMachine: boolean
+  daoCanHaveMultiple: boolean
   getCallableParamsArray: (
-    votingMachineParametersKey: string,
-    votingMachineAddress: string
+    schemeConfig: SchemeConfig,
+    deploymentInfo: DeploymentInfo
   ) => any[]
-  params: Param[]
+  params: ParamDefinition[]
 }
 
 export type DAO = {
@@ -54,4 +67,12 @@ export type DAO = {
   name: string
   daoToken: string
   reputation: string
+}
+
+export type DeploymentInfo = {
+  avatar: string // address
+  daoToken: string // address
+  reputation: string // address
+  votingMachineParametersKey?: string // hash
+  votingMachineAddress?: string // address
 }

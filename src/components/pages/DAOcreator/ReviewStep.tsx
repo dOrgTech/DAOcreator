@@ -14,10 +14,12 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
   Founder,
-  Scheme,
-  VotingMachine,
-  votingMachines,
-  VotingMachineConfiguration,
+  SchemeDefinition,
+  VotingMachineDefinition,
+  votingMachineDefinitions,
+  VotingMachineConfig,
+  SchemeConfig,
+  getSchemeDefinition,
 } from "../../../lib/integrations/daoStack/arc"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -27,7 +29,7 @@ interface Props extends WithStyles<typeof styles> {
   tokenName: string
   tokenSymbol: string
   founders: Founder[]
-  schemes: { scheme: Scheme; votingMachineConfig: VotingMachineConfiguration }[]
+  schemes: SchemeConfig[]
   stepNumber: number
   stepValid: boolean
 }
@@ -172,30 +174,32 @@ const displayFounder = ({ address, reputation, tokens }: Founder) => (
   </Grid>
 )
 
-const displayScheme = ({
-  scheme,
-  votingMachineConfig,
-}: {
-  scheme: Scheme
-  votingMachineConfig: VotingMachineConfiguration
-}) => {
-  const votingMachineType = votingMachines[votingMachineConfig.typeName]
+const displayScheme = (schemeConfig: SchemeConfig) => {
+  const votingMachine =
+    votingMachineDefinitions[
+      R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
+    ]
+  const schemeDefinition = getSchemeDefinition(schemeConfig.typeName)
   return (
-    <Grid container spacing={16} key={`scheme-${scheme.typeName}`}>
-      <Grid item xs={12}>
-        <Typography variant="subtitle1">{scheme.displayName}</Typography>
-        <Typography>
-          <i>{scheme.description}</i>
-        </Typography>
-      </Grid>
+    <Grid container spacing={16} key={`scheme-${schemeDefinition.typeName}`}>
       <Grid item xs={12}>
         <Typography variant="subtitle1">
-          {votingMachineType.displayName}
+          {schemeDefinition.displayName}
         </Typography>
         <Typography>
-          <i>{votingMachineType.description}</i>
+          <i>{schemeDefinition.description}</i>
         </Typography>
       </Grid>
+      {votingMachine != null ? (
+        <Grid item xs={12}>
+          <Typography variant="subtitle2">
+            {votingMachine.displayName}
+          </Typography>
+          <Typography>
+            <i>{votingMachine.description}</i>
+          </Typography>
+        </Grid>
+      ) : null}
     </Grid>
   )
 }

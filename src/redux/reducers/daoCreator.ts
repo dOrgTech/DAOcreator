@@ -4,7 +4,7 @@ import { DAOcreatorState } from "../../state"
 
 const initialState: DAOcreatorState = {
   step: 0,
-  stepValidation: [true],
+  stepValidation: [false, false],
   naming: {
     daoName: "",
     tokenName: "",
@@ -48,21 +48,22 @@ export const reducer = (
       return R.merge(state, {
         founders: R.append(event.payload, state.founders),
       })
-    case Events.DAO_CREATE_ADD_OR_UPDATE_SCHEME:
+    case Events.DAO_CREATE_REM_FOUNDER:
       return R.merge(state, {
-        schemes: R.append(
-          event.payload,
-          R.filter(
-            ({ scheme }) => scheme.typeName !== event.payload.scheme.typeName,
-            state.schemes
-          )
+        founders: R.filter(
+          founder => founder.address !== event.payload,
+          state.founders
         ),
       })
+    case Events.DAO_CREATE_ADD_SCHEME:
+      return R.merge(state, {
+        schemes: R.append(event.payload, state.schemes),
+      })
 
-    case Events.DAO_CREATE_REM_SCHEME:
+    case Events.DAO_CREATE_REMOVE_SCHEME:
       return R.merge(state, {
         schemes: R.filter(
-          ({ scheme }) => scheme.typeName !== event.payload,
+          schemeConfig => schemeConfig.id !== event.payload,
           state.schemes
         ),
       })

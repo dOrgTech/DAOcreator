@@ -1,8 +1,14 @@
-import { VotingMachine, Param, VotingMachineConfiguration } from "./types"
+import {
+  VotingMachineDefinition,
+  ParamDefinition,
+  VotingMachineConfig,
+} from "./types"
 import Web3 from "web3"
 import * as R from "ramda"
 
-export const votingMachines: { [key: string]: VotingMachine } = {
+export const votingMachineDefinitions: {
+  [key: string]: VotingMachineDefinition
+} = {
   AbsoluteVote: {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
@@ -24,7 +30,7 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         defaultValue: 50,
       },
     ],
-    getCallableParamsArray: ({ params }: VotingMachineConfiguration) => {
+    getCallableParamsArray: ({ params }: VotingMachineConfig) => {
       return [params["votePerc"], params["voteOnBehalf"]]
     },
   },
@@ -39,14 +45,14 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         typeName: "queuedVoteRequiredPercentage",
         valueType: "number",
         displayName: "Queued Vote Required Percentage",
-        description: "TODO",
+        description: "The minimum percentage for a vote on th queue to pass.",
         defaultValue: 50,
       },
       {
         typeName: "queuedVotePeriodLimit",
         valueType: "number",
         displayName: "Queued Vote Period Limit",
-        description: "TODO",
+        description: "The duration of a voting period.",
         defaultValue: 1800,
       },
       {
@@ -60,14 +66,16 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         typeName: "proposingRepRewardGwei",
         valueType: "number",
         displayName: "Proposing Rep Reward Gwei",
-        description: "TODO",
+        description:
+          "Reputation reward amount to the user that passes a proposal.",
         defaultValue: 5,
       },
       {
         typeName: "minimumDaoBountyGWei",
         valueType: "number",
         displayName: "Minimum Dao Bounty GWei",
-        description: "TODO",
+        description:
+          "The minimum amount you can have as a bounty for a proposal",
         defaultValue: 100,
       },
       {
@@ -199,7 +207,7 @@ export const votingMachines: { [key: string]: VotingMachine } = {
         defaultValue: 1,
       },
     ],
-    getCallableParamsArray: ({ params }: VotingMachineConfiguration) => {
+    getCallableParamsArray: ({ params }: VotingMachineConfig) => {
       return [
         [
           params["queuedVoteRequiredPercentage"],
@@ -227,3 +235,25 @@ export const votingMachines: { [key: string]: VotingMachine } = {
     params: [ TODO: Add me ],
   },*/
 }
+
+export const getVotingMachineDefaultParams = (typeName: string): any => {
+  const votingMachine = votingMachineDefinitions[
+    typeName
+  ] as VotingMachineDefinition
+
+  return R.reduce(
+    (acc, param) => R.assoc(param.typeName, param.defaultValue, acc),
+    {},
+    votingMachine.params
+  )
+}
+
+export const getVotingMachineDefinition = (typeName: string) =>
+  votingMachineDefinitions[typeName]
+
+export const getVotingMachineCallableParamsArray = (
+  votingMachineConfig: VotingMachineConfig
+) =>
+  getVotingMachineDefinition(
+    votingMachineConfig.typeName
+  ).getCallableParamsArray(votingMachineConfig)
