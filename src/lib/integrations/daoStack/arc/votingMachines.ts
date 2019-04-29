@@ -13,7 +13,7 @@ export const votingMachineDefinitions: {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
     description:
-      "The decision that first reaches the percentage of reputation-voted required by Majority Percentage is executed.",
+      "The decision that first reaches the percentage of reputation required is executed.",
     params: [
       {
         typeName: "voteOnBehalf",
@@ -25,9 +25,9 @@ export const votingMachineDefinitions: {
       {
         typeName: "votePerc",
         valueType: "number",
-        displayName: "Majority Percentage",
+        displayName: "Percentage Required",
         description:
-          "The percentage of reputation necessary to reach consensus.",
+          "The percentage of reputation necessary on a decision for it to be executed.",
         defaultValue: 50,
       },
     ],
