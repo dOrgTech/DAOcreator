@@ -27,7 +27,7 @@ export const votingMachineDefinitions: {
         valueType: "number",
         displayName: "Required Percentage for Quorum",
         description:
-          "The percentage of reputation that needs to have voted, before the vote is decided.",
+          "The percentage of reputation that needs to have participated, before the vote is decided.",
         defaultValue: 50,
       },
     ],
