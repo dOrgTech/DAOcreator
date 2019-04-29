@@ -125,7 +125,7 @@ export const schemeDefinitions: SchemeDefinition[] = [
         valueType: "Address",
         displayName: "Pay Token (keep empty to use the DAO's native token)",
         description:
-          "The ERC20 token to pay for register or promotion, an address. Keep this field empty to use tha DAO's notive token.",
+          "The address of the ERC20 token to use for paying the registration fee. Keep this field empty to use the DAO's native token.",
         defaultValue: "",
         optional: true,
       },
