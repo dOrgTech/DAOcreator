@@ -112,12 +112,22 @@ export const schemeDefinitions: SchemeDefinition[] = [
     daoCanHaveMultiple: false,
     params: [
       {
+        typeName: "beneficiary",
+        valueType: "Address",
+        displayName: "Beneficiary (keep empty to set it to the DAO)",
+        description:
+          "The beneficiary payment address. Keep this field empty to use the DAO as beneficiary.",
+        defaultValue: "",
+        optional: true,
+      },
+      {
         typeName: "token",
         valueType: "Address",
-        displayName: "Pay Token",
+        displayName: "Pay Token (keep empty to use the DAO's native token)",
         description:
-          "The ERC20 token to pay for register or promotion, an address.",
-        defaultValue: "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359", // DAI. TODO: make this show up nicely in th UI
+          "The ERC20 token to pay for register or promotion, an address. Keep this field empty to use tha DAO's notive token.",
+        defaultValue: "",
+        optional: true,
       },
       {
         typeName: "fee",
@@ -126,18 +136,17 @@ export const schemeDefinitions: SchemeDefinition[] = [
         description: "Fee for adding something to the register in Wei",
         defaultValue: 100,
       },
-      {
-        typeName: "beneficiary",
-        valueType: "Address",
-        displayName: "Beneficiary",
-        description: "The beneficiary payment address",
-        defaultValue: "",
-      },
     ],
     hasVotingMachine: false,
     getCallableParamsArray: function(schemeConfig, deploymentInfo) {
-      const { token, fee, beneficiary } = schemeConfig.params
-      return [token, fee, beneficiary] // TODO
+      let { token, fee, beneficiary } = schemeConfig.params
+      if (R.isEmpty(token)) {
+        token = deploymentInfo.daoToken
+      }
+      if (R.isEmpty(beneficiary)) {
+        beneficiary = deploymentInfo.avatar
+      }
+      return [token, fee, beneficiary]
     },
   },
   {
