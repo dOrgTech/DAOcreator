@@ -8,6 +8,8 @@ let readyWeb3: any
 
 export const getWeb3 = async (): Promise<any> => {
   if (readyWeb3 != null) {
+    const accounts = await readyWeb3.eth.getAccounts()
+    readyWeb3.eth.defaultAccount = accounts[0]
     return readyWeb3
   }
   const ethereum = (window as any).ethereum

@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from "redux"
 import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
 import { Notification as NotificationType } from "../../redux/reducers/notifications"
 import { RootState } from "../../state"
+import { Button } from "@material-ui/core"
 
 interface Props {
   notifications: NotificationType[]
@@ -54,6 +55,11 @@ class Notifications extends React.Component<Props, State> {
           persist: notification.persist,
           variant: notification.type,
           onClose: () => actions.removeNotification(notification.id as string),
+          action: (key: string) => (
+            <Button size="small" onClick={() => this.props.closeSnackbar(key)}>
+              Dismiss
+            </Button>
+          ),
         }),
       notificationsToAdd
     )

@@ -136,6 +136,7 @@ export const createDao = async (
               votingMachineConfig
             ),
             votingMachineAddress: addresses[votingMachineConfig.typeName],
+            votingMachineTypeName: votingMachineConfig.typeName,
           },
           acc
         )
@@ -167,6 +168,7 @@ export const createDao = async (
         votingMachineAddress,
         votingMachineContract,
         votingMachineCallableParamsArray,
+        votingMachineTypeName,
       }: any = initializedVotingMachines[votingMachineHash]
       const setParams = votingMachineContract.methods.setParameters.apply(
         null,
@@ -176,7 +178,11 @@ export const createDao = async (
       const votingMachineParametersKey = await setParams.call()
 
       const tx = await setParams.send()
-      console.log(`${votingMachineHash.toString()} parameters set.`)
+      console.log(
+        `${votingMachineTypeName} (${votingMachineHash.toString()}) parameters set (${votingMachineCallableParamsArray.join(
+          " ,"
+        )}).`
+      )
       console.log(tx)
 
       return {
@@ -228,15 +234,21 @@ export const createDao = async (
           votingMachineParametersKey,
         })
       }
-      console.log(deploymentInfo)
+      const schemeParameters = getSchemeCallableParamsArray(
+        schemeConfig,
+        deploymentInfo
+      )
       const setParams = schemeContract.methods.setParameters.apply(
         null,
-        getSchemeCallableParamsArray(schemeConfig, deploymentInfo)
+        schemeParameters
       )
       const schemeParametersKey = await setParams.call()
-
       const tx = await setParams.send()
-      console.log(`${schemeConfig.typeName} parameters set.`)
+      console.log(
+        `${schemeConfig.typeName} parameters set (${schemeParameters.join(
+          " ,"
+        )}).`
+      )
       console.log(tx)
 
       return schemeParametersKey
