@@ -9,6 +9,32 @@ import * as R from "ramda"
 export const votingMachineDefinitions: {
   [key: string]: VotingMachineDefinition
 } = {
+  QuorumVote: {
+    typeName: "QuorumVote",
+    displayName: "Quorum Vote",
+    description:
+      "The decision with the most votes when a quorum is met is executed.",
+    params: [
+      {
+        typeName: "voteOnBehalf",
+        valueType: "string",
+        displayName: "Vote on behalf",
+        description: "The address of the inital votee",
+        defaultValue: "0x0000000000000000000000000000000000000000",
+      },
+      {
+        typeName: "votePerc",
+        valueType: "number",
+        displayName: "Required Percentage for Quorum",
+        description:
+          "The percentage of reputation that needs to have participated, before the vote is decided.",
+        defaultValue: 50,
+      },
+    ],
+    getCallableParamsArray: ({ params }: VotingMachineConfig) => {
+      return [params["votePerc"], params["voteOnBehalf"]]
+    },
+  },
   AbsoluteVote: {
     typeName: "AbsoluteVote",
     displayName: "Absolute Vote",
