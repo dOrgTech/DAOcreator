@@ -146,23 +146,31 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   }
 
   validateParam = async (paramDefinition: ParamDefinition, value: string) => {
-    let errorMessage = ""
-    switch (paramDefinition.valueType) {
-      case "Address": {
-        errorMessage = FormValidation.isValidAddress(value)
-        break
+    if (value == null || (R.isEmpty(value) && paramDefinition.optional)) {
+      this.setState({
+        formErrors: R.merge(this.state.formErrors, {
+          [paramDefinition.typeName]: "",
+        }),
+      })
+    } else {
+      let errorMessage = ""
+      switch (paramDefinition.valueType) {
+        case "Address": {
+          errorMessage = FormValidation.isValidAddress(value)
+          break
+        }
+        case "number": {
+          errorMessage = FormValidation.isBigNumber(value)
+          break
+        }
       }
-      case "number": {
-        errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-    }
 
-    this.setState({
-      formErrors: R.merge(this.state.formErrors, {
-        [paramDefinition.typeName]: errorMessage,
-      }),
-    })
+      this.setState({
+        formErrors: R.merge(this.state.formErrors, {
+          [paramDefinition.typeName]: errorMessage,
+        }),
+      })
+    }
   }
 
   handleNext = () => {
@@ -276,14 +284,16 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     }
   }
 
-  setSchemeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  setSchemeType = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { schemeConfig } = this.state
     const { id } = schemeConfig
     const schemeTypeName = event.target.value
     const params = getSchemeDefaultParams(schemeTypeName)
+    const newSchemeConfig = { id, typeName: schemeTypeName, params }
     this.setState({
-      schemeConfig: { id, typeName: schemeTypeName, params },
+      schemeConfig: newSchemeConfig,
     })
+    await this.validateForm(newSchemeConfig)
   }
 
   stepControls = (
