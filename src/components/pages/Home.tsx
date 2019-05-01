@@ -26,7 +26,7 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
           <Typography variant="h2" className={classes.header}>
             dOrg
           </Typography>
-          <Typography variant="subheading" className={classes.header}>
+          <Typography variant="subtitle1" className={classes.header}>
             Empowering Decentralized Organization
           </Typography>
           <Button

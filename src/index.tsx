@@ -8,7 +8,7 @@ import { ConnectedRouter } from "connected-react-router"
 import { Provider } from "react-redux"
 
 import { configureStore } from "./redux/store"
-import createHashHistory from "history/createHashHistory"
+import { createHashHistory } from "history"
 
 import theme from "./style/theme"
 
