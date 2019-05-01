@@ -2,14 +2,7 @@ import deployedContractAddresses from "./contractAddresses.json"
 import { Dispatch } from "redux"
 import * as R from "ramda"
 import uuid from "uuid"
-
-export * from "./types"
-export * from "./typeConversions"
-export * from "./schemes"
-export * from "./votingMachines"
-
 import { createDao as createTheDao } from "./createDao"
-
 import {
   DAO,
   Founder,
@@ -18,6 +11,10 @@ import {
   VotingMachineConfig,
   SchemeConfig,
 } from "./types"
+export * from "./types"
+export * from "./typeConversions"
+export * from "./schemes"
+export * from "./votingMachines"
 
 export const init = async (web3: any) => {
   const network: string = await web3.eth.net.getNetworkType()

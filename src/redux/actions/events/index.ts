@@ -1,4 +1,12 @@
 import { Notification } from "../../reducers/notifications"
+import {
+  Event,
+  createEvent,
+  PayloadEvent,
+  createPayloadEvent,
+} from "./typeSafety"
+import * as Arc from "../../../lib/integrations/daoStack/arc"
+
 export enum Events {
   // DAO Creator
   DAO_CREATE_NEXT_STEP = "DAO_CREATE_NEXT_STEP",
@@ -23,16 +31,6 @@ export enum Events {
   WAITING_ANIMATION_CLOSE = "WAITING_ANIMATION_CLOSE",
   WAITING_ANIMATION_SET_DETAILS = "WAITING_ANIMATION_SET_DETAILS",
 }
-
-import {
-  Event,
-  createEvent,
-  PayloadEvent,
-  createPayloadEvent,
-} from "./typeSafety"
-
-// TODO: get layer 2 types instead? or UI types? I think layer 2 makes most sense...
-import * as Arc from "../../../lib/integrations/daoStack/arc"
 
 // DAO Creator
 interface DAO_CREATE_NEXT_STEP extends Event<string> {

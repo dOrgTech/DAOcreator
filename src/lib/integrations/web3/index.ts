@@ -1,10 +1,7 @@
-//declare module "web3"
 import * as typeValidation from "./typeValidation"
-//import * as rawWeb3 from "web3"
-const Web3 = require("web3")
-//const Web3 = rawWeb3 as any
+import Web3 from "web3"
 
-let readyWeb3: any
+let readyWeb3: Web3
 
 export const getWeb3 = async (): Promise<any> => {
   if (readyWeb3 != null) {
@@ -21,21 +18,21 @@ export const getWeb3 = async (): Promise<any> => {
       await ethereum.enable()
 
       // Acccounts now exposed
-      readyWeb3 = new Web3(ethereum)
+      readyWeb3 = new Web3(ethereum, undefined, {
+        transactionConfirmationBlocks: 1,
+      })
       const accounts = await readyWeb3.eth.getAccounts()
       readyWeb3.eth.defaultAccount = accounts[0]
-
-      return readyWeb3
     } catch (error) {
       return Promise.reject("User denied account access...")
     }
   }
   // Legacy dapp browsers...
   else if (web3) {
-    readyWeb3 = new Web3(web3.currentProvider)
+    readyWeb3 = new Web3(web3.currentProvider, undefined, {
+      transactionConfirmationBlocks: 1,
+    })
     const accounts = await readyWeb3.eth.getAccounts()
-    return readyWeb3
-    // Acccounts always exposed
   }
   // Non-dapp browsers...
   else {
@@ -43,6 +40,8 @@ export const getWeb3 = async (): Promise<any> => {
       "Non-Ethereum browser detected. You should consider trying MetaMask!"
     )
   }
+  typeValidation.init(readyWeb3)
+  return readyWeb3
 }
 
 export const TypeValidation = typeValidation

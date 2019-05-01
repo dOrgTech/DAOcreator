@@ -16,9 +16,11 @@ import {
 } from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
+import Web3 from "web3"
+import { ContractOptions } from "web3-eth-contract"
 
 export const createDao = async (
-  web3: any,
+  web3: Web3,
   updateStatus: (message: string) => void,
   deployedContractAddresses: any,
   naming: any,
@@ -32,13 +34,14 @@ export const createDao = async (
 
   const gasPrice = web3.utils.fromWei(await web3.eth.getGasPrice(), "gwei")
   const block = await web3.eth.getBlock("latest")
+  let nonce =
+    (await web3.eth.getTransactionCount(web3.eth.defaultAccount as string)) - 1
 
-  const opts = {
-    from: web3.eth.defaultAccount,
+  const opts: ContractOptions = {
+    from: web3.eth.defaultAccount as string,
     gas: block.gasLimit - 100000, // TODO: fix
-    gasPrice: gasPrice
-      ? web3.utils.toWei(gasPrice.toString(), "gwei")
-      : undefined,
+    gasPrice: web3.utils.toWei(gasPrice.toString(), "gwei"),
+    data: "",
   }
 
   const daoCreator = new web3.eth.Contract(
@@ -78,7 +81,7 @@ export const createDao = async (
   )
 
   const Avatar = await forgeOrg.call()
-  let tx = await forgeOrg.send()
+  let tx = await forgeOrg.send({ nonce: ++nonce })
   console.log("Created new organization. With avatar address: " + Avatar)
   console.log(tx)
 
@@ -97,7 +100,8 @@ export const createDao = async (
     const callableVotingParams = getVotingMachineCallableParamsArray(
       votingMachineConfig
     )
-    return hash({ callableVotingParams })
+    const { typeName } = votingMachineConfig
+    return hash({ typeName, callableVotingParams })
   }
 
   const initializedSchemes = R.map(schemeConfig => {
@@ -177,7 +181,7 @@ export const createDao = async (
 
       const votingMachineParametersKey = await setParams.call()
 
-      const tx = await setParams.send()
+      const tx = await setParams.send({ nonce: ++nonce })
       console.log(
         `${votingMachineTypeName} (${votingMachineHash.toString()}) parameters set (${votingMachineCallableParamsArray.join(
           " ,"
@@ -243,7 +247,7 @@ export const createDao = async (
         schemeParameters
       )
       const schemeParametersKey = await setParams.call()
-      const tx = await setParams.send()
+      const tx = await setParams.send({ nonce: ++nonce })
       console.log(
         `${schemeConfig.typeName} parameters set (${schemeParameters.join(
           " ,"
@@ -272,7 +276,7 @@ export const createDao = async (
       schemePermissions,
       "metaData"
     )
-    .send()
+    .send({ nonce: ++nonce })
   console.log("DAO schemes set.")
   console.log(tx)
 
