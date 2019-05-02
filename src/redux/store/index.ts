@@ -10,7 +10,7 @@ export function configureStore(history: History): Store<any> {
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
   const store = createStore(
-    connectRouter(history)(reducer),
+    reducer(history),
     composeEnhancers(
       applyMiddleware(routerMiddleware(history), thunkMiddleware)
     )

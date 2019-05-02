@@ -377,8 +377,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     isLastStep: boolean,
     classes: any
   ) => {
-    //await this.validateForm(schemeConfig)
-
     if (schemeDefinition == null) {
       return null
     } else {
@@ -398,7 +396,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     }
                     margin="normal"
                     onChange={this.handleSchemeConfigParamsChange(param)}
-                    value={R.prop(param.typeName, schemeConfig.params)}
+                    value={R.propOr("", param.typeName, schemeConfig.params)}
                     fullWidth
                     required={!R.pathOr(false, ["optional"], param)}
                   />
