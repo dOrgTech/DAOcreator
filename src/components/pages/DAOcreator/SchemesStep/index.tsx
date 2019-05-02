@@ -67,6 +67,11 @@ class SchemesStep extends React.Component<Props, State> {
 
     return (
       <Card className={classes.card}>
+        <CardContent>
+          <Typography variant="h4" gutterBottom>
+            Add Schemes
+          </Typography>
+        </CardContent>
         <div className={classes.root}>
           {R.map(schemeConfig => {
             const scheme = getSchemeDefinition(schemeConfig.typeName)
