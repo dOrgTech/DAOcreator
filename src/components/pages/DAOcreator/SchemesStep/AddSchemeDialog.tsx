@@ -148,9 +148,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   validateParam = async (paramDefinition: ParamDefinition, value: string) => {
     if (value == null || (R.isEmpty(value) && paramDefinition.optional)) {
       this.setState({
-        formErrors: R.merge(this.state.formErrors, {
+        formErrors: {
+          ...this.state.formErrors,
           [paramDefinition.typeName]: "",
-        }),
+        },
       })
     } else {
       let errorMessage = ""
@@ -166,9 +167,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       }
 
       this.setState({
-        formErrors: R.merge(this.state.formErrors, {
+        formErrors: {
+          ...this.state.formErrors,
           [paramDefinition.typeName]: errorMessage,
-        }),
+        },
       })
     }
   }

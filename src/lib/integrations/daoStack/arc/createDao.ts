@@ -4,6 +4,7 @@ import {
   SchemeDefinition,
   SchemeConfig,
   VotingMachineConfig,
+  DeploymentInfo,
 } from "./types"
 import {
   votingMachineDefinitions,
@@ -221,7 +222,7 @@ export const createDao = async (
 
   const schemeParams = await Promise.all(
     R.map(async ({ schemeConfig, schemeContract, votingMachineHash }) => {
-      let deploymentInfo = {
+      let deploymentInfo: DeploymentInfo = {
         avatar: Avatar,
         daoToken,
         reputation,
@@ -233,10 +234,11 @@ export const createDao = async (
             parameterizedVotingMachine.votingMachineHash === votingMachineHash,
           parameterizedVotingMachines
         ) as any
-        deploymentInfo = R.merge(deploymentInfo, {
+        deploymentInfo = {
+          ...deploymentInfo,
           votingMachineAddress,
           votingMachineParametersKey,
-        })
+        }
       }
       const schemeParameters = getSchemeCallableParamsArray(
         schemeConfig,

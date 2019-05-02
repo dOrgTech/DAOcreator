@@ -12,7 +12,6 @@ import {
   SchemeConfig,
 } from "./types"
 export * from "./types"
-export * from "./typeConversions"
 export * from "./schemes"
 export * from "./votingMachines"
 

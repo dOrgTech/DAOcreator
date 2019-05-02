@@ -22,7 +22,7 @@ export const reducer = (
     case Events.WAITING_ANIMATION_CLOSE:
       return { message: "", open: false }
     case Events.WAITING_ANIMATION_SET_DETAILS:
-      return R.merge(state, { details: event.payload })
+      return { ...state, details: event.payload }
     default:
       return state
   }

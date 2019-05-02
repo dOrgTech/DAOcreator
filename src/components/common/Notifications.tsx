@@ -67,10 +67,10 @@ class Notifications extends React.Component<Props, State> {
     // add new mappings to the activeIdToKey map
     if (newKeys.length != 0) {
       this.setState({
-        activeIdToKey: R.merge(
-          activeIdToKey,
-          R.zipObj(R.map(n => n.id as string, notificationsToAdd), newKeys)
-        ),
+        activeIdToKey: {
+          ...activeIdToKey,
+          ...R.zipObj(R.map(n => n.id as string, notificationsToAdd), newKeys),
+        },
       })
     }
 
