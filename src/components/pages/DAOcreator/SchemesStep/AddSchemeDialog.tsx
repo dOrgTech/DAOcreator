@@ -529,7 +529,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
     return (
       <Dialog open={open} className={classes.dialog}>
-        <DialogTitle>Select Scheme</DialogTitle>
+        <DialogTitle>Add a Scheme</DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <DialogContentText>
             Select a Scheme and configure it parameters.
