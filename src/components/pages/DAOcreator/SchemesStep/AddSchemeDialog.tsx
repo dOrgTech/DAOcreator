@@ -36,7 +36,6 @@ import {
   initSchemeConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../../../lib/formValidation"
-import { isNullOrUndefined } from "util"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -164,6 +163,8 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           errorMessage = FormValidation.isBigNumber(value)
           break
         }
+        default: {
+        }
       }
 
       this.setState({
@@ -274,8 +275,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
   handleSave = () => {
     const { schemeConfig } = this.state
-    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
-    const { votingMachineConfig } = schemeParams
+    const { typeName: schemeTypeName } = schemeConfig
     if (!R.isEmpty(schemeTypeName)) {
       this.props.addScheme(schemeConfig)
       this.handleClose()
@@ -518,7 +518,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   render() {
     const { classes, open } = this.props
     const { activeStep, schemeConfig } = this.state
-    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
+    const { typeName: schemeTypeName } = schemeConfig
     const schemeDefinition = getSchemeDefinition(schemeTypeName)
     const votingMachineConfig = schemeConfig.votingMachineConfig || {
       typeName: "",

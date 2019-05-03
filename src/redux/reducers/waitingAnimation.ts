@@ -1,6 +1,5 @@
 import { Events, AnyEvent } from "../../redux/actions"
 import { WaitingAnimationState } from "../../state"
-import * as R from "ramda"
 
 const initialState: WaitingAnimationState = {
   message: "",

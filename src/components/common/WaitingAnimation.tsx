@@ -1,19 +1,20 @@
-import * as React from "react"
-import { Dispatch } from "redux"
-import { connect } from "react-redux"
 import {
   CircularProgress,
+  createStyles,
+  Dialog,
   DialogContent,
   DialogContentText,
-  withStyles,
-  Theme,
-  Dialog,
   DialogTitle,
+  Theme,
+  withStyles,
   WithStyles,
-  createStyles,
 } from "@material-ui/core"
+import * as React from "react"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 import { RootState } from "../../state"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   message: string
   details: string

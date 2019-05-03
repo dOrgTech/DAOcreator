@@ -1,24 +1,19 @@
-import {
-  DAO,
-  Founder,
-  SchemeDefinition,
-  SchemeConfig,
-  VotingMachineConfig,
-  DeploymentInfo,
-} from "./types"
-import {
-  votingMachineDefinitions,
-  getVotingMachineDefinition,
-} from "./votingMachines"
-import {
-  getSchemeDefinition,
-  getSchemeCallableParamsArray,
-  getVotingMachineCallableParamsArray,
-} from "./index"
 import hash from "object-hash"
 import * as R from "ramda"
 import Web3 from "web3"
 import { ContractOptions } from "web3-eth-contract"
+import {
+  getSchemeCallableParamsArray,
+  getSchemeDefinition,
+  getVotingMachineCallableParamsArray,
+} from "./index"
+import {
+  DAO,
+  DeploymentInfo,
+  Founder,
+  SchemeConfig,
+  VotingMachineConfig,
+} from "./types"
 
 export const createDao = async (
   web3: Web3,

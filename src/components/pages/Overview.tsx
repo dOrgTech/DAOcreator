@@ -12,6 +12,7 @@ import {
   CardContent,
 } from "@material-ui/core"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   goHome: () => void
 }
@@ -53,7 +54,7 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
 // STYLE
 const padding = 50
 const minWidth = 800
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "100%",

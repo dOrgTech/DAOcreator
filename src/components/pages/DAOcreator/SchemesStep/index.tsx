@@ -13,7 +13,6 @@ import {
   WithStyles,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import hash from "object-hash"
 import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
@@ -21,11 +20,11 @@ import { bindActionCreators, Dispatch } from "redux"
 import {
   getSchemeDefinition,
   SchemeConfig,
-  VotingMachineConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   schemes: SchemeConfig[]
   actions: DAOcreatorActions
@@ -40,10 +39,6 @@ class SchemesStep extends React.Component<Props, State> {
   public readonly state: State = {
     expanded: null,
     addSchemeDialogOpen: false,
-  }
-
-  constructor(props: Props) {
-    super(props)
   }
 
   handleChange = (panelKey: any) => (event: any, expanded: boolean) => {

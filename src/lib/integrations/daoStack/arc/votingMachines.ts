@@ -1,10 +1,5 @@
-import {
-  VotingMachineDefinition,
-  ParamDefinition,
-  VotingMachineConfig,
-} from "./types"
 import * as R from "ramda"
-import { getWeb3 } from "../../web3"
+import { VotingMachineConfig, VotingMachineDefinition } from "./types"
 
 export const votingMachineDefinitions: {
   [key: string]: VotingMachineDefinition

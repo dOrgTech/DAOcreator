@@ -20,6 +20,7 @@ import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
 import { RootState } from "../../../state"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   step: number
   stepValid: boolean

@@ -33,6 +33,7 @@ export const getWeb3 = async (): Promise<any> => {
       transactionConfirmationBlocks: 1,
     })
     const accounts = await readyWeb3.eth.getAccounts()
+    readyWeb3.eth.defaultAccount = accounts[0]
   }
   // Non-dapp browsers...
   else {
