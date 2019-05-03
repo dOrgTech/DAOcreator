@@ -11,13 +11,10 @@ import {
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
+import { DAO } from "../../../lib/integrations/daoStack/arc"
 import { RootState } from "../../../state"
-import {
-  Founder,
-  SchemeDefinition,
-  DAO,
-} from "../../../lib/integrations/daoStack/arc"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined
 }
@@ -86,37 +83,9 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
     )
   }
 }
-const displayFounder = ({ address, reputation, tokens }: Founder) => (
-  <Grid container spacing={16} key={`founder-${address}`}>
-    <Grid item xs={6}>
-      <Typography>{address}</Typography>
-    </Grid>
-    <Grid item xs={2}>
-      <Typography>{reputation}</Typography>
-    </Grid>
-    <Grid item xs={2}>
-      <Typography>{tokens}</Typography>
-    </Grid>
-  </Grid>
-)
-
-const displayScheme = ({
-  displayName,
-  description,
-  typeName,
-}: SchemeDefinition) => (
-  <Grid container spacing={16} key={`founder-${typeName}`}>
-    <Grid item xs={12}>
-      <Typography variant="subtitle1">{displayName}</Typography>
-      <Typography>
-        <i>{description}</i>
-      </Typography>
-    </Grid>
-  </Grid>
-)
 
 // STYLE
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     card: {},
     headline: {},

@@ -1,19 +1,20 @@
-import * as React from "react"
-import { Dispatch } from "redux"
-import { connect } from "react-redux"
 import {
   CircularProgress,
+  createStyles,
+  Dialog,
   DialogContent,
   DialogContentText,
-  withStyles,
-  Theme,
-  Dialog,
   DialogTitle,
+  Theme,
+  withStyles,
   WithStyles,
-  createStyles,
 } from "@material-ui/core"
+import * as React from "react"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 import { RootState } from "../../state"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   message: string
   details: string
@@ -31,14 +32,17 @@ const WaitingAnmination: React.SFC<Props> = ({
     <DialogTitle id="simple-dialog-title">{message}</DialogTitle>
     <DialogContent className={classes.dialogContent}>
       <DialogContentText>{details}</DialogContentText>
-      <CircularProgress size={200} />
+      <CircularProgress size={40} className={classes.circularProgress} />
     </DialogContent>
   </Dialog>
 )
 
 // STYLE
 const styles = ({ palette }: Theme) =>
-  createStyles({ dialogContent: { textAlign: "center" } })
+  createStyles({
+    dialogContent: { textAlign: "center" },
+    circularProgress: { marginTop: 15 },
+  })
 
 const componentWithStyles = withStyles(styles)(WaitingAnmination)
 

@@ -1,4 +1,3 @@
-import * as R from "ramda"
 import {
   Card,
   CardContent,
@@ -9,21 +8,20 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core"
+import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
   Founder,
-  SchemeDefinition,
-  VotingMachineDefinition,
-  votingMachineDefinitions,
-  VotingMachineConfig,
-  SchemeConfig,
   getSchemeDefinition,
+  SchemeConfig,
+  votingMachineDefinitions,
 } from "../../../lib/integrations/daoStack/arc"
-import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
+import PieChart from "../../common/PieChart"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
@@ -205,7 +203,7 @@ const displayScheme = (schemeConfig: SchemeConfig) => {
 }
 
 // STYLE
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     card: {},
     headline: {

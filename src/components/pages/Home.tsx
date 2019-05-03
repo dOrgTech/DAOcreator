@@ -12,6 +12,7 @@ import {
   CardContent,
 } from "@material-ui/core"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   createDao: () => void
   gotoOverview: () => void
@@ -19,6 +20,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
   <div className={classes.root}>
+    // use grid and place the card in the middle of the screen
     <div className={classes.topPadding} />
     <div className={classes.cardWrapper}>
       <Card className={classes.card}>
@@ -26,7 +28,7 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
           <Typography variant="h2" className={classes.header}>
             dOrg
           </Typography>
-          <Typography variant="subheading" className={classes.header}>
+          <Typography variant="subtitle1" className={classes.header}>
             Empowering Decentralized Organization
           </Typography>
           <Button
@@ -58,7 +60,7 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
 // STYLE
 const padding = 50
 const minWidth = 450
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "100%",

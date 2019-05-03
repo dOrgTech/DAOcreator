@@ -1,6 +1,5 @@
 import { Events, AnyEvent } from "../../redux/actions"
 import { WaitingAnimationState } from "../../state"
-import * as R from "ramda"
 
 const initialState: WaitingAnimationState = {
   message: "",
@@ -22,7 +21,7 @@ export const reducer = (
     case Events.WAITING_ANIMATION_CLOSE:
       return { message: "", open: false }
     case Events.WAITING_ANIMATION_SET_DETAILS:
-      return R.merge(state, { details: event.payload })
+      return { ...state, details: event.payload }
     default:
       return state
   }

@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core"
 import Particles from "react-particles-js"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 const Background: React.SFC<Props> = ({ classes }) => (
@@ -36,7 +37,7 @@ const Background: React.SFC<Props> = ({ classes }) => (
   </Paper>
 )
 
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     background: {
       backgroundColor: "#4e4e4e",
@@ -45,8 +46,8 @@ const styles = ({  }: Theme) =>
       height: "100vh",
     },
     particles: {
-      padding: "5px",
-      borderRadius: "90px",
+      //padding: "5px",
+      //borderRadius: "90px",
       backgroundImage:
         "radial-gradient(circle at bottom left, rgb(0%, 26.6%, 30.8%), #38ffeb);",
       backgroundOrigin: "border-box",

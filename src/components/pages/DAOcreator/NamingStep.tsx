@@ -17,6 +17,7 @@ import { RootState } from "../../../state"
 import * as FormValidation from "../../../lib/formValidation"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
@@ -82,6 +83,8 @@ class NamingStep extends React.Component<Props, State> {
         errorMessage = FormValidation.isValidName(value)
         break
       }
+      default: {
+      }
     }
     await this.setState({
       formErrors: R.assoc(name, errorMessage, this.state.formErrors),
@@ -100,7 +103,7 @@ class NamingStep extends React.Component<Props, State> {
         R.keys(this.state.formErrors)
       )
 
-    if (stepIsValid != this.props.stepValid) {
+    if (stepIsValid !== this.props.stepValid) {
       await this.props.actions.setStepIsValid(stepIsValid)
     }
   }
@@ -187,7 +190,7 @@ class NamingStep extends React.Component<Props, State> {
 }
 
 // STYLE
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     card: {},
     headline: {},

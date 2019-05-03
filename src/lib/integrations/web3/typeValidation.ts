@@ -1,16 +1,31 @@
-//import * as rawWeb3 from "web3"
-//const Web3 = rawWeb3 as any
+import Web3 from "web3"
 
-const Web3 = require("web3")
+let web3: Web3
 
-export const isAddress = (address: string): boolean =>
-  Web3.utils.isAddress(address)
+export const init = (web3In: Web3) => {
+  web3 = web3In
+}
 
+export const isAddress = (address: string): boolean => {
+  if (web3 == null) {
+    throw Error(
+      "The web3 object must be set first, by calling the init function."
+    )
+  } else {
+    return web3.utils.isAddress(address)
+  }
+}
 export const isBigNumber = (number: string): boolean => {
-  try {
-    Web3.utils.toBN(number)
-    return true
-  } catch {
-    return false
+  if (web3 == null) {
+    throw Error(
+      "The web3 object must be set first, by calling the init function."
+    )
+  } else {
+    try {
+      web3.utils.toBN(number)
+      return true
+    } catch {
+      return false
+    }
   }
 }

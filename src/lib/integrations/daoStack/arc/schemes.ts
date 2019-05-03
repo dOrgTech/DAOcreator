@@ -1,6 +1,5 @@
-import { SchemeDefinition, SchemeConfig, DeploymentInfo } from "./types"
 import * as R from "ramda"
-import Web3 from "web3"
+import { DeploymentInfo, SchemeConfig, SchemeDefinition } from "./types"
 
 export const schemeDefinitions: SchemeDefinition[] = [
   {

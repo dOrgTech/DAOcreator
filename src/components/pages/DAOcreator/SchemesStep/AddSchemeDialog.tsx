@@ -36,7 +36,6 @@ import {
   initSchemeConfig,
 } from "../../../../lib/integrations/daoStack/arc"
 import * as FormValidation from "../../../../lib/formValidation"
-import { isNullOrUndefined } from "util"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -148,9 +147,10 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   validateParam = async (paramDefinition: ParamDefinition, value: string) => {
     if (value == null || (R.isEmpty(value) && paramDefinition.optional)) {
       this.setState({
-        formErrors: R.merge(this.state.formErrors, {
+        formErrors: {
+          ...this.state.formErrors,
           [paramDefinition.typeName]: "",
-        }),
+        },
       })
     } else {
       let errorMessage = ""
@@ -163,12 +163,15 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           errorMessage = FormValidation.isBigNumber(value)
           break
         }
+        default: {
+        }
       }
 
       this.setState({
-        formErrors: R.merge(this.state.formErrors, {
+        formErrors: {
+          ...this.state.formErrors,
           [paramDefinition.typeName]: errorMessage,
-        }),
+        },
       })
     }
   }
@@ -272,8 +275,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
   handleSave = () => {
     const { schemeConfig } = this.state
-    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
-    const { votingMachineConfig } = schemeParams
+    const { typeName: schemeTypeName } = schemeConfig
     if (!R.isEmpty(schemeTypeName)) {
       this.props.addScheme(schemeConfig)
       this.handleClose()
@@ -375,8 +377,6 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     isLastStep: boolean,
     classes: any
   ) => {
-    //await this.validateForm(schemeConfig)
-
     if (schemeDefinition == null) {
       return null
     } else {
@@ -396,7 +396,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
                     }
                     margin="normal"
                     onChange={this.handleSchemeConfigParamsChange(param)}
-                    value={R.prop(param.typeName, schemeConfig.params)}
+                    value={R.propOr("", param.typeName, schemeConfig.params)}
                     fullWidth
                     required={!R.pathOr(false, ["optional"], param)}
                   />
@@ -518,7 +518,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
   render() {
     const { classes, open } = this.props
     const { activeStep, schemeConfig } = this.state
-    const { typeName: schemeTypeName, params: schemeParams } = schemeConfig
+    const { typeName: schemeTypeName } = schemeConfig
     const schemeDefinition = getSchemeDefinition(schemeTypeName)
     const votingMachineConfig = schemeConfig.votingMachineConfig || {
       typeName: "",
@@ -529,7 +529,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
 
     return (
       <Dialog open={open} className={classes.dialog}>
-        <DialogTitle>Select Scheme</DialogTitle>
+        <DialogTitle>Add a Scheme</DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <DialogContentText>
             Select a Scheme and configure it parameters.
