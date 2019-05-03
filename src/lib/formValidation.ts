@@ -44,7 +44,7 @@ export const generateFormErrors = (
   R.reduce(
     (acc, paramDefinition) => {
       const value = paramValues[paramDefinition.typeName]
-      const isRequired = value == null && !paramDefinition.optional
+      const isRequired = !paramDefinition.optional
       if (R.either(R.isEmpty, R.isNil)(value)) {
         return {
           ...acc,
