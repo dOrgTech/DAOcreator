@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack"
 import Background from "./shell/Background"
 import Home from "./pages/Home"
 import Overview from "./pages/Overview"
+import About from "./pages/About"
 import DAOcreator from "./pages/DAOcreator"
 import Notifications from "./common/Notifications"
 import WaitingAnimation from "./common/WaitingAnimation"
@@ -14,9 +15,10 @@ const App: SFC = () => (
   <SnackbarProvider maxSnack={3}>
     <Background />
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/dao-creator" component={DAOcreator} />
       <Route exact path="/overview" component={Overview} />
+      <Route exact path="/dao-creator" component={DAOcreator} />
+      <Route exact path="/about" component={About} />
+      <Route exact path="/" component={Home} />
     </Switch>
     <WaitingAnimation />
     <Notifications />

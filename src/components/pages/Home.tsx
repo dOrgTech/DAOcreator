@@ -16,9 +16,15 @@ import {
 interface Props extends WithStyles<typeof styles> {
   createDao: () => void
   gotoOverview: () => void
+  gotoAbout: () => void
 }
 
-const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
+const Home: React.SFC<Props> = ({
+  classes,
+  createDao,
+  gotoOverview,
+  gotoAbout,
+}) => (
   <div className={classes.root}>
     // use grid and place the card in the middle of the screen
     <div className={classes.topPadding} />
@@ -29,15 +35,15 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
             dOrg
           </Typography>
           <Typography variant="subtitle1" className={classes.header}>
-            Empowering Decentralized Organization
+            Empowering Distributed Organization
           </Typography>
           <Button
             variant="contained"
             size="small"
             className={classes.button}
-            onClick={gotoOverview}
+            onClick={gotoAbout}
           >
-            What's a DAO?
+            About
           </Button>
           <Button
             variant="contained"
@@ -47,8 +53,13 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
           >
             Create a DAO
           </Button>
-          <Button variant="contained" size="small" className={classes.button}>
-            Browse a DAO
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.button}
+            onClick={gotoOverview}
+          >
+            F.A.Q.
           </Button>
         </CardContent>
       </Card>
@@ -119,6 +130,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     gotoOverview: () => {
       dispatch(push("/overview"))
+    },
+    gotoAbout: () => {
+      dispatch(push("/about"))
     },
   }
 }
