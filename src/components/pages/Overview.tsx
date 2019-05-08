@@ -36,17 +36,22 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="body1" className={classes.body}>
             <h3>What's a DAO</h3>
             A Decentralized Autonomous Organization (DAO) is an entity whose
-            bylaws are encoded in computer code that runs continuously on a
-            public blockchain.
+            bylaws are self-enforcing.
             <br />
             <br />
-            Because DAOs are software-defined and self-executing, they run
-            exactly as programmed without human operators. Participants can
-            focus on making good decisions rather than dealing with a
-            bureaucracy to enact them.
-            <h3> Who needs DAOs? </h3>
-            Anyone who needs to harness the collective intelligence of a
-            distributed set of actors.
+            Because DAOs run exactly as programmed without human operators,
+            participants can avoid bureaucracy and focus on the tasks at hand.
+            <h3> Who needs a DAO? </h3>
+            Any group that needs to allocate resources, make decisions and
+            govern itself in a manner that is:
+            <ul>
+              <li>Cheap → bureaucracy-free</li>
+              <li>Secure → resilient to bad actors</li>
+              <li>Scalable → effective at scale</li>
+              <li>Dynamic → fully programmable</li>
+              <li>Borderless → jurisdiction agnostic </li>
+              <li>Transparent → easy to audit</li>
+            </ul>
           </Typography>
         </CardContent>
       </Card>

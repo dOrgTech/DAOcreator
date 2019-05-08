@@ -31,7 +31,7 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant="h2" className={classes.header}>
-            Who is dOrg?
+            About dOrg
           </Typography>
           <Typography variant="body1" className={classes.body}>
             <h3>What we do:</h3>
@@ -55,10 +55,9 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
               </li>
               <br />
               <li>
-                <i>Blockchain-Based LLC:</i> Our DAO leverages Vermont's BBLLC
-                law to{" "}
-                <a href="https://docs.google.com/document/d/18gfexutgAVBpEpCyDg2e0XvudLNpZ-sjfp3gYQVesR4/edit#">
-                  fluidly interoperate with the legacy system.
+                <i>Blockchain Based LLC:</i> Our DAO is a legally registered{" "}
+                <a href="https://legislature.vermont.gov/statutes/section/11/025/04173">
+                  Vermont BBLLC
                 </a>
               </li>
             </ol>
