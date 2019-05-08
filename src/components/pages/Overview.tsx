@@ -31,19 +31,22 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant="h2" className={classes.header}>
-            What's a DAO?
+            F.A.Q.
           </Typography>
           <Typography variant="body1" className={classes.body}>
-            Decentralized autonomous organizations provide individuals the
-            ability to coordinate resources at a global scale. Participants can
-            vote on proposals on tasks and actions that will be executed on
-            behalf of the communnity. The DAOstack platform allows you to create
-            highly configurable DAOs that can be initialized with features that
-            are also extendable. To learn more about the DAOstack ecosystem and
-            the reasoning behind the native GEN token{" "}
-            <a href="https://daostack.io/">see here</a>. To interact with this
-            application you will need to browser that supports{" "}
-            <a href="https://metamask.io/">Metamask</a>.
+            <h3>What's a DAO</h3>
+            A Decentralized Autonomous Organization (DAO) is an entity whose
+            bylaws are encoded in computer code that runs continuously on a
+            public blockchain.
+            <br />
+            <br />
+            Because DAOs are software-defined and self-executing, they run
+            exactly as programmed without human operators. Participants can
+            focus on making good decisions rather than dealing with a
+            bureaucracy to enact them.
+            <h3> Who needs DAOs? </h3>
+            Anyone who needs to harness the collective intelligence of a
+            distributed set of actors.
           </Typography>
         </CardContent>
       </Card>

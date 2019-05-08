@@ -36,8 +36,8 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="body1" className={classes.body}>
             <h3>What we do:</h3>
             dOrg is a cooperative of freelancers building tools for distributed
-            organizations. We aim to make ecosystem partnerships and execute on
-            work that advances the open-source DAO ecosystem.
+            organizations. We make ecosystem partnerships and execute on work
+            that advances the open-source DAO ecosystem.
             <br />
             <br />
             For the full picture, visit our{" "}
@@ -46,25 +46,22 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
             </a>{" "}
             on Github.
             <h3>How we do it:</h3>
-            Our freelancer co-op is enabled by two core technologies:
-            <ul>
+            Our freelancer co-op rests on two core technologies:
+            <ol>
               <li>
-                <i>DAO:</i> We conduct 100% of our operations and organizational
-                governance on-chain using the DAOstack operating system.{" "}
-                <a href="https://alchemy.daostack.io">
-                  See our mainnet DAO in action
-                </a>
+                <i>DAOstack:</i> We conduct 100% of our operations and
+                governance through{" "}
+                <a href="https://alchemy.daostack.io">our own DAO.</a>
               </li>
               <br />
               <li>
-                <i>BBLLC:</i> Vermont's new 'Blockchain-Base Limited Liability
-                Company' designation lets us set the source of truth for our
-                organization to the DAO.{" "}
+                <i>Blockchain-Based LLC:</i> Our DAO leverages Vermont's BBLLC
+                law to{" "}
                 <a href="https://docs.google.com/document/d/18gfexutgAVBpEpCyDg2e0XvudLNpZ-sjfp3gYQVesR4/edit#">
-                  See our open-source Operating Agreement.
+                  fluidly interoperate with the legacy system.
                 </a>
               </li>
-            </ul>
+            </ol>
           </Typography>
         </CardContent>
       </Card>
