@@ -46,14 +46,24 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="body1" className={classes.body}>
             Any group that needs to allocate resources, make decisions and
             govern itself in a manner that is:
-            <ul>
-              <li>Cheap → bureaucracy-free</li>
-              <li>Secure → resilient to bad actors</li>
-              <li>Scalable → effective at scale</li>
-              <li>Dynamic → fully programmable</li>
-              <li>Borderless → jurisdiction agnostic </li>
-              <li>Transparent → easy to audit</li>
-            </ul>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Cheap → bureaucracy-free
+            </li>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Secure → resilient to bad actors
+            </li>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Scalable → effective at scale
+            </li>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Dynamic → fully programmable
+            </li>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Borderless → jurisdiction agnostic{" "}
+            </li>
+            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+              Transparent → easy to audit
+            </li>
           </Typography>
         </CardContent>
       </Card>

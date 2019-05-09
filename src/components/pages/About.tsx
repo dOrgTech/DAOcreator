@@ -49,20 +49,29 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="h5">How we do it</Typography>
           <Typography variant="body1" className={classes.body}>
             Our freelancer co-op rests on two core technologies:
-            <ol>
-              <li>
-                <i>DAOstack:</i> We conduct 100% of our operations and
-                governance through{" "}
-                <a href="https://alchemy.daostack.io">our own DAO.</a>
-              </li>
-              <br />
-              <li>
-                <i>Blockchain Based LLC:</i> Our DAO is a legally registered{" "}
-                <a href="https://legislature.vermont.gov/statutes/section/11/025/04173">
-                  Vermont BBLLC
-                </a>
-              </li>
-            </ol>
+            <li
+              style={{
+                listStyle: "decimal",
+                marginLeft: "35px",
+                marginTop: "10px",
+              }}
+            >
+              <i>DAOstack:</i> We conduct 100% of our operations and governance
+              through <a href="https://alchemy.daostack.io">our own DAO</a>.
+            </li>
+            <li
+              style={{
+                listStyle: "decimal",
+                marginLeft: "35px",
+                marginTop: "10px",
+              }}
+            >
+              <i>Blockchain Based LLC:</i> Our DAO is a legally registered{" "}
+              <a href="https://legislature.vermont.gov/statutes/section/11/025/04173">
+                Vermont BBLLC
+              </a>
+              .
+            </li>
           </Typography>
           <Typography variant="h5">Get in touch</Typography>
           <Typography variant="body1" className={classes.body}>
