@@ -14,15 +14,15 @@ import {
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  createDao: () => void
   gotoOverview: () => void
+  gotoDapp: () => void
   gotoAbout: () => void
 }
 
 const Home: React.SFC<Props> = ({
   classes,
-  createDao,
   gotoOverview,
+  gotoDapp,
   gotoAbout,
 }) => (
   <div className={classes.root}>
@@ -49,7 +49,7 @@ const Home: React.SFC<Props> = ({
             variant="contained"
             size="small"
             className={classes.button}
-            onClick={createDao}
+            onClick={gotoDapp}
           >
             Create a DAO
           </Button>
@@ -125,8 +125,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    createDao: () => {
-      dispatch(push("/dao-creator"))
+    gotoDapp: () => {
+      dispatch(push("/dapp"))
     },
     gotoOverview: () => {
       dispatch(push("/overview"))
