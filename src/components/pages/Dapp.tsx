@@ -12,8 +12,6 @@ import {
   CardContent,
 } from "@material-ui/core"
 
-import DAOcreator from "./DAOcreator"
-
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   createDao: () => void
@@ -36,11 +34,13 @@ const Dapp: React.SFC<Props> = ({ classes, goHome, createDao }) => (
           <Typography variant="h2" className={classes.header}>
             Warning
           </Typography>
+          <Typography variant="h5">Metamask Required</Typography>
           <Typography variant="body1" className={classes.body}>
-            <h3>Metamask Required</h3>
             To interact with this application you will need the{" "}
             <a href="https://metamask.io">Metamask browser extension</a>.
-            <h3>DAO Creator is in Alpha</h3>
+          </Typography>
+          <Typography variant="h5">DAO Creator is in Alpha</Typography>
+          <Typography variant="body1" className={classes.body}>
             This tool is for advanced users only. We do not advise new users
             deploy DAOs to mainnet at this time.
             <br />
@@ -88,9 +88,10 @@ const styles = (theme: Theme) =>
       position: "inherit",
       transform: "translateX(-50%)",
       pointerEvents: "all",
+      marginBottom: 40,
     },
     body: {
-      margin: 10,
+      margin: 20,
     },
     header: {
       margin: 20,

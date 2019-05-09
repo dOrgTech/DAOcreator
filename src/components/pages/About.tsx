@@ -33,8 +33,8 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="h2" className={classes.header}>
             About dOrg
           </Typography>
+          <Typography variant="h5">What we do</Typography>
           <Typography variant="body1" className={classes.body}>
-            <h3>What we do</h3>
             dOrg is a cooperative of freelancers building tools for distributed
             organizations. We make ecosystem partnerships and execute on work
             that advances the open-source DAO ecosystem.
@@ -45,7 +45,9 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
               project overview
             </a>{" "}
             on Github.
-            <h3>How we do it</h3>
+          </Typography>
+          <Typography variant="h5">How we do it</Typography>
+          <Typography variant="body1" className={classes.body}>
             Our freelancer co-op rests on two core technologies:
             <ol>
               <li>
@@ -61,10 +63,11 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
                 </a>
               </li>
             </ol>
-            <h3>Get in touch</h3>
-            Contact us through <a href="mailto:contact@dorg.tech">
-              email
-            </a> or <a href="https://discord.gg/6Kujmad">Discord</a>.
+          </Typography>
+          <Typography variant="h5">Get in touch</Typography>
+          <Typography variant="body1" className={classes.body}>
+            Contact us through <a href="mailto:contact@dorg.tech">email</a> or{" "}
+            <a href="https://discord.gg/6Kujmad">Discord</a>.
           </Typography>
         </CardContent>
       </Card>
@@ -95,9 +98,10 @@ const styles = (theme: Theme) =>
       position: "inherit",
       transform: "translateX(-50%)",
       pointerEvents: "all",
+      marginBottom: 40,
     },
     body: {
-      margin: 10,
+      margin: 20,
     },
     header: {
       margin: 20,
