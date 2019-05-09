@@ -34,7 +34,7 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
             About dOrg
           </Typography>
           <Typography variant="body1" className={classes.body}>
-            <h3>What we do:</h3>
+            <h3>What we do</h3>
             dOrg is a cooperative of freelancers building tools for distributed
             organizations. We make ecosystem partnerships and execute on work
             that advances the open-source DAO ecosystem.
@@ -45,7 +45,7 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
               project overview
             </a>{" "}
             on Github.
-            <h3>How we do it:</h3>
+            <h3>How we do it</h3>
             Our freelancer co-op rests on two core technologies:
             <ol>
               <li>
@@ -61,6 +61,10 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
                 </a>
               </li>
             </ol>
+            <h3>Get in touch</h3>
+            Contact us through <a href="mailto:contact@dorg.tech">
+              email
+            </a> or <a href="https://discord.gg/6Kujmad">Discord</a>.
           </Typography>
         </CardContent>
       </Card>

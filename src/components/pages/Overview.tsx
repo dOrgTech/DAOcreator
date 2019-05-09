@@ -34,7 +34,7 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
             F.A.Q.
           </Typography>
           <Typography variant="body1" className={classes.body}>
-            <h3>What's a DAO</h3>
+            <h3>What's a DAO?</h3>
             A Decentralized Autonomous Organization (DAO) is an entity whose
             bylaws are self-enforcing.
             <br />

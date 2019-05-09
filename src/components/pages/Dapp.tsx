@@ -39,10 +39,17 @@ const Dapp: React.SFC<Props> = ({ classes, goHome, createDao }) => (
           <Typography variant="body1" className={classes.body}>
             <h3>Metamask Required</h3>
             To interact with this application you will need the{" "}
-            <a href="https://metamask.io">Metamask browser extension.</a>{" "}
+            <a href="https://metamask.io">Metamask browser extension</a>.
             <h3>DAO Creator is in Alpha</h3>
             This tool is for advanced users only. We do not advise new users
             deploy DAOs to mainnet at this time.
+            <br />
+            To provide feedback, go{" "}
+            <a href="https://docs.google.com/forms/d/1qMwTYMFpLW0KU8l9dnHkhixwhz-fo5Qtqumjg_7JZ80">
+              here
+            </a>
+            . For any questions, reach out on{" "}
+            <a href="https://discord.gg/6Kujmad">Discord</a>!
           </Typography>
           <Button
             variant="contained"
