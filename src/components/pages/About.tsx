@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core"
 import InfoPage from "../common/InfoPage"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 const About: React.SFC<Props> = ({ classes }) => (
