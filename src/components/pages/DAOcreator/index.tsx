@@ -9,6 +9,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  Card,
   Button,
 } from "@material-ui/core"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
@@ -19,6 +20,7 @@ import ReviewStep from "./ReviewStep"
 import LiveDao from "./LiveDao"
 import { RootState } from "../../../state"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   step: number
   stepValid: boolean
@@ -60,13 +62,15 @@ class DAOcreator extends React.Component<Props> {
     const isLastStep = step === steps.length - 1
     return (
       <div className={classes.root}>
-        <Stepper className={classes.stepper} activeStep={step}>
-          {steps.map(thisStep => (
-            <Step key={thisStep.title}>
-              <StepLabel>{thisStep.title}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+        <Card>
+          <Stepper className={classes.stepper} activeStep={step}>
+            {steps.map(thisStep => (
+              <Step key={thisStep.title}>
+                <StepLabel>{thisStep.title}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Card>
         <div className={classes.content}>{steps[step].component}</div>
         {isLastStep ? (
           <></>

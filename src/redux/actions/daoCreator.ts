@@ -1,10 +1,10 @@
 import { Dispatch } from "redux"
 import uuid from "uuid"
-import * as Events from "./events"
-import { RootState } from "../../state"
 import * as Arc from "../../lib/integrations/daoStack/arc"
 import * as Web3 from "../../lib/integrations/web3"
-import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
+import * as notificationActions from "../../redux/actions/notifications"
+import { RootState } from "../../state"
+import * as Events from "./events"
 
 export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>

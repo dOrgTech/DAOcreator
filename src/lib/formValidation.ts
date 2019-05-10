@@ -1,6 +1,6 @@
-import { TypeValidation } from "./integrations/web3"
 import * as R from "ramda"
 import { ParamConfig, ParamDefinition } from "./integrations/daoStack/arc"
+import { TypeValidation } from "./integrations/web3"
 
 export function checkIfHasError<ValueType>(
   predicate: (value: ValueType) => boolean,
@@ -23,7 +23,10 @@ export const isValidName = checkIfHasError(
   "Error: Name must be less than 70 characters with no numbers or special characters"
 )
 
-export const isRequired = checkIfHasError(R.isEmpty, "This field is required")
+export const isRequired = checkIfHasError(
+  R.either(R.isEmpty, R.isNil),
+  "This field is required"
+)
 export const isValidAddress = checkIfHasError(
   addressHasError,
   "Please enter a valid address."
@@ -37,19 +40,38 @@ export const generateFormErrors = (
   paramDefinitions: ParamDefinition[],
   paramValues: ParamConfig,
   formErrors: any
-) => {
-  const formErrorObject = R.reduce(
-    (acc, paramType) => {
-      const value = paramValues[paramType.typeName]
-      let errorMessage = ""
-      if (value == null && !paramType.optional) {
-        errorMessage = "Required"
+) =>
+  R.reduce(
+    (acc, paramDefinition) => {
+      const value = paramValues[paramDefinition.typeName]
+      const isRequired = !paramDefinition.optional
+      if (R.either(R.isEmpty, R.isNil)(value)) {
+        return {
+          ...acc,
+          [paramDefinition.typeName]: isRequired ? "Required" : "",
+        }
+      } else {
+        let errorMessage = ""
+        switch (paramDefinition.valueType) {
+          case "Address":
+            errorMessage = isValidAddress(value)
+            break
+          case "BigNumber":
+            errorMessage = isBigNumber(value)
+            break
+          case "number":
+            errorMessage = isBigNumber(value)
+            break
+          default: {
+          }
+        }
+
+        return {
+          ...acc,
+          [paramDefinition.typeName]: errorMessage,
+        }
       }
-      return { ...acc, [paramType.typeName]: errorMessage }
     },
     formErrors,
     paramDefinitions
   )
-
-  return formErrors
-}

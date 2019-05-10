@@ -20,6 +20,7 @@ import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/da
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   addedFounders: Founder[]
   actions: DAOcreatorActions
@@ -51,10 +52,6 @@ const requiredFields = ["address", "tokens", "reputation"]
 class FoundersStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
 
-  constructor(props: Props) {
-    super(props)
-  }
-
   handleChange = async (event: any) => {
     const { name, value } = event.target
     let errorMessage = ""
@@ -80,6 +77,8 @@ class FoundersStep extends React.Component<Props, State> {
       case "reputation": {
         errorMessage = FormValidation.isBigNumber(value)
         break
+      }
+      default: {
       }
     }
     await this.setState({

@@ -1,10 +1,5 @@
-import {
-  VotingMachineDefinition,
-  ParamDefinition,
-  VotingMachineConfig,
-} from "./types"
-import Web3 from "web3"
 import * as R from "ramda"
+import { VotingMachineConfig, VotingMachineDefinition } from "./types"
 
 export const votingMachineDefinitions: {
   [key: string]: VotingMachineDefinition
@@ -90,20 +85,20 @@ export const votingMachineDefinitions: {
         defaultValue: 2000,
       },
       {
-        typeName: "proposingRepRewardGwei",
+        typeName: "proposingRepRewardWei",
         valueType: "number",
-        displayName: "Proposing Rep Reward Gwei",
+        displayName: "Proposing Rep Reward Wei",
         description:
           "Reputation reward amount to the user that passes a proposal.",
-        defaultValue: 5,
+        defaultValue: 5000000000,
       },
       {
-        typeName: "minimumDaoBountyGWei",
+        typeName: "minimumDaoBountyWei",
         valueType: "number",
-        displayName: "Minimum Dao Bounty GWei",
+        displayName: "Minimum Dao Bounty Wei",
         description:
           "The minimum amount you can have as a bounty for a proposal",
-        defaultValue: 100,
+        defaultValue: 100000000000,
       },
       {
         typeName: "boostedVotePeriodLimit",
@@ -243,9 +238,9 @@ export const votingMachineDefinitions: {
           params["preBoostedVotePeriodLimit"],
           params["thresholdConst"],
           params["quietEndingPeriod"],
-          Web3.utils.toWei(params["proposingRepRewardGwei"].toString(), "gwei"),
+          params["proposingRepRewardWei"],
           params["votersReputationLossRatio"],
-          Web3.utils.toWei(params["minimumDaoBountyGWei"].toString(), "gwei"),
+          params["minimumDaoBountyWei"],
           params["daoBountyConst"],
           params["activationTime"],
         ],

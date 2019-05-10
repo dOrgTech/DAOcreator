@@ -12,12 +12,19 @@ import {
   CardContent,
 } from "@material-ui/core"
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  createDao: () => void
   gotoOverview: () => void
+  gotoDapp: () => void
+  gotoAbout: () => void
 }
 
-const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
+const Home: React.SFC<Props> = ({
+  classes,
+  gotoOverview,
+  gotoDapp,
+  gotoAbout,
+}) => (
   <div className={classes.root}>
     <div className={classes.topPadding} />
     <div className={classes.cardWrapper}>
@@ -26,27 +33,32 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
           <Typography variant="h2" className={classes.header}>
             dOrg
           </Typography>
-          <Typography variant="subheading" className={classes.header}>
-            Empowering Decentralized Organization
+          <Typography variant="subtitle1" className={classes.header}>
+            Empowering Distributed Organization
           </Typography>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.button}
+            onClick={gotoAbout}
+          >
+            About
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.button}
+            onClick={gotoDapp}
+          >
+            Create a DAO
+          </Button>
           <Button
             variant="contained"
             size="small"
             className={classes.button}
             onClick={gotoOverview}
           >
-            What's a DAO?
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            className={classes.button}
-            onClick={createDao}
-          >
-            Create a DAO
-          </Button>
-          <Button variant="contained" size="small" className={classes.button}>
-            Browse a DAO
+            F.A.Q.
           </Button>
         </CardContent>
       </Card>
@@ -58,7 +70,7 @@ const Home: React.SFC<Props> = ({ classes, createDao, gotoOverview }) => (
 // STYLE
 const padding = 50
 const minWidth = 450
-const styles = ({  }: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
@@ -112,11 +124,14 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    createDao: () => {
-      dispatch(push("/dao-creator"))
+    gotoDapp: () => {
+      dispatch(push("/dapp"))
     },
     gotoOverview: () => {
       dispatch(push("/overview"))
+    },
+    gotoAbout: () => {
+      dispatch(push("/about"))
     },
   }
 }

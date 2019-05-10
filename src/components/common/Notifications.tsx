@@ -65,12 +65,12 @@ class Notifications extends React.Component<Props, State> {
     )
 
     // add new mappings to the activeIdToKey map
-    if (newKeys.length != 0) {
+    if (newKeys.length !== 0) {
       this.setState({
-        activeIdToKey: R.merge(
-          activeIdToKey,
-          R.zipObj(R.map(n => n.id as string, notificationsToAdd), newKeys)
-        ),
+        activeIdToKey: {
+          ...activeIdToKey,
+          ...R.zipObj(R.map(n => n.id as string, notificationsToAdd), newKeys),
+        },
       })
     }
 
@@ -81,7 +81,7 @@ class Notifications extends React.Component<Props, State> {
     )
 
     // remove removed notifications from the activeIdToKey map
-    if (notificationKeysToRemove.length != 0) {
+    if (notificationKeysToRemove.length !== 0) {
       this.setState({
         activeIdToKey: R.omit(notificationKeysToRemove, activeIdToKey),
       })
@@ -109,7 +109,7 @@ const getIdOfRemovedNotifications = (
   R.filter(
     notificationId =>
       R.find(
-        notification => notificationId == notification.id,
+        notification => notificationId === notification.id,
         notifications
       ) === undefined,
     R.keys(activeIdMap) as string[]
