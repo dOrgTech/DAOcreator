@@ -26,7 +26,6 @@ const Home: React.SFC<Props> = ({
   gotoAbout,
 }) => (
   <div className={classes.root}>
-    // use grid and place the card in the middle of the screen
     <div className={classes.topPadding} />
     <div className={classes.cardWrapper}>
       <Card className={classes.card}>

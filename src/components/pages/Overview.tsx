@@ -46,24 +46,16 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="body1" className={classes.body}>
             Any group that needs to allocate resources, make decisions and
             govern itself in a manner that is:
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
-              Cheap → bureaucracy-free
-            </li>
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+            <li className={classes.listItem}>Cheap → bureaucracy-free</li>
+            <li className={classes.listItem}>
               Secure → resilient to bad actors
             </li>
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
-              Scalable → effective at scale
-            </li>
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
-              Dynamic → fully programmable
-            </li>
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
+            <li className={classes.listItem}>Scalable → effective at scale</li>
+            <li className={classes.listItem}>Dynamic → fully programmable</li>
+            <li className={classes.listItem}>
               Borderless → jurisdiction agnostic{" "}
             </li>
-            <li style={{ marginLeft: "35px", marginTop: "10px" }}>
-              Transparent → easy to audit
-            </li>
+            <li className={classes.listItem}>Transparent → easy to audit</li>
           </Typography>
         </CardContent>
       </Card>
@@ -105,6 +97,10 @@ const styles = (theme: Theme) =>
     },
     button: {
       margin: 10,
+    },
+    listItem: {
+      marginLeft: "35px",
+      marginTop: "10px",
     },
   })
 
