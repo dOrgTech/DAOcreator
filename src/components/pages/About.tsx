@@ -49,23 +49,11 @@ const About: React.SFC<Props> = ({ classes, goHome }) => (
           <Typography variant="h5">How we do it</Typography>
           <Typography variant="body1" className={classes.body}>
             Our freelancer co-op rests on two core technologies:
-            <li
-              style={{
-                listStyle: "decimal",
-                marginLeft: "35px",
-                marginTop: "10px",
-              }}
-            >
+            <li className={classes.listItem}>
               <i>DAOstack:</i> We conduct 100% of our operations and governance
               through <a href="https://alchemy.daostack.io">our own DAO</a>.
             </li>
-            <li
-              style={{
-                listStyle: "decimal",
-                marginLeft: "35px",
-                marginTop: "10px",
-              }}
-            >
+            <li className={classes.listItem}>
               <i>Blockchain Based LLC:</i> Our DAO is a legally registered{" "}
               <a href="https://legislature.vermont.gov/statutes/section/11/025/04173">
                 Vermont BBLLC
@@ -118,6 +106,11 @@ const styles = (theme: Theme) =>
     },
     button: {
       margin: 10,
+    },
+    listItem: {
+      listStyle: "decimal",
+      marginLeft: "35px",
+      marginTop: "10px",
     },
   })
 
