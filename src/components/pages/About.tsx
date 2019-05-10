@@ -17,7 +17,7 @@ interface Props extends WithStyles<typeof styles> {
   goHome: () => void
 }
 
-const Overview: React.SFC<Props> = ({ classes, goHome }) => (
+const About: React.SFC<Props> = ({ classes, goHome }) => (
   <div className={classes.root}>
     <Button
       variant="contained"
@@ -31,31 +31,40 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant="h2" className={classes.header}>
-            F.A.Q.
+            About dOrg
           </Typography>
-          <Typography variant="h5">What's a DAO?</Typography>
+          <Typography variant="h5">What we do</Typography>
           <Typography variant="body1" className={classes.body}>
-            A Decentralized Autonomous Organization (DAO) is an entity whose
-            bylaws are self-enforcing.
+            dOrg is a cooperative of freelancers building tools for distributed
+            organizations. We make ecosystem partnerships and execute on work
+            that advances the open-source DAO ecosystem.
             <br />
             <br />
-            Because DAOs run exactly as programmed without human operators,
-            participants can avoid bureaucracy and focus on the tasks at hand.
+            For the full picture, visit our{" "}
+            <a href="https://github.com/dOrgTech/vision/blob/master/README.md">
+              project overview
+            </a>{" "}
+            on Github.
           </Typography>
-          <Typography variant="h5">Who needs a DAO?</Typography>
+          <Typography variant="h5">How we do it</Typography>
           <Typography variant="body1" className={classes.body}>
-            Any group that needs to allocate resources, make decisions and
-            govern itself in a manner that is:
-            <li className={classes.listItem}>Cheap → bureaucracy-free</li>
+            Our freelancer co-op rests on two core technologies:
             <li className={classes.listItem}>
-              Secure → resilient to bad actors
+              <i>DAOstack:</i> We conduct 100% of our operations and governance
+              through <a href="https://alchemy.daostack.io">our own DAO</a>.
             </li>
-            <li className={classes.listItem}>Scalable → effective at scale</li>
-            <li className={classes.listItem}>Dynamic → fully programmable</li>
             <li className={classes.listItem}>
-              Borderless → jurisdiction agnostic{" "}
+              <i>Blockchain Based LLC:</i> Our DAO is a legally registered{" "}
+              <a href="https://legislature.vermont.gov/statutes/section/11/025/04173">
+                Vermont BBLLC
+              </a>
+              .
             </li>
-            <li className={classes.listItem}>Transparent → easy to audit</li>
+          </Typography>
+          <Typography variant="h5">Get in touch</Typography>
+          <Typography variant="body1" className={classes.body}>
+            Contact us through <a href="mailto:contact@dorg.tech">email</a> or{" "}
+            <a href="https://discord.gg/6Kujmad">Discord</a>.
           </Typography>
         </CardContent>
       </Card>
@@ -99,12 +108,13 @@ const styles = (theme: Theme) =>
       margin: 10,
     },
     listItem: {
+      listStyle: "decimal",
       marginLeft: "35px",
       marginTop: "10px",
     },
   })
 
-const componentWithStyles = withStyles(styles)(Overview)
+const componentWithStyles = withStyles(styles)(About)
 
 // STATE
 const mapStateToProps = (state: any) => {

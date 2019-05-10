@@ -14,10 +14,11 @@ import {
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
+  createDao: () => void
   goHome: () => void
 }
 
-const Overview: React.SFC<Props> = ({ classes, goHome }) => (
+const Dapp: React.SFC<Props> = ({ classes, goHome, createDao }) => (
   <div className={classes.root}>
     <Button
       variant="contained"
@@ -31,32 +32,33 @@ const Overview: React.SFC<Props> = ({ classes, goHome }) => (
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant="h2" className={classes.header}>
-            F.A.Q.
+            Warning
           </Typography>
-          <Typography variant="h5">What's a DAO?</Typography>
+          <Typography variant="h5">Metamask Required</Typography>
           <Typography variant="body1" className={classes.body}>
-            A Decentralized Autonomous Organization (DAO) is an entity whose
-            bylaws are self-enforcing.
-            <br />
-            <br />
-            Because DAOs run exactly as programmed without human operators,
-            participants can avoid bureaucracy and focus on the tasks at hand.
+            To interact with this application you will need the{" "}
+            <a href="https://metamask.io">Metamask browser extension</a>.
           </Typography>
-          <Typography variant="h5">Who needs a DAO?</Typography>
+          <Typography variant="h5">DAO Creator is in Alpha</Typography>
           <Typography variant="body1" className={classes.body}>
-            Any group that needs to allocate resources, make decisions and
-            govern itself in a manner that is:
-            <li className={classes.listItem}>Cheap → bureaucracy-free</li>
-            <li className={classes.listItem}>
-              Secure → resilient to bad actors
-            </li>
-            <li className={classes.listItem}>Scalable → effective at scale</li>
-            <li className={classes.listItem}>Dynamic → fully programmable</li>
-            <li className={classes.listItem}>
-              Borderless → jurisdiction agnostic{" "}
-            </li>
-            <li className={classes.listItem}>Transparent → easy to audit</li>
+            This tool is for advanced users only. We do not advise new users
+            deploy DAOs to mainnet at this time.
+            <br />
+            To provide feedback, go{" "}
+            <a href="https://docs.google.com/forms/d/1qMwTYMFpLW0KU8l9dnHkhixwhz-fo5Qtqumjg_7JZ80">
+              here
+            </a>
+            . For any questions, reach out on{" "}
+            <a href="https://discord.gg/6Kujmad">Discord</a>!
           </Typography>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.button}
+            onClick={createDao}
+          >
+            Proceed
+          </Button>
         </CardContent>
       </Card>
     </div>
@@ -98,13 +100,9 @@ const styles = (theme: Theme) =>
     button: {
       margin: 10,
     },
-    listItem: {
-      marginLeft: "35px",
-      marginTop: "10px",
-    },
   })
 
-const componentWithStyles = withStyles(styles)(Overview)
+const componentWithStyles = withStyles(styles)(Dapp)
 
 // STATE
 const mapStateToProps = (state: any) => {
@@ -115,6 +113,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     goHome: () => {
       dispatch(push("/"))
+    },
+    createDao: () => {
+      dispatch(push("/dao-creator"))
     },
   }
 }
