@@ -12,22 +12,19 @@ import DAOcreator from "./pages/DAOcreator"
 import Notifications from "./common/Notifications"
 import WaitingAnimation from "./common/WaitingAnimation"
 
-const App: SFC = () => {
-  const url = process.env.PUBLIC_URL
-  return (
-    <SnackbarProvider maxSnack={3}>
-      <Background />
-      <Switch>
-        <Route exact path="/overview" component={Overview} />
-        <Route exact path="/dapp" component={Dapp} />
-        <Route exact path="/about" component={About} />
-        <Route exact path="/dao-creator" component={DAOcreator} />
-        <Route exact path="/" component={Home} />
-      </Switch>
-      <WaitingAnimation />
-      <Notifications />
-    </SnackbarProvider>
-  )
-}
+const App: SFC = () => (
+  <SnackbarProvider maxSnack={3}>
+    <Background />
+    <Switch>
+      <Route exact path="/overview" component={Overview} />
+      <Route exact path="/dapp" component={Dapp} />
+      <Route exact path="/about" component={About} />
+      <Route exact path="/dao-creator" component={DAOcreator} />
+      <Route exact path="/" component={Home} />
+    </Switch>
+    <WaitingAnimation />
+    <Notifications />
+  </SnackbarProvider>
+)
 
 export default App
