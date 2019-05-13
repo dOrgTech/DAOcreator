@@ -18,11 +18,11 @@ const App: SFC = () => {
     <SnackbarProvider maxSnack={3}>
       <Background />
       <Switch>
-        <Route exact path={`${url}/overview`} component={Overview} />
-        <Route exact path={`${url}/dapp`} component={Dapp} />
-        <Route exact path={`${url}/about`} component={About} />
-        <Route exact path={`${url}/dao-creator`} component={DAOcreator} />
-        <Route exact path={`${url}/`} component={Home} />
+        <Route exact path="/overview" component={Overview} />
+        <Route exact path="/dapp" component={Dapp} />
+        <Route exact path="/about" component={About} />
+        <Route exact path="/dao-creator" component={DAOcreator} />
+        <Route exact path="/" component={Home} />
       </Switch>
       <WaitingAnimation />
       <Notifications />
