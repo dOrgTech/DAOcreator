@@ -8,11 +8,11 @@ import { ConnectedRouter } from "connected-react-router"
 import { Provider } from "react-redux"
 
 import { configureStore } from "./redux/store"
-import { createBrowserHistory } from "history"
+import { createHashHistory } from "history"
 
 import theme from "./style/theme"
 
-const history = createBrowserHistory()
+const history = createHashHistory()
 const store = configureStore(history)
 
 ReactDOM.render(
