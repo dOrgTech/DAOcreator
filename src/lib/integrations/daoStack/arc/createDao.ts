@@ -23,6 +23,7 @@ export const createDao = async (
   founders: Founder[],
   schemesIn: SchemeConfig[]
 ): Promise<DAO> => {
+  const txSend = sendTx(web3)
   updateStatus(
     "Creating new organization. This requires 1 transaction. \n Step 1 of 4."
   )
@@ -77,7 +78,8 @@ export const createDao = async (
   )
 
   const Avatar = await forgeOrg.call()
-  let tx = await forgeOrg.send({ nonce: ++nonce })
+
+  let tx = await txSend(forgeOrg, ++nonce)
   console.log("Created new organization. With avatar address: " + Avatar)
   console.log(tx)
 
@@ -177,7 +179,7 @@ export const createDao = async (
 
       const votingMachineParametersKey = await setParams.call()
 
-      const tx = await setParams.send({ nonce: ++nonce })
+      const tx = await txSend(setParams, ++nonce)
       console.log(
         `${votingMachineTypeName} (${votingMachineHash.toString()}) parameters set (${votingMachineCallableParamsArray.join(
           " ,"
@@ -244,7 +246,8 @@ export const createDao = async (
         schemeParameters
       )
       const schemeParametersKey = await setParams.call()
-      const tx = await setParams.send({ nonce: ++nonce })
+
+      const tx = await txSend(setParams, ++nonce)
       console.log(
         `${schemeConfig.typeName} parameters set (${schemeParameters.join(
           " ,"
@@ -265,15 +268,16 @@ export const createDao = async (
       "\n Step 4 of 4"
   )
 
-  tx = await daoCreator.methods
-    .setSchemes(
+  tx = await txSend(
+    daoCreator.methods.setSchemes(
       Avatar,
       schemeAddresses,
       schemeParams,
       schemePermissions,
       "metaData"
-    )
-    .send({ nonce: ++nonce })
+    ),
+    ++nonce
+  )
   console.log("DAO schemes set.")
   console.log(tx)
 
@@ -285,4 +289,50 @@ export const createDao = async (
     daoToken,
     reputation,
   }
+}
+
+const sendTx = (web3: Web3) => (method: any, nonce: number) => {
+  // if the transaction is replaced / speeded up (or other error)
+  const subscribable = method.send({ nonce })
+
+  subscribable.on("error", (error: any) => {
+    console.log("Got this error:")
+    console.error(error)
+    console.log("However, we will continue waiting for the transaction.")
+  })
+
+  return Promise.race([
+    new Promise((resolve, reject) => {
+      subscribable.on("transactionHash", (hash: string) => {
+        return pollTx(web3, hash)
+          .then(resolve)
+          .catch(reject)
+      })
+    }),
+    new Promise((resolve, reject) => {
+      subscribable.on("receipt", resolve)
+    }),
+    new Promise((resolve, reject) => {
+      subscribable.on("confirmation", (_: any, receipt: any) =>
+        resolve(receipt)
+      )
+    }),
+  ])
+}
+
+const pollTx = (web3: Web3, hash: string): any =>
+  web3.eth.getTransaction(hash).then((tx: any) => {
+    console.log("pollTx res: " + JSON.stringify(tx))
+    if (tx != null) {
+      return Promise.resolve(tx)
+    } else {
+      return delay(5000).then(_ => pollTx(web3, hash))
+    }
+  })
+
+function delay(time: number) {
+  return new Promise(fulfill => {
+    // eslint-disable-next-line
+    setTimeout(fulfill, time)
+  })
 }
