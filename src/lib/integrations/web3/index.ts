@@ -20,6 +20,7 @@ export const getWeb3 = async (): Promise<any> => {
       // Acccounts now exposed
       readyWeb3 = new Web3(ethereum, undefined, {
         transactionConfirmationBlocks: 1,
+        transactionBlockTimeout: 1000,
       })
       const accounts = await readyWeb3.eth.getAccounts()
       readyWeb3.eth.defaultAccount = accounts[0]
