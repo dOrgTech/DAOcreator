@@ -5,7 +5,7 @@ import {
   PayloadEvent,
   createPayloadEvent,
 } from "./typeSafety"
-import * as Arc from "../../../lib/integrations/daoStack/arc"
+import * as Arc from "../../../lib/integrations/arc"
 
 export enum Events {
   // DAO Creator

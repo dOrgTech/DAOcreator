@@ -9,6 +9,7 @@ import {
 } from "./index"
 import {
   DAO,
+  DAOConfig,
   DeploymentInfo,
   Founder,
   SchemeConfig,
@@ -19,7 +20,7 @@ export const createDao = async (
   web3: Web3,
   updateStatus: (message: string) => void,
   deployedContractAddresses: any,
-  naming: any,
+  config: DAOConfig,
   founders: Founder[],
   schemesIn: SchemeConfig[]
 ): Promise<DAO> => {
@@ -57,9 +58,9 @@ export const createDao = async (
     uController,
     cap, // TODO: Should probably be configurable by the user
   ] = [
-    naming.daoName,
-    naming.tokenName,
-    naming.tokenSymbol,
+    config.daoName,
+    config.tokenName,
+    config.tokenSymbol,
     founders.map(({ address }) => address),
     founders.map(({ tokens }) => web3.utils.toWei(tokens.toString())),
     founders.map(({ reputation }) => web3.utils.toWei(reputation.toString())),
@@ -283,11 +284,13 @@ export const createDao = async (
 
   return {
     avatar: Avatar,
-    tokenName,
-    tokenSymbol,
-    name: orgName,
     daoToken,
     reputation,
+    config: {
+      daoName: orgName,
+      tokenName,
+      tokenSymbol
+    }
   }
 }
 

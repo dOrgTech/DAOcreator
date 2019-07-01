@@ -5,6 +5,21 @@
 //   will be useful. We don't want to bleed UI data into the state (descriptions, display names, etc),
 //   but we also want to keep them consistent between tools (GUI, CLI, etc).
 
+// TODO: use address where possible
+export type DAO = {
+  avatar: string // address
+  daoToken: string // address
+  reputation: string // address
+  config: DAOConfig
+}
+
+export type DAOConfig = {
+  daoName: string
+  tokenName: string
+  tokenSymbol: string
+}
+
+// TODO: be explicity, '|' types together for the params
 export type ParamConfig = {
   [paramName: string]: string | number
 }
@@ -58,15 +73,6 @@ export type SchemeDefinition = {
     deploymentInfo: DeploymentInfo
   ) => any[]
   params: ParamDefinition[]
-}
-
-export type DAO = {
-  avatar: string
-  tokenName: string
-  tokenSymbol: string
-  name: string
-  daoToken: string
-  reputation: string
 }
 
 export type DeploymentInfo = {

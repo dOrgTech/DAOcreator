@@ -17,143 +17,130 @@ import {
   getSchemeDefinition,
   SchemeConfig,
   votingMachineDefinitions,
-} from "../../../lib/integrations/daoStack/arc"
+} from "../../../lib/integrations/arc"
+import { DAOcreatorState } from "../../../state"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
 import PieChart from "../../common/PieChart"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-  founders: Founder[]
-  schemes: SchemeConfig[]
-  stepNumber: number
-  stepValid: boolean
+  creator: DAOcreatorState
 }
 
 const ReviewStep: React.SFC<Props> = ({
-  daoName,
-  tokenName,
-  tokenSymbol,
-  founders,
-  schemes,
-  stepNumber,
-  stepValid,
+  creator,
   classes,
-}) => {
-  return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h4" className={classes.headline} gutterBottom>
-          Review the DAO
-        </Typography>
-        <Grid container spacing={16}>
-          <Grid item xs={12} md={5}>
-            <Typography className={classes.guideText} variant="body2">
-              Look over this summary of the DAO you are about to create
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={7} />
-          <Grid item xs={12} md={5}>
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Naming
-              </Typography>
-              <Typography>
-                <b>DAO Name:</b> {daoName}
-              </Typography>
-              <Typography>
-                <b>Token Name:</b> {tokenName}
-              </Typography>
-              <Typography>
-                <b>Token Symbol:</b> {tokenSymbol}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Features
-              </Typography>
-              {R.map(displayScheme, schemes)}
-            </Grid>
-          </Grid>
+}) => (
+  <Card className={classes.card}>
+    <CardContent>
+      <Typography variant="h4" className={classes.headline} gutterBottom>
+        Review the DAO
+      </Typography>
+      <Grid container spacing={16}>
+        <Grid item xs={12} md={5}>
+          <Typography className={classes.guideText} variant="body2">
+            Look over this summary of the DAO you are about to create
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={7} />
+        <Grid item xs={12} md={5}>
           <Grid item xs={12}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Founders
+            <Typography
+              variant="h5"
+              className={classes.headline}
+              gutterBottom
+            >
+              Naming
             </Typography>
-            <Grid container spacing={16} key={`founder-headline`}>
-              <Grid item xs={1} />
-              <Grid item xs={7}>
-                <Typography>
-                  <b>Address</b>
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>
-                  <b>Reputation</b>
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>
-                  <b>Tokens</b>
-                </Typography>
-              </Grid>
+            <Typography>
+              <b>DAO Name:</b> {creator.config.daoName}
+            </Typography>
+            <Typography>
+              <b>Token Name:</b> {creator.config.tokenName}
+            </Typography>
+            <Typography>
+              <b>Token Symbol:</b> {creator.config.tokenSymbol}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={7}>
+          <Grid item xs={12}>
+            <Typography
+              variant="h5"
+              className={classes.headline}
+              gutterBottom
+            >
+              Features
+            </Typography>
+            {R.map(displayScheme, creator.schemes)}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5" className={classes.headline} gutterBottom>
+            Founders
+          </Typography>
+          <Grid container spacing={16} key={`founder-headline`}>
+            <Grid item xs={1} />
+            <Grid item xs={7}>
+              <Typography>
+                <b>Address</b>
+              </Typography>
             </Grid>
-            {R.map(displayFounder, founders)}
+            <Grid item xs={2}>
+              <Typography>
+                <b>Reputation</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography>
+                <b>Tokens</b>
+              </Typography>
+            </Grid>
           </Grid>
+          {R.map(displayFounder, creator.founders)}
         </Grid>
-        <Grid container spacing={16}>
-          <Grid item xs={6} sm={6} md={6}>
-            <Typography
-              variant="h6"
-              className={classes.pieChartHeading}
-              gutterBottom
-            >
-              Reputation Distribution
-            </Typography>
-            <PieChart
-              data={founders}
-              config={{
-                hight: 240,
-                width: 240,
-                dataKey: "reputation",
-                nameKey: "address",
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sm={6} md={6}>
-            <Typography
-              variant="h6"
-              className={classes.pieChartHeading}
-              gutterBottom
-            >
-              Tokens Distribution
-            </Typography>
-            <PieChart
-              data={founders}
-              config={{
-                hight: 240,
-                width: 240,
-                dataKey: "tokens",
-                nameKey: "address",
-              }}
-            />
-          </Grid>
+      </Grid>
+      <Grid container spacing={16}>
+        <Grid item xs={6} sm={6} md={6}>
+          <Typography
+            variant="h6"
+            className={classes.pieChartHeading}
+            gutterBottom
+          >
+            Reputation Distribution
+          </Typography>
+          <PieChart
+            data={creator.founders}
+            config={{
+              hight: 240,
+              width: 240,
+              dataKey: "reputation",
+              nameKey: "address",
+            }}
+          />
         </Grid>
-      </CardContent>
-    </Card>
-  )
-}
+        <Grid item xs={6} sm={6} md={6}>
+          <Typography
+            variant="h6"
+            className={classes.pieChartHeading}
+            gutterBottom
+          >
+            Tokens Distribution
+          </Typography>
+          <PieChart
+            data={creator.founders}
+            config={{
+              hight: 240,
+              width: 240,
+              dataKey: "tokens",
+              nameKey: "address",
+            }}
+          />
+        </Grid>
+      </Grid>
+    </CardContent>
+  </Card>
+)
 
 const displayFounder = ({ address, reputation, tokens }: Founder) => (
   <Grid container spacing={16} key={`founder-${address}`}>
@@ -226,21 +213,11 @@ const styles = (theme: Theme) =>
 const componentWithStyles = withStyles(styles)(ReviewStep)
 
 // STATE
-const mapStateToProps = (state: any) => {
-  return {
-    daoName: state.daoCreator.naming.daoName,
-    tokenName: state.daoCreator.naming.tokenName,
-    tokenSymbol: state.daoCreator.naming.tokenSymbol,
-    founders: state.daoCreator.founders,
-    schemes: state.daoCreator.schemes,
-    stepNumber: state.daoCreator.step,
-    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
-  }
-}
+const mapStateToProps = (state: any) => ({
+    creator: state.daoCreator
+})
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {}
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({})
 
 export default connect(
   mapStateToProps,

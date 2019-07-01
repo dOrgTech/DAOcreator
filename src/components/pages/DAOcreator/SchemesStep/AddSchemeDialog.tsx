@@ -34,8 +34,8 @@ import {
   VotingMachineConfig,
   votingMachineDefinitions,
   initSchemeConfig,
-} from "../../../../lib/integrations/daoStack/arc"
-import * as FormValidation from "../../../../lib/formValidation"
+} from "../../../../lib/integrations/arc"
+import * as FormValidation from "../../../../lib/forms/validation"
 
 const styles = (theme: Theme) =>
   createStyles({

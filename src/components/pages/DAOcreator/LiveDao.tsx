@@ -11,7 +11,7 @@ import {
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { DAO } from "../../../lib/integrations/daoStack/arc"
+import { DAO } from "../../../lib/integrations/arc"
 import { RootState } from "../../../state"
 
 // eslint-disable-next-line
@@ -27,7 +27,7 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
       </Typography>
     )
   } else {
-    const { name, tokenName, tokenSymbol, avatar, daoToken, reputation } = dao
+    const { config, avatar, daoToken, reputation } = dao
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -52,13 +52,13 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
                 DAO
               </Typography>
               <Typography>
-                <b>Name:</b> {name}
+                <b>Name:</b> {config.daoName}
               </Typography>
               <Typography>
-                <b>Token Name:</b> {tokenName}
+                <b>Token Name:</b> {config.tokenName}
               </Typography>
               <Typography>
-                <b>Token Symbol:</b> {tokenSymbol}
+                <b>Token Symbol:</b> {config.tokenSymbol}
               </Typography>
               <Typography
                 variant="h5"

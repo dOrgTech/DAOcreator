@@ -14,7 +14,8 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import { RootState } from "../../../state"
-import * as FormValidation from "../../../lib/formValidation"
+import * as FormValidation from "../../../lib/forms/validation"
+import { FormErrors } from "../../../lib/forms/FormErrors"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 
 // eslint-disable-next-line
@@ -27,29 +28,21 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 type State = {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-  formErrors: {
-    daoName: string
-    tokenName: string
-    tokenSymbol: string
-  }
+  config: DAOConfig
+  formErrors: FormErrors<DAOConfig>
+}
+
+const initState: State = {
+  daoName: "",
+  tokenName: "",
+  tokenSymbol: "",
+  formErrors: ,
 }
 
 const requiredFields = ["daoName", "tokenName", "tokenSymbol"]
 
 class NamingStep extends React.Component<Props, State> {
-  public readonly state: State = {
-    daoName: this.props.daoName,
-    tokenName: this.props.tokenName,
-    tokenSymbol: this.props.tokenSymbol,
-    formErrors: {
-      daoName: "",
-      tokenName: "",
-      tokenSymbol: "",
-    },
-  }
+  state: Readonly<State> = initState
 
   constructor(props: Props) {
     super(props)
@@ -213,9 +206,9 @@ const componentWithStyles = withStyles(styles)(NamingStep)
 // STATE
 const mapStateToProps = (state: RootState) => {
   return {
-    daoName: state.daoCreator.naming.daoName,
-    tokenName: state.daoCreator.naming.tokenName,
-    tokenSymbol: state.daoCreator.naming.tokenSymbol,
+    daoName: state.daoCreator.config.daoName,
+    tokenName: state.daoCreator.config.tokenName,
+    tokenSymbol: state.daoCreator.config.tokenSymbol,
     stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }

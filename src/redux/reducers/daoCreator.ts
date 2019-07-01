@@ -5,7 +5,7 @@ import { DAOcreatorState } from "../../state"
 const initialState: DAOcreatorState = {
   step: 0,
   stepValidation: [false, false],
-  naming: {
+  config: {
     daoName: "",
     tokenName: "",
     tokenSymbol: "",
@@ -34,13 +34,13 @@ export const reducer = (
     case Events.DAO_CREATE_PREV_STEP:
       return { ...state, step: state.step - 1 }
     case Events.DAO_CREATE_SET_NAME:
-      return { ...state, naming: { ...state.naming, daoName: event.payload } }
+      return { ...state, config: { ...state.config, daoName: event.payload } }
     case Events.DAO_CREATE_SET_TOKEN:
-      return { ...state, naming: { ...state.naming, tokenName: event.payload } }
+      return { ...state, config: { ...state.config, tokenName: event.payload } }
     case Events.DAO_CREATE_SET_TOKEN_SYM:
       return {
         ...state,
-        naming: { ...state.naming, tokenSymbol: event.payload },
+        config: { ...state.config, tokenSymbol: event.payload },
       }
     case Events.DAO_CREATE_ADD_FOUNDER:
       return { ...state, founders: R.append(event.payload, state.founders) }

@@ -1,33 +1,28 @@
 import { Notification } from "./redux/reducers/notifications"
 export interface RootState {
   daoCreator: DAOcreatorState
-  daoController: DaoControllerState
   notification: NotificationState
   waitingAnimation: WaitingAnimationState
 }
 
-import * as Arc from "./lib/integrations/daoStack/arc"
+import * as Arc from "./lib/integrations/arc"
 export interface DAOcreatorState {
   step: number
   stepValidation: boolean[]
-  naming: {
-    daoName: string
-    tokenName: string
-    tokenSymbol: string
-  }
+  config: Arc.DAOConfig
   founders: Arc.Founder[]
   schemes: Arc.SchemeConfig[]
   deployedDao: Arc.DAO | undefined
 }
 
-export interface DaoControllerState {
-  // TODO: Add layer 2 types that make up this state
-}
-
+// TODO: move this out of global state
+// Move this into a component and use it in the root of a tool's view
 export interface NotificationState {
   notifications: { [id: string]: Notification }
 }
 
+// TODO: move this out of global state
+// Wrap a view in a loading component instead
 export interface WaitingAnimationState {
   message: string
   details?: string

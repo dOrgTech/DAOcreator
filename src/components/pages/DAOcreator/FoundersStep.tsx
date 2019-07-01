@@ -14,8 +14,8 @@ import {
 } from "@material-ui/core"
 import { bindActionCreators, Dispatch } from "redux"
 import { connect } from "react-redux"
-import { Founder } from "../../../lib/integrations/daoStack/arc"
-import * as FormValidation from "../../../lib/formValidation"
+import { Founder } from "../../../lib/integrations/arc"
+import * as FormValidation from "../../../lib/forms/validation"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -51,55 +51,6 @@ const requiredFields = ["address", "tokens", "reputation"]
 
 class FoundersStep extends React.Component<Props, State> {
   state: Readonly<State> = initState
-
-  handleChange = async (event: any) => {
-    const { name, value } = event.target
-    let errorMessage = ""
-
-    const founderAlreadyPresent = (addr: string) =>
-      R.any(({ address }) => R.equals(address, addr), this.props.addedFounders)
-
-    switch (name) {
-      case "address": {
-        errorMessage = FormValidation.checkIfHasError(
-          founderAlreadyPresent,
-          "Error: Founder already added."
-        )(value)
-        if (R.isEmpty(errorMessage)) {
-          errorMessage = FormValidation.isValidAddress(value)
-        }
-        break
-      }
-      case "tokens": {
-        errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-      case "reputation": {
-        errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-      default: {
-      }
-    }
-    await this.setState({
-      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
-      [name]: value,
-    } as any)
-
-    const formHasAllValues = R.none(
-      field => R.isEmpty(R.prop(field, this.state as any)),
-      requiredFields
-    )
-
-    const formIsValid =
-      formHasAllValues &&
-      R.none(
-        key => !R.isEmpty(this.state.formErrors[key]),
-        R.keys(this.state.formErrors)
-      )
-
-    this.setState({ formIsValid })
-  }
 
   onAddFounder = () => {
     this.props.actions.addFounder(this.state)
@@ -250,6 +201,57 @@ class FoundersStep extends React.Component<Props, State> {
       </Grid>
     </Grid>
   )
+
+  // VALIDATION
+  handleChange = async (event: any) => {
+    const { name, value } = event.target
+    let errorMessage = ""
+
+    const founderAlreadyPresent = (addr: string) =>
+      R.any(({ address }) => R.equals(address, addr), this.props.addedFounders)
+
+    switch (name) {
+      case "address": {
+        errorMessage = FormValidation.checkIfHasError(
+          founderAlreadyPresent,
+          "Error: Founder already added."
+        )(value)
+        if (R.isEmpty(errorMessage)) {
+          errorMessage = FormValidation.isValidAddress(value)
+        }
+        break
+      }
+      case "tokens": {
+        errorMessage = FormValidation.isBigNumber(value)
+        break
+      }
+      case "reputation": {
+        errorMessage = FormValidation.isBigNumber(value)
+        break
+      }
+      default: {
+      }
+    }
+
+    await this.setState({
+      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
+      [name]: value,
+    } as any)
+
+    const formHasAllValues = R.none(
+      field => R.isEmpty(R.prop(field, this.state as any)),
+      requiredFields
+    )
+
+    const formIsValid =
+      formHasAllValues &&
+      R.none(
+        key => !R.isEmpty(this.state.formErrors[key]),
+        R.keys(this.state.formErrors)
+      )
+
+    this.setState({ formIsValid })
+  }
 }
 
 // STYLE

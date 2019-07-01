@@ -1,5 +1,5 @@
 import * as R from "ramda"
-import { ParamConfig, ParamDefinition } from "./integrations/daoStack/arc"
+import { ParamConfig, ParamDefinition } from "./integrations/arc"
 import { TypeValidation } from "./integrations/web3"
 
 export function checkIfHasError<ValueType>(

@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import uuid from "uuid"
-import * as Arc from "../../lib/integrations/daoStack/arc"
+import * as Arc from "../../lib/integrations/arc"
 import * as Web3 from "../../lib/integrations/web3"
 import * as notificationActions from "../../redux/actions/notifications"
 import { RootState } from "../../state"
@@ -144,14 +144,14 @@ export function createDao(): (
         message: "To create the DAO, please sign the upcoming transaction",
       })
     )
-    const { naming, founders, schemes } = getState().daoCreator
+    const { config, founders, schemes } = getState().daoCreator
     const waitingDetailsUpdater = (newStatus: string) =>
       dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus))
 
     try {
       const web3 = await Web3.getWeb3()
       const dao = await Arc.createDao(web3, waitingDetailsUpdater)(
-        naming,
+        config,
         founders,
         schemes
       )
