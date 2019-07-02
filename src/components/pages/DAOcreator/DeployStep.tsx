@@ -1,19 +1,11 @@
 // TODO: list of steps to take, each with their own transactions that need to be sent.
 // TODO: move away from using redux
-import {
-  createStyles,
-  Theme,
-  WithStyles,
-  withStyles
-} from "@material-ui/core"
+import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { RootState } from "../../../state"
-import {
-  Founder,
-  SchemeConfig
-} from "../../../lib/integrations/arc"
+import { Founder, SchemeConfig } from "../../../lib/integrations/arc"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -26,15 +18,10 @@ interface Props extends WithStyles<typeof styles> {
   stepValid: boolean
 }
 
-const DeployStep: React.SFC<Props> = ({
-
-}) => (
-
-)
+const DeployStep: React.SFC<Props> = ({}) => <></>
 
 // STYLE
-const styles = (theme: Theme) =>
-  createStyles({ })
+const styles = (theme: Theme) => createStyles({})
 
 const componentWithStyles = withStyles(styles)(DeployStep)
 

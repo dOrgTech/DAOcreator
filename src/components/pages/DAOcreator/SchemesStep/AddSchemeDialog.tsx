@@ -35,7 +35,7 @@ import {
   votingMachineDefinitions,
   initSchemeConfig,
 } from "../../../../lib/integrations/arc"
-import * as FormValidation from "../../../../lib/forms/validation"
+import { FormValidation } from "../../../../lib/forms"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -156,7 +156,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
       let errorMessage = ""
       switch (paramDefinition.valueType) {
         case "Address": {
-          errorMessage = FormValidation.isValidAddress(value)
+          errorMessage = FormValidation.isAddress(value)
           break
         }
         case "number": {

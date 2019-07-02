@@ -1,41 +1,50 @@
 import * as R from "ramda"
-import { ParamConfig, ParamDefinition } from "./integrations/arc"
-import { TypeValidation } from "./integrations/web3"
+import { ParamConfig, ParamDefinition } from "../integrations/arc"
+import { TypeValidation } from "../integrations/web3"
 
-export function checkIfHasError<ValueType>(
+function checkIfHasError<ValueType>(
   predicate: (value: ValueType) => boolean,
   errorMessage: string
 ) {
   return (value: ValueType) => (predicate(value) ? errorMessage : "")
 }
 
-const nameHasError = (name: any) =>
-  R.isEmpty(name) || name.length > 70 || /[_\W\d]/.test(name)
+const nameHasError = (name: string) =>
+  !name || R.isEmpty(name) || name.length > 70 || /[_\W\d]/.test(name)
 
-const addressHasError = (addr: any) =>
-  R.isEmpty(addr) || !TypeValidation.isAddress(addr)
+const addressHasError = (addr: string) =>
+  !addr || R.isEmpty(addr) || !TypeValidation.isAddress(addr)
 
-const numberHasError = (number: any) =>
-  R.isEmpty(number) || !TypeValidation.isBigNumber(number)
+const bigNumberHasError = (number: string) =>
+  !number || R.isEmpty(number) || !TypeValidation.isBigNumber(number)
 
-export const isValidName = checkIfHasError(
+const tokenSymbolHasError = (tokenSymbol: string) =>
+  !tokenSymbol || R.isEmpty(tokenSymbol) || tokenSymbol.length > 4
+
+export const isName = checkIfHasError(
   nameHasError,
-  "Error: Name must be less than 70 characters with no numbers or special characters"
+  "Name must be less than 70 characters with no numbers or special characters"
 )
 
 export const isRequired = checkIfHasError(
   R.either(R.isEmpty, R.isNil),
   "This field is required"
 )
-export const isValidAddress = checkIfHasError(
+export const isAddress = checkIfHasError(
   addressHasError,
   "Please enter a valid address."
 )
 export const isBigNumber = checkIfHasError(
-  numberHasError,
+  bigNumberHasError,
   "Please enter a valid number."
 )
 
+export const isTokenSymbol = checkIfHasError(
+  tokenSymbolHasError,
+  "Symbol should be max 4 characters for displays on exchanges"
+)
+
+// TODO: deprecate this, rename file to "DataValidators"
 export const generateFormErrors = (
   paramDefinitions: ParamDefinition[],
   paramValues: ParamConfig,
@@ -54,13 +63,13 @@ export const generateFormErrors = (
         let errorMessage = ""
         switch (paramDefinition.valueType) {
           case "Address":
-            errorMessage = isValidAddress(value)
+            errorMessage = isAddress(value as string)
             break
           case "BigNumber":
-            errorMessage = isBigNumber(value)
+            errorMessage = isBigNumber(value as string)
             break
           case "number":
-            errorMessage = isBigNumber(value)
+            errorMessage = isBigNumber(value.toString())
             break
           default: {
           }

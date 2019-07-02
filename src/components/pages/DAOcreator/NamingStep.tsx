@@ -3,109 +3,90 @@ import {
   CardContent,
   createStyles,
   Grid,
-  TextField,
   Theme,
   Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core"
-import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { RootState } from "../../../state"
-import * as FormValidation from "../../../lib/forms/validation"
-import { FormErrors } from "../../../lib/forms/FormErrors"
+import { RootState, DAOConfig } from "../../../state"
+import { FormValidation, Form } from "../../../lib/forms"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+import { FormDrawer } from "../../common/FormDrawer"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-  stepValid: boolean
+  config: DAOConfig
   actions: DAOcreatorActions
 }
 
 type State = {
-  config: DAOConfig
-  formErrors: FormErrors<DAOConfig>
+  form: Form<DAOConfig>
 }
-
-const initState: State = {
-  daoName: "",
-  tokenName: "",
-  tokenSymbol: "",
-  formErrors: ,
-}
-
-const requiredFields = ["daoName", "tokenName", "tokenSymbol"]
 
 class NamingStep extends React.Component<Props, State> {
-  state: Readonly<State> = initState
+  state: Readonly<State> = {
+    // TODO: move this all into a base component
+    form: new Form<DAOConfig>(
+      // onChange
+      () => {
+        this.forceUpdate()
+      },
+      // onValidate
+      (valid: boolean) => {
+        this.props.actions.setStepIsValid(valid)
+      },
+      // getData
+      () => {
+        return this.props.config
+      }
+    ),
+  }
 
   constructor(props: Props) {
     super(props)
-    this.props.actions.setStepIsValid(this.props.stepValid)
+    this.props.actions.setStepIsValid(false)
   }
 
-  handleChange = async (event: any) => {
-    const { name, value } = event.target
-    let errorMessage = FormValidation.isRequired(value)
-
-    await this.setState({
-      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
-      [name]: value,
-    } as any)
-
-    const limitTokenSymbols = (tknSym: string) => tknSym.length > 4
-
-    switch (name) {
-      case "tokenSymbol": {
-        errorMessage = FormValidation.checkIfHasError(
-          limitTokenSymbols,
-          "Error: Symbol should be max 4 characters for displays on exchanges"
-        )(value)
-        break
+  componentWillMount() {
+    this.state.form.configureFields(
+      {
+        field: "daoName",
+        config: {
+          description: "DAO Name",
+          required: true,
+          default: this.props.config.daoName,
+          setValue: value => this.props.actions.setDAOName(value),
+          validator: FormValidation.isName,
+        },
+      },
+      {
+        field: "tokenName",
+        config: {
+          description: "Token Name",
+          required: true,
+          default: this.props.config.tokenName,
+          setValue: value => this.props.actions.setTokenName(value),
+          validator: FormValidation.isName,
+        },
+      },
+      {
+        field: "tokenSymbol",
+        config: {
+          description: "Token Symbol",
+          required: true,
+          setValue: value => this.props.actions.setTokenSymbol(value),
+          validator: FormValidation.isTokenSymbol,
+        },
       }
-      case "tokenName": {
-        errorMessage = FormValidation.isValidName(value)
-        break
-      }
-      case "daoName": {
-        errorMessage = FormValidation.isValidName(value)
-        break
-      }
-      default: {
-      }
-    }
-    await this.setState({
-      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
-      [name]: value,
-    } as any)
-
-    const formHasAllValues = R.none(
-      field => R.isEmpty(R.prop(field, this.state as any)),
-      requiredFields
     )
-
-    const stepIsValid =
-      formHasAllValues &&
-      R.none(
-        key => !R.isEmpty(this.state.formErrors[key]),
-        R.keys(this.state.formErrors)
-      )
-
-    if (stepIsValid !== this.props.stepValid) {
-      await this.props.actions.setStepIsValid(stepIsValid)
-    }
   }
 
   render() {
     const { classes } = this.props
-    const actions = this.props.actions
-
-    const { daoName, tokenName, tokenSymbol, formErrors } = this.state
+    const { form } = this.state
 
     return (
       <Card className={classes.card}>
@@ -129,49 +110,13 @@ class NamingStep extends React.Component<Props, State> {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <TextField
-                    className={classes.daoName}
-                    name="daoName"
-                    label="DAO Name"
-                    value={daoName}
-                    onChange={this.handleChange}
-                    margin="normal"
-                    onBlur={() => actions.setName(daoName)}
-                    fullWidth
-                    required
-                    error={!R.isEmpty(formErrors.daoName)}
-                    helperText={formErrors.daoName}
-                  />
+                  <FormDrawer.Text field={"daoName"} form={form} />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    className={classes.tokenName}
-                    name="tokenName"
-                    label="Token Name"
-                    value={tokenName}
-                    onChange={this.handleChange}
-                    onBlur={() => actions.setTokenName(tokenName)}
-                    margin="normal"
-                    fullWidth
-                    error={!R.isEmpty(formErrors.tokenName)}
-                    helperText={formErrors.tokenName}
-                    required
-                  />
+                  <FormDrawer.Text field={"tokenName"} form={form} />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    className={classes.tokenSymbol}
-                    name="tokenSymbol"
-                    label="Token Symbol"
-                    value={tokenSymbol}
-                    onChange={this.handleChange}
-                    onBlur={() => actions.setTokenSymbol(tokenSymbol)}
-                    margin="normal"
-                    fullWidth
-                    error={!R.isEmpty(formErrors.tokenSymbol)}
-                    helperText={formErrors.tokenSymbol}
-                    required
-                  />
+                  <FormDrawer.Text field={"tokenSymbol"} form={form} />
                 </Grid>
               </Grid>
             </Grid>
@@ -206,10 +151,7 @@ const componentWithStyles = withStyles(styles)(NamingStep)
 // STATE
 const mapStateToProps = (state: RootState) => {
   return {
-    daoName: state.daoCreator.config.daoName,
-    tokenName: state.daoCreator.config.tokenName,
-    tokenSymbol: state.daoCreator.config.tokenSymbol,
-    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
+    config: state.daoCreator.config,
   }
 }
 

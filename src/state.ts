@@ -6,12 +6,15 @@ export interface RootState {
 }
 
 import * as Arc from "./lib/integrations/arc"
+export type DAOConfig = Arc.DAOConfig
+export type DAOFounders = Arc.Founder[]
+export type DAOSchemes = Arc.SchemeConfig[]
 export interface DAOcreatorState {
   step: number
   stepValidation: boolean[]
-  config: Arc.DAOConfig
-  founders: Arc.Founder[]
-  schemes: Arc.SchemeConfig[]
+  config: DAOConfig
+  founders: DAOFounders
+  schemes: DAOSchemes
   deployedDao: Arc.DAO | undefined
 }
 

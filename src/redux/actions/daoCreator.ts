@@ -10,7 +10,7 @@ export default interface DAOcreatorActions {
   init(): (dispatch: Dispatch) => Promise<void>
   nextStep(): (dispatch: Dispatch) => Promise<void>
   prevStep(): (dispatch: Dispatch) => Promise<void>
-  setName(name: string): (dispatch: Dispatch) => Promise<void>
+  setDAOName(name: string): (dispatch: Dispatch) => Promise<void>
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
   addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
@@ -70,7 +70,9 @@ export function prevStep(): (dispatch: Dispatch) => Promise<void> {
   }
 }
 
-export function setName(name: string): (dispatch: Dispatch) => Promise<void> {
+export function setDAOName(
+  name: string
+): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
     dispatch(Events.DAO_CREATE_SET_NAME(name))
     return Promise.resolve()

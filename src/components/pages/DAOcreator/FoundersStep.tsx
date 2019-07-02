@@ -15,7 +15,7 @@ import {
 import { bindActionCreators, Dispatch } from "redux"
 import { connect } from "react-redux"
 import { Founder } from "../../../lib/integrations/arc"
-import * as FormValidation from "../../../lib/forms/validation"
+import { FormValidation } from "../../../lib/forms"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
@@ -212,12 +212,11 @@ class FoundersStep extends React.Component<Props, State> {
 
     switch (name) {
       case "address": {
-        errorMessage = FormValidation.checkIfHasError(
-          founderAlreadyPresent,
-          "Error: Founder already added."
-        )(value)
+        errorMessage = founderAlreadyPresent(value)
+          ? ""
+          : "Error: Founder already added."
         if (R.isEmpty(errorMessage)) {
-          errorMessage = FormValidation.isValidAddress(value)
+          errorMessage = FormValidation.isAddress(value)
         }
         break
       }
