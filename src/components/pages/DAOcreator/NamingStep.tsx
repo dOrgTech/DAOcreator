@@ -57,7 +57,6 @@ class NamingStep extends React.Component<Props, State>
         config: {
           description: "DAO Name",
           required: true,
-          default: this.props.config.daoName,
           setValue: value => this.props.actions.setDAOName(value),
           validator: FormValidation.isName,
         },
@@ -67,7 +66,6 @@ class NamingStep extends React.Component<Props, State>
         config: {
           description: "Token Name",
           required: true,
-          default: this.props.config.tokenName,
           setValue: value => this.props.actions.setTokenName(value),
           validator: FormValidation.isName,
         },

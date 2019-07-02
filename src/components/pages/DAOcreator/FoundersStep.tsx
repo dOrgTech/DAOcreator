@@ -1,5 +1,3 @@
-import * as R from "ramda"
-import * as React from "react"
 import {
   withStyles,
   Typography,
@@ -7,67 +5,140 @@ import {
   WithStyles,
   createStyles,
   Grid,
-  TextField,
   Card,
   Button,
   CardContent,
 } from "@material-ui/core"
-import { bindActionCreators, Dispatch } from "redux"
+import * as R from "ramda"
+import * as React from "react"
 import { connect } from "react-redux"
-import { Founder } from "../../../lib/integrations/arc"
-import { FormValidation } from "../../../lib/forms"
+import { bindActionCreators, Dispatch } from "redux"
+import { RootState, DAOFounder } from "../../../state"
+import { FormValidation, FormCallbacks } from "../../../lib/forms"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
+import { Form } from "../../../lib/forms"
+import { FormField } from "../../common/FormField"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  addedFounders: Founder[]
+  founders: DAOFounder[]
   actions: DAOcreatorActions
 }
 
-type State = Founder & {
-  formErrors: {
-    address: string
-    tokens: string
-    reputation: string
-  }
-  formIsValid: boolean
+interface State {
+  form: Form<DAOFounder>
+  formValid: boolean
 }
 
-const initState: State = {
-  address: "",
-  tokens: "",
-  reputation: "",
-  formErrors: {
-    address: "",
-    tokens: "",
-    reputation: "",
-  },
-  formIsValid: false,
-}
-
-const requiredFields = ["address", "tokens", "reputation"]
-
-class FoundersStep extends React.Component<Props, State> {
-  state: Readonly<State> = initState
-
-  onAddFounder = () => {
-    this.props.actions.addFounder(this.state)
-    this.setState(initState)
-
-    this.props.actions.setStepIsValid(true)
+class FoundersStep extends React.Component<Props, State>
+  implements FormCallbacks<DAOFounder> {
+  state: Readonly<State> = {
+    form: new Form<DAOFounder>(this),
+    formValid: false,
   }
 
-  onRemoveFounder = (addr: string) => {
+  constructor(props: Props) {
+    super(props)
+    this.props.actions.setStepIsValid(false)
+  }
+
+  public onChange(): void {
+    this.forceUpdate()
+  }
+
+  public onValidate(valid: boolean): void {
+    this.setState({
+      form: this.state.form,
+      formValid: valid,
+    })
+  }
+
+  public getData(): DAOFounder {
+    return this.toData()
+  }
+
+  private toData(): DAOFounder {
+    const { form } = this.state
+    return {
+      address: form.getValue("address"),
+      reputation: form.getValue("reputation"),
+      tokens: form.getValue("tokens"),
+    }
+  }
+
+  private onAddFounder() {
+    const { actions } = this.props
+    const { form } = this.state
+
+    actions.addFounder(this.toData())
+    actions.setStepIsValid(true)
+    form.resetField("address")
+    form.resetField("reputation")
+    form.resetField("tokens")
+  }
+
+  private onRemoveFounder(addr: string) {
     this.props.actions.removeFounder(addr)
-    this.setState(initState)
-
     this.props.actions.setStepIsValid(true)
+  }
+
+  componentWillMount() {
+    this.state.form.configureFields(
+      {
+        field: "address",
+        config: {
+          description: "Wallet Address",
+          required: true,
+          setValue: value => {
+            /* nothing needed */
+          },
+          validator: (value: any) => {
+            const err = FormValidation.isAddress(value)
+
+            if (
+              R.isEmpty(err) &&
+              R.any(
+                ({ address }) => R.equals(address, value),
+                this.props.founders
+              )
+            ) {
+              return "Founder already exists."
+            }
+
+            return err
+          },
+        },
+      },
+      {
+        field: "reputation",
+        config: {
+          description: "Reputation",
+          required: true,
+          setValue: value => {
+            /* nothing needed */
+          },
+          validator: FormValidation.isBigNumber,
+        },
+      },
+      {
+        field: "tokens",
+        config: {
+          description: "Tokens",
+          required: true,
+          setValue: value => {
+            /* nothing needed */
+          },
+          validator: FormValidation.isBigNumber,
+        },
+      }
+    )
   }
 
   render() {
-    const { classes, addedFounders } = this.props
+    const { classes, founders } = this.props
+    const { form, formValid } = this.state
 
     return (
       <Card className={classes.card}>
@@ -95,7 +166,7 @@ class FoundersStep extends React.Component<Props, State> {
                 Reputation Distribution
               </Typography>
               <PieChart
-                data={addedFounders}
+                data={founders}
                 config={{
                   hight: 240,
                   width: 240,
@@ -113,7 +184,7 @@ class FoundersStep extends React.Component<Props, State> {
                 Tokens Distribution
               </Typography>
               <PieChart
-                data={addedFounders}
+                data={founders}
                 config={{
                   hight: 240,
                   width: 240,
@@ -124,43 +195,13 @@ class FoundersStep extends React.Component<Props, State> {
             </Grid>
             <Grid container spacing={16} className={classes.addLine}>
               <Grid item xs={6}>
-                <TextField
-                  name="address"
-                  label="Wallet Address"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.address}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.address)}
-                  helperText={this.state.formErrors.address}
-                  required
-                />
+                <FormField.Text field={"address"} form={form} />
               </Grid>
               <Grid item xs={2}>
-                <TextField
-                  name="reputation"
-                  label="Reputation"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.reputation}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.reputation)}
-                  helperText={this.state.formErrors.reputation}
-                  required
-                />
+                <FormField.Text field={"reputation"} form={form} />
               </Grid>
               <Grid item xs={2}>
-                <TextField
-                  name="tokens"
-                  label="Tokens"
-                  margin="normal"
-                  onChange={this.handleChange}
-                  value={this.state.tokens}
-                  fullWidth
-                  error={!R.isEmpty(this.state.formErrors.tokens)}
-                  helperText={this.state.formErrors.tokens}
-                  required
-                />
+                <FormField.Text field={"tokens"} form={form} />
               </Grid>
               <Grid item xs={1} className={classes.addButtonWrapper}>
                 <Button
@@ -169,20 +210,20 @@ class FoundersStep extends React.Component<Props, State> {
                   color="primary"
                   variant="contained"
                   aria-label="Add"
-                  disabled={!this.state.formIsValid}
+                  disabled={!formValid}
                 >
                   Add
                 </Button>
               </Grid>
             </Grid>
-            {R.map(this.addedFounder, addedFounders)}
+            {R.map(this.addedFounder, founders)}
           </Grid>
         </CardContent>
       </Card>
     )
   }
 
-  addedFounder = ({ address, reputation, tokens }: Founder) => (
+  addedFounder = ({ address, reputation, tokens }: DAOFounder) => (
     <Grid container spacing={16} key={`founder-${address}`}>
       <Grid item xs={1}>
         <EthAddressAvatar address={address} />
@@ -201,56 +242,6 @@ class FoundersStep extends React.Component<Props, State> {
       </Grid>
     </Grid>
   )
-
-  // VALIDATION
-  handleChange = async (event: any) => {
-    const { name, value } = event.target
-    let errorMessage = ""
-
-    const founderAlreadyPresent = (addr: string) =>
-      R.any(({ address }) => R.equals(address, addr), this.props.addedFounders)
-
-    switch (name) {
-      case "address": {
-        errorMessage = founderAlreadyPresent(value)
-          ? ""
-          : "Error: Founder already added."
-        if (R.isEmpty(errorMessage)) {
-          errorMessage = FormValidation.isAddress(value)
-        }
-        break
-      }
-      case "tokens": {
-        errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-      case "reputation": {
-        errorMessage = FormValidation.isBigNumber(value)
-        break
-      }
-      default: {
-      }
-    }
-
-    await this.setState({
-      formErrors: R.assoc(name, errorMessage, this.state.formErrors),
-      [name]: value,
-    } as any)
-
-    const formHasAllValues = R.none(
-      field => R.isEmpty(R.prop(field, this.state as any)),
-      requiredFields
-    )
-
-    const formIsValid =
-      formHasAllValues &&
-      R.none(
-        key => !R.isEmpty(this.state.formErrors[key]),
-        R.keys(this.state.formErrors)
-      )
-
-    this.setState({ formIsValid })
-  }
 }
 
 // STYLE
@@ -284,9 +275,9 @@ const styles = (theme: Theme) =>
 const componentWithStyles = withStyles(styles)(FoundersStep)
 
 // STATE
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    addedFounders: state.daoCreator.founders,
+    founders: state.daoCreator.founders,
   }
 }
 

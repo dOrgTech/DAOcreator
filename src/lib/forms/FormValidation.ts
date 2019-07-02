@@ -28,7 +28,7 @@ export const isName = checkIfHasError(
 
 export const isRequired = checkIfHasError(
   R.either(R.isEmpty, R.isNil),
-  "This field is required"
+  "This field is required."
 )
 export const isAddress = checkIfHasError(
   addressHasError,
@@ -41,7 +41,7 @@ export const isBigNumber = checkIfHasError(
 
 export const isTokenSymbol = checkIfHasError(
   tokenSymbolHasError,
-  "Symbol should be max 4 characters for displays on exchanges"
+  "Symbol should be max 4 characters for displays on exchanges."
 )
 
 // TODO: deprecate this, rename file to "DataValidators"

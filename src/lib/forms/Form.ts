@@ -40,13 +40,7 @@ export class Form<Data> {
 
   public configureField(field: keyof Data, config: FieldConfig): void {
     this.configs[field as string] = config
-
-    const data = this.callbacks.getData()
-    if (data[field]) {
-      this.setValue(field, data[field])
-    } else if (config.default) {
-      this.setValue(field, config.default)
-    }
+    this.resetField(field)
   }
 
   public getDescription(field: keyof Data): string {
@@ -70,7 +64,7 @@ export class Form<Data> {
       config.setValue(value)
     }
 
-    this.callbacks.onValidate(this.hasErrors())
+    this.callbacks.onValidate(this.isValid())
     this.callbacks.onChange()
   }
 
@@ -86,11 +80,22 @@ export class Form<Data> {
     return !R.isEmpty(this.getError(field))
   }
 
-  public hasErrors(): boolean {
+  public isValid(): boolean {
     const data = this.callbacks.getData()
     return R.none(
       key => this.errors[key] === undefined || !R.isEmpty(this.errors[key]),
       R.keys(data)
     )
+  }
+
+  public resetField(field: keyof Data): void {
+    const data = this.callbacks.getData()
+    const config = this.configs[field as string]
+
+    if (data[field]) {
+      this.setValue(field, data[field])
+    } else if (config.default) {
+      this.setValue(field, config.default)
+    }
   }
 }
