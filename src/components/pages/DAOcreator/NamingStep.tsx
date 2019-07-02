@@ -12,9 +12,9 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import { RootState, DAOConfig } from "../../../state"
-import { FormValidation, Form } from "../../../lib/forms"
+import { FormValidation, Form, FormCallbacks } from "../../../lib/forms"
 import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
-import { FormDrawer } from "../../common/FormDrawer"
+import { FormField } from "../../common/FormField"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -22,32 +22,32 @@ interface Props extends WithStyles<typeof styles> {
   actions: DAOcreatorActions
 }
 
-type State = {
+interface State {
   form: Form<DAOConfig>
 }
 
-class NamingStep extends React.Component<Props, State> {
+class NamingStep extends React.Component<Props, State>
+  implements FormCallbacks<DAOConfig> {
   state: Readonly<State> = {
     // TODO: move this all into a base component
-    form: new Form<DAOConfig>(
-      // onChange
-      () => {
-        this.forceUpdate()
-      },
-      // onValidate
-      (valid: boolean) => {
-        this.props.actions.setStepIsValid(valid)
-      },
-      // getData
-      () => {
-        return this.props.config
-      }
-    ),
+    form: new Form<DAOConfig>(this),
   }
 
   constructor(props: Props) {
     super(props)
     this.props.actions.setStepIsValid(false)
+  }
+
+  public onChange(): void {
+    this.forceUpdate()
+  }
+
+  public onValidate(valid: boolean): void {
+    this.props.actions.setStepIsValid(valid)
+  }
+
+  public getData(): DAOConfig {
+    return this.props.config
   }
 
   componentWillMount() {
@@ -110,13 +110,13 @@ class NamingStep extends React.Component<Props, State> {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <FormDrawer.Text field={"daoName"} form={form} />
+                  <FormField.Text field={"daoName"} form={form} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormDrawer.Text field={"tokenName"} form={form} />
+                  <FormField.Text field={"tokenName"} form={form} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormDrawer.Text field={"tokenSymbol"} form={form} />
+                  <FormField.Text field={"tokenSymbol"} form={form} />
                 </Grid>
               </Grid>
             </Grid>

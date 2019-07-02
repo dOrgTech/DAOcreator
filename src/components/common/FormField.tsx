@@ -2,15 +2,13 @@ import * as React from "react"
 import { TextField } from "@material-ui/core"
 import { Form } from "../../lib/forms"
 
-export class FormDrawer {
+export class FormField {
   public static Text = <Data extends {}>(props: {
     field: keyof Data
     form: Form<Data>
     styleClass?: string
   }) => {
     const { field, form, styleClass } = props
-
-    // TODO: check, for the existance of this field in the form
 
     return (
       <TextField

@@ -1,4 +1,5 @@
 import * as R from "ramda"
+import { FormCallbacks } from "./FormCallbacks"
 
 export interface FieldConfig {
   description: string
@@ -25,18 +26,10 @@ export class Form<Data> {
   private values: FieldValues = {}
   private errors: FieldErrors = {}
 
-  private onChange: () => void
-  private onFormValidate: (valid: boolean) => void
-  private getData: () => Data
+  private callbacks: FormCallbacks<Data>
 
-  constructor(
-    onChange: () => void,
-    onFormValidate: (valid: boolean) => void,
-    getData: () => Data
-  ) {
-    this.onChange = onChange
-    this.onFormValidate = onFormValidate
-    this.getData = getData
+  constructor(callbacks: FormCallbacks<Data>) {
+    this.callbacks = callbacks
   }
 
   public configureFields(
@@ -48,7 +41,7 @@ export class Form<Data> {
   public configureField(field: keyof Data, config: FieldConfig): void {
     this.configs[field as string] = config
 
-    const data = this.getData()
+    const data = this.callbacks.getData()
     if (data[field]) {
       this.setValue(field, data[field])
     } else if (config.default) {
@@ -77,8 +70,8 @@ export class Form<Data> {
       config.setValue(value)
     }
 
-    this.onFormValidate(this.hasErrors())
-    this.onChange()
+    this.callbacks.onValidate(this.hasErrors())
+    this.callbacks.onChange()
   }
 
   public isRequired(field: keyof Data): boolean {
@@ -94,7 +87,7 @@ export class Form<Data> {
   }
 
   public hasErrors(): boolean {
-    const data = this.getData()
+    const data = this.callbacks.getData()
     return R.none(
       key => this.errors[key] === undefined || !R.isEmpty(this.errors[key]),
       R.keys(data)
