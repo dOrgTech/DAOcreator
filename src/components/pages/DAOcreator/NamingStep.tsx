@@ -65,7 +65,7 @@ class NamingStep extends React.Component<Props, State>
         field: "tokenName",
         config: {
           description: "Token Name",
-          required: true,
+          required: false,
           setValue: value => this.props.actions.setTokenName(value),
           validator: FormValidation.isName,
         },
