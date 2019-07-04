@@ -84,6 +84,7 @@ class FoundersStep extends React.Component<Props, State>
     this.props.actions.setStepIsValid(true)
   }
 
+  // TODO: list of founders, manual entry, manual edit, import from csv
   componentWillMount() {
     this.state.form.configureFields(
       {
