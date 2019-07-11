@@ -1,7 +1,6 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { observer } from "mobx-react"
 import {
   withStyles,
   Theme,
@@ -20,67 +19,75 @@ import NamingStep from "./NamingStep"
 // import ReviewStep from "./ReviewStep"
 // import LiveDao from "./LiveDao"
 import { DAOcreatorForm, CreateDAOcreatorForm } from "../../../lib/forms"
+import { FormState } from "formstate"
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  actions: DAOcreatorActions
-}
+interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number
-  stepValid: boolean
 }
 
-@observer
+interface Step {
+  title: string
+  form: FormState<any>
+  Component: any
+}
+
 class DAOcreator extends React.Component<Props, State> {
   form: DAOcreatorForm = CreateDAOcreatorForm()
 
   constructor(props: Props) {
     super(props)
-    props.actions.init()
     this.state = {
       step: 0,
-      stepValid: false,
     }
   }
 
   render() {
-    const { classes, actions } = this.props
-    const { step, stepValid } = this.state
-    const form = this.form
-    const nameForm = form.$.config
-
-    const onValidate = (stepValid: boolean) =>
-      this.setState({
-        step,
-        stepValid,
-      })
-
-    const steps = [
+    const steps: Step[] = [
       {
         title: "Name",
-        component: <NamingStep form={nameForm} onValidate={onValidate} />,
+        form: this.form.$.config,
+        Component: NamingStep,
       },
-      /*{
+      {
+        title: "Name",
+        form: this.form.$.config,
+        Component: NamingStep,
+      } /*,
+      {
         title: "Founders",
-        component: <FoundersStep />,
+        form: this.form.$.founders,
+        Component: FoundersStep,
       },
       {
         title: "Features (schemes)",
-        component: <SchemesStep />,
-      },
-      {
-        title: "Review & Deploy",
-        component: <ReviewStep />,
-      },
-      {
-        title: "Live DAO",
-        component: <LiveDao />,
-      },*/
+        form: this.form.$.schemes,
+        Component: SchemesStep,
+      }*/,
     ]
-
-    const isDeployStep = step === steps.length - 2
+    const { classes } = this.props
+    const { step } = this.state
     const isLastStep = step === steps.length - 1
+    const { form, Component } = steps[step]
+
+    const previousStep = async () => {
+      this.setState({
+        step: this.state.step - 1,
+      })
+    }
+
+    const nextStep = async () => {
+      const res = await form.validate()
+
+      if (!res.hasError) {
+        this.setState({
+          step: this.state.step + 1,
+        })
+      }
+    }
+
     return (
       <div className={classes.root}>
         <Card>
@@ -92,7 +99,9 @@ class DAOcreator extends React.Component<Props, State> {
             ))}
           </Stepper>
         </Card>
-        <div className={classes.content}>{steps[step].component}</div>
+        <div className={classes.content}>
+          <Component form={form} />
+        </div>
         {isLastStep ? (
           <></>
         ) : (
@@ -101,7 +110,7 @@ class DAOcreator extends React.Component<Props, State> {
               variant="contained"
               color="primary"
               disabled={step === 0}
-              onClick={actions.prevStep}
+              onClick={previousStep}
               className={classes.button}
             >
               Back
@@ -109,11 +118,10 @@ class DAOcreator extends React.Component<Props, State> {
             <Button
               variant="contained"
               color="primary"
-              onClick={isDeployStep ? actions.createDao : actions.nextStep}
+              onClick={nextStep}
               className={classes.button}
-              disabled={!stepValid}
             >
-              {isDeployStep ? "Deploy DAO" : "Next"}
+              {"Next"}
             </Button>
           </div>
         )}
@@ -150,16 +158,4 @@ const styles = (theme: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(DAOcreator)
-
-// STATE
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(DAOcreator)

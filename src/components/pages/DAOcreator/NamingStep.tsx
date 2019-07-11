@@ -15,18 +15,11 @@ import { DAOConfigForm } from "../../../lib/forms"
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm
-  onValidate: (stepValid: boolean) => void
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form, onValidate } = this.props
-
-    const onChange = async () => {
-      /*const res = await form.validate()
-      onValidate(!res.hasError)*/
-      this.forceUpdate()
-    }
+    const { classes, form } = this.props
 
     return (
       <Card className={classes.card}>
@@ -54,7 +47,6 @@ class NamingStep extends React.Component<Props> {
                     id={"daoName"}
                     label={"DAO Name"}
                     field={form.$.daoName}
-                    onChange={onChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -62,7 +54,6 @@ class NamingStep extends React.Component<Props> {
                     id={"tokenName"}
                     label={"Token Name"}
                     field={form.$.tokenName}
-                    onChange={onChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -70,7 +61,6 @@ class NamingStep extends React.Component<Props> {
                     id={"tokenSymbol"}
                     label={"Token Symbol"}
                     field={form.$.tokenSymbol}
-                    onChange={onChange}
                   />
                 </Grid>
               </Grid>

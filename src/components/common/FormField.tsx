@@ -10,14 +10,8 @@ import { observer } from "mobx-react"
 
 export class FormField {
   public static Text = observer(
-    (props: {
-      id: string
-      label: string
-      field: StringField
-      onChange: () => Promise<void>
-      styleClass?: string
-    }) => {
-      const { id, label, field, onChange, styleClass } = props
+    (props: { id: string; label: string; field: StringField }) => {
+      const { id, label, field } = props
 
       return (
         <FormControl fullWidth>
@@ -29,9 +23,7 @@ export class FormField {
             error={field.hasError}
             id={id}
             value={field.value}
-            onChange={e => {
-              field.onChange(e.target.value)
-            }}
+            onChange={e => field.onChange(e.target.value)}
             onBlur={field.enableAutoValidationAndValidate}
           />
           <FormHelperText error={field.hasError}>{field.error}</FormHelperText>

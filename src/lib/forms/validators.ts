@@ -7,8 +7,6 @@ export const requiredText: Validator<StringOrNull> = value => {
   const error = "This is required."
 
   if (value == null || value.trim().length === 0) {
-    console.log("here")
-    console.log(value)
     return error
   }
 
@@ -27,10 +25,11 @@ export const validAddress: Validator<string> = value => {
 }
 
 export const validTokenSymbol: Validator<string> = value => {
-  const error = "Please enter a valid token symbol."
+  const error =
+    "Token names must be all capitol letters and less than 4 characters."
   value = value.trim()
 
-  if (value.length > 4 || !/[_\W\d]/.test(value)) {
+  if (value.length > 4 || !/^[A-Z]+$/.test(value)) {
     return error
   }
 
@@ -49,11 +48,10 @@ export const validBigNumber: Validator<string> = value => {
 }
 
 export const validName: Validator<string> = value => {
-  const error =
-    "Name must be less than 70 characters with no numbers or spectial characters"
+  const error = "Names must be less than 70 characters."
   value = value.trim()
 
-  if (value.length > 70 || !/[_\W\d]/.test(value)) {
+  if (value.length > 70) {
     return error
   }
 
