@@ -1,30 +1,42 @@
 import * as React from "react"
-import { TextField } from "@material-ui/core"
-import { Form } from "../../lib/forms"
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Input,
+} from "@material-ui/core"
+import { StringField } from "../../lib/forms"
+import { observer } from "mobx-react"
 
 export class FormField {
-  public static Text = <Data extends {}>(props: {
-    field: keyof Data
-    form: Form<Data>
-    styleClass?: string
-  }) => {
-    const { field, form, styleClass } = props
+  public static Text = observer(
+    (props: {
+      id: string
+      label: string
+      field: StringField
+      onChange: () => Promise<void>
+      styleClass?: string
+    }) => {
+      const { id, label, field, onChange, styleClass } = props
 
-    return (
-      <TextField
-        name={field as string}
-        label={form.getDescription(field)}
-        value={form.getValue(field)}
-        onChange={async (event: any) =>
-          form.setValue(field, event.target.value)
-        }
-        required={form.isRequired(field)}
-        error={form.hasError(field)}
-        helperText={form.getError(field)}
-        className={styleClass ? styleClass : (field as string)}
-        margin="normal"
-        fullWidth
-      />
-    )
-  }
+      return (
+        <FormControl fullWidth>
+          <InputLabel error={field.hasError} htmlFor={id}>
+            {label}
+          </InputLabel>
+          <Input
+            fullWidth
+            error={field.hasError}
+            id={id}
+            value={field.value}
+            onChange={e => {
+              field.onChange(e.target.value)
+            }}
+            onBlur={field.enableAutoValidationAndValidate}
+          />
+          <FormHelperText error={field.hasError}>{field.error}</FormHelperText>
+        </FormControl>
+      )
+    }
+  )
 }

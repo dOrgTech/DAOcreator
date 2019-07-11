@@ -12,7 +12,7 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { DAO } from "../../../lib/integrations/arc"
-import { RootState } from "../../../state"
+import { RootState } from "../../../lib/redux/state"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

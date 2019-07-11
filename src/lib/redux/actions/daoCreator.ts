@@ -1,9 +1,9 @@
 import { Dispatch } from "redux"
 import uuid from "uuid"
-import * as Arc from "../../lib/integrations/arc"
-import * as Web3 from "../../lib/integrations/web3"
-import * as notificationActions from "../../redux/actions/notifications"
-import { RootState } from "../../state"
+import * as Arc from "../../integrations/arc"
+import * as Web3 from "../../integrations/web3"
+import * as notificationActions from "./notifications"
+import { RootState } from "../state"
 import * as Events from "./events"
 
 export default interface DAOcreatorActions {
@@ -180,7 +180,7 @@ export function setStepIsValid(
   return (dispatch: Dispatch, getState: () => RootState) => {
     dispatch(
       Events.DAO_CREATE_SET_STEP_VALIDATION({
-        step: getState().daoCreator.step,
+        step: 0,
         isValid,
       })
     )

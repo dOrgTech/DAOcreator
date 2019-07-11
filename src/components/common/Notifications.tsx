@@ -3,9 +3,9 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import NotificationActions, * as notificationActions from "../../redux/actions/notifications"
-import { Notification as NotificationType } from "../../redux/reducers/notifications"
-import { RootState } from "../../state"
+import NotificationActions, * as notificationActions from "../../lib/redux/actions/notifications"
+import { Notification as NotificationType } from "../../lib/redux/state"
+import { RootState } from "../../lib/redux/state"
 import { Button } from "@material-ui/core"
 
 interface Props {

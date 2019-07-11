@@ -4,7 +4,7 @@ import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { RootState } from "../../../state"
+import { RootState } from "../../../lib/redux/state"
 import { Founder, SchemeConfig } from "../../../lib/integrations/arc"
 
 // eslint-disable-next-line
@@ -33,8 +33,6 @@ const mapStateToProps = (state: RootState) => {
     tokenSymbol: state.daoCreator.config.tokenSymbol,
     founders: state.daoCreator.founders,
     schemes: state.daoCreator.schemes,
-    stepNumber: state.daoCreator.step,
-    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
   }
 }
 

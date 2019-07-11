@@ -1,10 +1,8 @@
 import * as R from "ramda"
-import { Events, AnyEvent } from "../../redux/actions"
-import { DAOcreatorState } from "../../state"
+import { Events, AnyEvent } from "../actions"
+import { DAOcreatorState } from "../state"
 
 const initialState: DAOcreatorState = {
-  step: 0,
-  stepValidation: [false, false],
   config: {
     daoName: "",
     tokenName: "",
@@ -20,7 +18,7 @@ export const reducer = (
   event: AnyEvent
 ): DAOcreatorState => {
   switch (event.type) {
-    case Events.DAO_CREATE_NEXT_STEP: {
+    /*case Events.DAO_CREATE_NEXT_STEP: {
       const newStep = state.step + 1
       return {
         ...state,
@@ -72,7 +70,7 @@ export const reducer = (
           event.payload.isValid,
           state.stepValidation
         ),
-      }
+      }*/
     default:
       return state
   }

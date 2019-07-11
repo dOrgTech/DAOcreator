@@ -1,11 +1,11 @@
-import { Notification } from "../../reducers/notifications"
+import { Notification } from "../../state"
 import {
   Event,
   createEvent,
   PayloadEvent,
   createPayloadEvent,
 } from "./typeSafety"
-import * as Arc from "../../../lib/integrations/arc"
+import * as Arc from "../../../integrations/arc"
 
 export enum Events {
   // DAO Creator

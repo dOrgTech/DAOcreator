@@ -21,7 +21,7 @@ import {
   getSchemeDefinition,
   SchemeConfig,
 } from "../../../../lib/integrations/arc"
-import DAOcreatorActions, * as daoCreatorActions from "../../../../redux/actions/daoCreator"
+import DAOcreatorActions, * as daoCreatorActions from "../../../../lib/redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
 
 // eslint-disable-next-line

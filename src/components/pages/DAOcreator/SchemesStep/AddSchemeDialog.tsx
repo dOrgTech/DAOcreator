@@ -35,7 +35,6 @@ import {
   votingMachineDefinitions,
   initSchemeConfig,
 } from "../../../../lib/integrations/arc"
-import { FormValidation } from "../../../../lib/forms"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -99,7 +98,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     const scheme = getSchemeDefinition(schemeConfig.typeName)
     const { params: paramTypes } = scheme
     const { params: paramValues } = schemeConfig
-    const formErrorObject = FormValidation.generateFormErrors(
+    /*const formErrorObject = FormValidation.generateFormErrors(
       paramTypes,
       paramValues,
       this.state.formErrors
@@ -113,13 +112,13 @@ class VerticalLinearStepper extends React.Component<Props, State> {
     this.setState({
       formErrors: formErrorObject,
       formIsValid,
-    })
+    })*/
   }
 
   validateVotingMachine = async (
     votingMachineConfig: VotingMachineConfig | undefined
   ) => {
-    if (votingMachineConfig) {
+    /*if (votingMachineConfig) {
       const votingMachine = getVotingMachineDefinition(
         votingMachineConfig.typeName
       )
@@ -141,11 +140,11 @@ class VerticalLinearStepper extends React.Component<Props, State> {
         formErrors: formErrorObject,
         formIsValid,
       })
-    }
+    }*/
   }
 
   validateParam = async (paramDefinition: ParamDefinition, value: string) => {
-    if (value == null || (R.isEmpty(value) && paramDefinition.optional)) {
+    /*if (value == null || (R.isEmpty(value) && paramDefinition.optional)) {
       this.setState({
         formErrors: {
           ...this.state.formErrors,
@@ -173,7 +172,7 @@ class VerticalLinearStepper extends React.Component<Props, State> {
           [paramDefinition.typeName]: errorMessage,
         },
       })
-    }
+    }*/
   }
 
   handleNext = () => {

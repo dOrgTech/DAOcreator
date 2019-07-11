@@ -13,12 +13,10 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { RootState, DAOFounder } from "../../../state"
-import { FormValidation, FormCallbacks } from "../../../lib/forms"
-import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
+import { RootState, DAOFounder } from "../../../lib/redux/state"
+import DAOcreatorActions, * as daoCreatorActions from "../../../lib/redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
-import { Form } from "../../../lib/forms"
 import { FormField } from "../../common/FormField"
 
 // eslint-disable-next-line
@@ -28,17 +26,11 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 interface State {
-  form: Form<DAOFounder>
+  form: any
   formValid: boolean
 }
 
-class FoundersStep extends React.Component<Props, State>
-  implements FormCallbacks<DAOFounder> {
-  state: Readonly<State> = {
-    form: new Form<DAOFounder>(this),
-    formValid: false,
-  }
-
+class FoundersStep extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.props.actions.setStepIsValid(false)
@@ -85,7 +77,7 @@ class FoundersStep extends React.Component<Props, State>
   }
 
   // TODO: list of founders, manual entry, manual edit, import from csv
-  componentWillMount() {
+  /*  componentWillMount() {
     this.state.form.configureFields(
       {
         field: "address",
@@ -93,7 +85,6 @@ class FoundersStep extends React.Component<Props, State>
           description: "Wallet Address",
           required: true,
           setValue: value => {
-            /* nothing needed */
           },
           validator: (value: any) => {
             const err = FormValidation.isAddress(value)
@@ -118,7 +109,6 @@ class FoundersStep extends React.Component<Props, State>
           description: "Reputation",
           required: true,
           setValue: value => {
-            /* nothing needed */
           },
           validator: FormValidation.isBigNumber,
         },
@@ -129,19 +119,20 @@ class FoundersStep extends React.Component<Props, State>
           description: "Tokens",
           required: true,
           setValue: value => {
-            /* nothing needed */
           },
           validator: FormValidation.isBigNumber,
         },
       }
     )
-  }
+  }*/
 
   render() {
     const { classes, founders } = this.props
     const { form, formValid } = this.state
 
     return (
+      <></>
+    ) /*
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h4" className={classes.headline} gutterBottom>
@@ -221,7 +212,7 @@ class FoundersStep extends React.Component<Props, State>
           </Grid>
         </CardContent>
       </Card>
-    )
+    )*/
   }
 
   addedFounder = ({ address, reputation, tokens }: DAOFounder) => (

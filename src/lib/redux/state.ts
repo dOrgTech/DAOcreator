@@ -1,17 +1,14 @@
-import { Notification } from "./redux/reducers/notifications"
 export interface RootState {
   daoCreator: DAOcreatorState
   notification: NotificationState
   waitingAnimation: WaitingAnimationState
 }
 
-import * as Arc from "./lib/integrations/arc"
+import * as Arc from "../integrations/arc"
 export type DAOConfig = Arc.DAOConfig
 export type DAOFounder = Arc.Founder
 export type DAOScheme = Arc.SchemeConfig
 export interface DAOcreatorState {
-  step: number
-  stepValidation: boolean[]
   config: DAOConfig
   founders: DAOFounder[]
   schemes: DAOScheme[]
@@ -20,6 +17,14 @@ export interface DAOcreatorState {
 
 // TODO: move this out of global state
 // Move this into a component and use it in the root of a tool's view
+export interface Notification {
+  id?: string
+  message: string
+  type: "default" | "error" | "success" | "warning" | "info"
+  duration?: number // ms it will display. Persist overrides this
+  persist?: boolean // displaying until its explicitly closed
+}
+
 export interface NotificationState {
   notifications: { [id: string]: Notification }
 }

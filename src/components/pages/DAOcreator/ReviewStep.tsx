@@ -18,7 +18,7 @@ import {
   SchemeConfig,
   votingMachineDefinitions,
 } from "../../../lib/integrations/arc"
-import { DAOcreatorState } from "../../../state"
+import { DAOcreatorState } from "../../../lib/redux/state"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
 import PieChart from "../../common/PieChart"
 
@@ -27,10 +27,7 @@ interface Props extends WithStyles<typeof styles> {
   creator: DAOcreatorState
 }
 
-const ReviewStep: React.SFC<Props> = ({
-  creator,
-  classes,
-}) => (
+const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
   <Card className={classes.card}>
     <CardContent>
       <Typography variant="h4" className={classes.headline} gutterBottom>
@@ -45,11 +42,7 @@ const ReviewStep: React.SFC<Props> = ({
         <Grid item xs={12} md={7} />
         <Grid item xs={12} md={5}>
           <Grid item xs={12}>
-            <Typography
-              variant="h5"
-              className={classes.headline}
-              gutterBottom
-            >
+            <Typography variant="h5" className={classes.headline} gutterBottom>
               Naming
             </Typography>
             <Typography>
@@ -65,11 +58,7 @@ const ReviewStep: React.SFC<Props> = ({
         </Grid>
         <Grid item xs={12} md={7}>
           <Grid item xs={12}>
-            <Typography
-              variant="h5"
-              className={classes.headline}
-              gutterBottom
-            >
+            <Typography variant="h5" className={classes.headline} gutterBottom>
               Features
             </Typography>
             {R.map(displayScheme, creator.schemes)}
@@ -214,7 +203,7 @@ const componentWithStyles = withStyles(styles)(ReviewStep)
 
 // STATE
 const mapStateToProps = (state: any) => ({
-    creator: state.daoCreator
+  creator: state.daoCreator,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({})

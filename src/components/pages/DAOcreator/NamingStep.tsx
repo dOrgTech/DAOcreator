@@ -9,82 +9,24 @@ import {
   WithStyles,
 } from "@material-ui/core"
 import * as React from "react"
-import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
-import { RootState, DAOConfig } from "../../../state"
-import { FormValidation, Form, FormCallbacks } from "../../../lib/forms"
-import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
 import { FormField } from "../../common/FormField"
+import { DAOConfigForm } from "../../../lib/forms"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  config: DAOConfig
-  actions: DAOcreatorActions
+  form: DAOConfigForm
+  onValidate: (stepValid: boolean) => void
 }
 
-interface State {
-  form: Form<DAOConfig>
-}
-
-class NamingStep extends React.Component<Props, State>
-  implements FormCallbacks<DAOConfig> {
-  state: Readonly<State> = {
-    // TODO: move this all into a base component
-    form: new Form<DAOConfig>(this),
-  }
-
-  constructor(props: Props) {
-    super(props)
-    this.props.actions.setStepIsValid(false)
-  }
-
-  public onChange(): void {
-    this.forceUpdate()
-  }
-
-  public onValidate(valid: boolean): void {
-    this.props.actions.setStepIsValid(valid)
-  }
-
-  public getData(): DAOConfig {
-    return this.props.config
-  }
-
-  componentWillMount() {
-    this.state.form.configureFields(
-      {
-        field: "daoName",
-        config: {
-          description: "DAO Name",
-          required: true,
-          setValue: value => this.props.actions.setDAOName(value),
-          validator: FormValidation.isName,
-        },
-      },
-      {
-        field: "tokenName",
-        config: {
-          description: "Token Name",
-          required: false,
-          setValue: value => this.props.actions.setTokenName(value),
-          validator: FormValidation.isName,
-        },
-      },
-      {
-        field: "tokenSymbol",
-        config: {
-          description: "Token Symbol",
-          required: true,
-          setValue: value => this.props.actions.setTokenSymbol(value),
-          validator: FormValidation.isTokenSymbol,
-        },
-      }
-    )
-  }
-
+class NamingStep extends React.Component<Props> {
   render() {
-    const { classes } = this.props
-    const { form } = this.state
+    const { classes, form, onValidate } = this.props
+
+    const onChange = async () => {
+      /*const res = await form.validate()
+      onValidate(!res.hasError)*/
+      this.forceUpdate()
+    }
 
     return (
       <Card className={classes.card}>
@@ -108,13 +50,28 @@ class NamingStep extends React.Component<Props, State>
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <FormField.Text field={"daoName"} form={form} />
+                  <FormField.Text
+                    id={"daoName"}
+                    label={"DAO Name"}
+                    field={form.$.daoName}
+                    onChange={onChange}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text field={"tokenName"} form={form} />
+                  <FormField.Text
+                    id={"tokenName"}
+                    label={"Token Name"}
+                    field={form.$.tokenName}
+                    onChange={onChange}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text field={"tokenSymbol"} form={form} />
+                  <FormField.Text
+                    id={"tokenSymbol"}
+                    label={"Token Symbol"}
+                    field={form.$.tokenSymbol}
+                    onChange={onChange}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -144,22 +101,4 @@ const styles = (theme: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(NamingStep)
-
-// STATE
-const mapStateToProps = (state: RootState) => {
-  return {
-    config: state.daoCreator.config,
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(NamingStep)

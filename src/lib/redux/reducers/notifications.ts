@@ -1,5 +1,5 @@
-import { Events, AnyEvent } from "../../redux/actions"
-import { NotificationState } from "../../state"
+import { Events, AnyEvent } from "../actions"
+import { NotificationState } from "../state"
 import * as R from "ramda"
 
 const initialState: NotificationState = {
@@ -26,12 +26,4 @@ export const reducer = (
     default:
       return state
   }
-}
-
-export interface Notification {
-  id?: string
-  message: string
-  type: "default" | "error" | "success" | "warning" | "info"
-  duration?: number // ms it will display. Persist overrides this
-  persist?: boolean // displaying until its explicitly closed
 }
