@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import * as Events from "./events"
-import { Notification } from "../state"
+import { Notification } from "../../state"
 import uuid from "uuid"
 import * as R from "ramda"
 

@@ -34,7 +34,7 @@ import {
   VotingMachineConfig,
   votingMachineDefinitions,
   initSchemeConfig,
-} from "../../../../lib/integrations/arc"
+} from "../../../../lib/dependency/arc"
 
 const styles = (theme: Theme) =>
   createStyles({

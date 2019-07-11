@@ -1,6 +1,4 @@
 import * as React from "react"
-import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
 import {
   withStyles,
   Theme,
@@ -12,13 +10,10 @@ import {
   Card,
   Button,
 } from "@material-ui/core"
-import DAOcreatorActions, * as daoCreatorActions from "../../../lib/redux/actions/daoCreator"
 import NamingStep from "./NamingStep"
-// import FoundersStep from "./FoundersStep"
+import FoundersStep from "./FoundersStep"
 // import SchemesStep from "./SchemesStep"
-// import ReviewStep from "./ReviewStep"
-// import LiveDao from "./LiveDao"
-import { DAOcreatorForm, CreateDAOcreatorForm } from "../../../lib/forms"
+import { DAOForm, CreateDAOForm } from "../../../lib/forms"
 import { FormState } from "formstate"
 
 // eslint-disable-next-line
@@ -35,7 +30,7 @@ interface Step {
 }
 
 class DAOcreator extends React.Component<Props, State> {
-  form: DAOcreatorForm = CreateDAOcreatorForm()
+  form: DAOForm = CreateDAOForm()
 
   constructor(props: Props) {
     super(props)
@@ -52,15 +47,10 @@ class DAOcreator extends React.Component<Props, State> {
         Component: NamingStep,
       },
       {
-        title: "Name",
-        form: this.form.$.config,
-        Component: NamingStep,
-      } /*,
-      {
         title: "Founders",
-        form: this.form.$.founders,
+        form: this.form.$.members,
         Component: FoundersStep,
-      },
+      } /*,
       {
         title: "Features (schemes)",
         form: this.form.$.schemes,

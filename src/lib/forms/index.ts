@@ -10,38 +10,24 @@ import {
 
 export type StringField = FieldState<string>
 
-export type DAOcreatorForm = FormState<{
+export type DAOForm = FormState<{
   config: DAOConfigForm
-  founders: DAOFoundersForm
-  schemes: DAOSchemesForm
+  members: MembersForm
+  schemes: SchemesForm
 }>
+
+export const CreateDAOForm = (): DAOForm =>
+  new FormState({
+    config: CreateDAOConfigForm(),
+    members: CreateMembersForm(),
+    schemes: CreateSchemesForm(),
+  })
 
 export type DAOConfigForm = FormState<{
   daoName: StringField
   tokenName: StringField
   tokenSymbol: StringField
 }>
-
-export type DAOFounderForm = FormState<{
-  address: StringField
-  reputation: StringField
-  tokens: StringField
-}>
-
-export type DAOFoundersForm = FormState<DAOFounderForm[]>
-
-export type DAOSchemeForm = FormState<{
-  todo: StringField
-}>
-
-export type DAOSchemesForm = FormState<DAOSchemeForm[]>
-
-export const CreateDAOcreatorForm = (): DAOcreatorForm =>
-  new FormState({
-    config: CreateDAOConfigForm(),
-    founders: CreateDAOFoundersForm(),
-    schemes: CreateDAOSchemesForm(),
-  })
 
 export const CreateDAOConfigForm = (): DAOConfigForm =>
   new FormState({
@@ -52,7 +38,18 @@ export const CreateDAOConfigForm = (): DAOConfigForm =>
     tokenSymbol: new FieldState("").validators(requiredText, validTokenSymbol),
   })
 
-export const CreateDAOFounderForm = (): DAOFounderForm =>
+export type MembersForm = FormState<MemberForm[]>
+
+export const CreateMembersForm = (): MembersForm =>
+  new FormState([] as MemberForm[]).validators(requireElement("Member"))
+
+export type MemberForm = FormState<{
+  address: StringField
+  reputation: StringField
+  tokens: StringField
+}>
+
+export const CreateMemberForm = (): MemberForm =>
   new FormState({
     address: new FieldState("").validators(requiredText, validAddress),
 
@@ -61,13 +58,16 @@ export const CreateDAOFounderForm = (): DAOFounderForm =>
     tokens: new FieldState("").validators(requiredText, validBigNumber),
   })
 
-export const CreateDAOFoundersForm = (): DAOFoundersForm =>
-  new FormState([] as DAOFounderForm[]).validators(requireElement("Founder"))
+export type SchemeForm = FormState<{
+  todo: StringField
+}>
 
-export const CreateDAOSchemeForm = (): DAOSchemeForm =>
+export const CreateSchemeForm = (): SchemeForm =>
   new FormState({
     todo: new FieldState(""),
   })
 
-export const CreateDAOSchemesForm = (): DAOSchemesForm =>
-  new FormState([] as DAOSchemeForm[]).validators(requireElement("Scheme"))
+export type SchemesForm = FormState<SchemeForm[]>
+
+export const CreateSchemesForm = (): SchemesForm =>
+  new FormState([] as SchemeForm[]).validators(requireElement("Scheme"))

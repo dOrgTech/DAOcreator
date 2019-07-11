@@ -11,8 +11,8 @@ import {
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { DAO } from "../../../lib/integrations/arc"
-import { RootState } from "../../../lib/redux/state"
+import { DAO } from "../../../lib/dependency/arc"
+import { RootState } from "../../../lib/state"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -108,7 +108,7 @@ const componentWithStyles = withStyles(styles)(LiveDaoStep)
 // STATE
 const mapStateToProps = (state: RootState) => {
   return {
-    dao: state.daoCreator.deployedDao,
+    dao: undefined,
   }
 }
 

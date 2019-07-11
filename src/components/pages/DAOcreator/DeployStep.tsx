@@ -4,15 +4,15 @@ import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core"
 import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { RootState } from "../../../lib/redux/state"
-import { Founder, SchemeConfig } from "../../../lib/integrations/arc"
+import { RootState } from "../../../lib/state"
+import { Member, SchemeConfig } from "../../../lib/dependency/arc"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   daoName: string
   tokenName: string
   tokenSymbol: string
-  founders: Founder[]
+  founders: Member[]
   schemes: SchemeConfig[]
   stepNumber: number
   stepValid: boolean
@@ -31,7 +31,7 @@ const mapStateToProps = (state: RootState) => {
     daoName: state.daoCreator.config.daoName,
     tokenName: state.daoCreator.config.tokenName,
     tokenSymbol: state.daoCreator.config.tokenSymbol,
-    founders: state.daoCreator.founders,
+    founders: state.daoCreator.members,
     schemes: state.daoCreator.schemes,
   }
 }

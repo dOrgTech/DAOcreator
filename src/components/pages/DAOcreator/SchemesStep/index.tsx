@@ -20,7 +20,7 @@ import { bindActionCreators, Dispatch } from "redux"
 import {
   getSchemeDefinition,
   SchemeConfig,
-} from "../../../../lib/integrations/arc"
+} from "../../../../lib/dependency/arc"
 import DAOcreatorActions, * as daoCreatorActions from "../../../../lib/redux/actions/daoCreator"
 import AddSchemeDialog from "./AddSchemeDialog"
 

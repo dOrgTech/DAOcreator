@@ -1,5 +1,5 @@
 import { Events, AnyEvent } from "../actions"
-import { NotificationState } from "../state"
+import { NotificationState } from "../../state"
 import * as R from "ramda"
 
 const initialState: NotificationState = {

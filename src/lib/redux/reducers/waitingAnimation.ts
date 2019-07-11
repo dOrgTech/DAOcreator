@@ -1,5 +1,5 @@
 import { Events, AnyEvent } from "../actions"
-import { WaitingAnimationState } from "../state"
+import { WaitingAnimationState } from "../../state"
 
 const initialState: WaitingAnimationState = {
   message: "",

@@ -1,9 +1,9 @@
 import { Dispatch } from "redux"
 import uuid from "uuid"
-import * as Arc from "../../integrations/arc"
-import * as Web3 from "../../integrations/web3"
+import * as Arc from "../../dependency/arc"
+import * as Web3 from "../../dependency/web3"
 import * as notificationActions from "./notifications"
-import { RootState } from "../state"
+import { RootState } from "../../state"
 import * as Events from "./events"
 
 export default interface DAOcreatorActions {
@@ -13,7 +13,7 @@ export default interface DAOcreatorActions {
   setDAOName(name: string): (dispatch: Dispatch) => Promise<void>
   setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
   setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
-  addFounder(founder: Arc.Founder): (dispatch: Dispatch) => Promise<void>
+  addFounder(member: Arc.Member): (dispatch: Dispatch) => Promise<void>
   removeFounder(address: string): (dispatch: Dispatch) => Promise<void>
   addScheme(
     schemeConfig: Arc.SchemeConfig
@@ -98,7 +98,7 @@ export function setTokenSymbol(
 }
 
 export function addFounder(
-  founder: Arc.Founder
+  founder: Arc.Member
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
     dispatch(Events.DAO_CREATE_ADD_FOUNDER(founder))
@@ -146,7 +146,7 @@ export function createDao(): (
         message: "To create the DAO, please sign the upcoming transaction",
       })
     )
-    const { config, founders, schemes } = getState().daoCreator
+    const { config, members, schemes } = getState().daoCreator
     const waitingDetailsUpdater = (newStatus: string) =>
       dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus))
 
@@ -154,7 +154,7 @@ export function createDao(): (
       const web3 = await Web3.getWeb3()
       const dao = await Arc.createDao(web3, waitingDetailsUpdater)(
         config,
-        founders,
+        members,
         schemes
       )
       dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao))

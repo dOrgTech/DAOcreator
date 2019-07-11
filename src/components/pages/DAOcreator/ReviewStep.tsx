@@ -13,12 +13,12 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import {
-  Founder,
+  Member,
   getSchemeDefinition,
   SchemeConfig,
   votingMachineDefinitions,
-} from "../../../lib/integrations/arc"
-import { DAOcreatorState } from "../../../lib/redux/state"
+} from "../../../lib/dependency/arc"
+import { DAOcreatorState } from "../../../lib/state"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
 import PieChart from "../../common/PieChart"
 
@@ -86,7 +86,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
               </Typography>
             </Grid>
           </Grid>
-          {R.map(displayFounder, creator.founders)}
+          {R.map(displayFounder, creator.members)}
         </Grid>
       </Grid>
       <Grid container spacing={16}>
@@ -99,7 +99,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
             Reputation Distribution
           </Typography>
           <PieChart
-            data={creator.founders}
+            data={creator.members}
             config={{
               hight: 240,
               width: 240,
@@ -117,7 +117,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
             Tokens Distribution
           </Typography>
           <PieChart
-            data={creator.founders}
+            data={creator.members}
             config={{
               hight: 240,
               width: 240,
@@ -131,7 +131,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
   </Card>
 )
 
-const displayFounder = ({ address, reputation, tokens }: Founder) => (
+const displayFounder = ({ address, reputation, tokens }: Member) => (
   <Grid container spacing={16} key={`founder-${address}`}>
     <Grid item xs={1}>
       <EthAddressAvatar address={address} />

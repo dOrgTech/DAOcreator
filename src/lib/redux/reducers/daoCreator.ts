@@ -1,6 +1,6 @@
 import * as R from "ramda"
 import { Events, AnyEvent } from "../actions"
-import { DAOcreatorState } from "../state"
+import { DAOcreatorState } from "../../state"
 
 const initialState: DAOcreatorState = {
   config: {
@@ -8,9 +8,8 @@ const initialState: DAOcreatorState = {
     tokenName: "",
     tokenSymbol: "",
   },
-  founders: [],
+  members: [],
   schemes: [],
-  deployedDao: undefined,
 }
 
 export const reducer = (

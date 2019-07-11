@@ -2,7 +2,7 @@ import * as R from "ramda"
 import uuid from "uuid"
 import deployedContractAddresses from "./contractAddresses.json"
 import { createDao as createTheDao } from "./createDao"
-import { DAO, DAOConfig, Founder, SchemeConfig } from "./types"
+import { DAO, DAOConfig, Member, SchemeConfig } from "./types"
 export * from "./schemes"
 export * from "./types"
 export * from "./votingMachines"
@@ -26,7 +26,7 @@ export const createDao = (
   waitingDetailsUpdater: (message: string) => void
 ) => async (
   config: DAOConfig,
-  founders: Founder[],
+  members: Member[],
   schemes: SchemeConfig[]
 ): Promise<DAO> => {
   try {
@@ -36,7 +36,7 @@ export const createDao = (
       waitingDetailsUpdater,
       (deployedContractAddresses as any)[network],
       config,
-      founders,
+      members,
       schemes
     )
     console.log("DAO created")

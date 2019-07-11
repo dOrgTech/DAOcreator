@@ -13,41 +13,19 @@ import * as R from "ramda"
 import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
-import { RootState, DAOFounder } from "../../../lib/redux/state"
 import DAOcreatorActions, * as daoCreatorActions from "../../../lib/redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
 import { FormField } from "../../common/FormField"
+import { MembersForm, MemberForm } from "../../../lib/forms"
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  founders: DAOFounder[]
-  actions: DAOcreatorActions
+  form: MembersForm
 }
 
-interface State {
-  form: any
-  formValid: boolean
-}
-
-class FoundersStep extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.props.actions.setStepIsValid(false)
-  }
-
-  public onChange(): void {
-    this.forceUpdate()
-  }
-
-  public onValidate(valid: boolean): void {
-    this.setState({
-      form: this.state.form,
-      formValid: valid,
-    })
-  }
-
-  public getData(): DAOFounder {
+class FoundersStep extends React.Component<Props> {
+  /*public getData(): DAOFounder {
     return this.toData()
   }
 
@@ -76,63 +54,30 @@ class FoundersStep extends React.Component<Props, State> {
     this.props.actions.setStepIsValid(true)
   }
 
-  // TODO: list of founders, manual entry, manual edit, import from csv
-  /*  componentWillMount() {
-    this.state.form.configureFields(
-      {
-        field: "address",
-        config: {
-          description: "Wallet Address",
-          required: true,
-          setValue: value => {
-          },
-          validator: (value: any) => {
-            const err = FormValidation.isAddress(value)
-
-            if (
-              R.isEmpty(err) &&
-              R.any(
-                ({ address }) => R.equals(address, value),
-                this.props.founders
-              )
-            ) {
-              return "Founder already exists."
-            }
-
-            return err
-          },
-        },
-      },
-      {
-        field: "reputation",
-        config: {
-          description: "Reputation",
-          required: true,
-          setValue: value => {
-          },
-          validator: FormValidation.isBigNumber,
-        },
-      },
-      {
-        field: "tokens",
-        config: {
-          description: "Tokens",
-          required: true,
-          setValue: value => {
-          },
-          validator: FormValidation.isBigNumber,
-        },
-      }
-    )
-  }*/
-
   render() {
-    const { classes, founders } = this.props
-    const { form, formValid } = this.state
+
+    const { form } = this.props
+
+    // Map our form to a founders data array
+    const foundersData = form.$.map((founder: DAOFounderForm) => {
+      const { address, tokens, reputation } = founder.$
+
+      if (address.hasError) {
+        return {
+          address: "",
+          tokens: 0,
+          reputation: 0
+        }
+      } else {
+        return {
+          address: address.value,
+          tokens: tokens.hasError ? 0 : tokens.value,
+          reputation: reputation.hasError ? 0 : Number(reputation.value),
+        }
+      }
+    })
 
     return (
-      <></>
-    ) /*
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h4" className={classes.headline} gutterBottom>
@@ -158,7 +103,7 @@ class FoundersStep extends React.Component<Props, State> {
                 Reputation Distribution
               </Typography>
               <PieChart
-                data={founders}
+                data={foundersData}
                 config={{
                   hight: 240,
                   width: 240,
@@ -176,7 +121,7 @@ class FoundersStep extends React.Component<Props, State> {
                 Tokens Distribution
               </Typography>
               <PieChart
-                data={founders}
+                data={foundersData}
                 config={{
                   hight: 240,
                   width: 240,
@@ -187,7 +132,7 @@ class FoundersStep extends React.Component<Props, State> {
             </Grid>
             <Grid container spacing={16} className={classes.addLine}>
               <Grid item xs={6}>
-                <FormField.Text field={"address"} form={form} />
+                <FormField.Text form={form} />
               </Grid>
               <Grid item xs={2}>
                 <FormField.Text field={"reputation"} form={form} />
@@ -212,7 +157,7 @@ class FoundersStep extends React.Component<Props, State> {
           </Grid>
         </CardContent>
       </Card>
-    )*/
+    )
   }
 
   addedFounder = ({ address, reputation, tokens }: DAOFounder) => (
@@ -233,7 +178,7 @@ class FoundersStep extends React.Component<Props, State> {
         <Button onClick={() => this.onRemoveFounder(address)}>Delete</Button>
       </Grid>
     </Grid>
-  )
+  )*/
 }
 
 // STYLE
@@ -264,22 +209,4 @@ const styles = (theme: Theme) =>
     },
   })
 
-const componentWithStyles = withStyles(styles)(FoundersStep)
-
-// STATE
-const mapStateToProps = (state: RootState) => {
-  return {
-    founders: state.daoCreator.founders,
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(FoundersStep)

@@ -1,11 +1,11 @@
-import { Notification } from "../../state"
+import { Notification } from "../../../state"
 import {
   Event,
   createEvent,
   PayloadEvent,
   createPayloadEvent,
 } from "./typeSafety"
-import * as Arc from "../../../integrations/arc"
+import * as Arc from "../../../dependency/arc"
 
 export enum Events {
   // DAO Creator
@@ -68,7 +68,7 @@ export const DAO_CREATE_SET_TOKENSym = createPayloadEvent<
   DAO_CREATE_SET_TOKENSym
 >(Events.DAO_CREATE_SET_TOKEN_SYM)
 
-interface DAO_CREATE_ADD_FOUNDER extends PayloadEvent<string, Arc.Founder> {
+interface DAO_CREATE_ADD_FOUNDER extends PayloadEvent<string, Arc.Member> {
   type: Events.DAO_CREATE_ADD_FOUNDER
 }
 export const DAO_CREATE_ADD_FOUNDER = createPayloadEvent<

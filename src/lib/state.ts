@@ -4,15 +4,14 @@ export interface RootState {
   waitingAnimation: WaitingAnimationState
 }
 
-import * as Arc from "../integrations/arc"
+import * as Arc from "./dependency/arc"
 export type DAOConfig = Arc.DAOConfig
-export type DAOFounder = Arc.Founder
-export type DAOScheme = Arc.SchemeConfig
+export type Member = Arc.Member
+export type Scheme = Arc.SchemeConfig
 export interface DAOcreatorState {
   config: DAOConfig
-  founders: DAOFounder[]
-  schemes: DAOScheme[]
-  deployedDao: Arc.DAO | undefined
+  members: Member[]
+  schemes: Scheme[]
 }
 
 // TODO: move this out of global state

@@ -4,8 +4,8 @@ import * as React from "react"
 import { connect } from "react-redux"
 import { bindActionCreators, Dispatch } from "redux"
 import NotificationActions, * as notificationActions from "../../lib/redux/actions/notifications"
-import { Notification as NotificationType } from "../../lib/redux/state"
-import { RootState } from "../../lib/redux/state"
+import { Notification as NotificationType } from "../../lib/state"
+import { RootState } from "../../lib/state"
 import { Button } from "@material-ui/core"
 
 interface Props {

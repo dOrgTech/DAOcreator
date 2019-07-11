@@ -11,7 +11,7 @@ import {
   DAO,
   DAOConfig,
   DeploymentInfo,
-  Founder,
+  Member,
   SchemeConfig,
   VotingMachineConfig,
 } from "./types"
@@ -21,7 +21,7 @@ export const createDao = async (
   updateStatus: (message: string) => void,
   deployedContractAddresses: any,
   config: DAOConfig,
-  founders: Founder[],
+  members: Member[],
   schemesIn: SchemeConfig[]
 ): Promise<DAO> => {
   const txSend = sendTx(web3)
@@ -61,9 +61,9 @@ export const createDao = async (
     config.daoName,
     config.tokenName,
     config.tokenSymbol,
-    founders.map(({ address }) => address),
-    founders.map(({ tokens }) => web3.utils.toWei(tokens.toString())),
-    founders.map(({ reputation }) => web3.utils.toWei(reputation.toString())),
+    members.map(({ address }) => address),
+    members.map(({ tokens }) => web3.utils.toWei(tokens.toString())),
+    members.map(({ reputation }) => web3.utils.toWei(reputation.toString())),
     addresses.UController,
     "0",
   ]
@@ -289,8 +289,8 @@ export const createDao = async (
     config: {
       daoName: orgName,
       tokenName,
-      tokenSymbol
-    }
+      tokenSymbol,
+    },
   }
 }
 

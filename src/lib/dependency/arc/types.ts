@@ -46,7 +46,7 @@ export type ParamDefinition = {
   optional?: boolean
 }
 
-export type Founder = {
+export type Member = {
   address: string
   reputation: string
   tokens: string

@@ -1,5 +1,5 @@
 import { Validator } from "formstate"
-import { TypeValidation } from "../integrations/web3"
+import { TypeValidation } from "../dependency/web3"
 
 type StringOrNull = string | null | undefined
 
