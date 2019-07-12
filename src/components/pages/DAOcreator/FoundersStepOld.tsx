@@ -187,14 +187,6 @@ const styles = (theme: Theme) =>
     header: {},
     card: {},
     addButton: {},
-    addLine: {
-      marginBottom: 10,
-      justifyContent: "center",
-    },
-    addButtonWrapper: {
-      marginTop: "auto",
-      marginRight: theme.spacing.unit,
-    },
     subheader: {},
     headline: {},
     pieChartHeadlines: { textAlign: "center" },

@@ -11,7 +11,7 @@ import {
   Button,
 } from "@material-ui/core"
 import NamingStep from "./NamingStep"
-import FoundersStep from "./FoundersStep"
+import MembersStep from "./MembersStep"
 // import SchemesStep from "./SchemesStep"
 import { DAOForm, CreateDAOForm } from "../../../lib/forms"
 import { FormState } from "formstate"
@@ -47,9 +47,9 @@ class DAOcreator extends React.Component<Props, State> {
         Component: NamingStep,
       },
       {
-        title: "Founders",
+        title: "Members",
         form: this.form.$.members,
-        Component: FoundersStep,
+        Component: MembersStep,
       } /*,
       {
         title: "Features (schemes)",

@@ -8,7 +8,7 @@ import {
 import { StringField } from "../../lib/forms"
 import { observer } from "mobx-react"
 
-export class FormField {
+class FormField {
   public static Text = observer(
     (props: { id: string; label: string; field: StringField }) => {
       const { id, label, field } = props
@@ -32,3 +32,5 @@ export class FormField {
     }
   )
 }
+
+export default FormField
