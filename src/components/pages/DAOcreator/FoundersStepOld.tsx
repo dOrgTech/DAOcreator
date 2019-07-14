@@ -16,7 +16,6 @@ import { bindActionCreators, Dispatch } from "redux"
 import DAOcreatorActions, * as daoCreatorActions from "../../../lib/redux/actions/daoCreator"
 import PieChart from "../../common/PieChart"
 import EthAddressAvatar from "../../common/EthAddressAvatar"
-import { FormField } from "../../common/FormField"
 import { MembersForm, MemberForm } from "../../../lib/forms"
 
 // eslint-disable-next-line

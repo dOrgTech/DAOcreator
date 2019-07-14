@@ -41,11 +41,11 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const steps: Step[] = [
-      {
+      /*{
         title: "Name",
         form: this.form.$.config,
         Component: NamingStep,
-      },
+      },*/
       {
         title: "Members",
         form: this.form.$.members,

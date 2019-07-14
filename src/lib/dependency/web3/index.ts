@@ -42,7 +42,7 @@ export const getWeb3 = async (): Promise<any> => {
       "Non-Ethereum browser detected. You should consider trying MetaMask!"
     )
   }
-  typeValidation.init(readyWeb3)
+
   return readyWeb3
 }
 

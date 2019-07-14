@@ -14,7 +14,7 @@ interface Props extends WithStyles<typeof styles> {
   members: Member[]
 }
 
-class MembersOverview extends React.Component<Props> {
+class MembersAnalytics extends React.Component<Props> {
   render() {
     const { classes, members } = this.props
 
@@ -68,4 +68,4 @@ const styles = (theme: Theme) =>
     },
   })
 
-export default withStyles(styles)(MembersOverview)
+export default withStyles(styles)(MembersAnalytics)

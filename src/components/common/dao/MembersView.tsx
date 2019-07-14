@@ -7,42 +7,42 @@ import {
   Grid,
   Button,
 } from "@material-ui/core"
-import FormField from "../FormField"
-import {
-  MembersForm as Form,
-  MemberForm,
-  CreateMemberForm,
-} from "../../../lib/forms"
+import MemberView from "./MemberView"
+import { MembersForm, MemberForm, CreateMemberForm } from "../../../lib/forms"
 
 interface Props extends WithStyles<typeof styles> {
-  form: Form
+  form: MembersForm
 }
 
-class MembersForm extends React.Component<Props> {
+class MembersView extends React.Component<Props> {
   memberForm: MemberForm = CreateMemberForm()
 
   render() {
     const { classes, form } = this.props
+    const memberForm = this.memberForm
 
     return (
       <>
         <Grid container spacing={16} className={classes.addLine}>
-          <MemberForm form={memberForm} />
+          <MemberView form={memberForm} editable={true} />
           <Grid item xs={1} className={classes.addButtonWrapper}>
             <Button
-              onClick={this.onAddFounder}
+              onClick={() => {
+                form.$.push(memberForm)
+                memberForm.reset()
+              }}
               className={classes.addButton}
               color="primary"
               variant="contained"
               aria-label="Add"
-              disabled={!formValid}
+              disabled={memberForm.hasError}
             >
               Add
             </Button>
           </Grid>
         </Grid>
         {form.$.map(memberForm => (
-          <MemberForm form={memberForm} />
+          <MemberView form={memberForm} editable={false} />
         ))}
       </>
     )
@@ -55,10 +55,11 @@ const styles = (theme: Theme) =>
       marginBottom: 10,
       justifyContent: "center",
     },
+    addButton: {},
     addButtonWrapper: {
       marginTop: "auto",
       marginRight: theme.spacing.unit,
     },
   })
 
-export default withStyles(styles)(MembersForm)
+export default withStyles(styles)(MembersView)

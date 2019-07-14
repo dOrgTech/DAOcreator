@@ -1,9 +1,3 @@
-// MembersStep
-// MembersOverview
-// MembersForm
-// - member (editable) -> onAdd -> membersForm adds to members array
-// - members -> member[]
-
 import * as React from "react"
 import {
   WithStyles,
@@ -15,7 +9,8 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core"
-import MembersOverview from "../../common/dao/MembersOverview"
+import MembersView from "../../common/dao/MembersView"
+import MembersAnalytics from "../../common/dao/MembersAnalytics"
 import { MembersForm } from "../../../lib/forms"
 import { MembersFormToState } from "../../../lib/dataMappings/formToState"
 
@@ -45,8 +40,8 @@ class MembersStep extends React.Component<Props> {
                 of reputation and tokens for each address.
               </Typography>
             </Grid>
-            <MembersOverview members={members} />
-            <MembersForm form={form} />
+            <MembersAnalytics members={members} />
+            <MembersView form={form} />
           </Grid>
         </CardContent>
       </Card>

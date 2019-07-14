@@ -9,7 +9,7 @@ import {
   WithStyles,
 } from "@material-ui/core"
 import * as React from "react"
-import { FormField } from "../../common/FormField"
+import FormField from "../../common/FormField"
 import { DAOConfigForm } from "../../../lib/forms"
 
 // eslint-disable-next-line
