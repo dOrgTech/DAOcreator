@@ -1,31 +1,26 @@
-import { Dispatch } from "redux"
-import uuid from "uuid"
-import * as Arc from "../../dependency/arc"
-import * as Web3 from "../../dependency/web3"
-import * as notificationActions from "./notifications"
-import { RootState } from "../../state"
-import * as Events from "./events"
+import { Dispatch } from "redux";
+import uuid from "uuid";
+import * as Arc from "../../dependency/arc";
+import * as Web3 from "../../dependency/web3";
+import * as notificationActions from "./notifications";
+import { RootState } from "../../state";
+import * as Events from "./events";
 
 export default interface DAOcreatorActions {
-  init(): (dispatch: Dispatch) => Promise<void>
-  nextStep(): (dispatch: Dispatch) => Promise<void>
-  prevStep(): (dispatch: Dispatch) => Promise<void>
-  setDAOName(name: string): (dispatch: Dispatch) => Promise<void>
-  setTokenName(tokenName: string): (dispatch: Dispatch) => Promise<void>
-  setTokenSymbol(tokenSymbol: string): (dispatch: Dispatch) => Promise<void>
-  addFounder(member: Arc.Member): (dispatch: Dispatch) => Promise<void>
-  removeFounder(address: string): (dispatch: Dispatch) => Promise<void>
+  init(): (dispatch: Dispatch) => Promise<void>;
+  nextStep(): (dispatch: Dispatch) => Promise<void>;
+  prevStep(): (dispatch: Dispatch) => Promise<void>;
   addScheme(
     schemeConfig: Arc.SchemeConfig
-  ): (dispatch: Dispatch) => Promise<string>
-  removeScheme(id: string): (dispatch: Dispatch) => Promise<void>
+  ): (dispatch: Dispatch) => Promise<string>;
+  removeScheme(id: string): (dispatch: Dispatch) => Promise<void>;
   createDao(): (
     dispatch: Dispatch,
     getState: () => RootState
-  ) => Promise<string>
+  ) => Promise<string>;
   setStepIsValid(
     isValid: boolean
-  ): (dispatch: Dispatch, getState: () => RootState) => Promise<void>
+  ): (dispatch: Dispatch, getState: () => RootState) => Promise<void>;
 }
 
 export function init(): (dispatch: Dispatch) => Promise<void> {
@@ -33,12 +28,12 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
     return new Promise(async (resolve, reject) => {
       dispatch(
         Events.WAITING_ANIMATION_OPEN({
-          message: "Initializing Web3",
+          message: "Initializing Web3"
         })
-      )
+      );
       return Web3.getWeb3()
         .then(resolve)
-        .catch(reject)
+        .catch(reject);
     })
       .then((web3: any) => Arc.init(web3))
       .catch(e => {
@@ -46,93 +41,48 @@ export function init(): (dispatch: Dispatch) => Promise<void> {
           .addNotification({
             message: "Failed to initialize. " + e,
             type: "error",
-            persist: true,
+            persist: true
           })(dispatch)
-          .then(_ => Promise.resolve())
+          .then(_ => Promise.resolve());
       })
       .finally(() => {
-        dispatch(Events.WAITING_ANIMATION_CLOSE())
-      })
-  }
+        dispatch(Events.WAITING_ANIMATION_CLOSE());
+      });
+  };
 }
 
 export function nextStep(): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_NEXT_STEP())
-    return Promise.resolve()
-  }
+    dispatch(Events.DAO_CREATE_NEXT_STEP());
+    return Promise.resolve();
+  };
 }
 
 export function prevStep(): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_PREV_STEP())
-    return Promise.resolve()
-  }
-}
-
-export function setDAOName(
-  name: string
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_SET_NAME(name))
-    return Promise.resolve()
-  }
-}
-
-export function setTokenName(
-  tokenName: string
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_SET_TOKEN(tokenName))
-    return Promise.resolve()
-  }
-}
-
-export function setTokenSymbol(
-  tokenSymbol: string
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_SET_TOKENSym(tokenSymbol))
-    return Promise.resolve()
-  }
-}
-
-export function addFounder(
-  founder: Arc.Member
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_FOUNDER(founder))
-    return Promise.resolve()
-  }
-}
-
-export function removeFounder(
-  address: string
-): (dispatch: Dispatch) => Promise<void> {
-  return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_FOUNDER(address))
-    return Promise.resolve()
-  }
+    dispatch(Events.DAO_CREATE_PREV_STEP());
+    return Promise.resolve();
+  };
 }
 
 export function addScheme(
   schemeConfig: Arc.SchemeConfig
 ): (dispatch: Dispatch) => Promise<string> {
-  const schemeId = uuid()
-  schemeConfig.id = schemeId
+  const schemeId = uuid();
+  schemeConfig.id = schemeId;
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_ADD_SCHEME(schemeConfig))
-    return Promise.resolve(schemeId)
-  }
+    dispatch(Events.DAO_CREATE_ADD_SCHEME(schemeConfig));
+    return Promise.resolve(schemeId);
+  };
 }
 
 export function removeScheme(
   schemeId: string
 ): (dispatch: Dispatch) => Promise<void> {
   return (dispatch: Dispatch) => {
-    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeId))
-    return Promise.resolve()
-  }
+    dispatch(Events.DAO_CREATE_REM_SCHEME(schemeId));
+    return Promise.resolve();
+  };
 }
 
 export function createDao(): (
@@ -143,35 +93,35 @@ export function createDao(): (
     dispatch(
       Events.WAITING_ANIMATION_OPEN({
         type: "transaction",
-        message: "To create the DAO, please sign the upcoming transaction",
+        message: "To create the DAO, please sign the upcoming transaction"
       })
-    )
-    const { config, members, schemes } = getState().daoCreator
+    );
+    const { config, members, schemes } = getState().daoCreator;
     const waitingDetailsUpdater = (newStatus: string) =>
-      dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus))
+      dispatch(Events.WAITING_ANIMATION_SET_DETAILS(newStatus));
 
     try {
-      const web3 = await Web3.getWeb3()
+      const web3 = await Web3.getWeb3();
       const dao = await Arc.createDao(web3, waitingDetailsUpdater)(
         config,
         members,
         schemes
-      )
-      dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao))
-      dispatch(Events.DAO_CREATE_NEXT_STEP())
-      dispatch(Events.WAITING_ANIMATION_CLOSE())
-      return Promise.resolve("Success!")
+      );
+      dispatch(Events.DAO_CREATE_SET_DEPLOYED_DAO(dao));
+      dispatch(Events.DAO_CREATE_NEXT_STEP());
+      dispatch(Events.WAITING_ANIMATION_CLOSE());
+      return Promise.resolve("Success!");
     } catch (e) {
-      dispatch(Events.WAITING_ANIMATION_CLOSE())
+      dispatch(Events.WAITING_ANIMATION_CLOSE());
 
       notificationActions.addNotification({
         message: "Failed to create DAO. " + e.message,
         type: "error",
-        persist: true,
-      })(dispatch)
-      return Promise.resolve(e.message)
+        persist: true
+      })(dispatch);
+      return Promise.resolve(e.message);
     }
-  }
+  };
 }
 
 export function setStepIsValid(
@@ -181,9 +131,9 @@ export function setStepIsValid(
     dispatch(
       Events.DAO_CREATE_SET_STEP_VALIDATION({
         step: 0,
-        isValid,
+        isValid
       })
-    )
-    return Promise.resolve()
-  }
+    );
+    return Promise.resolve();
+  };
 }
