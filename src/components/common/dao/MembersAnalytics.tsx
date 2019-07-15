@@ -1,22 +1,23 @@
-import * as React from "react"
+import * as React from "react";
 import {
   WithStyles,
   Theme,
   createStyles,
   withStyles,
   Grid,
-  Typography,
-} from "@material-ui/core"
-import PieChart from "../PieChart"
-import { Member } from "../../../lib/state"
+  Typography
+} from "@material-ui/core";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
+import PieChart from "../PieChart";
+import { Member } from "../../../lib/state";
 
 interface Props extends WithStyles<typeof styles> {
-  members: Member[]
+  members: Member[];
 }
 
 class MembersAnalytics extends React.Component<Props> {
   render() {
-    const { classes, members } = this.props
+    const { classes, members } = this.props;
 
     return (
       <>
@@ -28,15 +29,19 @@ class MembersAnalytics extends React.Component<Props> {
           >
             Reputation Distribution
           </Typography>
-          <PieChart
-            data={members}
-            config={{
-              hight: 240,
-              width: 240,
-              dataKey: "reputation",
-              nameKey: "address",
-            }}
-          />
+          {members.length > 0 ? (
+            <PieChart
+              data={members}
+              config={{
+                hight: 240,
+                width: 240,
+                dataKey: "reputation",
+                nameKey: "address"
+              }}
+            />
+          ) : (
+            <QuestionIcon color={"primary"} className={classes.questionIcon} />
+          )}
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Typography
@@ -46,26 +51,35 @@ class MembersAnalytics extends React.Component<Props> {
           >
             Tokens Distribution
           </Typography>
-          <PieChart
-            data={members}
-            config={{
-              hight: 240,
-              width: 240,
-              dataKey: "tokens",
-              nameKey: "address",
-            }}
-          />
+          {members.length > 0 ? (
+            <PieChart
+              data={members}
+              config={{
+                hight: 240,
+                width: 240,
+                dataKey: "tokens",
+                nameKey: "address"
+              }}
+            />
+          ) : (
+            <QuestionIcon color={"primary"} className={classes.questionIcon} />
+          )}
         </Grid>
       </>
-    )
+    );
   }
 }
 
 const styles = (theme: Theme) =>
   createStyles({
     pieChartHeadlines: {
-      textAlign: "center",
+      textAlign: "center"
     },
-  })
+    questionIcon: {
+      width: "100%",
+      height: "75%",
+      alignSelf: "center"
+    }
+  });
 
-export default withStyles(styles)(MembersAnalytics)
+export default withStyles(styles)(MembersAnalytics);

@@ -1,4 +1,4 @@
-import { FieldState, FormState } from "formstate"
+import { FieldState, FormState } from "formstate";
 import {
   requiredText,
   validAddress,
@@ -6,68 +6,93 @@ import {
   validTokenSymbol,
   validName,
   requireElement,
-} from "./validators"
+  noDuplicates
+} from "./validators";
 
-export type StringField = FieldState<string>
+export type StringField = FieldState<string>;
 
 export type DAOForm = FormState<{
-  config: DAOConfigForm
-  members: MembersForm
-  schemes: SchemesForm
-}>
+  config: DAOConfigForm;
+  members: MembersForm;
+  schemes: SchemesForm;
+}>;
 
-export const CreateDAOForm = (): DAOForm =>
+export const CreateDAOForm = (form?: DAOForm): DAOForm =>
   new FormState({
-    config: CreateDAOConfigForm(),
-    members: CreateMembersForm(),
-    schemes: CreateSchemesForm(),
-  })
+    config: CreateDAOConfigForm(form ? form.$.config : undefined),
+    members: CreateMembersForm(form ? form.$.members : undefined),
+    schemes: CreateSchemesForm(form ? form.$.schemes : undefined)
+  });
 
 export type DAOConfigForm = FormState<{
-  daoName: StringField
-  tokenName: StringField
-  tokenSymbol: StringField
-}>
+  daoName: StringField;
+  tokenName: StringField;
+  tokenSymbol: StringField;
+}>;
 
-export const CreateDAOConfigForm = (): DAOConfigForm =>
+export const CreateDAOConfigForm = (form?: DAOConfigForm): DAOConfigForm =>
   new FormState({
-    daoName: new FieldState("").validators(requiredText, validName),
+    daoName: new FieldState(form ? form.$.daoName.value : "").validators(
+      requiredText,
+      validName
+    ),
 
-    tokenName: new FieldState("").validators(requiredText, validName),
+    tokenName: new FieldState(form ? form.$.tokenName.value : "").validators(
+      requiredText,
+      validName
+    ),
 
-    tokenSymbol: new FieldState("").validators(requiredText, validTokenSymbol),
-  })
+    tokenSymbol: new FieldState(
+      form ? form.$.tokenSymbol.value : ""
+    ).validators(requiredText, validTokenSymbol)
+  });
 
-export type MembersForm = FormState<MemberForm[]>
+export type MembersForm = FormState<MemberForm[]>;
 
-export const CreateMembersForm = (): MembersForm =>
-  new FormState([] as MemberForm[]).validators(requireElement("Member"))
+export const CreateMembersForm = (form?: MembersForm): MembersForm =>
+  new FormState(form ? form.$.map(value => value) : ([] as MemberForm[]))
+    .validators(requireElement("Member"))
+    .validators(
+      noDuplicates(
+        (a: MemberForm, b: MemberForm) =>
+          a.$.address.value === b.$.address.value
+      )
+    );
 
 export type MemberForm = FormState<{
-  address: StringField
-  reputation: StringField
-  tokens: StringField
-}>
+  address: StringField;
+  reputation: StringField;
+  tokens: StringField;
+}>;
 
-export const CreateMemberForm = (): MemberForm =>
+export const CreateMemberForm = (form?: MemberForm): MemberForm =>
   new FormState({
-    address: new FieldState("").validators(requiredText, validAddress),
+    address: new FieldState(form ? form.$.address.value : "").validators(
+      requiredText,
+      validAddress
+    ),
 
-    reputation: new FieldState("").validators(requiredText, validBigNumber),
+    reputation: new FieldState(form ? form.$.reputation.value : "").validators(
+      requiredText,
+      validBigNumber
+    ),
 
-    tokens: new FieldState("").validators(requiredText, validBigNumber),
-  })
+    tokens: new FieldState(form ? form.$.tokens.value : "").validators(
+      requiredText,
+      validBigNumber
+    )
+  });
+
+export type SchemesForm = FormState<SchemeForm[]>;
+
+export const CreateSchemesForm = (form?: SchemesForm): SchemesForm =>
+  new FormState([] as SchemeForm[]).validators(requireElement("Scheme"));
 
 export type SchemeForm = FormState<{
-  todo: StringField
-}>
+  todo: StringField;
+}>;
 
-export const CreateSchemeForm = (): SchemeForm =>
+export const CreateSchemeForm = (form?: SchemeForm): SchemeForm =>
   new FormState({
-    todo: new FieldState(""),
-  })
-
-export type SchemesForm = FormState<SchemeForm[]>
-
-export const CreateSchemesForm = (): SchemesForm =>
-  new FormState([] as SchemeForm[]).validators(requireElement("Scheme"))
+    todo: new FieldState("")
+  });

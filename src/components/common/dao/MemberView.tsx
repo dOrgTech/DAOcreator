@@ -1,54 +1,66 @@
-import * as React from "react"
-import { Grid } from "@material-ui/core"
-import FormField from "../FormField"
-import EthAddressAvatar from "../EthAddressAvatar"
-import { MemberForm, GetStringOrEmpty } from "../../../lib/forms"
+import * as React from "react";
+import { observer } from "mobx-react";
+import {
+  WithStyles,
+  Theme,
+  createStyles,
+  withStyles,
+  Grid
+} from "@material-ui/core";
+import FormField from "../FormField";
+import EthAddressAvatar from "../EthAddressAvatar";
+import { MemberForm, GetStringOrEmpty } from "../../../lib/forms";
 
-interface Props {
-  form: MemberForm
-  editable: boolean
+interface Props extends WithStyles<typeof styles> {
+  form: MemberForm;
+  editable: boolean;
 }
 
-// TODO: upon clicking button, call the "changeState" function with current and new state,
-// and see if the parent wants to allow the transition.
-// - duplicate addresses
-// - set parent form drawer to an invalid state (unable to resume)
+@observer
 class MemberView extends React.Component<Props> {
   render() {
-    const { form } = this.props
-    const address = GetStringOrEmpty(form.$.address)
+    const { classes, form, editable } = this.props;
+    const address = GetStringOrEmpty(form.$.address);
 
     return (
       <>
-        <Grid container spacing={16} key={`founder-${address}`}>
-          <Grid item xs={1}>
-            <EthAddressAvatar address={address} />
-          </Grid>
-          <Grid item xs={6}>
-            <FormField.Text
-              id={"address"}
-              label={"Member Address"}
-              field={form.$.address}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <FormField.Text
-              id={"reputation"}
-              label={"Reputation"}
-              field={form.$.reputation}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <FormField.Text
-              id={"tokens"}
-              label={"Tokens"}
-              field={form.$.tokens}
-            />
-          </Grid>
+        <Grid item xs={"auto"} className={classes.avatar}>
+          <EthAddressAvatar address={address} />
+        </Grid>
+        <Grid item xs={4}>
+          <FormField.Text
+            id={"address"}
+            label={"Address"}
+            field={form.$.address}
+            editable={editable}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <FormField.Text
+            id={"reputation"}
+            label={"Reputation"}
+            field={form.$.reputation}
+            editable={editable}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <FormField.Text
+            id={"tokens"}
+            label={"Tokens"}
+            field={form.$.tokens}
+            editable={editable}
+          />
         </Grid>
       </>
-    )
+    );
   }
 }
 
-export default MemberView
+const styles = (theme: Theme) =>
+  createStyles({
+    avatar: {
+      alignSelf: "center"
+    }
+  });
+
+export default withStyles(styles)(MemberView);

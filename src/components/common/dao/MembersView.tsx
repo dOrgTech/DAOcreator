@@ -1,65 +1,123 @@
-import * as React from "react"
+import * as React from "react";
+import { observer } from "mobx-react";
+import { observable } from "mobx";
 import {
   WithStyles,
   Theme,
   createStyles,
   withStyles,
   Grid,
-  Button,
-} from "@material-ui/core"
-import MemberView from "./MemberView"
-import { MembersForm, MemberForm, CreateMemberForm } from "../../../lib/forms"
+  Fab,
+  Typography,
+  FormControl
+} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import RemIcon from "@material-ui/icons/Remove";
+import MemberView from "./MemberView";
+import {
+  MembersForm,
+  MemberForm,
+  CreateMemberForm,
+  CreateMembersForm
+} from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
-  form: MembersForm
+  form: MembersForm;
 }
 
+@observer
 class MembersView extends React.Component<Props> {
-  memberForm: MemberForm = CreateMemberForm()
+  @observable memberForm: MemberForm = CreateMemberForm();
+  @observable addError: string | null | undefined = undefined;
 
   render() {
-    const { classes, form } = this.props
-    const memberForm = this.memberForm
+    const { classes, form } = this.props;
+    const memberForm = this.memberForm;
 
     return (
       <>
-        <Grid container spacing={16} className={classes.addLine}>
+        <Grid container spacing={8} key={"new-member"} justify={"center"}>
           <MemberView form={memberForm} editable={true} />
-          <Grid item xs={1} className={classes.addButtonWrapper}>
-            <Button
-              onClick={() => {
-                form.$.push(memberForm)
-                memberForm.reset()
-              }}
-              className={classes.addButton}
-              color="primary"
-              variant="contained"
-              aria-label="Add"
-              disabled={memberForm.hasError}
-            >
-              Add
-            </Button>
+          <Grid item className={classes.button}>
+            <FormControl fullWidth>
+              <Fab
+                size={"small"}
+                color={"primary"}
+                disabled={memberForm.hasError}
+                onClick={async () => {
+                  // See if the new member for has errors
+                  const formValidate = await memberForm.validate();
+                  if (formValidate.hasError) {
+                    return;
+                  }
+
+                  // See if the new member can be added to the array
+                  // without any errors
+                  const arrayCopy = CreateMembersForm(form);
+                  arrayCopy.$.push(memberForm);
+
+                  const arrayValdiate = await arrayCopy.validate();
+                  if (arrayValdiate.hasError) {
+                    this.addError = arrayCopy.error;
+                    return;
+                  }
+
+                  this.addError = undefined;
+
+                  // Finally add the new member to the form
+                  form.$.push(CreateMemberForm(memberForm));
+                  memberForm.reset();
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </FormControl>
           </Grid>
         </Grid>
-        {form.$.map(memberForm => (
-          <MemberView form={memberForm} editable={false} />
+
+        <Grid container justify={"center"}>
+          {this.addError ? (
+            <Typography color={"error"}>{this.addError}</Typography>
+          ) : (
+            <></>
+          )}
+        </Grid>
+
+        {form.$.length > 0 ? (
+          <Typography variant="h6">Members</Typography>
+        ) : (
+          <></>
+        )}
+
+        {form.$.map((member, index) => (
+          <Grid
+            container
+            spacing={8}
+            key={`member-${index}`}
+            justify={"center"}
+          >
+            <MemberView form={member} editable={true} />
+            <Grid item className={classes.button}>
+              <Fab
+                size={"small"}
+                color={"secondary"}
+                onClick={() => form.$.splice(index, 1)}
+              >
+                <RemIcon />
+              </Fab>
+            </Grid>
+          </Grid>
         ))}
       </>
-    )
+    );
   }
 }
 
 const styles = (theme: Theme) =>
   createStyles({
-    addLine: {
-      marginBottom: 10,
-      justifyContent: "center",
-    },
-    addButton: {},
-    addButtonWrapper: {
-      marginTop: "auto",
-      marginRight: theme.spacing.unit,
-    },
-  })
+    button: {
+      alignSelf: "center"
+    }
+  });
 
-export default withStyles(styles)(MembersView)
+export default withStyles(styles)(MembersView);

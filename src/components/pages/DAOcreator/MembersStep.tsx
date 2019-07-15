@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   WithStyles,
   Theme,
@@ -7,26 +7,28 @@ import {
   Card,
   CardContent,
   Grid,
-  Typography,
-} from "@material-ui/core"
-import MembersView from "../../common/dao/MembersView"
-import MembersAnalytics from "../../common/dao/MembersAnalytics"
-import { MembersForm } from "../../../lib/forms"
-import { MembersFormToState } from "../../../lib/dataMappings/formToState"
+  Typography
+} from "@material-ui/core";
+import MembersView from "../../common/dao/MembersView";
+import MembersAnalytics from "../../common/dao/MembersAnalytics";
+import { MembersForm } from "../../../lib/forms";
+import { MembersFormToState } from "../../../lib/dataMappings/formToState";
+import { observer } from "mobx-react";
 
 interface Props extends WithStyles<typeof styles> {
-  form: MembersForm
+  form: MembersForm;
 }
 
+@observer
 class MembersStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props
-    const members = MembersFormToState(form)
+    const { classes, form } = this.props;
+    const members = MembersFormToState(form);
 
     return (
-      <Card className={classes.card}>
+      <Card>
         <CardContent>
-          <Typography variant="h4" className={classes.headline} gutterBottom>
+          <Typography variant="h4" gutterBottom>
             Add Members
           </Typography>
           <Grid container spacing={16}>
@@ -45,14 +47,12 @@ class MembersStep extends React.Component<Props> {
           </Grid>
         </CardContent>
       </Card>
-    )
+    );
   }
 }
 
 const styles = (theme: Theme) =>
   createStyles({
-    card: {},
-    headline: {},
     guideText: {
       fontSize: 18,
       maxWidth: 450,
@@ -60,8 +60,8 @@ const styles = (theme: Theme) =>
       paddingRight: 30,
       paddingTop: 50,
       paddingBottom: 50,
-      margin: "auto",
-    },
-  })
+      margin: "auto"
+    }
+  });
 
-export default withStyles(styles)(MembersStep)
+export default withStyles(styles)(MembersStep);
