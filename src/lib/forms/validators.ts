@@ -104,6 +104,17 @@ export const lessThanOrEqual = (bound: number) => (value: string) => {
   return error;
 };
 
+export const nonZeroAddress: Validator<string> = value => {
+  const error = "Address must not be zero.";
+  value = value.trim();
+
+  if (value === "0x0000000000000000000000000000000000000000") {
+    return error;
+  }
+
+  return null;
+};
+
 export const requireElement = (elementName: string) => (array: any[]) =>
   !array.length && `Please add a ${elementName}.`;
 

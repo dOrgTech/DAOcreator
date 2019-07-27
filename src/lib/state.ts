@@ -7,8 +7,8 @@ export interface RootState {
 import * as Arc from "./dependency/arc";
 export type DAOConfig = Arc.DAOConfig;
 export type Member = Arc.Member;
-export type Scheme = Arc.SchemeConfig;
-export { GenesisProtocol } from "./dependency/arc";
+export type Scheme = Arc.Scheme;
+export { GenesisProtocol, GenericScheme } from "./dependency/arc";
 export interface DAOcreatorState {
   config: DAOConfig;
   members: Member[];

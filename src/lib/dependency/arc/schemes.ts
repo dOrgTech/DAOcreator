@@ -5,15 +5,14 @@ export const schemeDefinitions: SchemeDefinition[] = [
   {
     typeName: "GenericScheme",
     displayName: "Generic Scheme",
-    description:
-      "A scheme for proposing and executing calls to an arbitrary function on a specific contract on behalf of the organization avatar",
+    description: "",
     permissions: "0x00000010",
     params: [
       {
         typeName: "contractToCall",
         valueType: "Address",
-        displayName: "Contract Address",
-        description: "Address of the contract to call"
+        displayName: "",
+        description: ""
       }
     ],
     getCallableParamsArray: (schemeConfig, deploymentInfo) => {
