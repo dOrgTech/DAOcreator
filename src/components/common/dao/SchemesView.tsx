@@ -15,9 +15,14 @@ import {
   withStyles,
   Grid
 } from "@material-ui/core";
+import { SvgIconProps } from "@material-ui/core/SvgIcon";
+import ContributionRewardIcon from "@material-ui/icons/DonutSmallTwoTone";
+import SchemeRegistrarIcon from "@material-ui/icons/WidgetsTwoTone";
+import GenericSchemeIcon from "@material-ui/icons/LanguageTwoTone";
 import SchemeView from "./SchemeView";
 import {
   SchemesForm,
+  SchemeForm,
   GenericSchemeForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
@@ -30,19 +35,11 @@ interface Props extends WithStyles<typeof styles> {
   form: SchemesForm;
 }
 
-/*
-[Scheme Name] [Toggle]
-[Icon]
-[Description]
-// if (toggle)
-[Params]
-[Voting Machine Preset Selector][Custom Settings]
-[Voting Machine Overview Stats]
-*/
+interface SchemeFormView {
+  form: SchemeForm;
+  Icon: React.ComponentType<SvgIconProps>;
+}
 
-/*
-  <SchemeView type={SchemeType.GenericScheme} editable={true} onToggle={(schemeForm) => ...} />
-*/
 @observer
 class SchemesView extends React.Component<Props> {
   @observable
@@ -51,10 +48,19 @@ class SchemesView extends React.Component<Props> {
   schemeRegistrarForm: SchemeRegistrarForm = CreateSchemeRegistrarForm();
   @observable genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
 
-  schemeForms = [
-    this.contributionRewardForm,
-    this.schemeRegistrarForm,
-    this.genericSchemeForm
+  schemeForms: SchemeFormView[] = [
+    {
+      form: this.contributionRewardForm,
+      Icon: ContributionRewardIcon
+    },
+    {
+      form: this.schemeRegistrarForm,
+      Icon: SchemeRegistrarIcon
+    },
+    {
+      form: this.genericSchemeForm,
+      Icon: GenericSchemeIcon
+    }
   ];
 
   render() {
@@ -69,13 +75,14 @@ class SchemesView extends React.Component<Props> {
           justify="center"
           alignItems="baseline"
         >
-          {this.schemeForms.map(schemeForm => (
+          {this.schemeForms.map(scheme => (
             <SchemeView
-              form={schemeForm}
+              form={scheme.form}
+              Icon={scheme.Icon}
               editable={true}
               onToggle={(toggled: boolean) => {
                 if (toggled) {
-                  form.$.push(schemeForm);
+                  form.$.push(scheme.form);
                 } else {
                   // TODO: form.$.findIndex()
                 }

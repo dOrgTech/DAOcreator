@@ -10,17 +10,28 @@ import {
   Grid,
   Switch
 } from "@material-ui/core";
+import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { SchemeForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
   form: SchemeForm;
+  Icon: React.ComponentType<SvgIconProps>;
   editable: boolean;
   onToggle: (toggled: boolean) => void;
 }
 
+/*
+[Scheme Name] [Toggle]
+[Icon]
+[Description]
+// if (toggle)
+[Params]
+[Voting Machine Preset Selector][Custom Settings]
+[Voting Machine Overview Stats]
+*/
 class SchemeView extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, Icon } = this.props;
     return (
       <Grid item>
         <Card className={classes.card}>
@@ -40,7 +51,19 @@ class SchemeView extends React.Component<Props> {
                 <Switch />
               </Grid>
             </Grid>
-            <Typography>{form.description}</Typography>
+            <Grid
+              container
+              alignItems="center"
+              direction="column"
+              justify="center"
+            >
+              <Grid item xs={6}>
+                <Icon color="primary" className={classes.schemeIcon} />
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">{form.description}</Typography>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid>
@@ -52,6 +75,10 @@ const styles = (theme: Theme) =>
   createStyles({
     card: {
       maxWidth: 400
+    },
+    schemeIcon: {
+      width: "100%",
+      height: "100%"
     }
   });
 
