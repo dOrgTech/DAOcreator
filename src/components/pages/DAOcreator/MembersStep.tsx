@@ -13,7 +13,6 @@ import {
 import MembersView from "../../common/dao/MembersView";
 import MembersAnalytics from "../../common/dao/MembersAnalytics";
 import { MembersForm } from "../../../lib/forms";
-import { MembersFormToState } from "../../../lib/dataMappings/formToState";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
@@ -23,7 +22,7 @@ interface Props extends WithStyles<typeof styles> {
 class MembersStep extends React.Component<Props> {
   render() {
     const { classes, form } = this.props;
-    const members = MembersFormToState(form);
+    const members = form.toState();
 
     return (
       <Card>

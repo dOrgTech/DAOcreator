@@ -42,7 +42,7 @@ export const DAO_CREATE_PREV_STEP = createEvent<DAO_CREATE_PREV_STEP>(
   Events.DAO_CREATE_PREV_STEP
 );
 
-interface DAO_CREATE_ADD_SCHEME extends PayloadEvent<string, Arc.SchemeConfig> {
+interface DAO_CREATE_ADD_SCHEME extends PayloadEvent<string, Arc.Scheme> {
   type: Events.DAO_CREATE_ADD_SCHEME;
 }
 export const DAO_CREATE_ADD_SCHEME = createPayloadEvent<DAO_CREATE_ADD_SCHEME>(

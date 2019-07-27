@@ -1,10 +1,5 @@
-import * as R from "ramda";
-import uuid from "uuid";
-import { createDao as createTheDao } from "./createDao";
-import { DAO, DAOConfig, Member, SchemeConfig } from "./types";
-export * from "./schemes";
 export * from "./types";
-export * from "./votingMachines";
+/*export * from "./votingMachines";
 
 export const init = async (web3: any) => {
   const network: string = await web3.eth.net.getNetworkType();
@@ -60,3 +55,4 @@ export const initSchemeConfig = (
     params
   };
 };
+*/

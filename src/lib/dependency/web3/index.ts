@@ -1,11 +1,11 @@
-export * from "./types";
 import { BN } from "./types";
-import * as typeValidation from "./typeValidation";
-export const TypeValidation = typeValidation;
-import * as typeConversion from "./typeConversion";
-export const TypeConversion = typeConversion;
-
 import Web3 from "web3";
+import * as typeValidation from "./typeValidation";
+import * as typeConversion from "./typeConversion";
+
+export * from "./types";
+export const TypeValidation = typeValidation;
+export const TypeConversion = typeConversion;
 
 let readyWeb3: Web3;
 

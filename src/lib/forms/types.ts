@@ -375,7 +375,7 @@ export const CreateGenericSchemeForm = (form?: GenericSchemeForm): any =>
 
       contractToCall: new FriendlyField(
         form
-          ? form.$.contractToCall
+          ? form.$.contractToCall.value
           : "0x0000000000000000000000000000000000000000"
       )
         .validators(requiredText, validAddress, nonZeroAddress)

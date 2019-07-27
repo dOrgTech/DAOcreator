@@ -1,10 +1,11 @@
+import * as Arc from "./dependency/arc";
+
 export interface RootState {
   daoCreator: DAOcreatorState;
   notification: NotificationState;
   waitingAnimation: WaitingAnimationState;
 }
 
-import * as Arc from "./dependency/arc";
 export type DAOConfig = Arc.DAOConfig;
 export type Member = Arc.Member;
 export type Scheme = Arc.Scheme;

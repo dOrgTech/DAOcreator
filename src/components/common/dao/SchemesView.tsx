@@ -15,7 +15,7 @@ import {
 import {
   SchemeForm,
   SchemesForm,
-  CreateSchemeForm,
+  CreateGenericSchemeForm,
   CreateSchemesForm
 } from "../../../lib/forms";
 
@@ -25,7 +25,7 @@ interface Props extends WithStyles<typeof styles> {
 
 @observer
 class SchemesView extends React.Component<Props> {
-  @observable schemeForm: SchemeForm = CreateSchemeForm();
+  @observable schemeForm: SchemeForm = CreateGenericSchemeForm();
 
   render() {
     const { classes, form } = this.props;

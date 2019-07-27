@@ -6,25 +6,20 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import * as R from "ramda"
-import * as React from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
-import {
-  Member,
-  getSchemeDefinition,
-  SchemeConfig,
-  votingMachineDefinitions,
-} from "../../../lib/dependency/arc"
-import { DAOcreatorState } from "../../../lib/state"
-import EthAddressAvatar from "../../common/EthAddressAvatar"
-import PieChart from "../../common/PieChart"
+  WithStyles
+} from "@material-ui/core";
+import * as R from "ramda";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { Member } from "../../../lib/dependency/arc";
+import { DAOcreatorState } from "../../../lib/state";
+import EthAddressAvatar from "../../common/EthAddressAvatar";
+import PieChart from "../../common/PieChart";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  creator: DAOcreatorState
+  creator: DAOcreatorState;
 }
 
 const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
@@ -104,7 +99,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
               hight: 240,
               width: 240,
               dataKey: "reputation",
-              nameKey: "address",
+              nameKey: "address"
             }}
           />
         </Grid>
@@ -122,14 +117,14 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
               hight: 240,
               width: 240,
               dataKey: "tokens",
-              nameKey: "address",
+              nameKey: "address"
             }}
           />
         </Grid>
       </Grid>
     </CardContent>
   </Card>
-)
+);
 
 const displayFounder = ({ address, reputation, tokens }: Member) => (
   <Grid container spacing={16} key={`founder-${address}`}>
@@ -146,10 +141,10 @@ const displayFounder = ({ address, reputation, tokens }: Member) => (
       <Typography>{tokens}</Typography>
     </Grid>
   </Grid>
-)
+);
 
-const displayScheme = (schemeConfig: SchemeConfig) => {
-  const votingMachine =
+const displayScheme = (schemeConfig: any) => {
+  /*const votingMachine =
     votingMachineDefinitions[
       R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
     ]
@@ -175,15 +170,16 @@ const displayScheme = (schemeConfig: SchemeConfig) => {
         </Grid>
       ) : null}
     </Grid>
-  )
-}
+  )*/
+  return <></>;
+};
 
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
     card: {},
     headline: {
-      paddingTop: 20,
+      paddingTop: 20
     },
     daoName: {},
     tokenName: {},
@@ -192,23 +188,23 @@ const styles = (theme: Theme) =>
       fontSize: 18,
       maxWidth: 450,
       addingTop: 50,
-      paddingBottom: 20,
+      paddingBottom: 20
     },
     pieChartHeading: {
-      textAlign: "center",
-    },
-  })
+      textAlign: "center"
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(ReviewStep)
+const componentWithStyles = withStyles(styles)(ReviewStep);
 
 // STATE
 const mapStateToProps = (state: any) => ({
-  creator: state.daoCreator,
-})
+  creator: state.daoCreator
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({})
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);
