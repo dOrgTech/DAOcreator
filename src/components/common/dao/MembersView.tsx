@@ -96,7 +96,7 @@ class MembersView extends React.Component<Props> {
             key={`member-${index}`}
             justify={"center"}
           >
-            <MemberView form={member} editable={true} />
+            <MemberView form={member} editable={false} />
             <Grid item className={classes.button}>
               <Fab
                 size={"small"}

@@ -30,7 +30,6 @@ class MemberView extends React.Component<Props> {
         <Grid item xs={4}>
           <FormField.Text
             id={"address"}
-            label={"Address"}
             field={form.$.address}
             editable={editable}
           />
@@ -38,7 +37,6 @@ class MemberView extends React.Component<Props> {
         <Grid item xs={3}>
           <FormField.Text
             id={"reputation"}
-            label={"Reputation"}
             field={form.$.reputation}
             editable={editable}
           />
@@ -46,7 +44,6 @@ class MemberView extends React.Component<Props> {
         <Grid item xs={3}>
           <FormField.Text
             id={"tokens"}
-            label={"Tokens"}
             field={form.$.tokens}
             editable={editable}
           />

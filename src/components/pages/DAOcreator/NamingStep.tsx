@@ -6,20 +6,20 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import * as React from "react"
-import FormField from "../../common/FormField"
-import { DAOConfigForm } from "../../../lib/forms"
+  WithStyles
+} from "@material-ui/core";
+import * as React from "react";
+import FormField from "../../common/FormField";
+import { DAOConfigForm } from "../../../lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  form: DAOConfigForm
+  form: DAOConfigForm;
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props
+    const { classes, form } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -43,23 +43,14 @@ class NamingStep extends React.Component<Props> {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <FormField.Text
-                    id={"daoName"}
-                    label={"DAO Name"}
-                    field={form.$.daoName}
-                  />
+                  <FormField.Text id={"daoName"} field={form.$.daoName} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text
-                    id={"tokenName"}
-                    label={"Token Name"}
-                    field={form.$.tokenName}
-                  />
+                  <FormField.Text id={"tokenName"} field={form.$.tokenName} />
                 </Grid>
                 <Grid item xs={12}>
                   <FormField.Text
                     id={"tokenSymbol"}
-                    label={"Token Symbol"}
                     field={form.$.tokenSymbol}
                   />
                 </Grid>
@@ -68,7 +59,7 @@ class NamingStep extends React.Component<Props> {
           </CardContent>
         </form>
       </Card>
-    )
+    );
   }
 }
 
@@ -87,8 +78,8 @@ const styles = (theme: Theme) =>
       paddingRight: 30,
       paddingTop: 50,
       paddingBottom: 50,
-      margin: "auto",
-    },
-  })
+      margin: "auto"
+    }
+  });
 
-export default withStyles(styles)(NamingStep)
+export default withStyles(styles)(NamingStep);

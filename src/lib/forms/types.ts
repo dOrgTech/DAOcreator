@@ -172,7 +172,7 @@ export const CreateMemberForm = (form?: MemberForm): MemberForm =>
   new FriendlyForm(
     {
       address: new FriendlyField(form ? form.$.address.value : "")
-        .validators(requiredText, validAddress)
+        .validators(requiredText, validAddress, nonZeroAddress)
         .setDisplayName("Address")
         .setDescription("The member's public address."),
 
