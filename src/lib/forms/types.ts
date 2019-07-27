@@ -226,7 +226,7 @@ export const CreateGenesisProtocol = (form?: GenesisProtocolForm): any =>
     preBoostedVotePeriodLimit: new FriendlyField(
       form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
     )
-      .validators(requiredText, validBigNumber, positiveNumber)
+      .validators(requiredText, validBigNumber, greaterThan(0))
       .setDisplayName("Pre Boosted Vote Period Limit")
       .setDescription(
         "The time limit, in seconds, that a proposal can be in the preBoosted phase before it will be automatically closed with a winning vote of NO, regardless of the actual value of the winning vote at the time expiration. Note an attempt must be made to execute before the proposal state will actually change."
