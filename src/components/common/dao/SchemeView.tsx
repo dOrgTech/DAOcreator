@@ -11,7 +11,9 @@ import {
   Switch
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
-import { SchemeForm } from "../../../lib/forms";
+import GenesisProtocolSelector from "./GensisProtocolSelector";
+import { SchemeForm, GenesisProtocolForm } from "../../../lib/forms";
+import FormField from "../FormField";
 
 interface Props extends WithStyles<typeof styles> {
   form: SchemeForm;
@@ -21,11 +23,11 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 /*
-[Scheme Name] [Toggle]
-[Icon]
-[Description]
+[*Scheme Name] [*Toggle]
+[*Icon]
+[*Description]
 // if (toggle)
-[Params]
+[*Params]
 [Voting Machine Preset Selector][Custom Settings]
 [Voting Machine Overview Stats]
 */
@@ -43,9 +45,7 @@ class SchemeView extends React.Component<Props> {
               justify="space-between"
             >
               <Grid item>
-                <Typography variant="h5" component="h2">
-                  {form.displayName}
-                </Typography>
+                <Typography variant="h4">{form.displayName}</Typography>
               </Grid>
               <Grid item>
                 <Switch />
@@ -61,9 +61,34 @@ class SchemeView extends React.Component<Props> {
                 <Icon color="primary" className={classes.schemeIcon} />
               </Grid>
               <Grid item>
-                <Typography variant="body1">{form.description}</Typography>
+                <Typography
+                  variant="body1"
+                  className={classes.schemeDescription}
+                >
+                  {form.description}
+                </Typography>
               </Grid>
             </Grid>
+            {form.getParams ? (
+              <>
+                <Typography variant="h6">Parameters</Typography>
+                {form.getParams().map((param, index) => (
+                  <FormField.Text
+                    id={`param-${index}`}
+                    field={param}
+                    editable={true}
+                  />
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
+            <Typography variant="h6">Voting Configuration</Typography>
+            <GenesisProtocolSelector
+              onSelect={(genesisProtocol: GenesisProtocolForm) => {
+                form.$.votingMachine = genesisProtocol;
+              }}
+            />
           </CardContent>
         </Card>
       </Grid>
@@ -74,11 +99,15 @@ class SchemeView extends React.Component<Props> {
 const styles = (theme: Theme) =>
   createStyles({
     card: {
-      maxWidth: 400
+      minWidth: 410,
+      maxWidth: 420
     },
     schemeIcon: {
       width: "100%",
       height: "100%"
+    },
+    schemeDescription: {
+      marginBottom: 15
     }
   });
 

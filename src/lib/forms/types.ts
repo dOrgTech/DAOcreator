@@ -361,8 +361,17 @@ export class BaseSchemeForm<
   SchemeType extends Scheme,
   T extends ValidatableMapOrArray & { votingMachine: GenesisProtocolForm }
 > extends FriendlyForm<SchemeType, T> {
-  constructor($: T, toState: () => SchemeType) {
+  public getParams?: () => StringField[];
+
+  constructor(
+    $: T,
+    toState: () => SchemeType,
+    getParams?: () => StringField[]
+  ) {
     super($, toState);
+    if (getParams) {
+      this.getParams = getParams.bind(this);
+    }
   }
 }
 
@@ -402,6 +411,9 @@ export const CreateGenericSchemeForm = (
         this.$.contractToCall.value,
         this.$.votingMachine.toState()
       );
+    },
+    function(this: GenericSchemeForm): StringField[] {
+      return [this.$.contractToCall];
     }
   )
     .setDisplayName("Generic Scheme")
