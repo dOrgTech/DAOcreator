@@ -1,84 +1,146 @@
-// types exported by this integration
+import { Address, BN, keccak256, encodeParameters } from "../web3";
 
-// TODO: clean up the types, define the paradigm for 3 layers of types (UI, LIB, 3rd party)
-// - VotingMachine|(Param | Configuration) is a great example of why defining this seperation
-//   will be useful. We don't want to bleed UI data into the state (descriptions, display names, etc),
-//   but we also want to keep them consistent between tools (GUI, CLI, etc).
-
-// TODO: use address where possible
 export type DAO = {
-  avatar: string // address
-  daoToken: string // address
-  reputation: string // address
-  config: DAOConfig
-}
+  avatar: Address;
+  daoToken: Address;
+  reputation: Address;
+  config: DAOConfig;
+};
 
 export type DAOConfig = {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-}
-
-// TODO: be explicity, '|' types together for the params
-export type ParamConfig = {
-  [paramName: string]: string | number
-}
-
-export type VotingMachineConfig = {
-  typeName: string
-  params: ParamConfig
-}
-
-export type VotingMachineDefinition = {
-  typeName: string
-  displayName: string
-  description: string
-  params: ParamDefinition[]
-  getCallableParamsArray: (config: VotingMachineConfig) => any[]
-}
-
-export type ParamDefinition = {
-  typeName: string
-  valueType: "boolean" | "string" | "number" | "Address" | "BigNumber"
-  displayName: string
-  description: string
-  defaultValue?: string | number | boolean
-  optional?: boolean
-}
+  daoName: string;
+  tokenName: string;
+  tokenSymbol: string;
+};
 
 export type Member = {
-  address: string
-  reputation: string
-  tokens: string
+  address: Address;
+  reputation: BN;
+  tokens: BN;
+};
+
+export interface ParamLink {
+  getParameters: () => any[];
+  getParametersHash: () => string;
 }
 
-export type SchemeConfig = {
-  id: string
-  typeName: string // not schemeTypeName (that is in use now)
-  votingMachineConfig?: VotingMachineConfig
-  params: ParamConfig
+export interface Scheme extends ParamLink {
+  typeName: string;
+  permissions: string;
+  votingMachine: VotingMachine;
 }
 
-export type SchemeDefinition = {
-  typeName: string
-  address?: string
-  displayName: string
-  description: string
-  toggleDefault: boolean
-  permissions: string
-  hasVotingMachine: boolean
-  daoCanHaveMultiple: boolean
-  getCallableParamsArray: (
-    schemeConfig: SchemeConfig,
-    deploymentInfo: DeploymentInfo
-  ) => any[]
-  params: ParamDefinition[]
+export interface VotingMachine extends ParamLink {
+  typeName: string;
+  address: Address;
+}
+
+export class GenericScheme implements Scheme {
+  typeName: string = "GenericScheme";
+  permissions: string = "0x00000010";
+  votingMachine: VotingMachine;
+
+  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
+    this.votingMachine = votingMachine;
+  }
+
+  public getParameters(): any[] {
+    return [
+      this.votingMachine.getParametersHash(),
+      this.votingMachine.address,
+      this.contractToCall
+    ];
+  }
+
+  public getParametersHash(): string {
+    return keccak256(
+      encodeParameters(["bytes32", "address", "address"], this.getParameters())
+    );
+  }
+}
+
+export class GenesisProtocol implements VotingMachine {
+  public typeName: string = "GenesisProtocol";
+  public address: Address = "TODO";
+
+  constructor(
+    public queuedVoteRequiredPercentage: BN,
+    public queuedVotePeriodLimit: BN,
+    public thresholdConst: BN,
+    public proposingRepReward: BN,
+    public minimumDaoBounty: BN,
+    public boostedVotePeriodLimit: BN,
+    public daoBountyConst: BN,
+    public activationTime: BN,
+    public preBoostedVotePeriodLimit: BN,
+    public quietEndingPeriod: BN,
+    public voteOnBehalf: Address,
+    public votersReputationLossRatio: BN
+  ) {}
+
+  public getParameters(): any[] {
+    return [
+      [
+        this.queuedVoteRequiredPercentage,
+        this.queuedVotePeriodLimit,
+        this.boostedVotePeriodLimit,
+        this.preBoostedVotePeriodLimit,
+        this.thresholdConst,
+        this.quietEndingPeriod,
+        this.proposingRepReward,
+        this.votersReputationLossRatio,
+        this.minimumDaoBounty,
+        this.daoBountyConst,
+        this.activationTime
+      ],
+      this.voteOnBehalf
+    ];
+  }
+
+  public getParametersHash(): string {
+    return keccak256(
+      encodeParameters(
+        ["bytes32", "address"],
+        [
+          encodeParameters(
+            [
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint",
+              "uint"
+            ],
+            [
+              this.queuedVoteRequiredPercentage,
+              this.queuedVotePeriodLimit,
+              this.boostedVotePeriodLimit,
+              this.preBoostedVotePeriodLimit,
+              this.thresholdConst,
+              this.quietEndingPeriod,
+              this.proposingRepReward,
+              this.votersReputationLossRatio,
+              this.minimumDaoBounty,
+              this.daoBountyConst,
+              this.activationTime
+            ]
+          ),
+          this.voteOnBehalf
+        ]
+      )
+    );
+  }
 }
 
 export type DeploymentInfo = {
-  avatar: string // address
-  daoToken: string // address
-  reputation: string // address
-  votingMachineParametersKey?: string // hash
-  votingMachineAddress?: string // address
-}
+  avatar: Address;
+  daoToken: Address;
+  reputation: Address;
+  votingMachineParametersKey?: string; // hash
+  votingMachineAddress?: Address;
+};

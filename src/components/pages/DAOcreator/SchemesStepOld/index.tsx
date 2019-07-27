@@ -10,55 +10,55 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import * as R from "ramda"
-import * as React from "react"
-import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
+  WithStyles
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import * as R from "ramda";
+import * as React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
 import {
   getSchemeDefinition,
-  SchemeConfig,
-} from "../../../../lib/dependency/arc"
-import DAOcreatorActions, * as daoCreatorActions from "../../../../lib/redux/actions/daoCreator"
-import AddSchemeDialog from "./AddSchemeDialog"
+  SchemeConfig
+} from "../../../../lib/dependency/arc";
+import DAOcreatorActions, * as daoCreatorActions from "../../../../lib/redux/actions/daoCreator";
+import AddSchemeDialog from "./AddSchemeDialog";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  schemes: SchemeConfig[]
-  actions: DAOcreatorActions
+  schemes: SchemeConfig[];
+  actions: DAOcreatorActions;
 }
 
 interface State {
-  expanded: string | null
-  addSchemeDialogOpen: boolean
+  expanded: string | null;
+  addSchemeDialogOpen: boolean;
 }
 
 class SchemesStep extends React.Component<Props, State> {
   public readonly state: State = {
     expanded: null,
-    addSchemeDialogOpen: false,
-  }
+    addSchemeDialogOpen: false
+  };
 
   handleChange = (panelKey: any) => (event: any, expanded: boolean) => {
     this.setState({
-      expanded: expanded ? panelKey : false,
-    })
-  }
+      expanded: expanded ? panelKey : false
+    });
+  };
 
   addScheme = (schemeConfig: SchemeConfig) => {
-    this.props.actions.addScheme(schemeConfig)
-  }
+    this.props.actions.addScheme(schemeConfig);
+  };
 
   setSchemeDialog = (newStatus: boolean) => () =>
     this.setState({
-      addSchemeDialogOpen: newStatus,
-    })
+      addSchemeDialogOpen: newStatus
+    });
 
   render() {
-    const { schemes, actions, classes } = this.props
-    const { expanded, addSchemeDialogOpen } = this.state
+    const { schemes, actions, classes } = this.props;
+    const { expanded, addSchemeDialogOpen } = this.state;
 
     return (
       <Card className={classes.card}>
@@ -69,7 +69,7 @@ class SchemesStep extends React.Component<Props, State> {
         </CardContent>
         <div className={classes.root}>
           {R.map(schemeConfig => {
-            const scheme = getSchemeDefinition(schemeConfig.typeName)
+            const scheme = getSchemeDefinition(schemeConfig.typeName);
             return (
               <ExpansionPanel
                 expanded={expanded === schemeConfig.id}
@@ -111,7 +111,7 @@ class SchemesStep extends React.Component<Props, State> {
                   </Button>
                 </ExpansionPanelActions>
               </ExpansionPanel>
-            )
+            );
           }, schemes)}
         </div>
         {schemes.length === 0 ? (
@@ -137,7 +137,7 @@ class SchemesStep extends React.Component<Props, State> {
           close={this.setSchemeDialog(false)}
         />
       </Card>
-    )
+    );
   }
 }
 
@@ -145,42 +145,42 @@ class SchemesStep extends React.Component<Props, State> {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "100%",
+      width: "100%"
     },
     card: {},
     heading: {
       fontSize: theme.typography.pxToRem(15),
-      flexShrink: 0,
+      flexShrink: 0
     },
     column: {
-      flexBasis: "50%",
+      flexBasis: "50%"
     },
     secondaryHeading: {
       fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary,
+      color: theme.palette.text.secondary
     },
     button: {
       margin: theme.spacing.unit,
-      float: "right",
-    },
-  })
+      float: "right"
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(SchemesStep)
+const componentWithStyles = withStyles(styles)(SchemesStep);
 
 // STATE
 const mapStateToProps = (state: any) => {
   return {
-    schemes: state.daoCreator.schemes,
-  }
-}
+    schemes: state.daoCreator.schemes
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
+    actions: bindActionCreators(daoCreatorActions, dispatch)
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);

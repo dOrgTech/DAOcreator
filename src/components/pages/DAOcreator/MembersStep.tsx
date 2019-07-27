@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import {
   WithStyles,
   Theme,
@@ -13,7 +14,6 @@ import MembersView from "../../common/dao/MembersView";
 import MembersAnalytics from "../../common/dao/MembersAnalytics";
 import { MembersForm } from "../../../lib/forms";
 import { MembersFormToState } from "../../../lib/dataMappings/formToState";
-import { observer } from "mobx-react";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;

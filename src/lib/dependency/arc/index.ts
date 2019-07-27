@@ -1,25 +1,24 @@
-import * as R from "ramda"
-import uuid from "uuid"
-import deployedContractAddresses from "./contractAddresses.json"
-import { createDao as createTheDao } from "./createDao"
-import { DAO, DAOConfig, Member, SchemeConfig } from "./types"
-export * from "./schemes"
-export * from "./types"
-export * from "./votingMachines"
+import * as R from "ramda";
+import uuid from "uuid";
+import { createDao as createTheDao } from "./createDao";
+import { DAO, DAOConfig, Member, SchemeConfig } from "./types";
+export * from "./schemes";
+export * from "./types";
+export * from "./votingMachines";
 
 export const init = async (web3: any) => {
-  const network: string = await web3.eth.net.getNetworkType()
-  const supportedNetworks = R.keys(deployedContractAddresses)
+  const network: string = await web3.eth.net.getNetworkType();
+  const supportedNetworks = R.keys(deployedContractAddresses);
 
   if ((deployedContractAddresses as any)[network] != null) {
-    return
+    return;
   } else {
     throw Error(
       "Network not supported. The supported network are: " +
         supportedNetworks.toString()
-    )
+    );
   }
-}
+};
 
 export const createDao = (
   web3: any,
@@ -30,7 +29,7 @@ export const createDao = (
   schemes: SchemeConfig[]
 ): Promise<DAO> => {
   try {
-    const network: string = await web3.eth.net.getNetworkType()
+    const network: string = await web3.eth.net.getNetworkType();
     const newDao = await createTheDao(
       web3,
       waitingDetailsUpdater,
@@ -38,17 +37,17 @@ export const createDao = (
       config,
       members,
       schemes
-    )
-    console.log("DAO created")
-    console.log(newDao)
+    );
+    console.log("DAO created");
+    console.log(newDao);
 
-    return newDao
+    return newDao;
   } catch (e) {
-    console.log("Error while deploying DAO:")
-    console.error(e)
-    return Promise.reject(e)
+    console.log("Error while deploying DAO:");
+    console.error(e);
+    return Promise.reject(e);
   }
-}
+};
 
 export const initSchemeConfig = (
   id: string = uuid(),
@@ -58,6 +57,6 @@ export const initSchemeConfig = (
   return {
     id,
     typeName,
-    params,
-  }
-}
+    params
+  };
+};

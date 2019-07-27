@@ -15,8 +15,8 @@ import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberView from "./MemberView";
 import {
-  MembersForm,
   MemberForm,
+  MembersForm,
   CreateMemberForm,
   CreateMembersForm
 } from "../../../lib/forms";

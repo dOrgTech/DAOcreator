@@ -1,5 +1,6 @@
 import { Validator } from "formstate";
 import { TypeValidation } from "../dependency/web3";
+import { toBN } from "web3-utils";
 
 type StringOrNull = string | null | undefined;
 
@@ -56,6 +57,51 @@ export const validName: Validator<string> = value => {
   }
 
   return null;
+};
+
+export const validPercentage: Validator<string> = value => {
+  const error = "Percentages must be between 0 and 100.";
+  value = value.trim();
+  const number = Number(value);
+
+  if (number > 100 || number < 0) {
+    return error;
+  }
+
+  return null;
+};
+
+export const greaterThan = (bound: number) => (value: string) => {
+  const error = `Number must be greater than ${bound}.`;
+  value = value.trim();
+
+  if (toBN(value).toNumber() > bound) {
+    return null;
+  }
+
+  return error;
+};
+
+export const greaterThanOrEqual = (bound: number) => (value: string) => {
+  const error = `Number must be greater than or equal to ${bound}.`;
+  value = value.trim();
+
+  if (toBN(value).toNumber() >= bound) {
+    return null;
+  }
+
+  return error;
+};
+
+export const lessThanOrEqual = (bound: number) => (value: string) => {
+  const error = `Number must be less than or equal to ${bound}.`;
+  value = value.trim();
+
+  if (toBN(value).toNumber() <= bound) {
+    return null;
+  }
+
+  return error;
 };
 
 export const requireElement = (elementName: string) => (array: any[]) =>
