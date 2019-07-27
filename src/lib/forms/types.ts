@@ -19,7 +19,9 @@ import {
   Member,
   GenesisProtocol,
   Scheme,
-  GenericScheme
+  GenericScheme,
+  ContributionReward,
+  SchemeRegistrar
 } from "../state";
 import { TypeConversion } from "../dependency/web3";
 const toBN = TypeConversion.toBN;
@@ -216,7 +218,9 @@ export type GenesisProtocolForm = FriendlyForm<
 >;
 
 // TODO: support better fields (percentages, Day/Hour/Seconds, gwei, numbers [min, max])
-export const CreateGenesisProtocol = (form?: GenesisProtocolForm): any =>
+export const CreateGenesisProtocolForm = (
+  form?: GenesisProtocolForm
+): GenesisProtocolForm =>
   new FriendlyForm(
     {
       queuedVoteRequiredPercentage: new FriendlyField(
@@ -351,27 +355,38 @@ export const CreateGenesisProtocol = (form?: GenesisProtocolForm): any =>
     }
   ).setDisplayName("Genesis Protocol");
 
-export type SchemeForm = FriendlyForm<
-  Scheme,
-  {
-    votingMachine: GenesisProtocolForm;
+// TODO: clean this up
+// TODO: get the typename from the "SchemeType"
+export class BaseSchemeForm<
+  SchemeType extends Scheme,
+  T extends ValidatableMapOrArray & { votingMachine: GenesisProtocolForm }
+> extends FriendlyForm<SchemeType, T> {
+  constructor($: T, toState: () => SchemeType) {
+    super($, toState);
   }
->;
+}
+
+export type SchemeForm =
+  | GenericSchemeForm
+  | ContributionRewardForm
+  | SchemeRegistrarForm;
 
 // TODO: support custom permissions
 // TODO: support custom addresses / versions?
-export type GenericSchemeForm = SchemeForm &
-  FriendlyForm<
-    GenesisProtocol,
-    {
-      contractToCall: StringField;
-    }
-  >;
+export type GenericSchemeForm = BaseSchemeForm<
+  GenericScheme,
+  {
+    votingMachine: GenesisProtocolForm;
+    contractToCall: StringField;
+  }
+>;
 
-export const CreateGenericSchemeForm = (form?: GenericSchemeForm): any =>
-  new FriendlyForm(
+export const CreateGenericSchemeForm = (
+  form?: GenericSchemeForm
+): GenericSchemeForm =>
+  new BaseSchemeForm(
     {
-      votingMachine: form ? form.$.votingMachine : CreateGenesisProtocol(),
+      votingMachine: form ? form.$.votingMachine : CreateGenesisProtocolForm(),
 
       contractToCall: new FriendlyField(
         form
@@ -394,9 +409,51 @@ export const CreateGenericSchemeForm = (form?: GenericSchemeForm): any =>
       "A scheme for proposing and executing calls to an arbitrary function on a specific contract on behalf of the organization avatar."
     );
 
-/*export type ContributionRewardForm = SchemeForm & FriendlyForm<{}>
+export type ContributionRewardForm = BaseSchemeForm<
+  ContributionReward,
+  {
+    votingMachine: GenesisProtocolForm;
+  }
+>;
 
-export type SchemeRegistrar = SchemeForm & FriendlyForm<{}>*/
+export const CreateContributionRewardForm = (
+  form?: ContributionRewardForm
+): ContributionRewardForm =>
+  new BaseSchemeForm(
+    {
+      votingMachine: form ? form.$.votingMachine : CreateGenesisProtocolForm()
+    },
+    function(this: ContributionRewardForm): ContributionReward {
+      return new ContributionReward(this.$.votingMachine.toState());
+    }
+  )
+    .setDisplayName("Contribution Reward")
+    .setDescription(
+      "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination."
+    );
+
+export type SchemeRegistrarForm = BaseSchemeForm<
+  SchemeRegistrar,
+  {
+    votingMachine: GenesisProtocolForm;
+  }
+>;
+
+export const CreateSchemeRegistrarForm = (
+  form?: SchemeRegistrarForm
+): SchemeRegistrarForm =>
+  new BaseSchemeForm(
+    {
+      votingMachine: form ? form.$.votingMachine : CreateGenesisProtocolForm()
+    },
+    function(this: SchemeRegistrarForm): SchemeRegistrar {
+      return new SchemeRegistrar(this.$.votingMachine.toState());
+    }
+  )
+    .setDisplayName("Scheme Registrar")
+    .setDescription(
+      "Manages post-creation adding/modifying and removing of schemes. Schemes add functionality to the DAO."
+    );
 
 export type SchemesForm = FriendlyForm<Scheme[], SchemeForm[]>;
 

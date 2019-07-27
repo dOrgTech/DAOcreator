@@ -16,7 +16,6 @@ interface Props extends WithStyles<typeof styles> {
   editable: boolean;
 }
 
-@observer
 class MemberView extends React.Component<Props> {
   render() {
     const { classes, form, editable } = this.props;

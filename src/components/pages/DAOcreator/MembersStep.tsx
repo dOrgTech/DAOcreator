@@ -18,7 +18,6 @@ interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
 }
 
-@observer
 class MembersStep extends React.Component<Props> {
   render() {
     const { classes, form } = this.props;

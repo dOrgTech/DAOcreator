@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
-// import SchemesStep from "./SchemesStep"
+import SchemesStep from "./SchemesStep";
 import { DAOForm, CreateDAOForm } from "../../../lib/forms";
 import { FormState } from "formstate";
 
@@ -41,7 +41,7 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const steps: Step[] = [
-      {
+      /*{
         title: "Name",
         form: this.form.$.config,
         Component: NamingStep
@@ -50,12 +50,12 @@ class DAOcreator extends React.Component<Props, State> {
         title: "Members",
         form: this.form.$.members,
         Component: MembersStep
-      } /*,
+      },*/
       {
         title: "Features (schemes)",
         form: this.form.$.schemes,
-        Component: SchemesStep,
-      }*/
+        Component: SchemesStep
+      }
     ];
     const { classes } = this.props;
     const { step } = this.state;

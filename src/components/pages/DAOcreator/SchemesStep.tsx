@@ -7,7 +7,6 @@ import {
   withStyles,
   Card,
   CardContent,
-  Grid,
   Typography
 } from "@material-ui/core";
 import SchemesView from "../../common/dao/SchemesView";
@@ -20,9 +19,18 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class SchemesStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { form } = this.props;
 
-    return <></>;
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h4" gutterBottom>
+            Add Schemes
+          </Typography>
+          <SchemesView form={form} />
+        </CardContent>
+      </Card>
+    );
   }
 }
 
