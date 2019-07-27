@@ -1,9 +1,3 @@
-// TODO:
-// - tiles for each scheme that can be enabled
-// - - scheme params at top level in tile
-// - - each tile has a selector for genesis proocol presets
-// - - settings button next to protocol selector to set custom values
-// - - high level statistics about the voting machine
 // TODO: warning if they don't have contribution reward or scheme registrar. Default these?
 import * as React from "react";
 import { observer } from "mobx-react";
@@ -44,9 +38,12 @@ interface SchemeFormView {
 class SchemesView extends React.Component<Props> {
   @observable
   contributionRewardForm: ContributionRewardForm = CreateContributionRewardForm();
+
   @observable
   schemeRegistrarForm: SchemeRegistrarForm = CreateSchemeRegistrarForm();
-  @observable genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
+
+  @observable
+  genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
 
   schemeForms: SchemeFormView[] = [
     {

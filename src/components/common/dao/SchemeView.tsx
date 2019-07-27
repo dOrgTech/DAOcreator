@@ -11,7 +11,7 @@ import {
   Switch
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
-import GenesisProtocolSelector from "./GensisProtocolSelector";
+import GenesisProtocolSelector from "./GenesisProtocolSelector";
 import { SchemeForm, GenesisProtocolForm } from "../../../lib/forms";
 import FormField from "../FormField";
 
@@ -22,18 +22,11 @@ interface Props extends WithStyles<typeof styles> {
   onToggle: (toggled: boolean) => void;
 }
 
-/*
-[*Scheme Name] [*Toggle]
-[*Icon]
-[*Description]
-// if (toggle)
-[*Params]
-[Voting Machine Preset Selector][Custom Settings]
-[Voting Machine Overview Stats]
-*/
 class SchemeView extends React.Component<Props> {
   render() {
     const { classes, form, Icon } = this.props;
+    const params = form.getParams ? form.getParams() : [];
+
     return (
       <Grid item>
         <Card className={classes.card}>
@@ -69,10 +62,10 @@ class SchemeView extends React.Component<Props> {
                 </Typography>
               </Grid>
             </Grid>
-            {form.getParams ? (
+            {params.length > 0 ? (
               <>
                 <Typography variant="h6">Parameters</Typography>
-                {form.getParams().map((param, index) => (
+                {params.map((param, index) => (
                   <FormField.Text
                     id={`param-${index}`}
                     field={param}

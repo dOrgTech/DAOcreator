@@ -24,6 +24,7 @@ import {
   SchemeRegistrar
 } from "../state";
 import { TypeConversion } from "../dependency/web3";
+import { SchemeType } from "../dependency/arc";
 const toBN = TypeConversion.toBN;
 
 export class FriendlyField<T> extends FieldState<T> {
@@ -58,10 +59,16 @@ export class FriendlyForm<
   private _description: string = "";
   private _displayName: string = "";
   public toState: () => StateType;
+  public fromState: (state: StateType) => void;
 
-  constructor($: T, toState: () => StateType) {
+  constructor(
+    $: T,
+    toState: () => StateType,
+    fromState: (state: StateType) => void
+  ) {
     super($);
     this.toState = toState.bind(this);
+    this.fromState = fromState.bind(this);
   }
 
   setDescription(description: string): FriendlyForm<StateType, T> {
@@ -105,6 +112,11 @@ export const CreateDAOForm = (form?: DAOForm): DAOForm =>
         members: this.$.members.toState(),
         schemes: this.$.schemes.toState()
       };
+    },
+    function(this: DAOForm, state: DAOcreatorState): void {
+      this.$.config.fromState(state.config);
+      this.$.members.fromState(state.members);
+      this.$.schemes.fromState(state.schemes);
     }
   );
 
@@ -141,6 +153,11 @@ export const CreateDAOConfigForm = (form?: DAOConfigForm): DAOConfigForm =>
         tokenName: this.$.tokenName.value,
         tokenSymbol: this.$.tokenSymbol.value
       };
+    },
+    function(this: DAOConfigForm, state: DAOConfig): void {
+      this.$.daoName.value = state.daoName;
+      this.$.tokenName.value = state.tokenName;
+      this.$.tokenSymbol.value = state.tokenSymbol;
     }
   );
 
@@ -151,6 +168,13 @@ export const CreateMembersForm = (form?: MembersForm): MembersForm =>
     form ? form.$.map(value => value) : ([] as MemberForm[]),
     function(this: MembersForm): Member[] {
       return this.$.map((member: MemberForm): Member => member.toState());
+    },
+    function(this: MembersForm, state: Member[]): void {
+      this.$ = state.map(member => {
+        const memberForm = CreateMemberForm();
+        memberForm.fromState(member);
+        return memberForm;
+      });
     }
   )
     .validators(requireElement("Member"))
@@ -196,6 +220,11 @@ export const CreateMemberForm = (form?: MemberForm): MemberForm =>
         tokens: toBN(this.$.tokens.value),
         reputation: toBN(this.$.reputation.value)
       };
+    },
+    function(this: MemberForm, state: Member): void {
+      this.$.address.value = state.address;
+      this.$.reputation.value = state.reputation.toString();
+      this.$.tokens.value = state.tokens.toString();
     }
   );
 
@@ -352,6 +381,24 @@ export const CreateGenesisProtocolForm = (
         this.$.voteOnBehalf.value,
         toBN(this.$.votersReputationLossRatio.value)
       );
+    },
+    function(this: GenesisProtocolForm, state: GenesisProtocol): void {
+      this.$.queuedVoteRequiredPercentage.value = state.queuedVoteRequiredPercentage.toString();
+      this.$.queuedVotePeriodLimit.value = state.queuedVotePeriodLimit.toString();
+      this.$.thresholdConst.value = state.thresholdConst.toString();
+      this.$.proposingRepReward.value = state.proposingRepReward
+        .div(toBN(1000000))
+        .toString();
+      this.$.minimumDaoBounty.value = state.minimumDaoBounty
+        .div(toBN(1000000))
+        .toString();
+      this.$.boostedVotePeriodLimit.value = state.boostedVotePeriodLimit.toString();
+      this.$.daoBountyConst.value = state.daoBountyConst.toString();
+      this.$.activationTime.value = state.activationTime.toString();
+      this.$.preBoostedVotePeriodLimit.value = state.preBoostedVotePeriodLimit.toString();
+      this.$.quietEndingPeriod.value = state.quietEndingPeriod.toString();
+      this.$.voteOnBehalf.value = state.voteOnBehalf;
+      this.$.votersReputationLossRatio.value = state.votersReputationLossRatio.toString();
     }
   ).setDisplayName("Genesis Protocol");
 
@@ -366,12 +413,11 @@ export class BaseSchemeForm<
   constructor(
     $: T,
     toState: () => SchemeType,
-    getParams?: () => StringField[]
+    fromState: (state: SchemeType) => void,
+    getParams: () => StringField[]
   ) {
-    super($, toState);
-    if (getParams) {
-      this.getParams = getParams.bind(this);
-    }
+    super($, toState, fromState);
+    this.getParams = getParams.bind(this);
   }
 }
 
@@ -412,6 +458,11 @@ export const CreateGenericSchemeForm = (
         this.$.votingMachine.toState()
       );
     },
+    function(this: GenericSchemeForm, state: GenericScheme): void {
+      this.$.contractToCall.value = state.contractToCall;
+      // TODO: support multiple voting machine types
+      this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
+    },
     function(this: GenericSchemeForm): StringField[] {
       return [this.$.contractToCall];
     }
@@ -437,6 +488,13 @@ export const CreateContributionRewardForm = (
     },
     function(this: ContributionRewardForm): ContributionReward {
       return new ContributionReward(this.$.votingMachine.toState());
+    },
+    function(this: ContributionRewardForm, state: ContributionReward): void {
+      // TODO: support multiple types of voting machines
+      this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
+    },
+    function(this: ContributionRewardForm): StringField[] {
+      return [];
     }
   )
     .setDisplayName("Contribution Reward")
@@ -460,6 +518,13 @@ export const CreateSchemeRegistrarForm = (
     },
     function(this: SchemeRegistrarForm): SchemeRegistrar {
       return new SchemeRegistrar(this.$.votingMachine.toState());
+    },
+    function(this: SchemeRegistrarForm, state: SchemeRegistrar): void {
+      // TODO: support multiple voting machine types
+      this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
+    },
+    function(this: SchemeRegistrarForm): StringField[] {
+      return [];
     }
   )
     .setDisplayName("Scheme Registrar")
@@ -470,6 +535,35 @@ export const CreateSchemeRegistrarForm = (
 export type SchemesForm = FriendlyForm<Scheme[], SchemeForm[]>;
 
 export const CreateSchemesForm = (form?: SchemesForm): SchemesForm =>
-  new FriendlyForm([] as SchemeForm[], function(this: SchemesForm): Scheme[] {
-    return this.$.map((schemeForm: SchemeForm): Scheme => schemeForm.toState());
-  }).validators(requireElement("Scheme"));
+  new FriendlyForm(
+    [] as SchemeForm[],
+    function(this: SchemesForm): Scheme[] {
+      return this.$.map(
+        (schemeForm: SchemeForm): Scheme => schemeForm.toState()
+      );
+    },
+    function(this: SchemesForm, state: Scheme[]): void {
+      this.$ = state.map(scheme => {
+        let schemeForm: SchemeForm;
+
+        switch (scheme.type) {
+          case SchemeType.ContributionReward:
+            schemeForm = CreateContributionRewardForm();
+            schemeForm.fromState(scheme as ContributionReward);
+            break;
+          case SchemeType.SchemeRegistrar:
+            schemeForm = CreateSchemeRegistrarForm();
+            schemeForm.fromState(scheme as SchemeRegistrar);
+            break;
+          case SchemeType.GenericScheme:
+            schemeForm = CreateGenericSchemeForm();
+            schemeForm.fromState(scheme as GenericScheme);
+            break;
+          default:
+            throw Error(`Unimplemented SchemeType ${SchemeType[scheme.type]}`);
+        }
+
+        return schemeForm;
+      });
+    }
+  ).validators(requireElement("Scheme"));

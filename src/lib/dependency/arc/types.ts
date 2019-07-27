@@ -24,8 +24,14 @@ export interface ParamLink {
   getParametersHash: () => string;
 }
 
+export enum SchemeType {
+  ContributionReward,
+  SchemeRegistrar,
+  GenericScheme
+}
+
 export interface Scheme extends ParamLink {
-  typeName: string;
+  type: SchemeType;
   permissions: string;
   votingMachine: VotingMachine;
 }
@@ -113,32 +119,8 @@ export class GenesisProtocol implements VotingMachine {
   }
 }
 
-export class GenericScheme implements Scheme {
-  typeName: string = "GenericScheme";
-  permissions: string = "0x00000010";
-  votingMachine: VotingMachine;
-
-  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-
-  public getParameters(): any[] {
-    return [
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.address,
-      this.contractToCall
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "address", "address"], this.getParameters())
-    );
-  }
-}
-
 export class ContributionReward implements Scheme {
-  typeName: string = "ContributionReward";
+  type = SchemeType.ContributionReward;
   permissions: string = "0x00000000";
   votingMachine: VotingMachine;
 
@@ -159,7 +141,7 @@ export class ContributionReward implements Scheme {
 
 // TODO: support multiple voting machine configurations
 export class SchemeRegistrar implements Scheme {
-  typeName: string = "SchemeRegistrar";
+  type = SchemeType.SchemeRegistrar;
   permissions: string = "0x0000001F";
   votingMachine: VotingMachine;
 
@@ -178,6 +160,30 @@ export class SchemeRegistrar implements Scheme {
   public getParametersHash(): string {
     return keccak256(
       encodeParameters(["bytes32", "bytes32", "address"], this.getParameters())
+    );
+  }
+}
+
+export class GenericScheme implements Scheme {
+  type = SchemeType.GenericScheme;
+  permissions: string = "0x00000010";
+  votingMachine: VotingMachine;
+
+  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
+    this.votingMachine = votingMachine;
+  }
+
+  public getParameters(): any[] {
+    return [
+      this.votingMachine.getParametersHash(),
+      this.votingMachine.address,
+      this.contractToCall
+    ];
+  }
+
+  public getParametersHash(): string {
+    return keccak256(
+      encodeParameters(["bytes32", "address", "address"], this.getParameters())
     );
   }
 }

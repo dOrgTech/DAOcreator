@@ -47,8 +47,7 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
       });
     };
 
-    console.log(ProtocolPreset.fast);
-
+    // TODO: <GenesisProtocolAnalytics protocol{form.toState()} />
     return (
       <FormControl variant="filled" fullWidth>
         <InputLabel htmlFor="protocol">Genesis Protocol</InputLabel>
