@@ -9,7 +9,7 @@ import {
   CardContent,
   Typography
 } from "@material-ui/core";
-import SchemesView from "../../common/dao/SchemesView";
+import SchemesEditor from "../../common/dao/SchemesEditor";
 import { SchemesForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
@@ -27,7 +27,7 @@ class SchemesStep extends React.Component<Props> {
           <Typography variant="h4" gutterBottom>
             Add Schemes
           </Typography>
-          <SchemesView form={form} />
+          <SchemesEditor form={form} />
         </CardContent>
       </Card>
     );

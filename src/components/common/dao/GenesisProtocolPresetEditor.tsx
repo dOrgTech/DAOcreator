@@ -12,14 +12,15 @@ import {
   Grid,
   Fab,
   Dialog,
-  AppBar,
-  Toolbar,
-  Slide,
-  IconButton
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+  Button,
+  Divider
 } from "@material-ui/core";
-import { TransitionProps } from "@material-ui/core/transitions/transition";
 import EditIcon from "@material-ui/icons/Settings";
-import CloseIcon from "@material-ui/icons/Close";
+import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import {
   GenesisProtocolForm,
   CreateGenesisProtocolForm
@@ -30,7 +31,7 @@ interface Props extends WithStyles<typeof styles> {
   onSelect: (genesisProtocol: GenesisProtocolForm) => void;
 }
 
-export enum ProtocolPreset {
+enum ProtocolPreset {
   easy = "Easy",
   normal = "Normal",
   critical = "Critical",
@@ -42,7 +43,7 @@ interface State {
   editing: boolean;
 }
 
-class GenesisProtocolSelector extends React.Component<Props, State> {
+class GenesisProtocolPresetEditor extends React.Component<Props, State> {
   @observable
   form = CreateGenesisProtocolForm();
 
@@ -99,16 +100,10 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
       });
     };
 
-    const Transition = React.forwardRef<unknown, TransitionProps>(
-      function Transition(props, ref) {
-        // @ts-ignore: ref exists
-        return <Slide direction="up" ref={ref} {...props} />;
-      }
-    );
-
+    // TODO: base class for all forms
     // TODO: <GenesisProtocolAnalytics protocol{form.toState()} />
     return (
-      <div>
+      <>
         <FormControl variant="filled" fullWidth>
           <InputLabel htmlFor="protocol">Genesis Protocol</InputLabel>
           <Grid
@@ -146,24 +141,33 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
             </Grid>
           </Grid>
         </FormControl>
-        <Dialog fullScreen open={editing} TransitionComponent={Transition}>
-          <AppBar>
-            <Toolbar>
-              <Grid container justify="flex-end" alignItems="flex-start">
-                <Grid item>
-                  <IconButton color="inherit" onClick={onClose}>
-                    <CloseIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            </Toolbar>
-          </AppBar>
+        <Dialog
+          open={editing}
+          onClose={onClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Something about something Something about something Something
+              about something Something about something Something about
+              something Something about something Something about
+              somethingSomething about somethingSomething about something
+            </DialogContentText>
+            <div>
+              <span>&nbsp;&nbsp;</span>
+            </div>
+            <GenesisProtocolEditor form={form} editable={true} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose}>Save</Button>
+          </DialogActions>
         </Dialog>
-      </div>
+      </>
     );
   }
 }
 
 const styles = (theme: Theme) => createStyles({});
 
-export default withStyles(styles)(GenesisProtocolSelector);
+export default withStyles(styles)(GenesisProtocolPresetEditor);

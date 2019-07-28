@@ -13,7 +13,7 @@ import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import ContributionRewardIcon from "@material-ui/icons/DonutSmallTwoTone";
 import SchemeRegistrarIcon from "@material-ui/icons/WidgetsTwoTone";
 import GenericSchemeIcon from "@material-ui/icons/LanguageTwoTone";
-import SchemeView from "./SchemeView";
+import SchemeEditor from "./SchemeEditor";
 import {
   SchemesForm,
   SchemeForm,
@@ -29,13 +29,13 @@ interface Props extends WithStyles<typeof styles> {
   form: SchemesForm;
 }
 
-interface SchemeFormView {
+interface SchemeFormIcons {
   form: SchemeForm;
   Icon: React.ComponentType<SvgIconProps>;
 }
 
 @observer
-class SchemesView extends React.Component<Props> {
+class SchemesEditor extends React.Component<Props> {
   @observable
   contributionRewardForm: ContributionRewardForm = CreateContributionRewardForm();
 
@@ -45,7 +45,7 @@ class SchemesView extends React.Component<Props> {
   @observable
   genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
 
-  schemeForms: SchemeFormView[] = [
+  schemeForms: SchemeFormIcons[] = [
     {
       form: this.contributionRewardForm,
       Icon: ContributionRewardIcon
@@ -73,7 +73,7 @@ class SchemesView extends React.Component<Props> {
           alignItems="baseline"
         >
           {this.schemeForms.map(scheme => (
-            <SchemeView
+            <SchemeEditor
               form={scheme.form}
               Icon={scheme.Icon}
               editable={true}
@@ -99,4 +99,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(SchemesView);
+export default withStyles(styles)(SchemesEditor);

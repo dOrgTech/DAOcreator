@@ -12,9 +12,7 @@ import {
   Collapse
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
-import GenesisProtocolSelector, {
-  ProtocolPreset
-} from "./GenesisProtocolSelector";
+import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
 import { SchemeForm, GenesisProtocolForm } from "../../../lib/forms";
 import FormField from "../FormField";
 
@@ -29,7 +27,7 @@ interface State {
   enabled: boolean;
 }
 
-class SchemeView extends React.Component<Props, State> {
+class SchemeEditor extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -89,18 +87,14 @@ class SchemeView extends React.Component<Props, State> {
                   <>
                     <Typography variant="h6">Parameters</Typography>
                     {params.map((param, index) => (
-                      <FormField.Text
-                        id={`param-${index}`}
-                        field={param}
-                        editable={true}
-                      />
+                      <FormField.Text field={param} editable={true} />
                     ))}
                   </>
                 ) : (
                   <></>
                 )}
                 <Typography variant="h6">Voting Configuration</Typography>
-                <GenesisProtocolSelector
+                <GenesisProtocolPresetEditor
                   onSelect={(genesisProtocol: GenesisProtocolForm) => {
                     form.$.votingMachine = genesisProtocol;
                   }}
@@ -129,4 +123,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(SchemeView);
+export default withStyles(styles)(SchemeEditor);

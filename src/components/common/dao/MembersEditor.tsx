@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
-import MemberView from "./MemberView";
+import MemberEditor from "./MemberEditor";
 import {
   MemberForm,
   MembersForm,
@@ -26,7 +26,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 @observer
-class MembersView extends React.Component<Props> {
+class MembersEditor extends React.Component<Props> {
   @observable memberForm: MemberForm = CreateMemberForm();
   @observable addError: string | null | undefined = undefined;
 
@@ -37,7 +37,7 @@ class MembersView extends React.Component<Props> {
     return (
       <>
         <Grid container spacing={8} key={"new-member"} justify={"center"}>
-          <MemberView form={memberForm} editable={true} />
+          <MemberEditor form={memberForm} editable={true} />
           <Grid item className={classes.button}>
             <FormControl fullWidth>
               <Fab
@@ -96,7 +96,7 @@ class MembersView extends React.Component<Props> {
             key={`member-${index}`}
             justify={"center"}
           >
-            <MemberView form={member} editable={false} />
+            <MemberEditor form={member} editable={false} />
             <Grid item className={classes.button}>
               <Fab
                 size={"small"}
@@ -120,4 +120,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(MembersView);
+export default withStyles(styles)(MembersEditor);

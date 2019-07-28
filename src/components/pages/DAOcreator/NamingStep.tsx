@@ -43,16 +43,13 @@ class NamingStep extends React.Component<Props> {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <FormField.Text id={"daoName"} field={form.$.daoName} />
+                  <FormField.Text field={form.$.daoName} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text id={"tokenName"} field={form.$.tokenName} />
+                  <FormField.Text field={form.$.tokenName} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text
-                    id={"tokenSymbol"}
-                    field={form.$.tokenSymbol}
-                  />
+                  <FormField.Text field={form.$.tokenSymbol} />
                 </Grid>
               </Grid>
             </Grid>

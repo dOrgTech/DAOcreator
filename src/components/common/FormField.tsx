@@ -10,8 +10,8 @@ import { observer } from "mobx-react";
 
 class FormField {
   public static Text = observer(
-    (props: { id: string; field: StringField; editable?: boolean }) => {
-      const { id, field, editable } = props;
+    (props: { field: StringField; editable?: boolean }) => {
+      const { field, editable } = props;
 
       return (
         <FormControl fullWidth>
@@ -21,7 +21,6 @@ class FormField {
               label={field.displayName}
               variant={"filled"}
               error={field.hasError}
-              id={id}
               value={field.value}
               disabled={editable === undefined ? false : !editable}
               onChange={e => field.onChange(e.target.value)}

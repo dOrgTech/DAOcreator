@@ -1,5 +1,4 @@
 import * as React from "react";
-import { observer } from "mobx-react";
 import {
   WithStyles,
   Theme,
@@ -10,7 +9,7 @@ import {
   Grid,
   Typography
 } from "@material-ui/core";
-import MembersView from "../../common/dao/MembersView";
+import MembersEditor from "../../common/dao/MembersEditor";
 import MembersAnalytics from "../../common/dao/MembersAnalytics";
 import { MembersForm } from "../../../lib/forms";
 
@@ -41,7 +40,7 @@ class MembersStep extends React.Component<Props> {
               </Typography>
             </Grid>
             <MembersAnalytics members={members} />
-            <MembersView form={form} />
+            <MembersEditor form={form} />
           </Grid>
         </CardContent>
       </Card>
