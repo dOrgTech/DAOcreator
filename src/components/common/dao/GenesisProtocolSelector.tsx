@@ -8,8 +8,18 @@ import {
   Select,
   FilledInput,
   FormControl,
-  InputLabel
+  InputLabel,
+  Grid,
+  Fab,
+  Dialog,
+  AppBar,
+  Toolbar,
+  Slide,
+  IconButton
 } from "@material-ui/core";
+import { TransitionProps } from "@material-ui/core/transitions/transition";
+import EditIcon from "@material-ui/icons/Settings";
+import CloseIcon from "@material-ui/icons/Close";
 import {
   GenesisProtocolForm,
   CreateGenesisProtocolForm
@@ -29,6 +39,7 @@ export enum ProtocolPreset {
 
 interface State {
   protocol: ProtocolPreset;
+  editing: boolean;
 }
 
 class GenesisProtocolSelector extends React.Component<Props, State> {
@@ -38,13 +49,14 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      protocol: ProtocolPreset.normal
+      protocol: ProtocolPreset.normal,
+      editing: false
     };
   }
 
   render() {
-    const { onSelect } = this.props;
-    const { protocol } = this.state;
+    const { classes, onSelect } = this.props;
+    const { protocol, editing } = this.state;
     const form = this.form;
 
     const onChange = (event: React.ChangeEvent<{ value: any }>) => {
@@ -67,28 +79,87 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
       onSelect(form);
 
       this.setState({
+        ...this.state,
         protocol: preset
       });
     };
 
+    const onEdit = () => {
+      this.setState({
+        ...this.state,
+        editing: true,
+        protocol: ProtocolPreset.custom
+      });
+    };
+
+    const onClose = () => {
+      this.setState({
+        ...this.state,
+        editing: false
+      });
+    };
+
+    const Transition = React.forwardRef<unknown, TransitionProps>(
+      function Transition(props, ref) {
+        // @ts-ignore: ref exists
+        return <Slide direction="up" ref={ref} {...props} />;
+      }
+    );
+
     // TODO: <GenesisProtocolAnalytics protocol{form.toState()} />
     return (
-      <FormControl variant="filled" fullWidth>
-        <InputLabel htmlFor="protocol">Genesis Protocol</InputLabel>
-        <Select
-          native
-          value={protocol}
-          onChange={onChange}
-          input={<FilledInput name="protocol" id="protocol" />}
-        >
-          <option value={ProtocolPreset.easy}>{ProtocolPreset.easy}</option>
-          <option value={ProtocolPreset.normal}>{ProtocolPreset.normal}</option>
-          <option value={ProtocolPreset.critical}>
-            {ProtocolPreset.critical}
-          </option>
-          <option value={ProtocolPreset.custom}>{ProtocolPreset.custom}</option>
-        </Select>
-      </FormControl>
+      <div>
+        <FormControl variant="filled" fullWidth>
+          <InputLabel htmlFor="protocol">Genesis Protocol</InputLabel>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item xs={10}>
+              <Select
+                native
+                fullWidth
+                value={protocol}
+                onChange={onChange}
+                input={<FilledInput name="protocol" id="protocol" />}
+              >
+                <option value={ProtocolPreset.easy}>
+                  {ProtocolPreset.easy}
+                </option>
+                <option value={ProtocolPreset.normal}>
+                  {ProtocolPreset.normal}
+                </option>
+                <option value={ProtocolPreset.critical}>
+                  {ProtocolPreset.critical}
+                </option>
+                <option value={ProtocolPreset.custom}>
+                  {ProtocolPreset.custom}
+                </option>
+              </Select>
+            </Grid>
+            <Grid item>
+              <Fab size="small" color="secondary" onClick={onEdit}>
+                <EditIcon />
+              </Fab>
+            </Grid>
+          </Grid>
+        </FormControl>
+        <Dialog fullScreen open={editing} TransitionComponent={Transition}>
+          <AppBar>
+            <Toolbar>
+              <Grid container justify="flex-end" alignItems="flex-start">
+                <Grid item>
+                  <IconButton color="inherit" onClick={onClose}>
+                    <CloseIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </AppBar>
+        </Dialog>
+      </div>
     );
   }
 }
