@@ -1,4 +1,11 @@
-import { Address, BN, keccak256, encodeParameters } from "../web3";
+import {
+  Address,
+  BN,
+  keccak256,
+  encodeParameters,
+  TypeConversion
+} from "../web3";
+const toBN = TypeConversion.toBN;
 
 export interface DAO {
   avatar: Address;
@@ -41,41 +48,94 @@ export interface VotingMachine extends ParamLink {
   address: Address;
 }
 
+export interface GenesisProtocolConfig {
+  queuedVoteRequiredPercentage: BN;
+  queuedVotePeriodLimit: BN;
+  thresholdConst: BN;
+  proposingRepReward: BN;
+  minimumDaoBounty: BN;
+  boostedVotePeriodLimit: BN;
+  daoBountyConst: BN;
+  activationTime: BN;
+  preBoostedVotePeriodLimit: BN;
+  quietEndingPeriod: BN;
+  voteOnBehalf: Address;
+  votersReputationLossRatio: BN;
+}
+
 export class GenesisProtocol implements VotingMachine {
   public typeName: string = "GenesisProtocol";
   public address: Address = "TODO";
 
-  constructor(
-    public queuedVoteRequiredPercentage: BN,
-    public queuedVotePeriodLimit: BN,
-    public thresholdConst: BN,
-    public proposingRepReward: BN,
-    public minimumDaoBounty: BN,
-    public boostedVotePeriodLimit: BN,
-    public daoBountyConst: BN,
-    public activationTime: BN,
-    public preBoostedVotePeriodLimit: BN,
-    public quietEndingPeriod: BN,
-    public voteOnBehalf: Address,
-    public votersReputationLossRatio: BN
-  ) {}
+  public static get EasyConfig(): GenesisProtocol {
+    return new GenesisProtocol({
+      boostedVotePeriodLimit: toBN(129600), // 1.5 days
+      daoBountyConst: toBN(10),
+      minimumDaoBounty: toBN(50000000000), // 50 GEN
+      queuedVotePeriodLimit: toBN(604800), // 7 days
+      queuedVoteRequiredPercentage: toBN(50), // 50%
+      preBoostedVotePeriodLimit: toBN(43200), // 12 hours
+      proposingRepReward: toBN(10000000000), // 10 REP
+      quietEndingPeriod: toBN(86400), // 1 day
+      thresholdConst: toBN(1200),
+      votersReputationLossRatio: toBN(1), // 1%
+      voteOnBehalf: "0x0000000000000000000000000000000000000000",
+      activationTime: toBN(0)
+    });
+  }
+
+  public static get NormalConfig(): GenesisProtocol {
+    return new GenesisProtocol({
+      boostedVotePeriodLimit: toBN(345600), // 4 days
+      daoBountyConst: toBN(10),
+      minimumDaoBounty: toBN(150000000000), // 150 GEN
+      queuedVotePeriodLimit: toBN(2592000), // 30 days
+      queuedVoteRequiredPercentage: toBN(50), // 50%
+      preBoostedVotePeriodLimit: toBN(86400), // 1 day
+      proposingRepReward: toBN(50000000000), // 50 REP
+      quietEndingPeriod: toBN(172800), // 2 day
+      thresholdConst: toBN(1200),
+      votersReputationLossRatio: toBN(4), // 4%
+      voteOnBehalf: "0x0000000000000000000000000000000000000000",
+      activationTime: toBN(0)
+    });
+  }
+
+  public static get CriticalConfig(): GenesisProtocol {
+    return new GenesisProtocol({
+      boostedVotePeriodLimit: toBN(691200), // 8 days
+      daoBountyConst: toBN(10),
+      minimumDaoBounty: toBN(500000000000), // 500 GEN
+      queuedVotePeriodLimit: toBN(5184000), // 60 days
+      queuedVoteRequiredPercentage: toBN(50), // 50%
+      preBoostedVotePeriodLimit: toBN(172800), // 2 day
+      proposingRepReward: toBN(200000000000), // 200 REP
+      quietEndingPeriod: toBN(345600), // 4 day
+      thresholdConst: toBN(1500),
+      votersReputationLossRatio: toBN(4), // 4%
+      voteOnBehalf: "0x0000000000000000000000000000000000000000",
+      activationTime: toBN(0)
+    });
+  }
+
+  constructor(public config: GenesisProtocolConfig) {}
 
   public getParameters(): any[] {
     return [
       [
-        this.queuedVoteRequiredPercentage,
-        this.queuedVotePeriodLimit,
-        this.boostedVotePeriodLimit,
-        this.preBoostedVotePeriodLimit,
-        this.thresholdConst,
-        this.quietEndingPeriod,
-        this.proposingRepReward,
-        this.votersReputationLossRatio,
-        this.minimumDaoBounty,
-        this.daoBountyConst,
-        this.activationTime
+        this.config.queuedVoteRequiredPercentage,
+        this.config.queuedVotePeriodLimit,
+        this.config.boostedVotePeriodLimit,
+        this.config.preBoostedVotePeriodLimit,
+        this.config.thresholdConst,
+        this.config.quietEndingPeriod,
+        this.config.proposingRepReward,
+        this.config.votersReputationLossRatio,
+        this.config.minimumDaoBounty,
+        this.config.daoBountyConst,
+        this.config.activationTime
       ],
-      this.voteOnBehalf
+      this.config.voteOnBehalf
     ];
   }
 
@@ -99,20 +159,20 @@ export class GenesisProtocol implements VotingMachine {
               "uint"
             ],
             [
-              this.queuedVoteRequiredPercentage,
-              this.queuedVotePeriodLimit,
-              this.boostedVotePeriodLimit,
-              this.preBoostedVotePeriodLimit,
-              this.thresholdConst,
-              this.quietEndingPeriod,
-              this.proposingRepReward,
-              this.votersReputationLossRatio,
-              this.minimumDaoBounty,
-              this.daoBountyConst,
-              this.activationTime
+              this.config.queuedVoteRequiredPercentage,
+              this.config.queuedVotePeriodLimit,
+              this.config.boostedVotePeriodLimit,
+              this.config.preBoostedVotePeriodLimit,
+              this.config.thresholdConst,
+              this.config.quietEndingPeriod,
+              this.config.proposingRepReward,
+              this.config.votersReputationLossRatio,
+              this.config.minimumDaoBounty,
+              this.config.daoBountyConst,
+              this.config.activationTime
             ]
           ),
-          this.voteOnBehalf
+          this.config.voteOnBehalf
         ]
       )
     );

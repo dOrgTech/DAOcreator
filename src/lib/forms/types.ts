@@ -367,38 +367,45 @@ export const CreateGenesisProtocolForm = (
         )
     },
     function(this: GenesisProtocolForm): GenesisProtocol {
-      return new GenesisProtocol(
-        toBN(this.$.queuedVoteRequiredPercentage.value),
-        toBN(this.$.queuedVotePeriodLimit.value),
-        toBN(this.$.thresholdConst.value),
-        toBN(this.$.proposingRepReward.value).mul(toBN(1000000)), // GWei
-        toBN(this.$.minimumDaoBounty.value).mul(toBN(1000000)), // GWei
-        toBN(this.$.boostedVotePeriodLimit.value),
-        toBN(this.$.daoBountyConst.value),
-        toBN(this.$.activationTime.value),
-        toBN(this.$.preBoostedVotePeriodLimit.value),
-        toBN(this.$.quietEndingPeriod.value),
-        this.$.voteOnBehalf.value,
-        toBN(this.$.votersReputationLossRatio.value)
-      );
+      return new GenesisProtocol({
+        queuedVoteRequiredPercentage: toBN(
+          this.$.queuedVoteRequiredPercentage.value
+        ),
+        queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.value),
+        thresholdConst: toBN(this.$.thresholdConst.value),
+        proposingRepReward: toBN(this.$.proposingRepReward.value).mul(
+          toBN(1000000)
+        ), // GWei
+        minimumDaoBounty: toBN(this.$.minimumDaoBounty.value).mul(
+          toBN(1000000)
+        ), // GWei
+        boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.value),
+        daoBountyConst: toBN(this.$.daoBountyConst.value),
+        activationTime: toBN(this.$.activationTime.value),
+        preBoostedVotePeriodLimit: toBN(this.$.preBoostedVotePeriodLimit.value),
+        quietEndingPeriod: toBN(this.$.quietEndingPeriod.value),
+        voteOnBehalf: this.$.voteOnBehalf.value,
+        votersReputationLossRatio: toBN(this.$.votersReputationLossRatio.value)
+      });
     },
     function(this: GenesisProtocolForm, state: GenesisProtocol): void {
-      this.$.queuedVoteRequiredPercentage.value = state.queuedVoteRequiredPercentage.toString();
-      this.$.queuedVotePeriodLimit.value = state.queuedVotePeriodLimit.toString();
-      this.$.thresholdConst.value = state.thresholdConst.toString();
-      this.$.proposingRepReward.value = state.proposingRepReward
+      const config = state.config;
+      this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toString();
+      this.$.queuedVotePeriodLimit.value = config.queuedVotePeriodLimit.toString();
+      this.$.thresholdConst.value = config.thresholdConst.toString();
+      this.$.proposingRepReward.value = config.proposingRepReward
         .div(toBN(1000000))
         .toString();
-      this.$.minimumDaoBounty.value = state.minimumDaoBounty
+      this.$.minimumDaoBounty.value = config.minimumDaoBounty
         .div(toBN(1000000))
         .toString();
-      this.$.boostedVotePeriodLimit.value = state.boostedVotePeriodLimit.toString();
-      this.$.daoBountyConst.value = state.daoBountyConst.toString();
-      this.$.activationTime.value = state.activationTime.toString();
-      this.$.preBoostedVotePeriodLimit.value = state.preBoostedVotePeriodLimit.toString();
-      this.$.quietEndingPeriod.value = state.quietEndingPeriod.toString();
-      this.$.voteOnBehalf.value = state.voteOnBehalf;
-      this.$.votersReputationLossRatio.value = state.votersReputationLossRatio.toString();
+      this.$.boostedVotePeriodLimit.value = config.boostedVotePeriodLimit.toString();
+      this.$.daoBountyConst.value = config.daoBountyConst.toString();
+      this.$.activationTime.value = config.activationTime.toString();
+      this.$.preBoostedVotePeriodLimit.value = config.preBoostedVotePeriodLimit.toString();
+      this.$.quietEndingPeriod.value = config.quietEndingPeriod.toString();
+      this.$.voteOnBehalf.value = config.voteOnBehalf;
+      this.$.votersReputationLossRatio.value = config.votersReputationLossRatio.toString();
     }
   ).setDisplayName("Genesis Protocol");
 

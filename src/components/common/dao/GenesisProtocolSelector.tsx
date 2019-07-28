@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observable } from "mobx";
 import {
   Theme,
   createStyles,
@@ -9,16 +10,20 @@ import {
   FormControl,
   InputLabel
 } from "@material-ui/core";
-import { GenesisProtocolForm } from "../../../lib/forms";
+import {
+  GenesisProtocolForm,
+  CreateGenesisProtocolForm
+} from "../../../lib/forms";
+import { GenesisProtocol } from "../../../lib/dependency/arc";
 
 interface Props extends WithStyles<typeof styles> {
   onSelect: (genesisProtocol: GenesisProtocolForm) => void;
 }
 
-enum ProtocolPreset {
-  empty = "",
-  fast = "Fast",
-  slow = "Slow",
+export enum ProtocolPreset {
+  easy = "Easy",
+  normal = "Normal",
+  critical = "Critical",
   custom = "Custom"
 }
 
@@ -27,23 +32,42 @@ interface State {
 }
 
 class GenesisProtocolSelector extends React.Component<Props, State> {
+  @observable
+  form = CreateGenesisProtocolForm();
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      protocol: ProtocolPreset.empty
+      protocol: ProtocolPreset.normal
     };
   }
 
   render() {
     const { onSelect } = this.props;
     const { protocol } = this.state;
+    const form = this.form;
 
-    const handleChange = (name: keyof State) => (
-      event: React.ChangeEvent<{ value: any }>
-    ) => {
+    const onChange = (event: React.ChangeEvent<{ value: any }>) => {
+      const preset = event.target.value as ProtocolPreset;
+
+      // update the backing form to a preset if needed
+      switch (preset) {
+        case ProtocolPreset.easy:
+          form.fromState(GenesisProtocol.EasyConfig);
+          break;
+        case ProtocolPreset.normal:
+          form.fromState(GenesisProtocol.NormalConfig);
+          break;
+        case ProtocolPreset.critical:
+          form.fromState(GenesisProtocol.CriticalConfig);
+          break;
+      }
+
+      // let the parent know something's been chosen
+      onSelect(form);
+
       this.setState({
-        ...this.state,
-        [name]: event.target.value
+        protocol: preset
       });
     };
 
@@ -54,12 +78,14 @@ class GenesisProtocolSelector extends React.Component<Props, State> {
         <Select
           native
           value={protocol}
-          onChange={handleChange("protocol")}
+          onChange={onChange}
           input={<FilledInput name="protocol" id="protocol" />}
         >
-          <option value={ProtocolPreset.empty}>{ProtocolPreset.empty}</option>
-          <option value={ProtocolPreset.fast}>{ProtocolPreset.fast}</option>
-          <option value={ProtocolPreset.slow}>{ProtocolPreset.slow}</option>
+          <option value={ProtocolPreset.easy}>{ProtocolPreset.easy}</option>
+          <option value={ProtocolPreset.normal}>{ProtocolPreset.normal}</option>
+          <option value={ProtocolPreset.critical}>
+            {ProtocolPreset.critical}
+          </option>
           <option value={ProtocolPreset.custom}>{ProtocolPreset.custom}</option>
         </Select>
       </FormControl>

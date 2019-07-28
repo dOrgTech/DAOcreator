@@ -8,10 +8,13 @@ import {
   Card,
   CardContent,
   Grid,
-  Switch
+  Switch,
+  Collapse
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
-import GenesisProtocolSelector from "./GenesisProtocolSelector";
+import GenesisProtocolSelector, {
+  ProtocolPreset
+} from "./GenesisProtocolSelector";
 import { SchemeForm, GenesisProtocolForm } from "../../../lib/forms";
 import FormField from "../FormField";
 
@@ -22,10 +25,28 @@ interface Props extends WithStyles<typeof styles> {
   onToggle: (toggled: boolean) => void;
 }
 
-class SchemeView extends React.Component<Props> {
+interface State {
+  enabled: boolean;
+}
+
+class SchemeView extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      enabled: false
+    };
+  }
+
   render() {
     const { classes, form, Icon } = this.props;
+    const { enabled } = this.state;
     const params = form.getParams ? form.getParams() : [];
+
+    const onToggle = (event: object, checked: boolean) => {
+      this.setState({
+        enabled: checked
+      });
+    };
 
     return (
       <Grid item>
@@ -41,7 +62,7 @@ class SchemeView extends React.Component<Props> {
                 <Typography variant="h4">{form.displayName}</Typography>
               </Grid>
               <Grid item>
-                <Switch />
+                <Switch value={enabled} onChange={onToggle} />
               </Grid>
             </Grid>
             <Grid
@@ -62,26 +83,30 @@ class SchemeView extends React.Component<Props> {
                 </Typography>
               </Grid>
             </Grid>
-            {params.length > 0 ? (
-              <>
-                <Typography variant="h6">Parameters</Typography>
-                {params.map((param, index) => (
-                  <FormField.Text
-                    id={`param-${index}`}
-                    field={param}
-                    editable={true}
-                  />
-                ))}
-              </>
-            ) : (
-              <></>
-            )}
-            <Typography variant="h6">Voting Configuration</Typography>
-            <GenesisProtocolSelector
-              onSelect={(genesisProtocol: GenesisProtocolForm) => {
-                form.$.votingMachine = genesisProtocol;
-              }}
-            />
+            <Collapse in={enabled}>
+              <div>
+                {params.length > 0 ? (
+                  <>
+                    <Typography variant="h6">Parameters</Typography>
+                    {params.map((param, index) => (
+                      <FormField.Text
+                        id={`param-${index}`}
+                        field={param}
+                        editable={true}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <></>
+                )}
+                <Typography variant="h6">Voting Configuration</Typography>
+                <GenesisProtocolSelector
+                  onSelect={(genesisProtocol: GenesisProtocolForm) => {
+                    form.$.votingMachine = genesisProtocol;
+                  }}
+                />
+              </div>
+            </Collapse>
           </CardContent>
         </Card>
       </Grid>
