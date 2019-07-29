@@ -13,13 +13,16 @@ import {
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
-import { SchemeForm, GenesisProtocolForm } from "../../../lib/forms";
+import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
+import { SchemeForm } from "../../../lib/forms";
 import FormField from "../FormField";
+import { observer } from "mobx-react";
 
 interface Props extends WithStyles<typeof styles> {
   form: SchemeForm;
-  Icon: React.ComponentType<SvgIconProps>;
   editable: boolean;
+  enabled: boolean;
+  Icon: React.ComponentType<SvgIconProps>;
   onToggle: (toggled: boolean) => void;
 }
 
@@ -27,20 +30,22 @@ interface State {
   enabled: boolean;
 }
 
+@observer
 class SchemeEditor extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      enabled: false
+      enabled: this.props.enabled
     };
   }
 
   render() {
-    const { classes, form, Icon } = this.props;
+    const { classes, form, editable, Icon } = this.props;
     const { enabled } = this.state;
     const params = form.getParams ? form.getParams() : [];
 
     const onToggle = (event: object, checked: boolean) => {
+      this.props.onToggle(checked);
       this.setState({
         enabled: checked
       });
@@ -60,7 +65,11 @@ class SchemeEditor extends React.Component<Props, State> {
                 <Typography variant="h4">{form.displayName}</Typography>
               </Grid>
               <Grid item>
-                <Switch value={enabled} onChange={onToggle} />
+                <Switch
+                  disabled={!editable}
+                  checked={enabled}
+                  onChange={onToggle}
+                />
               </Grid>
             </Grid>
             <Grid
@@ -87,7 +96,7 @@ class SchemeEditor extends React.Component<Props, State> {
                   <>
                     <Typography variant="h6">Parameters</Typography>
                     {params.map((param, index) => (
-                      <FormField.Text field={param} editable={true} />
+                      <FormField.Text field={param} editable={editable} />
                     ))}
                   </>
                 ) : (
@@ -95,9 +104,11 @@ class SchemeEditor extends React.Component<Props, State> {
                 )}
                 <Typography variant="h6">Voting Configuration</Typography>
                 <GenesisProtocolPresetEditor
-                  onSelect={(genesisProtocol: GenesisProtocolForm) => {
-                    form.$.votingMachine = genesisProtocol;
-                  }}
+                  form={form.$.votingMachine}
+                  editable={editable}
+                />
+                <GenesisProtocolAnalytics
+                  data={form.$.votingMachine.toState()}
                 />
               </div>
             </Collapse>

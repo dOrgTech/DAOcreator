@@ -12,12 +12,12 @@ import PieChart from "../PieChart";
 import { Member } from "../../../lib/state";
 
 interface Props extends WithStyles<typeof styles> {
-  members: Member[];
+  data: Member[];
 }
 
 class MembersAnalytics extends React.Component<Props> {
   render() {
-    const { classes, members } = this.props;
+    const { classes, data } = this.props;
 
     return (
       <>
@@ -29,9 +29,9 @@ class MembersAnalytics extends React.Component<Props> {
           >
             Reputation Distribution
           </Typography>
-          {members.length > 0 ? (
+          {data.length > 0 ? (
             <PieChart
-              data={members}
+              data={data}
               config={{
                 hight: 240,
                 width: 240,
@@ -51,9 +51,9 @@ class MembersAnalytics extends React.Component<Props> {
           >
             Tokens Distribution
           </Typography>
-          {members.length > 0 ? (
+          {data.length > 0 ? (
             <PieChart
-              data={members}
+              data={data}
               config={{
                 hight: 240,
                 width: 240,

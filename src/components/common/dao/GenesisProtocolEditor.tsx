@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  WithStyles,
-  Theme,
-  createStyles,
-  withStyles,
-  Grid
-} from "@material-ui/core";
+import { WithStyles, Theme, createStyles, withStyles } from "@material-ui/core";
 import FormField from "../FormField";
 import { GenesisProtocolForm } from "../../../lib/forms";
 

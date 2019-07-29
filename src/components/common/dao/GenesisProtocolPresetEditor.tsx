@@ -1,5 +1,4 @@
 import * as React from "react";
-import { observable } from "mobx";
 import {
   Theme,
   createStyles,
@@ -16,19 +15,17 @@ import {
   DialogContentText,
   DialogContent,
   DialogActions,
-  Button,
-  Divider
+  Button
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
-import {
-  GenesisProtocolForm,
-  CreateGenesisProtocolForm
-} from "../../../lib/forms";
+import { GenesisProtocolForm } from "../../../lib/forms";
 import { GenesisProtocol } from "../../../lib/dependency/arc";
+import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
 
 interface Props extends WithStyles<typeof styles> {
-  onSelect: (genesisProtocol: GenesisProtocolForm) => void;
+  form: GenesisProtocolForm;
+  editable: boolean;
 }
 
 enum ProtocolPreset {
@@ -44,11 +41,9 @@ interface State {
 }
 
 class GenesisProtocolPresetEditor extends React.Component<Props, State> {
-  @observable
-  form = CreateGenesisProtocolForm();
-
   constructor(props: Props) {
     super(props);
+    this.props.form.fromState(GenesisProtocol.NormalConfig);
     this.state = {
       protocol: ProtocolPreset.normal,
       editing: false
@@ -56,9 +51,8 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, onSelect } = this.props;
+    const { classes, form, editable } = this.props;
     const { protocol, editing } = this.state;
-    const form = this.form;
 
     const onChange = (event: React.ChangeEvent<{ value: any }>) => {
       const preset = event.target.value as ProtocolPreset;
@@ -75,9 +69,6 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
           form.fromState(GenesisProtocol.CriticalConfig);
           break;
       }
-
-      // let the parent know something's been chosen
-      onSelect(form);
 
       this.setState({
         ...this.state,
@@ -100,8 +91,7 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
       });
     };
 
-    // TODO: base class for all forms
-    // TODO: <GenesisProtocolAnalytics protocol{form.toState()} />
+    // TODO: base class for all forms (move analytics into step, pass for into here)
     return (
       <>
         <FormControl variant="filled" fullWidth>
@@ -116,6 +106,7 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
               <Select
                 native
                 fullWidth
+                disabled={!editable}
                 value={protocol}
                 onChange={onChange}
                 input={<FilledInput name="protocol" id="protocol" />}
@@ -135,34 +126,39 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
               </Select>
             </Grid>
             <Grid item>
-              <Fab size="small" color="secondary" onClick={onEdit}>
+              <Fab
+                disabled={!editable}
+                size="small"
+                color="secondary"
+                onClick={onEdit}
+              >
                 <EditIcon />
               </Fab>
             </Grid>
+            <Dialog
+              open={editing}
+              onClose={onClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  TODO: Something about something Something about something
+                  Something about something Something about something Something
+                  about something Something about something Something about
+                  somethingSomething about somethingSomething about something
+                </DialogContentText>
+                <div>
+                  <span>&nbsp;&nbsp;</span>
+                </div>
+                <GenesisProtocolEditor form={form} editable={true} />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onClose}>Save</Button>
+              </DialogActions>
+            </Dialog>
           </Grid>
         </FormControl>
-        <Dialog
-          open={editing}
-          onClose={onClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Something about something Something about something Something
-              about something Something about something Something about
-              something Something about something Something about
-              somethingSomething about somethingSomething about something
-            </DialogContentText>
-            <div>
-              <span>&nbsp;&nbsp;</span>
-            </div>
-            <GenesisProtocolEditor form={form} editable={true} />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose}>Save</Button>
-          </DialogActions>
-        </Dialog>
       </>
     );
   }

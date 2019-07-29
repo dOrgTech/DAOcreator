@@ -20,7 +20,6 @@ interface Props extends WithStyles<typeof styles> {
 class MembersStep extends React.Component<Props> {
   render() {
     const { classes, form } = this.props;
-    const members = form.toState();
 
     return (
       <Card>
@@ -39,7 +38,7 @@ class MembersStep extends React.Component<Props> {
                 of reputation and tokens for each address.
               </Typography>
             </Grid>
-            <MembersAnalytics members={members} />
+            <MembersAnalytics data={form.toState()} />
             <MembersEditor form={form} />
           </Grid>
         </CardContent>

@@ -29,8 +29,9 @@ interface Props extends WithStyles<typeof styles> {
   form: SchemesForm;
 }
 
-interface SchemeFormIcons {
+interface SchemeFormDrawers {
   form: SchemeForm;
+  enabled: boolean;
   Icon: React.ComponentType<SvgIconProps>;
 }
 
@@ -45,17 +46,20 @@ class SchemesEditor extends React.Component<Props> {
   @observable
   genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
 
-  schemeForms: SchemeFormIcons[] = [
+  schemeForms: SchemeFormDrawers[] = [
     {
       form: this.contributionRewardForm,
+      enabled: true,
       Icon: ContributionRewardIcon
     },
     {
       form: this.schemeRegistrarForm,
+      enabled: true,
       Icon: SchemeRegistrarIcon
     },
     {
       form: this.genericSchemeForm,
+      enabled: false,
       Icon: GenericSchemeIcon
     }
   ];
@@ -77,6 +81,7 @@ class SchemesEditor extends React.Component<Props> {
               form={scheme.form}
               Icon={scheme.Icon}
               editable={true}
+              enabled={scheme.enabled}
               onToggle={(toggled: boolean) => {
                 if (toggled) {
                   form.$.push(scheme.form);
