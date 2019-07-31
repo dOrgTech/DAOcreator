@@ -107,9 +107,7 @@ class SchemeEditor extends React.Component<Props, State> {
                   form={form.$.votingMachine}
                   editable={editable}
                 />
-                <GenesisProtocolAnalytics
-                  data={form.$.votingMachine.toState()}
-                />
+                <GenesisProtocolAnalytics form={form.$.votingMachine} />
               </div>
             </Collapse>
           </CardContent>
