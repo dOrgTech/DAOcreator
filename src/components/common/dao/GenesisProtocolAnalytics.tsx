@@ -27,75 +27,75 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
   render() {
     const { classes, form } = this.props;
 
-    const secondsToString = (seconds: BN) => formatDays(secondsToDays(seconds));
+    const secondsToString = (seconds: number) =>
+      formatDays(secondsToDays(seconds));
 
     const proposalSpeedAnalytics = combineResults(
       analyzeField(form.$.boostedVotePeriodLimit, {
-        min: GP.EasyConfig.boostedVotePeriodLimit,
-        max: GP.CriticalConfig.boostedVotePeriodLimit,
+        min: GP.EasyConfig.boostedVotePeriodLimit.toNumber(),
+        max: GP.CriticalConfig.boostedVotePeriodLimit.toNumber(),
         toString: secondsToString
       }),
       analyzeField(form.$.queuedVotePeriodLimit, {
-        min: GP.EasyConfig.queuedVotePeriodLimit,
-        max: GP.CriticalConfig.queuedVotePeriodLimit,
+        min: GP.EasyConfig.queuedVotePeriodLimit.toNumber(),
+        max: GP.CriticalConfig.queuedVotePeriodLimit.toNumber(),
         toString: secondsToString
       }),
       analyzeField(form.$.preBoostedVotePeriodLimit, {
-        min: GP.EasyConfig.preBoostedVotePeriodLimit,
-        max: GP.CriticalConfig.preBoostedVotePeriodLimit,
-        toString: secondsToString
-      })
-    );
-
-    const voterAlignmentAssuranceAnalytics = combineResults(
-      analyzeField(form.$.queuedVoteRequiredPercentage, {
-        min: GP.EasyConfig.queuedVoteRequiredPercentage,
-        max: GP.CriticalConfig.queuedVoteRequiredPercentage,
-        toString: formatPercentage
-      }),
-      analyzeField(form.$.quietEndingPeriod, {
-        min: GP.EasyConfig.quietEndingPeriod,
-        max: GP.CriticalConfig.quietEndingPeriod,
+        min: GP.EasyConfig.preBoostedVotePeriodLimit.toNumber(),
+        max: GP.CriticalConfig.preBoostedVotePeriodLimit.toNumber(),
         toString: secondsToString
       })
     );
 
     const boostDifficultyAnalytics = combineResults(
       analyzeField(form.$.minimumDaoBounty, {
-        min: toBN(fromWei(GP.EasyConfig.minimumDaoBounty)),
-        max: toBN(fromWei(GP.CriticalConfig.minimumDaoBounty)),
+        min: Number(fromWei(GP.EasyConfig.minimumDaoBounty)),
+        max: Number(fromWei(GP.CriticalConfig.minimumDaoBounty)),
         toString: formatGEN
       }),
       analyzeField(form.$.thresholdConst, {
-        min: GP.EasyConfig.thresholdConst,
-        max: GP.CriticalConfig.thresholdConst,
-        toString: (value: BN) => value.toString()
+        min: GP.EasyConfig.thresholdConst.toNumber(),
+        max: GP.CriticalConfig.thresholdConst.toNumber(),
+        toString: (value: number) => value.toString()
+      })
+    );
+
+    const voterAlignmentAssuranceAnalytics = combineResults(
+      analyzeField(form.$.queuedVoteRequiredPercentage, {
+        min: GP.EasyConfig.queuedVoteRequiredPercentage.toNumber(),
+        max: GP.CriticalConfig.queuedVoteRequiredPercentage.toNumber(),
+        toString: formatPercentage
+      }),
+      analyzeField(form.$.quietEndingPeriod, {
+        min: GP.EasyConfig.quietEndingPeriod.toNumber(),
+        max: GP.CriticalConfig.quietEndingPeriod.toNumber(),
+        toString: secondsToString
       })
     );
 
     const alignmentIncentiveAnalytics = combineResults(
       analyzeField(form.$.proposingRepReward, {
-        min: toBN(fromWei(GP.EasyConfig.proposingRepReward)),
-        max: toBN(fromWei(GP.CriticalConfig.proposingRepReward)),
+        min: Number(fromWei(GP.EasyConfig.proposingRepReward)),
+        max: Number(fromWei(GP.CriticalConfig.proposingRepReward)),
         toString: formatREP
       }),
       analyzeField(form.$.daoBountyConst, {
-        min: GP.EasyConfig.daoBountyConst,
-        max: GP.CriticalConfig.daoBountyConst,
-        toString: (value: BN) => value.toString()
+        min: GP.EasyConfig.daoBountyConst.toNumber(),
+        max: GP.CriticalConfig.daoBountyConst.toNumber(),
+        toString: (value: number) => value.toString()
       })
     );
 
     const voterMisalignmentPenaltyAnalytics = combineResults(
       analyzeField(form.$.votersReputationLossRatio, {
-        min: GP.EasyConfig.votersReputationLossRatio,
-        max: GP.CriticalConfig.votersReputationLossRatio,
+        min: GP.EasyConfig.votersReputationLossRatio.toNumber(),
+        max: GP.CriticalConfig.votersReputationLossRatio.toNumber(),
         toString: formatPercentage
       })
     );
 
     // TODO: voteOnBehalf (etherscan link), activationTime (timer letting them know how long it'll be deactive for)
-
     return (
       <>
         <Divider className={classes.divider} />
@@ -105,13 +105,13 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         />
         <Divider className={classes.divider} />
         <AnalysisResultView
-          title="Voter Alignment Assurance"
-          result={voterAlignmentAssuranceAnalytics}
+          title="Boost Difficulty"
+          result={boostDifficultyAnalytics}
         />
         <Divider className={classes.divider} />
         <AnalysisResultView
-          title="Boost Difficulty"
-          result={boostDifficultyAnalytics}
+          title="Voter Alignment Assurance"
+          result={voterAlignmentAssuranceAnalytics}
         />
         <Divider className={classes.divider} />
         <AnalysisResultView
@@ -129,24 +129,24 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
 }
 
 // TODO use BN instead of number everywhere
-const secondsToDays = (seconds: BN): BN => {
-  return seconds.div(toBN(86400));
+const secondsToDays = (seconds: number): number => {
+  return seconds / 86400;
 };
 
-const formatDays = (days: BN): string => {
-  return `${Math.fround(days.toNumber())} Days`;
+const formatDays = (days: number): string => {
+  return `${Math.fround(days)} Days`;
 };
 
-const formatPercentage = (percentage: BN): string => {
-  return `${Math.fround(percentage.toNumber())}%`;
+const formatPercentage = (percentage: number): string => {
+  return `${Math.fround(percentage)}%`;
 };
 
-const formatGEN = (gen: BN): string => {
-  return `${Math.fround(gen.toNumber())} GEN`;
+const formatGEN = (gen: number): string => {
+  return `${Math.fround(gen)} GEN`;
 };
 
-const formatREP = (rep: BN): string => {
-  return `${Math.fround(rep.toNumber())} REP`;
+const formatREP = (rep: number): string => {
+  return `${Math.fround(rep)} REP`;
 };
 
 interface AnalysisResult {
@@ -156,23 +156,23 @@ interface AnalysisResult {
 }
 
 interface AnalysisOpts {
-  min: BN;
-  max: BN;
-  toString: (value: BN) => string;
+  min: number;
+  max: number;
+  toString: (value: number) => string;
 }
 
 const analyzeField = (
   field: StringField,
   opts: AnalysisOpts
 ): AnalysisResult => {
-  const value = toBN(field.value);
+  const value = Number(field.value);
   const { min, max } = opts;
   let toString = opts.toString;
 
   // Lerp between min and max based on
   let t: number;
 
-  if (Math.fround(min.sub(max).toNumber()) === 0) {
+  if (Math.fround(min - max) === 0) {
     if (value > max) {
       t = 1.1;
     } else if (value < min) {
@@ -181,10 +181,7 @@ const analyzeField = (
       t = 1;
     }
   } else {
-    t = value
-      .sub(min)
-      .div(max.sub(min))
-      .toNumber();
+    t = (value - min) / (max - min);
   }
 
   const warning: boolean = t < 0 || t > 1;
