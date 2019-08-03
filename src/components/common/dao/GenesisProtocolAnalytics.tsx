@@ -8,7 +8,8 @@ import {
   Typography,
   LinearProgress,
   Tooltip,
-  Grid
+  Grid,
+  Divider
 } from "@material-ui/core";
 import { GenesisProtocolForm, StringField } from "../../../lib/forms";
 import { GenesisProtocol as GP } from "../../../lib/dependency/arc";
@@ -24,7 +25,7 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class GenesisProtocolAnalytics extends React.Component<Props> {
   render() {
-    const { form } = this.props;
+    const { classes, form } = this.props;
 
     const secondsToString = (seconds: BN) => formatDays(secondsToDays(seconds));
 
@@ -97,16 +98,31 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
 
     return (
       <>
-        <Typography>Proposal Duration</Typography>
-        <AnalysisResultView result={proposalSpeedAnalytics} />
-        <Typography>Voter Alignment Assurance</Typography>
-        <AnalysisResultView result={voterAlignmentAssuranceAnalytics} />
-        <Typography>Boost Difficulty</Typography>
-        <AnalysisResultView result={boostDifficultyAnalytics} />
-        <Typography>Alignment Incentive</Typography>
-        <AnalysisResultView result={alignmentIncentiveAnalytics} />
-        <Typography>Voter Misalignment Penalty</Typography>
-        <AnalysisResultView result={voterMisalignmentPenaltyAnalytics} />
+        <Divider className={classes.divider} />
+        <AnalysisResultView
+          title="Proposal Duration"
+          result={proposalSpeedAnalytics}
+        />
+        <Divider className={classes.divider} />
+        <AnalysisResultView
+          title="Voter Alignment Assurance"
+          result={voterAlignmentAssuranceAnalytics}
+        />
+        <Divider className={classes.divider} />
+        <AnalysisResultView
+          title="Boost Difficulty"
+          result={boostDifficultyAnalytics}
+        />
+        <Divider className={classes.divider} />
+        <AnalysisResultView
+          title="Alignment Incentive"
+          result={alignmentIncentiveAnalytics}
+        />
+        <Divider className={classes.divider} />
+        <AnalysisResultView
+          title="Voter Misalignment Penalty"
+          result={voterMisalignmentPenaltyAnalytics}
+        />
       </>
     );
   }
@@ -134,7 +150,7 @@ const formatREP = (rep: BN): string => {
 };
 
 interface AnalysisResult {
-  t: BN;
+  t: number;
   message: string | React.ReactFragment;
   warning: boolean;
 }
@@ -156,9 +172,7 @@ const analyzeField = (
   // Lerp between min and max based on
   let t: number;
 
-  if (
-    Math.round(min.toNumber() * 10000) === Math.round(max.toNumber() * 10000)
-  ) {
+  if (Math.fround(min.sub(max).toNumber()) === 0) {
     if (value > max) {
       t = 1.1;
     } else if (value < min) {
@@ -191,7 +205,7 @@ const analyzeField = (
   }
 
   return {
-    t: toBN(t),
+    t,
     message,
     warning
   };
@@ -200,13 +214,13 @@ const analyzeField = (
 const combineResults = (...results: AnalysisResult[]): AnalysisResult => {
   // Aggregate results into a single result struct
   let result: AnalysisResult = {
-    t: toBN(0),
+    t: 0,
     warning: false,
     message: ""
   };
 
-  results.forEach((value, index) => {
-    result.t = result.t.add(value.t);
+  results.forEach(value => {
+    result.t += value.t;
     result.warning = result.warning || value.warning;
   });
 
@@ -225,12 +239,15 @@ const combineResults = (...results: AnalysisResult[]): AnalysisResult => {
   );
 
   // Average the t values
-  result.t.div(toBN(results.length));
+  result.t /= results.length;
 
   return result;
 };
 
-const AnalysisResultView = (props: { result: AnalysisResult }) => {
+const AnalysisResultView = (props: {
+  title: string;
+  result: AnalysisResult;
+}) => {
   const NormalStyle = {
     root: {
       height: 10,
@@ -264,11 +281,11 @@ const AnalysisResultView = (props: { result: AnalysisResult }) => {
     }
   }))(Tooltip);
 
-  const { result } = props;
-  let value = result.t.toNumber();
+  const { title, result } = props;
+  let value = result.t;
 
   // keep a little showing if there is no bar
-  if (result.t.isZero() && !result.warning) {
+  if (Math.fround(result.t) === 0 && !result.warning) {
     value = 0.05;
   }
 
@@ -277,6 +294,7 @@ const AnalysisResultView = (props: { result: AnalysisResult }) => {
   return (
     <Info title={result.message} placement={"top"}>
       <Grid>
+        <Typography variant="subtitle2">{title}</Typography>
         {result.warning ? (
           <Warning variant="determinate" color="secondary" value={value} />
         ) : (
@@ -287,6 +305,12 @@ const AnalysisResultView = (props: { result: AnalysisResult }) => {
   );
 };
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) =>
+  createStyles({
+    divider: {
+      marginTop: 10,
+      marginBottom: 5
+    }
+  });
 
 export default withStyles(styles)(GenesisProtocolAnalytics);
