@@ -41,9 +41,13 @@ interface State {
 }
 
 class GenesisProtocolPresetEditor extends React.Component<Props, State> {
+  private EasyConfig = new GenesisProtocol(GenesisProtocol.EasyConfig);
+  private NormalConfig = new GenesisProtocol(GenesisProtocol.NormalConfig);
+  private CriticalConfig = new GenesisProtocol(GenesisProtocol.CriticalConfig);
+
   constructor(props: Props) {
     super(props);
-    this.props.form.fromState(GenesisProtocol.NormalConfig);
+    this.props.form.fromState(this.NormalConfig);
     this.state = {
       protocol: ProtocolPreset.normal,
       editing: false
@@ -60,13 +64,13 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
       // update the backing form to a preset if needed
       switch (preset) {
         case ProtocolPreset.easy:
-          form.fromState(GenesisProtocol.EasyConfig);
+          form.fromState(this.EasyConfig);
           break;
         case ProtocolPreset.normal:
-          form.fromState(GenesisProtocol.NormalConfig);
+          form.fromState(this.NormalConfig);
           break;
         case ProtocolPreset.critical:
-          form.fromState(GenesisProtocol.CriticalConfig);
+          form.fromState(this.CriticalConfig);
           break;
       }
 

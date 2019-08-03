@@ -25,7 +25,7 @@ import {
 } from "../state";
 import { TypeConversion } from "../dependency/web3";
 import { SchemeType } from "../dependency/arc";
-const toBN = TypeConversion.toBN;
+const { toBN, toWei, fromWei } = TypeConversion;
 
 export class FriendlyField<T> extends FieldState<T> {
   private _description: string = "";
@@ -265,7 +265,7 @@ export const CreateGenesisProtocolForm = (
         form ? form.$.queuedVotePeriodLimit.value : "1800"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Queued Vote Period Limit")
+        .setDisplayName("Queued Vote Period")
         .setDescription("The duration, in seconds, of a voting period."),
 
       thresholdConst: new FriendlyField(
@@ -304,7 +304,7 @@ export const CreateGenesisProtocolForm = (
         form ? form.$.boostedVotePeriodLimit.value : "259200"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Boosted Vote Period Limit")
+        .setDisplayName("Boosted Vote Period")
         .setDescription(
           "The time limit, in seconds, for a proposal to be in the boosted phase, inclusive of the quietEndingPeriod."
         ),
@@ -331,7 +331,7 @@ export const CreateGenesisProtocolForm = (
         form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Pre Boosted Vote Period Limit")
+        .setDisplayName("Pre-Boosted Vote Period")
         .setDescription(
           "The time limit, in seconds, that a proposal can be in the preBoosted phase before it will be automatically closed with a winning vote of NO, regardless of the actual value of the winning vote at the time expiration. Note an attempt must be made to execute before the proposal state will actually change."
         ),
@@ -366,6 +366,7 @@ export const CreateGenesisProtocolForm = (
           "The percentage of reputation deducted from losing pre-boosted voters."
         )
     },
+    // TODO: use utility function for conversions of gwei to eth
     function(this: GenesisProtocolForm): GenesisProtocol {
       return new GenesisProtocol({
         queuedVoteRequiredPercentage: toBN(
@@ -373,12 +374,8 @@ export const CreateGenesisProtocolForm = (
         ),
         queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.value),
         thresholdConst: toBN(this.$.thresholdConst.value),
-        proposingRepReward: toBN(this.$.proposingRepReward.value).mul(
-          toBN(1000000)
-        ), // GWei
-        minimumDaoBounty: toBN(this.$.minimumDaoBounty.value).mul(
-          toBN(1000000)
-        ), // GWei
+        proposingRepReward: toBN(toWei(toBN(this.$.proposingRepReward.value))),
+        minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
         boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.value),
         daoBountyConst: toBN(this.$.daoBountyConst.value),
         activationTime: toBN(this.$.activationTime.value),
@@ -393,12 +390,8 @@ export const CreateGenesisProtocolForm = (
       this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toString();
       this.$.queuedVotePeriodLimit.value = config.queuedVotePeriodLimit.toString();
       this.$.thresholdConst.value = config.thresholdConst.toString();
-      this.$.proposingRepReward.value = config.proposingRepReward
-        .div(toBN(1000000))
-        .toString();
-      this.$.minimumDaoBounty.value = config.minimumDaoBounty
-        .div(toBN(1000000))
-        .toString();
+      this.$.proposingRepReward.value = fromWei(config.proposingRepReward);
+      this.$.minimumDaoBounty.value = fromWei(config.minimumDaoBounty);
       this.$.boostedVotePeriodLimit.value = config.boostedVotePeriodLimit.toString();
       this.$.daoBountyConst.value = config.daoBountyConst.toString();
       this.$.activationTime.value = config.activationTime.toString();

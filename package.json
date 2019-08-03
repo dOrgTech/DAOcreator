@@ -1,5 +1,5 @@
 {
-  "name": "dOrg-dApp",
+  "name": "@dorgtech/daocreator",
   "version": "0.2.0",
   "scripts": {
     "start": "react-scripts start",
@@ -11,6 +11,7 @@
     "@daostack/arc": "0.0.1-rc.16",
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "@material-ui/styles": "^4.3.0",
     "connected-react-router": "^6.4.0",
     "formstate": "^1.3.0",
     "history": "^4.9.0",
@@ -48,7 +49,7 @@
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
     "react-scripts": "3.0.0",
-    "typescript": "^3.4.5",
+    "typescript": "3.4.5",
     "wait-on": "^3.2.0"
   },
   "husky": {

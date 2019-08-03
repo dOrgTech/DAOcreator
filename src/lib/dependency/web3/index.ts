@@ -1,4 +1,4 @@
-import { BN } from "./types";
+import BN from "bn.js";
 import Web3 from "web3";
 import * as typeValidation from "./typeValidation";
 import * as typeConversion from "./typeConversion";
