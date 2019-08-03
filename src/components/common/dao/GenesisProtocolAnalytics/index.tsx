@@ -6,16 +6,13 @@ import {
   createStyles,
   withStyles,
   Typography,
-  LinearProgress,
-  Tooltip,
-  Grid,
   Divider
 } from "@material-ui/core";
-import { GenesisProtocolForm, StringField } from "../../../lib/forms";
-import { GenesisProtocol as GP } from "../../../lib/dependency/arc";
-import { TypeConversion } from "../../../lib/dependency/web3";
-import BN from "bn.js";
-const toBN = TypeConversion.toBN;
+import AnalysisResultView from "./AnalysisResultView";
+import { analyzeField, AnalysisResult } from "./utils";
+import { GenesisProtocolForm } from "../../../../lib/forms";
+import { GenesisProtocol as GP } from "../../../../lib/dependency/arc";
+import { TypeConversion } from "../../../../lib/dependency/web3";
 const fromWei = TypeConversion.fromWei;
 
 interface Props extends WithStyles<typeof styles> {
@@ -128,7 +125,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
   }
 }
 
-// TODO use BN instead of number everywhere
+// TODO: make this into a "DateTime" dependency in the lib when
+// that field view is made
 const secondsToDays = (seconds: number): number => {
   return seconds / 86400;
 };
@@ -149,66 +147,9 @@ const formatREP = (rep: number): string => {
   return `${Math.fround(rep)} REP`;
 };
 
-interface AnalysisResult {
-  t: number;
-  message: string | React.ReactFragment;
-  warning: boolean;
-}
-
-interface AnalysisOpts {
-  min: number;
-  max: number;
-  toString: (value: number) => string;
-}
-
-const analyzeField = (
-  field: StringField,
-  opts: AnalysisOpts
+export const combineResults = (
+  ...results: AnalysisResult[]
 ): AnalysisResult => {
-  const value = Number(field.value);
-  const { min, max } = opts;
-  let toString = opts.toString;
-
-  // Lerp between min and max based on
-  let t: number;
-
-  if (Math.fround(min - max) === 0) {
-    if (value > max) {
-      t = 1.1;
-    } else if (value < min) {
-      t = -0.1;
-    } else {
-      t = 1;
-    }
-  } else {
-    t = (value - min) / (max - min);
-  }
-
-  const warning: boolean = t < 0 || t > 1;
-  let message: string = ``;
-
-  if (t < 0) {
-    message += `[${
-      field.displayName
-    }] is LOWER than recommended min of ${toString(min)}`;
-    t = 0;
-  } else if (t > 1) {
-    message += `[${
-      field.displayName
-    }] is LARGER than recommended max of ${toString(max)}`;
-    t = 1;
-  } else {
-    message += `${field.displayName}: ${toString(value)}`;
-  }
-
-  return {
-    t,
-    message,
-    warning
-  };
-};
-
-const combineResults = (...results: AnalysisResult[]): AnalysisResult => {
   // Aggregate results into a single result struct
   let result: AnalysisResult = {
     t: 0,
@@ -239,67 +180,6 @@ const combineResults = (...results: AnalysisResult[]): AnalysisResult => {
   result.t /= results.length;
 
   return result;
-};
-
-const AnalysisResultView = (props: {
-  title: string;
-  result: AnalysisResult;
-}) => {
-  const NormalStyle = {
-    root: {
-      height: 10,
-      backgroundColor: "#94d8ff"
-    },
-    bar: {
-      borderRadius: 20,
-      backgroundColor: "#00a2ff"
-    }
-  };
-  const WarningStyle = {
-    root: {
-      height: 10,
-      backgroundColor: "#ffd178"
-    },
-    bar: {
-      borderRadius: 20,
-      backgroundColor: "#ffa800"
-    }
-  };
-  const Normal = withStyles(NormalStyle)(LinearProgress);
-  const Warning = withStyles(WarningStyle)(LinearProgress);
-
-  const Info = withStyles((theme: Theme) => ({
-    tooltip: {
-      backgroundColor: theme.palette.common.white,
-      maxWidth: 600,
-      fontSize: theme.typography.pxToRem(12),
-      border: "1px solid #dadde9",
-      paddingRight: 40
-    }
-  }))(Tooltip);
-
-  const { title, result } = props;
-  let value = result.t;
-
-  // keep a little showing if there is no bar
-  if (Math.fround(result.t) === 0 && !result.warning) {
-    value = 0.05;
-  }
-
-  value *= 100;
-
-  return (
-    <Info title={result.message} placement={"top"}>
-      <Grid>
-        <Typography variant="subtitle2">{title}</Typography>
-        {result.warning ? (
-          <Warning variant="determinate" color="secondary" value={value} />
-        ) : (
-          <Normal variant="determinate" color="secondary" value={value} />
-        )}
-      </Grid>
-    </Info>
-  );
 };
 
 const styles = (theme: Theme) =>
