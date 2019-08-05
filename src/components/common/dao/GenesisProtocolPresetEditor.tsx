@@ -147,10 +147,12 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
               <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  TODO: Something about something Something about something
-                  Something about something Something about something Something
-                  about something Something about something Something about
-                  somethingSomething about somethingSomething about something
+                  <div>
+                    Genesis protocol is our implementation of holographic
+                    consensus as a smart contract on the ethereum blockchain. In
+                    order to allow various use cases, the genesis protocol has
+                    several configurations parameters:
+                  </div>
                 </DialogContentText>
                 <div>
                   <span>&nbsp;&nbsp;</span>

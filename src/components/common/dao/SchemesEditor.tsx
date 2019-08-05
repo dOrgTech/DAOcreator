@@ -64,6 +64,7 @@ class SchemesEditor extends React.Component<Props> {
     }
   ];
 
+  // TODO: add schemes, and set SchemeRegistrar default to critical
   render() {
     const { classes, form } = this.props;
 

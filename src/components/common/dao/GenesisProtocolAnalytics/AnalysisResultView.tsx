@@ -15,7 +15,7 @@ const AnalysisResultView = (props: {
 }) => {
   const NormalStyle = {
     root: {
-      height: 10,
+      height: 5,
       backgroundColor: "#94d8ff"
     },
     bar: {
@@ -25,7 +25,7 @@ const AnalysisResultView = (props: {
   };
   const WarningStyle = {
     root: {
-      height: 10,
+      height: 5,
       backgroundColor: "#ffd178"
     },
     bar: {
