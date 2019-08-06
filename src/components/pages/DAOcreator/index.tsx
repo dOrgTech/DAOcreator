@@ -137,12 +137,12 @@ const styles = (theme: Theme) =>
       pointerEvents: "all"
     },
     content: {
-      marginTop: theme.spacing.unit,
-      marginBottom: theme.spacing.unit,
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
       pointerEvents: "all"
     },
     button: {
-      marginRight: theme.spacing.unit,
+      marginRight: theme.spacing(1),
       backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
       pointerEvents: "all"
     }

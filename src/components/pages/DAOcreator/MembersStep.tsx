@@ -29,8 +29,8 @@ class MembersStep extends React.Component<Props> {
           <Typography variant="h4" gutterBottom>
             Add Members
           </Typography>
-          <Grid container spacing={16}>
-            <Grid item xs={12} md={5}>
+          <Grid container>
+            <Grid item xs={12} md={6}>
               <Typography className={classes.guideText} variant="body2">
                 Here we specify the initial reputation and token distribution in
                 the DAO.

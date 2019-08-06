@@ -1,12 +1,12 @@
 import * as React from "react";
 import {
   withStyles,
-  Theme,
   LinearProgress,
-  Tooltip,
-  Grid,
-  Typography
+  Typography,
+  Popover,
+  ButtonBase
 } from "@material-ui/core";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import { AnalysisResult } from "./utils";
 
 const AnalysisResultView = (props: {
@@ -36,16 +36,6 @@ const AnalysisResultView = (props: {
   const Normal = withStyles(NormalStyle)(LinearProgress);
   const Warning = withStyles(WarningStyle)(LinearProgress);
 
-  const Info = withStyles((theme: Theme) => ({
-    tooltip: {
-      backgroundColor: theme.palette.common.white,
-      maxWidth: 600,
-      fontSize: theme.typography.pxToRem(12),
-      border: "1px solid #dadde9",
-      paddingRight: 40
-    }
-  }))(Tooltip);
-
   const { title, result } = props;
   let value = result.t;
 
@@ -57,16 +47,43 @@ const AnalysisResultView = (props: {
   value *= 100;
 
   return (
-    <Info title={result.message} placement={"top"}>
-      <Grid>
-        <Typography variant="subtitle2">{title}</Typography>
-        {result.warning ? (
-          <Warning variant="determinate" color="secondary" value={value} />
-        ) : (
-          <Normal variant="determinate" color="secondary" value={value} />
-        )}
-      </Grid>
-    </Info>
+    <PopupState variant="popover" popupId="popup-popover">
+      {(popupState: any) => (
+        <>
+          <ButtonBase
+            style={{ width: "100%" }}
+            focusRipple
+            {...bindTrigger(popupState)}
+          >
+            <span style={{ width: "100%" }}>
+              <Typography variant="subtitle2">{title}</Typography>
+              {result.warning ? (
+                <Warning
+                  variant="determinate"
+                  color="secondary"
+                  value={value}
+                />
+              ) : (
+                <Normal variant="determinate" color="secondary" value={value} />
+              )}
+            </span>
+          </ButtonBase>
+          <Popover
+            {...bindPopover(popupState)}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center"
+            }}
+          >
+            {result.message}
+          </Popover>
+        </>
+      )}
+    </PopupState>
   );
 };
 

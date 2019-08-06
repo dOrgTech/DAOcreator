@@ -33,8 +33,7 @@ class MembersAnalytics extends React.Component<Props> {
             <PieChart
               data={data}
               config={{
-                hight: 240,
-                width: 240,
+                size: 240,
                 dataKey: "reputation",
                 nameKey: "address"
               }}
@@ -55,8 +54,7 @@ class MembersAnalytics extends React.Component<Props> {
             <PieChart
               data={data}
               config={{
-                hight: 240,
-                width: 240,
+                size: 240,
                 dataKey: "tokens",
                 nameKey: "address"
               }}

@@ -18,8 +18,12 @@ class GenesisProtocolEditor extends React.Component<Props> {
     // a type. Then overrides can be made.
     return (
       <>
-        {Object.keys(formState).map((propName: string) => (
-          <FormField.Text field={formState[propName]} editable={editable} />
+        {Object.keys(formState).map((propName: string, index: number) => (
+          <FormField.Text
+            field={formState[propName]}
+            editable={editable}
+            key={`genproto-field-${index}`}
+          />
         ))}
       </>
     );

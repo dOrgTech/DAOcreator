@@ -28,7 +28,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
       <Typography variant="h4" className={classes.headline} gutterBottom>
         Review the DAO
       </Typography>
-      <Grid container spacing={16}>
+      <Grid container spacing={10}>
         <Grid item xs={12} md={5}>
           <Typography className={classes.guideText} variant="body2">
             Look over this summary of the DAO you are about to create
@@ -63,7 +63,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
           <Typography variant="h5" className={classes.headline} gutterBottom>
             Founders
           </Typography>
-          <Grid container spacing={16} key={`founder-headline`}>
+          <Grid container spacing={10} key={`founder-headline`}>
             <Grid item xs={1} />
             <Grid item xs={7}>
               <Typography>
@@ -84,7 +84,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
           {R.map(displayFounder, creator.members)}
         </Grid>
       </Grid>
-      <Grid container spacing={16}>
+      <Grid container spacing={10}>
         <Grid item xs={6} sm={6} md={6}>
           <Typography
             variant="h6"
@@ -96,8 +96,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
           <PieChart
             data={creator.members}
             config={{
-              hight: 240,
-              width: 240,
+              size: 240,
               dataKey: "reputation",
               nameKey: "address"
             }}
@@ -114,8 +113,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
           <PieChart
             data={creator.members}
             config={{
-              hight: 240,
-              width: 240,
+              size: 240,
               dataKey: "tokens",
               nameKey: "address"
             }}
@@ -127,7 +125,7 @@ const ReviewStep: React.SFC<Props> = ({ creator, classes }) => (
 );
 
 const displayFounder = ({ address, reputation, tokens }: Member) => (
-  <Grid container spacing={16} key={`founder-${address}`}>
+  <Grid container spacing={10} key={`founder-${address}`}>
     <Grid item xs={1}>
       <EthAddressAvatar address={address} />
     </Grid>
@@ -150,7 +148,7 @@ const displayScheme = (schemeConfig: any) => {
     ]
   const schemeDefinition = getSchemeDefinition(schemeConfig.typeName)
   return (
-    <Grid container spacing={16} key={`scheme-${schemeDefinition.typeName}`}>
+    <Grid container spacing={10} key={`scheme-${schemeDefinition.typeName}`}>
       <Grid item xs={12}>
         <Typography variant="subtitle1">
           {schemeDefinition.displayName}

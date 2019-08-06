@@ -71,7 +71,6 @@ class FormField {
                 vertical: "bottom",
                 horizontal: "left"
               }}
-              transition
             >
               {field.story === "" ? (
                 <Typography style={{ maxWidth: 400, margin: 20 }}>

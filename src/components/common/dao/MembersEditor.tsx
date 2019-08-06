@@ -36,7 +36,7 @@ class MembersEditor extends React.Component<Props> {
 
     return (
       <>
-        <Grid container spacing={8} key={"new-member"} justify={"center"}>
+        <Grid container spacing={1} key={"new-member"} justify={"center"}>
           <MemberEditor form={memberForm} editable={true} />
           <Grid item className={classes.button}>
             <FormControl fullWidth>
@@ -92,7 +92,7 @@ class MembersEditor extends React.Component<Props> {
         {form.$.map((member, index) => (
           <Grid
             container
-            spacing={8}
+            spacing={1}
             key={`member-${index}`}
             justify={"center"}
           >

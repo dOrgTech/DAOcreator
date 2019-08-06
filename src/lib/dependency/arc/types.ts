@@ -61,6 +61,7 @@ export interface GenesisProtocolConfig {
 export class GenesisProtocol implements VotingMachine {
   public typeName: string = "GenesisProtocol";
   public address: Address = "TODO";
+  public config: GenesisProtocolConfig;
 
   public static get EasyConfig(): GenesisProtocolConfig {
     return {
@@ -113,7 +114,9 @@ export class GenesisProtocol implements VotingMachine {
     };
   }
 
-  constructor(public config: GenesisProtocolConfig) {}
+  constructor(config: GenesisProtocolConfig) {
+    this.config = config;
+  }
 
   public getParameters(): any[] {
     return [
