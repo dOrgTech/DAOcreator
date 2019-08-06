@@ -8,7 +8,6 @@ interface Props extends WithStyles<typeof styles> {
   editable: boolean;
 }
 
-// https://daostack.zendesk.com/hc/en-us/articles/360002000537
 class GenesisProtocolEditor extends React.Component<Props> {
   render() {
     const { classes, form, editable } = this.props;

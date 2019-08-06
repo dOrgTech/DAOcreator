@@ -15,6 +15,7 @@
     "connected-react-router": "^6.4.0",
     "formstate": "^1.3.0",
     "history": "^4.9.0",
+    "material-ui-popup-state": "^1.4.0",
     "mobx": "^5.11.0",
     "mobx-react": "^6.1.1",
     "notistack": "^0.8.1",

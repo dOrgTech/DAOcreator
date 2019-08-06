@@ -30,6 +30,7 @@ const { toBN, toWei, fromWei } = TypeConversion;
 export class FriendlyField<T> extends FieldState<T> {
   private _description: string = "";
   private _displayName: string = "";
+  private _story: string = "";
 
   setDescription(description: string): FriendlyField<T> {
     this._description = description;
@@ -47,6 +48,15 @@ export class FriendlyField<T> extends FieldState<T> {
 
   get displayName(): string {
     return this._displayName;
+  }
+
+  setStory(story: string): FriendlyField<T> {
+    this._story = story;
+    return this;
+  }
+
+  get story(): string {
+    return this._story;
   }
 }
 
@@ -252,21 +262,90 @@ export const CreateGenesisProtocolForm = (
 ): GenesisProtocolForm =>
   new FriendlyForm(
     {
+      queuedVotePeriodLimit: new FriendlyField(
+        form ? form.$.queuedVotePeriodLimit.value : "1800"
+      )
+        .validators(requiredText, validBigNumber, greaterThan(0))
+        .setDisplayName("Queued Vote Period Limit")
+        .setDescription(
+          "The length of time that voting is open for non-boosted proposals."
+        )
+        .setStory(
+          "All proposals start out in the regular queue, where they require an absolute majority of support to pass or to fail. This parameter controls how long the DAO has to vote on a non-boosted proposal, so the longer it is, the more votes a given proposal is likely to accrue during its voting period. A longer voting period, however, also means the DAO will process proposals more slowly."
+        ),
+
+      preBoostedVotePeriodLimit: new FriendlyField(
+        form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
+      )
+        .validators(requiredText, validBigNumber, greaterThan(0))
+        .setDisplayName("Pre-Boosted Vote Period Limit")
+        .setDescription(
+          "The length of time that a proposal must maintain a confidence score higher than the boosting threshold to become eligible for boosting."
+        )
+        .setStory(
+          "If a proposal has received enough stake predicting its success to become boosted, it first has to go through this pending period, to ensure there’s a chance for predictors to downstake it. This improves the staking/boosting system’s prediction accuracy and resilience to malicious actions."
+        ),
+
+      boostedVotePeriodLimit: new FriendlyField(
+        form ? form.$.boostedVotePeriodLimit.value : "259200"
+      )
+        .validators(requiredText, validBigNumber, greaterThan(0))
+        .setDisplayName("Boosted Vote Period Limit")
+        .setDescription(
+          "The length of time that voting is open for boosted proposals."
+        )
+        .setStory(
+          "Proposals can only become boosted by gaining high confidence scores (lots of predictions that they will succeed), and so boosted proposals are “fast-tracked”: they require no minimum quorum of voters and have a shorter voting time period than non-boosted proposals."
+        ),
+
+      // TODO: make all of these Day/Hour/Second selectors
+      quietEndingPeriod: new FriendlyField(
+        form ? form.$.quietEndingPeriod.value : "86400"
+      )
+        .validators(requiredText, validBigNumber, greaterThan(0))
+        .setDisplayName("Quiet Ending Period")
+        .setDescription(
+          "The length of time a vote’s potential result needs to stay the same in order to be confirmed as the official result."
+        )
+        .setStory(
+          "Holding votes until the last second of a voting period is not good for collective intelligence, and the quiet ending period helps get rid of it. If a vote switches from yes to no, or vice versa, near the end of the voting time (during it’s quiet ending period), extra voting time (another quiet ending period) is added."
+        ),
+
       queuedVoteRequiredPercentage: new FriendlyField(
         form ? form.$.queuedVoteRequiredPercentage.value : "50"
       )
         .validators(requiredText, validPercentage)
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
-          "The minimum percentage for a vote on th queue to pass."
+          "The quorum required to decide a vote on a non-boosted proposal."
+        )
+        .setStory(
+          "We think of non-boosted proposals as requiring more than 50% of a DAO’s voting power to decide, but this percentage is actually adjustable as well. Some DAOs may want to require a supermajority such as 60% and others, realizing how unlikely reaching 50% consensus is given participation rates, may want a lower quorum."
         ),
 
-      queuedVotePeriodLimit: new FriendlyField(
-        form ? form.$.queuedVotePeriodLimit.value : "1800"
+      minimumDaoBounty: new FriendlyField(
+        form ? form.$.minimumDaoBounty.value : "100"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Queued Vote Period")
-        .setDescription("The duration, in seconds, of a voting period."),
+        .setDisplayName("Minimum DAO Bounty")
+        .setDescription(
+          "The minimum amount of GEN a DAO will stake when automatically downstaking each proposal."
+        )
+        .setStory(
+          "The DAO will automatically downstake every proposal, in order to properly set up the staking system, and this parameter sets the minimum size for that downstake. A higher minimum means the DAO is more heavily subsidizing staking."
+        ),
+
+      daoBountyConst: new FriendlyField(
+        form ? form.$.daoBountyConst.value : "75"
+      )
+        .validators(requiredText, validBigNumber, greaterThan(0))
+        .setDisplayName("DAO Bounty Const")
+        .setDescription(
+          "This is multiplied by the average downstake on boosted proposals to calculate how large the DAO’s automatic downstake should be."
+        )
+        .setStory(
+          "A size coefficient of 1 will mean the DAO automatically downstakes new proposal with a downstake as large as the average downstake on boosted proposals (unless that would be smaller than the minimum DAOstake parameter!)."
+        ),
 
       thresholdConst: new FriendlyField(
         form ? form.$.thresholdConst.value : "2000"
@@ -279,7 +358,22 @@ export const CreateGenesisProtocolForm = (
         )
         .setDisplayName("Threshold Const")
         .setDescription(
-          "Constant for thresold calculation. threshold = thresholdConst ** (numberOfBoostedProposals)."
+          "Controls how quickly the required confidence score for boosting goes up as the number of currently boosted proposals rises. threshold = thresholdConst ** (numberOfBoostedProposals)."
+        )
+        .setStory(
+          "The boosting confidence score is this parameter raised to a power equal to the number of boosted proposals. Because the threshold goes up exponentially, this parameter sets a “soft cap” on the number of boosted proposals while still allowing the number of boosted proposals to scale with the size of the DAO."
+        ),
+
+      votersReputationLossRatio: new FriendlyField(
+        form ? form.$.votersReputationLossRatio.value : "1"
+      )
+        .validators(requiredText, validBigNumber, validPercentage)
+        .setDisplayName("Voters Reputation Loss Ratio")
+        .setDescription(
+          "The percentage of a voter’s voting power they stand to lose if they vote against the DAO’s eventual decision on a non-boosted proposal."
+        )
+        .setStory(
+          "This loss / gain only applies to voting on non-boosted proposals. Voters who vote with the DAO’s eventual majority are rewarded with the voting power lost by incorrect voters. This has the effect of encouraging early votes to reflect the DAO’s perceived collective opinion, making the DAO more predictable and reliable overall. The larger this parameter is, the stronger the effect is."
         ),
 
       proposingRepReward: new FriendlyField(
@@ -288,62 +382,22 @@ export const CreateGenesisProtocolForm = (
         .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Proposing Rep Reward")
         .setDescription(
-          "Reputation reward amount to the user that passes a proposal."
-        ),
-
-      minimumDaoBounty: new FriendlyField(
-        form ? form.$.minimumDaoBounty.value : "100"
-      )
-        .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Minimum Dao Bounty")
-        .setDescription(
-          "The minimum amount you can have as a bounty for a proposal."
-        ),
-
-      boostedVotePeriodLimit: new FriendlyField(
-        form ? form.$.boostedVotePeriodLimit.value : "259200"
-      )
-        .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Boosted Vote Period")
-        .setDescription(
-          "The time limit, in seconds, for a proposal to be in the boosted phase, inclusive of the quietEndingPeriod."
-        ),
-
-      daoBountyConst: new FriendlyField(
-        form ? form.$.daoBountyConst.value : "75"
-      )
-        .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("DAO Bounty Const")
-        .setDescription(
-          "Multiple of a winning stake to be rewarded as bounty."
+          "The amount of voting power given out as a reward for submitting a proposal that the DAO passes."
+        )
+        .setStory(
+          "Each DAO has its own model of the ideal group of members to achieve its goals. Many of these models may include the idea that anyone who submits good ideas to the DAO belongs in that member group, and this parameter controls how much voting power those submitters are granted."
         ),
 
       activationTime: new FriendlyField(
         form ? form.$.activationTime.value : "0"
       )
         .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
-        .setDisplayName("Activation Time")
+        .setDisplayName("Locking / Activation Time")
         .setDescription(
-          "If set, proposals will be disabled until the time given has passed. Set to 0 to disable this feature."
-        ),
-
-      preBoostedVotePeriodLimit: new FriendlyField(
-        form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
-      )
-        .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Pre-Boosted Vote Period")
-        .setDescription(
-          "The time limit, in seconds, that a proposal can be in the preBoosted phase before it will be automatically closed with a winning vote of NO, regardless of the actual value of the winning vote at the time expiration. Note an attempt must be made to execute before the proposal state will actually change."
-        ),
-
-      // TODO: make all of these Day/Hour/Second selectors
-      quietEndingPeriod: new FriendlyField(
-        form ? form.$.quietEndingPeriod.value : "86400"
-      )
-        .validators(requiredText, validBigNumber, greaterThan(0))
-        .setDisplayName("Quiet Ending Period")
-        .setDescription(
-          "The duration, in seconds, at the end of the boosted phase during which any vote that changes the outcome of a proposal will cause the boosted phase to be extended by the amount of the quietEndingPeriod.  If the quietEndingPeriod expires then the proposal expires and may be executed.  It is a moving window: If the winning vote switches during the quietEndingPeriod then it restarts at the point in time when the vote switched, thus extending the boosted period."
+          "The point (represented in Unix time) in time when proposing and voting are activated."
+        )
+        .setStory(
+          "Some DAOs may want to build in some set up time before governance begins: a staking period, a fund raising period, etc. This parameter sets that time."
         ),
 
       voteOnBehalf: new FriendlyField(
@@ -355,15 +409,6 @@ export const CreateGenesisProtocolForm = (
         .setDisplayName("Vote On Behalf")
         .setDescription(
           "If set, only this address can call the vote function in the voting machine. This address would serve as a proxy voting module, and could contain additional functionality such as delegate based voting."
-        ),
-
-      votersReputationLossRatio: new FriendlyField(
-        form ? form.$.votersReputationLossRatio.value : "1"
-      )
-        .validators(requiredText, validBigNumber, validPercentage)
-        .setDisplayName("Voters Reputation Loss Ratio")
-        .setDescription(
-          "The percentage of reputation deducted from losing pre-boosted voters."
         )
     },
     // TODO: use utility function for conversions of gwei to eth
