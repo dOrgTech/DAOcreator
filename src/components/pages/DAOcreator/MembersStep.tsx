@@ -16,12 +16,13 @@ import { MembersForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
+  getDAOTokenSymbol: () => string;
 }
 
 @observer
 class MembersStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, getDAOTokenSymbol } = this.props;
 
     return (
       <Card>
@@ -41,7 +42,7 @@ class MembersStep extends React.Component<Props> {
               </Typography>
             </Grid>
             <MembersAnalytics data={form.toState()} />
-            <MembersEditor form={form} />
+            <MembersEditor getDAOTokenSymbol={getDAOTokenSymbol} form={form} />
           </Grid>
         </CardContent>
       </Card>

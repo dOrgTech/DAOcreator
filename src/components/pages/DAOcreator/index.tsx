@@ -27,6 +27,9 @@ interface Step {
   title: string;
   form: FormState<any>;
   Component: any;
+  props?: {
+    [name: string]: any;
+  };
 }
 
 class DAOcreator extends React.Component<Props, State> {
@@ -54,13 +57,16 @@ class DAOcreator extends React.Component<Props, State> {
       {
         title: "Members",
         form: this.form.$.members,
-        Component: MembersStep
+        Component: MembersStep,
+        props: {
+          getDAOTokenSymbol: () => this.form.$.config.$.tokenSymbol.value
+        }
       }
     ];
     const { classes } = this.props;
     const { step } = this.state;
     const isLastStep = step === steps.length - 1;
-    const { form, Component } = steps[step];
+    const { form, Component, props } = steps[step];
 
     const previousStep = async () => {
       this.setState({
@@ -90,7 +96,7 @@ class DAOcreator extends React.Component<Props, State> {
           </Stepper>
         </Card>
         <div className={classes.content}>
-          <Component form={form} />
+          <Component form={form} {...props} />
         </div>
         {isLastStep ? (
           <></>

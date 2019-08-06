@@ -27,40 +27,117 @@ import { TypeConversion } from "../dependency/web3";
 import { SchemeType } from "../dependency/arc";
 const { toBN, toWei, fromWei } = TypeConversion;
 
-export class FriendlyField<T> extends FieldState<T> {
+export enum FieldType {
+  String,
+  Token,
+  DateTime,
+  Duration,
+  Address,
+  Percentage
+}
+
+export abstract class FriendlyField<
+  ValueType,
+  DerivedType extends FriendlyField<ValueType, DerivedType>
+> extends FieldState<ValueType> {
   private _description: string = "";
   private _displayName: string = "";
   private _story: string = "";
+  private _type: FieldType;
 
-  setDescription(description: string): FriendlyField<T> {
+  constructor(init: ValueType, type: FieldType) {
+    super(init);
+    this._type = type;
+  }
+
+  setDescription(description: string): DerivedType {
     this._description = description;
-    return this;
+    return (this as any) as DerivedType;
   }
 
   get description(): string {
     return this._description;
   }
 
-  setDisplayName(displayName: string): FriendlyField<T> {
+  setDisplayName(displayName: string): DerivedType {
     this._displayName = displayName;
-    return this;
+    return (this as any) as DerivedType;
   }
 
   get displayName(): string {
     return this._displayName;
   }
 
-  setStory(story: string): FriendlyField<T> {
+  setStory(story: string): DerivedType {
     this._story = story;
-    return this;
+    return (this as any) as DerivedType;
   }
 
   get story(): string {
     return this._story;
   }
+
+  get type(): FieldType {
+    return this._type;
+  }
 }
 
-export type StringField = FriendlyField<string>;
+export class StringField extends FriendlyField<string, StringField> {
+  constructor(init: string) {
+    super(init, FieldType.String);
+  }
+}
+
+export class TokenField extends FriendlyField<string, TokenField> {
+  private _symbol: string | (() => string);
+
+  constructor(symbol: string | (() => string), init: string) {
+    super(init, FieldType.Token);
+    this._symbol = symbol;
+  }
+
+  get symbol(): string {
+    if (typeof this._symbol === "string") {
+      return this._symbol as string;
+    } else {
+      return this._symbol();
+    }
+  }
+}
+
+export class DateTimeField extends FriendlyField<string, DateTimeField> {
+  constructor(init: string) {
+    super(init, FieldType.DateTime);
+  }
+}
+
+// TODO: use number or BN wherever possible instead of string?
+export class DurationField extends FriendlyField<string, DurationField> {
+  constructor(init: string) {
+    super(init, FieldType.Duration);
+  }
+}
+
+// TODO: add standard verifiers for known types
+export class AddressField extends FriendlyField<string, AddressField> {
+  constructor(init: string) {
+    super(init, FieldType.Address);
+  }
+}
+
+export class PercentageField extends FriendlyField<string, PercentageField> {
+  constructor(init: string) {
+    super(init, FieldType.Percentage);
+  }
+}
+
+export type AnyField =
+  | StringField
+  | TokenField
+  | DateTimeField
+  | DurationField
+  | AddressField
+  | PercentageField;
 
 export class FriendlyForm<
   StateType,
@@ -109,11 +186,17 @@ export type DAOForm = FriendlyForm<
   }
 >;
 
-export const CreateDAOForm = (form?: DAOForm): DAOForm =>
-  new FriendlyForm(
+export const CreateDAOForm = (form?: DAOForm): DAOForm => {
+  const daoConfig = CreateDAOConfigForm(form ? form.$.config : undefined);
+  const getDAOTokenSymbol = () => daoConfig.$.tokenSymbol.value;
+
+  return new FriendlyForm(
     {
-      config: CreateDAOConfigForm(form ? form.$.config : undefined),
-      members: CreateMembersForm(form ? form.$.members : undefined),
+      config: daoConfig,
+      members: CreateMembersForm(
+        getDAOTokenSymbol,
+        form ? form.$.members : undefined
+      ),
       schemes: CreateSchemesForm(form ? form.$.schemes : undefined)
     },
     function(this: DAOForm): DAOcreatorState {
@@ -129,6 +212,7 @@ export const CreateDAOForm = (form?: DAOForm): DAOForm =>
       this.$.schemes.fromState(state.schemes);
     }
   );
+};
 
 export type DAOConfigForm = FriendlyForm<
   DAOConfig,
@@ -142,17 +226,17 @@ export type DAOConfigForm = FriendlyForm<
 export const CreateDAOConfigForm = (form?: DAOConfigForm): DAOConfigForm =>
   new FriendlyForm(
     {
-      daoName: new FriendlyField(form ? form.$.daoName.value : "")
+      daoName: new StringField(form ? form.$.daoName.value : "")
         .validators(requiredText, validName)
         .setDisplayName("DAO Name")
         .setDescription("The name of the DAO."),
 
-      tokenName: new FriendlyField(form ? form.$.tokenName.value : "")
+      tokenName: new StringField(form ? form.$.tokenName.value : "")
         .validators(requiredText, validName)
         .setDisplayName("Token Name")
         .setDescription("The name of the DAO's token."),
 
-      tokenSymbol: new FriendlyField(form ? form.$.tokenSymbol.value : "")
+      tokenSymbol: new StringField(form ? form.$.tokenSymbol.value : "")
         .validators(requiredText, validTokenSymbol)
         .setDisplayName("Token Symbol")
         .setDescription("The token's 4 letter symbol for exchanges.")
@@ -173,7 +257,10 @@ export const CreateDAOConfigForm = (form?: DAOConfigForm): DAOConfigForm =>
 
 export type MembersForm = FriendlyForm<Member[], MemberForm[]>;
 
-export const CreateMembersForm = (form?: MembersForm): MembersForm =>
+export const CreateMembersForm = (
+  getDAOTokenSymbol: () => string,
+  form?: MembersForm
+): MembersForm =>
   new FriendlyForm(
     form ? form.$.map(value => value) : ([] as MemberForm[]),
     function(this: MembersForm): Member[] {
@@ -181,7 +268,7 @@ export const CreateMembersForm = (form?: MembersForm): MembersForm =>
     },
     function(this: MembersForm, state: Member[]): void {
       this.$ = state.map(member => {
-        const memberForm = CreateMemberForm();
+        const memberForm = CreateMemberForm(getDAOTokenSymbol);
         memberForm.fromState(member);
         return memberForm;
       });
@@ -198,28 +285,31 @@ export const CreateMembersForm = (form?: MembersForm): MembersForm =>
 export type MemberForm = FriendlyForm<
   Member,
   {
-    address: StringField;
-    reputation: StringField;
-    tokens: StringField;
+    address: AddressField;
+    reputation: TokenField;
+    tokens: TokenField;
   }
 >;
 
-export const CreateMemberForm = (form?: MemberForm): MemberForm =>
+export const CreateMemberForm = (
+  getDAOTokenSymbol: () => string,
+  form?: MemberForm
+): MemberForm =>
   new FriendlyForm(
     {
-      address: new FriendlyField(form ? form.$.address.value : "")
+      address: new AddressField(form ? form.$.address.value : "")
         .validators(requiredText, validAddress, nonZeroAddress)
         .setDisplayName("Address")
         .setDescription("The member's public address."),
 
-      reputation: new FriendlyField(form ? form.$.reputation.value : "")
+      reputation: new TokenField("REP", form ? form.$.reputation.value : "")
         .validators(requiredText, validBigNumber)
         .setDisplayName("Reputation")
         .setDescription(
           "The member's reputation (voting power) within the DAO."
         ),
 
-      tokens: new FriendlyField(form ? form.$.tokens.value : "")
+      tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
         .validators(requiredText, validBigNumber)
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
@@ -241,18 +331,18 @@ export const CreateMemberForm = (form?: MemberForm): MemberForm =>
 export type GenesisProtocolForm = FriendlyForm<
   GenesisProtocol,
   {
-    queuedVoteRequiredPercentage: StringField;
-    queuedVotePeriodLimit: StringField;
-    thresholdConst: StringField;
-    proposingRepReward: StringField;
-    minimumDaoBounty: StringField;
-    boostedVotePeriodLimit: StringField;
+    queuedVotePeriodLimit: DurationField;
+    preBoostedVotePeriodLimit: DurationField;
+    boostedVotePeriodLimit: DurationField;
+    quietEndingPeriod: DurationField;
+    queuedVoteRequiredPercentage: PercentageField;
+    minimumDaoBounty: TokenField;
     daoBountyConst: StringField;
-    activationTime: StringField;
-    preBoostedVotePeriodLimit: StringField;
-    quietEndingPeriod: StringField;
-    voteOnBehalf: StringField;
-    votersReputationLossRatio: StringField;
+    thresholdConst: StringField;
+    votersReputationLossRatio: PercentageField;
+    proposingRepReward: TokenField;
+    activationTime: DateTimeField;
+    voteOnBehalf: AddressField;
   }
 >;
 
@@ -262,7 +352,7 @@ export const CreateGenesisProtocolForm = (
 ): GenesisProtocolForm =>
   new FriendlyForm(
     {
-      queuedVotePeriodLimit: new FriendlyField(
+      queuedVotePeriodLimit: new DurationField(
         form ? form.$.queuedVotePeriodLimit.value : "1800"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -274,7 +364,7 @@ export const CreateGenesisProtocolForm = (
           "All proposals start out in the regular queue, where they require an absolute majority of support to pass or to fail. This parameter controls how long the DAO has to vote on a non-boosted proposal, so the longer it is, the more votes a given proposal is likely to accrue during its voting period. A longer voting period, however, also means the DAO will process proposals more slowly."
         ),
 
-      preBoostedVotePeriodLimit: new FriendlyField(
+      preBoostedVotePeriodLimit: new DurationField(
         form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -286,7 +376,7 @@ export const CreateGenesisProtocolForm = (
           "If a proposal has received enough stake predicting its success to become boosted, it first has to go through this pending period, to ensure there’s a chance for predictors to downstake it. This improves the staking/boosting system’s prediction accuracy and resilience to malicious actions."
         ),
 
-      boostedVotePeriodLimit: new FriendlyField(
+      boostedVotePeriodLimit: new DurationField(
         form ? form.$.boostedVotePeriodLimit.value : "259200"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -298,8 +388,7 @@ export const CreateGenesisProtocolForm = (
           "Proposals can only become boosted by gaining high confidence scores (lots of predictions that they will succeed), and so boosted proposals are “fast-tracked”: they require no minimum quorum of voters and have a shorter voting time period than non-boosted proposals."
         ),
 
-      // TODO: make all of these Day/Hour/Second selectors
-      quietEndingPeriod: new FriendlyField(
+      quietEndingPeriod: new DurationField(
         form ? form.$.quietEndingPeriod.value : "86400"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -311,7 +400,7 @@ export const CreateGenesisProtocolForm = (
           "Holding votes until the last second of a voting period is not good for collective intelligence, and the quiet ending period helps get rid of it. If a vote switches from yes to no, or vice versa, near the end of the voting time (during it’s quiet ending period), extra voting time (another quiet ending period) is added."
         ),
 
-      queuedVoteRequiredPercentage: new FriendlyField(
+      queuedVoteRequiredPercentage: new PercentageField(
         form ? form.$.queuedVoteRequiredPercentage.value : "50"
       )
         .validators(requiredText, validPercentage)
@@ -323,7 +412,8 @@ export const CreateGenesisProtocolForm = (
           "We think of non-boosted proposals as requiring more than 50% of a DAO’s voting power to decide, but this percentage is actually adjustable as well. Some DAOs may want to require a supermajority such as 60% and others, realizing how unlikely reaching 50% consensus is given participation rates, may want a lower quorum."
         ),
 
-      minimumDaoBounty: new FriendlyField(
+      minimumDaoBounty: new TokenField(
+        "GEN",
         form ? form.$.minimumDaoBounty.value : "100"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -335,9 +425,7 @@ export const CreateGenesisProtocolForm = (
           "The DAO will automatically downstake every proposal, in order to properly set up the staking system, and this parameter sets the minimum size for that downstake. A higher minimum means the DAO is more heavily subsidizing staking."
         ),
 
-      daoBountyConst: new FriendlyField(
-        form ? form.$.daoBountyConst.value : "75"
-      )
+      daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "75")
         .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
@@ -347,7 +435,7 @@ export const CreateGenesisProtocolForm = (
           "A size coefficient of 1 will mean the DAO automatically downstakes new proposal with a downstake as large as the average downstake on boosted proposals (unless that would be smaller than the minimum DAOstake parameter!)."
         ),
 
-      thresholdConst: new FriendlyField(
+      thresholdConst: new StringField(
         form ? form.$.thresholdConst.value : "2000"
       )
         .validators(
@@ -364,7 +452,7 @@ export const CreateGenesisProtocolForm = (
           "The boosting confidence score is this parameter raised to a power equal to the number of boosted proposals. Because the threshold goes up exponentially, this parameter sets a “soft cap” on the number of boosted proposals while still allowing the number of boosted proposals to scale with the size of the DAO."
         ),
 
-      votersReputationLossRatio: new FriendlyField(
+      votersReputationLossRatio: new PercentageField(
         form ? form.$.votersReputationLossRatio.value : "1"
       )
         .validators(requiredText, validBigNumber, validPercentage)
@@ -376,7 +464,8 @@ export const CreateGenesisProtocolForm = (
           "This loss / gain only applies to voting on non-boosted proposals. Voters who vote with the DAO’s eventual majority are rewarded with the voting power lost by incorrect voters. This has the effect of encouraging early votes to reflect the DAO’s perceived collective opinion, making the DAO more predictable and reliable overall. The larger this parameter is, the stronger the effect is."
         ),
 
-      proposingRepReward: new FriendlyField(
+      proposingRepReward: new TokenField(
+        "REP",
         form ? form.$.proposingRepReward.value : "5"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
@@ -388,7 +477,7 @@ export const CreateGenesisProtocolForm = (
           "Each DAO has its own model of the ideal group of members to achieve its goals. Many of these models may include the idea that anyone who submits good ideas to the DAO belongs in that member group, and this parameter controls how much voting power those submitters are granted."
         ),
 
-      activationTime: new FriendlyField(
+      activationTime: new DateTimeField(
         form ? form.$.activationTime.value : "0"
       )
         .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
@@ -400,7 +489,7 @@ export const CreateGenesisProtocolForm = (
           "Some DAOs may want to build in some set up time before governance begins: a staking period, a fund raising period, etc. This parameter sets that time."
         ),
 
-      voteOnBehalf: new FriendlyField(
+      voteOnBehalf: new AddressField(
         form
           ? form.$.voteOnBehalf.value
           : "0x0000000000000000000000000000000000000000"
@@ -453,13 +542,13 @@ export class BaseSchemeForm<
   SchemeType extends Scheme,
   T extends ValidatableMapOrArray & { votingMachine: GenesisProtocolForm }
 > extends FriendlyForm<SchemeType, T> {
-  public getParams?: () => StringField[];
+  public getParams?: () => AnyField[];
 
   constructor(
     $: T,
     toState: () => SchemeType,
     fromState: (state: SchemeType) => void,
-    getParams: () => StringField[]
+    getParams: () => AnyField[]
   ) {
     super($, toState, fromState);
     this.getParams = getParams.bind(this);
@@ -477,7 +566,7 @@ export type GenericSchemeForm = BaseSchemeForm<
   GenericScheme,
   {
     votingMachine: GenesisProtocolForm;
-    contractToCall: StringField;
+    contractToCall: AddressField;
   }
 >;
 
@@ -488,7 +577,7 @@ export const CreateGenericSchemeForm = (
     {
       votingMachine: form ? form.$.votingMachine : CreateGenesisProtocolForm(),
 
-      contractToCall: new FriendlyField(
+      contractToCall: new AddressField(
         form
           ? form.$.contractToCall.value
           : "0x0000000000000000000000000000000000000000"
@@ -508,7 +597,7 @@ export const CreateGenericSchemeForm = (
       // TODO: support multiple voting machine types
       this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
     },
-    function(this: GenericSchemeForm): StringField[] {
+    function(this: GenericSchemeForm): AnyField[] {
       return [this.$.contractToCall];
     }
   )
@@ -538,7 +627,7 @@ export const CreateContributionRewardForm = (
       // TODO: support multiple types of voting machines
       this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
     },
-    function(this: ContributionRewardForm): StringField[] {
+    function(this: ContributionRewardForm): AnyField[] {
       return [];
     }
   )
@@ -568,7 +657,7 @@ export const CreateSchemeRegistrarForm = (
       // TODO: support multiple voting machine types
       this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
     },
-    function(this: SchemeRegistrarForm): StringField[] {
+    function(this: SchemeRegistrarForm): AnyField[] {
       return [];
     }
   )

@@ -23,15 +23,18 @@ import {
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
+  getDAOTokenSymbol: () => string;
 }
 
 @observer
 class MembersEditor extends React.Component<Props> {
-  @observable memberForm: MemberForm = CreateMemberForm();
   @observable addError: string | null | undefined = undefined;
+  @observable memberForm: MemberForm = CreateMemberForm(
+    this.props.getDAOTokenSymbol
+  );
 
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, getDAOTokenSymbol } = this.props;
     const memberForm = this.memberForm;
 
     return (
@@ -53,7 +56,7 @@ class MembersEditor extends React.Component<Props> {
 
                   // See if the new member can be added to the array
                   // without any errors
-                  const arrayCopy = CreateMembersForm(form);
+                  const arrayCopy = CreateMembersForm(getDAOTokenSymbol, form);
                   arrayCopy.$.push(memberForm);
 
                   const arrayValdiate = await arrayCopy.validate();
@@ -65,7 +68,7 @@ class MembersEditor extends React.Component<Props> {
                   this.addError = undefined;
 
                   // Finally add the new member to the form
-                  form.$.push(CreateMemberForm(memberForm));
+                  form.$.push(CreateMemberForm(getDAOTokenSymbol, memberForm));
                   memberForm.reset();
                 }}
               >

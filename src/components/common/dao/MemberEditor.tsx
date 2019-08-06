@@ -26,13 +26,13 @@ class MemberEditor extends React.Component<Props> {
           <EthAddressAvatar address={address} />
         </Grid>
         <Grid item sm={4} xs={8}>
-          <FormField.Text field={form.$.address} editable={editable} />
+          <FormField field={form.$.address} editable={editable} />
         </Grid>
         <Grid item sm={3} xs={5}>
-          <FormField.Text field={form.$.reputation} editable={editable} />
+          <FormField field={form.$.reputation} editable={editable} />
         </Grid>
         <Grid item sm={3} xs={5}>
-          <FormField.Text field={form.$.tokens} editable={editable} />
+          <FormField field={form.$.tokens} editable={editable} />
         </Grid>
       </>
     );

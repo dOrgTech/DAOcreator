@@ -19,7 +19,7 @@ class GenesisProtocolEditor extends React.Component<Props> {
     return (
       <>
         {Object.keys(formState).map((propName: string, index: number) => (
-          <FormField.Text
+          <FormField
             field={formState[propName]}
             editable={editable}
             key={`genproto-field-${index}`}
