@@ -87,7 +87,9 @@ class SchemesEditor extends React.Component<Props> {
                 if (toggled) {
                   form.$.push(scheme.form);
                 } else {
-                  // TODO: form.$.findIndex()
+                  // TODO: use the type paradigm with schemes like fields did
+                  console.log(form.$.map(scheme => scheme.type));
+                  form.$ = form.$.splice(form.$.indexOf(scheme.form));
                 }
               }}
             />
