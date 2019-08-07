@@ -13,7 +13,7 @@ import {
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
-import { DAOForm, CreateDAOForm } from "../../../lib/forms";
+import { DAOForm } from "../../../lib/forms";
 import { FormState } from "formstate";
 
 // eslint-disable-next-line
@@ -33,7 +33,7 @@ interface Step {
 }
 
 class DAOcreator extends React.Component<Props, State> {
-  form: DAOForm = CreateDAOForm();
+  form = new DAOForm();
 
   constructor(props: Props) {
     super(props);

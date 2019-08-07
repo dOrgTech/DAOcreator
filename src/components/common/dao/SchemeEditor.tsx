@@ -14,12 +14,12 @@ import {
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
 import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
-import { SchemeForm } from "../../../lib/forms";
+import { AnySchemeForm } from "../../../lib/forms";
 import FormField from "../FormField";
 import { observer } from "mobx-react";
 
 interface Props extends WithStyles<typeof styles> {
-  form: SchemeForm;
+  form: AnySchemeForm;
   editable: boolean;
   enabled: boolean;
   Icon: React.ComponentType<SvgIconProps>;
@@ -34,9 +34,13 @@ interface State {
 class SchemeEditor extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      enabled: this.props.enabled
-    };
+
+    const { enabled, onToggle } = this.props;
+    this.state = { enabled };
+
+    if (enabled) {
+      onToggle(true);
+    }
   }
 
   render() {

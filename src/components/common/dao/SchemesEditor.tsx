@@ -16,13 +16,10 @@ import GenericSchemeIcon from "@material-ui/icons/LanguageTwoTone";
 import SchemeEditor from "./SchemeEditor";
 import {
   SchemesForm,
-  SchemeForm,
+  AnySchemeForm,
   GenericSchemeForm,
   ContributionRewardForm,
-  SchemeRegistrarForm,
-  CreateGenericSchemeForm,
-  CreateContributionRewardForm,
-  CreateSchemeRegistrarForm
+  SchemeRegistrarForm
 } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
@@ -30,7 +27,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 interface SchemeFormDrawers {
-  form: SchemeForm;
+  form: AnySchemeForm;
   enabled: boolean;
   Icon: React.ComponentType<SvgIconProps>;
 }
@@ -38,13 +35,13 @@ interface SchemeFormDrawers {
 @observer
 class SchemesEditor extends React.Component<Props> {
   @observable
-  contributionRewardForm: ContributionRewardForm = CreateContributionRewardForm();
+  contributionRewardForm = new ContributionRewardForm();
 
   @observable
-  schemeRegistrarForm: SchemeRegistrarForm = CreateSchemeRegistrarForm();
+  schemeRegistrarForm = new SchemeRegistrarForm();
 
   @observable
-  genericSchemeForm: GenericSchemeForm = CreateGenericSchemeForm();
+  genericSchemeForm = new GenericSchemeForm();
 
   schemeForms: SchemeFormDrawers[] = [
     {
@@ -87,9 +84,17 @@ class SchemesEditor extends React.Component<Props> {
                 if (toggled) {
                   form.$.push(scheme.form);
                 } else {
-                  // TODO: use the type paradigm with schemes like fields did
-                  console.log(form.$.map(scheme => scheme.type));
-                  form.$ = form.$.splice(form.$.indexOf(scheme.form));
+                  const index = form.$.findIndex(
+                    test => test.type === scheme.form.type
+                  );
+
+                  if (index === -1) {
+                    throw Error(
+                      "Trying to remove scheme that hasn't been added."
+                    );
+                  }
+
+                  form.$.splice(index, 1);
                 }
               }}
               key={`scheme-${index}`}

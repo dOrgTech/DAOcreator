@@ -14,12 +14,7 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
-import {
-  MemberForm,
-  MembersForm,
-  CreateMemberForm,
-  CreateMembersForm
-} from "../../../lib/forms";
+import { MemberForm, MembersForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
@@ -29,9 +24,7 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class MembersEditor extends React.Component<Props> {
   @observable addError: string | null | undefined = undefined;
-  @observable memberForm: MemberForm = CreateMemberForm(
-    this.props.getDAOTokenSymbol
-  );
+  @observable memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
   render() {
     const { classes, form, getDAOTokenSymbol } = this.props;
@@ -56,7 +49,7 @@ class MembersEditor extends React.Component<Props> {
 
                   // See if the new member can be added to the array
                   // without any errors
-                  const arrayCopy = CreateMembersForm(getDAOTokenSymbol, form);
+                  const arrayCopy = new MembersForm(getDAOTokenSymbol, form);
                   arrayCopy.$.push(memberForm);
 
                   const arrayValdiate = await arrayCopy.validate();
@@ -68,7 +61,7 @@ class MembersEditor extends React.Component<Props> {
                   this.addError = undefined;
 
                   // Finally add the new member to the form
-                  form.$.push(CreateMemberForm(getDAOTokenSymbol, memberForm));
+                  form.$.push(new MemberForm(getDAOTokenSymbol, memberForm));
                   memberForm.reset();
                 }}
               >
