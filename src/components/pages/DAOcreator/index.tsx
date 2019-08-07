@@ -20,6 +20,7 @@ interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
+  error: string;
 }
 
 interface Step {
@@ -37,17 +38,18 @@ class DAOcreator extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 0
+      step: 0,
+      error: ""
     };
   }
 
   render() {
     const steps: Step[] = [
-      {
+      /*{
         title: "Name",
         form: this.form.$.config,
         Component: NamingStep
-      },
+      },*/
       {
         title: "Schemes",
         form: this.form.$.schemes,
@@ -69,17 +71,32 @@ class DAOcreator extends React.Component<Props, State> {
 
     const previousStep = async () => {
       this.setState({
-        step: this.state.step - 1
+        step: this.state.step - 1,
+        error: ""
       });
     };
 
     const nextStep = async () => {
       const res = await form.validate();
+      const { step } = this.state;
 
       if (!res.hasError) {
         this.setState({
-          step: this.state.step + 1
+          step: step + 1,
+          error: ""
         });
+      } else {
+        if (form.error) {
+          this.setState({
+            step,
+            error: form.error
+          });
+        } else {
+          this.setState({
+            step,
+            error: "Unknown Error."
+          });
+        }
       }
     };
 

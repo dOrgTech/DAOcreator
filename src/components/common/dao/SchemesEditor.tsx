@@ -7,7 +7,8 @@ import {
   Theme,
   createStyles,
   withStyles,
-  Grid
+  Grid,
+  Typography
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import ContributionRewardIcon from "@material-ui/icons/DonutSmallTwoTone";
@@ -64,6 +65,7 @@ class SchemesEditor extends React.Component<Props> {
   // TODO: add schemes, and set SchemeRegistrar default to critical
   render() {
     const { classes, form } = this.props;
+    const error = form.showFormError;
 
     return (
       <div className={classes.root}>
@@ -101,6 +103,7 @@ class SchemesEditor extends React.Component<Props> {
             />
           ))}
         </Grid>
+        {error ? <Typography color={"error"}>{form.error}</Typography> : <></>}
       </div>
     );
   }
