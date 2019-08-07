@@ -1,20 +1,18 @@
-import { Action as Event } from "redux"
-export type Event<T> = Event<T>
+import { Action as Event } from "redux";
+export type Event<T> = Event<T>;
 
 export interface PayloadEvent<TType, TPayload> extends Event<TType> {
-  payload: TPayload
+  payload: TPayload;
 }
 
-// tslint:disable-next-line:max-line-length
 export function createEvent<TEvent extends Event<TEvent["type"]>>(
   type: TEvent["type"]
 ): () => Event<TEvent["type"]> {
   return () => ({
-    type,
-  })
+    type
+  });
 }
 
-// tslint:disable-next-line:max-line-length
 export function createPayloadEvent<
   TEvent extends PayloadEvent<TEvent["type"], TEvent["payload"]>
 >(
@@ -24,6 +22,6 @@ export function createPayloadEvent<
 ) => PayloadEvent<TEvent["type"], TEvent["payload"]> {
   return (payload: TEvent["payload"]) => ({
     type,
-    payload,
-  })
+    payload
+  });
 }

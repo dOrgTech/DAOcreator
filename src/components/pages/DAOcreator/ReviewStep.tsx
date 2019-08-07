@@ -17,7 +17,6 @@ import { DAOcreatorState } from "../../../lib/state";
 import EthAddressAvatar from "../../common/EthAddressAvatar";
 import PieChart from "../../common/PieChart";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   creator: DAOcreatorState;
 }

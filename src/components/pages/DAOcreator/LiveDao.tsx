@@ -14,7 +14,6 @@ import { Dispatch } from "redux";
 import { DAO } from "../../../lib/dependency/arc";
 import { RootState } from "../../../lib/state";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined;
 }

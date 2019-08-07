@@ -12,7 +12,6 @@ import * as React from "react";
 import FormField from "../../common/FormField";
 import { DAOConfigForm } from "../../../lib/forms";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm;
 }

@@ -1,19 +1,18 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { push } from "connected-react-router"
+import * as React from "react";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
 import {
   withStyles,
   Typography,
   Button,
   Theme,
   WithStyles,
-  createStyles,
-} from "@material-ui/core"
-import InfoPage from "../common/InfoPage"
+  createStyles
+} from "@material-ui/core";
+import InfoPage from "../common/InfoPage";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  createDao: () => void
+  createDao: () => void;
 }
 
 const Dapp: React.SFC<Props> = ({ classes, createDao }) => (
@@ -51,39 +50,39 @@ const Dapp: React.SFC<Props> = ({ classes, createDao }) => (
       </>
     )}
   />
-)
+);
 
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
     body: {
-      margin: 20,
+      margin: 20
     },
     header: {
       margin: 20,
-      textAlign: "center",
+      textAlign: "center"
     },
     button: {
-      margin: 10,
-    },
-  })
+      margin: 10
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(Dapp)
+const componentWithStyles = withStyles(styles)(Dapp);
 
 // STATE
 const mapStateToProps = (state: any) => {
-  return {}
-}
+  return {};
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createDao: () => {
-      dispatch(push("/dao-creator"))
-    },
-  }
-}
+      dispatch(push("/dao-creator"));
+    }
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);

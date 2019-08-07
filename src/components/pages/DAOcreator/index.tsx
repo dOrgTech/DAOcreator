@@ -16,7 +16,6 @@ import SchemesStep from "./SchemesStep";
 import { DAOForm } from "../../../lib/forms";
 import { FormState } from "formstate";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 interface State {

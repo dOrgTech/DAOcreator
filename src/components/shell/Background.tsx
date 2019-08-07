@@ -1,14 +1,13 @@
-import * as React from "react"
+import * as React from "react";
 import {
   withStyles,
   Theme,
   WithStyles,
   createStyles,
-  Paper,
-} from "@material-ui/core"
-import Particles from "react-particles-js"
+  Paper
+} from "@material-ui/core";
+import Particles from "react-particles-js";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 const Background: React.SFC<Props> = ({ classes }) => (
@@ -18,24 +17,24 @@ const Background: React.SFC<Props> = ({ classes }) => (
       params={{
         particles: {
           number: {
-            value: 80,
+            value: 80
           },
           size: {
-            value: 5,
-          },
+            value: 5
+          }
         },
         interactivity: {
           events: {
             onhover: {
               enable: true,
-              mode: "bubble",
-            },
-          },
-        },
+              mode: "bubble"
+            }
+          }
+        }
       }}
     />
   </Paper>
-)
+);
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -43,7 +42,7 @@ const styles = (theme: Theme) =>
       backgroundColor: "#4e4e4e",
       position: "fixed",
       width: "100vw",
-      height: "100vh",
+      height: "100vh"
     },
     particles: {
       //padding: "5px",
@@ -58,8 +57,8 @@ const styles = (theme: Theme) =>
       height: "100%",
       flexGrow: 1,
       minWidth: 0, // So the Typography noWrap works
-      minHeight: "100vh",
-    },
-  })
+      minHeight: "100vh"
+    }
+  });
 
-export default withStyles(styles)(Background)
+export default withStyles(styles)(Background);
