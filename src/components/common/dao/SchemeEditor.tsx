@@ -96,7 +96,11 @@ class SchemeEditor extends React.Component<Props, State> {
                   <>
                     <Typography variant="h6">Parameters</Typography>
                     {params.map((param, index) => (
-                      <FormField.Text field={param} editable={editable} />
+                      <FormField
+                        field={param}
+                        editable={editable}
+                        key={`field-${index}`}
+                      />
                     ))}
                   </>
                 ) : (

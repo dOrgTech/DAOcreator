@@ -72,12 +72,12 @@ class SchemesEditor extends React.Component<Props> {
       <div className={classes.root}>
         <Grid
           container
-          spacing={16}
+          spacing={2}
           direction="row"
           justify="center"
           alignItems="baseline"
         >
-          {this.schemeForms.map(scheme => (
+          {this.schemeForms.map((scheme, index) => (
             <SchemeEditor
               form={scheme.form}
               Icon={scheme.Icon}
@@ -92,6 +92,7 @@ class SchemesEditor extends React.Component<Props> {
                   form.$ = form.$.splice(form.$.indexOf(scheme.form));
                 }
               }}
+              key={`scheme-${index}`}
             />
           ))}
         </Grid>

@@ -16,12 +16,13 @@ import { MembersForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
+  getDAOTokenSymbol: () => string;
 }
 
 @observer
 class MembersStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, getDAOTokenSymbol } = this.props;
 
     return (
       <Card>
@@ -29,8 +30,8 @@ class MembersStep extends React.Component<Props> {
           <Typography variant="h4" gutterBottom>
             Add Members
           </Typography>
-          <Grid container spacing={16}>
-            <Grid item xs={12} md={5}>
+          <Grid container>
+            <Grid item xs={12} md={6}>
               <Typography className={classes.guideText} variant="body2">
                 Here we specify the initial reputation and token distribution in
                 the DAO.
@@ -41,7 +42,7 @@ class MembersStep extends React.Component<Props> {
               </Typography>
             </Grid>
             <MembersAnalytics data={form.toState()} />
-            <MembersEditor form={form} />
+            <MembersEditor getDAOTokenSymbol={getDAOTokenSymbol} form={form} />
           </Grid>
         </CardContent>
       </Card>

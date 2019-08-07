@@ -28,7 +28,7 @@ class NamingStep extends React.Component<Props> {
             <Typography variant="h4" className={classes.headline} gutterBottom>
               Name the DAO
             </Typography>
-            <Grid container spacing={16}>
+            <Grid container spacing={10}>
               <Grid item xs={12} md={5}>
                 <Typography className={classes.guideText} variant="body2">
                   Welcome!
@@ -43,13 +43,13 @@ class NamingStep extends React.Component<Props> {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Grid item xs={12}>
-                  <FormField.Text field={form.$.daoName} />
+                  <FormField field={form.$.daoName} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text field={form.$.tokenName} />
+                  <FormField field={form.$.tokenName} />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormField.Text field={form.$.tokenSymbol} />
+                  <FormField field={form.$.tokenSymbol} />
                 </Grid>
               </Grid>
             </Grid>

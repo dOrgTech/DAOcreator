@@ -163,17 +163,30 @@ export const combineResults = (
   });
 
   result.message = (
-    <>
-      <ul>
-        {results.map(result => (
-          <li>
-            <Typography color={result.warning ? "secondary" : "primary"}>
-              {result.message}
-            </Typography>
-          </li>
-        ))}
-      </ul>
-    </>
+    <div style={{ margin: "10px" }}>
+      {results.map((result, index) => {
+        const msg = result.message as string;
+
+        if (msg === undefined) {
+          throw Error("This should never happen");
+        }
+
+        const parts = msg.split(":");
+
+        if (parts.length !== 2) {
+          throw Error("Message is malformed");
+        }
+
+        return (
+          <Typography
+            color={result.warning ? "error" : "textPrimary"}
+            key={`msg-${index}`}
+          >
+            <b>{parts[0]}:</b> {parts[1]}
+          </Typography>
+        );
+      })}
+    </div>
   );
 
   // Average the t values

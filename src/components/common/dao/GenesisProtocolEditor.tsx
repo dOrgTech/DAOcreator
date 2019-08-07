@@ -8,7 +8,6 @@ interface Props extends WithStyles<typeof styles> {
   editable: boolean;
 }
 
-// https://daostack.zendesk.com/hc/en-us/articles/360002000537
 class GenesisProtocolEditor extends React.Component<Props> {
   render() {
     const { classes, form, editable } = this.props;
@@ -19,8 +18,12 @@ class GenesisProtocolEditor extends React.Component<Props> {
     // a type. Then overrides can be made.
     return (
       <>
-        {Object.keys(formState).map((propName: string) => (
-          <FormField.Text field={formState[propName]} editable={editable} />
+        {Object.keys(formState).map((propName: string, index: number) => (
+          <FormField
+            field={formState[propName]}
+            editable={editable}
+            key={`genproto-field-${index}`}
+          />
         ))}
       </>
     );
