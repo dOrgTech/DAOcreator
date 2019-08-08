@@ -71,6 +71,45 @@ export const validPercentage: Validator<string> = value => {
   return null;
 };
 
+export const validDuration: Validator<string> = value => {
+  const error = "Duration format is incorrect. Please use DD:hh:mm:ss";
+  value = value.trim();
+  const parts = value.split(":");
+
+  if (parts.length !== 4) {
+    return error;
+  }
+
+  return null;
+};
+
+export const positiveDuration: Validator<string> = value => {
+  let error = null;
+  value = value.trim();
+  const parts = value.split(":");
+
+  parts.forEach((part, index) => {
+    if (Number(part) < 0) {
+      switch (index) {
+        case 0:
+          error = "Days cannot be negative.";
+          return;
+        case 1:
+          error = "Hours cannot be negative.";
+          return;
+        case 2:
+          error = "Minutes cannot be negative.";
+          return;
+        case 3:
+          error = "Seconds cannot be negative.";
+          return;
+      }
+    }
+  });
+
+  return error;
+};
+
 export const greaterThan = (bound: number) => (value: string) => {
   const error = `Number must be greater than ${bound}.`;
   value = value.trim();

@@ -199,117 +199,91 @@ const TokenFieldView = observer(
 
 const DurationFieldView = observer(
   ({ field, popupState, editable }: FieldProps<DurationField>) => {
-    const DayHourMinute = ({}) => {
-      const [values, setValues] = React.useState({
-        days: 0,
-        hours: 0,
-        minutes: 0
-      });
-
-      const onChange = (event: any) => {
-        const { name, value } = event.target;
-
-        if (value < 0) {
-          return;
-        }
-
-        setValues({ ...values, [name]: value });
-        // TODO: update form
+    const onChange = (event: any) => {
+      const { name, value } = event.target;
+      const duration: any = {
+        days: field.days,
+        hours: field.hours,
+        minutes: field.minutes
       };
-
-      return (
-        <>
-          <TextField
-            disabled
-            label={field.displayName}
-            variant={"filled"}
-            value={" "}
-            style={{
-              height: "60px"
-            }}
-            InputProps={{
-              startAdornment: FieldInformation(popupState, {
-                padding: 0,
-                marginTop: "25px",
-                marginLeft: "0px"
-              })
-            }}
-            inputProps={{
-              style: {
-                height: "25px"
-              }
-            }}
-          />
-          <Grid
-            container
-            justify={"space-between"}
-            style={{
-              marginTop: "-40px"
-            }}
-          >
-            <Grid item>
-              <div style={{ width: "20px" }} />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                name={"days"}
-                label={"days"}
-                value={values.days}
-                onChange={onChange}
-                variant={"outlined"}
-                type={"number"}
-                margin={"dense"}
-                inputProps={{
-                  style: {
-                    paddingTop: "5px",
-                    paddingBottom: "5px"
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                name={"hours"}
-                label={"hrs"}
-                value={values.hours}
-                onChange={onChange}
-                variant={"outlined"}
-                type={"number"}
-                margin={"dense"}
-                inputProps={{
-                  style: {
-                    paddingTop: "5px",
-                    paddingBottom: "5px"
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                name={"minutes"}
-                label={"mins"}
-                value={values.minutes}
-                onChange={onChange}
-                variant={"outlined"}
-                type={"number"}
-                margin={"dense"}
-                inputProps={{
-                  style: {
-                    paddingTop: "5px",
-                    paddingBottom: "5px"
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item>
-              <div style={{ width: "10px" }} />
-            </Grid>
-          </Grid>
-        </>
-      );
+      duration[name] = Number(value);
+      field.value = `${duration.days}:${duration.hours}:${duration.minutes}:00`;
     };
 
-    return <DayHourMinute />;
+    const DurationPart = observer(
+      (props: { name: "days" | "hours" | "minutes" }) => (
+        <TextField
+          name={props.name}
+          label={props.name}
+          value={field[props.name]}
+          onChange={onChange}
+          variant={"outlined"}
+          type={"number"}
+          margin={"dense"}
+          error={field.hasError}
+          inputProps={{
+            style: {
+              paddingTop: "5px",
+              paddingBottom: "5px"
+            }
+          }}
+          onBlur={field.enableAutoValidationAndValidate}
+        />
+      )
+    );
+
+    return (
+      <>
+        <TextField
+          disabled
+          label={field.displayName}
+          error={field.hasError}
+          variant={"filled"}
+          value={" "}
+          style={{
+            height: "60px",
+            marginTop: "8px"
+          }}
+          InputProps={{
+            startAdornment: FieldInformation(popupState, {
+              padding: 0,
+              marginTop: "25px",
+              marginLeft: "0px"
+            })
+          }}
+          inputProps={{
+            style: {
+              height: "25px"
+            }
+          }}
+        />
+        <Grid
+          container
+          justify={"space-between"}
+          style={{
+            marginTop: "-39px",
+            marginBottom: "4px"
+          }}
+        >
+          <Grid item>
+            <div style={{ width: "25px" }} />
+          </Grid>
+          <Grid item xs={3}>
+            <DurationPart name={"days"} />
+          </Grid>
+          <Grid item xs={3}>
+            <DurationPart name={"hours"} />
+          </Grid>
+          <Grid item xs={3}>
+            <DurationPart name={"minutes"} />
+          </Grid>
+          <Grid item>
+            <div style={{ width: "10px" }} />
+          </Grid>
+        </Grid>
+        <FieldError field={field} />
+      </>
+    );
   }
 );
 

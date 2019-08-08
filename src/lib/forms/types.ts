@@ -11,7 +11,9 @@ import {
   greaterThan,
   lessThanOrEqual,
   greaterThanOrEqual,
-  nonZeroAddress
+  nonZeroAddress,
+  positiveDuration,
+  validDuration
 } from "./validators";
 import {
   DAOcreatorState,
@@ -111,10 +113,53 @@ export class DateTimeField extends FriendlyField<string, DateTimeField> {
   }
 }
 
-// TODO: use number or BN wherever possible instead of string?
+// Format: DD:hh:mm:ss
 export class DurationField extends FriendlyField<string, DurationField> {
+  get days(): number {
+    const parts = this.value.split(":");
+    return Number(parts[0]);
+  }
+
+  get hours(): number {
+    const parts = this.value.split(":");
+    return Number(parts[1]);
+  }
+
+  get minutes(): number {
+    const parts = this.value.split(":");
+    return Number(parts[2]);
+  }
+
+  get seconds(): number {
+    const parts = this.value.split(":");
+    return Number(parts[3]);
+  }
+
   constructor(init: string) {
     super(init, FieldType.Duration);
+    this.validators(validDuration, positiveDuration);
+  }
+
+  // TODO: put these constants somewhere (86400, 3600, etc)
+  public toSeconds(): number {
+    const parts = this.value.split(":");
+    const days = Number(parts[0]);
+    const hours = Number(parts[1]);
+    const minutes = Number(parts[2]);
+    const seconds = Number(parts[3]);
+
+    return days * 86400 + hours * 3600 + minutes * 60 + seconds;
+  }
+
+  public fromSeconds(seconds: number) {
+    const days = Math.trunc(seconds / 86400);
+    seconds -= days * 86400;
+    const hours = Math.trunc(seconds / 3600);
+    seconds -= hours * 3600;
+    const minutes = Math.trunc(seconds / 60);
+    seconds -= minutes * 60;
+    seconds = Math.trunc(seconds);
+    return `${days}:${hours}:${minutes}:${seconds}`;
   }
 }
 
@@ -346,9 +391,8 @@ export class GenesisProtocolForm extends FriendlyForm<
   constructor(form?: GenesisProtocolForm) {
     super({
       queuedVotePeriodLimit: new DurationField(
-        form ? form.$.queuedVotePeriodLimit.value : "1800"
+        form ? form.$.queuedVotePeriodLimit.value : "00:00:30:00"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Queued Vote Period Limit")
         .setDescription(
           "The length of time that voting is open for non-boosted proposals."
@@ -358,9 +402,8 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       preBoostedVotePeriodLimit: new DurationField(
-        form ? form.$.preBoostedVotePeriodLimit.value : "1814400"
+        form ? form.$.preBoostedVotePeriodLimit.value : "21:00:00:00"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Pre-Boosted Vote Period Limit")
         .setDescription(
           "The length of time that a proposal must maintain a confidence score higher than the boosting threshold to become eligible for boosting."
@@ -370,9 +413,8 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       boostedVotePeriodLimit: new DurationField(
-        form ? form.$.boostedVotePeriodLimit.value : "259200"
+        form ? form.$.boostedVotePeriodLimit.value : "03:00:00:00"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Boosted Vote Period Limit")
         .setDescription(
           "The length of time that voting is open for boosted proposals."
@@ -382,9 +424,8 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       quietEndingPeriod: new DurationField(
-        form ? form.$.quietEndingPeriod.value : "86400"
+        form ? form.$.quietEndingPeriod.value : "01:00:00:00"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Quiet Ending Period")
         .setDescription(
           "The length of time a vote’s potential result needs to stay the same in order to be confirmed as the official result."
@@ -503,15 +544,17 @@ export class GenesisProtocolForm extends FriendlyForm<
       queuedVoteRequiredPercentage: toBN(
         this.$.queuedVoteRequiredPercentage.value
       ),
-      queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.value),
+      queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.toSeconds()),
       thresholdConst: toBN(this.$.thresholdConst.value),
       proposingRepReward: toBN(toWei(toBN(this.$.proposingRepReward.value))),
       minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
-      boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.value),
+      boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.toSeconds()),
       daoBountyConst: toBN(this.$.daoBountyConst.value),
       activationTime: toBN(this.$.activationTime.value),
-      preBoostedVotePeriodLimit: toBN(this.$.preBoostedVotePeriodLimit.value),
-      quietEndingPeriod: toBN(this.$.quietEndingPeriod.value),
+      preBoostedVotePeriodLimit: toBN(
+        this.$.preBoostedVotePeriodLimit.toSeconds()
+      ),
+      quietEndingPeriod: toBN(this.$.quietEndingPeriod.toSeconds()),
       voteOnBehalf: this.$.voteOnBehalf.value,
       votersReputationLossRatio: toBN(this.$.votersReputationLossRatio.value)
     });
@@ -520,15 +563,21 @@ export class GenesisProtocolForm extends FriendlyForm<
   public fromState(state: GenesisProtocol) {
     const config = state.config;
     this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toString();
-    this.$.queuedVotePeriodLimit.value = config.queuedVotePeriodLimit.toString();
+    this.$.queuedVotePeriodLimit.fromSeconds(
+      config.queuedVotePeriodLimit.toNumber()
+    );
     this.$.thresholdConst.value = config.thresholdConst.toString();
     this.$.proposingRepReward.value = fromWei(config.proposingRepReward);
     this.$.minimumDaoBounty.value = fromWei(config.minimumDaoBounty);
-    this.$.boostedVotePeriodLimit.value = config.boostedVotePeriodLimit.toString();
+    this.$.boostedVotePeriodLimit.fromSeconds(
+      config.boostedVotePeriodLimit.toNumber()
+    );
     this.$.daoBountyConst.value = config.daoBountyConst.toString();
     this.$.activationTime.value = config.activationTime.toString();
-    this.$.preBoostedVotePeriodLimit.value = config.preBoostedVotePeriodLimit.toString();
-    this.$.quietEndingPeriod.value = config.quietEndingPeriod.toString();
+    this.$.preBoostedVotePeriodLimit.fromSeconds(
+      config.preBoostedVotePeriodLimit.toNumber()
+    );
+    this.$.quietEndingPeriod.fromSeconds(config.quietEndingPeriod.toNumber());
     this.$.voteOnBehalf.value = config.voteOnBehalf;
     this.$.votersReputationLossRatio.value = config.votersReputationLossRatio.toString();
   }
