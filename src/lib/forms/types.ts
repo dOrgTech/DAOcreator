@@ -192,9 +192,10 @@ export class AddressField extends FriendlyField<string, AddressField> {
   }
 }
 
-export class PercentageField extends FriendlyField<string, PercentageField> {
-  constructor(init: string) {
+export class PercentageField extends FriendlyField<number, PercentageField> {
+  constructor(init: number) {
     super(init, FieldType.Percentage);
+    this.validators(validPercentage);
   }
 }
 
@@ -457,9 +458,9 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       queuedVoteRequiredPercentage: new PercentageField(
-        form ? form.$.queuedVoteRequiredPercentage.value : "50"
+        form ? form.$.queuedVoteRequiredPercentage.value : 50
       )
-        .validators(requiredText, validPercentage)
+        .validators(validPercentage)
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
           "The quorum required to decide a vote on a non-boosted proposal."
@@ -509,9 +510,9 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       votersReputationLossRatio: new PercentageField(
-        form ? form.$.votersReputationLossRatio.value : "1"
+        form ? form.$.votersReputationLossRatio.value : 1
       )
-        .validators(requiredText, validBigNumber, validPercentage)
+        .validators(validPercentage)
         .setDisplayName("Voters Reputation Loss Ratio")
         .setDescription(
           "The percentage of a voter’s voting power they stand to lose if they vote against the DAO’s eventual decision on a non-boosted proposal."
@@ -586,7 +587,7 @@ export class GenesisProtocolForm extends FriendlyForm<
 
   public fromState(state: GenesisProtocol) {
     const config = state.config;
-    this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toString();
+    this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toNumber();
     this.$.queuedVotePeriodLimit.fromSeconds(
       config.queuedVotePeriodLimit.toNumber()
     );
@@ -603,7 +604,7 @@ export class GenesisProtocolForm extends FriendlyForm<
     );
     this.$.quietEndingPeriod.fromSeconds(config.quietEndingPeriod.toNumber());
     this.$.voteOnBehalf.value = config.voteOnBehalf;
-    this.$.votersReputationLossRatio.value = config.votersReputationLossRatio.toString();
+    this.$.votersReputationLossRatio.value = config.votersReputationLossRatio.toNumber();
   }
 }
 

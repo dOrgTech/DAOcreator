@@ -59,12 +59,10 @@ export const validName: Validator<string> = value => {
   return null;
 };
 
-export const validPercentage: Validator<string> = value => {
+export const validPercentage: Validator<number> = value => {
   const error = "Percentages must be between 0 and 100.";
-  value = value.trim();
-  const number = Number(value);
 
-  if (number > 100 || number < 0) {
+  if (value > 100 || value < 0) {
     return error;
   }
 

@@ -68,7 +68,7 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         }
       ),
       analyzeField(
-        Number(form.$.thresholdConst),
+        Number(form.$.thresholdConst.value),
         form.$.thresholdConst.displayName,
         {
           min: GP.EasyConfig.thresholdConst.toNumber(),

@@ -11,7 +11,9 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   InputAdornment,
-  Grid
+  Grid,
+  Slider,
+  Input
 } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/InfoTwoTone";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -25,7 +27,8 @@ import {
   StringField,
   TokenField,
   DurationField,
-  DateTimeField
+  DateTimeField,
+  PercentageField
 } from "../../../lib/forms";
 
 export interface Props {
@@ -59,7 +62,7 @@ class FormField extends React.Component<Props> {
               FieldView = StringFieldView;
               break;
             case FieldType.Percentage:
-              FieldView = StringFieldView;
+              FieldView = PercentageFieldView;
               break;
             default:
               throw Error(
@@ -317,6 +320,82 @@ const DateTimeFieldView = observer(
       />
     </MuiPickersUtilsProvider>
   )
+);
+
+const PercentageFieldView = observer(
+  ({ field, popupState, editable }: FieldProps<PercentageField>) => {
+    const onSliderChange = (event: any, newValue: number | number[]) => {
+      if (typeof newValue === "number") {
+        field.value = newValue;
+      } else {
+        field.value = newValue[0];
+      }
+    };
+
+    const onInputChange = (event: any) => {
+      const value = event.target.value;
+      field.value = value === "" ? 0 : Number(value);
+    };
+
+    return (
+      <>
+        <TextField
+          disabled
+          label={field.displayName}
+          error={field.hasError}
+          variant={"filled"}
+          value={" "}
+          style={{
+            height: "60px",
+            marginTop: "8px"
+          }}
+        />
+        <Grid
+          container
+          spacing={2}
+          alignItems={"center"}
+          style={{
+            marginTop: "-50px",
+            paddingRight: "12px",
+            paddingLeft: "12px"
+          }}
+        >
+          <Grid item>
+            {FieldInformation(popupState, {
+              padding: 0
+            })}
+          </Grid>
+          <Grid item xs>
+            <Slider
+              value={field.value}
+              onChange={onSliderChange}
+              onBlur={field.enableAutoValidationAndValidate}
+              disabled={editable === undefined ? false : !editable}
+              step={0.1}
+              style={{
+                marginTop: "10px"
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <Input
+              value={field.value}
+              margin={"dense"}
+              onChange={onInputChange}
+              onBlur={field.enableAutoValidationAndValidate}
+              inputProps={{
+                step: 0.1,
+                min: 0,
+                max: 100,
+                type: "number"
+              }}
+              disabled={editable === undefined ? false : !editable}
+            />
+          </Grid>
+        </Grid>
+      </>
+    );
+  }
 );
 
 export default FormField;
