@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -8,8 +9,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import * as React from "react";
-import FormField from "../../common/FormField";
+import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
 import { DAOConfigForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
@@ -21,10 +21,10 @@ class NamingStep extends React.Component<Props> {
     const { classes, form } = this.props;
 
     return (
-      <Card className={classes.card}>
+      <Card>
         <form>
           <CardContent>
-            <Typography variant="h4" className={classes.headline} gutterBottom>
+            <Typography variant="h4" gutterBottom>
               Name the DAO
             </Typography>
             <Grid container spacing={10}>
@@ -40,17 +40,7 @@ class NamingStep extends React.Component<Props> {
                   <br />
                 </Typography>
               </Grid>
-              <Grid item xs={12} md={7}>
-                <Grid item xs={12}>
-                  <FormField field={form.$.daoName} />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormField field={form.$.tokenName} />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormField field={form.$.tokenSymbol} />
-                </Grid>
-              </Grid>
+              <DAOConfigEditor form={form} editable={true} />
             </Grid>
           </CardContent>
         </form>
@@ -62,11 +52,6 @@ class NamingStep extends React.Component<Props> {
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
-    card: {},
-    headline: {},
-    daoName: {},
-    tokenName: {},
-    tokenSymbol: {},
     guideText: {
       fontSize: 18,
       maxWidth: 450,

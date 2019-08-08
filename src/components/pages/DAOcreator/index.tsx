@@ -13,6 +13,7 @@ import {
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
+import ReviewStep from "./ReviewStep";
 import { DAOForm } from "../../../lib/forms";
 import { FormState } from "formstate";
 
@@ -62,6 +63,11 @@ class DAOcreator extends React.Component<Props, State> {
         props: {
           getDAOTokenSymbol: () => this.form.$.config.$.tokenSymbol.value
         }
+      },
+      {
+        title: "Review",
+        form: this.form,
+        Component: ReviewStep
       }
     ];
     const { classes } = this.props;
@@ -114,19 +120,19 @@ class DAOcreator extends React.Component<Props, State> {
         <div className={classes.content}>
           <Component form={form} {...props} />
         </div>
-        {isLastStep ? (
-          <></>
-        ) : (
-          <div>
-            <Button
-              variant={"contained"}
-              color={"primary"}
-              disabled={step === 0}
-              onClick={previousStep}
-              className={classes.button}
-            >
-              Back
-            </Button>
+        <div>
+          <Button
+            variant={"contained"}
+            color={"primary"}
+            disabled={step === 0}
+            onClick={previousStep}
+            className={classes.button}
+          >
+            Back
+          </Button>
+          {isLastStep ? (
+            <></>
+          ) : (
             <Button
               variant={"contained"}
               color={"primary"}
@@ -135,8 +141,8 @@ class DAOcreator extends React.Component<Props, State> {
             >
               Next
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }

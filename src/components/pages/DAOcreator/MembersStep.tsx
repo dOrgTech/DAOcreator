@@ -42,7 +42,11 @@ class MembersStep extends React.Component<Props> {
               </Typography>
             </Grid>
             <MembersAnalytics data={form.toState()} />
-            <MembersEditor getDAOTokenSymbol={getDAOTokenSymbol} form={form} />
+            <MembersEditor
+              getDAOTokenSymbol={getDAOTokenSymbol}
+              form={form}
+              editable={true}
+            />
           </Grid>
         </CardContent>
       </Card>

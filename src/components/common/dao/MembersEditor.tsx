@@ -18,6 +18,7 @@ import { MemberForm, MembersForm } from "../../../lib/forms";
 
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
+  editable: boolean;
   getDAOTokenSymbol: () => string;
 }
 
@@ -27,59 +28,67 @@ class MembersEditor extends React.Component<Props> {
   @observable memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
   render() {
-    const { classes, form, getDAOTokenSymbol } = this.props;
+    const { classes, form, editable, getDAOTokenSymbol } = this.props;
     const memberForm = this.memberForm;
 
     return (
       <>
-        <Grid container spacing={1} key={"new-member"} justify={"center"}>
-          <MemberEditor form={memberForm} editable={true} />
-          <Grid item className={classes.button}>
-            <FormControl fullWidth>
-              <Fab
-                size={"small"}
-                color={"primary"}
-                disabled={memberForm.hasError}
-                onClick={async () => {
-                  // See if the new member for has errors
-                  const memberValidate = await memberForm.validate();
-                  if (memberValidate.hasError) {
-                    return;
-                  }
+        {editable ? (
+          <>
+            <Grid container spacing={1} key={"new-member"} justify={"center"}>
+              <MemberEditor form={memberForm} editable={true} />
+              <Grid item className={classes.button}>
+                <FormControl fullWidth>
+                  <Fab
+                    size={"small"}
+                    color={"primary"}
+                    disabled={memberForm.hasError}
+                    onClick={async () => {
+                      // See if the new member for has errors
+                      const memberValidate = await memberForm.validate();
+                      if (memberValidate.hasError) {
+                        return;
+                      }
 
-                  // See if the new member can be added to the array
-                  // without any errors
-                  form.$.push(new MemberForm(getDAOTokenSymbol, memberForm));
+                      // See if the new member can be added to the array
+                      // without any errors
+                      form.$.push(
+                        new MemberForm(getDAOTokenSymbol, memberForm)
+                      );
 
-                  const membersValidate = await form.validate();
-                  if (membersValidate.hasError) {
-                    this.addError = form.error;
-                    form.$.pop();
-                    return;
-                  }
+                      const membersValidate = await form.validate();
+                      if (membersValidate.hasError) {
+                        this.addError = form.error;
+                        form.$.pop();
+                        return;
+                      }
 
-                  this.addError = undefined;
-                  memberForm.reset();
-                }}
-              >
-                <AddIcon />
-              </Fab>
-            </FormControl>
-          </Grid>
-        </Grid>
+                      this.addError = undefined;
+                      memberForm.reset();
+                    }}
+                  >
+                    <AddIcon />
+                  </Fab>
+                </FormControl>
+              </Grid>
+            </Grid>
 
-        <Grid container justify={"center"}>
-          {this.addError ? (
-            <Typography color={"error"}>{this.addError}</Typography>
-          ) : (
-            <></>
-          )}
-        </Grid>
+            <Grid container justify={"center"}>
+              {this.addError ? (
+                <Typography color={"error"}>{this.addError}</Typography>
+              ) : (
+                <></>
+              )}
+            </Grid>
 
-        {form.$.length > 0 ? (
-          <Typography variant="h6">Members</Typography>
+            {form.$.length > 0 ? (
+              <Typography variant="h6">Members</Typography>
+            ) : (
+              <></>
+            )}
+          </>
         ) : (
-          <></>
+          <> </>
         )}
 
         {form.$.map((member, index) => (
@@ -90,15 +99,19 @@ class MembersEditor extends React.Component<Props> {
             justify={"center"}
           >
             <MemberEditor form={member} editable={false} />
-            <Grid item className={classes.button}>
-              <Fab
-                size={"small"}
-                color={"secondary"}
-                onClick={() => form.$.splice(index, 1)}
-              >
-                <RemIcon />
-              </Fab>
-            </Grid>
+            {editable ? (
+              <Grid item className={classes.button}>
+                <Fab
+                  size={"small"}
+                  color={"secondary"}
+                  onClick={() => form.$.splice(index, 1)}
+                >
+                  <RemIcon />
+                </Fab>
+              </Grid>
+            ) : (
+              <> </>
+            )}
           </Grid>
         ))}
       </>

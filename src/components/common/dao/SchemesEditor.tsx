@@ -25,6 +25,7 @@ import {
 
 interface Props extends WithStyles<typeof styles> {
   form: SchemesForm;
+  editable: boolean;
 }
 
 interface SchemeFormDrawers {
@@ -64,8 +65,14 @@ class SchemesEditor extends React.Component<Props> {
 
   // TODO: add schemes, and set SchemeRegistrar default to critical
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, editable } = this.props;
     const error = form.showFormError;
+    const schemes = editable
+      ? this.schemeForms
+      : this.schemeForms.filter(
+          scheme =>
+            form.$.findIndex(added => added.type === scheme.form.type) > -1
+        );
 
     return (
       <div className={classes.root}>
@@ -76,11 +83,11 @@ class SchemesEditor extends React.Component<Props> {
           justify="center"
           alignItems="baseline"
         >
-          {this.schemeForms.map((scheme, index) => (
+          {schemes.map((scheme, index) => (
             <SchemeEditor
               form={scheme.form}
               Icon={scheme.Icon}
-              editable={true}
+              editable={editable}
               enabled={scheme.enabled}
               onToggle={(toggled: boolean) => {
                 if (toggled) {
