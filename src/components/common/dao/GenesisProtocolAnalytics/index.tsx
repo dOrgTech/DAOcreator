@@ -15,6 +15,7 @@ import { GenesisProtocol as GP } from "../../../../lib/dependency/arc";
 import { TypeConversion } from "../../../../lib/dependency/web3";
 const fromWei = TypeConversion.fromWei;
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: GenesisProtocolForm;
 }

@@ -101,6 +101,8 @@ export const positiveDuration: Validator<string> = value => {
         case 3:
           error = "Seconds cannot be negative.";
           return;
+        default:
+          throw Error("This should never happen.");
       }
     }
   });

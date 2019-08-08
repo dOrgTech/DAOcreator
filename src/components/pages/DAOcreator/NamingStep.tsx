@@ -12,6 +12,7 @@ import {
 import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
 import { DAOConfigForm } from "../../../lib/forms";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm;
 }

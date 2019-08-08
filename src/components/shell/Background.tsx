@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import Particles from "react-particles-js";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 const Background: React.SFC<Props> = ({ classes }) => (

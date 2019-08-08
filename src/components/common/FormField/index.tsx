@@ -263,6 +263,7 @@ const DurationFieldView = observer(
               marginLeft: "0px"
             })
           }}
+          // eslint-disable-next-line
           inputProps={{
             style: {
               height: "25px"

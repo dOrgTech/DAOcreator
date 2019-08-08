@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../lib/state";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   message: string;
   details: string;

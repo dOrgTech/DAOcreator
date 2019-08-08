@@ -24,10 +24,7 @@ export const getWeb3 = async (): Promise<any> => {
       await ethereum.enable();
 
       // Acccounts now exposed
-      readyWeb3 = new Web3(ethereum, undefined, {
-        transactionConfirmationBlocks: 1,
-        transactionBlockTimeout: 1000
-      });
+      readyWeb3 = new Web3(ethereum);
       const accounts = await readyWeb3.eth.getAccounts();
       readyWeb3.eth.defaultAccount = accounts[0];
     } catch (error) {
@@ -36,9 +33,7 @@ export const getWeb3 = async (): Promise<any> => {
   }
   // Legacy dapp browsers...
   else if (web3) {
-    readyWeb3 = new Web3(web3.currentProvider, undefined, {
-      transactionConfirmationBlocks: 1
-    });
+    readyWeb3 = new Web3(web3.currentProvider);
     const accounts = await readyWeb3.eth.getAccounts();
     readyWeb3.eth.defaultAccount = accounts[0];
   }
@@ -57,11 +52,15 @@ export const keccak256 = (value: string | BN): string => {
     throw Error("Web3 not initialized. Please call 'getWeb3'");
   }
 
-  return readyWeb3.utils.keccak256(value);
+  if (typeof value === "string") {
+    return readyWeb3.utils.keccak256(value);
+  } else {
+    return readyWeb3.utils.keccak256(value.toString());
+  }
 };
 
 export const encodeParameters = (
-  types: (string | {})[],
+  types: string[],
   parameters: any[]
 ): string => {
   if (readyWeb3 == null) {

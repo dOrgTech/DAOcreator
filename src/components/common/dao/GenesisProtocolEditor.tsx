@@ -1,16 +1,15 @@
 import * as React from "react";
-import { WithStyles, Theme, createStyles, withStyles } from "@material-ui/core";
 import FormField from "../FormField";
 import { GenesisProtocolForm } from "../../../lib/forms";
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   form: GenesisProtocolForm;
   editable: boolean;
 }
 
-class GenesisProtocolEditor extends React.Component<Props> {
+export default class GenesisProtocolEditor extends React.Component<Props> {
   render() {
-    const { classes, form, editable } = this.props;
+    const { form, editable } = this.props;
     const formState = form.$ as any;
 
     // TODO: make this the default behaviour of all form components
@@ -29,7 +28,3 @@ class GenesisProtocolEditor extends React.Component<Props> {
     );
   }
 }
-
-const styles = (theme: Theme) => createStyles({});
-
-export default withStyles(styles)(GenesisProtocolEditor);

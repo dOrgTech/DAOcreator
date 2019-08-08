@@ -18,6 +18,7 @@ import { AnySchemeForm } from "../../../lib/forms";
 import FormField from "../FormField";
 import { observer } from "mobx-react";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: AnySchemeForm;
   editable: boolean;

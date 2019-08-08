@@ -11,6 +11,7 @@ import {
   CardContent
 } from "@material-ui/core";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   goHome: () => void;
   Content: React.FunctionComponent;

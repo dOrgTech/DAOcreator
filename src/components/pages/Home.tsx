@@ -13,6 +13,7 @@ import {
   Grid
 } from "@material-ui/core";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   gotoOverview: () => void;
   gotoDapp: () => void;

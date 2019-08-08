@@ -11,6 +11,7 @@ import QuestionIcon from "@material-ui/icons/HelpOutline";
 import PieChart from "../PieChart";
 import { Member } from "../../../lib/state";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   data: Member[];
 }

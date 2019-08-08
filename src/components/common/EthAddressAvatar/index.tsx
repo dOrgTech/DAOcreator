@@ -12,6 +12,7 @@ const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
     style={{
       padding: 0
     }}
+    tabIndex={-1}
   >
     <Blockies seed={address} />
   </IconButton>

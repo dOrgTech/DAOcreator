@@ -1,10 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import {
-  Theme,
-  createStyles,
-  WithStyles,
-  withStyles,
   Select,
   FilledInput,
   FormControl,
@@ -23,7 +19,7 @@ import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import { GenesisProtocolForm } from "../../../lib/forms";
 import { GenesisProtocol } from "../../../lib/dependency/arc";
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   form: GenesisProtocolForm;
   editable: boolean;
 }
@@ -41,7 +37,10 @@ interface State {
 }
 
 @observer
-class GenesisProtocolPresetEditor extends React.Component<Props, State> {
+export default class GenesisProtocolPresetEditor extends React.Component<
+  Props,
+  State
+> {
   private EasyConfig = new GenesisProtocol(GenesisProtocol.EasyConfig);
   private NormalConfig = new GenesisProtocol(GenesisProtocol.NormalConfig);
   private CriticalConfig = new GenesisProtocol(GenesisProtocol.CriticalConfig);
@@ -56,7 +55,7 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, form, editable } = this.props;
+    const { form, editable } = this.props;
     const { protocol, editing } = this.state;
 
     const onChange = (event: React.ChangeEvent<{ value: any }>) => {
@@ -73,6 +72,8 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
         case ProtocolPreset.critical:
           form.fromState(this.CriticalConfig);
           break;
+        default:
+          throw Error("Unimplemented protocol preset.");
       }
 
       this.setState({
@@ -173,7 +174,3 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
     );
   }
 }
-
-const styles = (theme: Theme) => createStyles({});
-
-export default withStyles(styles)(GenesisProtocolPresetEditor);

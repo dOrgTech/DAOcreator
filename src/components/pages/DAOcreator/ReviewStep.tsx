@@ -1,10 +1,5 @@
 import * as React from "react";
-import { observer } from "mobx-react";
 import {
-  WithStyles,
-  Theme,
-  createStyles,
-  withStyles,
   Card,
   CardContent,
   Typography,
@@ -16,11 +11,11 @@ import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
 import MembersEditor from "../../common/dao/MembersEditor";
 import { DAOForm } from "../../../lib/forms";
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   form: DAOForm;
 }
 
-class ReviewStep extends React.Component<Props> {
+export default class ReviewStep extends React.Component<Props> {
   render() {
     const { form } = this.props;
     const getDAOTokenSymbol = () => form.$.config.$.tokenSymbol.value;
@@ -61,7 +56,3 @@ class ReviewStep extends React.Component<Props> {
     );
   }
 }
-
-const styles = (theme: Theme) => createStyles({});
-
-export default withStyles(styles)(ReviewStep);

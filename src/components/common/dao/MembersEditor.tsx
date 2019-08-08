@@ -16,6 +16,7 @@ import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
 import { MemberForm, MembersForm } from "../../../lib/forms";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   editable: boolean;

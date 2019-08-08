@@ -23,6 +23,7 @@ import {
   SchemeRegistrarForm
 } from "../../../lib/forms";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: SchemesForm;
   editable: boolean;

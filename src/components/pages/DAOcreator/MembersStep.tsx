@@ -14,6 +14,7 @@ import MembersEditor from "../../common/dao/MembersEditor";
 import MembersAnalytics from "../../common/dao/MembersAnalytics";
 import { MembersForm } from "../../../lib/forms";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   getDAOTokenSymbol: () => string;
