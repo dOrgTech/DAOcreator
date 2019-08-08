@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import {
   Theme,
   createStyles,
@@ -21,7 +22,6 @@ import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import { GenesisProtocolForm } from "../../../lib/forms";
 import { GenesisProtocol } from "../../../lib/dependency/arc";
-import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
 
 interface Props extends WithStyles<typeof styles> {
   form: GenesisProtocolForm;
@@ -40,6 +40,7 @@ interface State {
   editing: boolean;
 }
 
+@observer
 class GenesisProtocolPresetEditor extends React.Component<Props, State> {
   private EasyConfig = new GenesisProtocol(GenesisProtocol.EasyConfig);
   private NormalConfig = new GenesisProtocol(GenesisProtocol.NormalConfig);
@@ -88,7 +89,13 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
       });
     };
 
-    const onClose = () => {
+    const onClose = async () => {
+      const res = await this.props.form.validate();
+
+      if (res.hasError) {
+        return;
+      }
+
       this.setState({
         ...this.state,
         editing: false

@@ -42,26 +42,23 @@ class MembersEditor extends React.Component<Props> {
                 disabled={memberForm.hasError}
                 onClick={async () => {
                   // See if the new member for has errors
-                  const formValidate = await memberForm.validate();
-                  if (formValidate.hasError) {
+                  const memberValidate = await memberForm.validate();
+                  if (memberValidate.hasError) {
                     return;
                   }
 
                   // See if the new member can be added to the array
                   // without any errors
-                  const arrayCopy = new MembersForm(getDAOTokenSymbol, form);
-                  arrayCopy.$.push(memberForm);
+                  form.$.push(new MemberForm(getDAOTokenSymbol, memberForm));
 
-                  const arrayValdiate = await arrayCopy.validate();
-                  if (arrayValdiate.hasError) {
-                    this.addError = arrayCopy.error;
+                  const membersValidate = await form.validate();
+                  if (membersValidate.hasError) {
+                    this.addError = form.error;
+                    form.$.pop();
                     return;
                   }
 
                   this.addError = undefined;
-
-                  // Finally add the new member to the form
-                  form.$.push(new MemberForm(getDAOTokenSymbol, memberForm));
                   memberForm.reset();
                 }}
               >
