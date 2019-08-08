@@ -89,7 +89,7 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         }
       ),
       analyzeField(
-        Number(form.$.quietEndingPeriod.value),
+        form.$.quietEndingPeriod.toSeconds(),
         form.$.quietEndingPeriod.displayName,
         {
           min: GP.EasyConfig.quietEndingPeriod.toNumber(),
