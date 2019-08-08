@@ -16,12 +16,16 @@ import {
 import InfoIcon from "@material-ui/icons/InfoTwoTone";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   AnyField,
   FieldType,
   StringField,
   TokenField,
-  DurationField
+  DurationField,
+  DateTimeField
 } from "../../../lib/forms";
 
 export interface Props {
@@ -46,7 +50,7 @@ class FormField extends React.Component<Props> {
               FieldView = TokenFieldView;
               break;
             case FieldType.DateTime:
-              FieldView = StringFieldView;
+              FieldView = DateTimeFieldView;
               break;
             case FieldType.Duration:
               FieldView = DurationFieldView;
@@ -216,6 +220,7 @@ const DurationFieldView = observer(
           name={props.name}
           label={props.name}
           value={field[props.name]}
+          contentEditable={editable}
           onChange={onChange}
           variant={"outlined"}
           type={"number"}
@@ -240,6 +245,7 @@ const DurationFieldView = observer(
           error={field.hasError}
           variant={"filled"}
           value={" "}
+          contentEditable={editable}
           style={{
             height: "60px",
             marginTop: "8px"
@@ -285,6 +291,32 @@ const DurationFieldView = observer(
       </>
     );
   }
+);
+
+const DateTimeFieldView = observer(
+  ({ field, popupState, editable }: FieldProps<DateTimeField>) => (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardDateTimePicker
+        label={field.displayName}
+        value={field.value}
+        contentEditable={editable}
+        onChange={date => {
+          field.value = date ? date : new Date();
+        }}
+        disablePast
+        format="MM/dd/yyyy HH:mm"
+        variant={"dialog"}
+        inputVariant={"filled"}
+        ampm={false}
+        style={{
+          marginTop: "5px"
+        }}
+        InputProps={{
+          startAdornment: FieldInformation(popupState)
+        }}
+      />
+    </MuiPickersUtilsProvider>
+  )
 );
 
 export default FormField;

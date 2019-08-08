@@ -13,7 +13,8 @@ import {
   greaterThanOrEqual,
   nonZeroAddress,
   positiveDuration,
-  validDuration
+  validDuration,
+  futureDate
 } from "./validators";
 import {
   DAOcreatorState,
@@ -107,9 +108,30 @@ export class TokenField extends FriendlyField<string, TokenField> {
   }
 }
 
-export class DateTimeField extends FriendlyField<string, DateTimeField> {
-  constructor(init: string) {
+export class DateTimeField extends FriendlyField<Date, DateTimeField> {
+  constructor(init: Date) {
     super(init, FieldType.DateTime);
+  }
+
+  public getunixTime(futureOnly?: boolean): number {
+    if (futureOnly) {
+      if (Date.now() < this.value.getTime()) {
+        return 0;
+      }
+    }
+
+    // div by 1000 to convert to seconds
+    return this.value.getTime() / 1000;
+  }
+
+  public fromUnixTime(unix: number) {
+    if (unix === 0) {
+      // now
+      this.value = new Date();
+    } else {
+      // mul by 1000 to convert to milliseconds
+      this.value = new Date(unix * 1000);
+    }
   }
 }
 
@@ -450,7 +472,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         "GEN",
         form ? form.$.minimumDaoBounty.value : "100"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
+        .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
         .setDisplayName("Minimum DAO Bounty")
         .setDescription(
           "The minimum amount of GEN a DAO will stake when automatically downstaking each proposal."
@@ -512,9 +534,9 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       activationTime: new DateTimeField(
-        form ? form.$.activationTime.value : "0"
+        form ? form.$.activationTime.value : new Date()
       )
-        .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
+        .validators(futureDate)
         .setDisplayName("Locking / Activation Time")
         .setDescription(
           "The point (represented in Unix time) in time when proposing and voting are activated."
@@ -550,7 +572,9 @@ export class GenesisProtocolForm extends FriendlyForm<
       minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
       boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.toSeconds()),
       daoBountyConst: toBN(this.$.daoBountyConst.value),
-      activationTime: toBN(this.$.activationTime.value),
+      // TODO: future only is a hack for the editor, it won't work
+      // if we're viewing past data froma already deployed DAO...
+      activationTime: toBN(this.$.activationTime.getunixTime(true)),
       preBoostedVotePeriodLimit: toBN(
         this.$.preBoostedVotePeriodLimit.toSeconds()
       ),
@@ -573,7 +597,7 @@ export class GenesisProtocolForm extends FriendlyForm<
       config.boostedVotePeriodLimit.toNumber()
     );
     this.$.daoBountyConst.value = config.daoBountyConst.toString();
-    this.$.activationTime.value = config.activationTime.toString();
+    this.$.activationTime.fromUnixTime(config.activationTime.toNumber());
     this.$.preBoostedVotePeriodLimit.fromSeconds(
       config.preBoostedVotePeriodLimit.toNumber()
     );

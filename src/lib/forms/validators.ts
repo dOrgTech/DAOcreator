@@ -110,6 +110,17 @@ export const positiveDuration: Validator<string> = value => {
   return error;
 };
 
+export const futureDate: Validator<Date> = value => {
+  let error = "Date must be in the future.";
+  const currentTime = new Date().getTime();
+
+  if (value.getTime() < currentTime) {
+    return error;
+  }
+
+  return null;
+};
+
 export const greaterThan = (bound: number) => (value: string) => {
   const error = `Number must be greater than ${bound}.`;
   value = value.trim();
