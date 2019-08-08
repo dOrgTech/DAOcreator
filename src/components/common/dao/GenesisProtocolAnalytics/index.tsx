@@ -28,68 +28,108 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
       formatDays(secondsToDays(seconds));
 
     const proposalSpeedAnalytics = combineResults(
-      analyzeField(form.$.boostedVotePeriodLimit, {
-        min: GP.EasyConfig.boostedVotePeriodLimit.toNumber(),
-        max: GP.CriticalConfig.boostedVotePeriodLimit.toNumber(),
-        toString: secondsToString
-      }),
-      analyzeField(form.$.queuedVotePeriodLimit, {
-        min: GP.EasyConfig.queuedVotePeriodLimit.toNumber(),
-        max: GP.CriticalConfig.queuedVotePeriodLimit.toNumber(),
-        toString: secondsToString
-      }),
-      analyzeField(form.$.preBoostedVotePeriodLimit, {
-        min: GP.EasyConfig.preBoostedVotePeriodLimit.toNumber(),
-        max: GP.CriticalConfig.preBoostedVotePeriodLimit.toNumber(),
-        toString: secondsToString
-      })
+      analyzeField(
+        form.$.boostedVotePeriodLimit.toSeconds(),
+        form.$.boostedVotePeriodLimit.displayName,
+        {
+          min: GP.EasyConfig.boostedVotePeriodLimit.toNumber(),
+          max: GP.CriticalConfig.boostedVotePeriodLimit.toNumber(),
+          toString: secondsToString
+        }
+      ),
+      analyzeField(
+        form.$.queuedVotePeriodLimit.toSeconds(),
+        form.$.queuedVotePeriodLimit.displayName,
+        {
+          min: GP.EasyConfig.queuedVotePeriodLimit.toNumber(),
+          max: GP.CriticalConfig.queuedVotePeriodLimit.toNumber(),
+          toString: secondsToString
+        }
+      ),
+      analyzeField(
+        form.$.preBoostedVotePeriodLimit.toSeconds(),
+        form.$.preBoostedVotePeriodLimit.displayName,
+        {
+          min: GP.EasyConfig.preBoostedVotePeriodLimit.toNumber(),
+          max: GP.CriticalConfig.preBoostedVotePeriodLimit.toNumber(),
+          toString: secondsToString
+        }
+      )
     );
 
     const boostDifficultyAnalytics = combineResults(
-      analyzeField(form.$.minimumDaoBounty, {
-        min: Number(fromWei(GP.EasyConfig.minimumDaoBounty)),
-        max: Number(fromWei(GP.CriticalConfig.minimumDaoBounty)),
-        toString: formatGEN
-      }),
-      analyzeField(form.$.thresholdConst, {
-        min: GP.EasyConfig.thresholdConst.toNumber(),
-        max: GP.CriticalConfig.thresholdConst.toNumber(),
-        toString: (value: number) => value.toString()
-      })
+      analyzeField(
+        Number(form.$.minimumDaoBounty.value),
+        form.$.minimumDaoBounty.displayName,
+        {
+          min: Number(fromWei(GP.EasyConfig.minimumDaoBounty)),
+          max: Number(fromWei(GP.CriticalConfig.minimumDaoBounty)),
+          toString: formatGEN
+        }
+      ),
+      analyzeField(
+        Number(form.$.thresholdConst),
+        form.$.thresholdConst.displayName,
+        {
+          min: GP.EasyConfig.thresholdConst.toNumber(),
+          max: GP.CriticalConfig.thresholdConst.toNumber(),
+          toString: (value: number) => value.toString()
+        }
+      )
     );
 
     const voterAlignmentAssuranceAnalytics = combineResults(
-      analyzeField(form.$.queuedVoteRequiredPercentage, {
-        min: GP.EasyConfig.queuedVoteRequiredPercentage.toNumber(),
-        max: GP.CriticalConfig.queuedVoteRequiredPercentage.toNumber(),
-        toString: formatPercentage
-      }),
-      analyzeField(form.$.quietEndingPeriod, {
-        min: GP.EasyConfig.quietEndingPeriod.toNumber(),
-        max: GP.CriticalConfig.quietEndingPeriod.toNumber(),
-        toString: secondsToString
-      })
+      analyzeField(
+        Number(form.$.queuedVoteRequiredPercentage.value),
+        form.$.queuedVoteRequiredPercentage.displayName,
+        {
+          min: GP.EasyConfig.queuedVoteRequiredPercentage.toNumber(),
+          max: GP.CriticalConfig.queuedVoteRequiredPercentage.toNumber(),
+          toString: formatPercentage
+        }
+      ),
+      analyzeField(
+        Number(form.$.quietEndingPeriod.value),
+        form.$.quietEndingPeriod.displayName,
+        {
+          min: GP.EasyConfig.quietEndingPeriod.toNumber(),
+          max: GP.CriticalConfig.quietEndingPeriod.toNumber(),
+          toString: secondsToString
+        }
+      )
     );
 
     const alignmentIncentiveAnalytics = combineResults(
-      analyzeField(form.$.proposingRepReward, {
-        min: Number(fromWei(GP.EasyConfig.proposingRepReward)),
-        max: Number(fromWei(GP.CriticalConfig.proposingRepReward)),
-        toString: formatREP
-      }),
-      analyzeField(form.$.daoBountyConst, {
-        min: GP.EasyConfig.daoBountyConst.toNumber(),
-        max: GP.CriticalConfig.daoBountyConst.toNumber(),
-        toString: (value: number) => value.toString()
-      })
+      analyzeField(
+        Number(form.$.proposingRepReward.value),
+        form.$.proposingRepReward.displayName,
+        {
+          min: Number(fromWei(GP.EasyConfig.proposingRepReward)),
+          max: Number(fromWei(GP.CriticalConfig.proposingRepReward)),
+          toString: formatREP
+        }
+      ),
+      analyzeField(
+        Number(form.$.daoBountyConst.value),
+        form.$.daoBountyConst.displayName,
+        {
+          min: GP.EasyConfig.daoBountyConst.toNumber(),
+          max: GP.CriticalConfig.daoBountyConst.toNumber(),
+          toString: (value: number) => value.toString()
+        }
+      )
     );
 
     const voterMisalignmentPenaltyAnalytics = combineResults(
-      analyzeField(form.$.votersReputationLossRatio, {
-        min: GP.EasyConfig.votersReputationLossRatio.toNumber(),
-        max: GP.CriticalConfig.votersReputationLossRatio.toNumber(),
-        toString: formatPercentage
-      })
+      analyzeField(
+        Number(form.$.votersReputationLossRatio.value),
+        form.$.votersReputationLossRatio.displayName,
+        {
+          min: GP.EasyConfig.votersReputationLossRatio.toNumber(),
+          max: GP.CriticalConfig.votersReputationLossRatio.toNumber(),
+          toString: formatPercentage
+        }
+      )
     );
 
     // TODO: voteOnBehalf (etherscan link), activationTime (timer letting them know how long it'll be deactive for)

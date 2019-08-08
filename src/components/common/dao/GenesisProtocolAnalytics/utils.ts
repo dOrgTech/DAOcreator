@@ -13,10 +13,10 @@ export interface AnalysisOpts {
 }
 
 export const analyzeField = (
-  field: StringField,
+  value: number,
+  name: string,
   opts: AnalysisOpts
 ): AnalysisResult => {
-  const value = Number(field.value);
   const { min, max } = opts;
   let toString = opts.toString;
 
@@ -39,17 +39,13 @@ export const analyzeField = (
   let message: string = ``;
 
   if (t < 0) {
-    message += `${field.displayName}: LOWER than recommended min of ${toString(
-      min
-    )}`;
+    message += `${name}: LOWER than recommended min of ${toString(min)}`;
     t = 0;
   } else if (t > 1) {
-    message += `${field.displayName}: LARGER than recommended max of ${toString(
-      max
-    )}`;
+    message += `${name}: LARGER than recommended max of ${toString(max)}`;
     t = 1;
   } else {
-    message += `${field.displayName}: ${toString(value)}`;
+    message += `${name}: ${toString(value)}`;
   }
 
   return {

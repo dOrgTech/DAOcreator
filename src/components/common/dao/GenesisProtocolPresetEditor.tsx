@@ -154,9 +154,6 @@ class GenesisProtocolPresetEditor extends React.Component<Props, State> {
                     several configurations parameters:
                   </div>
                 </DialogContentText>
-                <div>
-                  <span>&nbsp;&nbsp;</span>
-                </div>
                 <GenesisProtocolEditor form={form} editable={true} />
               </DialogContent>
               <DialogActions>

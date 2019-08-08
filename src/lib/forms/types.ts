@@ -124,7 +124,7 @@ export class DateTimeField extends FriendlyField<Date, DateTimeField> {
     return this.value.getTime() / 1000;
   }
 
-  public fromUnixTime(unix: number) {
+  public fromUnixTime(unix: number): void {
     if (unix === 0) {
       // now
       this.value = new Date();
@@ -173,7 +173,7 @@ export class DurationField extends FriendlyField<string, DurationField> {
     return days * 86400 + hours * 3600 + minutes * 60 + seconds;
   }
 
-  public fromSeconds(seconds: number) {
+  public fromSeconds(seconds: number): void {
     const days = Math.trunc(seconds / 86400);
     seconds -= days * 86400;
     const hours = Math.trunc(seconds / 3600);
@@ -181,7 +181,7 @@ export class DurationField extends FriendlyField<string, DurationField> {
     const minutes = Math.trunc(seconds / 60);
     seconds -= minutes * 60;
     seconds = Math.trunc(seconds);
-    return `${days}:${hours}:${minutes}:${seconds}`;
+    this.value = `${days}:${hours}:${minutes}:${seconds}`;
   }
 }
 

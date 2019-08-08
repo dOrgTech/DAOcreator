@@ -220,7 +220,7 @@ const DurationFieldView = observer(
           name={props.name}
           label={props.name}
           value={field[props.name]}
-          contentEditable={editable}
+          disabled={editable === undefined ? false : !editable}
           onChange={onChange}
           variant={"outlined"}
           type={"number"}
@@ -245,7 +245,6 @@ const DurationFieldView = observer(
           error={field.hasError}
           variant={"filled"}
           value={" "}
-          contentEditable={editable}
           style={{
             height: "60px",
             marginTop: "8px"
@@ -299,7 +298,7 @@ const DateTimeFieldView = observer(
       <KeyboardDateTimePicker
         label={field.displayName}
         value={field.value}
-        contentEditable={editable}
+        disabled={editable === undefined ? false : !editable}
         onChange={date => {
           field.value = date ? date : new Date();
         }}
@@ -309,7 +308,8 @@ const DateTimeFieldView = observer(
         inputVariant={"filled"}
         ampm={false}
         style={{
-          marginTop: "5px"
+          marginTop: "5px",
+          marginBottom: "4px"
         }}
         InputProps={{
           startAdornment: FieldInformation(popupState)
