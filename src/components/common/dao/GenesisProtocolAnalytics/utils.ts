@@ -39,14 +39,14 @@ export const analyzeField = (
   let message: string = ``;
 
   if (t < 0) {
-    message += `[${
-      field.displayName
-    }] is LOWER than recommended min of ${toString(min)}`;
+    message += `${field.displayName}: LOWER than recommended min of ${toString(
+      min
+    )}`;
     t = 0;
   } else if (t > 1) {
-    message += `[${
-      field.displayName
-    }] is LARGER than recommended max of ${toString(max)}`;
+    message += `${field.displayName}: LARGER than recommended max of ${toString(
+      max
+    )}`;
     t = 1;
   } else {
     message += `${field.displayName}: ${toString(value)}`;
