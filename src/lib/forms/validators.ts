@@ -108,11 +108,11 @@ export const positiveDuration: Validator<string> = value => {
   return error;
 };
 
-export const futureDate: Validator<Date> = value => {
+export const futureDate: Validator<Date | undefined> = value => {
   let error = "Date must be in the future.";
   const currentTime = new Date().getTime();
 
-  if (value.getTime() < currentTime) {
+  if (value && value.getTime() < currentTime) {
     return error;
   }
 

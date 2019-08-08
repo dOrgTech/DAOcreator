@@ -28,8 +28,10 @@ import {
   TokenField,
   DurationField,
   DateTimeField,
-  PercentageField
+  PercentageField,
+  AddressField
 } from "../../../lib/forms";
+import EthAddressAvatar from "../EthAddressAvatar";
 
 export interface Props {
   field: AnyField;
@@ -59,7 +61,7 @@ class FormField extends React.Component<Props> {
               FieldView = DurationFieldView;
               break;
             case FieldType.Address:
-              FieldView = StringFieldView;
+              FieldView = AddressFieldView;
               break;
             case FieldType.Percentage:
               FieldView = PercentageFieldView;
@@ -214,7 +216,9 @@ const DurationFieldView = observer(
         minutes: field.minutes
       };
       duration[name] = Number(value);
-      field.value = `${duration.days}:${duration.hours}:${duration.minutes}:00`;
+      field.onChange(
+        `${duration.days}:${duration.hours}:${duration.minutes}:00`
+      );
     };
 
     const DurationPart = observer(
@@ -300,12 +304,13 @@ const DateTimeFieldView = observer(
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <KeyboardDateTimePicker
         label={field.displayName}
-        value={field.value}
+        value={field.value === undefined ? null : field.value}
         disabled={editable === undefined ? false : !editable}
-        onChange={date => {
-          field.value = date ? date : new Date();
-        }}
+        onChange={date =>
+          date === null ? field.onChange(undefined) : field.onChange(date)
+        }
         disablePast
+        clearable
         format="MM/dd/yyyy HH:mm"
         variant={"dialog"}
         inputVariant={"filled"}
@@ -326,15 +331,15 @@ const PercentageFieldView = observer(
   ({ field, popupState, editable }: FieldProps<PercentageField>) => {
     const onSliderChange = (event: any, newValue: number | number[]) => {
       if (typeof newValue === "number") {
-        field.value = newValue;
+        field.onChange(newValue);
       } else {
-        field.value = newValue[0];
+        field.onChange(newValue[0]);
       }
     };
 
     const onInputChange = (event: any) => {
       const value = event.target.value;
-      field.value = value === "" ? 0 : Number(value);
+      field.onChange(value === "" ? 0 : Number(value));
     };
 
     return (
@@ -396,6 +401,29 @@ const PercentageFieldView = observer(
       </>
     );
   }
+);
+
+const AddressFieldView = observer(
+  ({ field, popupState, editable }: FieldProps<AddressField>) => (
+    <>
+      <TextField
+        fullWidth
+        variant={"filled"}
+        margin={"dense"}
+        label={field.displayName}
+        error={field.hasError}
+        value={field.value}
+        disabled={editable === undefined ? false : !editable}
+        onChange={e => field.onChange(e.target.value)}
+        onBlur={field.enableAutoValidationAndValidate}
+        InputProps={{
+          startAdornment: FieldInformation(popupState),
+          endAdornment: <EthAddressAvatar address={field.value} />
+        }}
+      />
+      <FieldError field={field} />
+    </>
+  )
 );
 
 export default FormField;

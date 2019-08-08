@@ -1,12 +1,20 @@
-import * as React from "react"
-import Blockies from "react-blockies"
+import * as React from "react";
+import { IconButton } from "@material-ui/core";
+import Blockies from "react-blockies";
 
 export type Props = {
-  address: string
-}
+  address: string;
+};
 
-const EthAddressAvatar: React.SFC<Props> = ({ address }) => {
-  return <Blockies seed={address} />
-}
+const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
+  <IconButton
+    onClick={() => window.open(`https://etherscan.io/address/${address}`)}
+    style={{
+      padding: 0
+    }}
+  >
+    <Blockies seed={address} />
+  </IconButton>
+);
 
-export default EthAddressAvatar
+export default EthAddressAvatar;

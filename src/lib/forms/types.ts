@@ -108,16 +108,17 @@ export class TokenField extends FriendlyField<string, TokenField> {
   }
 }
 
-export class DateTimeField extends FriendlyField<Date, DateTimeField> {
-  constructor(init: Date) {
+export class DateTimeField extends FriendlyField<
+  Date | undefined,
+  DateTimeField
+> {
+  constructor(init?: Date) {
     super(init, FieldType.DateTime);
   }
 
-  public getunixTime(futureOnly?: boolean): number {
-    if (futureOnly) {
-      if (Date.now() < this.value.getTime()) {
-        return 0;
-      }
+  public getunixTime(): number {
+    if (this.value === undefined) {
+      return 0;
     }
 
     // div by 1000 to convert to seconds
@@ -125,9 +126,10 @@ export class DateTimeField extends FriendlyField<Date, DateTimeField> {
   }
 
   public fromUnixTime(unix: number): void {
+    console.log(unix);
     if (unix === 0) {
       // now
-      this.value = new Date();
+      this.value = undefined;
     } else {
       // mul by 1000 to convert to milliseconds
       this.value = new Date(unix * 1000);
@@ -535,7 +537,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       activationTime: new DateTimeField(
-        form ? form.$.activationTime.value : new Date()
+        form ? form.$.activationTime.value : undefined
       )
         .validators(futureDate)
         .setDisplayName("Locking / Activation Time")
@@ -575,7 +577,7 @@ export class GenesisProtocolForm extends FriendlyForm<
       daoBountyConst: toBN(this.$.daoBountyConst.value),
       // TODO: future only is a hack for the editor, it won't work
       // if we're viewing past data froma already deployed DAO...
-      activationTime: toBN(this.$.activationTime.getunixTime(true)),
+      activationTime: toBN(this.$.activationTime.getunixTime()),
       preBoostedVotePeriodLimit: toBN(
         this.$.preBoostedVotePeriodLimit.toSeconds()
       ),

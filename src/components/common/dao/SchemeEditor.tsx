@@ -57,7 +57,7 @@ class SchemeEditor extends React.Component<Props, State> {
 
     return (
       <Grid item>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised>
           <CardContent>
             <Grid
               container
