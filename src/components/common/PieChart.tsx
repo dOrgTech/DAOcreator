@@ -1,71 +1,66 @@
-import * as React from "react"
-import * as R from "ramda"
-import { PieChart as RePieChart, Pie, Tooltip, Cell } from "recharts"
+import * as React from "react";
+import {
+  Chart,
+  PieSeries,
+  Tooltip
+} from "@devexpress/dx-react-chart-material-ui";
+import { Animation, EventTracker } from "@devexpress/dx-react-chart";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
-
-export type PieChartConfig = {
-  width: number
-  hight: number
-  dataKey: string
-  nameKey: string
+export interface PieChartConfig {
+  size: number;
+  dataKey: string;
+  nameKey: string;
 }
 
-export type Props = {
-  data: any[]
-  config: PieChartConfig
+export interface Props {
+  data: any[];
+  config: PieChartConfig;
 }
 
-const PieChart: React.SFC<Props> = ({ data, config }) => {
-  return (
-    <RePieChart
-      style={{ margin: "auto" }}
-      width={config.width}
-      height={config.hight}
-    >
-      <Pie
-        dataKey={(dataObject: any) => parseInt(dataObject[config.dataKey])}
-        nameKey={config.nameKey}
-        data={data}
-        labelLine={false}
-        label={renderCustomizedLabel}
-      >
-        {data.map((entry, index) => (
-          <Cell key={"cell-" + index} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-      <Tooltip />
-    </RePieChart>
-  )
+interface State {
+  targetItem: any;
 }
 
-const RADIAN = Math.PI / 180
+class PieChart extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      targetItem: undefined
+    };
+  }
 
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  name,
-  index,
-}: any) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-  const x = cx + radius * Math.cos(-midAngle * RADIAN)
-  const y = cy + radius * Math.sin(-midAngle * RADIAN)
+  render() {
+    const { data, config } = this.props;
+    const { targetItem } = this.state;
 
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`...${R.take(5, name)} - ${(percent * 100).toFixed(0)}%`}
-    </text>
-  )
+    const TooltipContent = () => (
+      <div>
+        <Tooltip.Content
+          targetItem={targetItem}
+          text={`${config.nameKey}: ${data[targetItem.point][config.nameKey]}`}
+        />
+        <Tooltip.Content
+          targetItem={targetItem}
+          text={`${config.dataKey}: ${data[targetItem.point][config.dataKey]}`}
+        />
+      </div>
+    );
+
+    return (
+      <Chart data={data} height={config.size}>
+        <PieSeries valueField={config.dataKey} argumentField={config.nameKey} />
+        <EventTracker />
+        <Tooltip
+          targetItem={targetItem}
+          contentComponent={TooltipContent}
+          onTargetItemChange={(targetItem: any) =>
+            this.setState({ targetItem })
+          }
+        />
+        <Animation />
+      </Chart>
+    );
+  }
 }
 
-export default PieChart
+export default PieChart;

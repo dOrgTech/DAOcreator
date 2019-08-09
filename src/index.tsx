@@ -7,7 +7,7 @@ import CssBaseline from "@material-ui/core/CssBaseline"
 import { ConnectedRouter } from "connected-react-router"
 import { Provider } from "react-redux"
 
-import { configureStore } from "./redux/store"
+import { configureStore } from "./lib/redux/store"
 import { createHashHistory } from "history"
 
 import theme from "./style/theme"

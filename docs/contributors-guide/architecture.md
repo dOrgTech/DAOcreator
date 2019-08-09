@@ -4,65 +4,32 @@ TODO: Describe folder structure & tools
 
 ## 3 Layers Of Data Types
 
-TODO: Still very WIP
+We view the different data types in this project as if they are in 3 layers:
 
-We view the different data types in this project as if they are in 3 buckets:
+1. _Form Data_
+2. _State Data_
+3. _Dependency Data_
 
-1. _UI Data_
-2. _Internal / Backend Data_
-3. _3rd Party Dependency Data_
+Data in each layer can flow in either direction, 1 <> 2 <> 3. In order to do this, we write mapping located in the `src/lib/dataMappings` folder.
 
-We want to avoid as many **run-time type related errors** as possible, so each layer has its own type definitions.
+We did this to avoid as many **run-time type related errors** as possible, and to decouple our user-friendly UI data from the backing state & dependency data.
 
-These definitions can be found in:
+These type definitions can be found in:
 
-1. `src/components/**.ts`
-2. `src/lib/types/*.ts`
-3. `src/lib/integrations/**/types/*.ts`
+1. `src/lib/forms`
+2. `src/lib/state`
+3. `src/lib/dependency`
 
-Confused? So were we, that's why we wrote this...
+Confused? So were we, that's why we wrote this... here's a brief description of each layer.
 
-#### UI types
+#### Form Data
 
-These are types that are internal to a react component. This normally takes the form of the Component's Props and State interfaces.
+This is user input data that needs to be sanitized before it can flow into the application's main state.
 
-Why make a UI type? Why not just use the Lib Types? Components should not be directly dependent on (2.) Lib Types as the component should only get access to the data that is strictly needed for that specific component.
+#### State Data
 
-Data from 1 gets to 2 through dispatched redux actions. Data gets from 2 to 1 through
-The remapping between (2.) Lib types and UI types should happen in mapStateToProps (and in mapDispatchToProps if required).
+This is the core state of the application.
 
-TODO
+#### Dependency Data
 
-Example:
-1 to 2
-// component, action, reducer (state)  
-2 to 1
-// map state to props
-
-Bad:
-
-```
-interface Founder = {
-  name: string
-}
-
-type Props = {
-  founder: Founder
-}
-```
-
-Good:
-
-```
-type Props = {
-  founderName: string
-}
-```
-
-#### 2. Lib types
-
-These are the types that are used through the project for internal communication (state, actions, exposed by integration modules etc.).
-
-#### 3. Integration types
-
-These are the types that are provided by external dependencies. These types should not be accessible to the project as a whole, they should be constrained to the integration's integration module. Everything exposed by an integration module should have (2.) Lib type. This way we can easily exchange the integrations internal package.
+These are the types that are provided by external dependencies. These types should not be accessible to the project as a whole, they should be constrained to the dependency's module. This way we can easily exchange the dependency.

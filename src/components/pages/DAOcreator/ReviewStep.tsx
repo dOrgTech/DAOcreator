@@ -1,248 +1,104 @@
+import * as React from "react";
 import {
   Card,
   CardContent,
-  createStyles,
-  Grid,
-  Theme,
   Typography,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import * as R from "ramda"
-import * as React from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
-import {
-  Founder,
-  getSchemeDefinition,
-  SchemeConfig,
-  votingMachineDefinitions,
-} from "../../../lib/integrations/daoStack/arc"
-import EthAddressAvatar from "../../common/EthAddressAvatar"
-import PieChart from "../../common/PieChart"
+  Divider,
+  Grid,
+  Fab
+} from "@material-ui/core";
+import WarningIcon from "@material-ui/icons/WarningTwoTone";
+import EditIcon from "@material-ui/icons/Settings";
+import SchemesEditor from "../../common/dao/SchemesEditor";
+import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
+import MembersEditor from "../../common/dao/MembersEditor";
+import MembersAnalytics from "../../common/dao/MembersAnalytics";
+import { DAOForm } from "../../../lib/forms";
+import { SchemeType } from "../../../lib/state";
 
-// eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  daoName: string
-  tokenName: string
-  tokenSymbol: string
-  founders: Founder[]
-  schemes: SchemeConfig[]
-  stepNumber: number
-  stepValid: boolean
+interface Props {
+  form: DAOForm;
+  // TODO: don't use a number here, use an enum instead. This will break easily.
+  setStep: (step: number) => void;
 }
 
-const ReviewStep: React.SFC<Props> = ({
-  daoName,
-  tokenName,
-  tokenSymbol,
-  founders,
-  schemes,
-  stepNumber,
-  stepValid,
-  classes,
-}) => {
-  return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h4" className={classes.headline} gutterBottom>
-          Review the DAO
-        </Typography>
-        <Grid container spacing={16}>
-          <Grid item xs={12} md={5}>
-            <Typography className={classes.guideText} variant="body2">
-              Look over this summary of the DAO you are about to create
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={7} />
-          <Grid item xs={12} md={5}>
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Naming
-              </Typography>
-              <Typography>
-                <b>DAO Name:</b> {daoName}
-              </Typography>
-              <Typography>
-                <b>Token Name:</b> {tokenName}
-              </Typography>
-              <Typography>
-                <b>Token Symbol:</b> {tokenSymbol}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                className={classes.headline}
-                gutterBottom
-              >
-                Features
-              </Typography>
-              {R.map(displayScheme, schemes)}
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" className={classes.headline} gutterBottom>
-              Founders
-            </Typography>
-            <Grid container spacing={16} key={`founder-headline`}>
-              <Grid item xs={1} />
-              <Grid item xs={7}>
-                <Typography>
-                  <b>Address</b>
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>
-                  <b>Reputation</b>
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>
-                  <b>Tokens</b>
-                </Typography>
-              </Grid>
-            </Grid>
-            {R.map(displayFounder, founders)}
-          </Grid>
-        </Grid>
-        <Grid container spacing={16}>
-          <Grid item xs={6} sm={6} md={6}>
-            <Typography
-              variant="h6"
-              className={classes.pieChartHeading}
-              gutterBottom
-            >
-              Reputation Distribution
-            </Typography>
-            <PieChart
-              data={founders}
-              config={{
-                hight: 240,
-                width: 240,
-                dataKey: "reputation",
-                nameKey: "address",
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sm={6} md={6}>
-            <Typography
-              variant="h6"
-              className={classes.pieChartHeading}
-              gutterBottom
-            >
-              Tokens Distribution
-            </Typography>
-            <PieChart
-              data={founders}
-              config={{
-                hight: 240,
-                width: 240,
-                dataKey: "tokens",
-                nameKey: "address",
-              }}
-            />
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  )
-}
+export default class ReviewStep extends React.Component<Props> {
+  render() {
+    const { form, setStep } = this.props;
+    const { config, schemes, members } = form.$;
+    const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
+    const missingSchemeReg =
+      schemes.$.findIndex(
+        scheme => scheme.type === SchemeType.SchemeRegistrar
+      ) === -1;
 
-const displayFounder = ({ address, reputation, tokens }: Founder) => (
-  <Grid container spacing={16} key={`founder-${address}`}>
-    <Grid item xs={1}>
-      <EthAddressAvatar address={address} />
-    </Grid>
-    <Grid item xs={7}>
-      <Typography>{address}</Typography>
-    </Grid>
-    <Grid item xs={2}>
-      <Typography>{reputation}</Typography>
-    </Grid>
-    <Grid item xs={2}>
-      <Typography>{tokens}</Typography>
-    </Grid>
-  </Grid>
-)
+    const modifyStep = (step: number) => (
+      <Fab
+        color={"primary"}
+        onClick={() => setStep(step)}
+        style={{
+          height: "20px",
+          width: "20px",
+          minHeight: "20px",
+          marginRight: "5px",
+          marginTop: "5px"
+        }}
+      >
+        <EditIcon fontSize={"inherit"} />
+      </Fab>
+    );
 
-const displayScheme = (schemeConfig: SchemeConfig) => {
-  const votingMachine =
-    votingMachineDefinitions[
-      R.pathOr(null, ["votingMachineConfig", "typeName"], schemeConfig.params)
-    ]
-  const schemeDefinition = getSchemeDefinition(schemeConfig.typeName)
-  return (
-    <Grid container spacing={16} key={`scheme-${schemeDefinition.typeName}`}>
-      <Grid item xs={12}>
-        <Typography variant="subtitle1">
-          {schemeDefinition.displayName}
-        </Typography>
-        <Typography>
-          <i>{schemeDefinition.description}</i>
+    const titleText = (title: string, step: number) => (
+      <Grid container direction={"row"}>
+        {modifyStep(step)}
+        <Typography variant="h5" gutterBottom>
+          {title}
         </Typography>
       </Grid>
-      {votingMachine != null ? (
-        <Grid item xs={12}>
-          <Typography variant="subtitle2">
-            {votingMachine.displayName}
-          </Typography>
-          <Typography>
-            <i>{votingMachine.description}</i>
-          </Typography>
-        </Grid>
-      ) : null}
-    </Grid>
-  )
-}
+    );
 
-// STYLE
-const styles = (theme: Theme) =>
-  createStyles({
-    card: {},
-    headline: {
-      paddingTop: 20,
-    },
-    daoName: {},
-    tokenName: {},
-    tokenSymbol: {},
-    guideText: {
-      fontSize: 18,
-      maxWidth: 450,
-      addingTop: 50,
-      paddingBottom: 20,
-    },
-    pieChartHeading: {
-      textAlign: "center",
-    },
-  })
-
-const componentWithStyles = withStyles(styles)(ReviewStep)
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {
-    daoName: state.daoCreator.naming.daoName,
-    tokenName: state.daoCreator.naming.tokenName,
-    tokenSymbol: state.daoCreator.naming.tokenSymbol,
-    founders: state.daoCreator.founders,
-    schemes: state.daoCreator.schemes,
-    stepNumber: state.daoCreator.step,
-    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h4">Review your new DAO:</Typography>
+          <Divider />
+          <Grid container spacing={3} direction={"column"}>
+            <Grid item>
+              {titleText("Names", 0)}
+              <Grid container justify={"center"}>
+                <DAOConfigEditor form={config} editable={false} />
+              </Grid>
+            </Grid>
+            <Grid item>
+              {titleText("Schemes", 1)}
+              <SchemesEditor form={schemes} editable={false} />
+              {missingSchemeReg ? (
+                <Grid container direction={"row"}>
+                  <WarningIcon color={"error"} />
+                  <Typography color={"error"}>
+                    Warning: Your DAO is missing a SchemeRegistrar, and will not
+                    be able to modify itself once deployed. We highly recommend
+                    adding this to your DAO.
+                  </Typography>
+                </Grid>
+              ) : (
+                <></>
+              )}
+            </Grid>
+            <Grid item>
+              {titleText("Members", 2)}
+              <Grid container direction={"row"} justify={"center"}>
+                <MembersAnalytics data={members.toState()} />
+              </Grid>
+              <MembersEditor
+                form={members}
+                editable={false}
+                getDAOTokenSymbol={getDAOTokenSymbol}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    );
   }
 }
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {}
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)

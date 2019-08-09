@@ -6,17 +6,16 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles,
-} from "@material-ui/core"
-import * as React from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
-import { DAO } from "../../../lib/integrations/daoStack/arc"
-import { RootState } from "../../../state"
+  WithStyles
+} from "@material-ui/core";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { DAO } from "../../../lib/dependency/arc";
+import { RootState } from "../../../lib/state";
 
-// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  dao: DAO | undefined
+  dao: DAO | undefined;
 }
 
 const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
@@ -25,16 +24,16 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
       <Typography variant="h5" className={classes.headline} gutterBottom>
         No DAO
       </Typography>
-    )
+    );
   } else {
-    const { name, tokenName, tokenSymbol, avatar, daoToken, reputation } = dao
+    const { config, avatar, daoToken, reputation } = dao;
     return (
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h4" className={classes.headline} gutterBottom>
             Live DAO
           </Typography>
-          <Grid container spacing={16}>
+          <Grid container spacing={10}>
             <Grid item xs={12} md={5}>
               <Typography className={classes.guideText} variant="body2">
                 Hurray! Your DAO is deployed!
@@ -52,13 +51,13 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
                 DAO
               </Typography>
               <Typography>
-                <b>Name:</b> {name}
+                <b>Name:</b> {config.daoName}
               </Typography>
               <Typography>
-                <b>Token Name:</b> {tokenName}
+                <b>Token Name:</b> {config.tokenName}
               </Typography>
               <Typography>
-                <b>Token Symbol:</b> {tokenSymbol}
+                <b>Token Symbol:</b> {config.tokenSymbol}
               </Typography>
               <Typography
                 variant="h5"
@@ -80,9 +79,9 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
           </Grid>
         </CardContent>
       </Card>
-    )
+    );
   }
-}
+};
 
 // STYLE
 const styles = (theme: Theme) =>
@@ -99,24 +98,24 @@ const styles = (theme: Theme) =>
       paddingRight: 30,
       paddingTop: 50,
       paddingBottom: 50,
-      margin: "auto",
-    },
-  })
+      margin: "auto"
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(LiveDaoStep)
+const componentWithStyles = withStyles(styles)(LiveDaoStep);
 
 // STATE
 const mapStateToProps = (state: RootState) => {
   return {
-    dao: state.daoCreator.deployedDao,
-  }
-}
+    dao: undefined
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {}
-}
+  return {};
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);

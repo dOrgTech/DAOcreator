@@ -1,6 +1,4 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux"
+import * as React from "react";
 import {
   withStyles,
   Theme,
@@ -10,56 +8,119 @@ import {
   Step,
   StepLabel,
   Card,
-  Button,
-} from "@material-ui/core"
-import DAOcreatorActions, * as daoCreatorActions from "../../../redux/actions/daoCreator"
-import NamingStep from "./NamingStep"
-import FoundersStep from "./FoundersStep"
-import SchemesStep from "./SchemesStep"
-import ReviewStep from "./ReviewStep"
-import LiveDao from "./LiveDao"
-import { RootState } from "../../../state"
+  Button
+} from "@material-ui/core";
+import NamingStep from "./NamingStep";
+import MembersStep from "./MembersStep";
+import SchemesStep from "./SchemesStep";
+import ReviewStep from "./ReviewStep";
+import DeployStep from "./DeployStep";
+import { DAOForm } from "../../../lib/forms";
+import { FormState } from "formstate";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  step: number
-  stepValid: boolean
-  actions: DAOcreatorActions
+interface Props extends WithStyles<typeof styles> {}
+
+interface State {
+  step: number;
+  error: string;
 }
 
-class DAOcreator extends React.Component<Props> {
+interface Step {
+  title: string;
+  form: FormState<any>;
+  Component: any;
+  props?: {
+    [name: string]: any;
+  };
+}
+
+class DAOcreator extends React.Component<Props, State> {
+  form = new DAOForm();
+
   constructor(props: Props) {
-    super(props)
-    props.actions.init()
+    super(props);
+    this.state = {
+      step: 0,
+      error: ""
+    };
   }
 
   render() {
-    const { classes, step, stepValid, actions } = this.props
-    const steps = [
+    const steps: Step[] = [
       {
         title: "Name",
-        component: <NamingStep />,
+        form: this.form.$.config,
+        Component: NamingStep
       },
       {
-        title: "Founders",
-        component: <FoundersStep />,
+        title: "Schemes",
+        form: this.form.$.schemes,
+        Component: SchemesStep
       },
       {
-        title: "Features (schemes)",
-        component: <SchemesStep />,
+        title: "Members",
+        form: this.form.$.members,
+        Component: MembersStep,
+        props: {
+          getDAOTokenSymbol: () => this.form.$.config.$.tokenSymbol.value
+        }
       },
       {
-        title: "Review & Deploy",
-        component: <ReviewStep />,
+        title: "Review",
+        form: this.form,
+        Component: ReviewStep,
+        props: {
+          setStep: (step: number) => {
+            this.setState({
+              step,
+              error: ""
+            });
+          }
+        }
       },
       {
-        title: "Live DAO",
-        component: <LiveDao />,
-      },
-    ]
+        title: "Deploy",
+        form: this.form,
+        Component: DeployStep
+      }
+    ];
+    const { classes } = this.props;
+    const { step } = this.state;
+    const isLastStep = step === steps.length - 1;
+    const { form, Component, props } = steps[step];
 
-    const isDeployStep = step === steps.length - 2
-    const isLastStep = step === steps.length - 1
+    const previousStep = async () => {
+      this.setState({
+        step: this.state.step - 1,
+        error: ""
+      });
+    };
+
+    const nextStep = async () => {
+      const res = await form.validate();
+      const { step } = this.state;
+
+      if (!res.hasError) {
+        this.setState({
+          step: step + 1,
+          error: ""
+        });
+      } else {
+        if (form.error) {
+          this.setState({
+            step,
+            error: form.error
+          });
+        } else {
+          this.setState({
+            step,
+            error: "Unknown Error."
+          });
+        }
+      }
+    };
+
     return (
       <div className={classes.root}>
         <Card>
@@ -71,33 +132,34 @@ class DAOcreator extends React.Component<Props> {
             ))}
           </Stepper>
         </Card>
-        <div className={classes.content}>{steps[step].component}</div>
-        {isLastStep ? (
-          <></>
-        ) : (
-          <div>
+        <div className={classes.content}>
+          <Component form={form} {...props} />
+        </div>
+        <div>
+          <Button
+            variant={"contained"}
+            color={"primary"}
+            disabled={step === 0}
+            onClick={previousStep}
+            className={classes.button}
+          >
+            Back
+          </Button>
+          {isLastStep ? (
+            <></>
+          ) : (
             <Button
-              variant="contained"
-              color="primary"
-              disabled={step === 0}
-              onClick={actions.prevStep}
+              variant={"contained"}
+              color={"primary"}
+              onClick={nextStep}
               className={classes.button}
             >
-              Back
+              Next
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={isDeployStep ? actions.createDao : actions.nextStep}
-              className={classes.button}
-              disabled={!stepValid}
-            >
-              {isDeployStep ? "Deploy DAO" : "Next"}
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    )
+    );
   }
 }
 
@@ -112,40 +174,21 @@ const styles = (theme: Theme) =>
       position: "relative",
       pointerEvents: "none",
       maxWidth: 1000,
-      margin: "auto",
+      margin: "auto"
     },
     stepper: {
-      pointerEvents: "all",
+      pointerEvents: "all"
     },
     content: {
-      marginTop: theme.spacing.unit,
-      marginBottom: theme.spacing.unit,
-      pointerEvents: "all",
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      pointerEvents: "all"
     },
     button: {
-      marginRight: theme.spacing.unit,
+      marginRight: theme.spacing(1),
       backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
-      pointerEvents: "all",
-    },
-  })
+      pointerEvents: "all"
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(DAOcreator)
-
-// STATE
-const mapStateToProps = (state: RootState, ownProps: any) => {
-  return {
-    step: state.daoCreator.step,
-    stepValid: state.daoCreator.stepValidation[state.daoCreator.step],
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    actions: bindActionCreators(daoCreatorActions, dispatch),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles)
+export default withStyles(styles)(DAOcreator);
