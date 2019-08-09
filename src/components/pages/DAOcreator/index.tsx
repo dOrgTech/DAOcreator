@@ -69,7 +69,15 @@ class DAOcreator extends React.Component<Props, State> {
       {
         title: "Review",
         form: this.form,
-        Component: ReviewStep
+        Component: ReviewStep,
+        props: {
+          setStep: (step: number) => {
+            this.setState({
+              step,
+              error: ""
+            });
+          }
+        }
       },
       {
         title: "Deploy",
