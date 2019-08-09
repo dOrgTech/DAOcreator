@@ -6,10 +6,12 @@ import {
   Divider,
   Grid
 } from "@material-ui/core";
+import WarningIcon from "@material-ui/icons/WarningTwoTone";
 import SchemesEditor from "../../common/dao/SchemesEditor";
 import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
 import MembersEditor from "../../common/dao/MembersEditor";
 import { DAOForm } from "../../../lib/forms";
+import { SchemeType } from "../../../lib/state";
 
 interface Props {
   form: DAOForm;
@@ -18,7 +20,12 @@ interface Props {
 export default class ReviewStep extends React.Component<Props> {
   render() {
     const { form } = this.props;
-    const getDAOTokenSymbol = () => form.$.config.$.tokenSymbol.value;
+    const { config, schemes, members } = form.$;
+    const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
+    const missingSchemeReg =
+      schemes.$.findIndex(
+        scheme => scheme.type === SchemeType.SchemeRegistrar
+      ) === -1;
 
     return (
       <Card>
@@ -31,21 +38,33 @@ export default class ReviewStep extends React.Component<Props> {
                 Names
               </Typography>
               <Grid container justify={"center"}>
-                <DAOConfigEditor form={form.$.config} editable={false} />
+                <DAOConfigEditor form={config} editable={false} />
               </Grid>
             </Grid>
             <Grid item>
               <Typography variant="h5" gutterBottom>
                 Schemes
               </Typography>
-              <SchemesEditor form={form.$.schemes} editable={false} />
+              <SchemesEditor form={schemes} editable={false} />
+              {missingSchemeReg ? (
+                <Grid container direction={"row"}>
+                  <WarningIcon color={"error"} />
+                  <Typography color={"error"}>
+                    Warning: Your DAO is missing a SchemeRegistrar, and will not
+                    be able to modify itself once deployed. We highly recommend
+                    adding this to your DAO.
+                  </Typography>
+                </Grid>
+              ) : (
+                <></>
+              )}
             </Grid>
             <Grid item>
               <Typography variant="h5" gutterBottom>
                 Members
               </Typography>
               <MembersEditor
-                form={form.$.members}
+                form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
               />

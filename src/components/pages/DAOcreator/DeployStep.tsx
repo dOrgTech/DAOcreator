@@ -7,6 +7,7 @@ import { Dispatch } from "redux";
 import { RootState } from "../../../lib/state";
 import { Member, Scheme } from "../../../lib/dependency/arc";
 
+// eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   daoName: string;
   tokenName: string;
@@ -17,6 +18,7 @@ interface Props extends WithStyles<typeof styles> {
   stepValid: boolean;
 }
 
+// eslint-disable-next-line
 const DeployStep: React.SFC<Props> = ({}) => <></>;
 
 // STYLE
