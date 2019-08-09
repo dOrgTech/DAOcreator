@@ -17,22 +17,14 @@ import {
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import { GenesisProtocolForm } from "../../../lib/forms";
-import { GenesisProtocol } from "../../../lib/dependency/arc";
+import { GenesisProtocolPreset } from "../../../lib/dependency/arc";
 
 interface Props {
   form: GenesisProtocolForm;
   editable: boolean;
 }
 
-enum ProtocolPreset {
-  easy = "Easy",
-  normal = "Normal",
-  critical = "Critical",
-  custom = "Custom"
-}
-
 interface State {
-  protocol: ProtocolPreset;
   editing: boolean;
 }
 
@@ -41,52 +33,26 @@ export default class GenesisProtocolPresetEditor extends React.Component<
   Props,
   State
 > {
-  private EasyConfig = new GenesisProtocol(GenesisProtocol.EasyConfig);
-  private NormalConfig = new GenesisProtocol(GenesisProtocol.NormalConfig);
-  private CriticalConfig = new GenesisProtocol(GenesisProtocol.CriticalConfig);
-
   constructor(props: Props) {
     super(props);
-    this.props.form.fromState(this.NormalConfig);
     this.state = {
-      protocol: ProtocolPreset.normal,
       editing: false
     };
   }
 
   render() {
     const { form, editable } = this.props;
-    const { protocol, editing } = this.state;
+    const { editing } = this.state;
 
     const onChange = (event: React.ChangeEvent<{ value: any }>) => {
-      const preset = event.target.value as ProtocolPreset;
-
-      // update the backing form to a preset if needed
-      switch (preset) {
-        case ProtocolPreset.easy:
-          form.fromState(this.EasyConfig);
-          break;
-        case ProtocolPreset.normal:
-          form.fromState(this.NormalConfig);
-          break;
-        case ProtocolPreset.critical:
-          form.fromState(this.CriticalConfig);
-          break;
-        default:
-          throw Error("Unimplemented protocol preset.");
-      }
-
-      this.setState({
-        ...this.state,
-        protocol: preset
-      });
+      form.preset = event.target.value;
+      this.forceUpdate();
     };
 
     const onEdit = () => {
       this.setState({
         ...this.state,
-        editing: true,
-        protocol: ProtocolPreset.custom
+        editing: true
       });
     };
 
@@ -119,22 +85,14 @@ export default class GenesisProtocolPresetEditor extends React.Component<
                 native
                 fullWidth
                 disabled={!editable}
-                value={protocol}
+                value={form.preset}
                 onChange={onChange}
                 input={<FilledInput name="protocol" id="protocol" />}
               >
-                <option value={ProtocolPreset.easy}>
-                  {ProtocolPreset.easy}
-                </option>
-                <option value={ProtocolPreset.normal}>
-                  {ProtocolPreset.normal}
-                </option>
-                <option value={ProtocolPreset.critical}>
-                  {ProtocolPreset.critical}
-                </option>
-                <option value={ProtocolPreset.custom}>
-                  {ProtocolPreset.custom}
-                </option>
+                <option value={GenesisProtocolPreset.Easy}>Easy</option>
+                <option value={GenesisProtocolPreset.Normal}>Normal</option>
+                <option value={GenesisProtocolPreset.Critical}>Critical</option>
+                <option value={undefined}>Custom</option>
               </Select>
             </Grid>
             <Grid item>

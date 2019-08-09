@@ -27,7 +27,7 @@ import {
   SchemeRegistrar
 } from "../state";
 import { TypeConversion } from "../dependency/web3";
-import { SchemeType } from "../dependency/arc";
+import { SchemeType, GenesisProtocolPreset } from "../dependency/arc";
 const { toBN, toWei, fromWei } = TypeConversion;
 
 export enum FieldType {
@@ -126,7 +126,6 @@ export class DateTimeField extends FriendlyField<
   }
 
   public fromUnixTime(unix: number): void {
-    console.log(unix);
     if (unix === 0) {
       // now
       this.value = undefined;
@@ -396,6 +395,11 @@ export class MemberForm extends FriendlyForm<
   }
 }
 
+export interface GenesisProtocolFormOpts {
+  form?: GenesisProtocolForm;
+  preset?: GenesisProtocolPreset;
+}
+
 export class GenesisProtocolForm extends FriendlyForm<
   GenesisProtocol,
   {
@@ -413,10 +417,31 @@ export class GenesisProtocolForm extends FriendlyForm<
     voteOnBehalf: AddressField;
   }
 > {
-  constructor(form?: GenesisProtocolForm) {
+  private _preset?: GenesisProtocolPreset;
+
+  public get preset(): GenesisProtocolPreset | undefined {
+    return this._preset;
+  }
+
+  public set preset(value: GenesisProtocolPreset | undefined) {
+    this._preset = value;
+
+    if (value) {
+      this.fromState(
+        new GenesisProtocol({
+          preset: value
+        })
+      );
+    }
+  }
+
+  constructor(opts: GenesisProtocolFormOpts) {
+    const form = opts.form;
+    const preset = opts.preset;
+
     super({
       queuedVotePeriodLimit: new DurationField(
-        form ? form.$.queuedVotePeriodLimit.value : "00:00:30:00"
+        form ? form.$.queuedVotePeriodLimit.value : "00:00:00:00"
       )
         .setDisplayName("Queued Vote Period Limit")
         .setDescription(
@@ -427,7 +452,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       preBoostedVotePeriodLimit: new DurationField(
-        form ? form.$.preBoostedVotePeriodLimit.value : "21:00:00:00"
+        form ? form.$.preBoostedVotePeriodLimit.value : "00:00:00:00"
       )
         .setDisplayName("Pre-Boosted Vote Period Limit")
         .setDescription(
@@ -438,7 +463,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       boostedVotePeriodLimit: new DurationField(
-        form ? form.$.boostedVotePeriodLimit.value : "03:00:00:00"
+        form ? form.$.boostedVotePeriodLimit.value : "00:00:00:00"
       )
         .setDisplayName("Boosted Vote Period Limit")
         .setDescription(
@@ -449,7 +474,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       quietEndingPeriod: new DurationField(
-        form ? form.$.quietEndingPeriod.value : "01:00:00:00"
+        form ? form.$.quietEndingPeriod.value : "00:00:00:00"
       )
         .setDisplayName("Quiet Ending Period")
         .setDescription(
@@ -460,7 +485,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       queuedVoteRequiredPercentage: new PercentageField(
-        form ? form.$.queuedVoteRequiredPercentage.value : 50
+        form ? form.$.queuedVoteRequiredPercentage.value : 0
       )
         .validators(validPercentage)
         .setDisplayName("Queued Vote Required Percentage")
@@ -473,7 +498,7 @@ export class GenesisProtocolForm extends FriendlyForm<
 
       minimumDaoBounty: new TokenField(
         "GEN",
-        form ? form.$.minimumDaoBounty.value : "100"
+        form ? form.$.minimumDaoBounty.value : "0"
       )
         .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
         .setDisplayName("Minimum DAO Bounty")
@@ -484,7 +509,7 @@ export class GenesisProtocolForm extends FriendlyForm<
           "The DAO will automatically downstake every proposal, in order to properly set up the staking system, and this parameter sets the minimum size for that downstake. A higher minimum means the DAO is more heavily subsidizing staking."
         ),
 
-      daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "75")
+      daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "1")
         .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
@@ -495,7 +520,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       thresholdConst: new StringField(
-        form ? form.$.thresholdConst.value : "2000"
+        form ? form.$.thresholdConst.value : "1200"
       )
         .validators(
           requiredText,
@@ -512,7 +537,7 @@ export class GenesisProtocolForm extends FriendlyForm<
         ),
 
       votersReputationLossRatio: new PercentageField(
-        form ? form.$.votersReputationLossRatio.value : 1
+        form ? form.$.votersReputationLossRatio.value : 0
       )
         .validators(validPercentage)
         .setDisplayName("Voters Reputation Loss Ratio")
@@ -525,7 +550,7 @@ export class GenesisProtocolForm extends FriendlyForm<
 
       proposingRepReward: new TokenField(
         "REP",
-        form ? form.$.proposingRepReward.value : "5"
+        form ? form.$.proposingRepReward.value : "0"
       )
         .validators(requiredText, validBigNumber, greaterThan(0))
         .setDisplayName("Proposing Rep Reward")
@@ -561,33 +586,63 @@ export class GenesisProtocolForm extends FriendlyForm<
     });
 
     this.setDisplayName("Genesis Protocol");
+
+    if (form && preset) {
+      throw Error(
+        "Cannot construct a GenesisProtocolForm with both a form and a preset. Please supply only one."
+      );
+    }
+
+    if (preset) {
+      this.preset = preset;
+    } else if (form) {
+      this._preset = form.preset;
+    } else {
+      this.preset = GenesisProtocolPreset.Normal;
+    }
   }
 
   // TODO: have fields that convert themselves (gwei to eth)
   public toState(): GenesisProtocol {
-    return new GenesisProtocol({
-      queuedVoteRequiredPercentage: toBN(
-        this.$.queuedVoteRequiredPercentage.value
-      ),
-      queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.toSeconds()),
-      thresholdConst: toBN(this.$.thresholdConst.value),
-      proposingRepReward: toBN(toWei(toBN(this.$.proposingRepReward.value))),
-      minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
-      boostedVotePeriodLimit: toBN(this.$.boostedVotePeriodLimit.toSeconds()),
-      daoBountyConst: toBN(this.$.daoBountyConst.value),
-      // TODO: future only is a hack for the editor, it won't work
-      // if we're viewing past data froma already deployed DAO...
-      activationTime: toBN(this.$.activationTime.getunixTime()),
-      preBoostedVotePeriodLimit: toBN(
-        this.$.preBoostedVotePeriodLimit.toSeconds()
-      ),
-      quietEndingPeriod: toBN(this.$.quietEndingPeriod.toSeconds()),
-      voteOnBehalf: this.$.voteOnBehalf.value,
-      votersReputationLossRatio: toBN(this.$.votersReputationLossRatio.value)
-    });
+    if (this.preset) {
+      return new GenesisProtocol({ preset: this.preset });
+    } else {
+      return new GenesisProtocol({
+        config: {
+          queuedVoteRequiredPercentage: toBN(
+            this.$.queuedVoteRequiredPercentage.value
+          ),
+          queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.toSeconds()),
+          thresholdConst: toBN(this.$.thresholdConst.value),
+          proposingRepReward: toBN(
+            toWei(toBN(this.$.proposingRepReward.value))
+          ),
+          minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
+          boostedVotePeriodLimit: toBN(
+            this.$.boostedVotePeriodLimit.toSeconds()
+          ),
+          daoBountyConst: toBN(this.$.daoBountyConst.value),
+          // TODO: future only is a hack for the editor, it won't work
+          // if we're viewing past data froma already deployed DAO...
+          activationTime: toBN(this.$.activationTime.getunixTime()),
+          preBoostedVotePeriodLimit: toBN(
+            this.$.preBoostedVotePeriodLimit.toSeconds()
+          ),
+          quietEndingPeriod: toBN(this.$.quietEndingPeriod.toSeconds()),
+          voteOnBehalf: this.$.voteOnBehalf.value,
+          votersReputationLossRatio: toBN(
+            this.$.votersReputationLossRatio.value
+          )
+        }
+      });
+    }
   }
 
   public fromState(state: GenesisProtocol) {
+    if (state.preset) {
+      this._preset = state.preset;
+    }
+
     const config = state.config;
     this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toNumber();
     this.$.queuedVotePeriodLimit.fromSeconds(
@@ -644,7 +699,7 @@ export class GenericSchemeForm extends SchemeForm<
 > {
   constructor(form?: GenericSchemeForm) {
     super(SchemeType.GenericScheme, {
-      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm(),
+      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm({}),
 
       contractToCall: new AddressField(
         form
@@ -688,7 +743,7 @@ export class ContributionRewardForm extends SchemeForm<
 > {
   constructor(form?: ContributionRewardForm) {
     super(SchemeType.ContributionReward, {
-      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm()
+      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm({})
     });
 
     this.setDisplayName("Contribution Reward");
@@ -718,7 +773,9 @@ export class SchemeRegistrarForm extends SchemeForm<
 > {
   constructor(form?: SchemeRegistrarForm) {
     super(SchemeType.SchemeRegistrar, {
-      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm()
+      votingMachine: form
+        ? form.$.votingMachine
+        : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Critical })
     });
 
     this.setDisplayName("Scheme Registrar");

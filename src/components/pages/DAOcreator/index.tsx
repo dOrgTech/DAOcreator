@@ -14,6 +14,7 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
+import DeployStep from "./DeployStep";
 import { DAOForm } from "../../../lib/forms";
 import { FormState } from "formstate";
 
@@ -47,28 +48,33 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const steps: Step[] = [
-      {
+      /*{
         title: "Name",
         form: this.form.$.config,
         Component: NamingStep
-      },
+      },*/
       {
         title: "Schemes",
         form: this.form.$.schemes,
         Component: SchemesStep
       },
-      {
+      /*{
         title: "Members",
         form: this.form.$.members,
         Component: MembersStep,
         props: {
           getDAOTokenSymbol: () => this.form.$.config.$.tokenSymbol.value
         }
-      },
+      },*/
       {
         title: "Review",
         form: this.form,
         Component: ReviewStep
+      },
+      {
+        title: "Deploy",
+        form: this.form,
+        Component: DeployStep
       }
     ];
     const { classes } = this.props;

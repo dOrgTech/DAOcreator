@@ -33,8 +33,6 @@ class PieChart extends React.Component<Props, State> {
     const { data, config } = this.props;
     const { targetItem } = this.state;
 
-    console.log(config.nameKey);
-
     const TooltipContent = () => (
       <div>
         <Tooltip.Content

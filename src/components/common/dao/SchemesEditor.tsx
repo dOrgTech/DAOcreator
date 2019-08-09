@@ -1,7 +1,7 @@
 // TODO: warning if they don't have contribution reward or scheme registrar. Default these?
 import * as React from "react";
 import { observer } from "mobx-react";
-import { observable } from "mobx";
+import { observable, IObservableObject } from "mobx";
 import {
   WithStyles,
   Theme,
@@ -22,6 +22,7 @@ import {
   ContributionRewardForm,
   SchemeRegistrarForm
 } from "../../../lib/forms";
+import { SchemeType } from "../../../lib/dependency/arc";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -35,45 +36,54 @@ interface SchemeFormDrawers {
   Icon: React.ComponentType<SvgIconProps>;
 }
 
+type IconType = React.ComponentType<SvgIconProps>;
+
 @observer
 class SchemesEditor extends React.Component<Props> {
-  @observable
-  contributionRewardForm = new ContributionRewardForm();
+  icons: { [type: number]: IconType } = {};
+  fillers: { [type: number]: AnySchemeForm & IObservableObject } = {};
 
-  @observable
-  schemeRegistrarForm = new SchemeRegistrarForm();
+  constructor(props: Props) {
+    super(props);
 
-  @observable
-  genericSchemeForm = new GenericSchemeForm();
+    this.icons[SchemeType.ContributionReward] = ContributionRewardIcon;
+    this.icons[SchemeType.GenericScheme] = GenericSchemeIcon;
+    this.icons[SchemeType.SchemeRegistrar] = SchemeRegistrarIcon;
 
-  schemeForms: SchemeFormDrawers[] = [
-    {
-      form: this.contributionRewardForm,
-      enabled: true,
-      Icon: ContributionRewardIcon
-    },
-    {
-      form: this.schemeRegistrarForm,
-      enabled: true,
-      Icon: SchemeRegistrarIcon
-    },
-    {
-      form: this.genericSchemeForm,
-      enabled: false,
-      Icon: GenericSchemeIcon
-    }
-  ];
+    this.fillers[SchemeType.ContributionReward] = observable(
+      new ContributionRewardForm()
+    );
+    this.fillers[SchemeType.SchemeRegistrar] = observable(
+      new SchemeRegistrarForm()
+    );
+    this.fillers[SchemeType.GenericScheme] = observable(
+      new GenericSchemeForm()
+    );
+  }
 
-  // TODO: add schemes, and set SchemeRegistrar default to critical
   render() {
     const { classes, form, editable } = this.props;
     const error = form.showFormError;
-    const schemes = editable
-      ? this.schemeForms
-      : this.schemeForms.filter(
-          scheme =>
-            form.$.findIndex(added => added.type === scheme.form.type) > -1
-        );
+
+    let schemes: SchemeFormDrawers[] = [];
+
+    // iterate through each scheme type
+    for (const type in SchemeType) {
+      // https://tinyurl.com/y33e9j9x
+      if (isNaN(Number(type))) {
+        break;
+      }
+
+      const schemeType: SchemeType = Number(type);
+      const index = form.$.findIndex(scheme => scheme.type === schemeType);
+      const added = index > -1;
+
+      schemes.push({
+        form: added ? form.$[index] : this.fillers[schemeType],
+        enabled: added,
+        Icon: this.icons[schemeType]
+      });
+    }
 
     return (
       <div className={classes.root}>
@@ -84,32 +94,38 @@ class SchemesEditor extends React.Component<Props> {
           justify="center"
           alignItems="baseline"
         >
-          {schemes.map((scheme, index) => (
-            <SchemeEditor
-              form={scheme.form}
-              Icon={scheme.Icon}
-              editable={editable}
-              enabled={scheme.enabled}
-              onToggle={(toggled: boolean) => {
-                if (toggled) {
-                  form.$.push(scheme.form);
-                } else {
-                  const index = form.$.findIndex(
-                    test => test.type === scheme.form.type
-                  );
+          {schemes.map((scheme, index) => {
+            if (!editable && !scheme.enabled) {
+              return <></>;
+            }
 
-                  if (index === -1) {
-                    throw Error(
-                      "Trying to remove scheme that hasn't been added."
+            return (
+              <SchemeEditor
+                form={scheme.form}
+                Icon={scheme.Icon}
+                editable={editable}
+                enabled={scheme.enabled}
+                onToggle={(toggled: boolean) => {
+                  if (toggled) {
+                    form.$.push(scheme.form);
+                  } else {
+                    const index = form.$.findIndex(
+                      test => test.type === scheme.form.type
                     );
-                  }
 
-                  form.$.splice(index, 1);
-                }
-              }}
-              key={`scheme-${index}`}
-            />
-          ))}
+                    if (index === -1) {
+                      throw Error(
+                        "Trying to remove scheme that hasn't been added."
+                      );
+                    }
+
+                    form.$.splice(index, 1);
+                  }
+                }}
+                key={`scheme-${index}`}
+              />
+            );
+          })}
         </Grid>
         {error ? <Typography color={"error"}>{form.error}</Typography> : <></>}
       </div>

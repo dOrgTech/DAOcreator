@@ -35,19 +35,13 @@ interface State {
 class SchemeEditor extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
-    const { enabled, onToggle } = this.props;
-    this.state = { enabled };
-
-    if (enabled) {
-      onToggle(true);
-    }
+    this.state = { enabled: props.enabled };
   }
 
   render() {
     const { classes, form, editable, Icon } = this.props;
     const { enabled } = this.state;
-    const params = form.getParams ? form.getParams() : [];
+    const params = form.getParams();
 
     const onToggle = (event: object, checked: boolean) => {
       this.props.onToggle(checked);

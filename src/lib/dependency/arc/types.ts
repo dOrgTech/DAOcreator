@@ -58,10 +58,22 @@ export interface GenesisProtocolConfig {
   votersReputationLossRatio: BN;
 }
 
+export enum GenesisProtocolPreset {
+  Easy = 1,
+  Normal,
+  Critical
+}
+
+export interface GenesisProtocolOpts {
+  config?: GenesisProtocolConfig;
+  preset?: GenesisProtocolPreset;
+}
+
 export class GenesisProtocol implements VotingMachine {
   public typeName: string = "GenesisProtocol";
   public address: Address = "TODO";
   public config: GenesisProtocolConfig;
+  public preset?: GenesisProtocolPreset;
 
   public static get EasyConfig(): GenesisProtocolConfig {
     return {
@@ -114,8 +126,32 @@ export class GenesisProtocol implements VotingMachine {
     };
   }
 
-  constructor(config: GenesisProtocolConfig) {
-    this.config = config;
+  constructor(opts: GenesisProtocolOpts) {
+    if (opts.preset) {
+      if (typeof opts.preset === "string") {
+        opts.preset = Number(opts.preset);
+      }
+
+      switch (opts.preset) {
+        case GenesisProtocolPreset.Easy:
+          this.config = GenesisProtocol.EasyConfig;
+          break;
+        case GenesisProtocolPreset.Normal:
+          this.config = GenesisProtocol.NormalConfig;
+          break;
+        case GenesisProtocolPreset.Critical:
+          this.config = GenesisProtocol.CriticalConfig;
+          break;
+        default:
+          throw Error("Preset not implemented.");
+      }
+    } else if (opts.config) {
+      this.config = opts.config;
+    } else {
+      throw Error(
+        "Invalid construction arguments. Please use a custom config or a preset."
+      );
+    }
   }
 
   public getParameters(): any[] {
