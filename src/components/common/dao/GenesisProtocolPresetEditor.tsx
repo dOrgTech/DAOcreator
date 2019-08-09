@@ -45,11 +45,18 @@ export default class GenesisProtocolPresetEditor extends React.Component<
     const { editing } = this.state;
 
     const onChange = (event: React.ChangeEvent<{ value: any }>) => {
-      form.preset = event.target.value;
+      let value = event.target.value;
+
+      if (value === "0") {
+        value = undefined;
+      }
+
+      form.preset = value;
       this.forceUpdate();
     };
 
     const onEdit = () => {
+      form.preset = undefined;
       this.setState({
         ...this.state,
         editing: true
@@ -85,14 +92,14 @@ export default class GenesisProtocolPresetEditor extends React.Component<
                 native
                 fullWidth
                 disabled={!editable}
-                value={form.preset}
+                value={form.preset === undefined ? 0 : form.preset}
                 onChange={onChange}
                 input={<FilledInput name="protocol" id="protocol" />}
               >
                 <option value={GenesisProtocolPreset.Easy}>Easy</option>
                 <option value={GenesisProtocolPreset.Normal}>Normal</option>
                 <option value={GenesisProtocolPreset.Critical}>Critical</option>
-                <option value={undefined}>Custom</option>
+                <option value={0}>Custom</option>
               </Select>
             </Grid>
             <Grid item>
