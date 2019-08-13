@@ -32,7 +32,19 @@ class MembersEditor extends React.Component<Props> {
   render() {
     const { classes, form, editable, getDAOTokenSymbol } = this.props;
     const memberForm = this.memberForm;
-
+    console.log(this.memberForm);
+    const memberCVSImport = (members: MemberForm[]): any => {
+      const addMembers = (member: MemberForm): void => {
+        console.log("member from csv import", member);
+        // memberForm.set('address', member.address);
+        // memberForm.set('reputation', member.reputation);
+        // memberForm.set('token', member.token);
+        const newMember = new MemberForm(getDAOTokenSymbol, member);
+        form.$.push(newMember);
+      };
+      members.map(addMembers);
+      return { success: true };
+    };
     return (
       <>
         {editable ? (
@@ -54,8 +66,19 @@ class MembersEditor extends React.Component<Props> {
 
                       // See if the new member can be added to the array
                       // without any errors
+                      // console.log('memberForm', memberForm)
+                      const member = new MemberForm(
+                        getDAOTokenSymbol,
+                        memberForm
+                      );
+                      console.log("member", member);
+                      console.log(
+                        "this.props.getDAOTokenSymbol",
+                        this.props.getDAOTokenSymbol()
+                      );
                       form.$.push(
-                        new MemberForm(getDAOTokenSymbol, memberForm)
+                        // new MemberForm(getDAOTokenSymbol, memberForm)
+                        member
                       );
 
                       const membersValidate = await form.validate();
@@ -72,7 +95,12 @@ class MembersEditor extends React.Component<Props> {
                     <AddIcon />
                   </Fab>
                 </FormControl>
-                <MemberCSVImport />
+              </Grid>
+              <Grid item className={classes.button}>
+                <MemberCSVImport
+                  form={form}
+                  memberCVSImport={memberCVSImport}
+                />
               </Grid>
             </Grid>
 

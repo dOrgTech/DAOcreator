@@ -37,3 +37,7 @@ export interface WaitingAnimationState {
   type?: "transaction";
   open: boolean;
 }
+
+export interface MemberCSVImportState {
+  openDialog: boolean;
+}

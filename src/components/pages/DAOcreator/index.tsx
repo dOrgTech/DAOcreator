@@ -10,9 +10,9 @@ import {
   Card,
   Button
 } from "@material-ui/core";
-import NamingStep from "./NamingStep";
+// import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
-import SchemesStep from "./SchemesStep";
+// import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import { DAOForm } from "../../../lib/forms";
@@ -48,16 +48,16 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const steps: Step[] = [
-      {
-        title: "Name",
-        form: this.form.$.config,
-        Component: NamingStep
-      },
-      {
-        title: "Schemes",
-        form: this.form.$.schemes,
-        Component: SchemesStep
-      },
+      // {
+      //   title: "Name",
+      //   form: this.form.$.config,
+      //   Component: NamingStep
+      // },
+      // {
+      //   title: "Schemes",
+      //   form: this.form.$.schemes,
+      //   Component: SchemesStep
+      // },
       {
         title: "Members",
         form: this.form.$.members,
