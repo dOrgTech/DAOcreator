@@ -71,7 +71,7 @@ class MembersEditor extends React.Component<Props> {
                   >
                     <AddIcon />
                   </Fab>
-                  <MemberCSVImport />
+                  <MemberCSVImport form={form} />
                 </FormControl>
               </Grid>
             </Grid>
