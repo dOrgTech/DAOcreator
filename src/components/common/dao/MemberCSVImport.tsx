@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Fab, FormControl, Dialog, DialogTitle } from "@material-ui/core";
+import {
+  Fab,
+  FormControl,
+  Dialog,
+  DialogTitle,
+  Button
+} from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
 import parse from "csv-parse";
 import { MembersForm, MemberForm } from "../../../lib/forms";
@@ -74,12 +80,24 @@ export default class MemberCSVImport extends React.Component<
             Make sure CSV is properly formatted
           </DialogTitle>
           <FormControl>
-            <input
+            <Button variant="contained" component="label">
+              Upload File
+              <input
+                type="file"
+                id="file"
+                accept=".csv"
+                onChange={event =>
+                  this.handleFileChosen(event.target.files![0])
+                }
+                style={{ display: "none" }}
+              />
+            </Button>
+            {/*<input
               type="file"
               id="file"
               accept=".csv"
               onChange={event => this.handleFileChosen(event.target.files![0])}
-            />
+            />*/}
           </FormControl>
         </Dialog>
       </>
