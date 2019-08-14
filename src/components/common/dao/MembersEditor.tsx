@@ -32,19 +32,6 @@ class MembersEditor extends React.Component<Props> {
   render() {
     const { classes, form, editable, getDAOTokenSymbol } = this.props;
     const memberForm = this.memberForm;
-    console.log(this.memberForm);
-    const memberCVSImport = (members: MemberForm[]): any => {
-      const addMembers = (member: MemberForm): void => {
-        console.log("member from csv import", member);
-        // memberForm.set('address', member.address);
-        // memberForm.set('reputation', member.reputation);
-        // memberForm.set('token', member.token);
-        const newMember = new MemberForm(getDAOTokenSymbol, member);
-        form.$.push(newMember);
-      };
-      members.map(addMembers);
-      return { success: true };
-    };
     return (
       <>
         {editable ? (
@@ -71,15 +58,7 @@ class MembersEditor extends React.Component<Props> {
                         getDAOTokenSymbol,
                         memberForm
                       );
-                      console.log("member", member);
-                      console.log(
-                        "this.props.getDAOTokenSymbol",
-                        this.props.getDAOTokenSymbol()
-                      );
-                      form.$.push(
-                        // new MemberForm(getDAOTokenSymbol, memberForm)
-                        member
-                      );
+                      form.$.push(member);
 
                       const membersValidate = await form.validate();
                       if (membersValidate.hasError) {
@@ -97,10 +76,7 @@ class MembersEditor extends React.Component<Props> {
                 </FormControl>
               </Grid>
               <Grid item className={classes.button}>
-                <MemberCSVImport
-                  form={form}
-                  memberCVSImport={memberCVSImport}
-                />
+                <MemberCSVImport form={form} />
               </Grid>
             </Grid>
 

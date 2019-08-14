@@ -319,6 +319,10 @@ export class DAOConfigForm extends FriendlyForm<
 export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
   private _getDAOTokenSymbol: () => string;
 
+  public get getDAOTokenSymbol(): () => string {
+    return this._getDAOTokenSymbol;
+  }
+
   constructor(getDAOTokenSymbol: () => string, form?: MembersForm) {
     super(form ? form.$ : ([] as MemberForm[]));
     this._getDAOTokenSymbol = getDAOTokenSymbol;

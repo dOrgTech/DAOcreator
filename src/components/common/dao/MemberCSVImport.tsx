@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Fab, FormControl, Dialog, DialogTitle } from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
-import { MembersForm } from "../../../lib/forms";
+import { MembersForm, MemberForm } from "../../../lib/forms";
 import { MemberCSVImportState } from "../../../lib/state";
 
 interface Props {
   form: MembersForm;
-  memberCVSImport: any;
 }
 
 const fileReader: FileReader = new FileReader();
@@ -45,8 +44,22 @@ export default class MemberCSVImport extends React.Component<
       }
       members.push(member);
     }
-    if (this.props.memberCVSImport(members.slice(0, -1)))
-      this.handleDialogClose();
+    const addMembers = (member: any) => {
+      console.log("member", member);
+      let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
+      console.log("member.address", member.address);
+      console.log("member.reputation", member.reputation);
+      console.log("member.tokens", member.tokens);
+      newMember.$.address.$ = member.address;
+      newMember.$.reputation.$ = member.reputation;
+      newMember.$.tokens.$ = member.tokens;
+      console.log("newMember.$.address.$", newMember.$.address.$);
+      console.log("newMember.$.reputation.$", newMember.$.reputation.$);
+      console.log("newMember.$.tokens.$", newMember.$.tokens.$);
+      this.props.form.$.push(newMember);
+    };
+    members.slice(0, -1).map(addMembers);
+    this.handleDialogClose();
   }
 
   render() {
