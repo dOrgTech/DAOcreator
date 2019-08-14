@@ -12,7 +12,6 @@ import AnalysisResultView from "./AnalysisResultView";
 import { analyzeField, AnalysisResult } from "./utils";
 import { GenesisProtocolForm } from "../../../../lib/forms";
 import { GenesisProtocol as GP } from "../../../../lib/dependency/arc";
-import { TypeConversion } from "../../../../lib/dependency/web3";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
