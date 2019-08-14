@@ -8164,6 +8164,11 @@
         "schema-utils": "^1.0.0"
       }
     },
+    "file-saver": {
+      "version": "2.0.2",
+      "resolved": "https://registry.npmjs.org/file-saver/-/file-saver-2.0.2.tgz",
+      "integrity": "sha512-Wz3c3XQ5xroCxd1G8b7yL0Ehkf0TC9oYC6buPFkNnU9EnaPlifeAFCyCh+iewXTyFRcg0a6j3J7FmJsIhlhBdw=="
+    },
     "file-type": {
       "version": "5.2.0",
       "resolved": "https://registry.npmjs.org/file-type/-/file-type-5.2.0.tgz",
@@ -11746,6 +11751,11 @@
         "type-fest": "^0.3.0"
       }
     },
+    "load-script": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/load-script/-/load-script-1.0.0.tgz",
+      "integrity": "sha1-BJGTngvuVkPuSUp+PaPSuscMbKQ="
+    },
     "loader-fs-cache": {
       "version": "1.0.2",
       "resolved": "https://registry.npmjs.org/loader-fs-cache/-/loader-fs-cache-1.0.2.tgz",
@@ -15178,6 +15188,23 @@
       "integrity": "sha512-gsYIr55plOMB6nZW2iBjgXoqOZqBvggW9trNTk0mYHkvqQUpuxhcCDGwRwnts10XQ442PjzxZbklwMlhSOcfgA==",
       "requires": {
         "lodash": "^4.17.11"
+      }
+    },
+    "react-player": {
+      "version": "1.11.2",
+      "resolved": "https://registry.npmjs.org/react-player/-/react-player-1.11.2.tgz",
+      "integrity": "sha512-VOO+3np/4DBy6A6NYxDUSvfigo2mkBqwQgpKgyNSq46Ew2XA6f+K26DWs0KLxtkLRbm2tcPrQMRqek8hh21ipg==",
+      "requires": {
+        "deepmerge": "^3.0.0",
+        "load-script": "^1.0.0",
+        "prop-types": "^15.5.6"
+      },
+      "dependencies": {
+        "deepmerge": {
+          "version": "3.3.0",
+          "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-3.3.0.tgz",
+          "integrity": "sha512-GRQOafGHwMHpjPx9iCvTgpu9NojZ49q794EEL94JVEw6VaeA8XTUyBKvAkOOjBX9oJNiV6G3P+T+tihFjo2TqA=="
+        }
       }
     },
     "react-redux": {

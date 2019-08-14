@@ -82,7 +82,10 @@ class DAOcreator extends React.Component<Props, State> {
       {
         title: "Deploy",
         form: this.form,
-        Component: DeployStep
+        Component: DeployStep,
+        props: {
+          dao: this.form.toState()
+        }
       }
     ];
     const { classes } = this.props;
