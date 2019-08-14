@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Fab, FormControl, Dialog, DialogTitle } from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
+import parse from "csv-parse";
 import { MembersForm, MemberForm } from "../../../lib/forms";
 import { MemberCSVImportState } from "../../../lib/state";
 
@@ -33,33 +34,20 @@ export default class MemberCSVImport extends React.Component<
 
   private handleFileRead(): void {
     const csv: any = fileReader.result;
-    const lines: any = csv.split("\n");
-    let members: any = [];
-    let columns = lines[0].split(",");
-    for (let index = 1; index < lines.length; index++) {
-      let member: any = {};
-      let row: any = lines[index].split(",");
-      for (let index2 = 0; index2 < columns.length; index2++) {
-        member[columns[index2]] = row[index2];
-      }
-      members.push(member);
-    }
-    const addMembers = (member: any) => {
-      console.log("member", member);
-      let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
-      console.log("member.address", member.address);
-      console.log("member.reputation", member.reputation);
-      console.log("member.tokens", member.tokens);
-      newMember.$.address.$ = member.address;
-      newMember.$.reputation.$ = member.reputation;
-      newMember.$.tokens.$ = member.tokens;
-      console.log("newMember.$.address.$", newMember.$.address.$);
-      console.log("newMember.$.reputation.$", newMember.$.reputation.$);
-      console.log("newMember.$.tokens.$", newMember.$.tokens.$);
-      this.props.form.$.push(newMember);
+    const parseCSV = (error: any, members: MemberForm[]) => {
+      const addMembers = (member: any, index: number) => {
+        let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
+        newMember.$.address.$ = member.address;
+        newMember.$.reputation.$ = member.reputation;
+        newMember.$.tokens.$ = member.tokens;
+        if (index === 1) console.log("newMember", newMember);
+        this.props.form.$.push(newMember);
+      };
+      members.map(addMembers);
+      this.handleDialogClose();
+      if (error) console.log("error", error);
     };
-    members.slice(0, -1).map(addMembers);
-    this.handleDialogClose();
+    parse(csv, { columns: true }, parseCSV);
   }
 
   render() {
@@ -94,3 +82,28 @@ export default class MemberCSVImport extends React.Component<
     );
   }
 }
+
+// Old CVS Logic
+// private handleFileRead(): void {
+// const csv: any = fileReader.result;
+// const lines: any = csv.split("\n");
+// let members: any = [];
+// let columns = lines[0].split(",");
+// for (let index = 1; index < lines.length; index++) {
+//   let member: any = {};
+//   let row: any = lines[index].split(",");
+//   for (let index2 = 0; index2 < columns.length; index2++) {
+//     member[columns[index2]] = row[index2];
+//   }
+//   members.push(member);
+// }
+// const addMembers = (member: any) => {
+//   let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
+//   newMember.$.address.$ = member.address;
+//   newMember.$.reputation.$ = member.reputation;
+//   newMember.$.tokens.$ = member.tokens;
+//   this.props.form.$.push(newMember);
+// };
+// members.slice(0, -1).map(addMembers);
+// this.handleDialogClose();
+// }
