@@ -35,7 +35,7 @@ export default class MemberCSVImport extends React.Component<
   private handleFileRead(): void {
     const csv: any = fileReader.result;
     const parseCSV = (error: any, members: MemberForm[]) => {
-      const addMembers = (member: any, index: number) => {
+      const addMembers = (member: any) => {
         let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
         newMember.$.address.value = member.address;
         newMember.$.reputation.value = member.reputation;
@@ -44,9 +44,14 @@ export default class MemberCSVImport extends React.Component<
       };
       members.map(addMembers);
       this.handleDialogClose();
-      if (error) console.log("error", error);
+      if (error) {
+        console.log("error", error);
+      }
     };
-    parse(csv, { columns: true }, parseCSV);
+    const parseCSVOptions = {
+      columns: true
+    };
+    parse(csv, parseCSVOptions, parseCSV);
   }
 
   render() {
