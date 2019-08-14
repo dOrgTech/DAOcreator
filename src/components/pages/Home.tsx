@@ -1,6 +1,6 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { push } from "connected-react-router"
+import * as React from "react";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
 import {
   withStyles,
   Typography,
@@ -10,21 +10,21 @@ import {
   Card,
   Button,
   CardContent,
-  Grid,
-} from "@material-ui/core"
+  Grid
+} from "@material-ui/core";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  gotoOverview: () => void
-  gotoDapp: () => void
-  gotoAbout: () => void
+  gotoOverview: () => void;
+  gotoDapp: () => void;
+  gotoAbout: () => void;
 }
 
 const Home: React.SFC<Props> = ({
   classes,
   gotoOverview,
   gotoDapp,
-  gotoAbout,
+  gotoAbout
 }) => (
   <Grid
     container
@@ -44,7 +44,7 @@ const Home: React.SFC<Props> = ({
           className={classes.subtitleContainer}
           direction="row"
           justify="center"
-          spacing={8}
+          spacing={1}
         >
           <Grid item>
             <Typography variant="subtitle1" className={classes.header}>
@@ -62,7 +62,7 @@ const Home: React.SFC<Props> = ({
             </Typography>
           </Grid>
         </Grid>
-        <Grid container justify="center" spacing={8} direction="row">
+        <Grid container justify="center" spacing={2} direction="row">
           <Grid key={"about"} item>
             <Button
               variant="contained"
@@ -97,7 +97,7 @@ const Home: React.SFC<Props> = ({
       </CardContent>
     </Card>
   </Grid>
-)
+);
 
 // STYLE
 const styles = (theme: Theme) =>
@@ -108,42 +108,42 @@ const styles = (theme: Theme) =>
       // bring forward (infront of background)
       position: "relative",
       // disable pointer events, don't block background
-      pointerEvents: "none",
+      pointerEvents: "none"
     },
     card: {
       margin: 16,
-      pointerEvents: "all",
+      pointerEvents: "all"
     },
     cardContent: {},
     header: {},
     subtitleContainer: {},
     button: {
-      margin: 5,
-    },
-  })
+      margin: 5
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(Home)
+const componentWithStyles = withStyles(styles)(Home);
 
 // STATE
 const mapStateToProps = (state: any) => {
-  return {}
-}
+  return {};
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     gotoDapp: () => {
-      dispatch(push("/dapp"))
+      dispatch(push("/dapp"));
     },
     gotoOverview: () => {
-      dispatch(push("/overview"))
+      dispatch(push("/overview"));
     },
     gotoAbout: () => {
-      dispatch(push("/about"))
-    },
-  }
-}
+      dispatch(push("/about"));
+    }
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);

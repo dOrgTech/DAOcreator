@@ -1,6 +1,6 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { push } from "connected-react-router"
+import * as React from "react";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
 import {
   withStyles,
   Theme,
@@ -8,13 +8,13 @@ import {
   createStyles,
   Card,
   Button,
-  CardContent,
-} from "@material-ui/core"
+  CardContent
+} from "@material-ui/core";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  goHome: () => void
-  Content: React.FunctionComponent
+  goHome: () => void;
+  Content: React.FunctionComponent;
 }
 
 const InfoPage: React.SFC<Props> = ({ classes, goHome, Content }) => (
@@ -35,23 +35,23 @@ const InfoPage: React.SFC<Props> = ({ classes, goHome, Content }) => (
       </Card>
     </div>
   </div>
-)
+);
 
 // STYLE
-const padding = 50
-const minWidth = 800
+const padding = 50;
+const minWidth = 800;
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
       minWidth: minWidth + padding * 2,
-      height: "100vh",
+      height: "100vh"
     },
     cardWrapper: {
       width: 0,
       position: "relative",
       left: "50%",
-      pointerEvents: "none",
+      pointerEvents: "none"
     },
     cardContent: {},
     card: {
@@ -60,29 +60,29 @@ const styles = (theme: Theme) =>
       position: "inherit",
       transform: "translateX(-50%)",
       pointerEvents: "all",
-      marginBottom: 40,
+      marginBottom: 40
     },
     button: {
-      margin: 10,
-    },
-  })
+      margin: 10
+    }
+  });
 
-const componentWithStyles = withStyles(styles)(InfoPage)
+const componentWithStyles = withStyles(styles)(InfoPage);
 
 // STATE
 const mapStateToProps = (state: any) => {
-  return {}
-}
+  return {};
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     goHome: () => {
-      dispatch(push("/"))
-    },
-  }
-}
+      dispatch(push("/"));
+    }
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(componentWithStyles)
+)(componentWithStyles);

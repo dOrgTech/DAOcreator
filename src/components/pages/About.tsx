@@ -1,12 +1,12 @@
-import * as React from "react"
+import * as React from "react";
 import {
   withStyles,
   Typography,
   Theme,
   WithStyles,
-  createStyles,
-} from "@material-ui/core"
-import InfoPage from "../common/InfoPage"
+  createStyles
+} from "@material-ui/core";
+import InfoPage from "../common/InfoPage";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -54,23 +54,23 @@ const About: React.SFC<Props> = ({ classes }) => (
       </>
     )}
   />
-)
+);
 
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
     body: {
-      margin: 20,
+      margin: 20
     },
     header: {
       margin: 20,
-      textAlign: "center",
+      textAlign: "center"
     },
     listItem: {
       listStyle: "decimal",
       marginLeft: "35px",
-      marginTop: "10px",
-    },
-  })
+      marginTop: "10px"
+    }
+  });
 
-export default withStyles(styles)(About)
+export default withStyles(styles)(About);
