@@ -12,8 +12,6 @@ import AnalysisResultView from "./AnalysisResultView";
 import { analyzeField, AnalysisResult } from "./utils";
 import { GenesisProtocolForm } from "../../../../lib/forms";
 import { GenesisProtocol as GP } from "../../../../lib/dependency/arc";
-import { TypeConversion } from "../../../../lib/dependency/web3";
-const fromWei = TypeConversion.fromWei;
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -63,8 +61,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.minimumDaoBounty.value),
         form.$.minimumDaoBounty.displayName,
         {
-          min: Number(fromWei(GP.EasyConfig.minimumDaoBounty)),
-          max: Number(fromWei(GP.CriticalConfig.minimumDaoBounty)),
+          min: GP.EasyConfig.minimumDaoBounty.toNumber(),
+          max: GP.CriticalConfig.minimumDaoBounty.toNumber(),
           toString: formatGEN
         }
       ),
@@ -105,8 +103,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.proposingRepReward.value),
         form.$.proposingRepReward.displayName,
         {
-          min: Number(fromWei(GP.EasyConfig.proposingRepReward)),
-          max: Number(fromWei(GP.CriticalConfig.proposingRepReward)),
+          min: GP.EasyConfig.proposingRepReward.toNumber(),
+          max: GP.CriticalConfig.proposingRepReward.toNumber(),
           toString: formatREP
         }
       ),

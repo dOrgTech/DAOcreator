@@ -9,10 +9,7 @@ import {
   WithStyles
 } from "@material-ui/core";
 import * as React from "react";
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import { DAO } from "../../../lib/dependency/arc";
-import { RootState } from "../../../lib/state";
 
 interface Props extends WithStyles<typeof styles> {
   dao: DAO | undefined;
@@ -102,20 +99,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-const componentWithStyles = withStyles(styles)(LiveDaoStep);
-
-// STATE
-const mapStateToProps = (state: RootState) => {
-  return {
-    dao: undefined
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {};
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles);
+export default withStyles(styles)(LiveDaoStep);

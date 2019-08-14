@@ -1,7 +1,8 @@
 import { Address, keccak256, encodeParameters, TypeConversion } from "../web3";
 import BN from "bn.js";
-const { toBN, toWei } = TypeConversion;
+const { toBN } = TypeConversion;
 
+// TODO refactor this
 export interface DAO {
   avatar: Address;
   daoToken: Address;
@@ -79,11 +80,11 @@ export class GenesisProtocol implements VotingMachine {
     return {
       boostedVotePeriodLimit: toBN(129600), // 1.5 days
       daoBountyConst: toBN(10),
-      minimumDaoBounty: toBN(toWei(toBN(50))), // 50 GEN
+      minimumDaoBounty: toBN(50), // 50 GEN
       queuedVotePeriodLimit: toBN(604800), // 7 days
       queuedVoteRequiredPercentage: toBN(50), // 50%
       preBoostedVotePeriodLimit: toBN(43200), // 12 hours
-      proposingRepReward: toBN(toWei(toBN(10))), // 10 REP
+      proposingRepReward: toBN(10), // 10 REP
       quietEndingPeriod: toBN(86400), // 1 day
       thresholdConst: toBN(1200),
       votersReputationLossRatio: toBN(1), // 1%
@@ -96,11 +97,11 @@ export class GenesisProtocol implements VotingMachine {
     return {
       boostedVotePeriodLimit: toBN(345600), // 4 days
       daoBountyConst: toBN(10),
-      minimumDaoBounty: toBN(toWei(toBN(150))), // 150 GEN
+      minimumDaoBounty: toBN(150), // 150 GEN
       queuedVotePeriodLimit: toBN(2592000), // 30 days
       queuedVoteRequiredPercentage: toBN(50), // 50%
       preBoostedVotePeriodLimit: toBN(86400), // 1 day
-      proposingRepReward: toBN(toWei(toBN(50))), // 50 REP
+      proposingRepReward: toBN(50), // 50 REP
       quietEndingPeriod: toBN(172800), // 2 day
       thresholdConst: toBN(1200),
       votersReputationLossRatio: toBN(4), // 4%
@@ -113,11 +114,11 @@ export class GenesisProtocol implements VotingMachine {
     return {
       boostedVotePeriodLimit: toBN(691200), // 8 days
       daoBountyConst: toBN(10),
-      minimumDaoBounty: toBN(toWei(toBN(500))), // 500 GEN
+      minimumDaoBounty: toBN(500), // 500 GEN
       queuedVotePeriodLimit: toBN(5184000), // 60 days
       queuedVoteRequiredPercentage: toBN(50), // 50%
       preBoostedVotePeriodLimit: toBN(172800), // 2 day
-      proposingRepReward: toBN(toWei(toBN(200))), // 200 REP
+      proposingRepReward: toBN(200), // 200 REP
       quietEndingPeriod: toBN(345600), // 4 day
       thresholdConst: toBN(1500),
       votersReputationLossRatio: toBN(4), // 4%
