@@ -9,7 +9,7 @@ import {
 import { AttachFile } from "@material-ui/icons";
 import parse from "csv-parse";
 import { MembersForm, MemberForm } from "../../../lib/forms";
-import { MemberCSVImportState } from "../../../lib/state";
+import { MembersCSVImportState } from "../../../lib/state";
 
 interface Props {
   form: MembersForm;
@@ -17,9 +17,9 @@ interface Props {
 
 const fileReader: FileReader = new FileReader();
 
-export default class MemberCSVImport extends React.Component<
+export default class MembersCSVImport extends React.Component<
   Props,
-  MemberCSVImportState
+  MembersCSVImportState
 > {
   constructor(props: Props) {
     super(props);

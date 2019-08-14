@@ -38,6 +38,6 @@ export interface WaitingAnimationState {
   open: boolean;
 }
 
-export interface MemberCSVImportState {
+export interface MembersCSVImportState {
   openDialog: boolean;
 }
