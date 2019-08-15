@@ -15,17 +15,17 @@ interface Props {
   form: MembersForm;
 }
 
-const fileReader: FileReader = new FileReader();
-
 export default class MembersCSVImport extends React.Component<
   Props,
   MembersCSVImportState
 > {
+  private fileReader: FileReader;
   constructor(props: Props) {
     super(props);
     this.state = {
       openDialog: false
     };
+    this.fileReader = new FileReader();
     this.handleFileRead = this.handleFileRead.bind(this);
   }
 
@@ -34,12 +34,12 @@ export default class MembersCSVImport extends React.Component<
   }
 
   public handleFileChosen(file: any): void {
-    fileReader.onloadend = this.handleFileRead;
-    fileReader.readAsText(file);
+    this.fileReader.onloadend = this.handleFileRead;
+    this.fileReader.readAsText(file);
   }
 
   private handleFileRead(): void {
-    const csv: any = fileReader.result;
+    const csv: any = this.fileReader.result;
     const parseCSV = (error: any, members: MemberForm[]) => {
       const addMembers = (member: any) => {
         let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
@@ -86,18 +86,12 @@ export default class MembersCSVImport extends React.Component<
                 type="file"
                 id="file"
                 accept=".csv"
-                onChange={event =>
-                  this.handleFileChosen(event.target.files![0])
-                }
+                onChange={event => {
+                  this.handleFileChosen(event.target.files![0]);
+                }}
                 style={{ display: "none" }}
               />
             </Button>
-            {/*<input
-              type="file"
-              id="file"
-              accept=".csv"
-              onChange={event => this.handleFileChosen(event.target.files![0])}
-            />*/}
           </FormControl>
         </Dialog>
       </>
