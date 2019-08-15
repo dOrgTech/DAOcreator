@@ -77,7 +77,10 @@ export default class MembersCSVImport extends React.Component<
         </Fab>
         <Dialog onClose={() => this.handleDialogClose()} open={openDialog}>
           <DialogTitle id="simple-dialog-title">
-            Make sure CSV is properly formatted
+            Make sure your CSV file has the following columns:
+            <li>Address</li>
+            <li>Reputation</li>
+            <li>Tokens</li>
           </DialogTitle>
           <FormControl>
             <Button variant="contained" component="label">
