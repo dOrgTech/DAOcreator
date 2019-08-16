@@ -19,7 +19,7 @@ export default class MembersCSVImport extends React.Component<
   Props,
   MembersCSVImportState
 > {
-  private fileReader: FileReader;
+  private fileReader!: FileReader;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -27,13 +27,24 @@ export default class MembersCSVImport extends React.Component<
     };
     this.fileReader = new FileReader();
     this.handleFileRead = this.handleFileRead.bind(this);
+    this.importCSV = this.importCSV.bind(this);
   }
 
   public handleDialogClose(): void {
     this.setState({ openDialog: false });
   }
 
-  public handleFileChosen(file: any): void {
+  public importCSV(event: any): void {
+    const files = Array.from(event.target.files);
+    const handleFiles = (file: any) => {
+      this.handleFileChosen(file);
+    };
+    files.map(handleFiles);
+  }
+
+  private handleFileChosen(file: any): void {
+    let fileReader = new FileReader();
+    this.fileReader = fileReader;
     this.fileReader.onloadend = this.handleFileRead;
     this.fileReader.readAsText(file);
   }
@@ -89,9 +100,8 @@ export default class MembersCSVImport extends React.Component<
                 type="file"
                 id="file"
                 accept=".csv"
-                onChange={event => {
-                  this.handleFileChosen(event.target.files![0]);
-                }}
+                multiple={true}
+                onChange={this.importCSV}
                 style={{ display: "none" }}
               />
             </Button>
