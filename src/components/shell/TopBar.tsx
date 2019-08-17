@@ -17,7 +17,8 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
-  IconButton
+  IconButton,
+  Typography
 } from "@material-ui/core";
 import MailIcon from "@material-ui/icons/Mail";
 import GitHubIcon from "../common/icons/GitHub";
@@ -27,9 +28,16 @@ import "./NeonGlow.css";
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   gotoDapp: () => void;
+  gotoOverview: () => void;
+  gotoAbout: () => void;
 }
 
-const TopBar: React.SFC<Props> = ({ classes, gotoDapp }) => {
+const TopBar: React.SFC<Props> = ({
+  classes,
+  gotoDapp,
+  gotoOverview,
+  gotoAbout
+}) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
 
@@ -86,7 +94,40 @@ const TopBar: React.SFC<Props> = ({ classes, gotoDapp }) => {
                           }}
                           className={classes.menuItem}
                         >
-                          Create a DAO
+                          <Typography
+                            align={"center"}
+                            style={{ width: "100%" }}
+                          >
+                            Create a DAO
+                          </Typography>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={event => {
+                            gotoAbout();
+                            handleClose(event);
+                          }}
+                          className={classes.menuItem}
+                        >
+                          <Typography
+                            align={"center"}
+                            style={{ width: "100%" }}
+                          >
+                            About
+                          </Typography>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={event => {
+                            gotoOverview();
+                            handleClose(event);
+                          }}
+                          className={classes.menuItem}
+                        >
+                          <Typography
+                            align={"center"}
+                            style={{ width: "100%" }}
+                          >
+                            F.A.Q.
+                          </Typography>
                         </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
@@ -186,6 +227,12 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     gotoDapp: () => {
       dispatch(push("/dapp"));
+    },
+    gotoOverview: () => {
+      dispatch(push("/overview"));
+    },
+    gotoAbout: () => {
+      dispatch(push("/about"));
     }
   };
 };
