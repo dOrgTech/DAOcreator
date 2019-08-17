@@ -50,7 +50,11 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             description={
               "We can develop anything, from small and fast prototypes, to finished polished products."
             }
-            onSelect={() => setSelection(Selection.Hire)}
+            onSelect={() =>
+              setSelection(
+                selection === Selection.Hire ? Selection.None : Selection.Hire
+              )
+            }
           />
           {selection === Selection.Hire ? (
             <TopCardHighlight variant={"determinate"} value={100} />
@@ -65,7 +69,11 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             description={
               "Work with a talented, ever growing, community of developers from around the world."
             }
-            onSelect={() => setSelection(Selection.Join)}
+            onSelect={() =>
+              setSelection(
+                selection === Selection.Join ? Selection.None : Selection.Join
+              )
+            }
           />
           {selection === Selection.Join ? (
             <TopCardHighlight variant={"determinate"} value={100} />

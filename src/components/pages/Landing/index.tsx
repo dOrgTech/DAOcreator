@@ -5,7 +5,8 @@ import {
   WithStyles,
   createStyles,
   Grid,
-  Typography
+  Typography,
+  Divider
 } from "@material-ui/core";
 import LearnMore from "./LearnMore";
 import CaseCard from "./CaseCard";
@@ -15,7 +16,6 @@ interface Props extends WithStyles<typeof styles> {}
 
 const Landing: React.SFC<Props> = ({ classes }) => (
   <div className={classes.root}>
-    <LearnMore />
     <Grid
       container
       direction={"column"}
@@ -26,13 +26,10 @@ const Landing: React.SFC<Props> = ({ classes }) => (
         <Typography align={"center"} variant={"h3"}>
           Let's Build Together
         </Typography>
-        <Typography align={"center"} variant={"h5"}>
-          dOrg is a self-organized developer community that wills software into
-          existence.
-        </Typography>
       </Grid>
+      <LearnMore />
       <Grid item className={classes.cases}>
-        <Typography align={"center"} variant={"h4"}>
+        <Typography align={"center"} variant={"h3"}>
           Cases
         </Typography>
         <Grid
@@ -97,8 +94,7 @@ const styles = (theme: Theme) =>
       width: "100%"
     },
     centerText: {
-      margin: "20px",
-      paddingTop: "20px",
+      marginTop: "40px",
       maxWidth: "680px"
     },
     cases: {
