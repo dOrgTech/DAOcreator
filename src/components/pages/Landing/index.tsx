@@ -26,12 +26,14 @@ const Landing: React.SFC<Props> = ({ classes }) => (
         <Typography align={"center"} variant={"h3"}>
           Let's Build Together
         </Typography>
+        <Divider />
       </Grid>
       <LearnMore />
       <Grid item className={classes.cases}>
         <Typography align={"center"} variant={"h3"}>
           Cases
         </Typography>
+        <Divider />
         <Grid
           container
           direction={"row"}
@@ -82,7 +84,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
-      height: "75vh",
+      height: "100vh",
       // bring forward (infront of background)
       position: "relative",
       // disable pointer events, don't block background

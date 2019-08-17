@@ -82,7 +82,12 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
           )}
         </Grid>
       </Grid>
-      <Collapse in={selection !== Selection.None}>
+      <Collapse
+        in={selection !== Selection.None}
+        className={
+          selection !== Selection.None ? classes.collapse : classes.noCollapse
+        }
+      >
         <SwipeableViews axis={"x"} index={selection - 1} disabled={true}>
           <DetailsCard
             title={"Don't outsource, DAOsource."}
@@ -143,6 +148,12 @@ const styles = (theme: Theme) =>
       minWidth: "380px",
       maxWidth: "420px",
       margin: "20px"
+    },
+    collapse: {
+      width: "100%"
+    },
+    noCollapse: {
+      width: "0px"
     }
   });
 
