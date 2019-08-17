@@ -16,8 +16,12 @@ import {
   Grow,
   ClickAwayListener,
   MenuList,
-  MenuItem
+  MenuItem,
+  IconButton
 } from "@material-ui/core";
+import MailIcon from "@material-ui/icons/Mail";
+import GitHubIcon from "../common/icons/GitHub";
+import TwitterIcon from "../common/icons/Twitter";
 import "./NeonGlow.css";
 
 // eslint-disable-next-line
@@ -93,6 +97,26 @@ const TopBar: React.SFC<Props> = ({ classes, gotoDapp }) => {
           </div>
           <div className={classes.text}>{"}"}</div>
         </Grid>
+        <div className={classes.icons}>
+          <IconButton
+            className={classes.icon}
+            onClick={() => window.open("https://github.com/dOrgTech")}
+          >
+            <GitHubIcon />
+          </IconButton>
+          <IconButton
+            className={classes.icon}
+            onClick={() => window.open("https://twitter.com/dOrg_tech")}
+          >
+            <TwitterIcon />
+          </IconButton>
+          <IconButton
+            className={classes.icon}
+            onClick={() => window.open("mailto:contact@dorg.tech")}
+          >
+            <MailIcon />
+          </IconButton>
+        </div>
       </Toolbar>
     </AppBar>
   );
@@ -126,6 +150,13 @@ const styles = (theme: Theme) =>
       "-webkit-animation": "neon 1.5s ease-in-out infinite alternate",
       "-moz-animation": "neon 1.5s ease-in-out infinite alternate",
       animation: "neon 1.5s ease-in-out infinite alternate"
+    },
+    icons: {
+      position: "absolute",
+      right: "10px"
+    },
+    icon: {
+      color: "#4bd2c6"
     }
   });
 
