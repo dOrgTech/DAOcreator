@@ -50,21 +50,17 @@ const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
         >
           <List>
             {[
-              { title: "Home Page", onClick: gotoHome },
+              { title: "Home", onClick: gotoHome },
               { title: "Create A DAO", onClick: gotoDapp },
-              {
-                title: "Join dOrg",
-                onClick: () =>
-                  window.open(
-                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
-                  )
-              },
               {
                 title: "Hire dOrg",
                 onClick: () =>
-                  window.open(
-                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
-                  )
+                  window.open("https://dorgtech.typeform.com/to/Q1LOP1")
+              },
+              {
+                title: "Join dOrg",
+                onClick: () =>
+                  window.open("https://dorgtech.typeform.com/to/a1rMob")
               }
             ].map(item => (
               <ListItem button key={item.title} onClick={item.onClick}>
