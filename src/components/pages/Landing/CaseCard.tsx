@@ -8,7 +8,6 @@ import {
   Card,
   CardMedia,
   CardContent,
-  Button,
   Grid,
   IconButton
 } from "@material-ui/core";
