@@ -8,22 +8,25 @@ import {
   Card,
   CardMedia,
   CardContent,
-  Button,
+  IconButton,
   Grid
 } from "@material-ui/core";
+import QuestionIcon from "@material-ui/icons/Help";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   icon: string;
   title: string;
   description: string;
+  onSelect: () => void;
 }
 
-const LearnMoreCard: React.SFC<Props> = ({
+const TopCard: React.SFC<Props> = ({
   classes,
   icon,
   title,
-  description
+  description,
+  onSelect
 }) => (
   <Card className={classes.background}>
     <CardMedia image={icon} className={classes.icon} />
@@ -40,9 +43,9 @@ const LearnMoreCard: React.SFC<Props> = ({
         <Typography align={"center"} className={classes.description}>
           {description}
         </Typography>
-        <Button className={classes.button} variant={"contained"}>
-          Learn More
-        </Button>
+        <IconButton onClick={onSelect} className={classes.button}>
+          <QuestionIcon />
+        </IconButton>
       </Grid>
     </CardContent>
   </Card>
@@ -77,4 +80,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(LearnMoreCard);
+export default withStyles(styles)(TopCard);

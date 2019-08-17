@@ -24,17 +24,11 @@ import "./NeonGlow.css";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
+  gotoHome: () => void;
   gotoDapp: () => void;
-  gotoOverview: () => void;
-  gotoAbout: () => void;
 }
 
-const TopBar: React.SFC<Props> = ({
-  classes,
-  gotoDapp,
-  gotoOverview,
-  gotoAbout
-}) => {
+const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -56,9 +50,22 @@ const TopBar: React.SFC<Props> = ({
         >
           <List>
             {[
+              { title: "Home Page", onClick: gotoHome },
               { title: "Create A DAO", onClick: gotoDapp },
-              { title: "About", onClick: gotoAbout },
-              { title: "F.A.Q.", onClick: gotoOverview }
+              {
+                title: "Join dOrg",
+                onClick: () =>
+                  window.open(
+                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
+                  )
+              },
+              {
+                title: "Hire dOrg",
+                onClick: () =>
+                  window.open(
+                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
+                  )
+              }
             ].map(item => (
               <ListItem button key={item.title} onClick={item.onClick}>
                 <ListItemText
@@ -122,7 +129,7 @@ const styles = (theme: Theme) =>
     },
     menuPaper: {
       background: "rgba(2, 46, 46, 0.9)",
-      height: "160px",
+      height: "210px",
       top: "75px"
     },
     menuItem: {
@@ -170,14 +177,11 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    gotoHome: () => {
+      dispatch(push("/"));
+    },
     gotoDapp: () => {
       dispatch(push("/dapp"));
-    },
-    gotoOverview: () => {
-      dispatch(push("/overview"));
-    },
-    gotoAbout: () => {
-      dispatch(push("/about"));
     }
   };
 };
