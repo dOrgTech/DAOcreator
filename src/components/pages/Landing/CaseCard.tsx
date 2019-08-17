@@ -89,8 +89,8 @@ const styles = (theme: Theme) =>
       color: "white"
     },
     iconButton: {
-      color: "#4bd2c6",
       margin: "10px",
+      color: "#4bd2c6",
       backgroundColor: "rgba(2, 46, 46, 0.5)",
       "&:hover": {
         backgroundColor: "black"
