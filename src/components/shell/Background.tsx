@@ -18,7 +18,7 @@ const Background: React.SFC<Props> = ({ classes }) => (
       params={{
         particles: {
           number: {
-            value: 80
+            value: 50
           },
           size: {
             value: 5
@@ -40,7 +40,7 @@ const Background: React.SFC<Props> = ({ classes }) => (
 const styles = (theme: Theme) =>
   createStyles({
     background: {
-      backgroundColor: "#4e4e4e",
+      backgroundColor: "#0e9999",
       position: "fixed",
       width: "100vw",
       height: "100vh"
@@ -49,7 +49,7 @@ const styles = (theme: Theme) =>
       //padding: "5px",
       //borderRadius: "90px",
       backgroundImage:
-        "radial-gradient(circle at bottom left, rgb(0%, 26.6%, 30.8%), #38ffeb);",
+        "radial-gradient(circle at bottom left, rgb(0%, 26.6%, 30.8%), #077d7d);",
       backgroundOrigin: "border-box",
       backgroundClip: "content-box, border-box;",
       overflow: "hidden",
