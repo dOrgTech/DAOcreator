@@ -29,9 +29,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
       </Grid>
       <LearnMore />
       <Grid item className={classes.cases}>
-        <Divider />
-        <br />
-        <br />
+        <Divider className={classes.casesDivider} />
         <Typography align={"center"} variant={"h3"}>
           Cases
         </Typography>
@@ -72,6 +70,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
               title={"DAOcomponents"}
               description={"DAO enabling React applications."}
               github={"https://github.com/dOrgTech/DAOcomponents"}
+              test={"https://www.npmjs.com/package/@dorgtech/daocomponents"}
             />
           </Grid>
         </Grid>
@@ -104,6 +103,9 @@ const styles = (theme: Theme) =>
       margin: "20px",
       paddingTop: "20px",
       maxWidth: "840px"
+    },
+    casesDivider: {
+      marginBottom: "50px"
     },
     caseCard: {
       minWidth: "380px",

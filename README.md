@@ -8,22 +8,18 @@ Welcome Fellow Contributors. Today We DAO.
 
 ### Installing
 
-`yarn` or `npm install`
+`npm install`
 
 ### Running
 
-`yarn start` or `npm run start`
-
-1. Launches Ganache (`npm run eth-ganache-start`)
-2. Deploys Contracts (`npm run eth-arc-migrate`)
-3. Launches App (`npm run app-start`)
+`npm run start`
 
 ### Debugging
 
 VS Code w/ Chrome
 
 1. Install Extension "`Debugger for Chrome`"
-2. Launch the app by running `yarn start` or `npm run start` for just the UI.
+2. Launch the app by running `npm run start`.
 3. Press the green play button in the debug menu of VS Code.
 
 ## Project Architecture
@@ -36,9 +32,7 @@ We view the different data types in this project as if they are in 3 layers:
 2. _State Data_
 3. _Dependency Data_
 
-Data in each layer can flow in either direction, 1 <> 2 <> 3. In order to do this, we write mapping located in the `src/lib/dataMappings` folder.
-
-We did this to avoid as many **run-time type related errors** as possible, and to decouple our user-friendly UI data from the backing state & dependency data.
+Data in each layer can flow in either direction, 1 <> 2 <> 3. We did this to avoid as many **run-time type related errors** as possible, and to decouple our user-friendly UI data from the backing state & dependency data.
 
 These type definitions can be found in:
 
