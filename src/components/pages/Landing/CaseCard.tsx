@@ -9,21 +9,28 @@ import {
   CardMedia,
   CardContent,
   Button,
-  Grid
+  Grid,
+  IconButton
 } from "@material-ui/core";
+import TestIcon from "@material-ui/icons/ExitToApp";
+import GitHubIcon from "../../common/icons/GitHub";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   icon: string;
   title: string;
   description: string;
+  github: string;
+  test?: string;
 }
 
-const LearnMoreCard: React.SFC<Props> = ({
+const CaseCard: React.SFC<Props> = ({
   classes,
   icon,
   title,
-  description
+  description,
+  github,
+  test
 }) => (
   <Card className={classes.background}>
     <CardMedia image={icon} className={classes.icon} />
@@ -40,9 +47,24 @@ const LearnMoreCard: React.SFC<Props> = ({
         <Typography align={"center"} className={classes.description}>
           {description}
         </Typography>
-        <Button className={classes.button} variant={"contained"}>
-          Learn More
-        </Button>
+        <Grid container direction={"row"} justify={"center"}>
+          <IconButton
+            className={classes.iconButton}
+            onClick={() => window.open(github)}
+          >
+            <GitHubIcon />
+          </IconButton>
+          {test ? (
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => window.open(test)}
+            >
+              <TestIcon />
+            </IconButton>
+          ) : (
+            <></>
+          )}
+        </Grid>
       </Grid>
     </CardContent>
   </Card>
@@ -57,8 +79,8 @@ const styles = (theme: Theme) =>
       padding: "10px"
     },
     icon: {
-      minHeight: "200px",
-      maxWidth: "200px",
+      minHeight: "300px",
+      maxWidth: "300px",
       margin: "auto"
     },
     title: {
@@ -67,9 +89,9 @@ const styles = (theme: Theme) =>
     description: {
       color: "white"
     },
-    button: {
-      marginTop: "10px",
+    iconButton: {
       color: "#4bd2c6",
+      margin: "10px",
       backgroundColor: "rgba(2, 46, 46, 0.5)",
       "&:hover": {
         backgroundColor: "black"
@@ -77,4 +99,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(LearnMoreCard);
+export default withStyles(styles)(CaseCard);

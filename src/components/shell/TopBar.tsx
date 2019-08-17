@@ -50,9 +50,9 @@ const TopBar: React.SFC<Props> = ({ classes, gotoDapp }) => {
 
   return (
     <AppBar position={"static"} className={classes.appBar}>
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Grid container justify={"center"} alignItems={"center"}>
-          <div className={classes.text}>{"{"}</div>
+          <div className={classes.bracket}>{"{"}</div>
           <div>
             <Button
               ref={anchorRef}
@@ -95,23 +95,26 @@ const TopBar: React.SFC<Props> = ({ classes, gotoDapp }) => {
               )}
             </Popper>
           </div>
-          <div className={classes.text}>{"}"}</div>
+          <div className={classes.bracket}>{"}"}</div>
         </Grid>
         <div className={classes.icons}>
           <IconButton
             className={classes.icon}
+            size={"small"}
             onClick={() => window.open("https://github.com/dOrgTech")}
           >
             <GitHubIcon />
           </IconButton>
           <IconButton
             className={classes.icon}
+            size={"small"}
             onClick={() => window.open("https://twitter.com/dOrg_tech")}
           >
             <TwitterIcon />
           </IconButton>
           <IconButton
             className={classes.icon}
+            size={"small"}
             onClick={() => window.open("mailto:contact@dorg.tech")}
           >
             <MailIcon />
@@ -130,6 +133,9 @@ const styles = (theme: Theme) =>
       // bring forward (infront of background)
       position: "relative"
     },
+    toolbar: {
+      marginBottom: "5px"
+    },
     menu: {
       background: "rgba(2, 46, 46, 0.8)"
     },
@@ -141,12 +147,12 @@ const styles = (theme: Theme) =>
       width: "103px",
       marginTop: "5px"
     },
-    text: {
+    bracket: {
       pointerEvents: "none",
       fontSize: "50px",
       color: "#4bd2c6",
-      marginRight: "20px",
-      marginLeft: "20px",
+      marginRight: "15px",
+      marginLeft: "15px",
       "-webkit-animation": "neon 1.5s ease-in-out infinite alternate",
       "-moz-animation": "neon 1.5s ease-in-out infinite alternate",
       animation: "neon 1.5s ease-in-out infinite alternate"
@@ -156,7 +162,16 @@ const styles = (theme: Theme) =>
       right: "10px"
     },
     icon: {
-      color: "#4bd2c6"
+      color: "#4bd2c6",
+      margin: "5px"
+    },
+    logoButton: {
+      color: "rgba(2, 46, 46, 0.1)",
+      backgroundColor: "rgba(2, 46, 46, 0.1)",
+      "&:hover": {
+        backgroundColor: "rgba(1, 1, 1, 0.2)"
+      },
+      margin: "10px"
     }
   });
 

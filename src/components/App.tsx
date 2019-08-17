@@ -4,7 +4,6 @@ import { Route, Switch } from "react-router";
 
 import TopBar from "./shell/TopBar";
 import Background from "./shell/Background";
-import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Overview from "./pages/Overview";
 import About from "./pages/About";
@@ -12,7 +11,14 @@ import Dapp from "./pages/Dapp";
 import DAOcreator from "./pages/DAOcreator";
 
 const App: SFC = () => (
-  <>
+  <div
+    style={{
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      minWidth: "455px"
+    }}
+  >
     <Background />
     <TopBar />
     <Switch>
@@ -22,7 +28,7 @@ const App: SFC = () => (
       <Route exact path="/dao-creator" component={DAOcreator} />
       <Route exact path="/" component={Landing} />
     </Switch>
-  </>
+  </div>
 );
 
 export default App;
