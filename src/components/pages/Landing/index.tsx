@@ -1,56 +1,21 @@
 import * as React from "react";
-import { connect } from "react-redux";
-import { push } from "connected-react-router";
 import {
   withStyles,
   Theme,
   WithStyles,
   createStyles,
   Grid,
-  Typography
+  Typography,
+  Divider
 } from "@material-ui/core";
-import LearnMoreCard from "./LearnMoreCard";
+import LearnMore from "./LearnMore";
 import CaseCard from "./CaseCard";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  gotoOverview: () => void;
-  gotoDapp: () => void;
-  gotoAbout: () => void;
-}
+interface Props extends WithStyles<typeof styles> {}
 
-const Landing: React.SFC<Props> = ({
-  classes,
-  gotoOverview,
-  gotoDapp,
-  gotoAbout
-}) => (
+const Landing: React.SFC<Props> = ({ classes }) => (
   <div className={classes.root}>
-    <Grid
-      container
-      direction={"row"}
-      justify={"center"}
-      alignItems={"flex-start"}
-    >
-      <Grid item xs={3} className={classes.learnMoreCard}>
-        <LearnMoreCard
-          icon={"/icons/flock.svg"}
-          title={"Hire dOrg"}
-          description={
-            "We can develop anything, from small and fast prototypes, to finished polished products."
-          }
-        />
-      </Grid>
-      <Grid item xs={3} className={classes.learnMoreCard}>
-        <LearnMoreCard
-          icon={"/icons/explorer.svg"}
-          title={"Join dOrg"}
-          description={
-            "Work with a talented, ever growing, community of developers from around the world."
-          }
-        />
-      </Grid>
-    </Grid>
     <Grid
       container
       direction={"column"}
@@ -61,15 +26,14 @@ const Landing: React.SFC<Props> = ({
         <Typography align={"center"} variant={"h3"}>
           Let's Build Together
         </Typography>
-        <Typography align={"center"} variant={"h5"}>
-          dOrg is a self-organized developer community that wills software into
-          existence.
-        </Typography>
+        <Divider />
       </Grid>
+      <LearnMore />
       <Grid item className={classes.cases}>
-        <Typography align={"center"} variant={"h4"}>
+        <Typography align={"center"} variant={"h3"}>
           Cases
         </Typography>
+        <Divider />
         <Grid
           container
           direction={"row"}
@@ -120,7 +84,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
-      height: "75vh",
+      height: "100vh",
       // bring forward (infront of background)
       position: "relative",
       // disable pointer events, don't block background
@@ -131,49 +95,20 @@ const styles = (theme: Theme) =>
       height: "50px",
       width: "100%"
     },
-    learnMoreCard: {
-      minWidth: "270px",
-      maxWidth: "400px",
-      margin: "20px"
-    },
     centerText: {
-      margin: "20px",
-      paddingTop: "20px",
+      marginTop: "40px",
       maxWidth: "680px"
     },
     cases: {
       margin: "20px",
-      paddingTop: "20px"
+      paddingTop: "20px",
+      maxWidth: "840px"
     },
     caseCard: {
-      minWidth: "395px",
-      maxWidth: "600px",
+      minWidth: "380px",
+      maxWidth: "420px",
       margin: "20px"
     }
   });
 
-const componentWithStyles = withStyles(styles)(Landing);
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    gotoDapp: () => {
-      dispatch(push("/dapp"));
-    },
-    gotoOverview: () => {
-      dispatch(push("/overview"));
-    },
-    gotoAbout: () => {
-      dispatch(push("/about"));
-    }
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles);
+export default withStyles(styles)(Landing);

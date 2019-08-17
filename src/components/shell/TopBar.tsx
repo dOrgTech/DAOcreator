@@ -10,16 +10,13 @@ import {
   Toolbar,
   CardMedia,
   Grid,
-  Button,
-  Popper,
-  Paper,
-  Grow,
-  ClickAwayListener,
-  MenuList,
-  MenuItem,
   IconButton,
-  Typography
+  Drawer,
+  List,
+  ListItem,
+  ListItemText
 } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import GitHubIcon from "../common/icons/GitHub";
 import TwitterIcon from "../common/icons/Twitter";
@@ -27,134 +24,80 @@ import "./NeonGlow.css";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
+  gotoHome: () => void;
   gotoDapp: () => void;
-  gotoOverview: () => void;
-  gotoAbout: () => void;
 }
 
-const TopBar: React.SFC<Props> = ({
-  classes,
-  gotoDapp,
-  gotoOverview,
-  gotoAbout
-}) => {
+const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
-
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
-  const handleClose = (event: React.MouseEvent<EventTarget>) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <AppBar position={"static"} className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
+        <IconButton
+          onClick={() => setOpen(true)}
+          className={classes.menuButton}
+        >
+          <MenuIcon className={classes.menuIcon} />
+        </IconButton>
+        <Drawer
+          open={open}
+          onClose={() => setOpen(false)}
+          anchor={"left"}
+          classes={{
+            paper: classes.menuPaper
+          }}
+        >
+          <List>
+            {[
+              { title: "Home Page", onClick: gotoHome },
+              { title: "Create A DAO", onClick: gotoDapp },
+              {
+                title: "Join dOrg",
+                onClick: () =>
+                  window.open(
+                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
+                  )
+              },
+              {
+                title: "Hire dOrg",
+                onClick: () =>
+                  window.open(
+                    "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
+                  )
+              }
+            ].map(item => (
+              <ListItem button key={item.title} onClick={item.onClick}>
+                <ListItemText
+                  primary={item.title}
+                  className={classes.menuItem}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
         <Grid container justify={"center"} alignItems={"center"}>
           <div className={classes.bracket}>{"{"}</div>
-          <div>
-            <Button
-              ref={anchorRef}
-              aria-controls="menu-list-grow"
-              aria-haspopup="true"
-              onClick={handleToggle}
-            >
-              <CardMedia image={"/icons/dOrg.svg"} className={classes.image} />
-            </Button>
-            <Popper
-              open={open}
-              anchorEl={anchorRef.current}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === "bottom" ? "center top" : "center bottom"
-                  }}
-                >
-                  <Paper id="menu-list-grow" className={classes.menu}>
-                    <ClickAwayListener onClickAway={handleClose}>
-                      <MenuList>
-                        <MenuItem
-                          onClick={event => {
-                            gotoDapp();
-                            handleClose(event);
-                          }}
-                          className={classes.menuItem}
-                        >
-                          <Typography
-                            align={"center"}
-                            style={{ width: "100%" }}
-                          >
-                            Create a DAO
-                          </Typography>
-                        </MenuItem>
-                        <MenuItem
-                          onClick={event => {
-                            gotoAbout();
-                            handleClose(event);
-                          }}
-                          className={classes.menuItem}
-                        >
-                          <Typography
-                            align={"center"}
-                            style={{ width: "100%" }}
-                          >
-                            About
-                          </Typography>
-                        </MenuItem>
-                        <MenuItem
-                          onClick={event => {
-                            gotoOverview();
-                            handleClose(event);
-                          }}
-                          className={classes.menuItem}
-                        >
-                          <Typography
-                            align={"center"}
-                            style={{ width: "100%" }}
-                          >
-                            F.A.Q.
-                          </Typography>
-                        </MenuItem>
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
-          </div>
+          <CardMedia image={"/icons/dOrg.svg"} className={classes.image} />
           <div className={classes.bracket}>{"}"}</div>
         </Grid>
-        <div className={classes.icons}>
+        <div className={classes.contactIcons}>
           <IconButton
-            className={classes.icon}
+            className={classes.contactIcon}
             size={"small"}
             onClick={() => window.open("https://github.com/dOrgTech")}
           >
             <GitHubIcon />
           </IconButton>
           <IconButton
-            className={classes.icon}
+            className={classes.contactIcon}
             size={"small"}
             onClick={() => window.open("https://twitter.com/dOrg_tech")}
           >
             <TwitterIcon />
           </IconButton>
           <IconButton
-            className={classes.icon}
+            className={classes.contactIcon}
             size={"small"}
             onClick={() => window.open("mailto:contact@dorg.tech")}
           >
@@ -177,8 +120,17 @@ const styles = (theme: Theme) =>
     toolbar: {
       marginBottom: "5px"
     },
-    menu: {
-      background: "rgba(2, 46, 46, 0.8)"
+    menuButton: {
+      position: "absolute",
+      left: "10px"
+    },
+    menuIcon: {
+      color: "#4bd2c6"
+    },
+    menuPaper: {
+      background: "rgba(2, 46, 46, 0.9)",
+      height: "210px",
+      top: "75px"
     },
     menuItem: {
       color: "#4bd2c6"
@@ -198,11 +150,11 @@ const styles = (theme: Theme) =>
       "-moz-animation": "neon 1.5s ease-in-out infinite alternate",
       animation: "neon 1.5s ease-in-out infinite alternate"
     },
-    icons: {
+    contactIcons: {
       position: "absolute",
       right: "10px"
     },
-    icon: {
+    contactIcon: {
       color: "#4bd2c6",
       margin: "5px"
     },
@@ -225,14 +177,11 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    gotoHome: () => {
+      dispatch(push("/"));
+    },
     gotoDapp: () => {
       dispatch(push("/dapp"));
-    },
-    gotoOverview: () => {
-      dispatch(push("/overview"));
-    },
-    gotoAbout: () => {
-      dispatch(push("/about"));
     }
   };
 };

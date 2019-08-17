@@ -7,7 +7,6 @@ import {
   WithStyles,
   createStyles,
   Card,
-  Button,
   CardContent
 } from "@material-ui/core";
 
@@ -19,14 +18,6 @@ interface Props extends WithStyles<typeof styles> {
 
 const InfoPage: React.SFC<Props> = ({ classes, goHome, Content }) => (
   <div className={classes.root}>
-    <Button
-      variant="contained"
-      size="small"
-      className={classes.button}
-      onClick={goHome}
-    >
-      Back to Home
-    </Button>
     <div className={classes.cardWrapper}>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
@@ -49,6 +40,7 @@ const styles = (theme: Theme) =>
     },
     cardWrapper: {
       width: 0,
+      marginTop: "50px",
       position: "relative",
       left: "50%",
       pointerEvents: "none"
