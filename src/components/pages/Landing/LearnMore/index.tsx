@@ -111,6 +111,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
                   "Tailored solutions and quick response times help you get what you need, when you need it."
               }
             ]}
+            link={"https://dorgtech.typeform.com/to/Q1LOP1"}
           />
           <DetailsCard
             title={"Ready. Set. DAO."}
@@ -134,6 +135,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
                   "Administrative support frees you up to focus on the projects you care about."
               }
             ]}
+            link={"https://dorgtech.typeform.com/to/a1rMob"}
           />
         </SwipeableViews>
       </Collapse>
