@@ -48,7 +48,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             icon={"/icons/flock.svg"}
             title={"Hire dOrg"}
             description={
-              "We can develop anything, from small and fast prototypes, to finished polished products."
+              "We can develop anything, from small and fast prototypes, to fully polished products."
             }
             onSelect={() =>
               setSelection(
@@ -67,7 +67,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             icon={"/icons/explorer.svg"}
             title={"Join dOrg"}
             description={
-              "Work with a talented, ever growing, community of developers from around the world."
+              "Work with a talented, ever growing community of developers from around the world."
             }
             onSelect={() =>
               setSelection(
@@ -111,6 +111,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
                   "Tailored solutions and quick response times help you get what you need, when you need it."
               }
             ]}
+            link={"https://dorgtech.typeform.com/to/Q1LOP1"}
           />
           <DetailsCard
             title={"Ready. Set. DAO."}
@@ -134,6 +135,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
                   "Administrative support frees you up to focus on the projects you care about."
               }
             ]}
+            link={"https://dorgtech.typeform.com/to/a1rMob"}
           />
         </SwipeableViews>
       </Collapse>

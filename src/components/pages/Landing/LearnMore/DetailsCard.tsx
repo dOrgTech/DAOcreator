@@ -22,9 +22,10 @@ interface PanelData {
 interface Props extends WithStyles<typeof styles> {
   title: string;
   panels: PanelData[];
+  link: string;
 }
 
-const DetailsCard: React.SFC<Props> = ({ classes, title, panels }) => (
+const DetailsCard: React.SFC<Props> = ({ classes, title, panels, link }) => (
   <Grid container justify={"center"}>
     <Card className={classes.background}>
       <CardContent>
@@ -70,11 +71,7 @@ const DetailsCard: React.SFC<Props> = ({ classes, title, panels }) => (
           <Button
             className={classes.button}
             variant={"contained"}
-            onClick={() =>
-              window.open(
-                "https://docs.google.com/forms/d/1b_0DNAHtVupFXY0JPqEs9GJahLri3iQUMww15BzR1Po/"
-              )
-            }
+            onClick={() => window.open(link)}
           >
             Learn More
           </Button>
