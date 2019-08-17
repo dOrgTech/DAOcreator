@@ -26,14 +26,15 @@ const Landing: React.SFC<Props> = ({ classes }) => (
         <Typography align={"center"} variant={"h3"}>
           Let's Build Together
         </Typography>
-        <Divider />
       </Grid>
       <LearnMore />
       <Grid item className={classes.cases}>
+        <Divider />
+        <br />
+        <br />
         <Typography align={"center"} variant={"h3"}>
           Cases
         </Typography>
-        <Divider />
         <Grid
           container
           direction={"row"}
