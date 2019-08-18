@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
 import parse from "csv-parse";
+// import Papa from 'papaparse';
 import { MembersForm, MemberForm } from "../../../lib/forms";
 import { MembersCSVImportState } from "../../../lib/state";
 
@@ -23,9 +24,9 @@ export default class MembersCSVImport extends React.Component<
   constructor(props: Props) {
     super(props);
     this.state = {
-      openDialog: false
+      openDialog: false,
+      files: []
     };
-    this.fileReader = new FileReader();
     this.handleFileRead = this.handleFileRead.bind(this);
     this.importCSV = this.importCSV.bind(this);
   }
@@ -34,15 +35,16 @@ export default class MembersCSVImport extends React.Component<
     this.setState({ openDialog: false });
   }
 
-  public importCSV(event: any): void {
-    const files = Array.from(event.target.files);
+  public importCSV(event: React.ChangeEvent): void {
+    const files: File[] = Array.from(event.target.files);
+    this.setState({ files });
     const handleFiles = (file: any) => {
       this.handleFileChosen(file);
     };
     files.map(handleFiles);
   }
 
-  private handleFileChosen(file: any): void {
+  private handleFileChosen(file: File): void {
     let fileReader = new FileReader();
     this.fileReader = fileReader;
     this.fileReader.onloadend = this.handleFileRead;
