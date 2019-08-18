@@ -23,16 +23,8 @@ const Landing: React.SFC<Props> = ({ classes }) => (
       alignItems={"center"}
     >
       <Grid item className={classes.centerText}>
-        <Typography align={"center"} variant={"h3"} className={classes.header}>
+        <Typography align={"center"} variant={"h2"} className={classes.header}>
           Let's Build Together
-        </Typography>
-        <Typography
-          align={"center"}
-          variant={"h5"}
-          className={classes.subHeader}
-        >
-          dOrg is a self-organized developer community that wills software into
-          existence.
         </Typography>
       </Grid>
       <LearnMore />
@@ -83,6 +75,9 @@ const Landing: React.SFC<Props> = ({ classes }) => (
           </Grid>
         </Grid>
       </Grid>
+      <Typography className={classes.copyright}>
+        © 2019 dOrg, BBLLC. All Rights Reserved.
+      </Typography>
     </Grid>
   </div>
 );
@@ -121,6 +116,9 @@ const styles = (theme: Theme) =>
       minWidth: "380px",
       maxWidth: "420px",
       margin: "20px"
+    },
+    copyright: {
+      color: "white"
     }
   });
 
