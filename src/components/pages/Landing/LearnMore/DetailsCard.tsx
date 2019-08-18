@@ -95,7 +95,8 @@ const styles = (theme: Theme) =>
       marginLeft: "20px"
     },
     title: {
-      color: "#4bd2c6"
+      color: "#4bd2c6",
+      marginBottom: "25px"
     },
     description: {
       color: "white"

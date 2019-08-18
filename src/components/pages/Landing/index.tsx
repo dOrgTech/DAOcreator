@@ -23,14 +23,14 @@ const Landing: React.SFC<Props> = ({ classes }) => (
       alignItems={"center"}
     >
       <Grid item className={classes.centerText}>
-        <Typography align={"center"} variant={"h3"}>
+        <Typography align={"center"} variant={"h2"} className={classes.header}>
           Let's Build Together
         </Typography>
       </Grid>
       <LearnMore />
       <Grid item className={classes.cases}>
         <Divider className={classes.casesDivider} />
-        <Typography align={"center"} variant={"h3"}>
+        <Typography align={"center"} variant={"h3"} className={classes.header}>
           Cases
         </Typography>
         <Grid
@@ -75,6 +75,9 @@ const Landing: React.SFC<Props> = ({ classes }) => (
           </Grid>
         </Grid>
       </Grid>
+      <Typography className={classes.copyright}>
+        © 2019 dOrg, BBLLC. All Rights Reserved.
+      </Typography>
     </Grid>
   </div>
 );
@@ -91,9 +94,11 @@ const styles = (theme: Theme) =>
       pointerEvents: "none"
     },
     header: {
-      pointerEvents: "all",
-      height: "50px",
-      width: "100%"
+      color: "#4bd2c6"
+    },
+    subHeader: {
+      marginBottom: "20px",
+      color: "white"
     },
     centerText: {
       marginTop: "40px",
@@ -111,6 +116,9 @@ const styles = (theme: Theme) =>
       minWidth: "380px",
       maxWidth: "420px",
       margin: "20px"
+    },
+    copyright: {
+      color: "white"
     }
   });
 
