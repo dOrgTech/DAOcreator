@@ -37,7 +37,7 @@ const TopCard: React.SFC<Props> = ({
         justify={"flex-start"}
         alignItems={"center"}
       >
-        <Typography variant={"h4"} className={classes.title}>
+        <Typography variant={"h4"} align={"center"} className={classes.title}>
           {title}
         </Typography>
         <Typography align={"center"} className={classes.description}>
