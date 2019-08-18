@@ -26,6 +26,14 @@ const Landing: React.SFC<Props> = ({ classes }) => (
         <Typography align={"center"} variant={"h3"}>
           Let's Build Together
         </Typography>
+        <Typography
+          align={"center"}
+          variant={"h5"}
+          className={classes.subHeader}
+        >
+          dOrg is a self-organized developer community that wills software into
+          existence.
+        </Typography>
       </Grid>
       <LearnMore />
       <Grid item className={classes.cases}>
@@ -94,6 +102,9 @@ const styles = (theme: Theme) =>
       pointerEvents: "all",
       height: "50px",
       width: "100%"
+    },
+    subHeader: {
+      marginBottom: "20px"
     },
     centerText: {
       marginTop: "40px",

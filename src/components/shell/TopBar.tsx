@@ -132,8 +132,8 @@ const styles = (theme: Theme) =>
       color: "#4bd2c6"
     },
     image: {
-      height: "50px",
-      width: "103px",
+      height: "59px",
+      width: "122px",
       marginTop: "5px"
     },
     bracket: {
