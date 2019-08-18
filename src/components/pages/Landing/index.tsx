@@ -33,6 +33,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
         <Typography align={"center"} variant={"h3"} className={classes.header}>
           Cases
         </Typography>
+        <Divider />
         <Grid
           container
           direction={"row"}
