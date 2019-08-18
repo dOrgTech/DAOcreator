@@ -23,7 +23,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
       alignItems={"center"}
     >
       <Grid item className={classes.centerText}>
-        <Typography align={"center"} variant={"h3"}>
+        <Typography align={"center"} variant={"h3"} className={classes.header}>
           Let's Build Together
         </Typography>
         <Typography
@@ -38,7 +38,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
       <LearnMore />
       <Grid item className={classes.cases}>
         <Divider className={classes.casesDivider} />
-        <Typography align={"center"} variant={"h3"}>
+        <Typography align={"center"} variant={"h3"} className={classes.header}>
           Cases
         </Typography>
         <Grid
@@ -99,12 +99,11 @@ const styles = (theme: Theme) =>
       pointerEvents: "none"
     },
     header: {
-      pointerEvents: "all",
-      height: "50px",
-      width: "100%"
+      color: "#4bd2c6"
     },
     subHeader: {
-      marginBottom: "20px"
+      marginBottom: "20px",
+      color: "white"
     },
     centerText: {
       marginTop: "40px",
