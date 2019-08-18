@@ -48,7 +48,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             icon={"/icons/flock.svg"}
             title={"Hire dOrg"}
             description={
-              "We can develop anything, from small and fast prototypes, to fully polished products."
+              "We can develop anything from quick prototypes to fully polished products."
             }
             onSelect={() =>
               setSelection(
