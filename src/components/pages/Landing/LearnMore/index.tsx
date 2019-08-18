@@ -48,7 +48,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             icon={"/icons/flock.svg"}
             title={"Hire dOrg"}
             description={
-              "We can develop anything, from small and fast prototypes, to fully polished products."
+              "We can develop anything from quick prototypes to fully polished products."
             }
             onSelect={() =>
               setSelection(
@@ -93,22 +93,22 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
             title={"Don't outsource, DAOsource."}
             panels={[
               {
-                icon: "/icons/quality.png",
-                title: "Quality Work, Guaranteed",
+                icon: "/icons/pay.png",
+                title: "Pay for Results",
                 description:
-                  "Payment is released at pre-set milestones upon your approval."
+                  "Fixed payments are released at pre-set milestones upon your approval."
               },
               {
-                icon: "/icons/price.png",
-                title: "Know The Price Upfront",
+                icon: "/icons/on-demand.png",
+                title: "On-Demand Expertise",
                 description:
-                  "Know exactly what you’ll pay. No hourly rates, just a fixed price."
+                  "Get matched with a team optimized for your project’s requirements."
               },
               {
                 icon: "/icons/cust-support.png",
                 title: "Customer Support",
                 description:
-                  "Tailored solutions and quick response times help you get what you need, when you need it."
+                  "Built-in feedback processes help ensure you get what you need."
               }
             ]}
             link={"https://dorgtech.typeform.com/to/Q1LOP1"}
@@ -132,7 +132,7 @@ const LearnMore: React.SFC<Props> = ({ classes }) => {
                 icon: "/icons/contrib-support.png",
                 title: "Contributor Support",
                 description:
-                  "Administrative support frees you up to focus on the projects you care about."
+                  "Focus on work you care about, not the administrative tasks."
               }
             ]}
             link={"https://dorgtech.typeform.com/to/a1rMob"}

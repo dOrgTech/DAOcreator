@@ -25,10 +25,16 @@ import "./NeonGlow.css";
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   gotoHome: () => void;
+  gotoAbout: () => void;
   gotoDapp: () => void;
 }
 
-const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
+const TopBar: React.SFC<Props> = ({
+  classes,
+  gotoHome,
+  gotoAbout,
+  gotoDapp
+}) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -51,6 +57,7 @@ const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
           <List>
             {[
               { title: "Home", onClick: gotoHome },
+              { title: "About", onClick: gotoAbout },
               { title: "Create A DAO", onClick: gotoDapp },
               {
                 title: "Hire dOrg",
@@ -63,7 +70,14 @@ const TopBar: React.SFC<Props> = ({ classes, gotoHome, gotoDapp }) => {
                   window.open("https://dorgtech.typeform.com/to/a1rMob")
               }
             ].map(item => (
-              <ListItem button key={item.title} onClick={item.onClick}>
+              <ListItem
+                button
+                key={item.title}
+                onClick={() => {
+                  item.onClick();
+                  setOpen(false);
+                }}
+              >
                 <ListItemText
                   primary={item.title}
                   className={classes.menuItem}
@@ -125,15 +139,15 @@ const styles = (theme: Theme) =>
     },
     menuPaper: {
       background: "rgba(2, 46, 46, 0.9)",
-      height: "210px",
+      height: "260px",
       top: "75px"
     },
     menuItem: {
       color: "#4bd2c6"
     },
     image: {
-      height: "50px",
-      width: "103px",
+      height: "59px",
+      width: "122px",
       marginTop: "5px"
     },
     bracket: {
@@ -175,6 +189,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     gotoHome: () => {
       dispatch(push("/"));
+    },
+    gotoAbout: () => {
+      dispatch(push("/about"));
     },
     gotoDapp: () => {
       dispatch(push("/dapp"));
