@@ -1,30 +1,33 @@
-import * as React from "react"
-import { SFC } from "react"
-import { Route, Switch } from "react-router"
-import { SnackbarProvider } from "notistack"
+import * as React from "react";
+import { SFC } from "react";
+import { Route, Switch } from "react-router";
 
-import Background from "./shell/Background"
-import Home from "./pages/Home"
-import Overview from "./pages/Overview"
-import About from "./pages/About"
-import Dapp from "./pages/Dapp"
-import DAOcreator from "./pages/DAOcreator"
-import Notifications from "./common/Notifications"
-import WaitingAnimation from "./common/WaitingAnimation"
+import TopBar from "./shell/TopBar";
+import Background from "./shell/Background";
+import Landing from "./pages/Landing";
+import About from "./pages/About";
+import Dapp from "./pages/Dapp";
+import DAOcreator from "./pages/DAOcreator";
 
 const App: SFC = () => (
-  <SnackbarProvider maxSnack={3}>
+  <div
+    style={{
+      position: "absolute",
+      width: "100vw",
+      height: "100vh",
+      minWidth: "450px",
+      maxWidth: "100%"
+    }}
+  >
     <Background />
+    <TopBar />
     <Switch>
-      <Route exact path="/overview" component={Overview} />
-      <Route exact path="/dapp" component={Dapp} />
+      <Route exact path="/" component={Landing} />
       <Route exact path="/about" component={About} />
+      <Route exact path="/dapp" component={Dapp} />
       <Route exact path="/dao-creator" component={DAOcreator} />
-      <Route exact path="/" component={Home} />
     </Switch>
-    <WaitingAnimation />
-    <Notifications />
-  </SnackbarProvider>
-)
+  </div>
+);
 
-export default App
+export default App;

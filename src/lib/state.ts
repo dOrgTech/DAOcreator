@@ -1,13 +1,16 @@
 import { DAOConfig, Member, Scheme } from "./dependency/arc";
 
-export * from "./dependency/arc";
+export {
+  SchemeType,
+  ContributionReward,
+  SchemeRegistrar,
+  GenericScheme,
+  GenesisProtocol
+} from "./dependency/arc";
 
-// TODO: remove this
-export interface RootState {
-  daoCreator: DAOcreatorState;
-  notification: NotificationState;
-  waitingAnimation: WaitingAnimationState;
-}
+export type DAOConfig = DAOConfig;
+export type Member = Member;
+export type Scheme = Scheme;
 
 export interface DAOcreatorState {
   config: DAOConfig;

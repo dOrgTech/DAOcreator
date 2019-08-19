@@ -1,0 +1,46 @@
+/*Neon*/
+/* Credit: https://codepen.io/FelixRilling/pen/qzfoc */
+/*glow for webkit*/
+
+@-webkit-keyframes neon {
+  from {
+    text-shadow: 0 0 5px #003133, 0 0 10px #003133, 0 0 15px #003133,
+      0 0 20px #00ffe2, 0 0 35px #00ffe2, 0 0 40px #00ffe2, 0 0 50px #00ffe2,
+      0 0 60px #00ffe2;
+  }
+  to {
+    text-shadow: 0 0 2.5px #003133, 0 0 5px #003133, 0 0 7.5px #003133,
+      0 0 10px #00ffe2, 0 0 17.5px #00ffe2, 0 0 20px #00ffe2, 0 0 25px #00ffe2,
+      0 0 37.5px #00ffe2;
+  }
+}
+
+/*glow for mozilla*/
+
+@-moz-keyframes neon {
+  from {
+    text-shadow: 0 0 5px #003133, 0 0 10px #003133, 0 0 15px #003133,
+      0 0 20px #00ffe2, 0 0 35px #00ffe2, 0 0 40px #00ffe2, 0 0 50px #00ffe2,
+      0 0 60px #00ffe2;
+  }
+  to {
+    text-shadow: 0 0 2.5px #003133, 0 0 5px #003133, 0 0 7.5px #003133,
+      0 0 10px #00ffe2, 0 0 17.5px #00ffe2, 0 0 20px #00ffe2, 0 0 25px #00ffe2,
+      0 0 37.5px #00ffe2;
+  }
+}
+
+/*glow*/
+
+@keyframes neon {
+  from {
+    text-shadow: 0 0 5px #003133, 0 0 10px #003133, 0 0 15px #003133,
+      0 0 20px #00ffe2, 0 0 35px #00ffe2, 0 0 40px #00ffe2, 0 0 50px #00ffe2,
+      0 0 60px #00ffe2;
+  }
+  to {
+    text-shadow: 0 0 2.5px #003133, 0 0 5px #003133, 0 0 7.5px #003133,
+      0 0 10px #00ffe2, 0 0 17.5px #00ffe2, 0 0 20px #00ffe2, 0 0 25px #00ffe2,
+      0 0 37.5px #00ffe2;
+  }
+}

@@ -28,7 +28,7 @@ import {
 } from "../state";
 import { TypeConversion } from "../dependency/web3";
 import { SchemeType, GenesisProtocolPreset } from "../dependency/arc";
-const { toBN, toWei, fromWei } = TypeConversion;
+const { toBN } = TypeConversion;
 
 export enum FieldType {
   String,
@@ -618,10 +618,8 @@ export class GenesisProtocolForm extends FriendlyForm<
           ),
           queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.toSeconds()),
           thresholdConst: toBN(this.$.thresholdConst.value),
-          proposingRepReward: toBN(
-            toWei(toBN(this.$.proposingRepReward.value))
-          ),
-          minimumDaoBounty: toBN(toWei(toBN(this.$.minimumDaoBounty.value))),
+          proposingRepReward: toBN(this.$.proposingRepReward.value),
+          minimumDaoBounty: toBN(this.$.minimumDaoBounty.value),
           boostedVotePeriodLimit: toBN(
             this.$.boostedVotePeriodLimit.toSeconds()
           ),
@@ -653,8 +651,8 @@ export class GenesisProtocolForm extends FriendlyForm<
       config.queuedVotePeriodLimit.toNumber()
     );
     this.$.thresholdConst.value = config.thresholdConst.toString();
-    this.$.proposingRepReward.value = fromWei(config.proposingRepReward);
-    this.$.minimumDaoBounty.value = fromWei(config.minimumDaoBounty);
+    this.$.proposingRepReward.value = config.proposingRepReward.toString();
+    this.$.minimumDaoBounty.value = config.minimumDaoBounty.toString();
     this.$.boostedVotePeriodLimit.fromSeconds(
       config.boostedVotePeriodLimit.toNumber()
     );
