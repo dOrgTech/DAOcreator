@@ -20,7 +20,6 @@ export default class MembersCSVImport extends React.Component<
   Props,
   MembersCSVImportState
 > {
-  private fileReader!: FileReader;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -36,32 +35,45 @@ export default class MembersCSVImport extends React.Component<
   }
 
   public importCSV(event: React.ChangeEvent): void {
-    const files: File[] = Array.from(event.target.files);
+    const target = event.target as HTMLInputElement;
+    const files: File[] = Array.from(target.files as FileList);
     this.setState({ files });
-    const handleFiles = (file: any) => {
+    const handleFiles = (file: File) => {
       this.handleFileChosen(file);
     };
     files.map(handleFiles);
   }
 
-  private handleFileChosen(file: File): void {
+  public handleFileChosen(file: File): void {
     let fileReader = new FileReader();
-    this.fileReader = fileReader;
-    this.fileReader.onloadend = this.handleFileRead;
-    this.fileReader.readAsText(file);
+    fileReader.readAsText(file);
+    fileReader.onload = () => {
+      this.handleFileRead(fileReader);
+    };
   }
 
-  private handleFileRead(): void {
-    const csv: any = this.fileReader.result;
+  private handleFileRead(file: any): void {
+    let csv: any = file.result;
     const parseCSV = (error: any, members: MemberForm[]) => {
       const addMembers = (member: any) => {
-        let newMember = new MemberForm(this.props.form.getDAOTokenSymbol);
-        newMember.$.address.value = member.address;
-        newMember.$.reputation.value = member.reputation;
-        newMember.$.tokens.value = member.tokens;
-        this.props.form.$.push(newMember);
+        return new Promise<MemberForm>(resolve => {
+          let newMember: MemberForm = new MemberForm(
+            this.props.form.getDAOTokenSymbol
+          );
+          newMember.$.address.value = member.address;
+          newMember.$.reputation.value = member.reputation;
+          newMember.$.tokens.value = member.tokens;
+          resolve(newMember);
+        });
       };
-      members.map(addMembers);
+
+      const membersPromises = members.map(addMembers);
+      Promise.all(membersPromises).then(resolvedMembers => {
+        for (const addMember of resolvedMembers) {
+          this.props.form.$.push(addMember);
+        }
+      });
+
       this.handleDialogClose();
       if (error) {
         console.log("error", error);
@@ -70,6 +82,7 @@ export default class MembersCSVImport extends React.Component<
     const parseCSVOptions = {
       columns: true
     };
+
     parse(csv, parseCSVOptions, parseCSV);
   }
 
