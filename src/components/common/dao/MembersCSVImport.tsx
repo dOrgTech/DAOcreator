@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import { AttachFile } from "@material-ui/icons";
 import parse from "csv-parse";
-// import Papa from 'papaparse';
 import { MembersForm, MemberForm } from "../../../lib/forms";
 import { MembersCSVImportState } from "../../../lib/state";
 
@@ -55,8 +54,11 @@ export default class MembersCSVImport extends React.Component<
   private handleFileRead(file: any): void {
     let csv: any = file.result;
     const parseCSV = (error: any, members: MemberForm[]) => {
+      this.isCSVImportValid(Object.keys(members[0]))
+        ? console.log("csv format is good")
+        : console.log("csv format is bad");
       const addMembers = (member: any) => {
-        return new Promise<MemberForm>(resolve => {
+        const memberPromise = new Promise<MemberForm>(resolve => {
           let newMember: MemberForm = new MemberForm(
             this.props.form.getDAOTokenSymbol
           );
@@ -65,6 +67,7 @@ export default class MembersCSVImport extends React.Component<
           newMember.$.tokens.value = member.tokens;
           resolve(newMember);
         });
+        return memberPromise;
       };
 
       const membersPromises = members.map(addMembers);
@@ -84,6 +87,18 @@ export default class MembersCSVImport extends React.Component<
     };
 
     parse(csv, parseCSVOptions, parseCSV);
+  }
+
+  private isCSVImportValid(csvColumns: Array<string>): boolean {
+    const checkForThreeColumns = csvColumns.length === 3;
+    const checkForOrderOfColumns = (): boolean => {
+      return (
+        csvColumns[0] === "address" &&
+        csvColumns[1] === "reputation" &&
+        csvColumns[2] === "tokens"
+      );
+    };
+    return checkForOrderOfColumns && checkForThreeColumns;
   }
 
   render() {
