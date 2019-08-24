@@ -44,4 +44,5 @@ export interface WaitingAnimationState {
 export interface MembersCSVImportState {
   openDialog: boolean;
   files: File[];
+  csvError: boolean;
 }
