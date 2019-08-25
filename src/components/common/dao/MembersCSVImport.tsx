@@ -15,7 +15,14 @@ import { MembersCSVImportState } from "../../../lib/state";
 interface Props {
   form: MembersForm;
 }
-
+const INITIAL_STATE = {
+  openDialog: false,
+  files: [],
+  csvFormat: {
+    error: false,
+    filenames: []
+  }
+};
 export default class MembersCSVImport extends React.Component<
   Props,
   MembersCSVImportState
@@ -23,16 +30,15 @@ export default class MembersCSVImport extends React.Component<
   constructor(props: Props) {
     super(props);
     this.state = {
-      openDialog: false,
-      files: [],
-      csvError: false
+      ...INITIAL_STATE
     };
     this.handleFileRead = this.handleFileRead.bind(this);
     this.importCSV = this.importCSV.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
   }
 
   public handleDialogClose(): void {
-    this.setState({ openDialog: false, csvError: false });
+    this.setState({ ...INITIAL_STATE });
   }
 
   public importCSV(event: React.ChangeEvent): void {
@@ -49,17 +55,17 @@ export default class MembersCSVImport extends React.Component<
     let fileReader = new FileReader();
     fileReader.readAsText(file);
     fileReader.onload = () => {
-      this.handleFileRead(fileReader);
+      this.handleFileRead(fileReader, file.name);
     };
   }
 
-  private handleFileRead(file: FileReader): void {
+  private handleFileRead(file: FileReader, filename: string): void {
     let csv: any = file.result;
     const parseCSV = (error: Error | undefined, members: MemberForm[]) => {
       const csvColumns = Object.keys(members[0]);
       if (this.isCSVImportValid(csvColumns)) {
         const addMembers = (member: any) => {
-          const memberPromise = new Promise<MemberForm>(resolve => {
+          const memberResolver = (resolve: any) => {
             let newMember: MemberForm = new MemberForm(
               this.props.form.getDAOTokenSymbol
             );
@@ -67,7 +73,8 @@ export default class MembersCSVImport extends React.Component<
             newMember.$.reputation.value = member.reputation;
             newMember.$.tokens.value = member.tokens;
             resolve(newMember);
-          });
+          };
+          const memberPromise = new Promise<MemberForm>(memberResolver);
           return memberPromise;
         };
 
@@ -77,11 +84,16 @@ export default class MembersCSVImport extends React.Component<
             this.props.form.$.push(addMember);
           }
         });
-        this.handleDialogClose();
+        if (!this.state.csvFormat.error) {
+          this.handleDialogClose();
+        }
       } else {
-        console.log("csv format is bad");
-        this.setState({
-          csvError: true
+        this.setState(state => {
+          const csvFormat = {
+            error: true,
+            filenames: [...state.csvFormat.filenames, filename]
+          };
+          return { csvFormat };
         });
       }
       if (error) {
@@ -119,15 +131,22 @@ export default class MembersCSVImport extends React.Component<
         >
           <AttachFile />
         </Fab>
-        <Dialog onClose={() => this.handleDialogClose()} open={openDialog}>
-          {this.state.csvError ? (
+        <Dialog onClose={this.handleDialogClose} open={openDialog}>
+          {this.state.csvFormat.error ? (
             <DialogContent>
-              <strong>
+              <p>
                 There has been an error uploading one or more of your csv files.
-                Make sure proper formatting is set on each cvs file columns. ie:
+                Make sure proper formatting is set on each csv file columns. ie:
                 make sure the first line of each csv file looks exactly like
                 this: "address,reputation,tokens"
-              </strong>
+                <br />
+                <strong>An issue has been found in the following files:</strong>
+                {this.state.csvFormat.filenames.map(
+                  (filename: string, index: number) => (
+                    <li key={index}>{filename}</li>
+                  )
+                )}
+              </p>
             </DialogContent>
           ) : (
             <DialogTitle id="simple-dialog-title">

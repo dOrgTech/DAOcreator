@@ -41,8 +41,13 @@ export interface WaitingAnimationState {
   open: boolean;
 }
 
+export interface MembersCSVImportFormat {
+  error: boolean;
+  filenames: string[];
+}
+
 export interface MembersCSVImportState {
   openDialog: boolean;
   files: File[];
-  csvError: boolean;
+  csvFormat: MembersCSVImportFormat;
 }
