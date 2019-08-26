@@ -19,8 +19,10 @@ const INITIAL_STATE = {
   openDialog: false,
   files: [],
   csvFormat: {
-    error: false,
-    filenames: []
+    hasError: false,
+    filenames: [],
+    errorMessage: null,
+    errorMessages: []
   }
 };
 export default class MembersCSVImport extends React.Component<
@@ -52,7 +54,7 @@ export default class MembersCSVImport extends React.Component<
   }
 
   public handleFileChosen(file: File): void {
-    let fileReader = new FileReader();
+    const fileReader = new FileReader();
     fileReader.readAsText(file);
     fileReader.onload = () => {
       this.handleFileRead(fileReader, file.name);
@@ -64,37 +66,15 @@ export default class MembersCSVImport extends React.Component<
     const parseCSV = (error: Error | undefined, members: MemberForm[]) => {
       const csvColumns = Object.keys(members[0]);
       if (this.isCSVImportValid(csvColumns)) {
-        const addMembers = (member: any) => {
-          const memberResolver = (resolve: any) => {
-            let newMember: MemberForm = new MemberForm(
-              this.props.form.getDAOTokenSymbol
-            );
-            newMember.$.address.value = member.address;
-            newMember.$.reputation.value = member.reputation;
-            newMember.$.tokens.value = member.tokens;
-            resolve(newMember);
-          };
-          const memberPromise = new Promise<MemberForm>(memberResolver);
-          return memberPromise;
-        };
-
-        const membersPromises = members.map(addMembers);
-        Promise.all(membersPromises).then(resolvedMembers => {
-          for (const addMember of resolvedMembers) {
-            this.props.form.$.push(addMember);
-          }
-        });
-        if (!this.state.csvFormat.error) {
-          this.handleDialogClose();
-        }
+        this.CSVImportAddMembers(members, filename);
       } else {
-        this.setState(state => {
-          const csvFormat = {
-            error: true,
-            filenames: [...state.csvFormat.filenames, filename]
-          };
-          return { csvFormat };
-        });
+        const csvFormat = {
+          ...this.state.csvFormat,
+          hasError: true,
+          filenames: [...this.state.csvFormat.filenames, filename],
+          errorMessage: "FileCSVColumnsIssue"
+        };
+        this.setState({ csvFormat });
       }
       if (error) {
         console.log("error", error);
@@ -105,6 +85,79 @@ export default class MembersCSVImport extends React.Component<
     };
 
     parse(csv, parseCSVOptions, parseCSV);
+  }
+
+  private CSVImportAddMembers(members: MemberForm[], filename: string): void {
+    const addMembers = (member: any) => {
+      const memberResolver = (resolve: any) => {
+        let newMember: MemberForm = new MemberForm(
+          this.props.form.getDAOTokenSymbol
+        );
+        newMember.$.address.value = member.address;
+        newMember.$.reputation.value = member.reputation;
+        newMember.$.tokens.value = member.tokens;
+        resolve(newMember);
+      };
+      const memberPromise = new Promise<MemberForm>(memberResolver);
+      return memberPromise;
+    };
+
+    const membersPromises = members.map(addMembers);
+    let memberIndex: number = 1;
+    let addMemberErrors: string[] = [];
+    const resolvedMembers = async (resolvedMembers: MemberForm[]) => {
+      for (const addMember of resolvedMembers) {
+        this.props.form.$.push(addMember);
+        memberIndex += 1;
+        const memberValidate = await this.props.form.validate();
+        this.setState({
+          csvFormat: {
+            ...this.state.csvFormat,
+            hasError: memberValidate.hasError
+          }
+        });
+        if (memberValidate.hasError) {
+          const errorMessage = `${this.props.form.error}. Check line ${memberIndex} in file ${filename}`;
+          addMemberErrors.push(errorMessage);
+          this.setState((state: MembersCSVImportState) => {
+            const csvFormat = {
+              ...state.csvFormat,
+              errorMessage: addMemberErrors[0],
+              errorMessages: [...state.csvFormat.errorMessages, errorMessage]
+            };
+            return { csvFormat };
+          });
+          this.props.form.$.pop();
+        } else {
+          console.log("no error uploading csv");
+        }
+      }
+    };
+    if (!(this.state.csvFormat.errorMessage === "FileCSVColumnsIssue")) {
+      Promise.all(membersPromises)
+        .then(resolvedMembers)
+        .then(() => {
+          if (this.state.csvFormat.errorMessages.length > 0) {
+            this.setState({
+              csvFormat: {
+                ...this.state.csvFormat,
+                hasError: true,
+                errorMessages: addMemberErrors
+              }
+            });
+            for (
+              let index = 0;
+              index < membersPromises.length - addMemberErrors.length;
+              index++
+            ) {
+              this.props.form.$.pop();
+            }
+          }
+          if (!this.state.csvFormat.hasError) {
+            this.handleDialogClose();
+          }
+        });
+    }
   }
 
   private isCSVImportValid(csvColumns: Array<string>): boolean {
@@ -125,28 +178,51 @@ export default class MembersCSVImport extends React.Component<
           color={"primary"}
           onClick={async () => {
             this.setState({
-              openDialog: true
+              openDialog: true,
+              csvFormat: {
+                hasError: false,
+                filenames: [],
+                errorMessage: null,
+                errorMessages: []
+              }
             });
           }}
         >
           <AttachFile />
         </Fab>
         <Dialog onClose={this.handleDialogClose} open={openDialog}>
-          {this.state.csvFormat.error ? (
+          {this.state.csvFormat.hasError ? (
             <DialogContent>
-              <p>
-                There has been an error uploading one or more of your csv files.
-                Make sure proper formatting is set on each csv file columns. ie:
-                make sure the first line of each csv file looks exactly like
-                this: "address,reputation,tokens"
-                <br />
-                <strong>An issue has been found in the following files:</strong>
-                {this.state.csvFormat.filenames.map(
-                  (filename: string, index: number) => (
-                    <li key={index}>{filename}</li>
-                  )
-                )}
-              </p>
+              {this.state.csvFormat.errorMessage === "FileCSVColumnsIssue" ? (
+                <p>
+                  There has been an error uploading one or more of your csv
+                  files. Make sure proper formatting is set on each csv file
+                  columns. ie: make sure the first line of each csv file looks
+                  exactly like this: "address,reputation,tokens"
+                  <br />
+                  <strong>
+                    An issue has been found in the following files:
+                  </strong>
+                  {this.state.csvFormat.filenames.map(
+                    (filename: string, index: number) => (
+                      <li key={index}>{filename}</li>
+                    )
+                  )}
+                </p>
+              ) : (
+                <p>
+                  <strong>
+                    We found one or more issues trying to add members uploaded
+                    via csv files.
+                  </strong>
+                  <br />
+                  {this.state.csvFormat.errorMessages.map(
+                    (errorMessage: string, index: number) => (
+                      <li key={index}> {errorMessage} </li>
+                    )
+                  )}
+                </p>
+              )}
             </DialogContent>
           ) : (
             <DialogTitle id="simple-dialog-title">
@@ -167,6 +243,20 @@ export default class MembersCSVImport extends React.Component<
                 accept=".csv"
                 multiple={true}
                 onChange={this.importCSV}
+                onClick={(event: React.MouseEvent) => {
+                  // Need to this so we can select same file again and again for testing.
+                  // Also reset messages in Dialog.
+                  const element = event.target as HTMLInputElement;
+                  element.value = "";
+                  this.setState({
+                    csvFormat: {
+                      hasError: false,
+                      filenames: [],
+                      errorMessage: null,
+                      errorMessages: []
+                    }
+                  });
+                }}
                 style={{ display: "none" }}
               />
             </Button>

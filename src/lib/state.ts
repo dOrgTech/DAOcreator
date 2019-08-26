@@ -42,8 +42,10 @@ export interface WaitingAnimationState {
 }
 
 export interface MembersCSVImportFormat {
-  error: boolean;
+  hasError: boolean;
   filenames: string[];
+  errorMessage: string | null;
+  errorMessages: string[];
 }
 
 export interface MembersCSVImportState {
