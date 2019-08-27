@@ -1,4 +1,5 @@
 import { FieldState, FormState, ValidatableMapOrArray } from "formstate";
+import parse from "csv-parse";
 import {
   requiredText,
   validAddress,
@@ -344,6 +345,80 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
       const memberForm = new MemberForm(this._getDAOTokenSymbol);
       memberForm.fromState(member);
       return memberForm;
+    });
+  }
+
+  public async fromCSV(file: File): Promise<void> {
+    const fileReader = new FileReader();
+    fileReader.readAsText(file);
+
+    await new Promise(
+      (resolve, reject) => (fileReader.onloadend = () => resolve())
+    );
+
+    const csv = fileReader.result;
+
+    if (csv === null) {
+      throw Error(`Unable to read file.`);
+    }
+
+    const parseCSV = (resolve: () => void, reject: (error: Error) => void) => (
+      error: Error | undefined,
+      rows: any
+    ) => {
+      if (error !== undefined) {
+        throw error;
+      }
+
+      const colNames = Object.keys(rows[0]);
+
+      // Verify all necessary columns are present
+      ["address", "reputation", "tokens"].forEach(name => {
+        if (colNames.findIndex(column => column === name) === -1) {
+          reject(new Error(`Missing '${name}' column.`));
+        }
+      });
+
+      rows.forEach(async (row: any, index: number) => {
+        // Create the member
+        const member = new MemberForm(this._getDAOTokenSymbol);
+        member.$.address.value = row.address;
+        member.$.reputation.value = row.reputation;
+        member.$.tokens.value = row.tokens;
+
+        // Validate the member
+        const memberValidate = await member.validate();
+        if (memberValidate.hasError) {
+          reject(
+            new Error(`Invalid member on row ${index}. Error: ${member.error}`)
+          );
+        }
+
+        // Add the member to ourselves
+        this.$.push(member);
+
+        // Validate the collection
+        await this.validate();
+        if (this.hasError) {
+          reject(
+            new Error(
+              `Member on row ${index} is invalid within the collection. Error: ${this.error}`
+            )
+          );
+        }
+
+        if (index === rows.length - 1) {
+          resolve();
+        }
+      });
+    };
+
+    await new Promise((resolve, reject) => {
+      parse(
+        csv as string | Buffer,
+        { columns: true },
+        parseCSV(resolve, reject)
+      );
     });
   }
 }
