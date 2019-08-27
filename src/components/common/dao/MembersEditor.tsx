@@ -14,7 +14,6 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
-import MembersCSVImport from "./MembersCSVImport";
 import MembersImporter from "./MembersImporter";
 import { MemberForm, MembersForm } from "../../../lib/forms";
 
