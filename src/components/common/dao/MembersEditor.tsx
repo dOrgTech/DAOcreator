@@ -32,6 +32,7 @@ class MembersEditor extends React.Component<Props> {
   render() {
     const { classes, form, editable, getDAOTokenSymbol } = this.props;
     const memberForm = this.memberForm;
+
     return (
       <>
         {editable ? (
@@ -53,12 +54,9 @@ class MembersEditor extends React.Component<Props> {
 
                       // See if the new member can be added to the array
                       // without any errors
-                      // console.log('memberForm', memberForm)
-                      const member = new MemberForm(
-                        getDAOTokenSymbol,
-                        memberForm
+                      form.$.push(
+                        new MemberForm(getDAOTokenSymbol, memberForm)
                       );
-                      form.$.push(member);
 
                       const membersValidate = await form.validate();
                       if (membersValidate.hasError) {

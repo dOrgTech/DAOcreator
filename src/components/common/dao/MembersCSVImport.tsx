@@ -10,11 +10,24 @@ import {
 import { AttachFile } from "@material-ui/icons";
 import parse from "csv-parse";
 import { MembersForm, MemberForm } from "../../../lib/forms";
-import { MembersCSVImportState } from "../../../lib/state";
 
 interface Props {
   form: MembersForm;
 }
+
+export interface MembersCSVImportFormat {
+  hasError: boolean;
+  filenames: string[];
+  errorMessage: string | null;
+  errorMessages: string[];
+}
+
+export interface MembersCSVImportState {
+  openDialog: boolean;
+  files: File[];
+  csvFormat: MembersCSVImportFormat;
+}
+
 const INITIAL_STATE = {
   openDialog: false,
   files: [],
@@ -25,6 +38,7 @@ const INITIAL_STATE = {
     errorMessages: []
   }
 };
+
 export default class MembersCSVImport extends React.Component<
   Props,
   MembersCSVImportState
