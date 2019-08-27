@@ -16,23 +16,23 @@ interface Props {
   form: MembersForm;
 }
 
-export interface MembersCSVImportFormat {
+interface State {
+  openDialog: boolean;
+  files: File[];
+  result: ImportResult;
+}
+
+interface ImportResult {
   hasError: boolean;
   filenames: string[];
   errorMessage: string | null;
   errorMessages: string[];
 }
 
-export interface MembersCSVImportState {
-  openDialog: boolean;
-  files: File[];
-  csvFormat: MembersCSVImportFormat;
-}
-
-const INITIAL_STATE = {
+const initState = {
   openDialog: false,
   files: [],
-  csvFormat: {
+  result: {
     hasError: false,
     filenames: [],
     errorMessage: null,
@@ -40,15 +40,13 @@ const INITIAL_STATE = {
   }
 };
 
-export default class MembersCSVImport extends React.Component<
-  Props,
-  MembersCSVImportState
-> {
+export default class MembersCSVImport extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      ...INITIAL_STATE
+      ...initState
     };
+
     this.handleFileRead = this.handleFileRead.bind(this);
     this.importCSV = this.importCSV.bind(this);
     this.importCSVClick = this.importCSVClick.bind(this);
@@ -56,15 +54,7 @@ export default class MembersCSVImport extends React.Component<
   }
 
   public handleDialogClose(): void {
-    this.setState({ ...INITIAL_STATE });
-  }
-
-  public importCSVClick(event: React.MouseEvent) {
-    // Need to this so we can select same file again and again for testing.
-    // Also reset messages in Dialog.
-    const element = event.target as HTMLInputElement;
-    element.value = "";
-    this.clearCSVFormat();
+    this.setState({ ...initState });
   }
 
   public importCSV(event: React.ChangeEvent): void {
@@ -86,23 +76,26 @@ export default class MembersCSVImport extends React.Component<
   }
 
   private handleFileRead(file: FileReader, filename: string): void {
-    const csv: any = file.result;
-    const parseCSVOptions = {
-      columns: true
-    };
+    const csv = file.result as any;
+    const parseCSVOptions = { columns: true };
+
     const parseCSV = (error: Error | undefined, members: MemberForm[]) => {
       const csvColumns = Object.keys(members[0]);
+
       if (this.isCSVImportValid(csvColumns)) {
         this.CSVImportAddMembers(members, filename);
       } else {
-        const csvFormat = {
-          ...this.state.csvFormat,
-          hasError: true,
-          filenames: [...this.state.csvFormat.filenames, filename],
-          errorMessage: "FileCSVColumnsIssue"
-        };
-        this.setState({ csvFormat });
+        this.setState({
+          result: {
+            ...this.state.result,
+            hasError: true,
+            filenames: [...this.state.result.filenames, filename],
+            errorMessage: "FileCSVColumnsIssue"
+          }
+        });
       }
+
+      // TODO: do something with this error
       if (error) {
         console.log("error", error);
       }
@@ -135,21 +128,21 @@ export default class MembersCSVImport extends React.Component<
         csvLineIndex += 1;
         const memberValidate = await this.props.form.validate();
         this.setState({
-          csvFormat: {
-            ...this.state.csvFormat,
+          result: {
+            ...this.state.result,
             hasError: memberValidate.hasError
           }
         });
         if (memberValidate.hasError) {
           const errorMessage = `${this.props.form.error}. Check line ${csvLineIndex} in file ${filename}`;
           addMemberErrors.push(errorMessage);
-          this.setState((state: MembersCSVImportState) => {
-            const csvFormat = {
-              ...state.csvFormat,
+          this.setState((state: State) => {
+            const result = {
+              ...state.result,
               errorMessage: addMemberErrors[0],
-              errorMessages: [...state.csvFormat.errorMessages, errorMessage]
+              errorMessages: [...state.result.errorMessages, errorMessage]
             };
-            return { csvFormat };
+            return { result };
           });
           this.props.form.$.pop();
         } else {
@@ -157,14 +150,14 @@ export default class MembersCSVImport extends React.Component<
         }
       }
     };
-    if (!(this.state.csvFormat.errorMessage === "FileCSVColumnsIssue")) {
+    if (!(this.state.result.errorMessage === "FileCSVColumnsIssue")) {
       Promise.all(membersPromises)
         .then(resolvedMembers)
         .then(() => {
-          if (this.state.csvFormat.errorMessages.length > 0) {
+          if (this.state.result.errorMessages.length > 0) {
             this.setState({
-              csvFormat: {
-                ...this.state.csvFormat,
+              result: {
+                ...this.state.result,
                 hasError: true,
                 errorMessages: addMemberErrors
               }
@@ -178,7 +171,7 @@ export default class MembersCSVImport extends React.Component<
               this.props.form.$.pop();
             }
           }
-          if (!this.state.csvFormat.hasError) {
+          if (!this.state.result.hasError) {
             this.handleDialogClose();
           }
         });
@@ -196,86 +189,23 @@ export default class MembersCSVImport extends React.Component<
 
   private clearCSVFormat(): void {
     this.setState({
-      csvFormat: {
-        ...INITIAL_STATE.csvFormat
+      result: {
+        ...initState.result
       }
     });
   }
 
-  private renderFab() {
-    return (
-      <Fab
-        size={"small"}
-        color={"primary"}
-        onClick={async () => {
-          this.setState({
-            openDialog: true,
-            csvFormat: {
-              ...INITIAL_STATE.csvFormat
-            }
-          });
-        }}
-      >
-        <AttachFile />
-      </Fab>
-    );
-  }
+  // TODO: move the above functions that implement the CSV import functionality
+  // into the library, simplifying the view logic and allowing it to be reused
+  // in other apps.
 
-  private renderDialog(openDialog: boolean) {
-    return (
-      <Dialog onClose={this.handleDialogClose} open={openDialog}>
-        {this.renderDialogContent()}
-        {this.renderFormControl()}
-      </Dialog>
-    );
-  }
-
-  private renderDialogContent() {
-    if (this.state.csvFormat.hasError) {
-      return (
-        <DialogContent>
-          {this.state.csvFormat.errorMessage === "FileCSVColumnsIssue" ? (
-            <p>
-              There has been an error uploading one or more of your csv files.
-              Make sure proper formatting is set on each csv file columns. ie:
-              make sure the first line of each csv file looks exactly like this:
-              "address,reputation,tokens"
-              <br />
-              <strong>An issue has been found in the following files:</strong>
-              {this.state.csvFormat.filenames.map(
-                (filename: string, index: number) => (
-                  <li key={index}>{filename}</li>
-                )
-              )}
-            </p>
-          ) : (
-            <p>
-              <strong>
-                We found one or more issues trying to add members uploaded via
-                csv files.
-              </strong>
-              <br />
-              {this.state.csvFormat.errorMessages.map(
-                (errorMessage: string, index: number) => (
-                  <li key={index}> {errorMessage} </li>
-                )
-              )}
-            </p>
-          )}
-        </DialogContent>
-      );
-    } else {
-      return (
-        <DialogTitle id="simple-dialog-title">
-          Make sure your CSV file has the following columns:
-          <ul>
-            <li>Address</li>
-            <li>Reputation</li>
-            <li>Tokens</li>
-          </ul>
-        </DialogTitle>
-      );
-    }
+  // TODO: Why is this needed? Can it be removed?
+  public importCSVClick(event: React.MouseEvent) {
+    // Need to this so we can select same file again and again for testing.
+    // Also reset messages in Dialog.
+    const element = event.target as HTMLInputElement;
+    element.value = "";
+    this.clearCSVFormat();
   }
 
   private renderFormControl() {
@@ -297,12 +227,75 @@ export default class MembersCSVImport extends React.Component<
     );
   }
 
+  private renderDialogContent() {
+    const {
+      result: { hasError, errorMessage, filenames, errorMessages }
+    } = this.state;
+
+    if (hasError) {
+      return (
+        <DialogContent>
+          {errorMessage === "FileCSVColumnsIssue" ? (
+            <p>
+              There has been an error uploading one or more of your csv files.
+              Make sure proper formatting is set on each csv file columns. ie:
+              make sure the first line of each csv file looks exactly like this:
+              "address,reputation,tokens"
+              <br />
+              <strong>An issue has been found in the following files:</strong>
+              {filenames.map((name: string, index: number) => (
+                <li key={index}>{name}</li>
+              ))}
+            </p>
+          ) : (
+            <p>
+              <strong>
+                We found one or more issues trying to add members uploaded via
+                csv files.
+              </strong>
+              <br />
+              {errorMessages.map((msg: string, index: number) => (
+                <li key={index}> {msg} </li>
+              ))}
+            </p>
+          )}
+        </DialogContent>
+      );
+    } else {
+      return (
+        <DialogTitle id="simple-dialog-title">
+          Make sure your CSV file has the following columns:
+          <ul>
+            <li>Address</li>
+            <li>Reputation</li>
+            <li>Tokens</li>
+          </ul>
+        </DialogTitle>
+      );
+    }
+  }
+
   render() {
     const { openDialog } = this.state;
+
     return (
       <>
-        {this.renderFab()}
-        {this.renderDialog(openDialog)}
+        <Fab
+          size={"small"}
+          color={"primary"}
+          onClick={async () => {
+            this.setState({
+              ...initState,
+              openDialog: true
+            });
+          }}
+        >
+          <AttachFile />
+        </Fab>
+        <Dialog onClose={this.handleDialogClose} open={openDialog}>
+          {this.renderDialogContent()}
+          {this.renderFormControl()}
+        </Dialog>
       </>
     );
   }
