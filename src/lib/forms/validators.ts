@@ -1,5 +1,5 @@
 import { Validator } from "formstate";
-import { TypeValidation } from "../dependency/web3";
+import { TypeValidation } from "lib/dependency/web3";
 import { toBN } from "web3-utils";
 
 type StringOrNull = string | null | undefined;

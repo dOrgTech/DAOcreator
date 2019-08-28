@@ -15,7 +15,7 @@ import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
-import { DAOForm } from "../../../lib/forms";
+import { DAOForm } from "lib/forms";
 import { FormState } from "formstate";
 
 // eslint-disable-next-line

@@ -2,7 +2,7 @@ import { routerMiddleware } from "connected-react-router";
 import { History } from "history";
 import { applyMiddleware, compose, createStore, Store } from "redux";
 import thunkMiddleware from "redux-thunk";
-import reducer from "../reducers";
+import reducer from "lib/redux/reducers";
 
 export function configureStore(history: History): Store<any> {
   // Redux DevTools

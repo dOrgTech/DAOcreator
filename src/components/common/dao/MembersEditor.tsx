@@ -14,7 +14,7 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
-import { MemberForm, MembersForm } from "../../../lib/forms";
+import { MemberForm, MembersForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

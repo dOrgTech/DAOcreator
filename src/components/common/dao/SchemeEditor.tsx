@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import {
   Theme,
   createStyles,
@@ -14,9 +15,8 @@ import {
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
 import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
-import { AnySchemeForm } from "../../../lib/forms";
-import FormField from "../FormField";
-import { observer } from "mobx-react";
+import { AnySchemeForm } from "lib/forms";
+import FormField from "components/common/FormField";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

@@ -18,8 +18,8 @@ import {
   DialogActions
 } from "@material-ui/core";
 import ReactPlayer from "react-player";
-import { DAOcreatorState } from "../../../lib/state";
-import { serializeDAO } from "../../../lib/dependency/arc";
+import { DAOcreatorState } from "lib/state";
+import { serializeDAO } from "lib/dependency/arc";
 
 const FileSaver = require("file-saver");
 

@@ -1,6 +1,6 @@
 import * as React from "react";
-import FormField from "../FormField";
-import { GenesisProtocolForm } from "../../../lib/forms";
+import FormField from "components/common/FormField";
+import { GenesisProtocolForm } from "lib/forms";
 
 interface Props {
   form: GenesisProtocolForm;

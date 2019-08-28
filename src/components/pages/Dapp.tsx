@@ -9,7 +9,7 @@ import {
   WithStyles,
   createStyles
 } from "@material-ui/core";
-import InfoPage from "../common/InfoPage";
+import InfoPage from "components/common/InfoPage";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
