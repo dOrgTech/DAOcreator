@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Grid } from "@material-ui/core";
-import FormField from "../FormField";
-import { MemberForm } from "../../../lib/forms";
+import FormField from "components/common/FormField";
+import { MemberForm } from "lib/forms";
 
 interface Props {
   form: MemberForm;

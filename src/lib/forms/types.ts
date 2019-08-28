@@ -26,9 +26,9 @@ import {
   GenericScheme,
   ContributionReward,
   SchemeRegistrar
-} from "../state";
-import { TypeConversion } from "../dependency/web3";
-import { SchemeType, GenesisProtocolPreset } from "../dependency/arc";
+} from "lib/state";
+import { TypeConversion } from "lib/dependency/web3";
+import { SchemeType, GenesisProtocolPreset } from "lib/dependency/arc";
 const { toBN } = TypeConversion;
 
 export enum FieldType {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Grid } from "@material-ui/core";
-import FormField from "../FormField";
-import { DAOConfigForm } from "../../../lib/forms";
+import FormField from "components/common/FormField";
+import { DAOConfigForm } from "lib/forms";
 
 interface Props {
   form: DAOConfigForm;

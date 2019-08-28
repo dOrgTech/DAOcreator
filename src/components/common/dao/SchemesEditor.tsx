@@ -21,8 +21,8 @@ import {
   GenericSchemeForm,
   ContributionRewardForm,
   SchemeRegistrarForm
-} from "../../../lib/forms";
-import { SchemeType } from "../../../lib/dependency/arc";
+} from "lib/forms";
+import { SchemeType } from "lib/dependency/arc";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
