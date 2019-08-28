@@ -179,7 +179,7 @@ export const noDuplicates = (evaluate: (a: any, b: any) => boolean) => (
       const b = array[k];
 
       if (evaluate(a, b)) {
-        return "This is a duplicate entry.";
+        return "Duplicate entry detected.";
       }
     }
   }
