@@ -331,7 +331,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
       requireElement("Member"),
       noDuplicates(
         (a: MemberForm, b: MemberForm) =>
-          a.$.address.value === b.$.address.value
+          a.$.address.value.toLowerCase() === b.$.address.value.toLowerCase()
       )
     );
   }

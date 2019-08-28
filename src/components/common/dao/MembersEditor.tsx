@@ -112,7 +112,10 @@ class MembersEditor extends React.Component<Props> {
                 <Fab
                   size={"small"}
                   color={"secondary"}
-                  onClick={() => form.$.splice(index, 1)}
+                  onClick={() => {
+                    form.$.splice(index, 1);
+                    this.forceUpdate();
+                  }}
                 >
                   <RemIcon />
                 </Fab>
