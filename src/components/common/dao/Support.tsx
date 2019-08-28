@@ -80,8 +80,8 @@ const styles = (theme: Theme) =>
     },
     menuPaper: {
       background: "rgba(2, 46, 46, 0.9)",
-      height: "unset",
-      top: "75px"
+      height: "unset"
+      // top: "75px"
     },
     menuItem: {
       color: "#4bd2c6"
