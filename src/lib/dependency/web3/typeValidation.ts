@@ -2,7 +2,8 @@ import * as Web3Utils from "web3-utils";
 import { Address } from "./types";
 
 export const isAddress = (address: Address): boolean => {
-  return Web3Utils.isAddress(address);
+  const addr = address.toLowerCase();
+  return addr[0] === "0" && addr[1] === "x" && Web3Utils.isAddress(addr);
 };
 
 export const isBigNumber = (number: string | number): boolean => {

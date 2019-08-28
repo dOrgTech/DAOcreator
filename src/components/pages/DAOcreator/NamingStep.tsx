@@ -9,8 +9,8 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
-import { DAOConfigForm } from "../../../lib/forms";
+import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import { DAOConfigForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

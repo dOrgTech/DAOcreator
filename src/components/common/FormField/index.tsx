@@ -30,8 +30,8 @@ import {
   DateTimeField,
   PercentageField,
   AddressField
-} from "../../../lib/forms";
-import EthAddressAvatar from "../EthAddressAvatar";
+} from "lib/forms";
+import EthAddressAvatar from "components/common/EthAddressAvatar";
 
 export interface Props {
   field: AnyField;

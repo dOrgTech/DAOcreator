@@ -1,5 +1,5 @@
 import { Validator } from "formstate";
-import { TypeValidation } from "../dependency/web3";
+import { TypeValidation } from "lib/dependency/web3";
 import { toBN } from "web3-utils";
 
 type StringOrNull = string | null | undefined;
@@ -179,7 +179,7 @@ export const noDuplicates = (evaluate: (a: any, b: any) => boolean) => (
       const b = array[k];
 
       if (evaluate(a, b)) {
-        return "This is a duplicate entry.";
+        return "Duplicate entry detected.";
       }
     }
   }

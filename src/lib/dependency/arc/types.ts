@@ -1,4 +1,9 @@
-import { Address, keccak256, encodeParameters, TypeConversion } from "../web3";
+import {
+  Address,
+  keccak256,
+  encodeParameters,
+  TypeConversion
+} from "lib/dependency/web3";
 import BN from "bn.js";
 const { toBN } = TypeConversion;
 

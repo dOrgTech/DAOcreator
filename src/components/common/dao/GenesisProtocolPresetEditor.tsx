@@ -16,8 +16,8 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
-import { GenesisProtocolForm } from "../../../lib/forms";
-import { GenesisProtocolPreset } from "../../../lib/dependency/arc";
+import { GenesisProtocolForm } from "lib/forms";
+import { GenesisProtocolPreset } from "lib/dependency/arc";
 
 interface Props {
   form: GenesisProtocolForm;

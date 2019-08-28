@@ -14,7 +14,8 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
-import { MemberForm, MembersForm } from "../../../lib/forms";
+import MembersImporter from "./MembersImporter";
+import { MemberForm, MembersForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -72,6 +73,12 @@ class MembersEditor extends React.Component<Props> {
                   </Fab>
                 </FormControl>
               </Grid>
+              <Grid item className={classes.button}>
+                <MembersImporter
+                  form={form}
+                  membersAdded={() => this.forceUpdate()}
+                />
+              </Grid>
             </Grid>
 
             <Grid container justify={"center"}>
@@ -105,7 +112,10 @@ class MembersEditor extends React.Component<Props> {
                 <Fab
                   size={"small"}
                   color={"secondary"}
-                  onClick={() => form.$.splice(index, 1)}
+                  onClick={() => {
+                    form.$.splice(index, 1);
+                    this.forceUpdate();
+                  }}
                 >
                   <RemIcon />
                 </Fab>
