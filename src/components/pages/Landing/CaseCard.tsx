@@ -12,7 +12,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import TestIcon from "@material-ui/icons/ExitToApp";
-import GitHubIcon from "../../common/icons/GitHub";
+import GitHubIcon from "components/common/icons/GitHub";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

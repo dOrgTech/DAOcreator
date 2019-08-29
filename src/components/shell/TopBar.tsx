@@ -18,8 +18,8 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
-import GitHubIcon from "../common/icons/GitHub";
-import TwitterIcon from "../common/icons/Twitter";
+import GitHubIcon from "components/common/icons/GitHub";
+import TwitterIcon from "components/common/icons/Twitter";
 import "./NeonGlow.css";
 
 // eslint-disable-next-line

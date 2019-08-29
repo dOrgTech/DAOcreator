@@ -8,7 +8,7 @@ import {
   Button
 } from "@material-ui/core";
 import ImportIcon from "@material-ui/icons/AttachFile";
-import { MembersForm } from "../../../lib/forms";
+import { MembersForm } from "lib/forms";
 
 interface ImportError {
   file: string;
