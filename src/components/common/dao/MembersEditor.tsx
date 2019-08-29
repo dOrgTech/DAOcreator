@@ -74,10 +74,7 @@ class MembersEditor extends React.Component<Props> {
                 </FormControl>
               </Grid>
               <Grid item className={classes.button}>
-                <MembersImporter
-                  form={form}
-                  membersAdded={() => this.forceUpdate()}
-                />
+                <MembersImporter form={form} />
               </Grid>
             </Grid>
 
@@ -112,10 +109,7 @@ class MembersEditor extends React.Component<Props> {
                 <Fab
                   size={"small"}
                   color={"secondary"}
-                  onClick={() => {
-                    form.$.splice(index, 1);
-                    this.forceUpdate();
-                  }}
+                  onClick={() => form.$.splice(index, 1)}
                 >
                   <RemIcon />
                 </Fab>
