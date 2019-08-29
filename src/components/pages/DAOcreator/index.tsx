@@ -163,8 +163,8 @@ class DAOcreator extends React.Component<Props, State> {
               </Button>
             )}
           </div>
-          <Support />
         </div>
+        <Support />
       </>
     );
   }
