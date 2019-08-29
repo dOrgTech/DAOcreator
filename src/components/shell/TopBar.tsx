@@ -19,7 +19,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import GitHubIcon from "components/common/icons/GitHub";
-import TwitterIcon from "components/common/icons/Twitter";
+import DiscordIcon from "components/common/icons/Discord";
 import "./NeonGlow.css";
 
 // eslint-disable-next-line
@@ -68,6 +68,13 @@ const TopBar: React.SFC<Props> = ({
                 title: "Join dOrg",
                 onClick: () =>
                   window.open("https://dorgtech.typeform.com/to/a1rMob")
+              },
+              {
+                title: "View Our DAO",
+                onClick: () =>
+                  window.open(
+                    "https://alchemy.daostack.io/dao/0xbe1a98d3452f6da6e0984589e545d4fc25af7526"
+                  )
               }
             ].map(item => (
               <ListItem
@@ -102,9 +109,9 @@ const TopBar: React.SFC<Props> = ({
           <IconButton
             className={classes.contactIcon}
             size={"small"}
-            onClick={() => window.open("https://twitter.com/dOrg_tech")}
+            onClick={() => window.open("https://discord.gg/Z5R4CcS")}
           >
-            <TwitterIcon />
+            <DiscordIcon />
           </IconButton>
           <IconButton
             className={classes.contactIcon}
@@ -139,7 +146,7 @@ const styles = (theme: Theme) =>
     },
     menuPaper: {
       background: "rgba(2, 46, 46, 0.9)",
-      height: "260px",
+      height: "305px",
       top: "75px"
     },
     menuItem: {
