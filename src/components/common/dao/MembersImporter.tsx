@@ -17,7 +17,6 @@ interface ImportError {
 
 interface Props {
   form: MembersForm;
-  membersAdded: () => void;
 }
 
 interface State {
@@ -39,7 +38,7 @@ export default class MembersImporter extends React.Component<Props, State> {
   }
 
   render() {
-    const { form, membersAdded } = this.props;
+    const { form } = this.props;
     const { open, error } = this.state;
 
     const onOpen = () =>
@@ -89,8 +88,9 @@ export default class MembersImporter extends React.Component<Props, State> {
         }
       }
 
-      form.$ = [...formClone.$];
-      membersAdded();
+      form.$.splice(0, form.$.length);
+      form.$.push(...formClone.$);
+
       onClose();
     };
 
