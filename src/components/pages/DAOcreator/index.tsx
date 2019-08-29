@@ -15,6 +15,7 @@ import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
+import Support from "components/common/Support";
 import { DAOForm } from "lib/forms";
 import { FormState } from "formstate";
 
@@ -125,43 +126,46 @@ class DAOcreator extends React.Component<Props, State> {
     };
 
     return (
-      <div className={classes.root}>
-        <Card>
-          <Stepper className={classes.stepper} activeStep={step}>
-            {steps.map(thisStep => (
-              <Step key={thisStep.title}>
-                <StepLabel>{thisStep.title}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Card>
-        <div className={classes.content}>
-          <Component form={form} {...props} />
-        </div>
-        <div>
-          <Button
-            variant={"contained"}
-            color={"primary"}
-            disabled={step === 0}
-            onClick={previousStep}
-            className={classes.button}
-          >
-            Back
-          </Button>
-          {isLastStep ? (
-            <></>
-          ) : (
+      <>
+        <div className={classes.root}>
+          <Card>
+            <Stepper className={classes.stepper} activeStep={step}>
+              {steps.map(thisStep => (
+                <Step key={thisStep.title}>
+                  <StepLabel>{thisStep.title}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Card>
+          <div className={classes.content}>
+            <Component form={form} {...props} />
+          </div>
+          <div>
             <Button
               variant={"contained"}
               color={"primary"}
-              onClick={nextStep}
+              disabled={step === 0}
+              onClick={previousStep}
               className={classes.button}
             >
-              Next
+              Back
             </Button>
-          )}
+            {isLastStep ? (
+              <></>
+            ) : (
+              <Button
+                variant={"contained"}
+                color={"primary"}
+                onClick={nextStep}
+                className={classes.button}
+              >
+                Next
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+        <Support />
+      </>
     );
   }
 }
