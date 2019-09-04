@@ -15,6 +15,7 @@ import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import MemberEditor from "./MemberEditor";
 import MembersImporter from "./MembersImporter";
+import MembersExporter from "./MembersExporter";
 import { MemberForm, MembersForm } from "lib/forms";
 
 // eslint-disable-next-line
@@ -75,6 +76,9 @@ class MembersEditor extends React.Component<Props> {
               </Grid>
               <Grid item className={classes.button}>
                 <MembersImporter form={form} />
+              </Grid>
+              <Grid item className={classes.button}>
+                <MembersExporter form={form} />
               </Grid>
             </Grid>
 
