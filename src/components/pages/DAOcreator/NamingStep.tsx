@@ -18,11 +18,12 @@ import { DAOConfig } from "lib/state";
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm;
   sendToReviewStep: DAOConfig;
+  updateForms: any;
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form, sendToReviewStep } = this.props;
+    const { classes, form, sendToReviewStep, updateForms } = this.props;
 
     return (
       <Card>
@@ -45,7 +46,10 @@ class NamingStep extends React.Component<Props> {
                 </Typography>
               </Grid>
               <DAOConfigEditor form={form} editable={true} />
-              <SettingsImport sendToReviewStep={sendToReviewStep} />
+              <SettingsImport
+                sendToReviewStep={sendToReviewStep}
+                updateForms={updateForms}
+              />
             </Grid>
           </CardContent>
         </form>

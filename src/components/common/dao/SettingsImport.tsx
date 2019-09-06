@@ -21,6 +21,7 @@ interface State {
 
 interface Props {
   sendToReviewStep: any;
+  updateForms: any;
 }
 
 const initState = {
@@ -36,7 +37,7 @@ export default class SettingsImport extends React.Component<Props, State> {
     };
   }
   render() {
-    const { sendToReviewStep } = this.props;
+    const { sendToReviewStep, updateForms } = this.props;
     const { open, error } = this.state;
     const onOpen = () => {
       this.setState({
@@ -60,12 +61,28 @@ export default class SettingsImport extends React.Component<Props, State> {
       </DialogContent>
     );
 
-    // const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // this.setState({
-    // 	open: false
-    // })
-    // sendToReviewStep();
-    // };
+    const importJSON = (event: React.ChangeEvent<HTMLInputElement>): void => {
+      if (event.target.files === null) {
+        return;
+      }
+
+      const target = event.target as HTMLInputElement;
+      const file: File = target.files![0];
+      handleFileChosen(file);
+
+      this.setState({
+        open: false
+      });
+    };
+
+    const handleFileChosen = (file: File): void => {
+      let fileReader = new FileReader();
+      fileReader.readAsText(file);
+      fileReader.onload = () => {
+        updateForms(fileReader.result);
+        sendToReviewStep();
+      };
+    };
 
     const ImportButton = () => (
       <FormControl>
@@ -75,7 +92,7 @@ export default class SettingsImport extends React.Component<Props, State> {
             type="file"
             id="file"
             accept=".json"
-            onChange={() => sendToReviewStep()}
+            onChange={importJSON}
             style={{ display: "none" }}
           />
         </Button>

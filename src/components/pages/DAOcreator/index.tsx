@@ -48,6 +48,13 @@ class DAOcreator extends React.Component<Props, State> {
   }
 
   render() {
+    const updateForms = (params: string) => {
+      const daoParams = JSON.parse(params);
+      this.form.$.config.$.daoName.value = daoParams.orgName;
+      this.form.$.config.$.tokenName.value = daoParams.tokenName;
+      this.form.$.config.$.tokenSymbol.value = daoParams.tokenSymbol;
+    };
+
     const steps: Step[] = [
       {
         title: "Name",
@@ -59,7 +66,8 @@ class DAOcreator extends React.Component<Props, State> {
               step: 3,
               error: ""
             });
-          }
+          },
+          updateForms: updateForms
         }
       },
       {
