@@ -60,12 +60,12 @@ export default class SettingsImport extends React.Component<Props, State> {
       </DialogContent>
     );
 
-    const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-      // this.setState({
-      // 	open: false
-      // })
-      sendToReviewStep();
-    };
+    // const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // this.setState({
+    // 	open: false
+    // })
+    // sendToReviewStep();
+    // };
 
     const ImportButton = () => (
       <FormControl>
