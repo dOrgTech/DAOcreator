@@ -10,16 +10,19 @@ import {
   WithStyles
 } from "@material-ui/core";
 import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import SettingsImport from "components/common/dao/SettingsImport";
 import { DAOConfigForm } from "lib/forms";
+import { DAOConfig } from "lib/state";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm;
+  sendToReviewStep: DAOConfig;
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, sendToReviewStep } = this.props;
 
     return (
       <Card>
@@ -42,6 +45,7 @@ class NamingStep extends React.Component<Props> {
                 </Typography>
               </Grid>
               <DAOConfigEditor form={form} editable={true} />
+              <SettingsImport sendToReviewStep={sendToReviewStep} />
             </Grid>
           </CardContent>
         </form>

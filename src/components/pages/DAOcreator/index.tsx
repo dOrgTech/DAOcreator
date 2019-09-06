@@ -52,7 +52,15 @@ class DAOcreator extends React.Component<Props, State> {
       {
         title: "Name",
         form: this.form.$.config,
-        Component: NamingStep
+        Component: NamingStep,
+        props: {
+          sendToReviewStep: () => {
+            this.setState({
+              step: 3,
+              error: ""
+            });
+          }
+        }
       },
       {
         title: "Schemes",
