@@ -137,6 +137,7 @@ export class DateTimeField extends FriendlyField<
   }
 }
 
+// TODO: enforce formatting
 // Format: DD:hh:mm:ss
 export class DurationField extends FriendlyField<string, DurationField> {
   get days(): number {
