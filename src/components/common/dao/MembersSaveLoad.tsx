@@ -1,14 +1,17 @@
 import * as React from "react";
 import {
-  Fab,
   FormControl,
   Dialog,
   DialogTitle,
   DialogContent,
-  Button
+  Button,
+  ButtonGroup,
+  Grid
 } from "@material-ui/core";
-import ImportIcon from "@material-ui/icons/AttachFile";
+import DownloadIcon from "@material-ui/icons/Archive";
+import ImportIcon from "@material-ui/icons/Unarchive";
 import { MembersForm } from "lib/forms";
+import { saveAs } from "file-saver";
 
 interface ImportError {
   file: string;
@@ -29,7 +32,7 @@ const initState = {
   error: undefined
 };
 
-export default class MembersImporter extends React.Component<Props, State> {
+export default class MembersSaveLoad extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -97,11 +100,33 @@ export default class MembersImporter extends React.Component<Props, State> {
     const ImportInfo = () => (
       <DialogTitle id="simple-dialog-title">
         Make sure your CSV file has the following columns:
-        <ul>
-          <li>address</li>
-          <li>reputation</li>
-          <li>tokens</li>
-        </ul>
+        <Grid
+          container
+          direction={"row"}
+          justify={"space-around"}
+          alignItems={"center"}
+        >
+          <Grid item>
+            <ul>
+              <li>address</li>
+              <li>reputation</li>
+              <li>tokens</li>
+            </ul>
+          </Grid>
+          <Grid item>
+            Need a template?
+            <Grid container justify={"center"}>
+              <Button
+                onClick={onDownloadTemplate}
+                size={"small"}
+                color={"primary"}
+                variant={"contained"}
+              >
+                <DownloadIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </DialogTitle>
     );
 
@@ -117,7 +142,7 @@ export default class MembersImporter extends React.Component<Props, State> {
 
     const ImportButton = () => (
       <FormControl>
-        <Button variant="contained" component="label">
+        <Button color={"primary"} variant={"contained"} component="label">
           Upload File
           <input
             type="file"
@@ -131,16 +156,28 @@ export default class MembersImporter extends React.Component<Props, State> {
       </FormControl>
     );
 
+    const onDownload = async () => {
+      saveAs(new File([await form.toCSV()], "dao-members.csv"));
+    };
+
+    const onDownloadTemplate = async () => {
+      const emptyForm = new MembersForm(form.getDAOTokenSymbol);
+      saveAs(new File([await emptyForm.toCSV()], "dao-members.csv"));
+    };
+
     return (
-      <>
-        <Fab size={"small"} color={"primary"} onClick={onOpen}>
+      <ButtonGroup size={"small"} color={"primary"} variant={"contained"}>
+        <Button onClick={onDownload}>
+          <DownloadIcon />
+        </Button>
+        <Button onClick={onOpen}>
           <ImportIcon />
-        </Fab>
+        </Button>
         <Dialog onClose={onClose} open={open}>
           {error ? <ImportErrors error={error} /> : <ImportInfo />}
           <ImportButton />
         </Dialog>
-      </>
+      </ButtonGroup>
     );
   }
 }

@@ -1,5 +1,6 @@
 import { FieldState, FormState, ValidatableMapOrArray } from "formstate";
-import parse from "csv-parse";
+import csvParse from "csv-parse";
+import csvStringify from "csv-stringify";
 import {
   requiredText,
   validAddress,
@@ -371,12 +372,18 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
         throw error;
       }
 
+      if (!rows || rows.length === 0) {
+        reject(new Error("Empty CSV"));
+        return;
+      }
+
       const colNames = Object.keys(rows[0]);
 
       // Verify all necessary columns are present
       ["address", "reputation", "tokens"].forEach(name => {
         if (colNames.findIndex(column => column === name) === -1) {
           reject(new Error(`Missing '${name}' column.`));
+          return;
         }
       });
 
@@ -393,6 +400,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
           reject(
             new Error(`Invalid member on row ${index}. Error: ${member.error}`)
           );
+          return;
         }
 
         // Add the member to ourselves
@@ -406,6 +414,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
               `Member on row ${index} is invalid within the collection. Error: ${this.error}`
             )
           );
+          return;
         }
 
         if (index === rows.length - 1) {
@@ -415,11 +424,32 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
     };
 
     await new Promise((resolve, reject) => {
-      parse(
+      csvParse(
         csv as string | Buffer,
         { columns: true },
         parseCSV(resolve, reject)
       );
+    });
+  }
+
+  public toCSV(): Promise<string> {
+    const csvData = [
+      ["address", "reputation", "tokens"],
+      ...this.$.map(member => [
+        member.$.address.value,
+        member.$.reputation.value,
+        member.$.tokens.value
+      ])
+    ];
+
+    return new Promise((resolve, reject) => {
+      csvStringify(csvData, (err, output) => {
+        if (output === undefined) {
+          reject(new Error("CSV Stringify result should always be defined."));
+        } else {
+          resolve(output);
+        }
+      });
     });
   }
 }
