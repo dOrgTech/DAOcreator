@@ -1,5 +1,6 @@
 import { FieldState, FormState, ValidatableMapOrArray } from "formstate";
-import parse from "csv-parse";
+import csvParse from "csv-parse";
+import csvStringify from "csv-stringify";
 import {
   requiredText,
   validAddress,
@@ -414,11 +415,32 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
     };
 
     await new Promise((resolve, reject) => {
-      parse(
+      csvParse(
         csv as string | Buffer,
         { columns: true },
         parseCSV(resolve, reject)
       );
+    });
+  }
+
+  public toCSV(): Promise<string> {
+    const csvData = [
+      ["address", "reputation", "token"],
+      ...this.$.map(member => [
+        member.$.address.value,
+        member.$.reputation.value,
+        member.$.tokens.value
+      ])
+    ];
+
+    return new Promise((resolve, reject) => {
+      csvStringify(csvData, (err, output) => {
+        if (output === undefined) {
+          reject(new Error("CSV Stringify result should always be defined."));
+        } else {
+          resolve(output);
+        }
+      });
     });
   }
 }
