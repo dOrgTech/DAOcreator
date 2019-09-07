@@ -371,12 +371,18 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
         throw error;
       }
 
+      if (!rows || rows.length === 0) {
+        reject(new Error("Empty CSV"));
+        return;
+      }
+
       const colNames = Object.keys(rows[0]);
 
       // Verify all necessary columns are present
       ["address", "reputation", "tokens"].forEach(name => {
         if (colNames.findIndex(column => column === name) === -1) {
           reject(new Error(`Missing '${name}' column.`));
+          return;
         }
       });
 
@@ -393,6 +399,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
           reject(
             new Error(`Invalid member on row ${index}. Error: ${member.error}`)
           );
+          return;
         }
 
         // Add the member to ourselves
@@ -406,6 +413,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
               `Member on row ${index} is invalid within the collection. Error: ${this.error}`
             )
           );
+          return;
         }
 
         if (index === rows.length - 1) {
@@ -425,7 +433,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
 
   public toCSV(): Promise<string> {
     const csvData = [
-      ["address", "reputation", "token"],
+      ["address", "reputation", "tokens"],
       ...this.$.map(member => [
         member.$.address.value,
         member.$.reputation.value,
