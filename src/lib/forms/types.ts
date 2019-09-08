@@ -212,16 +212,12 @@ export type AnyField =
   | PercentageField;
 
 export abstract class FriendlyForm<
-  StateType,
   T extends ValidatableMapOrArray
 > extends FormState<T> {
-  public abstract toState(): StateType;
-  public abstract fromState(state: StateType): void;
-
   private _description: string = "";
   private _displayName: string = "";
 
-  setDescription(description: string): FriendlyForm<StateType, T> {
+  setDescription(description: string): FriendlyForm<T> {
     this._description = description;
     return this;
   }
@@ -230,7 +226,7 @@ export abstract class FriendlyForm<
     return this._description;
   }
 
-  setDisplayName(displayName: string): FriendlyForm<StateType, T> {
+  setDisplayName(displayName: string): FriendlyForm<T> {
     this._displayName = displayName;
     return this;
   }
@@ -240,7 +236,22 @@ export abstract class FriendlyForm<
   }
 }
 
-export class DAOForm extends FriendlyForm<
+export abstract class ExpertForm<
+  StateType,
+  T extends ValidatableMapOrArray
+> extends FriendlyForm<T> {
+  public abstract toState(): StateType;
+  public abstract fromState(state: StateType): void;
+}
+
+export abstract class SimpleForm<
+  ExpertFormType extends ExpertForm<any, any>,
+  T extends ValidatableMapOrArray
+> extends FriendlyForm<T> {
+  public abstract toExpert(): ExpertFormType;
+}
+
+export class DAOForm extends ExpertForm<
   DAOcreatorState,
   {
     config: DAOConfigForm;
@@ -277,7 +288,7 @@ export class DAOForm extends FriendlyForm<
   }
 }
 
-export class DAOConfigForm extends FriendlyForm<
+export class DAOConfigForm extends ExpertForm<
   DAOConfig,
   {
     daoName: StringField;
@@ -319,7 +330,37 @@ export class DAOConfigForm extends FriendlyForm<
   }
 }
 
-export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
+export class SimpleDAOConfigForm extends SimpleForm<
+  DAOConfigForm,
+  {
+    daoName: StringField;
+    daoSymbol: StringField;
+  }
+> {
+  constructor(form?: SimpleDAOConfigForm) {
+    super({
+      daoName: new StringField(form ? form.$.daoName.value : "")
+        .validators(requiredText, validName)
+        .setDisplayName("DAO Name")
+        .setDescription("The name of the DAO."),
+
+      daoSymbol: new StringField(form ? form.$.daoSymbol.value : "")
+        .validators(requiredText, validTokenSymbol)
+        .setDisplayName("DAO Symbol")
+        .setDescription("The DAO's 4 letter symbol.")
+    });
+  }
+
+  public toExpert(): DAOConfigForm {
+    const form = new DAOConfigForm();
+    form.$.daoName.value = this.$.daoName.value;
+    form.$.tokenName.value = this.$.daoName.value;
+    form.$.tokenSymbol.value = this.$.daoSymbol.value;
+    return form;
+  }
+}
+
+export class MembersForm extends ExpertForm<Member[], MemberForm[]> {
   private _getDAOTokenSymbol: () => string;
 
   public get getDAOTokenSymbol(): () => string {
@@ -454,7 +495,7 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
   }
 }
 
-export class MemberForm extends FriendlyForm<
+export class MemberForm extends ExpertForm<
   Member,
   {
     address: AddressField;
@@ -510,7 +551,7 @@ export interface GenesisProtocolFormOpts {
   preset?: GenesisProtocolPreset;
 }
 
-export class GenesisProtocolForm extends FriendlyForm<
+export class GenesisProtocolForm extends ExpertForm<
   GenesisProtocol,
   {
     queuedVotePeriodLimit: DurationField;
@@ -776,7 +817,7 @@ export class GenesisProtocolForm extends FriendlyForm<
 export abstract class SchemeForm<
   StateType extends Scheme,
   T extends ValidatableMapOrArray & { votingMachine: GenesisProtocolForm }
-> extends FriendlyForm<StateType, T> {
+> extends ExpertForm<StateType, T> {
   public abstract getParams(): AnyField[];
 
   private _type: SchemeType;
@@ -906,7 +947,7 @@ export class SchemeRegistrarForm extends SchemeForm<
   }
 }
 
-export class SchemesForm extends FriendlyForm<Scheme[], AnySchemeForm[]> {
+export class SchemesForm extends ExpertForm<Scheme[], AnySchemeForm[]> {
   constructor(form?: SchemesForm) {
     super(form ? form.$ : ([] as AnySchemeForm[]));
 
