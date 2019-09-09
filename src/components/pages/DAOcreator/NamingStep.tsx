@@ -9,12 +9,13 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
-import { DAOConfigForm } from "lib/forms";
+// import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import SimpleDAOConfigEditor from "components/common/dao/SimpleDAOConfigEditor";
+import { DAOConfigForm, SimpleDAOConfigForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  form: DAOConfigForm;
+  form: SimpleDAOConfigForm;
 }
 
 class NamingStep extends React.Component<Props> {
@@ -41,7 +42,8 @@ class NamingStep extends React.Component<Props> {
                   <br />
                 </Typography>
               </Grid>
-              <DAOConfigEditor form={form} editable={true} />
+              {/*<DAOConfigEditor form={form} editable={true} />*/}
+              <SimpleDAOConfigEditor form={form} editable={true} />
             </Grid>
           </CardContent>
         </form>

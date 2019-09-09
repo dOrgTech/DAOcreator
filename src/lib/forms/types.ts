@@ -254,14 +254,15 @@ export abstract class SimpleForm<
 export class DAOForm extends ExpertForm<
   DAOcreatorState,
   {
-    config: DAOConfigForm;
+    // TODO: properly implement simple mode
+    config: SimpleDAOConfigForm;
     members: MembersForm;
     schemes: SchemesForm;
   }
 > {
   constructor(form?: DAOForm) {
-    const daoConfig = new DAOConfigForm(form ? form.$.config : undefined);
-    const getDAOTokenSymbol = () => daoConfig.$.tokenSymbol.value;
+    const daoConfig = new SimpleDAOConfigForm(form ? form.$.config : undefined);
+    const getDAOTokenSymbol = () => daoConfig.$.daoSymbol.value;
 
     super({
       config: daoConfig,
@@ -275,14 +276,20 @@ export class DAOForm extends ExpertForm<
 
   public toState(): DAOcreatorState {
     return {
-      config: this.$.config.toState(),
+      config: this.$.config.toExpert().toState(),
       members: this.$.members.toState(),
       schemes: this.$.schemes.toState()
     };
   }
 
   public fromState(state: DAOcreatorState) {
-    this.$.config.fromState(state.config);
+    // WIP
+    // const expertConfig = new DAOConfigForm();
+    // expertConfig.fromState(state);
+    // this.$.config.fromExpert(expertConfig);
+    // this.$.config.fromExpert().fromState(state.config);
+    // original below
+    this.$.members.fromState(state.members);
     this.$.members.fromState(state.members);
     this.$.schemes.fromState(state.schemes);
   }
@@ -356,6 +363,11 @@ export class SimpleDAOConfigForm extends SimpleForm<
     form.$.daoName.value = this.$.daoName.value;
     form.$.tokenName.value = this.$.daoName.value;
     form.$.tokenSymbol.value = this.$.daoSymbol.value;
+    return form;
+  }
+  /// WIP here we need to set the simple inputs based from expert
+  public fromExpert(state: any) {
+    const form = new DAOConfigForm(state);
     return form;
   }
 }
