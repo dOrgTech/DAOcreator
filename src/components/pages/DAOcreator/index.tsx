@@ -16,8 +16,10 @@ import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
-import { DAOForm } from "lib/forms";
+import { DAOForm, MemberForm } from "lib/forms";
 import { FormState } from "formstate";
+import { DAOMigrationParams, DAOcreatorState } from "lib/state";
+import { deserializeDAO } from "lib/dependency/arc";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -49,10 +51,28 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const updateForms = (params: string) => {
-      const daoParams = JSON.parse(params);
-      this.form.$.config.$.daoName.value = daoParams.orgName;
-      this.form.$.config.$.tokenName.value = daoParams.tokenName;
-      this.form.$.config.$.tokenSymbol.value = daoParams.tokenSymbol;
+      const daoParams: DAOMigrationParams = JSON.parse(params);
+      const deserializedParams: DAOcreatorState = deserializeDAO(daoParams);
+
+      //this is going to be refactored into another function
+      const { daoName, tokenName, tokenSymbol } = deserializedParams.config;
+
+      this.form.$.config.$.daoName.value = daoName;
+      this.form.$.config.$.tokenName.value = tokenName;
+      this.form.$.config.$.tokenSymbol.value = tokenSymbol;
+
+      const getDAOTokenSymbol = () => {
+        return tokenSymbol;
+      };
+
+      deserializedParams.members.forEach(founder => {
+        const member = new MemberForm(getDAOTokenSymbol);
+        member.$.address.value = founder.address;
+        member.$.reputation.value = founder.reputation.toString();
+        member.$.tokens.value = founder.tokens.toString();
+
+        this.form.$.members.$.push(member);
+      });
     };
 
     const steps: Step[] = [

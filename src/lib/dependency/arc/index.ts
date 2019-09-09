@@ -1,7 +1,8 @@
-import { DAOcreatorState } from "lib/state";
-import { SchemeType, GenericScheme, GenesisProtocol } from "./types";
-
+import { DAOcreatorState, DAOMigrationParams, Member, Scheme } from "lib/state";
+import { SchemeType, GenericScheme, GenesisProtocol, DAOConfig } from "./types";
+import { TypeConversion } from "lib/dependency/web3";
 export * from "./types";
+const { toBN } = TypeConversion;
 
 // TODO: refine the types for DAO in arc/types
 export const serializeDAO = (dao: DAOcreatorState): string => {
@@ -80,4 +81,33 @@ export const serializeDAO = (dao: DAOcreatorState): string => {
   }
 
   return JSON.stringify(json, null, 2);
+};
+
+export const deserializeDAO = (dao: DAOMigrationParams): DAOcreatorState => {
+  const daoConfig: DAOConfig = {
+    daoName: dao.orgName,
+    tokenSymbol: dao.tokenSymbol,
+    tokenName: dao.tokenName
+  };
+
+  let daoMembers: Member[] = [];
+
+  for (const member of dao.founders) {
+    const newFounder: Member = {
+      address: member.address,
+      tokens: toBN(member.tokens),
+      reputation: toBN(member.reputation)
+    };
+    daoMembers.push(newFounder);
+  }
+
+  let daoSchemes: Scheme[] = [];
+
+  const creatorState: DAOcreatorState = {
+    config: daoConfig,
+    members: daoMembers,
+    schemes: daoSchemes
+  };
+
+  return creatorState;
 };
