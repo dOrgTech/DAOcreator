@@ -50,10 +50,11 @@ class DAOcreator extends React.Component<Props, State> {
   }
 
   render() {
-    const updateForms = (params: string) => {
+    const updateForms = async (params: string) => {
       const daoParams: DAOMigrationParams = JSON.parse(params);
-      const deserializedParams: DAOcreatorState = deserializeDAO(daoParams);
-
+      const deserializedParams: DAOcreatorState = await deserializeDAO(
+        daoParams
+      );
       //this is going to be refactored into another function
       const { daoName, tokenName, tokenSymbol } = deserializedParams.config;
 

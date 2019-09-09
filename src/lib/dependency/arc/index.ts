@@ -83,31 +83,43 @@ export const serializeDAO = (dao: DAOcreatorState): string => {
   return JSON.stringify(json, null, 2);
 };
 
-export const deserializeDAO = (dao: DAOMigrationParams): DAOcreatorState => {
-  const daoConfig: DAOConfig = {
-    daoName: dao.orgName,
-    tokenSymbol: dao.tokenSymbol,
-    tokenName: dao.tokenName
-  };
+export const deserializeDAO = (
+  dao: DAOMigrationParams
+): Promise<DAOcreatorState> => {
+  return new Promise<DAOcreatorState>(
+    (
+      resolve: (creatorState: DAOcreatorState) => void,
+      reject: (error: Error) => void
+    ) => {
+      // config
+      const daoConfig: DAOConfig = {
+        daoName: dao.orgName,
+        tokenSymbol: dao.tokenSymbol,
+        tokenName: dao.tokenName
+      };
 
-  let daoMembers: Member[] = [];
+      // members
+      let daoMembers: Member[] = [];
+      for (const member of dao.founders) {
+        const newFounder: Member = {
+          address: member.address,
+          tokens: toBN(member.tokens),
+          reputation: toBN(member.reputation)
+        };
+        daoMembers.push(newFounder);
+      }
 
-  for (const member of dao.founders) {
-    const newFounder: Member = {
-      address: member.address,
-      tokens: toBN(member.tokens),
-      reputation: toBN(member.reputation)
-    };
-    daoMembers.push(newFounder);
-  }
+      //schemes
+      let daoSchemes: Scheme[] = [];
 
-  let daoSchemes: Scheme[] = [];
+      //final object
+      const creatorState: DAOcreatorState = {
+        config: daoConfig,
+        members: daoMembers,
+        schemes: daoSchemes
+      };
 
-  const creatorState: DAOcreatorState = {
-    config: daoConfig,
-    members: daoMembers,
-    schemes: daoSchemes
-  };
-
-  return creatorState;
+      resolve(creatorState);
+    }
+  );
 };
