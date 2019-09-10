@@ -89,7 +89,7 @@ class DAOcreator extends React.Component<Props, State> {
       });
 
       deserializedParams.schemes.forEach(scheme => {
-        const schemeObject: any = new Object();
+        const schemeObject: any = {};
         schemeObject.$ = {};
         const config = scheme.votingMachine.getParameters()[0];
 
