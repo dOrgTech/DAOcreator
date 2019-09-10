@@ -1,7 +1,11 @@
 import { ValidatableMapOrArray } from "formstate";
 import { Form } from "lib/forms/Form";
-// {/*DAOConfigForm,*/}
-import { SimpleDAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
+import {
+  DAOConfigForm,
+  SimpleDAOConfigForm,
+  MembersForm,
+  SchemesForm
+} from "lib/forms";
 import { DAOcreatorState } from "lib/state";
 
 export abstract class ExpertForm<
@@ -17,6 +21,7 @@ export abstract class SimpleForm<
   T extends ValidatableMapOrArray
 > extends Form<ExpertFormType, T> {
   public abstract toExpert(): ExpertFormType;
+  public abstract fromExpert(state: ExpertFormType): void;
 }
 
 export class DAOForm extends ExpertForm<
@@ -51,13 +56,12 @@ export class DAOForm extends ExpertForm<
   }
 
   public fromState(state: DAOcreatorState) {
-    // WIP
-    // const expertConfig = new DAOConfigForm();
-    // expertConfig.fromState(state);
-    // this.$.config.fromExpert(expertConfig);
-    // this.$.config.fromExpert().fromState(state.config);
+    // WIP Need to make changes here.
+    const expertConfig = new DAOConfigForm();
+    expertConfig.fromState(state.config);
+    this.$.config.fromExpert(expertConfig);
     // original below
-    this.$.members.fromState(state.members);
+    // this.$.members.fromState(state.config);
     this.$.members.fromState(state.members);
     this.$.schemes.fromState(state.schemes);
   }

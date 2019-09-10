@@ -58,6 +58,7 @@ export class SimpleDAOConfigForm extends SimpleForm<
   }
 > {
   public fromState(): void {}
+  // getting error here without this function.
   public toState(): DAOConfigForm {
     throw new Error("Method not implemented.");
   }
@@ -82,9 +83,11 @@ export class SimpleDAOConfigForm extends SimpleForm<
     form.$.tokenSymbol.value = this.$.daoSymbol.value;
     return form;
   }
-  /// WIP here we need to set the simple inputs based from expert
-  public fromExpert(state: any) {
-    const form = new DAOConfigForm(state);
+  /// WIP here we need to set the simple inputs based from expert. Need to make some change here
+  public fromExpert(state: DAOConfigForm): SimpleDAOConfigForm {
+    const form = new SimpleDAOConfigForm();
+    form.$.daoName.value = this.$.daoName.value;
+    form.$.daoSymbol.value = this.$.daoSymbol.value;
     return form;
   }
 }
