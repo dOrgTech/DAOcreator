@@ -1,6 +1,6 @@
 import { FormState, ValidatableMapOrArray } from "formstate";
 
-export abstract class FriendlyForm<
+export abstract class Form<
   StateType,
   T extends ValidatableMapOrArray
 > extends FormState<T> {
@@ -10,7 +10,7 @@ export abstract class FriendlyForm<
   private _description: string = "";
   private _displayName: string = "";
 
-  setDescription(description: string): FriendlyForm<StateType, T> {
+  setDescription(description: string): Form<StateType, T> {
     this._description = description;
     return this;
   }
@@ -19,7 +19,7 @@ export abstract class FriendlyForm<
     return this._description;
   }
 
-  setDisplayName(displayName: string): FriendlyForm<StateType, T> {
+  setDisplayName(displayName: string): Form<StateType, T> {
     this._displayName = displayName;
     return this;
   }

@@ -1,16 +1,11 @@
-import { GenesisProtocol } from "lib/state";
-import { TypeConversion } from "lib/dependency/web3";
-import { GenesisProtocolPreset } from "lib/dependency/arc";
+import { Form } from "lib/forms/Form";
 import {
   StringField,
   TokenField,
   DateTimeField,
   DurationField,
   AddressField,
-  PercentageField
-} from "lib/forms/field-types";
-import { FriendlyForm } from "lib/forms/friendly-form";
-import {
+  PercentageField,
   requiredText,
   validAddress,
   validBigNumber,
@@ -19,7 +14,10 @@ import {
   lessThanOrEqual,
   greaterThanOrEqual,
   futureDate
-} from "lib/forms/validators";
+} from "lib/forms";
+import { GenesisProtocol } from "lib/state";
+import { GenesisProtocolPreset } from "lib/dependency/arc";
+import { TypeConversion } from "lib/dependency/web3";
 const { toBN } = TypeConversion;
 
 export interface GenesisProtocolFormOpts {
@@ -27,7 +25,7 @@ export interface GenesisProtocolFormOpts {
   preset?: GenesisProtocolPreset;
 }
 
-export class GenesisProtocolForm extends FriendlyForm<
+export class GenesisProtocolForm extends Form<
   GenesisProtocol,
   {
     queuedVotePeriodLimit: DurationField;

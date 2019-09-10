@@ -1,22 +1,72 @@
-import csvParse from "csv-parse";
-import csvStringify from "csv-stringify";
-
-import { Member } from "lib/state";
-import { TypeConversion } from "lib/dependency/web3";
-
-import { TokenField, AddressField } from "lib/forms/field-types";
-import { FriendlyForm } from "lib/forms/friendly-form";
+import { Form } from "lib/forms/Form";
 import {
+  TokenField,
+  AddressField,
   requiredText,
   validAddress,
   validBigNumber,
   requireElement,
   noDuplicates,
   nonZeroAddress
-} from "lib/forms/validators";
+} from "lib/forms";
+import { Member } from "lib/state";
+import csvParse from "csv-parse";
+import csvStringify from "csv-stringify";
+import { TypeConversion } from "lib/dependency/web3";
 const { toBN } = TypeConversion;
 
-export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
+export class MemberForm extends Form<
+  Member,
+  {
+    address: AddressField;
+    reputation: TokenField;
+    tokens: TokenField;
+  }
+> {
+  private _getDAOTokenSymbol: () => string;
+
+  get getDAOTokenSymbol() {
+    return this._getDAOTokenSymbol;
+  }
+
+  constructor(getDAOTokenSymbol: () => string, form?: MemberForm) {
+    super({
+      address: new AddressField(form ? form.$.address.value : "")
+        .validators(requiredText, validAddress, nonZeroAddress)
+        .setDisplayName("Address")
+        .setDescription("The member's public address."),
+
+      reputation: new TokenField("REP", form ? form.$.reputation.value : "")
+        .validators(requiredText, validBigNumber)
+        .setDisplayName("Reputation")
+        .setDescription(
+          "The member's reputation (voting power) within the DAO."
+        ),
+
+      tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
+        .validators(requiredText, validBigNumber)
+        .setDisplayName("Tokens")
+        .setDescription("The number of DAO tokens this member owns.")
+    });
+    this._getDAOTokenSymbol = getDAOTokenSymbol;
+  }
+
+  public toState(): Member {
+    return {
+      address: this.$.address.value,
+      tokens: toBN(this.$.tokens.value),
+      reputation: toBN(this.$.reputation.value)
+    };
+  }
+
+  public fromState(state: Member) {
+    this.$.address.value = state.address;
+    this.$.reputation.value = state.reputation.toString();
+    this.$.tokens.value = state.tokens.toString();
+  }
+}
+
+export class MembersForm extends Form<Member[], MemberForm[]> {
   private _getDAOTokenSymbol: () => string;
 
   public get getDAOTokenSymbol(): () => string {
@@ -148,56 +198,5 @@ export class MembersForm extends FriendlyForm<Member[], MemberForm[]> {
         }
       });
     });
-  }
-}
-
-export class MemberForm extends FriendlyForm<
-  Member,
-  {
-    address: AddressField;
-    reputation: TokenField;
-    tokens: TokenField;
-  }
-> {
-  private _getDAOTokenSymbol: () => string;
-
-  get getDAOTokenSymbol() {
-    return this._getDAOTokenSymbol;
-  }
-
-  constructor(getDAOTokenSymbol: () => string, form?: MemberForm) {
-    super({
-      address: new AddressField(form ? form.$.address.value : "")
-        .validators(requiredText, validAddress, nonZeroAddress)
-        .setDisplayName("Address")
-        .setDescription("The member's public address."),
-
-      reputation: new TokenField("REP", form ? form.$.reputation.value : "")
-        .validators(requiredText, validBigNumber)
-        .setDisplayName("Reputation")
-        .setDescription(
-          "The member's reputation (voting power) within the DAO."
-        ),
-
-      tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
-        .validators(requiredText, validBigNumber)
-        .setDisplayName("Tokens")
-        .setDescription("The number of DAO tokens this member owns.")
-    });
-    this._getDAOTokenSymbol = getDAOTokenSymbol;
-  }
-
-  public toState(): Member {
-    return {
-      address: this.$.address.value,
-      tokens: toBN(this.$.tokens.value),
-      reputation: toBN(this.$.reputation.value)
-    };
-  }
-
-  public fromState(state: Member) {
-    this.$.address.value = state.address;
-    this.$.reputation.value = state.reputation.toString();
-    this.$.tokens.value = state.tokens.toString();
   }
 }
