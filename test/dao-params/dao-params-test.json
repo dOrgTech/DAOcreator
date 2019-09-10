@@ -22,24 +22,23 @@
     {
       "boostedVotePeriodLimit": 129600,
       "daoBountyConst": 10,
-      "minimumDaoBountyGWei": 50000000000,
+      "minimumDaoBounty": 50000000000,
       "queuedVotePeriodLimit": 604800,
       "queuedVoteRequiredPercentage": 50,
       "preBoostedVotePeriodLimit": 43200,
-      "proposingRepRewardGwei": 0,
+      "proposingRepReward": 190,
       "quietEndingPeriod": 86400,
       "thresholdConst": 1200,
       "voteOnBehalf": "0x0000000000000000000000000000000000000000",
       "votersReputationLossRatio": 0,
-      "activationTime": 0
+      "activationTime": 0,
+      "thresholdConst": 10002
     }
   ],
   "schemes": {
     "ContributionReward": true,
     "GenericScheme": false,
-    "SchemeRegistrar": true,
-    "GlobalConstraintRegistrar": true,
-    "UpgradeScheme": true
+    "SchemeRegistrar": true
   },
   "unregisterOwner": true,
   "useUController": true,
