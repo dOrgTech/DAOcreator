@@ -16,10 +16,23 @@ import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
-import { DAOForm, MemberForm } from "lib/forms";
+import {
+  DAOForm,
+  MemberForm,
+  ContributionRewardForm,
+  GenesisProtocolForm,
+  GenesisProtocolFormOpts,
+  SchemeRegistrarForm,
+  GenericSchemeForm
+} from "lib/forms";
 import { FormState } from "formstate";
 import { DAOMigrationParams, DAOcreatorState } from "lib/state";
-import { deserializeDAO } from "lib/dependency/arc";
+import {
+  deserializeDAO,
+  GenesisProtocolConfig,
+  GenesisProtocol,
+  GenesisProtocolOpts
+} from "lib/dependency/arc";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -73,6 +86,40 @@ class DAOcreator extends React.Component<Props, State> {
         member.$.tokens.value = founder.tokens.toString();
 
         this.form.$.members.$.push(member);
+      });
+
+      deserializedParams.schemes.forEach(scheme => {
+        const schemeObject: any = new Object();
+        schemeObject.$ = {};
+        const config = scheme.votingMachine.getParameters()[0];
+
+        Object.keys(config).forEach(type => {
+          schemeObject["$"][type] = { value: config[type] };
+        });
+
+        const protocolConfig: GenesisProtocolConfig = schemeObject;
+        const votingMachine: GenesisProtocolOpts = { config: protocolConfig };
+        const protocol = new GenesisProtocol(votingMachine);
+        const params = new GenesisProtocolForm(protocol);
+        const formOpts: GenesisProtocolFormOpts = { form: params };
+        const finalForm = new GenesisProtocolForm(formOpts);
+        switch (scheme.constructor.name) {
+          case "SchemeRegistrar":
+            let schemeRegistrar = new SchemeRegistrarForm();
+            schemeRegistrar.$.votingMachine = finalForm;
+            this.form.$.schemes.$.push(schemeRegistrar);
+            break;
+          case "ContributionReward":
+            let contributionReward = new ContributionRewardForm();
+            contributionReward.$.votingMachine = finalForm;
+            this.form.$.schemes.$.push(contributionReward);
+            break;
+          case "GenericScheme":
+            let genericScheme = new GenericSchemeForm();
+            genericScheme.$.votingMachine = finalForm;
+            this.form.$.schemes.$.push(genericScheme);
+            break;
+        }
       });
     };
 

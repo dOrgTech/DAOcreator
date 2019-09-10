@@ -1,9 +1,5 @@
-import {
-  DAOConfig,
-  Member,
-  Scheme,
-  GenesisProtocolConfig
-} from "./dependency/arc";
+import { DAOConfig, Member, Scheme } from "./dependency/arc";
+import { GenesisProtocolForm } from "./forms";
 
 export {
   SchemeType,
@@ -27,7 +23,7 @@ export interface DAOMigrationParams {
   orgName: string;
   tokenName: string;
   tokenSymbol: string;
-  VotingMachineParams: GenesisProtocolConfig[];
+  VotingMachinesParams: GenesisProtocolForm[];
   schemes: {
     ContributionReward?: boolean;
     GenericScheme?: boolean;

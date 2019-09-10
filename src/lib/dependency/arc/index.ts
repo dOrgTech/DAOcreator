@@ -1,6 +1,14 @@
 import { DAOcreatorState, DAOMigrationParams, Member, Scheme } from "lib/state";
-import { SchemeType, GenericScheme, GenesisProtocol, DAOConfig } from "./types";
+import {
+  SchemeType,
+  GenericScheme,
+  GenesisProtocol,
+  DAOConfig,
+  ContributionReward,
+  SchemeRegistrar
+} from "./types";
 import { TypeConversion } from "lib/dependency/web3";
+import { GenesisProtocolForm } from "lib/forms";
 export * from "./types";
 const { toBN } = TypeConversion;
 
@@ -108,9 +116,69 @@ export const deserializeDAO = (
         };
         daoMembers.push(newFounder);
       }
-
       //schemes
       let daoSchemes: Scheme[] = [];
+      const { schemes } = dao;
+      Object.keys(schemes).forEach(type => {
+        switch (type) {
+          case "ContributionReward":
+            if (schemes[type]) {
+              const index = dao.ContributionReward
+                ? dao.ContributionReward["voteParams"]
+                : 0;
+              const params = [dao.VotingMachinesParams[index]];
+              const votingMachine = {
+                typeName: "GenesisProtocol",
+                address: "Todo",
+                getParameters: () => params,
+                getParametersHash: () => "" // must be something else this is just for testing
+              };
+              const contributionScheme = new ContributionReward(votingMachine);
+              daoSchemes.push(contributionScheme);
+            }
+            break;
+          case "GenericScheme":
+            if (schemes[type]) {
+              const index = dao.GenericScheme
+                ? dao.GenericScheme["voteParams"]
+                : 0;
+              const address = dao.GenericScheme
+                ? dao.GenericScheme["targetContract"]
+                : "0x000";
+              const params: GenesisProtocolForm[] = [
+                dao.VotingMachinesParams[index]
+              ];
+              const votingMachine = {
+                typeName: "GenesisProtocol",
+                address: "Todo",
+                getParameters: () => params as GenesisProtocolForm[],
+                getParametersHash: () => "" // must be something else this is just for testing
+              };
+              const genericScheme = new GenericScheme(address, votingMachine);
+              daoSchemes.push(genericScheme);
+            }
+            break;
+          case "SchemeRegistrar":
+            if (schemes[type]) {
+              const index = dao.SchemeRegistrar
+                ? dao.SchemeRegistrar["voteParams"]
+                : 0;
+              const params = [dao.VotingMachinesParams[index]];
+              const votingMachine = {
+                typeName: "GenesisProtocol",
+                address: "Todo",
+                getParameters: () => params,
+                getParametersHash: () => "" // must be something else this is just for testing
+              };
+              const schemeRegistrar = new SchemeRegistrar(votingMachine);
+              daoSchemes.push(schemeRegistrar);
+            }
+            break;
+          default:
+            reject(new Error(`unrecognized scheme ${type}`));
+            break;
+        }
+      });
 
       //final object
       const creatorState: DAOcreatorState = {
