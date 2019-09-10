@@ -8,7 +8,7 @@ import {
   DialogContent,
   Button
 } from "@material-ui/core"; // import { DAOConfig } from "lib/state";
-
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 interface ImportError {
   file: string;
   error: string;
@@ -103,7 +103,7 @@ export default class SettingsImport extends React.Component<Props, State> {
       <>
         <Grid item xs={12} md={7}>
           <Fab size={"small"} color={"primary"} onClick={onOpen}>
-            Go to review
+            <CloudUploadIcon />
           </Fab>
         </Grid>
         <Dialog open={open}>
