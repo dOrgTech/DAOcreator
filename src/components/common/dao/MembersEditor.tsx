@@ -88,30 +88,31 @@ class MembersEditor extends React.Component<Props> {
         ) : (
           <> </>
         )}
-
-        {form.$.map((member, index) => (
-          <Grid
-            container
-            spacing={1}
-            key={`member-${index}`}
-            justify={"center"}
-          >
-            <MemberEditor form={member} editable={false} />
-            {editable ? (
-              <Grid item className={classes.button}>
-                <Fab
-                  size={"small"}
-                  color={"primary"}
-                  onClick={() => form.$.splice(index, 1)}
-                >
-                  <RemIcon />
-                </Fab>
-              </Grid>
-            ) : (
-              <> </>
-            )}
-          </Grid>
-        ))}
+        <Grid container className={classes.scrollView}>
+          {form.$.map((member, index) => (
+            <Grid
+              container
+              spacing={1}
+              key={`member-${index}`}
+              justify={"center"}
+            >
+              <MemberEditor form={member} editable={false} />
+              {editable ? (
+                <Grid item className={classes.button}>
+                  <Fab
+                    size={"small"}
+                    color={"primary"}
+                    onClick={() => form.$.splice(index, 1)}
+                  >
+                    <RemIcon />
+                  </Fab>
+                </Grid>
+              ) : (
+                <> </>
+              )}
+            </Grid>
+          ))}
+        </Grid>
       </>
     );
   }
@@ -121,6 +122,12 @@ const styles = (theme: Theme) =>
   createStyles({
     button: {
       alignSelf: "center"
+    },
+    scrollView: {
+      maxHeight: "20rem",
+      overflowY: "auto",
+      scrollbarWidth: "thin",
+      overflowX: "hidden"
     }
   });
 
