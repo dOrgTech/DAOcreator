@@ -18,8 +18,8 @@ import {
   DialogActions
 } from "@material-ui/core";
 import ReactPlayer from "react-player";
-import { DAOcreatorState } from "lib/state";
-import { serializeDAO } from "lib/dependency/arc";
+import { DAOcreatorState, toDAOMigrationParams } from "lib/state";
+import { serialize } from "lib/dependency/arc";
 
 const FileSaver = require("file-saver");
 
@@ -46,7 +46,7 @@ class DeployStep extends React.Component<Props, State> {
     const { exportOpen } = this.state;
 
     const saveFile = () => {
-      var blob = new Blob([serializeDAO(dao)], {
+      var blob = new Blob([serialize(toDAOMigrationParams(dao))], {
         type: "text/plain;charset=utf-8"
       });
       FileSaver.saveAs(blob, "migration-params.json");

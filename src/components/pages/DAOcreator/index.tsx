@@ -26,9 +26,10 @@ import {
   GenericSchemeForm
 } from "lib/forms";
 import { FormState } from "formstate";
-import { DAOMigrationParams, DAOcreatorState } from "lib/state";
+import { DAOcreatorState, fromDAOMigrationParams } from "lib/state";
 import {
-  deserializeDAO,
+  deserialize,
+  DAOMigrationParams,
   GenesisProtocolConfig,
   GenesisProtocol,
   GenesisProtocolOpts
@@ -63,9 +64,9 @@ class DAOcreator extends React.Component<Props, State> {
   }
 
   render() {
-    const updateForms = async (params: string) => {
-      const daoParams: DAOMigrationParams = JSON.parse(params);
-      const deserializedParams: DAOcreatorState = await deserializeDAO(
+    const updateForms = (params: string) => {
+      const daoParams: DAOMigrationParams = deserialize(params);
+      const deserializedParams: DAOcreatorState = fromDAOMigrationParams(
         daoParams
       );
       //this is going to be refactored into another function

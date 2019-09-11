@@ -1,3 +1,4 @@
+import { ParamLink } from "./index";
 import {
   Address,
   keccak256,
@@ -6,43 +7,6 @@ import {
 } from "lib/dependency/web3";
 import BN from "bn.js";
 const { toBN } = TypeConversion;
-
-// TODO refactor this
-export interface DAO {
-  avatar: Address;
-  daoToken: Address;
-  reputation: Address;
-  config: DAOConfig;
-}
-
-export interface DAOConfig {
-  daoName: string;
-  tokenName: string;
-  tokenSymbol: string;
-}
-
-export interface Member {
-  address: Address;
-  reputation: BN;
-  tokens: BN;
-}
-
-export interface ParamLink {
-  getParameters: () => any[];
-  getParametersHash: () => string;
-}
-
-export enum SchemeType {
-  ContributionReward,
-  SchemeRegistrar,
-  GenericScheme
-}
-
-export interface Scheme extends ParamLink {
-  type: SchemeType;
-  permissions: string;
-  votingMachine: VotingMachine;
-}
 
 export interface VotingMachine extends ParamLink {
   typeName: string;
@@ -217,81 +181,4 @@ export class GenesisProtocol implements VotingMachine {
       )
     );
   }
-}
-
-export class ContributionReward implements Scheme {
-  type = SchemeType.ContributionReward;
-  permissions: string = "0x00000000";
-  votingMachine: VotingMachine;
-
-  constructor(votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-
-  public getParameters(): any[] {
-    return [this.votingMachine.getParametersHash(), this.votingMachine.address];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "address"], this.getParameters())
-    );
-  }
-}
-
-// TODO: support multiple voting machine configurations
-export class SchemeRegistrar implements Scheme {
-  type = SchemeType.SchemeRegistrar;
-  permissions: string = "0x0000001F";
-  votingMachine: VotingMachine;
-
-  constructor(votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-
-  public getParameters(): any[] {
-    return [
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.address
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "bytes32", "address"], this.getParameters())
-    );
-  }
-}
-
-export class GenericScheme implements Scheme {
-  type = SchemeType.GenericScheme;
-  permissions: string = "0x00000010";
-  votingMachine: VotingMachine;
-
-  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-
-  public getParameters(): any[] {
-    return [
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.address,
-      this.contractToCall
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "address", "address"], this.getParameters())
-    );
-  }
-}
-
-export interface DeploymentInfo {
-  avatar: Address;
-  daoToken: Address;
-  reputation: Address;
-  votingMachineParametersKey?: string; // hash
-  votingMachineAddress?: Address;
 }

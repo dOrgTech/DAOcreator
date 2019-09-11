@@ -7,8 +7,9 @@ import {
   DialogTitle,
   DialogContent,
   Button
-} from "@material-ui/core"; // import { DAOConfig } from "lib/state";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+} from "@material-ui/core";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+
 interface ImportError {
   file: string;
   error: string;
@@ -29,16 +30,18 @@ const initState = {
   error: undefined
 };
 
-export default class SettingsImport extends React.Component<Props, State> {
+class SettingsImport extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       ...initState
     };
   }
+
   render() {
     const { sendToReviewStep, updateForms } = this.props;
     const { open, error } = this.state;
+
     const onOpen = () => {
       this.setState({
         open: true
@@ -103,7 +106,7 @@ export default class SettingsImport extends React.Component<Props, State> {
       <>
         <Grid item xs={12} md={7}>
           <Fab size={"small"} color={"primary"} onClick={onOpen}>
-            <CloudUploadIcon />
+            <UploadIcon />
           </Fab>
         </Grid>
         <Dialog open={open}>
@@ -114,3 +117,5 @@ export default class SettingsImport extends React.Component<Props, State> {
     );
   }
 }
+
+export default SettingsImport;

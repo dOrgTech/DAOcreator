@@ -22,6 +22,7 @@ interface Props extends WithStyles<typeof styles> {
 class GenesisProtocolAnalytics extends React.Component<Props> {
   render() {
     const { classes, form } = this.props;
+
     const secondsToString = (seconds: number) =>
       formatDays(secondsToDays(seconds));
 
