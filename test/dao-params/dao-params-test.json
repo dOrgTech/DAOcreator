@@ -20,7 +20,7 @@
       "proposingRepReward": "32",
       "quietEndingPeriod": "2a300",
       "thresholdConst": "4b0",
-      "votersReputionLossRatio": "4",
+      "votersReputationLossRatio": "4",
       "voteOnBehalf": "0x0000000000000000000000000000000000000000",
       "activationTime": "0"
     },
