@@ -125,7 +125,6 @@ export const fromDAOMigrationParams = (
           const votingMachine = new GenesisProtocol({
             config: params.VotingMachinesParams[index]
           });
-
           schemes.push(new ContributionReward(votingMachine));
         }
         break;

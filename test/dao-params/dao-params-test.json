@@ -1,63 +1,66 @@
 {
   "orgName": "dOrg",
   "tokenName": "dOrg",
-  "tokenSymbol": "dOrg",
-  "ContributionReward": {
-    "voteParams": 0
-  },
-  "GenericScheme": {
-    "voteParams": 0,
-    "targetContract": "0x0000000000000000000000000000000000000000"
-  },
-  "SchemeRegistrar": {
-    "voteParams": 0
-  },
-  "GlobalConstraintRegistrar": {
-    "voteParams": 0
-  },
-  "UpgradeScheme": {
-    "voteParams": 0
+  "tokenSymbol": "DORG",
+  "unregisterOwner": true,
+  "useUController": false,
+  "useDaoCreator": true,
+  "schemes": {
+    "ContributionReward": true,
+    "SchemeRegistrar": true
   },
   "VotingMachinesParams": [
     {
-      "boostedVotePeriodLimit": 129600,
-      "daoBountyConst": 10,
-      "minimumDaoBounty": 50000000000,
-      "queuedVotePeriodLimit": 604800,
-      "queuedVoteRequiredPercentage": 50,
-      "preBoostedVotePeriodLimit": 43200,
-      "proposingRepReward": 190,
-      "quietEndingPeriod": 86400,
-      "thresholdConst": 1200,
+      "boostedVotePeriodLimit": "54600",
+      "daoBountyConst": "a",
+      "minimumDaoBounty": "96",
+      "queuedVotePeriodLimit": "278d00",
+      "queuedVoteRequiredPercentage": "32",
+      "preBoostedVotePeriodLimit": "15180",
+      "proposingRepReward": "32",
+      "quietEndingPeriod": "2a300",
+      "thresholdConst": "4b0",
+      "votersReputionLossRatio": "4",
       "voteOnBehalf": "0x0000000000000000000000000000000000000000",
-      "votersReputationLossRatio": 0,
-      "activationTime": 0,
-      "thresholdConst": 10002
+      "activationTime": "0"
+    },
+    {
+      "boostedVotePeriodLimit": "54600",
+      "daoBountyConst": "a",
+      "minimumDaoBounty": "96",
+      "queuedVotePeriodLimit": "278d00",
+      "queuedVoteRequiredPercentage": "32",
+      "preBoostedVotePeriodLimit": "15180",
+      "proposingRepReward": "32",
+      "quietEndingPeriod": "2a300",
+      "thresholdConst": "4b0",
+      "votersReputationLossRatio": "4",
+      "voteOnBehalf": "0x0000000000000000000000000000000000000000",
+      "activationTime": "0"
     }
   ],
-  "schemes": {
-    "ContributionReward": true,
-    "GenericScheme": false,
-    "SchemeRegistrar": true
-  },
-  "unregisterOwner": true,
-  "useUController": true,
-  "useDaoCreator": false,
   "founders": [
     {
       "address": "0xEB0C4F040FF0e2278bB2c14B7CC9c357467C83e3",
-      "tokens": 1,
-      "reputation": 100
+      "tokens": "1",
+      "reputation": "64"
     },
     {
       "address": "0x7F2a1ef39EA0D470b5669ce105a13C5b3BD8cD31",
-      "tokens": 1,
-      "reputation": 100
+      "tokens": "1",
+      "reputation": "64"
     },
     {
       "address": "0xB1B7586656116D546033e3bAFF69BFcD6592225E",
-      "tokens": 1,
-      "reputation": 100
+      "tokens": "1",
+      "reputation": "64"
     }
-  ]
+  ],
+  "ContributionReward": {
+    "voteParams": 0
+  },
+  "SchemeRegistrar": {
+    "voteRegisterParams": 1,
+    "voteRemoveParams": 1
+  }
 }
