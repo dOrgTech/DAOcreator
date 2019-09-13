@@ -21,7 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   editable: boolean;
   getDAOTokenSymbol: () => string;
-  scrollHeight?: string;
+  maxHeight?: string;
 }
 
 @observer
@@ -35,7 +35,7 @@ class MembersEditor extends React.Component<Props> {
       form,
       editable,
       getDAOTokenSymbol,
-      scrollHeight
+      maxHeight
     } = this.props;
     const memberForm = this.memberForm;
 
@@ -98,9 +98,9 @@ class MembersEditor extends React.Component<Props> {
         <Grid
           container
           style={
-            scrollHeight
+            maxHeight
               ? {
-                  maxHeight: scrollHeight,
+                  maxHeight: maxHeight,
                   overflowY: "auto",
                   scrollbarWidth: "thin",
                   overflowX: "hidden"
