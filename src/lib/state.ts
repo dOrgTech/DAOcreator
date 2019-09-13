@@ -5,7 +5,8 @@ export {
   ContributionReward,
   SchemeRegistrar,
   GenericScheme,
-  GenesisProtocol
+  GenesisProtocol,
+  GenesisProtocolPreset
 } from "./dependency/arc";
 
 export type DAOConfig = DAOConfig;
