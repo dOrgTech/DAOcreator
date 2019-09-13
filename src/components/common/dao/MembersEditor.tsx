@@ -21,6 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   editable: boolean;
   getDAOTokenSymbol: () => string;
+  scrollHeight?: string;
 }
 
 @observer
@@ -29,7 +30,13 @@ class MembersEditor extends React.Component<Props> {
   @observable memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
   render() {
-    const { classes, form, editable, getDAOTokenSymbol } = this.props;
+    const {
+      classes,
+      form,
+      editable,
+      getDAOTokenSymbol,
+      scrollHeight
+    } = this.props;
     const memberForm = this.memberForm;
 
     const onAdd = async () => {
@@ -88,7 +95,19 @@ class MembersEditor extends React.Component<Props> {
         ) : (
           <> </>
         )}
-        <Grid container className={classes.scrollView}>
+        <Grid
+          container
+          style={
+            scrollHeight
+              ? {
+                  maxHeight: scrollHeight,
+                  overflowY: "auto",
+                  scrollbarWidth: "thin",
+                  overflowX: "hidden"
+                }
+              : {}
+          }
+        >
           {form.$.map((member, index) => (
             <Grid
               container
@@ -122,12 +141,6 @@ const styles = (theme: Theme) =>
   createStyles({
     button: {
       alignSelf: "center"
-    },
-    scrollView: {
-      maxHeight: "20rem",
-      overflowY: "auto",
-      scrollbarWidth: "thin",
-      overflowX: "hidden"
     }
   });
 
