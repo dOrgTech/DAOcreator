@@ -61,81 +61,81 @@ class MembersEditor extends React.Component<Props> {
       memberForm.reset();
     };
 
-    return (
+    const editing = (
       <>
-        {editable ? (
-          <>
-            <Grid container spacing={1} key={"new-member"} justify={"center"}>
-              <MemberEditor form={memberForm} editable={true} />
+        <Grid container spacing={1} key={"new-member"} justify={"center"}>
+          <MemberEditor form={memberForm} editable={true} />
+          <Grid item className={classes.button}>
+            <Fab
+              size={"small"}
+              color={"primary"}
+              disabled={memberForm.hasError}
+              onClick={onAdd}
+            >
+              <AddIcon />
+            </Fab>
+          </Grid>
+        </Grid>
+
+        <Grid container justify={"center"}>
+          {this.addError && (
+            <Typography color={"error"}>{this.addError}</Typography>
+          )}
+        </Grid>
+
+        <Grid direction={"column"}>
+          <Typography variant="h6">Members</Typography>
+          <MembersSaveLoad form={form} />
+        </Grid>
+      </>
+    );
+
+    const members = (
+      <Grid
+        container
+        style={
+          maxScrollHeight
+            ? {
+                maxHeight: maxScrollHeight,
+                overflowY: "auto",
+                scrollbarWidth: "thin"
+              }
+            : {}
+        }
+      >
+        {form.$.map((member, index) => (
+          <Grid
+            container
+            spacing={1}
+            style={{
+              //Removes useless scrollbars caused by spacing{1}
+              margin: "0",
+              width: "100%"
+            }}
+            key={`member-${index}`}
+            justify={"center"}
+          >
+            <MemberEditor form={member} editable={false} />
+            {editable && (
               <Grid item className={classes.button}>
                 <Fab
                   size={"small"}
                   color={"primary"}
-                  disabled={memberForm.hasError}
-                  onClick={onAdd}
+                  onClick={() => form.$.splice(index, 1)}
                 >
-                  <AddIcon />
+                  <RemIcon />
                 </Fab>
               </Grid>
-            </Grid>
+            )}
+          </Grid>
+        ))}
+      </Grid>
+    );
 
-            <Grid container justify={"center"}>
-              {this.addError ? (
-                <Typography color={"error"}>{this.addError}</Typography>
-              ) : (
-                <></>
-              )}
-            </Grid>
-
-            <Grid direction={"column"}>
-              <Typography variant="h6">Members</Typography>
-              <MembersSaveLoad form={form} />
-            </Grid>
-          </>
-        ) : (
-          <> </>
-        )}
-        <Grid
-          container
-          style={
-            maxScrollHeight
-              ? {
-                  maxHeight: maxScrollHeight,
-                  overflowY: "auto",
-                  scrollbarWidth: "thin"
-                }
-              : {}
-          }
-        >
-          {form.$.map((member, index) => (
-            <Grid
-              container
-              spacing={1}
-              style={{
-                //Removes useless scrollbars caused by spacing{1}
-                margin: "0",
-                width: "100%"
-              }}
-              key={`member-${index}`}
-              justify={"center"}
-            >
-              <MemberEditor form={member} editable={false} />
-              {editable ? (
-                <Grid item className={classes.button}>
-                  <Fab
-                    size={"small"}
-                    color={"primary"}
-                    onClick={() => form.$.splice(index, 1)}
-                  >
-                    <RemIcon />
-                  </Fab>
-                </Grid>
-              ) : (
-                <> </>
-              )}
-            </Grid>
-          ))}
-        </Grid>
+    return (
+      <>
+        {editable && editing}
+        {members}
       </>
     );
   }
