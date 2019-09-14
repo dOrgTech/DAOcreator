@@ -21,7 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   editable: boolean;
   getDAOTokenSymbol: () => string;
-  maxHeight?: string;
+  maxScrollHeight?: string;
 }
 
 @observer
@@ -35,7 +35,7 @@ class MembersEditor extends React.Component<Props> {
       form,
       editable,
       getDAOTokenSymbol,
-      maxHeight
+      maxScrollHeight
     } = this.props;
     const memberForm = this.memberForm;
 
@@ -98,12 +98,11 @@ class MembersEditor extends React.Component<Props> {
         <Grid
           container
           style={
-            maxHeight
+            maxScrollHeight
               ? {
-                  maxHeight: maxHeight,
+                  maxHeight: maxScrollHeight,
                   overflowY: "auto",
-                  scrollbarWidth: "thin",
-                  overflowX: "hidden"
+                  scrollbarWidth: "thin"
                 }
               : {}
           }
@@ -112,6 +111,11 @@ class MembersEditor extends React.Component<Props> {
             <Grid
               container
               spacing={1}
+              style={{
+                //Removes useless scrollbars caused by spacing{1}
+                margin: "0",
+                width: "100%"
+              }}
               key={`member-${index}`}
               justify={"center"}
             >
