@@ -27,7 +27,8 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class MembersEditor extends React.Component<Props> {
   @observable addError: string | null | undefined = undefined;
-  @observable memberForm = new MemberForm(this.props.getDAOTokenSymbol);
+  @observable newMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
+  @observable selectedMemberForm: MemberForm | null = null;
 
   render() {
     const {
@@ -37,18 +38,33 @@ class MembersEditor extends React.Component<Props> {
       getDAOTokenSymbol,
       maxScrollHeight
     } = this.props;
-    const memberForm = this.memberForm;
+    const newMemberForm = this.newMemberForm;
+    const selectedMemberForm = this.newMemberForm;
 
-    const onAdd = async () => {
-      // See if the new member for has errors
-      const memberValidate = await memberForm.validate();
-      if (memberValidate.hasError) {
+    //TODO update selectedMemberForm onFocus
+    //TODO call validateInput onBlur with the index of blured input
+
+    //Called when a form input is updated
+    //TODO Only call on enter or user clicks away from this member(not just the input)
+    const validateInput = (index: number) => {
+      //Check whether we're handling selectedMemberForm or newMemberForm
+      if (index === 0) {
+        onAdd();
         return;
       }
 
+      onEdit(index);
+    };
+
+    //TODO handle giving error before form is complete
+    const onAdd = async () => {
+      // Check the new member for errors
+      const memberValidate = await newMemberForm.validate();
+      if (memberValidate.hasError) return;
+
       // See if the new member can be added to the array
       // without any errors
-      form.$.push(new MemberForm(getDAOTokenSymbol, memberForm));
+      form.$.push(new MemberForm(getDAOTokenSymbol, newMemberForm));
 
       const membersValidate = await form.validate();
       if (membersValidate.hasError) {
@@ -58,7 +74,27 @@ class MembersEditor extends React.Component<Props> {
       }
 
       this.addError = undefined;
-      memberForm.reset();
+      newMemberForm.reset();
+    };
+
+    const onEdit = async (index: number) => {
+      // Check the selected member for errors
+      const memberValidate = await selectedMemberForm.validate();
+      if (memberValidate.hasError) return;
+
+      // See if the member can be updated
+      // without any errors
+      const backupMember = form.$[index];
+      form.$.splice(index, 1, selectedMemberForm);
+
+      const membersValidate = await form.validate();
+      if (membersValidate.hasError) {
+        this.addError = form.error;
+        form.$.splice(index, 1, backupMember);
+        return;
+      }
+
+      this.addError = undefined;
     };
 
     const editing = (
@@ -68,12 +104,13 @@ class MembersEditor extends React.Component<Props> {
           <MembersSaveLoad form={form} />
         </Grid>
         <Grid container spacing={1} key={"new-member"} justify={"center"}>
-          <MemberEditor form={memberForm} editable={true} />
+          <MemberEditor form={newMemberForm} editable={true} />
+          {/* MEMBER EDITOR */}
           <Grid item className={classes.button}>
             <Fab
               size={"small"}
               color={"primary"}
-              disabled={memberForm.hasError}
+              disabled={newMemberForm.hasError}
               onClick={onAdd}
             >
               <AddIcon />
@@ -102,7 +139,7 @@ class MembersEditor extends React.Component<Props> {
             : {}
         }
       >
-        {form.$.map((member, index) => (
+        {form.$.map((memberForm, index) => (
           <Grid
             container
             spacing={1}
@@ -114,7 +151,8 @@ class MembersEditor extends React.Component<Props> {
             key={`member-${index}`}
             justify={"center"}
           >
-            <MemberEditor form={member} editable={false} />
+            <MemberEditor form={memberForm} editable />
+            {/* MEMBER EDITOR */}
             {editable && (
               <Grid item className={classes.button}>
                 <Fab
