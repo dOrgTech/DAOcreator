@@ -63,6 +63,10 @@ class MembersEditor extends React.Component<Props> {
 
     const editing = (
       <>
+        <Grid>
+          <Typography variant="h6">Members</Typography>
+          <MembersSaveLoad form={form} />
+        </Grid>
         <Grid container spacing={1} key={"new-member"} justify={"center"}>
           <MemberEditor form={memberForm} editable={true} />
           <Grid item className={classes.button}>
@@ -81,11 +85,6 @@ class MembersEditor extends React.Component<Props> {
           {this.addError && (
             <Typography color={"error"}>{this.addError}</Typography>
           )}
-        </Grid>
-
-        <Grid direction={"column"}>
-          <Typography variant="h6">Members</Typography>
-          <MembersSaveLoad form={form} />
         </Grid>
       </>
     );
