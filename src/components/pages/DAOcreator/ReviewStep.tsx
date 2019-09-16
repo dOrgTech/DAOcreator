@@ -11,6 +11,7 @@ import WarningIcon from "@material-ui/icons/WarningTwoTone";
 import EditIcon from "@material-ui/icons/Settings";
 import SchemesEditor from "components/common/dao/SchemesEditor";
 import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import SimpleDAOConfigEditor from "components/common/dao/SimpleDAOConfigEditor";
 import MembersEditor from "components/common/dao/MembersEditor";
 import MembersAnalytics from "components/common/dao/MembersAnalytics";
 import { DAOForm } from "lib/forms";
@@ -26,7 +27,7 @@ export default class ReviewStep extends React.Component<Props> {
   render() {
     const { form, setStep } = this.props;
     const { config, schemes, members } = form.$;
-    const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
+    const getDAOTokenSymbol = () => config.$.daoSymbol.value;
     const missingSchemeReg =
       schemes.$.findIndex(
         scheme => scheme.type === SchemeType.SchemeRegistrar
@@ -66,7 +67,8 @@ export default class ReviewStep extends React.Component<Props> {
             <Grid item>
               {titleText("Names", 0)}
               <Grid container justify={"center"}>
-                <DAOConfigEditor form={config} editable={false} />
+                {/*<DAOConfigEditor form={config} editable={false} />*/}
+                <SimpleDAOConfigEditor form={config} editable={false} />
               </Grid>
             </Grid>
             <Grid item>

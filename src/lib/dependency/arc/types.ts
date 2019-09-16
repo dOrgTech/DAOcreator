@@ -21,6 +21,11 @@ export interface DAOConfig {
   tokenSymbol: string;
 }
 
+export interface SimpleDAOConfig {
+  daoName: string;
+  daoSymbol: string;
+}
+
 export interface Member {
   address: Address;
   reputation: BN;
