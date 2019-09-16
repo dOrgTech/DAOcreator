@@ -18,8 +18,7 @@ import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
 import { DAOForm } from "lib/forms";
 import { FormState } from "formstate";
-import { DAOcreatorState, fromDAOMigrationParams } from "lib/state";
-import { deserialize, DAOMigrationParams } from "lib/dependency/arc";
+import { importParams } from "lib/state";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -62,16 +61,8 @@ class DAOcreator extends React.Component<Props, State> {
               error: ""
             });
           },
-          updateForms: (params: string) => {
-            return new Promise((resolve, reject) => {
-              try {
-                const daoParams: DAOMigrationParams = deserialize(params);
-                this.form.fromState(fromDAOMigrationParams(daoParams));
-                resolve();
-              } catch (error) {
-                reject(error);
-              }
-            });
+          updateForms: async (params: string) => {
+            await importParams(this.form, params);
           }
         }
       },

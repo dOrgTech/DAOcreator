@@ -7,8 +7,10 @@ import {
   GenericScheme,
   ContributionReward,
   SchemeRegistrar,
-  GenesisProtocol
+  GenesisProtocol,
+  deserialize
 } from "lib/dependency/arc";
+import { DAOForm } from "lib/forms";
 import { TypeConversion } from "lib/dependency/web3";
 export {
   SchemeType,
@@ -181,4 +183,16 @@ export const fromDAOMigrationParams = (
     members,
     schemes
   };
+};
+
+export const importParams = (form: DAOForm, params: string) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const daoParams: DAOMigrationParams = deserialize(params);
+      form.fromState(fromDAOMigrationParams(daoParams));
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
