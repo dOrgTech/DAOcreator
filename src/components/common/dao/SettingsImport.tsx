@@ -85,10 +85,6 @@ class SettingsImport extends React.Component<Props, State> {
       const target = event.target as HTMLInputElement;
       const file: File = target.files![0];
       handleFileChosen(file);
-
-      // this.setState({
-      //   open: false
-      // });
     };
 
     const handleFileChosen = (file: File) => {
