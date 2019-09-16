@@ -47,6 +47,7 @@ class MembersStep extends React.Component<Props> {
               getDAOTokenSymbol={getDAOTokenSymbol}
               form={form}
               editable={true}
+              maxHeight={"20rem"}
             />
           </Grid>
         </CardContent>

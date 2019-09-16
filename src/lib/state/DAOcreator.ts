@@ -17,7 +17,8 @@ export {
   ContributionReward,
   SchemeRegistrar,
   GenericScheme,
-  GenesisProtocol
+  GenesisProtocol,
+  GenesisProtocolPreset
 } from "lib/dependency/arc";
 
 const toBN = TypeConversion.toBN;
