@@ -11,7 +11,6 @@ import {
 import UploadIcon from "@material-ui/icons/CloudUpload";
 
 interface ImportError {
-  file: string;
   error: string;
 }
 
@@ -44,13 +43,29 @@ class SettingsImport extends React.Component<Props, State> {
 
     const onOpen = () => {
       this.setState({
+        ...initState,
         open: true
       });
     };
 
+    const onClose = () =>
+      this.setState({
+        ...initState,
+        open: false
+      });
+
+    const onError = () =>
+      this.setState({
+        ...this.state,
+        error: {
+          error:
+            "Please make sure you are importing a existing dao-params.json file"
+        }
+      });
+
     const ImportInfo = () => (
       <DialogTitle id="simple-dialog-title">
-        Make sure your JSON works
+        Import an existing dao-params.json file
       </DialogTitle>
     );
 
@@ -58,9 +73,7 @@ class SettingsImport extends React.Component<Props, State> {
       <DialogContent>
         <strong>We encountered an issue during the import process:</strong>
         <br />
-        <div>
-          {props.error.file}: {props.error.error}
-        </div>
+        <div>{props.error.error}</div>
       </DialogContent>
     );
 
@@ -73,17 +86,22 @@ class SettingsImport extends React.Component<Props, State> {
       const file: File = target.files![0];
       handleFileChosen(file);
 
-      this.setState({
-        open: false
-      });
+      // this.setState({
+      //   open: false
+      // });
     };
 
-    const handleFileChosen = (file: File): void => {
+    const handleFileChosen = (file: File) => {
       let fileReader = new FileReader();
       fileReader.readAsText(file);
-      fileReader.onload = () => {
-        updateForms(fileReader.result);
-        sendToReviewStep();
+      fileReader.onload = async () => {
+        try {
+          await updateForms(fileReader.result);
+          sendToReviewStep();
+        } catch (error) {
+          onError();
+          return;
+        }
       };
     };
 
@@ -109,7 +127,7 @@ class SettingsImport extends React.Component<Props, State> {
             <UploadIcon />
           </Fab>
         </Grid>
-        <Dialog open={open}>
+        <Dialog onClose={onClose} open={open}>
           {error ? <ImportErrors error={error} /> : <ImportInfo />}
           <ImportButton />
         </Dialog>

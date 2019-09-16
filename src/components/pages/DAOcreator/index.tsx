@@ -50,15 +50,6 @@ class DAOcreator extends React.Component<Props, State> {
   }
 
   render() {
-    const updateForms = (params: string) => {
-      const daoParams: DAOMigrationParams = deserialize(params);
-      const deserializedParams: DAOcreatorState = fromDAOMigrationParams(
-        daoParams
-      );
-
-      this.form.fromState(deserializedParams);
-    };
-
     const steps: Step[] = [
       {
         title: "Name",
@@ -71,7 +62,17 @@ class DAOcreator extends React.Component<Props, State> {
               error: ""
             });
           },
-          updateForms: updateForms
+          updateForms: (params: string) => {
+            return new Promise((resolve, reject) => {
+              try {
+                const daoParams: DAOMigrationParams = deserialize(params);
+                this.form.fromState(fromDAOMigrationParams(daoParams));
+                resolve();
+              } catch (error) {
+                reject(error);
+              }
+            });
+          }
         }
       },
       {
