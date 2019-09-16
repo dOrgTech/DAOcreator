@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
 import {
@@ -28,7 +28,10 @@ interface Props extends WithStyles<typeof styles> {
 class MembersEditor extends React.Component<Props> {
   @observable addError: string | null | undefined = undefined;
   @observable newMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
-  @observable selectedMemberForm: MemberForm | null = null;
+  @observable selected: {
+    memberForm: MemberForm;
+    index: number | null;
+  } = { memberForm: new MemberForm(this.props.getDAOTokenSymbol), index: null };
 
   render() {
     const {
@@ -39,24 +42,34 @@ class MembersEditor extends React.Component<Props> {
       maxScrollHeight
     } = this.props;
     const newMemberForm = this.newMemberForm;
-    const selectedMemberForm = this.newMemberForm;
+    const selected = this.selected;
 
-    //TODO update selectedMemberForm onFocus
-    //TODO call validateInput onBlur with the index of blured input
+    const onSelect = async (index: number) => {
+      if (index === selected.index) return;
+      selected.index = index;
 
-    //Called when a form input is updated
-    //TODO Only call on enter or user clicks away from this member(not just the input)
-    const validateInput = (index: number) => {
-      //Check whether we're handling selectedMemberForm or newMemberForm
-      if (index === 0) {
-        onAdd();
-        return;
-      }
+      //Create new memberform
+      selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
-      onEdit(index);
+      //Set backup to revert to in case of errors
+      const backupMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
+      const { address, reputation, tokens } = form.$[index].$;
+      backupMemberForm.$ = {
+        ...backupMemberForm.$,
+        address,
+        reputation,
+        tokens
+      };
+
+      //Set values on selectedMemberForm
+      selected.memberForm.$ = {
+        ...backupMemberForm.$,
+        address,
+        reputation,
+        tokens
+      };
     };
 
-    //TODO handle giving error before form is complete
     const onAdd = async () => {
       // Check the new member for errors
       const memberValidate = await newMemberForm.validate();
@@ -77,25 +90,7 @@ class MembersEditor extends React.Component<Props> {
       newMemberForm.reset();
     };
 
-    const onEdit = async (index: number) => {
-      // Check the selected member for errors
-      const memberValidate = await selectedMemberForm.validate();
-      if (memberValidate.hasError) return;
-
-      // See if the member can be updated
-      // without any errors
-      const backupMember = form.$[index];
-      form.$.splice(index, 1, selectedMemberForm);
-
-      const membersValidate = await form.validate();
-      if (membersValidate.hasError) {
-        this.addError = form.error;
-        form.$.splice(index, 1, backupMember);
-        return;
-      }
-
-      this.addError = undefined;
-    };
+    const onEdit = async (index: number) => {};
 
     const editing = (
       <>
@@ -105,7 +100,6 @@ class MembersEditor extends React.Component<Props> {
         </Grid>
         <Grid container spacing={1} key={"new-member"} justify={"center"}>
           <MemberEditor form={newMemberForm} editable={true} />
-          {/* MEMBER EDITOR */}
           <Grid item className={classes.button}>
             <Fab
               size={"small"}
@@ -150,9 +144,13 @@ class MembersEditor extends React.Component<Props> {
             }}
             key={`member-${index}`}
             justify={"center"}
+            onClick={() => onSelect(index)}
           >
-            <MemberEditor form={memberForm} editable />
-            {/* MEMBER EDITOR */}
+            {index !== selected.index ? (
+              <MemberEditor form={memberForm} editable={false} />
+            ) : (
+              <MemberEditor form={selected.memberForm} editable />
+            )}
             {editable && (
               <Grid item className={classes.button}>
                 <Fab
