@@ -26,7 +26,13 @@ export default class ReviewStep extends React.Component<Props> {
   render() {
     const { form, setStep } = this.props;
     const { config, schemes, members } = form.$;
-    const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
+    const getDAOTokenSymbol = () => {
+      if (config.$.expertConfig) {
+        return config.$.expertConfig.tokenSymbol.value;
+      } else {
+        return config.$.simpleConfig.daoSymbol.value;
+      }
+    };
     const missingSchemeReg =
       schemes.$.findIndex(
         scheme => scheme.type === SchemeType.SchemeRegistrar

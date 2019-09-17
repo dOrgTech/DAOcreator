@@ -12,7 +12,13 @@ export class DAOForm extends Form<
 > {
   constructor(form?: DAOForm) {
     const daoConfig = new DAOConfigForm(form ? form.$.config : undefined);
-    const getDAOTokenSymbol = () => daoConfig.$.tokenSymbol.value;
+    const getDAOTokenSymbol = () => {
+      if (daoConfig.$.expertConfig) {
+        return daoConfig.$.expertConfig.tokenSymbol.value;
+      } else {
+        return daoConfig.$.simpleConfig.daoSymbol.value;
+      }
+    };
 
     super({
       config: daoConfig,
@@ -37,8 +43,4 @@ export class DAOForm extends Form<
     this.$.members.fromState(state.members);
     this.$.schemes.fromState(state.schemes);
   }
-
-  public toExpert() {}
-
-  public toSimple() {}
 }

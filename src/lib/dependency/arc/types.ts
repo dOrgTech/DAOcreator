@@ -5,6 +5,7 @@ import {
   TypeConversion
 } from "lib/dependency/web3";
 import BN from "bn.js";
+import { StringField } from "lib/forms";
 const { toBN } = TypeConversion;
 
 // TODO refactor this
@@ -21,14 +22,14 @@ export interface DAOConfig {
 }
 
 export interface ExpertDAOConfig {
-  daoName: string;
-  tokenName: string;
-  tokenSymbol: string;
+  daoName: StringField;
+  tokenName: StringField;
+  tokenSymbol: StringField;
 }
 
 export interface SimpleDAOConfig {
-  daoName: string;
-  daoSymbol: string;
+  daoName: StringField;
+  daoSymbol: StringField;
 }
 
 export interface Member {

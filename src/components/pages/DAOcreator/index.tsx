@@ -64,7 +64,13 @@ class DAOcreator extends React.Component<Props, State> {
         form: this.form.$.members,
         Component: MembersStep,
         props: {
-          getDAOTokenSymbol: () => this.form.$.config.$.tokenSymbol.value
+          getDAOTokenSymbol: () => {
+            if (this.form.$.config.$.expertConfig) {
+              return this.form.$.config.$.expertConfig.tokenSymbol.value;
+            } else {
+              return this.form.$.config.$.simpleConfig.daoSymbol.value;
+            }
+          }
         }
       },
       {

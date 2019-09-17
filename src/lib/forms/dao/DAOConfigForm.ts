@@ -10,47 +10,75 @@ import { DAOConfig } from "lib/state";
 export class DAOConfigForm extends Form<
   DAOConfig,
   {
-    daoName: StringField;
-    tokenName: StringField;
-    tokenSymbol: StringField;
-    daoSymbol: StringField;
+    expertConfig?: any;
+    simpleConfig?: any;
   }
 > {
   constructor(form?: DAOConfigForm) {
     super({
-      daoName: new StringField(form ? form.$.daoName.value : "")
-        .validators(requiredText, validName)
-        .setDisplayName("DAO Name")
-        .setDescription("The name of the DAO."),
+      expertConfig: {
+        daoName: new StringField(form ? form.$.expertConfig!.daoName.value : "")
+          .validators(requiredText, validName)
+          .setDisplayName("DAO Name")
+          .setDescription("The name of the DAO."),
 
-      tokenName: new StringField(form ? form.$.tokenName.value : "")
-        .validators(requiredText, validName)
-        .setDisplayName("Token Name")
-        .setDescription("The name of the DAO's token."),
+        tokenName: new StringField(
+          form ? form.$.expertConfig!.tokenName.value : ""
+        )
+          .validators(requiredText, validName)
+          .setDisplayName("Token Name")
+          .setDescription("The name of the DAO's token."),
 
-      tokenSymbol: new StringField(form ? form.$.tokenSymbol.value : "")
-        .validators(requiredText, validTokenSymbol)
-        .setDisplayName("Token Symbol")
-        .setDescription("The token's 4 letter symbol for exchanges."),
+        tokenSymbol: new StringField(
+          form ? form.$.expertConfig!.tokenSymbol.value : ""
+        )
+          .validators(requiredText, validTokenSymbol)
+          .setDisplayName("Token Symbol")
+          .setDescription("The token's 4 letter symbol for exchanges.")
+      },
+      simpleConfig: {
+        daoName: new StringField(form ? form.$.simpleConfig!.daoName.value : "")
+          .validators(requiredText, validName)
+          .setDisplayName("DAO Name")
+          .setDescription("The name of the DAO."),
 
-      daoSymbol: new StringField(form ? form.$.daoSymbol.value : "")
-        .validators(requiredText, validTokenSymbol)
-        .setDisplayName("DAO Symbol")
-        .setDescription("The dao's 4 letter symbol for exchanges.")
+        daoSymbol: new StringField(
+          form ? form.$.simpleConfig!.daoSymbol.value : ""
+        )
+          .validators(requiredText, validName)
+          .setDisplayName("DAO symbol")
+          .setDescription("The symbol of the DAO.")
+      }
     });
   }
 
   public toState(): DAOConfig {
-    return {
-      daoName: this.$.daoName.value,
-      tokenName: this.$.tokenName.value,
-      tokenSymbol: this.$.tokenSymbol.value
-    };
+    if (this.$.expertConfig) {
+      return {
+        simpleConfig: {
+          daoName: this.$.simpleConfig.daoName.value,
+          daoSymbol: this.$.simpleConfig.daoSymbol.value
+        }
+      };
+    } else {
+      return {
+        expertConfig: {
+          daoName: this.$.expertConfig.daoName.value,
+          tokenName: this.$.expertConfig.tokenName.value,
+          tokenSymbol: this.$.expertConfig.tokenSymbol.value
+        }
+      };
+    }
   }
 
   public fromState(state: DAOConfig) {
-    this.$.daoName.value = state.daoName;
-    this.$.tokenName.value = state.tokenName;
-    this.$.tokenSymbol.value = state.tokenSymbol;
+    if (state.expertConfig) {
+      this.$.expertConfig.daoName.value = state.expertConfig!.daoName;
+      this.$.expertConfig.tokenName.value = state.expertConfig!.tokenName;
+      this.$.expertConfig.tokenSymbol.value = state.expertConfig!.tokenSymbol;
+    } else {
+      this.$.simpleConfig.daoName.value = state.simpleConfig!.daoName;
+      this.$.simpleConfig.daoSymbol.value = state.simpleConfig!.daoSymbol;
+    }
   }
 }
