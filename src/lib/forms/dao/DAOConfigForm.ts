@@ -13,6 +13,7 @@ export class DAOConfigForm extends Form<
     daoName: StringField;
     tokenName: StringField;
     tokenSymbol: StringField;
+    daoSymbol: StringField;
   }
 > {
   constructor(form?: DAOConfigForm) {
@@ -30,7 +31,12 @@ export class DAOConfigForm extends Form<
       tokenSymbol: new StringField(form ? form.$.tokenSymbol.value : "")
         .validators(requiredText, validTokenSymbol)
         .setDisplayName("Token Symbol")
-        .setDescription("The token's 4 letter symbol for exchanges.")
+        .setDescription("The token's 4 letter symbol for exchanges."),
+
+      daoSymbol: new StringField(form ? form.$.daoSymbol.value : "")
+        .validators(requiredText, validTokenSymbol)
+        .setDisplayName("DAO Symbol")
+        .setDescription("The dao's 4 letter symbol for exchanges.")
     });
   }
 

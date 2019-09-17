@@ -47,15 +47,28 @@ const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {
               >
                 DAO
               </Typography>
-              <Typography>
-                <b>Name:</b> {config.daoName}
-              </Typography>
-              <Typography>
-                <b>Token Name:</b> {config.tokenName}
-              </Typography>
-              <Typography>
-                <b>Token Symbol:</b> {config.tokenSymbol}
-              </Typography>
+              {config.expertConfig ? (
+                <>
+                  <Typography>
+                    <b>Name:</b> {config.expertConfig!.daoName}
+                  </Typography>
+                  <Typography>
+                    <b>Token Name:</b> {config.expertConfig!.tokenName}
+                  </Typography>
+                  <Typography>
+                    <b>Token Symbol:</b> {config.expertConfig!.tokenSymbol}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography>
+                    <b>Name:</b> {config.simpleConfig!.daoName}
+                  </Typography>
+                  <Typography>
+                    <b>Dao Symbol:</b> {config.simpleConfig!.daoSymbol}
+                  </Typography>
+                </>
+              )}
               <Typography
                 variant="h5"
                 className={classes.headline}

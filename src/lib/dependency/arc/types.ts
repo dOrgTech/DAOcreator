@@ -16,9 +16,19 @@ export interface DAO {
 }
 
 export interface DAOConfig {
+  expertConfig?: ExpertDAOConfig;
+  simpleConfig?: SimpleDAOConfig;
+}
+
+export interface ExpertDAOConfig {
   daoName: string;
   tokenName: string;
   tokenSymbol: string;
+}
+
+export interface SimpleDAOConfig {
+  daoName: string;
+  daoSymbol: string;
 }
 
 export interface Member {

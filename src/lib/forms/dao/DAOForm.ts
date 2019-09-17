@@ -37,4 +37,8 @@ export class DAOForm extends Form<
     this.$.members.fromState(state.members);
     this.$.schemes.fromState(state.schemes);
   }
+
+  public toExpert() {}
+
+  public toSimple() {}
 }
