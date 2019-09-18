@@ -34,6 +34,20 @@ class MembersEditor extends React.Component<Props> {
     index: number | null;
   } = { memberForm: new MemberForm(this.props.getDAOTokenSymbol), index: null };
 
+  handleKeyDown = (event: { keyCode: number }) => {
+    if (event.keyCode === 27) {
+      this.selected = {
+        memberForm: new MemberForm(this.props.getDAOTokenSymbol),
+        index: null
+      };
+      return false;
+    }
+    if ((event.keyCode = 13)) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     const {
       classes,
@@ -44,9 +58,14 @@ class MembersEditor extends React.Component<Props> {
     } = this.props;
     const newMemberForm = this.newMemberForm;
     const selected = this.selected;
+    const handleKeyDown = this.handleKeyDown;
 
+    //Validates edit and updates form
+    const onEdit = async (index: number) => {};
+
+    //Selects a memberForm and enables editing
     const onSelect = async (index: number) => {
-      if (index === selected.index) return;
+      if (index === selected.index) onEdit(index);
       selected.index = index;
 
       //Create new memberform
@@ -71,6 +90,7 @@ class MembersEditor extends React.Component<Props> {
       };
     };
 
+    //Adds a new memberForm to form
     const onAdd = async () => {
       // Check the new member for errors
       const memberValidate = await newMemberForm.validate();
@@ -91,20 +111,19 @@ class MembersEditor extends React.Component<Props> {
       newMemberForm.reset();
     };
 
-    const onEdit = async (index: number) => {};
-
-    const onEnter = async (index: number) => {
-      //onAdd()
-      //onEdit()
-    };
-
     const editing = (
       <>
         <Grid>
           <Typography variant="h6">Members</Typography>
           <MembersSaveLoad form={form} />
         </Grid>
-        <Grid container spacing={1} key={"new-member"} justify={"center"}>
+        <Grid
+          container
+          spacing={1}
+          key={"new-member"}
+          justify={"center"}
+          onKeyDown={e => handleKeyDown(e) && onAdd()}
+        >
           <MemberEditor form={newMemberForm} editable={true} />
           <Grid item className={classes.button}>
             <Fab
@@ -150,6 +169,7 @@ class MembersEditor extends React.Component<Props> {
             }}
             key={`member-${index}`}
             justify={"center"}
+            onKeyDown={e => handleKeyDown(e) && onEdit(index)}
           >
             {index !== selected.index ? (
               <MemberEditor form={memberForm} editable={false} />
