@@ -8,10 +8,12 @@ import {
   withStyles,
   Grid,
   Fab,
+  Button,
   Typography
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
+import EditIcon from "@material-ui/icons/Edit";
 import MemberEditor from "./MemberEditor";
 import { MemberForm, MembersForm } from "lib/forms";
 import MembersSaveLoad from "./MembersSaveLoad";
@@ -144,7 +146,6 @@ class MembersEditor extends React.Component<Props> {
             }}
             key={`member-${index}`}
             justify={"center"}
-            onClick={() => onSelect(index)}
           >
             {index !== selected.index ? (
               <MemberEditor form={memberForm} editable={false} />
@@ -152,15 +153,26 @@ class MembersEditor extends React.Component<Props> {
               <MemberEditor form={selected.memberForm} editable />
             )}
             {editable && (
-              <Grid item className={classes.button}>
-                <Fab
-                  size={"small"}
-                  color={"primary"}
-                  onClick={() => form.$.splice(index, 1)}
-                >
-                  <RemIcon />
-                </Fab>
-              </Grid>
+              <>
+                <Grid item className={classes.button}>
+                  <Fab
+                    size={"small"}
+                    color={"primary"}
+                    onClick={() => onSelect(index)}
+                  >
+                    <EditIcon />
+                  </Fab>
+                </Grid>
+                <Grid item className={classes.button}>
+                  <Fab
+                    size={"small"}
+                    color={"primary"}
+                    onClick={() => form.$.splice(index, 1)}
+                  >
+                    <RemIcon />
+                  </Fab>
+                </Grid>
+              </>
             )}
           </Grid>
         ))}
