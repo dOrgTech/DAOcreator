@@ -8,7 +8,6 @@ import {
   withStyles,
   Grid,
   Fab,
-  Button,
   Typography
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -93,6 +92,11 @@ class MembersEditor extends React.Component<Props> {
     };
 
     const onEdit = async (index: number) => {};
+
+    const onEnter = async (index: number) => {
+      //onAdd()
+      //onEdit()
+    };
 
     const editing = (
       <>
