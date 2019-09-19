@@ -31,18 +31,24 @@ class MembersEditor extends React.Component<Props> {
   @observable newMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
   @observable selected: {
     memberForm: MemberForm;
-    index: number | null;
-  } = { memberForm: new MemberForm(this.props.getDAOTokenSymbol), index: null };
+    index: number;
+    backup: { address: string; reputation: string; tokens: string };
+  } = {
+    memberForm: new MemberForm(this.props.getDAOTokenSymbol),
+    index: -1,
+    backup: { address: "", reputation: "", tokens: "" }
+  };
 
-  handleKeyDown = (event: { keyCode: number }) => {
-    if (event.keyCode === 27) {
+  handleKeyDown = (event: { key: string }) => {
+    if (event.key === "Escape") {
       this.selected = {
         memberForm: new MemberForm(this.props.getDAOTokenSymbol),
-        index: null
+        index: -1,
+        backup: { address: "", reputation: "", tokens: "" }
       };
       return false;
     }
-    if ((event.keyCode = 13)) {
+    if (event.key === "Enter") {
       return true;
     }
     return false;
@@ -60,37 +66,29 @@ class MembersEditor extends React.Component<Props> {
     const selected = this.selected;
     const handleKeyDown = this.handleKeyDown;
 
-    //Validates edit and updates form
-    const onEdit = async (index: number) => {};
-
-    //Selects a memberForm and enables editing
-    const onSelect = async (index: number) => {
-      if (index === selected.index) onEdit(index);
-      selected.index = index;
-
-      //Create new memberform
+    const resetSelected = () => {
       selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
+      selected.index = -1;
+      selected.backup = { address: "", reputation: "", tokens: "" };
+    };
 
-      //Set backup to revert to in case of errors
-      const backupMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
-      const address = form.$[index].$.address.$;
-      const reputation = form.$[index].$.reputation.$;
-      const tokens = form.$[index].$.tokens.$;
-
-      //Handles pass by ref issues
-      const setValues = (
-        memberForm: MemberForm,
-        address: string,
-        reputation: string,
-        tokens: string
-      ) => {
-        memberForm.$.address.value = address;
-        memberForm.$.reputation.value = reputation;
-        memberForm.$.tokens.value = tokens;
-      };
-
-      setValues(backupMemberForm, address, reputation, tokens);
-      setValues(selected.memberForm, address, reputation, tokens);
+    //Handles pass by ref issues
+    const getValues = (memberForm: MemberForm) => ({
+      address: memberForm.$.address.value,
+      reputation: memberForm.$.reputation.value,
+      tokens: memberForm.$.tokens.value
+    });
+    const setValues = (
+      memberForm: MemberForm,
+      values: {
+        address: string;
+        reputation: string;
+        tokens: string;
+      }
+    ) => {
+      memberForm.$.address.value = values.address;
+      memberForm.$.reputation.value = values.reputation;
+      memberForm.$.tokens.value = values.tokens;
     };
 
     //Adds a new memberForm to form
@@ -112,6 +110,51 @@ class MembersEditor extends React.Component<Props> {
 
       this.addError = undefined;
       newMemberForm.reset();
+    };
+
+    const onRemove = (index: number) => {
+      resetSelected();
+      form.$.splice(index, 1);
+    };
+
+    //Validates edit and updates form
+    const onEdit = async (index: number) => {
+      // Check the edited member for errors
+      const memberValidate = await selected.memberForm.validate();
+      if (memberValidate.hasError) return;
+
+      // See if the edited member can be reinserted into the array
+      // without any errors
+      setValues(form.$[index], getValues(selected.memberForm));
+
+      const membersValidate = await form.validate();
+      if (membersValidate.hasError) {
+        this.addError = form.error;
+        setValues(form.$[index], selected.backup);
+        return;
+      }
+
+      this.addError = undefined;
+      resetSelected();
+    };
+
+    //Selects a memberForm and enables editing
+    const onSelect = async (index: number) => {
+      if (index === selected.index) {
+        await onEdit(index);
+        resetSelected();
+        return;
+      }
+      if (index > -1) await onEdit(selected.index);
+      selected.index = index;
+
+      //Create new memberform
+      selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
+
+      //Set backup to revert to in case of errors
+      selected.backup = getValues(form.$[index]);
+
+      setValues(selected.memberForm, selected.backup);
     };
 
     const editing = (
@@ -194,7 +237,7 @@ class MembersEditor extends React.Component<Props> {
                   <Fab
                     size={"small"}
                     color={"primary"}
-                    onClick={() => form.$.splice(index, 1)}
+                    onClick={() => onRemove(index)}
                   >
                     <RemIcon />
                   </Fab>
