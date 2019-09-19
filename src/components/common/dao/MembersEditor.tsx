@@ -73,21 +73,24 @@ class MembersEditor extends React.Component<Props> {
 
       //Set backup to revert to in case of errors
       const backupMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
-      const { address, reputation, tokens } = form.$[index].$;
-      backupMemberForm.$ = {
-        ...backupMemberForm.$,
-        address,
-        reputation,
-        tokens
+      const address = form.$[index].$.address.$;
+      const reputation = form.$[index].$.reputation.$;
+      const tokens = form.$[index].$.tokens.$;
+
+      //Handles pass by ref issues
+      const setValues = (
+        memberForm: MemberForm,
+        address: string,
+        reputation: string,
+        tokens: string
+      ) => {
+        memberForm.$.address.value = address;
+        memberForm.$.reputation.value = reputation;
+        memberForm.$.tokens.value = tokens;
       };
 
-      //Set values on selectedMemberForm
-      selected.memberForm.$ = {
-        ...backupMemberForm.$,
-        address,
-        reputation,
-        tokens
-      };
+      setValues(backupMemberForm, address, reputation, tokens);
+      setValues(selected.memberForm, address, reputation, tokens);
     };
 
     //Adds a new memberForm to form
