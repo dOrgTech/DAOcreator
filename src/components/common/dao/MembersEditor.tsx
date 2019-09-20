@@ -82,6 +82,8 @@ class MembersEditor extends React.Component<Props> {
             <Grid container justify={"center"}>
               {this.addError ? (
                 <Typography color={"error"}>{this.addError}</Typography>
+              ) : form.error ? (
+                <Typography color={"error"}>{form.error}</Typography>
               ) : (
                 <></>
               )}
@@ -92,8 +94,12 @@ class MembersEditor extends React.Component<Props> {
               <MembersSaveLoad form={form} />
             </Grid>
           </>
+        ) : form.error ? (
+          <Grid container justify={"center"}>
+            <Typography color={"error"}>{form.error}</Typography>
+          </Grid>
         ) : (
-          <> </>
+          <></>
         )}
         <Grid
           container
@@ -121,7 +127,10 @@ class MembersEditor extends React.Component<Props> {
                   <Fab
                     size={"small"}
                     color={"primary"}
-                    onClick={() => form.$.splice(index, 1)}
+                    onClick={() => {
+                      form.$.splice(index, 1);
+                      this.forceUpdate();
+                    }}
                   >
                     <RemIcon />
                   </Fab>

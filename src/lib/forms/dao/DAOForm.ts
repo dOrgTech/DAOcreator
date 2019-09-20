@@ -1,6 +1,7 @@
 import { Form } from "lib/forms/Form";
 import { DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
-import { DAOcreatorState } from "lib/state";
+import { DAOcreatorState, fromDAOMigrationParams } from "lib/state";
+import { fromJSON, DAOMigrationParams } from "lib/dependency/arc";
 
 export class DAOForm extends Form<
   DAOcreatorState,
@@ -36,5 +37,30 @@ export class DAOForm extends Form<
     this.$.config.fromState(state.config);
     this.$.members.fromState(state.members);
     this.$.schemes.fromState(state.schemes);
+  }
+
+  public async fromMigrationParamsFile(file: File): Promise<void> {
+    const fileReader = new FileReader();
+    fileReader.readAsText(file);
+
+    await new Promise(
+      (resolve, reject) => (fileReader.onloadend = () => resolve())
+    );
+
+    if (fileReader.result === null) {
+      throw Error("Unaable to read file.");
+    }
+
+    const json = fileReader.result as string | ArrayBuffer;
+    let params: DAOMigrationParams;
+
+    if (typeof json === "string") {
+      params = fromJSON(json as string);
+    } else {
+      const decoder = new TextDecoder();
+      params = fromJSON(decoder.decode(json as ArrayBuffer));
+    }
+
+    this.fromState(fromDAOMigrationParams(params));
   }
 }
