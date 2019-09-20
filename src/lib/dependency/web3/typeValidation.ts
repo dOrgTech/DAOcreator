@@ -6,11 +6,6 @@ export const isAddress = (address: Address): boolean => {
   return addr[0] === "0" && addr[1] === "x" && Web3Utils.isAddress(addr);
 };
 
-export const isBigNumber = (number: string | number): boolean => {
-  try {
-    Web3Utils.toBN(number);
-    return true;
-  } catch {
-    return false;
-  }
+export const isBN = (number: Object): boolean => {
+  return Web3Utils.isBN(number);
 };

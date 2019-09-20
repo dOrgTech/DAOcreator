@@ -1,5 +1,5 @@
 import { Validator } from "formstate";
-import { TypeValidation } from "lib/dependency/web3";
+import { TypeValidation, TypeConversion } from "lib/dependency/web3";
 import { toBN } from "web3-utils";
 
 type StringOrNull = string | null | undefined;
@@ -38,10 +38,23 @@ export const validTokenSymbol: Validator<string> = value => {
 };
 
 export const validBigNumber: Validator<string> = value => {
+  const error = "Please enter a valid whole number.";
+  value = value.trim();
+
+  try {
+    TypeConversion.toBN(value);
+  } catch (e) {
+    return error;
+  }
+
+  return null;
+};
+
+export const validNumber: Validator<string> = value => {
   const error = "Please enter a valid number.";
   value = value.trim();
 
-  if (!TypeValidation.isBigNumber(value)) {
+  if (isNaN(Number(value))) {
     return error;
   }
 
@@ -168,9 +181,10 @@ export const nonZeroAddress: Validator<string> = value => {
 export const requireElement = (elementName: string) => (array: any[]) =>
   !array.length && `Please add a ${elementName}.`;
 
-export const noDuplicates = (evaluate: (a: any, b: any) => boolean) => (
-  array: any[]
-) => {
+export const noDuplicates = (
+  evaluate: (a: any, b: any) => boolean,
+  toString: (value: any) => string
+) => (array: any[]) => {
   for (let i = 0; i < array.length; ++i) {
     const a = array[i];
 
@@ -179,7 +193,7 @@ export const noDuplicates = (evaluate: (a: any, b: any) => boolean) => (
       const b = array[k];
 
       if (evaluate(a, b)) {
-        return "Duplicate entry detected.";
+        return `Duplicate entry detected: ${toString(a)}`;
       }
     }
   }

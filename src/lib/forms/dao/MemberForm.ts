@@ -4,7 +4,7 @@ import {
   AddressField,
   requiredText,
   validAddress,
-  validBigNumber,
+  validNumber,
   requireElement,
   noDuplicates,
   nonZeroAddress
@@ -12,8 +12,6 @@ import {
 import { Member } from "lib/state";
 import csvParse from "csv-parse";
 import csvStringify from "csv-stringify";
-import { TypeConversion } from "lib/dependency/web3";
-const { toBN } = TypeConversion;
 
 export class MemberForm extends Form<
   Member,
@@ -37,14 +35,14 @@ export class MemberForm extends Form<
         .setDescription("The member's public address."),
 
       reputation: new TokenField("REP", form ? form.$.reputation.value : "")
-        .validators(requiredText, validBigNumber)
+        .validators(requiredText, validNumber)
         .setDisplayName("Reputation")
         .setDescription(
           "The member's reputation (voting power) within the DAO."
         ),
 
       tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
-        .validators(requiredText, validBigNumber)
+        .validators(requiredText, validNumber)
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
     });
@@ -54,15 +52,15 @@ export class MemberForm extends Form<
   public toState(): Member {
     return {
       address: this.$.address.value,
-      tokens: toBN(this.$.tokens.value),
-      reputation: toBN(this.$.reputation.value)
+      tokens: Number(this.$.tokens.value),
+      reputation: Number(this.$.reputation.value)
     };
   }
 
   public fromState(state: Member) {
     this.$.address.value = state.address;
     this.$.reputation.value = state.reputation.toString();
-    this.$.tokens.value = state.tokens.toString();
+    this.$.tokens.value = state.tokens ? state.tokens.toString() : "0";
   }
 }
 
@@ -80,7 +78,8 @@ export class MembersForm extends Form<Member[], MemberForm[]> {
       requireElement("Member"),
       noDuplicates(
         (a: MemberForm, b: MemberForm) =>
-          a.$.address.value.toLowerCase() === b.$.address.value.toLowerCase()
+          a.$.address.value.toLowerCase() === b.$.address.value.toLowerCase(),
+        (value: MemberForm) => value.$.address.value
       )
     );
   }
@@ -108,7 +107,7 @@ export class MembersForm extends Form<Member[], MemberForm[]> {
     const csv = fileReader.result;
 
     if (csv === null) {
-      throw Error(`Unable to read file.`);
+      throw Error("Unable to read file.");
     }
 
     const parseCSV = (resolve: () => void, reject: (error: Error) => void) => (

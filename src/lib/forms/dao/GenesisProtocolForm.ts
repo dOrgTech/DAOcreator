@@ -262,9 +262,7 @@ export class GenesisProtocolForm extends Form<
   }
 
   public fromState(state: GenesisProtocol) {
-    if (state.preset) {
-      this._preset = state.preset;
-    }
+    this._preset = state.preset;
 
     const config = state.config;
     this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toNumber();
