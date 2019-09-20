@@ -1,5 +1,4 @@
 // TODO: options:
-//       - export button (popover w/ download button + youtube video for how to use the file)
 //       - multi-step process for deployment
 import * as React from "react";
 import {
@@ -19,7 +18,7 @@ import {
 } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { DAOcreatorState, toDAOMigrationParams } from "lib/state";
-import { serialize } from "lib/dependency/arc";
+import { toJSON } from "lib/dependency/arc";
 
 const FileSaver = require("file-saver");
 
@@ -46,7 +45,7 @@ class DeployStep extends React.Component<Props, State> {
     const { exportOpen } = this.state;
 
     const saveFile = () => {
-      var blob = new Blob([serialize(toDAOMigrationParams(dao))], {
+      var blob = new Blob([toJSON(toDAOMigrationParams(dao))], {
         type: "text/plain;charset=utf-8"
       });
       FileSaver.saveAs(blob, "migration-params.json");

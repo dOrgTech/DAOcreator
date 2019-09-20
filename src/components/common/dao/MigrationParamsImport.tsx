@@ -8,10 +8,17 @@ import {
   DialogContent,
   Button
 } from "@material-ui/core";
-import UploadIcon from "@material-ui/icons/CloudUpload";
+import ImportIcon from "@material-ui/icons/Unarchive";
+import { DAOForm } from "lib/forms";
 
 interface ImportError {
+  file: string;
   error: string;
+}
+
+interface Props {
+  form: DAOForm;
+  onImport: () => void;
 }
 
 interface State {
@@ -19,17 +26,15 @@ interface State {
   error: ImportError | undefined;
 }
 
-interface Props {
-  sendToReviewStep: any;
-  updateForms: any;
-}
-
 const initState = {
   open: false,
   error: undefined
 };
 
-class SettingsImport extends React.Component<Props, State> {
+export default class MigrationParamsImport extends React.Component<
+  Props,
+  State
+> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -38,7 +43,7 @@ class SettingsImport extends React.Component<Props, State> {
   }
 
   render() {
-    const { sendToReviewStep, updateForms } = this.props;
+    const { form, onImport } = this.props;
     const { open, error } = this.state;
 
     const onOpen = () => {
@@ -54,18 +59,40 @@ class SettingsImport extends React.Component<Props, State> {
         open: false
       });
 
-    const onError = () =>
+    const onError = (file: string, error: string) =>
       this.setState({
         ...this.state,
-        error: {
-          error:
-            "Please make sure you are importing a existing dao-params.json file"
-        }
+        error: { file, error }
       });
+
+    const onFilePicked = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files === null) {
+        return;
+      }
+
+      const files = Array.from(event.target.files);
+
+      if (files.length === 0) {
+        return;
+      }
+
+      const file: File = files[0];
+
+      try {
+        await form.fromMigrationParamsFile(file);
+        await form.validate();
+      } catch (e) {
+        onError(file.name, e.message);
+        return;
+      }
+
+      onClose();
+      onImport();
+    };
 
     const ImportInfo = () => (
       <DialogTitle id="simple-dialog-title">
-        Import an existing dao-params.json file
+        Import an existing `dao-params.json` file.
       </DialogTitle>
     );
 
@@ -73,43 +100,22 @@ class SettingsImport extends React.Component<Props, State> {
       <DialogContent>
         <strong>We encountered an issue during the import process:</strong>
         <br />
-        <div>{props.error.error}</div>
+        <div>
+          {props.error.file}: {props.error.error}
+        </div>
       </DialogContent>
     );
 
-    const importJSON = (event: React.ChangeEvent<HTMLInputElement>): void => {
-      if (event.target.files === null) {
-        return;
-      }
-
-      const target = event.target as HTMLInputElement;
-      const file: File = target.files![0];
-      handleFileChosen(file);
-    };
-
-    const handleFileChosen = (file: File) => {
-      let fileReader = new FileReader();
-      fileReader.readAsText(file);
-      fileReader.onload = async () => {
-        try {
-          await updateForms(fileReader.result);
-          sendToReviewStep();
-        } catch (error) {
-          onError();
-          return;
-        }
-      };
-    };
-
     const ImportButton = () => (
       <FormControl>
-        <Button variant="contained" component="label">
+        <Button color="primary" variant="contained" component="label">
           Upload File
           <input
             type="file"
             id="file"
             accept=".json"
-            onChange={importJSON}
+            multiple={false}
+            onChange={onFilePicked}
             style={{ display: "none" }}
           />
         </Button>
@@ -120,7 +126,7 @@ class SettingsImport extends React.Component<Props, State> {
       <>
         <Grid item xs={12} md={7}>
           <Fab size={"small"} color={"primary"} onClick={onOpen}>
-            <UploadIcon />
+            <ImportIcon />
           </Fab>
         </Grid>
         <Dialog onClose={onClose} open={open}>
@@ -131,5 +137,3 @@ class SettingsImport extends React.Component<Props, State> {
     );
   }
 }
-
-export default SettingsImport;

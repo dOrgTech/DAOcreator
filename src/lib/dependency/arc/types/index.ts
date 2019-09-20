@@ -1,5 +1,4 @@
 import { Address } from "lib/dependency/web3";
-import BN from "bn.js";
 
 export * from "./schemes";
 export * from "./votingMachines";
@@ -11,6 +10,7 @@ export interface DAO {
   daoToken: Address;
   reputation: Address;
   config: DAOConfig;
+  // TODO schemes
 }
 
 export interface DAOConfig {
@@ -21,8 +21,8 @@ export interface DAOConfig {
 
 export interface Member {
   address: Address;
-  reputation: BN;
-  tokens: BN;
+  reputation: number;
+  tokens: number | undefined;
 }
 
 export interface DeploymentInfo {

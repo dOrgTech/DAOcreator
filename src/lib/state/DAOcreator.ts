@@ -7,11 +7,8 @@ import {
   GenericScheme,
   ContributionReward,
   SchemeRegistrar,
-  GenesisProtocol,
-  deserialize
+  GenesisProtocol
 } from "lib/dependency/arc";
-import { DAOForm } from "lib/forms";
-import { TypeConversion } from "lib/dependency/web3";
 export {
   SchemeType,
   ContributionReward,
@@ -20,8 +17,6 @@ export {
   GenesisProtocol,
   GenesisProtocolPreset
 } from "lib/dependency/arc";
-
-const toBN = TypeConversion.toBN;
 
 export type DAOConfig = DAOConfig;
 export type Member = Member;
@@ -105,8 +100,8 @@ export const fromDAOMigrationParams = (
   for (const member of params.founders) {
     members.push({
       address: member.address,
-      tokens: toBN(member.tokens),
-      reputation: toBN(member.reputation)
+      tokens: member.tokens ? member.tokens : 0,
+      reputation: member.reputation
     });
   }
 
@@ -184,16 +179,4 @@ export const fromDAOMigrationParams = (
     members,
     schemes
   };
-};
-
-export const importParams = (form: DAOForm, params: string) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const daoParams: DAOMigrationParams = deserialize(params);
-      form.fromState(fromDAOMigrationParams(daoParams));
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
 };

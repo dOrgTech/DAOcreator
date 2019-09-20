@@ -1,6 +1,5 @@
 import { Member, GenesisProtocolConfig } from "./index";
-import { TypeConversion } from "lib/dependency/web3";
-const { toBN } = TypeConversion;
+import { TypeConversion, TypeValidation } from "lib/dependency/web3";
 
 export interface DAOMigrationParams {
   orgName: string;
@@ -29,39 +28,47 @@ export interface DAOMigrationParams {
   founders: Member[];
 }
 
-export const serialize = (params: DAOMigrationParams): string => {
-  params.VotingMachinesParams = params.VotingMachinesParams.map(
-    (machineParams: any) => {
-      Object.keys(machineParams).map(voting => {
-        if (voting !== "voteOnBehalf") {
-          return (machineParams[voting] = toBN(
-            machineParams[voting]
-          ).toNumber());
-        } else {
-          return (machineParams[voting] = machineParams[voting].toString());
-        }
-      });
-      return machineParams;
-    }
-  );
+export const toJSON = (params: DAOMigrationParams): string => {
+  // convert all BN values to numbers
+  for (let config of params.VotingMachinesParams) {
+    Object.keys(config).forEach(key => {
+      const value = (config as any)[key];
+      if (TypeValidation.isBN(value)) {
+        (config as any)[key] = value.toNumber();
+      }
+    });
+  }
+
   return JSON.stringify(params, null, 2);
 };
 
-export const deserialize = (params: string): DAOMigrationParams => {
-  const migrationParams = JSON.parse(params);
-  migrationParams.VotingMachinesParams = migrationParams.VotingMachinesParams.map(
-    (machineParams: any) => {
-      Object.keys(machineParams).map(voting => {
-        if (voting !== "voteOnBehalf") {
-          return (machineParams[voting] = toBN(
-            machineParams[voting].toString()
-          ));
-        } else {
-          return (machineParams[voting] = machineParams[voting].toString());
-        }
-      });
-      return machineParams;
+// Used to detect what property names are of type BN.
+// See below.
+const bn0 = TypeConversion.toBN(0);
+const dummyInstance: GenesisProtocolConfig = {
+  queuedVoteRequiredPercentage: bn0,
+  queuedVotePeriodLimit: bn0,
+  thresholdConst: bn0,
+  proposingRepReward: bn0,
+  minimumDaoBounty: bn0,
+  boostedVotePeriodLimit: bn0,
+  daoBountyConst: bn0,
+  activationTime: bn0,
+  preBoostedVotePeriodLimit: bn0,
+  quietEndingPeriod: bn0,
+  voteOnBehalf: "0x",
+  votersReputationLossRatio: bn0
+};
+
+export const fromJSON = (params: string): DAOMigrationParams => {
+  const receiver = (key: string, value: any) => {
+    const testValue = (dummyInstance as any)[key];
+    if (testValue && TypeValidation.isBN(testValue)) {
+      return TypeConversion.toBN(value);
+    } else {
+      return value;
     }
-  );
-  return migrationParams;
+  };
+
+  return JSON.parse(params, receiver);
 };
