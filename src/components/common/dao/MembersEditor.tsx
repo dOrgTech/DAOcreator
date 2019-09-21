@@ -94,11 +94,13 @@ class MembersEditor extends React.Component<Props> {
 
       this.addError = undefined;
       newMemberForm.reset();
+      this.forceUpdate();
     };
 
     const onRemove = (index: number) => {
       resetSelected();
       form.$.splice(index, 1);
+      this.forceUpdate();
     };
 
     //Validates edit and updates form
@@ -120,6 +122,7 @@ class MembersEditor extends React.Component<Props> {
 
       this.addError = undefined;
       resetSelected();
+      this.forceUpdate();
     };
 
     //Selects a memberForm and enables editing
