@@ -13,9 +13,12 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import RemIcon from "@material-ui/icons/Remove";
 import EditIcon from "@material-ui/icons/Edit";
+import CheckIcon from "@material-ui/icons/Check";
+import ErrorIcon from "@material-ui/icons/Error";
 import MemberEditor from "./MemberEditor";
 import { MemberForm, MembersForm } from "lib/forms";
 import MembersSaveLoad from "./MembersSaveLoad";
+import { Member } from "lib/state";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -32,7 +35,7 @@ class MembersEditor extends React.Component<Props> {
   @observable selected: {
     memberForm: MemberForm;
     index: number;
-    backup: { address: string; reputation: string; tokens: string };
+    backup: { [key in keyof Member]: string };
   } = {
     memberForm: new MemberForm(this.props.getDAOTokenSymbol),
     index: -1,
@@ -72,25 +75,6 @@ class MembersEditor extends React.Component<Props> {
       selected.backup = { address: "", reputation: "", tokens: "" };
     };
 
-    //Handles pass by ref issues
-    const getValues = (memberForm: MemberForm) => ({
-      address: memberForm.$.address.value,
-      reputation: memberForm.$.reputation.value,
-      tokens: memberForm.$.tokens.value
-    });
-    const setValues = (
-      memberForm: MemberForm,
-      values: {
-        address: string;
-        reputation: string;
-        tokens: string;
-      }
-    ) => {
-      memberForm.$.address.value = values.address;
-      memberForm.$.reputation.value = values.reputation;
-      memberForm.$.tokens.value = values.tokens;
-    };
-
     //Adds a new memberForm to form
     const onAdd = async () => {
       // Check the new member for errors
@@ -125,12 +109,12 @@ class MembersEditor extends React.Component<Props> {
 
       // See if the edited member can be reinserted into the array
       // without any errors
-      setValues(form.$[index], getValues(selected.memberForm));
+      form.$[index].setValues(selected.memberForm.values);
 
       const membersValidate = await form.validate();
       if (membersValidate.hasError) {
         this.addError = form.error;
-        setValues(form.$[index], selected.backup);
+        form.$[index].setValues(selected.backup);
         return;
       }
 
@@ -152,9 +136,8 @@ class MembersEditor extends React.Component<Props> {
       selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
       //Set backup to revert to in case of errors
-      selected.backup = getValues(form.$[index]);
-
-      setValues(selected.memberForm, selected.backup);
+      selected.backup = form.$[index].values;
+      selected.memberForm.setValues(selected.backup);
     };
 
     const editing = (
@@ -165,13 +148,14 @@ class MembersEditor extends React.Component<Props> {
         </Grid>
         <Grid
           container
-          spacing={1}
           key={"new-member"}
+          spacing={1}
           justify={"center"}
+          alignItems={"flex-start"}
           onKeyDown={e => handleKeyDown(e) && onAdd()}
         >
           <MemberEditor form={newMemberForm} editable={true} />
-          <Grid item className={classes.button}>
+          <Grid item className={classes.addButton}>
             <Fab
               size={"small"}
               color={"primary"}
@@ -209,12 +193,13 @@ class MembersEditor extends React.Component<Props> {
             container
             spacing={1}
             style={{
-              //Removes useless scrollbars caused by spacing{1}
+              // Removes useless scrollbars caused by spacing={1}
               margin: "0",
               width: "100%"
             }}
             key={`member-${index}`}
             justify={"center"}
+            alignItems={"flex-start"}
             onKeyDown={e => handleKeyDown(e) && onEdit(index)}
           >
             {index !== selected.index ? (
@@ -224,16 +209,24 @@ class MembersEditor extends React.Component<Props> {
             )}
             {editable && (
               <>
-                <Grid item className={classes.button}>
+                <Grid item className={classes.editButtons}>
                   <Fab
                     size={"small"}
                     color={"primary"}
                     onClick={() => onSelect(index)}
                   >
-                    <EditIcon />
+                    {selected.index === index ? (
+                      selected.memberForm.error ? (
+                        <ErrorIcon />
+                      ) : (
+                        <CheckIcon />
+                      )
+                    ) : (
+                      <EditIcon />
+                    )}
                   </Fab>
                 </Grid>
-                <Grid item className={classes.button}>
+                <Grid item className={classes.editButtons}>
                   <Fab
                     size={"small"}
                     color={"primary"}
@@ -260,8 +253,13 @@ class MembersEditor extends React.Component<Props> {
 
 const styles = (theme: Theme) =>
   createStyles({
-    button: {
-      alignSelf: "center"
+    addButton: {
+      marginTop: "12px",
+      marginLeft: "22px",
+      paddingRight: "34px !important"
+    },
+    editButtons: {
+      marginTop: "12px"
     }
   });
 
