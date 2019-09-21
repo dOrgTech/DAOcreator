@@ -44,26 +44,23 @@ export const toJSON = (params: DAOMigrationParams): string => {
 
 // Used to detect what property names are of type BN.
 // See below.
-const bn0 = TypeConversion.toBN(0);
-const dummyInstance: GenesisProtocolConfig = {
-  queuedVoteRequiredPercentage: bn0,
-  queuedVotePeriodLimit: bn0,
-  thresholdConst: bn0,
-  proposingRepReward: bn0,
-  minimumDaoBounty: bn0,
-  boostedVotePeriodLimit: bn0,
-  daoBountyConst: bn0,
-  activationTime: bn0,
-  preBoostedVotePeriodLimit: bn0,
-  quietEndingPeriod: bn0,
-  voteOnBehalf: "0x",
-  votersReputationLossRatio: bn0
-};
+const bnProps = new Set([
+  "queuedVoteRequiredPercentage",
+  "queuedVotePeriodLimit",
+  "thresholdConst",
+  "proposingRepReward",
+  "minimumDaoBounty",
+  "boostedVotePeriodLimit",
+  "daoBountyConst",
+  "activationTime",
+  "preBoostedVotePeriodLimit",
+  "quietEndingPeriod",
+  "votersReputationLossRatio"
+]);
 
 export const fromJSON = (params: string): DAOMigrationParams => {
   const receiver = (key: string, value: any) => {
-    const testValue = (dummyInstance as any)[key];
-    if (testValue && TypeValidation.isBN(testValue)) {
+    if (bnProps.has(key)) {
       return TypeConversion.toBN(value);
     } else {
       return value;
