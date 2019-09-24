@@ -26,6 +26,7 @@ export const migrateDAO = async (
     gasLimit: undefined
   };
 
+  // TODO: move this into web3 lib
   let network = await web3.eth.net.getNetworkType();
   if (network === "main") {
     network = "mainnet";

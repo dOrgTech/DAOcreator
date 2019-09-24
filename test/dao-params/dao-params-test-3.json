@@ -46,11 +46,15 @@
       "reputation": 12312
     }
   ],
-  "ContributionReward": {
-    "voteParams": 0
-  },
-  "SchemeRegistrar": {
-    "voteRegisterParams": 1,
-    "voteRemoveParams": 1
-  }
+  "ContributionReward": [
+    {
+      "voteParams": 0
+    }
+  ],
+  "SchemeRegistrar": [
+    {
+      "voteRegisterParams": 1,
+      "voteRemoveParams": 1
+    }
+  ]
 }

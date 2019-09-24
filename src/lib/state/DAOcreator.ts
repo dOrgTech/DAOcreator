@@ -48,26 +48,35 @@ export const toDAOMigrationParams = (
   for (const scheme of schemes) {
     switch (scheme.type) {
       case SchemeType.ContributionReward: {
-        params.ContributionReward = {
+        if (!params.ContributionReward) {
+          params.ContributionReward = [];
+        }
+        params.ContributionReward.push({
           voteParams: params.VotingMachinesParams.length
-        };
+        });
         params.schemes.ContributionReward = true;
         break;
       }
       case SchemeType.GenericScheme: {
         const genericScheme = scheme as GenericScheme;
-        params.GenericScheme = {
+        if (!params.UGenericScheme) {
+          params.UGenericScheme = [];
+        }
+        params.UGenericScheme.push({
           voteParams: params.VotingMachinesParams.length,
           targetContract: genericScheme.contractToCall
-        };
-        params.schemes.GenericScheme = true;
+        });
+        params.schemes.UGenericScheme = true;
         break;
       }
       case SchemeType.SchemeRegistrar: {
-        params.SchemeRegistrar = {
+        if (!params.SchemeRegistrar) {
+          params.SchemeRegistrar = [];
+        }
+        params.SchemeRegistrar.push({
           voteRegisterParams: params.VotingMachinesParams.length,
           voteRemoveParams: params.VotingMachinesParams.length
-        };
+        });
         params.schemes.SchemeRegistrar = true;
         break;
       }
@@ -109,14 +118,18 @@ export const fromDAOMigrationParams = (
   let schemes: Scheme[] = [];
 
   Object.keys(params.schemes).forEach(type => {
+    // TODO: support multiple schemes of a single type
     switch (type) {
       case "ContributionReward":
         if (params.schemes[type]) {
-          let index = params.ContributionReward
-            ? params.ContributionReward["voteParams"]
-            : 0;
+          const config = params.ContributionReward
+            ? params.ContributionReward[0]
+            : undefined;
+          let index;
 
-          if (index === undefined) {
+          if (config && config.voteParams) {
+            index = config.voteParams;
+          } else {
             index = 0;
           }
 
@@ -126,19 +139,23 @@ export const fromDAOMigrationParams = (
           schemes.push(new ContributionReward(votingMachine));
         }
         break;
-      case "GenericScheme":
+      case "UGenericScheme":
         if (params.schemes[type]) {
-          let index = params.GenericScheme
-            ? params.GenericScheme["voteParams"]
-            : 0;
-          let address = params.GenericScheme
-            ? params.GenericScheme["targetContract"]
-            : "0x0000000000000000000000000000000000000000";
+          const config = params.UGenericScheme
+            ? params.UGenericScheme[0]
+            : undefined;
+          let index;
+          let address;
 
-          if (index === undefined) {
+          if (config && config.voteParams) {
+            index = config.voteParams;
+          } else {
             index = 0;
           }
-          if (address === undefined) {
+
+          if (config && config.targetContract) {
+            address = config.targetContract;
+          } else {
             address = "0x0000000000000000000000000000000000000000";
           }
 
@@ -151,15 +168,21 @@ export const fromDAOMigrationParams = (
         break;
       case "SchemeRegistrar":
         if (params.schemes[type]) {
-          let index = params.SchemeRegistrar
-            ? params.SchemeRegistrar["voteRegisterParams"]
-            : 0;
+          const config = params.SchemeRegistrar
+            ? params.SchemeRegistrar[0]
+            : undefined;
+          let index;
 
-          if (index === undefined) {
-            index = params.SchemeRegistrar
-              ? params.SchemeRegistrar["voteRemoveParams"]
-              : 0;
-            index = index ? index : 0;
+          if (config) {
+            if (config.voteRegisterParams) {
+              index = config.voteRegisterParams;
+            } else if (config.voteRemoveParams) {
+              index = config.voteRemoveParams;
+            } else {
+              index = 0;
+            }
+          } else {
+            index = 0;
           }
 
           const votingMachine = new GenesisProtocol({

@@ -8,20 +8,20 @@ export interface DAOMigrationParams {
   VotingMachinesParams: GenesisProtocolConfig[];
   schemes: {
     ContributionReward?: boolean;
-    GenericScheme?: boolean;
+    UGenericScheme?: boolean;
     SchemeRegistrar?: boolean;
   };
   ContributionReward?: {
     voteParams?: number;
-  };
-  GenericScheme?: {
+  }[];
+  UGenericScheme?: {
     voteParams?: number;
     targetContract: string;
-  };
+  }[];
   SchemeRegistrar?: {
     voteRegisterParams?: number;
     voteRemoveParams?: number;
-  };
+  }[];
   unregisterOwner: boolean;
   useUController: boolean;
   useDaoCreator: boolean;
