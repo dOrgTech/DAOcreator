@@ -1,5 +1,3 @@
-// TODO: options:
-//       - multi-step process for deployment
 import * as React from "react";
 import {
   createStyles,
@@ -14,11 +12,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  CircularProgress
 } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { DAOcreatorState, toDAOMigrationParams } from "lib/state";
-import { toJSON } from "lib/dependency/arc";
+import { toJSON, migrateDAO, DAOMigrationCallbacks } from "lib/dependency/arc";
 
 const FileSaver = require("file-saver");
 
@@ -29,26 +28,66 @@ interface Props extends WithStyles<typeof styles> {
 
 interface State {
   exportOpen: boolean;
+  deploying: boolean;
 }
+
+const initState: State = {
+  exportOpen: false,
+  deploying: false
+};
 
 class DeployStep extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
     this.state = {
-      exportOpen: false
+      ...initState
     };
   }
 
   render() {
     const { dao, classes } = this.props;
-    const { exportOpen } = this.state;
+    const { exportOpen, deploying } = this.state;
 
-    const saveFile = () => {
+    const onSaveFile = () => {
       var blob = new Blob([toJSON(toDAOMigrationParams(dao))], {
         type: "text/plain;charset=utf-8"
       });
       FileSaver.saveAs(blob, "migration-params.json");
+    };
+
+    const onDeploy = async () => {
+      const callback: DAOMigrationCallbacks = {
+        userApproval: (msg: string): Promise<boolean> => {
+          console.log(msg);
+          return new Promise(resolve => resolve(true));
+        },
+        info: (msg: string) => {
+          console.log(msg);
+        },
+        error: (err: string) => {
+          console.log(err);
+        },
+        txComplete: (
+          msg: string,
+          txHash: string,
+          txCost: number
+        ): Promise<void> => {
+          console.log(msg);
+          console.log(txHash);
+          console.log(txCost);
+          return new Promise(() => {});
+        },
+        migrationAborted: (msg: string) => {
+          console.log(msg);
+        }
+      };
+      const params = toDAOMigrationParams(dao);
+
+      this.setState({ ...initState, deploying: true });
+
+      await migrateDAO(params, callback);
+
+      this.setState({ ...initState, deploying: false });
     };
 
     return (
@@ -63,14 +102,14 @@ class DeployStep extends React.Component<Props, State> {
             <Button
               variant={"contained"}
               color={"primary"}
-              onClick={() => this.setState({ exportOpen: true })}
+              onClick={() => this.setState({ ...initState, exportOpen: true })}
             >
               Export Config
             </Button>
             <Dialog
               open={exportOpen}
               fullWidth
-              onClose={() => this.setState({ exportOpen: false })}
+              onClose={() => this.setState({ ...initState, exportOpen: false })}
               aria-labelledby={"export-dao-config"}
             >
               <DialogTitle>Export JSON Config</DialogTitle>
@@ -90,12 +129,16 @@ class DeployStep extends React.Component<Props, State> {
                 <Button
                   variant={"contained"}
                   color={"primary"}
-                  onClick={saveFile}
+                  onClick={onSaveFile}
                 >
                   Export
                 </Button>
               </DialogActions>
             </Dialog>
+            <Button variant={"contained"} color={"primary"} onClick={onDeploy}>
+              Deploy DAO
+            </Button>
+            {deploying ? <CircularProgress /> : <></>}
           </Grid>
         </CardContent>
       </Card>

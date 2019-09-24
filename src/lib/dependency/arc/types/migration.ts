@@ -28,6 +28,14 @@ export interface DAOMigrationParams {
   founders: Member[];
 }
 
+export interface DAOMigrationCallbacks {
+  userApproval: (msg: string) => Promise<boolean>;
+  info: (msg: string) => void;
+  error: (err: string) => void;
+  txComplete: (msg: string, txHash: string, txCost: number) => Promise<void>;
+  migrationAborted: (msg: string) => void;
+}
+
 export const toJSON = (params: DAOMigrationParams): string => {
   // convert all BN values to numbers
   for (let config of params.VotingMachinesParams) {

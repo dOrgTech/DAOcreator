@@ -8,7 +8,7 @@
     "app-test": "react-scripts test"
   },
   "dependencies": {
-    "@daostack/arc": "0.0.1-rc.16",
+    "@daostack/migration": "0.0.1-rc.24-v3",
     "@date-io/date-fns": "^1.3.9",
     "@devexpress/dx-react-chart": "^2.0.2",
     "@devexpress/dx-react-chart-material-ui": "^2.0.2",

@@ -27,7 +27,7 @@ interface State {
   error: ImportError | undefined;
 }
 
-const initState = {
+const initState: State = {
   open: false,
   error: undefined
 };
