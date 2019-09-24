@@ -30,8 +30,3 @@ export interface DeploymentInfo {
   daoToken: Address;
   reputation: Address;
 }
-
-export interface ParamLink {
-  getParameters: () => any[];
-  getParametersHash: () => string;
-}

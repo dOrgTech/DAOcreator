@@ -1,4 +1,3 @@
-// TODO: warning if they don't have contribution reward or scheme registrar. Default these?
 import * as React from "react";
 import { observer } from "mobx-react";
 import { observable, IObservableObject } from "mobx";

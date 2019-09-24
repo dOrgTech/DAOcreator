@@ -227,7 +227,6 @@ export class GenesisProtocolForm extends Form<
     }
   }
 
-  // TODO: have fields that convert themselves (gwei to eth)
   public toState(): GenesisProtocol {
     if (this.preset) {
       return new GenesisProtocol({ preset: this.preset });
