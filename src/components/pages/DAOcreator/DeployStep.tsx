@@ -12,12 +12,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  CircularProgress
+  DialogActions
 } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { DAOcreatorState, toDAOMigrationParams } from "lib/state";
-import { toJSON, migrateDAO, DAOMigrationCallbacks } from "lib/dependency/arc";
+import { toJSON, DAOMigrationResult } from "lib/dependency/arc";
+import Migrator from "components/common/dao/Migrator";
 
 const FileSaver = require("file-saver");
 
@@ -28,12 +28,10 @@ interface Props extends WithStyles<typeof styles> {
 
 interface State {
   exportOpen: boolean;
-  deploying: boolean;
 }
 
 const initState: State = {
-  exportOpen: false,
-  deploying: false
+  exportOpen: false
 };
 
 class DeployStep extends React.Component<Props, State> {
@@ -46,48 +44,13 @@ class DeployStep extends React.Component<Props, State> {
 
   render() {
     const { dao, classes } = this.props;
-    const { exportOpen, deploying } = this.state;
+    const { exportOpen } = this.state;
 
     const onSaveFile = () => {
       var blob = new Blob([toJSON(toDAOMigrationParams(dao))], {
         type: "text/plain;charset=utf-8"
       });
       FileSaver.saveAs(blob, "migration-params.json");
-    };
-
-    const onDeploy = async () => {
-      const callback: DAOMigrationCallbacks = {
-        userApproval: (msg: string): Promise<boolean> => {
-          console.log(msg);
-          return new Promise(resolve => resolve(true));
-        },
-        info: (msg: string) => {
-          console.log(msg);
-        },
-        error: (err: string) => {
-          console.log(err);
-        },
-        txComplete: (
-          msg: string,
-          txHash: string,
-          txCost: number
-        ): Promise<void> => {
-          console.log(msg);
-          console.log(txHash);
-          console.log(txCost);
-          return new Promise(() => {});
-        },
-        migrationAborted: (msg: string) => {
-          console.log(msg);
-        }
-      };
-      const params = toDAOMigrationParams(dao);
-
-      this.setState({ ...initState, deploying: true });
-
-      await migrateDAO(params, callback);
-
-      this.setState({ ...initState, deploying: false });
     };
 
     return (
@@ -135,10 +98,15 @@ class DeployStep extends React.Component<Props, State> {
                 </Button>
               </DialogActions>
             </Dialog>
-            <Button variant={"contained"} color={"primary"} onClick={onDeploy}>
-              Deploy DAO
-            </Button>
-            {deploying ? <CircularProgress /> : <></>}
+            <Migrator
+              dao={toDAOMigrationParams(dao)}
+              onComplete={(result: DAOMigrationResult) => {
+                console.log(result);
+              }}
+              onAbort={(error: Error) => {
+                console.log(error.message);
+              }}
+            />
           </Grid>
         </CardContent>
       </Card>

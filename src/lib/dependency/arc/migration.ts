@@ -1,7 +1,3 @@
-// confirmation... yes/no
-// steps...
-// spinner (msg) -> error ? -> logTx (done message)
-
 // TODO: additional options (use DAOcreator, etc)
 
 import { DAOMigrationParams, DAOMigrationCallbacks } from "./types";
@@ -45,22 +41,27 @@ export const migrateDAO = async (
     }
   };
 
-  const migration = await migrate({
-    migrationParams: dao,
-    web3,
-    spinner: {
-      start: callbacks.info,
-      fail: callbacks.error
-    },
-    confirm: callbacks.userApproval,
-    logTx,
-    opts,
-    previousMigration: { ...addresses[network] },
-    customabislocation: undefined
-  });
+  try {
+    const migration = await migrate({
+      migrationParams: dao,
+      web3,
+      spinner: {
+        start: callbacks.info,
+        fail: callbacks.error
+      },
+      confirm: callbacks.userApproval,
+      logTx,
+      opts,
+      previousMigration: { ...addresses[network] },
+      customabislocation: undefined
+    });
 
-  // return arc version
-  return migration.dao[arcVersion]; // name, Avatar, DAOToken, Reputation, Controller, Schemes
+    // TODO:
+    // return arc version
+    return migration.dao[arcVersion]; // name, Avatar, DAOToken, Reputation, Controller, Schemes
+  } catch (e) {
+    callbacks.migrationAborted(e);
+  }
 
   // TODO: ensure etherscan verification
   // TODO: create an interface for the migration result

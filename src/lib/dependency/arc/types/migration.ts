@@ -1,5 +1,5 @@
 import { Member, GenesisProtocolConfig } from "./index";
-import { TypeConversion, TypeValidation } from "lib/dependency/web3";
+import { TypeConversion, TypeValidation, Address } from "lib/dependency/web3";
 
 export interface DAOMigrationParams {
   orgName: string;
@@ -28,12 +28,23 @@ export interface DAOMigrationParams {
   founders: Member[];
 }
 
+export interface DAOMigrationResult {
+  arcVersion: string;
+  name: string;
+  avatar: Address;
+  token: Address;
+  reputation: Address;
+  controller: Address;
+  schemes: ?
+}
+
 export interface DAOMigrationCallbacks {
   userApproval: (msg: string) => Promise<boolean>;
   info: (msg: string) => void;
-  error: (err: string) => void;
+  error: (msg: string) => void;
   txComplete: (msg: string, txHash: string, txCost: number) => Promise<void>;
-  migrationAborted: (msg: string) => void;
+  migrationAborted: (err: Error) => void;
+  migrationComplete: (result: DAOMigrationResult) => void;
 }
 
 export const toJSON = (params: DAOMigrationParams): string => {
