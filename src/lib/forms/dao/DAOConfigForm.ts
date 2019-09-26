@@ -1,22 +1,21 @@
-import { ValidatableMapOrArray } from "formstate";
-import { Form } from "lib/forms/Form";
+import { Form, SimpleForm } from "lib/forms/types";
 import {
   StringField,
   requiredText,
   validTokenSymbol,
   validName
 } from "lib/forms";
-import { ExpertDAOConfig } from "lib/state";
+import { DAOConfig } from "lib/state";
 
-export class ExpertDAOConfigForm extends Form<
-  ExpertDAOConfig,
+export class DAOConfigForm extends Form<
+  DAOConfig,
   {
     daoName: StringField;
     tokenName: StringField;
     tokenSymbol: StringField;
   }
 > {
-  constructor(form?: ExpertDAOConfig) {
+  constructor(form?: DAOConfigForm) {
     super({
       daoName: new StringField(form ? form.$.daoName.value : "")
         .validators(requiredText, validName)
@@ -30,16 +29,10 @@ export class ExpertDAOConfigForm extends Form<
         .validators(requiredText, validTokenSymbol)
         .setDisplayName("Token Symbol")
         .setDescription("The token's 4 letter symbol for exchanges.")
-      // daoSymbol: new StringField(
-      //   form ? form.$.daoSymbol!.value : ""
-      // )
-      //   .validators(validTokenSymbol)
-      //   .setDisplayName("DAO symbol")
-      //   .setDescription("The symbol of the DAO.")
     });
   }
 
-  public toState(): ExpertDAOConfig {
+  public toState(): DAOConfig {
     return {
       daoName: this.$.daoName.value,
       tokenName: this.$.tokenName!.value,
@@ -47,7 +40,7 @@ export class ExpertDAOConfigForm extends Form<
     };
   }
 
-  public fromState(state: ExpertDAOConfig) {
+  public fromState(state: DAOConfig) {
     this.$.daoName.value = state.daoName;
     this.$.tokenName.value = state.tokenName;
     this.$.tokenSymbol.value = state.tokenSymbol;
@@ -55,7 +48,7 @@ export class ExpertDAOConfigForm extends Form<
 }
 
 export class SimpleDAOConfigForm extends SimpleForm<
-  SimpleDAOConfig,
+  DAOConfigForm,
   {
     daoName: StringField;
     daoSymbol: StringField;
@@ -75,31 +68,16 @@ export class SimpleDAOConfigForm extends SimpleForm<
     });
   }
 
-  // getting error here without this function.
-  public toState(): SimpleDAOConfig {
-    return {
-      daoName: this.$.daoName.value,
-      daoSymbol: this.$.daoSymbol.value
-    };
+  public toForm(): DAOConfigForm {
+    const form = new DAOConfigForm();
+    form.$.daoName.value = this.$.daoName.value;
+    form.$.tokenName.value = this.$.daoName.value;
+    form.$.tokenSymbol.value = this.$.daoSymbol.value;
+    return form;
   }
 
-  public fromState(state: SimpleDAOConfig) {
-    this.$.daoName.value = state.daoName;
-    this.$.daoSymbol.value = state.daoSymbol;
+  public fromForm(form: DAOConfigForm): void {
+    this.$.daoName = form.$.daoName;
+    this.$.daoSymbol = form.$.tokenSymbol;
   }
-
-  // public toExpert(): DAOConfigForm {
-  //   const form = new DAOConfigForm();
-  //   form.$.daoName.value = this.$.daoName.value;
-  //   form.$.tokenName.value = this.$.daoName.value;
-  //   form.$.tokenSymbol.value = this.$.daoSymbol.value;
-  //   return form;
-  // }
-  // /// WIP here we need to set the simple inputs based from expert. Need to make some change here
-  // public fromExpert(state: DAOConfigForm): SimpleDAOConfigForm {
-  //   const form = new SimpleDAOConfigForm();
-  //   form.$.daoName.value = this.$.daoName.value;
-  //   form.$.daoSymbol.value = this.$.daoSymbol.value;
-  //   return form;
-  // }
 }
