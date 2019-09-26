@@ -12,10 +12,10 @@ export interface DAO {
   avatar: Address;
   daoToken: Address;
   reputation: Address;
-  config: DAOConfig;
+  config: ExpertDAOConfig | SimpleDAOConfig;
 }
 
-export interface DAOConfig {
+export interface ExpertDAOConfig {
   daoName: string;
   tokenName: string;
   tokenSymbol: string;

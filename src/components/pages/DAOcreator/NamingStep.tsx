@@ -9,13 +9,12 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-// import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
-import SimpleDAOConfigEditor from "components/common/dao/SimpleDAOConfigEditor";
-import { DAOConfigForm, SimpleDAOConfigForm } from "lib/forms";
+import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import { ExpertDAOConfigForm, SimpleDAOConfigForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  form: SimpleDAOConfigForm;
+  form: ExpertDAOConfigForm | SimpleDAOConfigForm;
 }
 
 class NamingStep extends React.Component<Props> {

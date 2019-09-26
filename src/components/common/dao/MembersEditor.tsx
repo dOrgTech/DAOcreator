@@ -21,6 +21,7 @@ interface Props extends WithStyles<typeof styles> {
   form: MembersForm;
   editable: boolean;
   getDAOTokenSymbol: () => string;
+  maxHeight?: string;
 }
 
 @observer
@@ -29,7 +30,13 @@ class MembersEditor extends React.Component<Props> {
   @observable memberForm = new MemberForm(this.props.getDAOTokenSymbol);
 
   render() {
-    const { classes, form, editable, getDAOTokenSymbol } = this.props;
+    const {
+      classes,
+      form,
+      editable,
+      getDAOTokenSymbol,
+      maxHeight
+    } = this.props;
     const memberForm = this.memberForm;
 
     const onAdd = async () => {
@@ -88,30 +95,43 @@ class MembersEditor extends React.Component<Props> {
         ) : (
           <> </>
         )}
-
-        {form.$.map((member, index) => (
-          <Grid
-            container
-            spacing={1}
-            key={`member-${index}`}
-            justify={"center"}
-          >
-            <MemberEditor form={member} editable={false} />
-            {editable ? (
-              <Grid item className={classes.button}>
-                <Fab
-                  size={"small"}
-                  color={"primary"}
-                  onClick={() => form.$.splice(index, 1)}
-                >
-                  <RemIcon />
-                </Fab>
-              </Grid>
-            ) : (
-              <> </>
-            )}
-          </Grid>
-        ))}
+        <Grid
+          container
+          style={
+            maxHeight
+              ? {
+                  maxHeight: maxHeight,
+                  overflowY: "auto",
+                  scrollbarWidth: "thin",
+                  overflowX: "hidden"
+                }
+              : {}
+          }
+        >
+          {form.$.map((member, index) => (
+            <Grid
+              container
+              spacing={1}
+              key={`member-${index}`}
+              justify={"center"}
+            >
+              <MemberEditor form={member} editable={false} />
+              {editable ? (
+                <Grid item className={classes.button}>
+                  <Fab
+                    size={"small"}
+                    color={"primary"}
+                    onClick={() => form.$.splice(index, 1)}
+                  >
+                    <RemIcon />
+                  </Fab>
+                </Grid>
+              ) : (
+                <> </>
+              )}
+            </Grid>
+          ))}
+        </Grid>
       </>
     );
   }

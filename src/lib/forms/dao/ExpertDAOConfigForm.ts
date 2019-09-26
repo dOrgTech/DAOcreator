@@ -6,46 +6,48 @@ import {
   validTokenSymbol,
   validName
 } from "lib/forms";
-import { DAOConfig } from "lib/state";
-import { SimpleForm } from "lib/forms";
-import { SimpleDAOConfig } from "lib/dependency/arc";
+import { ExpertDAOConfig } from "lib/state";
 
-export class DAOConfigForm extends Form<
-  DAOConfig,
+export class ExpertDAOConfigForm extends Form<
+  ExpertDAOConfig,
   {
     daoName: StringField;
     tokenName: StringField;
     tokenSymbol: StringField;
   }
 > {
-  constructor(form?: DAOConfigForm) {
+  constructor(form?: ExpertDAOConfig) {
     super({
       daoName: new StringField(form ? form.$.daoName.value : "")
         .validators(requiredText, validName)
         .setDisplayName("DAO Name")
         .setDescription("The name of the DAO."),
-
-      tokenName: new StringField(form ? form.$.tokenName.value : "")
+      tokenName: new StringField(form ? form.$.tokenName!.value : "")
         .validators(requiredText, validName)
         .setDisplayName("Token Name")
         .setDescription("The name of the DAO's token."),
-
-      tokenSymbol: new StringField(form ? form.$.tokenSymbol.value : "")
+      tokenSymbol: new StringField(form ? form.$.tokenSymbol!.value : "")
         .validators(requiredText, validTokenSymbol)
         .setDisplayName("Token Symbol")
         .setDescription("The token's 4 letter symbol for exchanges.")
+      // daoSymbol: new StringField(
+      //   form ? form.$.daoSymbol!.value : ""
+      // )
+      //   .validators(validTokenSymbol)
+      //   .setDisplayName("DAO symbol")
+      //   .setDescription("The symbol of the DAO.")
     });
   }
 
-  public toState(): DAOConfig {
+  public toState(): ExpertDAOConfig {
     return {
       daoName: this.$.daoName.value,
-      tokenName: this.$.tokenName.value,
-      tokenSymbol: this.$.tokenSymbol.value
+      tokenName: this.$.tokenName!.value,
+      tokenSymbol: this.$.tokenSymbol!.value
     };
   }
 
-  public fromState(state: DAOConfig) {
+  public fromState(state: ExpertDAOConfig) {
     this.$.daoName.value = state.daoName;
     this.$.tokenName.value = state.tokenName;
     this.$.tokenSymbol.value = state.tokenSymbol;

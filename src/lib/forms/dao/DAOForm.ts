@@ -1,11 +1,6 @@
 import { ValidatableMapOrArray } from "formstate";
 import { Form } from "lib/forms/Form";
-import {
-  DAOConfigForm,
-  SimpleDAOConfigForm,
-  MembersForm,
-  SchemesForm
-} from "lib/forms";
+import { ExpertDAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
 import { DAOcreatorState } from "lib/state";
 
 export abstract class ExpertForm<
@@ -27,14 +22,13 @@ export abstract class SimpleForm<
 export class DAOForm extends ExpertForm<
   DAOcreatorState,
   {
-    // TODO: properly implement simple mode
-    config: SimpleDAOConfigForm;
+    config: ExpertDAOConfigForm;
     members: MembersForm;
     schemes: SchemesForm;
   }
 > {
   constructor(form?: DAOForm) {
-    const daoConfig = new SimpleDAOConfigForm(form ? form.$.config : undefined);
+    const daoConfig = new ExpertDAOConfigForm(form ? form.$.config : undefined);
     const getDAOTokenSymbol = () => daoConfig.$.daoSymbol.value;
 
     super({
