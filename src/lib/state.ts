@@ -1,4 +1,9 @@
-import { DAOConfig, Member, Scheme } from "./dependency/arc";
+import {
+  ExpertDAOConfig,
+  Member,
+  Scheme,
+  SimpleDAOConfig
+} from "./dependency/arc";
 
 export {
   SchemeType,
@@ -9,12 +14,13 @@ export {
   GenesisProtocolPreset
 } from "./dependency/arc";
 
-export type DAOConfig = DAOConfig;
+export type ExpertDAOConfig = ExpertDAOConfig;
+export type SimpleDAOConfig = SimpleDAOConfig;
 export type Member = Member;
 export type Scheme = Scheme;
 
 export interface DAOcreatorState {
-  config: DAOConfig;
+  config: ExpertDAOConfig | SimpleDAOConfig;
   members: Member[];
   schemes: Scheme[];
 }

@@ -27,10 +27,10 @@ export default class ReviewStep extends React.Component<Props> {
     const { form, setStep } = this.props;
     const { config, schemes, members } = form.$;
     const getDAOTokenSymbol = () => {
-      if (config.$.expertConfig) {
-        return config.$.expertConfig.tokenSymbol.value;
+      if (config.$.tokenSymbol) {
+        return config.$.tokenSymbol.value;
       } else {
-        return config.$.simpleConfig.daoSymbol.value;
+        return config.$.daoSymbol!.value;
       }
     };
     const missingSchemeReg =

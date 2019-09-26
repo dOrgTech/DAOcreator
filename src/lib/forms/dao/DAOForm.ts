@@ -1,24 +1,18 @@
 import { Form } from "lib/forms/Form";
-import { DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
+import { ExpertDAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
 import { DAOcreatorState } from "lib/state";
 
 export class DAOForm extends Form<
   DAOcreatorState,
   {
-    config: DAOConfigForm;
+    config: ExpertDAOConfigForm;
     members: MembersForm;
     schemes: SchemesForm;
   }
 > {
   constructor(form?: DAOForm) {
-    const daoConfig = new DAOConfigForm(form ? form.$.config : undefined);
-    const getDAOTokenSymbol = () => {
-      if (daoConfig.$.expertConfig) {
-        return daoConfig.$.expertConfig.tokenSymbol.value;
-      } else {
-        return daoConfig.$.simpleConfig.daoSymbol.value;
-      }
-    };
+    const daoConfig = new ExpertDAOConfigForm(form ? form.$.config : undefined);
+    const getDAOTokenSymbol = () => daoConfig.$.daoSymbol.value;
 
     super({
       config: daoConfig,

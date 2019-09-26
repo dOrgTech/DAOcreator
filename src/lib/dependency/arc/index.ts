@@ -9,13 +9,12 @@ export const serializeDAO = (dao: DAOcreatorState): string => {
   let json: any = {};
 
   // names
-  if (config.expertConfig) {
-    json.orgName = config.expertConfig!.daoName;
-    json.tokenName = config.expertConfig!.tokenName;
-    json.tokenSymbol = config.expertConfig!.tokenSymbol;
+  json.orgName = config.daoName;
+  if (config.tokenName) {
+    json.tokenName = config.tokenName;
+    json.tokenSymbol = config.tokenSymbol;
   } else {
-    json.orgName = config.simpleConfig!.daoName;
-    json.daoSymbol = config.simpleConfig!.daoSymbol;
+    json.daoSymbol = config.daoSymbol;
   }
 
   json.VotingMachinesParams = [];
