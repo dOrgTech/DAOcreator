@@ -27,4 +27,32 @@ export abstract class Form<
   get displayName(): string {
     return this._displayName;
   }
+
+  setValues(values: { [key in keyof T]?: any }): Form<StateType, T> {
+    // iterate through all the possible keys
+    for (let [key, value] of Object.entries(values)) {
+      const field = (this.$ as any)[key];
+      // if it's a FieldState, it has the property "value"
+      if ((field as Object).hasOwnProperty("value")) {
+        field.value = value;
+      } else {
+        (this.$ as any)[key] = value;
+      }
+    }
+    return this;
+  }
+
+  get values(): { [key in keyof T]: any } {
+    let values: any = {};
+
+    for (let [key, value] of Object.entries(this.$)) {
+      if ((value as Object).hasOwnProperty("value")) {
+        values[key] = value.value;
+      } else {
+        values[key] = value;
+      }
+    }
+
+    return values;
+  }
 }

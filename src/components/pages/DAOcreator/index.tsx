@@ -16,21 +16,30 @@ import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
-import { DAOForm, SimpleDAOConfigForm } from "lib/forms";
-import { FormState } from "formstate";
+import {
+  DAOForm,
+  DAOConfigForm,
+  MembersForm,
+  SchemesForm,
+  SimpleDAOConfigForm
+} from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
-  error: string;
   simple: Boolean;
 }
 
 interface Step {
   title: string;
-  form: FormState<any>;
+  form:
+    | DAOForm
+    | DAOConfigForm
+    | MembersForm
+    | SchemesForm
+    | SimpleDAOConfigForm;
   Component: any;
   props?: {
     [name: string]: any;
@@ -44,7 +53,6 @@ class DAOcreator extends React.Component<Props, State> {
     super(props);
     this.state = {
       step: 0,
-      error: "",
       simple: true
     };
   }
@@ -58,6 +66,12 @@ class DAOcreator extends React.Component<Props, State> {
           : this.form.$.config.toForm(),
         Component: NamingStep,
         props: {
+          daoForm: this.form,
+          toReviewStep: () => {
+            this.setState({
+              step: 3
+            });
+          },
           updateConfig: () => this.setState({ simple: !this.state.simple })
         }
       },
@@ -81,8 +95,7 @@ class DAOcreator extends React.Component<Props, State> {
         props: {
           setStep: (step: number) => {
             this.setState({
-              step,
-              error: ""
+              step
             });
           }
         }
@@ -103,8 +116,7 @@ class DAOcreator extends React.Component<Props, State> {
 
     const previousStep = async () => {
       this.setState({
-        step: this.state.step - 1,
-        error: ""
+        step: this.state.step - 1
       });
     };
 
@@ -114,19 +126,16 @@ class DAOcreator extends React.Component<Props, State> {
 
       if (!res.hasError) {
         this.setState({
-          step: step + 1,
-          error: ""
+          step: step + 1
         });
       } else {
         if (form.error) {
           this.setState({
-            step,
-            error: form.error
+            step
           });
         } else {
           this.setState({
-            step,
-            error: "Unknown Error."
+            step
           });
         }
       }

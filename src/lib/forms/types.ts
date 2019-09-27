@@ -1,36 +1,5 @@
 import { FieldState, FormState, ValidatableMapOrArray } from "formstate";
-import csvParse from "csv-parse";
-import csvStringify from "csv-stringify";
-import {
-  requiredText,
-  validAddress,
-  validBigNumber,
-  validTokenSymbol,
-  validName,
-  requireElement,
-  noDuplicates,
-  validPercentage,
-  greaterThan,
-  lessThanOrEqual,
-  greaterThanOrEqual,
-  nonZeroAddress,
-  positiveDuration,
-  validDuration,
-  futureDate
-} from "./validators";
-import {
-  DAOcreatorState,
-  DAOConfig,
-  Member,
-  GenesisProtocol,
-  Scheme,
-  GenericScheme,
-  ContributionReward,
-  SchemeRegistrar
-} from "lib/state";
-import { TypeConversion } from "lib/dependency/web3";
-import { SchemeType, GenesisProtocolPreset } from "lib/dependency/arc";
-const { toBN } = TypeConversion;
+import { validPercentage, positiveDuration, validDuration } from "./validators";
 
 export enum FieldType {
   String,

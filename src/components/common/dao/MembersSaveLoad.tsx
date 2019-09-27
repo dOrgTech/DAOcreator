@@ -62,7 +62,7 @@ export default class MembersSaveLoad extends React.Component<Props, State> {
         error: { file, error }
       });
 
-    const onImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onFilePicked = async (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files === null) {
         return;
       }
@@ -95,6 +95,15 @@ export default class MembersSaveLoad extends React.Component<Props, State> {
       form.$.push(...formClone.$);
 
       onClose();
+    };
+
+    const onDownload = async () => {
+      saveAs(new File([await form.toCSV()], "dao-members.csv"));
+    };
+
+    const onDownloadTemplate = async () => {
+      const emptyForm = new MembersForm(form.getDAOTokenSymbol);
+      saveAs(new File([await emptyForm.toCSV()], "dao-members.csv"));
     };
 
     const ImportInfo = () => (
@@ -142,28 +151,19 @@ export default class MembersSaveLoad extends React.Component<Props, State> {
 
     const ImportButton = () => (
       <FormControl>
-        <Button color={"primary"} variant={"contained"} component="label">
+        <Button color="primary" variant="contained" component="label">
           Upload File
           <input
             type="file"
             id="file"
             accept=".csv"
             multiple={true}
-            onChange={onImport}
+            onChange={onFilePicked}
             style={{ display: "none" }}
           />
         </Button>
       </FormControl>
     );
-
-    const onDownload = async () => {
-      saveAs(new File([await form.toCSV()], "dao-members.csv"));
-    };
-
-    const onDownloadTemplate = async () => {
-      const emptyForm = new MembersForm(form.getDAOTokenSymbol);
-      saveAs(new File([await emptyForm.toCSV()], "dao-members.csv"));
-    };
 
     return (
       <ButtonGroup size={"small"} color={"primary"} variant={"contained"}>
