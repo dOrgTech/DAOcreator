@@ -16,7 +16,7 @@ import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
-import { DAOForm } from "lib/forms";
+import { DAOForm, SimpleDAOConfigForm } from "lib/forms";
 import { FormState } from "formstate";
 
 // eslint-disable-next-line
@@ -25,6 +25,7 @@ interface Props extends WithStyles<typeof styles> {}
 interface State {
   step: number;
   error: string;
+  simple: Boolean;
 }
 
 interface Step {
@@ -43,7 +44,8 @@ class DAOcreator extends React.Component<Props, State> {
     super(props);
     this.state = {
       step: 0,
-      error: ""
+      error: "",
+      simple: true
     };
   }
 
@@ -51,8 +53,13 @@ class DAOcreator extends React.Component<Props, State> {
     const steps: Step[] = [
       {
         title: "Name",
-        form: this.form.$.config,
-        Component: NamingStep
+        form: this.state.simple
+          ? this.form.$.config
+          : this.form.$.config.toForm(),
+        Component: NamingStep,
+        props: {
+          updateConfig: () => this.setState({ simple: !this.state.simple })
+        }
       },
       {
         title: "Schemes",

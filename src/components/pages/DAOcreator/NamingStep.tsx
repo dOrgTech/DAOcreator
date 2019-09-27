@@ -7,19 +7,21 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles
+  WithStyles,
+  Button
 } from "@material-ui/core";
 import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
-import { ExpertDAOConfigForm, SimpleDAOConfigForm } from "lib/forms";
+import { DAOConfigForm, SimpleDAOConfigForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
-  form: ExpertDAOConfigForm | SimpleDAOConfigForm;
+  form: DAOConfigForm | SimpleDAOConfigForm;
+  updateConfig: any;
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, updateConfig } = this.props;
 
     return (
       <Card>
@@ -39,10 +41,23 @@ class NamingStep extends React.Component<Props> {
                   <br />
                   Let's start by giving a name to the DAO and its token.
                   <br />
+                  <br />
+                  Would you like to do it in expert mode?
+                  <br />
+                  {form instanceof SimpleDAOConfigForm ? (
+                    <Button
+                      variant={"contained"}
+                      color={"secondary"}
+                      onClick={updateConfig}
+                    >
+                      Expert mode
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </Typography>
               </Grid>
-              {/*<DAOConfigEditor form={form} editable={true} />*/}
-              <SimpleDAOConfigEditor form={form} editable={true} />
+              <DAOConfigEditor form={form} editable={true} />
             </Grid>
           </CardContent>
         </form>

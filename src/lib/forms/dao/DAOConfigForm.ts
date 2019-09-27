@@ -35,8 +35,8 @@ export class DAOConfigForm extends Form<
   public toState(): DAOConfig {
     return {
       daoName: this.$.daoName.value,
-      tokenName: this.$.tokenName!.value,
-      tokenSymbol: this.$.tokenSymbol!.value
+      tokenName: this.$.tokenName.value,
+      tokenSymbol: this.$.tokenSymbol.value
     };
   }
 
