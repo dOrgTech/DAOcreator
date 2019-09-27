@@ -62,7 +62,7 @@ const Landing: React.SFC<Props> = ({ classes }) => (
               title={"DAOcreator"}
               description={"Wizard for DAO design and deployment."}
               github={"https://github.com/dOrgTech/DAOcreator"}
-              test={"https://dorg.tech/#/dao-creator"}
+              test={"/#/dao-creator"}
             />
           </Grid>
           <Grid item xs={3} className={classes.caseCard}>

@@ -16,8 +16,8 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
-import { GenesisProtocolForm } from "../../../lib/forms";
-import { GenesisProtocolPreset } from "../../../lib/dependency/arc";
+import { GenesisProtocolForm } from "lib/forms";
+import { GenesisProtocolPreset } from "lib/dependency/arc";
 
 interface Props {
   form: GenesisProtocolForm;
@@ -49,6 +49,7 @@ export default class GenesisProtocolPresetEditor extends React.Component<
 
       if (value === "0") {
         value = undefined;
+        this.setState({ editing: true });
       }
 
       form.preset = value;
@@ -112,29 +113,29 @@ export default class GenesisProtocolPresetEditor extends React.Component<
                 <EditIcon />
               </Fab>
             </Grid>
-            <Dialog
-              open={editing}
-              onClose={onClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  <div>
-                    Genesis protocol is our implementation of holographic
-                    consensus as a smart contract on the ethereum blockchain. In
-                    order to allow various use cases, the genesis protocol has
-                    several configurations parameters:
-                  </div>
-                </DialogContentText>
-                <GenesisProtocolEditor form={form} editable={true} />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={onClose}>Save</Button>
-              </DialogActions>
-            </Dialog>
           </Grid>
         </FormControl>
+        <Dialog
+          open={editing}
+          onClose={onClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Genesis Protocol</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <div>
+                Genesis protocol is our implementation of holographic consensus
+                as a smart contract on the ethereum blockchain. In order to
+                allow various use cases, the genesis protocol has several
+                configurations parameters:
+              </div>
+            </DialogContentText>
+            <GenesisProtocolEditor form={form} editable={true} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose}>Save</Button>
+          </DialogActions>
+        </Dialog>
       </>
     );
   }

@@ -9,12 +9,12 @@ import {
 } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/WarningTwoTone";
 import EditIcon from "@material-ui/icons/Settings";
-import SchemesEditor from "../../common/dao/SchemesEditor";
-import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
-import MembersEditor from "../../common/dao/MembersEditor";
-import MembersAnalytics from "../../common/dao/MembersAnalytics";
-import { DAOForm } from "../../../lib/forms";
-import { SchemeType } from "../../../lib/state";
+import SchemesEditor from "components/common/dao/SchemesEditor";
+import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import MembersEditor from "components/common/dao/MembersEditor";
+import MembersAnalytics from "components/common/dao/MembersAnalytics";
+import { DAOForm } from "lib/forms";
+import { SchemeType } from "lib/state";
 
 interface Props {
   form: DAOForm;
@@ -94,6 +94,7 @@ export default class ReviewStep extends React.Component<Props> {
                 form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
+                maxScrollHeight={"200px"}
               />
             </Grid>
           </Grid>

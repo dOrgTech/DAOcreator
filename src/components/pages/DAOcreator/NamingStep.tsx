@@ -9,17 +9,20 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import DAOConfigEditor from "../../common/dao/DAOConfigEditor";
-import { DAOConfigForm } from "../../../lib/forms";
+import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
+import MigrationParamsImport from "components/common/dao/MigrationParamsImport";
+import { DAOConfigForm, DAOForm } from "lib/forms";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   form: DAOConfigForm;
+  daoForm: DAOForm;
+  toReviewStep: () => void;
 }
 
 class NamingStep extends React.Component<Props> {
   render() {
-    const { classes, form } = this.props;
+    const { classes, form, daoForm, toReviewStep } = this.props;
 
     return (
       <Card>
@@ -42,6 +45,7 @@ class NamingStep extends React.Component<Props> {
                 </Typography>
               </Grid>
               <DAOConfigEditor form={form} editable={true} />
+              <MigrationParamsImport form={daoForm} onImport={toReviewStep} />
             </Grid>
           </CardContent>
         </form>

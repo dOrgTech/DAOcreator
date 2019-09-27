@@ -1,8 +1,8 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Card, CardContent, Typography } from "@material-ui/core";
-import SchemesEditor from "../../common/dao/SchemesEditor";
-import { SchemesForm } from "../../../lib/forms";
+import SchemesEditor from "components/common/dao/SchemesEditor";
+import { SchemesForm } from "lib/forms";
 
 interface Props {
   form: SchemesForm;
