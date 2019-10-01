@@ -1,6 +1,5 @@
 import { Validator } from "formstate";
 import { TypeValidation, TypeConversion } from "lib/dependency/web3";
-import { toBN } from "web3-utils";
 
 type StringOrNull = string | null | undefined;
 
@@ -138,7 +137,7 @@ export const greaterThan = (bound: number) => (value: string) => {
   const error = `Number must be greater than ${bound}.`;
   value = value.trim();
 
-  if (toBN(value).toNumber() > bound) {
+  if (validNumber(value) === null && Number(value) > bound) {
     return null;
   }
 
@@ -149,7 +148,7 @@ export const greaterThanOrEqual = (bound: number) => (value: string) => {
   const error = `Number must be greater than or equal to ${bound}.`;
   value = value.trim();
 
-  if (toBN(value).toNumber() >= bound) {
+  if (validNumber(value) === null && Number(value) >= bound) {
     return null;
   }
 
@@ -160,7 +159,7 @@ export const lessThanOrEqual = (bound: number) => (value: string) => {
   const error = `Number must be less than or equal to ${bound}.`;
   value = value.trim();
 
-  if (toBN(value).toNumber() <= bound) {
+  if (validNumber(value) === null && Number(value) <= bound) {
     return null;
   }
 
