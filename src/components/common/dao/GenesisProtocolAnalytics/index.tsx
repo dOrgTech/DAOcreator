@@ -31,8 +31,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         form.$.boostedVotePeriodLimit.toSeconds(),
         form.$.boostedVotePeriodLimit.displayName,
         {
-          min: GP.EasyConfig.boostedVotePeriodLimit.toNumber(),
-          max: GP.CriticalConfig.boostedVotePeriodLimit.toNumber(),
+          min: GP.EasyConfig.boostedVotePeriodLimit,
+          max: GP.CriticalConfig.boostedVotePeriodLimit,
           toString: secondsToString
         }
       ),
@@ -40,8 +40,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         form.$.queuedVotePeriodLimit.toSeconds(),
         form.$.queuedVotePeriodLimit.displayName,
         {
-          min: GP.EasyConfig.queuedVotePeriodLimit.toNumber(),
-          max: GP.CriticalConfig.queuedVotePeriodLimit.toNumber(),
+          min: GP.EasyConfig.queuedVotePeriodLimit,
+          max: GP.CriticalConfig.queuedVotePeriodLimit,
           toString: secondsToString
         }
       ),
@@ -49,8 +49,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         form.$.preBoostedVotePeriodLimit.toSeconds(),
         form.$.preBoostedVotePeriodLimit.displayName,
         {
-          min: GP.EasyConfig.preBoostedVotePeriodLimit.toNumber(),
-          max: GP.CriticalConfig.preBoostedVotePeriodLimit.toNumber(),
+          min: GP.EasyConfig.preBoostedVotePeriodLimit,
+          max: GP.CriticalConfig.preBoostedVotePeriodLimit,
           toString: secondsToString
         }
       )
@@ -61,8 +61,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.minimumDaoBounty.value),
         form.$.minimumDaoBounty.displayName,
         {
-          min: GP.EasyConfig.minimumDaoBounty.toNumber(),
-          max: GP.CriticalConfig.minimumDaoBounty.toNumber(),
+          min: GP.EasyConfig.minimumDaoBounty,
+          max: GP.CriticalConfig.minimumDaoBounty,
           toString: formatGEN
         }
       ),
@@ -70,8 +70,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.thresholdConst.value),
         form.$.thresholdConst.displayName,
         {
-          min: GP.EasyConfig.thresholdConst.toNumber(),
-          max: GP.CriticalConfig.thresholdConst.toNumber(),
+          min: GP.EasyConfig.thresholdConst,
+          max: GP.CriticalConfig.thresholdConst,
           toString: (value: number) => value.toString()
         }
       )
@@ -82,8 +82,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.queuedVoteRequiredPercentage.value),
         form.$.queuedVoteRequiredPercentage.displayName,
         {
-          min: GP.EasyConfig.queuedVoteRequiredPercentage.toNumber(),
-          max: GP.CriticalConfig.queuedVoteRequiredPercentage.toNumber(),
+          min: GP.EasyConfig.queuedVoteRequiredPercentage,
+          max: GP.CriticalConfig.queuedVoteRequiredPercentage,
           toString: formatPercentage
         }
       ),
@@ -91,8 +91,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         form.$.quietEndingPeriod.toSeconds(),
         form.$.quietEndingPeriod.displayName,
         {
-          min: GP.EasyConfig.quietEndingPeriod.toNumber(),
-          max: GP.CriticalConfig.quietEndingPeriod.toNumber(),
+          min: GP.EasyConfig.quietEndingPeriod,
+          max: GP.CriticalConfig.quietEndingPeriod,
           toString: secondsToString
         }
       )
@@ -103,8 +103,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.proposingRepReward.value),
         form.$.proposingRepReward.displayName,
         {
-          min: GP.EasyConfig.proposingRepReward.toNumber(),
-          max: GP.CriticalConfig.proposingRepReward.toNumber(),
+          min: GP.EasyConfig.proposingRepReward,
+          max: GP.CriticalConfig.proposingRepReward,
           toString: formatREP
         }
       ),
@@ -112,8 +112,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.daoBountyConst.value),
         form.$.daoBountyConst.displayName,
         {
-          min: GP.EasyConfig.daoBountyConst.toNumber(),
-          max: GP.CriticalConfig.daoBountyConst.toNumber(),
+          min: GP.EasyConfig.daoBountyConst,
+          max: GP.CriticalConfig.daoBountyConst,
           toString: (value: number) => value.toString()
         }
       )
@@ -124,8 +124,8 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
         Number(form.$.votersReputationLossRatio.value),
         form.$.votersReputationLossRatio.displayName,
         {
-          min: GP.EasyConfig.votersReputationLossRatio.toNumber(),
-          max: GP.CriticalConfig.votersReputationLossRatio.toNumber(),
+          min: GP.EasyConfig.votersReputationLossRatio,
+          max: GP.CriticalConfig.votersReputationLossRatio,
           toString: formatPercentage
         }
       )
