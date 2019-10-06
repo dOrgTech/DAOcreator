@@ -55,13 +55,8 @@ class DeployStep extends React.Component<Props, State> {
 
     return (
       <Card>
-        <CardContent>
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
+        <CardContent className={classes.root}>
+          {/*
             <Button
               variant={"contained"}
               color={"primary"}
@@ -98,16 +93,16 @@ class DeployStep extends React.Component<Props, State> {
                 </Button>
               </DialogActions>
             </Dialog>
-            <Migrator
-              dao={toDAOMigrationParams(dao)}
-              onComplete={(result: DAOMigrationResult) => {
-                console.log(result);
-              }}
-              onAbort={(error: Error) => {
-                console.log(error.message);
-              }}
-            />
-          </Grid>
+            */}
+          <Migrator
+            dao={toDAOMigrationParams(dao)}
+            onComplete={(result: DAOMigrationResult) => {
+              console.log(result);
+            }}
+            onAbort={(error: Error) => {
+              console.log(error.message);
+            }}
+          />
         </CardContent>
       </Card>
     );
@@ -117,6 +112,9 @@ class DeployStep extends React.Component<Props, State> {
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
+    root: {
+      maxWidth: "100%"
+    },
     dialog: {
       maxWidth: "690px"
     }

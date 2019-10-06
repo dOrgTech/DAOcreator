@@ -1049,6 +1049,16 @@
       "integrity": "sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==",
       "dev": true
     },
+    "@daostack/arc": {
+      "version": "0.0.1-rc.23",
+      "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.23.tgz",
+      "integrity": "sha512-3BbVfWgbB4MRQv971CB1b+oy+7piZohGwdurojEfANpvAJJHvkRun7Ds4YUcjRD8xSK73Cj2x1GsNezvjijE4Q==",
+      "requires": {
+        "@daostack/infra": "0.0.1-rc.14",
+        "math": "0.0.3",
+        "openzeppelin-solidity": "2.1.3"
+      }
+    },
     "@daostack/arc-hive": {
       "version": "0.0.1-rc.4",
       "resolved": "https://registry.npmjs.org/@daostack/arc-hive/-/arc-hive-0.0.1-rc.4.tgz",
@@ -1064,12 +1074,21 @@
         }
       }
     },
-    "@daostack/migration": {
-      "version": "0.0.1-rc.24-v3",
-      "resolved": "https://registry.npmjs.org/@daostack/migration/-/migration-0.0.1-rc.24-v3.tgz",
-      "integrity": "sha512-Y/FqS9smM1dlhG+WA+i7mnCR/l8PCDP/gS87xwn+X2NuZXPj/8BlQkrxa2dfRojCAt6eq3yERq75Ak2fJ8n5aA==",
+    "@daostack/infra": {
+      "version": "0.0.1-rc.14",
+      "resolved": "https://registry.npmjs.org/@daostack/infra/-/infra-0.0.1-rc.14.tgz",
+      "integrity": "sha512-c/zQ8drjq/GJk37zgNqBh2BxPFVXVEBS0X0EZLoRwOZ4aHC31673oVUjtbQ7ltmuFC4yPfQOvWTGzT4C+D8fNg==",
       "requires": {
-        "@daostack/arc": "0.0.1-rc.24",
+        "ethereumjs-abi": "^0.6.5",
+        "openzeppelin-solidity": "2.1.3"
+      }
+    },
+    "@daostack/migration": {
+      "version": "0.0.1-rc.23-v3",
+      "resolved": "https://registry.npmjs.org/@daostack/migration/-/migration-0.0.1-rc.23-v3.tgz",
+      "integrity": "sha512-SfqyY2e9E5sexr9P2AHGW5Uxje9rdNa9dLnhjz/DuK/DFbl1fFUD+5T2iDRbL//XDgLGGhFhmMr6wX21nY81AA==",
+      "requires": {
+        "@daostack/arc": "0.0.1-rc.23",
         "@daostack/arc-hive": "0.0.1-rc.4",
         "ethereumjs-wallet": "^0.6.3",
         "fstream": "^1.0.12",
@@ -1086,32 +1105,6 @@
         "yargs": "^12.0.2"
       },
       "dependencies": {
-        "@daostack/arc": {
-          "version": "0.0.1-rc.24",
-          "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.24.tgz",
-          "integrity": "sha512-Q08qwihU2/A2vGV8DyZ8mkMZ7BXSf1eVGxevlXVqA7HvgR+RZV1tv5E0S5V8LT6x+uFTveLF6Xg9bpmc3gv+ew==",
-          "requires": {
-            "@daostack/infra": "0.0.1-rc.14",
-            "math": "0.0.3",
-            "openzeppelin-solidity": "2.3.0"
-          }
-        },
-        "@daostack/infra": {
-          "version": "0.0.1-rc.14",
-          "resolved": "https://registry.npmjs.org/@daostack/infra/-/infra-0.0.1-rc.14.tgz",
-          "integrity": "sha512-c/zQ8drjq/GJk37zgNqBh2BxPFVXVEBS0X0EZLoRwOZ4aHC31673oVUjtbQ7ltmuFC4yPfQOvWTGzT4C+D8fNg==",
-          "requires": {
-            "ethereumjs-abi": "^0.6.5",
-            "openzeppelin-solidity": "2.1.3"
-          },
-          "dependencies": {
-            "openzeppelin-solidity": {
-              "version": "2.1.3",
-              "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.1.3.tgz",
-              "integrity": "sha512-Zz595xw6w4ZrNU3JJJTlPd8bHFbHv5OkJlkqsM2i+NBs6CzImoHI3dZ+nmhkfR+p52cGXKmayAGbnfdCum1SMg=="
-            }
-          }
-        },
         "bn.js": {
           "version": "4.11.6",
           "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-4.11.6.tgz",
@@ -1234,11 +1227,6 @@
           "requires": {
             "http-https": "^1.0.0"
           }
-        },
-        "openzeppelin-solidity": {
-          "version": "2.3.0",
-          "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.3.0.tgz",
-          "integrity": "sha512-QYeiPLvB1oSbDt6lDQvvpx7k8ODczvE474hb2kLXZBPKMsxKT1WxTCHBYrCU7kS7hfAku4DcJ0jqOyL+jvjwQw=="
         },
         "p-cancelable": {
           "version": "0.3.0",
@@ -1549,19 +1537,8 @@
           "integrity": "sha512-8p6ZLv+1JYa5Vs8oBn33Nn3VGFBbF+wVfO+b78RJS1Qf1uIOzjFVDk3XwYDD7rlz9G5BKpxhaQw+6EGQ7L02aw==",
           "requires": {
             "underscore": "1.8.3",
-            "web3-core-helpers": "1.0.0-beta.37"
-          },
-          "dependencies": {
-            "websocket": {
-              "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "from": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "requires": {
-                "debug": "^2.2.0",
-                "nan": "^2.3.3",
-                "typedarray-to-buffer": "^3.1.2",
-                "yaeti": "^0.0.6"
-              }
-            }
+            "web3-core-helpers": "1.0.0-beta.37",
+            "websocket": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2"
           }
         },
         "web3-shh": {
@@ -9208,7 +9185,8 @@
         },
         "ansi-regex": {
           "version": "2.1.1",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         },
         "aproba": {
           "version": "1.2.0",
@@ -9573,7 +9551,8 @@
         },
         "safe-buffer": {
           "version": "5.1.2",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         },
         "safer-buffer": {
           "version": "2.1.2",
@@ -9621,6 +9600,7 @@
         "strip-ansi": {
           "version": "3.0.1",
           "bundled": true,
+          "optional": true,
           "requires": {
             "ansi-regex": "^2.0.0"
           }
@@ -9659,11 +9639,13 @@
         },
         "wrappy": {
           "version": "1.0.2",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         },
         "yallist": {
           "version": "3.0.3",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         }
       }
     },
@@ -15179,6 +15161,11 @@
       "requires": {
         "is-wsl": "^1.1.0"
       }
+    },
+    "openzeppelin-solidity": {
+      "version": "2.1.3",
+      "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.1.3.tgz",
+      "integrity": "sha512-Zz595xw6w4ZrNU3JJJTlPd8bHFbHv5OkJlkqsM2i+NBs6CzImoHI3dZ+nmhkfR+p52cGXKmayAGbnfdCum1SMg=="
     },
     "opn": {
       "version": "5.5.0",

@@ -1,5 +1,4 @@
-import { ParamLink } from "./index";
-import { Address, keccak256, encodeParameters } from "lib/dependency/web3";
+import { Address } from "lib/dependency/web3";
 
 export interface VotingMachine {
   typeName: string;

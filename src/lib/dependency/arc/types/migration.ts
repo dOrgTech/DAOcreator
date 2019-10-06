@@ -1,4 +1,5 @@
 import { Member, GenesisProtocolConfig } from "./index";
+import { Address } from "lib/dependency/web3";
 
 export interface DAOMigrationParams {
   orgName: string;
@@ -31,10 +32,10 @@ export interface DAOMigrationResult {
   arcVersion: string;
   name: string;
   avatar: Address;
-  token: Address;
+  daoToken: Address;
   reputation: Address;
   controller: Address;
-  schemes: ?
+  schemes: string[];
 }
 
 export interface DAOMigrationCallbacks {

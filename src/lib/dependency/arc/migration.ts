@@ -1,7 +1,11 @@
 // TODO: additional options (use DAOcreator, etc)
 
-import { DAOMigrationParams, DAOMigrationCallbacks } from "./types";
-import { getWeb3 } from "lib/dependency/web3";
+import {
+  DAOMigrationParams,
+  DAOMigrationCallbacks,
+  DAOMigrationResult
+} from "./types";
+import { getWeb3, getNetworkName, getDefaultOpts } from "lib/dependency/web3";
 const migrate = require("@daostack/migration/migrate-dao");
 const addresses = require("@daostack/migration/migration.json");
 const arcVersion = require("@daostack/migration/package.json").dependencies[
@@ -11,22 +15,10 @@ const arcVersion = require("@daostack/migration/package.json").dependencies[
 export const migrateDAO = async (
   dao: DAOMigrationParams,
   callbacks: DAOMigrationCallbacks
-): Promise<any> => {
+): Promise<DAOMigrationResult | undefined> => {
   const web3 = await getWeb3();
-
-  // default opts for web3
-  const block = await web3.eth.getBlock("latest");
-  const opts = {
-    from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000,
-    gasLimit: undefined
-  };
-
-  // TODO: move this into web3 lib
-  let network = await web3.eth.net.getNetworkType();
-  if (network === "main") {
-    network = "mainnet";
-  }
+  const opts = await getDefaultOpts();
+  const network = await getNetworkName();
 
   const logTx = async ({ transactionHash, gasUsed }: any, msg: string) => {
     const tx = await web3.eth.getTransaction(transactionHash);
@@ -40,6 +32,9 @@ export const migrateDAO = async (
       callbacks.txComplete(msg, transactionHash, txCost);
     }
   };
+
+  // Report back to caller the version of Arc being used
+  callbacks.info(`Using Arc Version: ${arcVersion}`);
 
   try {
     const migration = await migrate({
@@ -56,13 +51,20 @@ export const migrateDAO = async (
       customabislocation: undefined
     });
 
-    // TODO:
-    // return arc version
-    return migration.dao[arcVersion]; // name, Avatar, DAOToken, Reputation, Controller, Schemes
+    // TODO: create an interface for the migration result
+    const result = migration.dao[arcVersion];
+    console.log(result);
+    return {
+      arcVersion: arcVersion,
+      name: result.name,
+      avatar: result.Avatar,
+      daoToken: result.DAOToken,
+      reputation: result.Reputation,
+      controller: result.Controller,
+      schemes: []
+    };
   } catch (e) {
     callbacks.migrationAborted(e);
+    return undefined;
   }
-
-  // TODO: ensure etherscan verification
-  // TODO: create an interface for the migration result
 };
