@@ -8,7 +8,7 @@ import {
   PercentageField,
   requiredText,
   validAddress,
-  validBigNumber,
+  validNumber,
   validPercentage,
   greaterThan,
   lessThanOrEqual,
@@ -17,8 +17,6 @@ import {
 } from "lib/forms";
 import { GenesisProtocol } from "lib/state";
 import { GenesisProtocolPreset } from "lib/dependency/arc";
-import { TypeConversion } from "lib/dependency/web3";
-const { toBN } = TypeConversion;
 
 export interface GenesisProtocolFormOpts {
   form?: GenesisProtocolForm;
@@ -125,7 +123,7 @@ export class GenesisProtocolForm extends Form<
         "GEN",
         form ? form.$.minimumDaoBounty.value : "0"
       )
-        .validators(requiredText, validBigNumber, greaterThanOrEqual(0))
+        .validators(requiredText, validNumber, greaterThanOrEqual(0))
         .setDisplayName("Minimum DAO Bounty")
         .setDescription(
           "The minimum amount of GEN a DAO will stake when automatically downstaking each proposal."
@@ -135,7 +133,7 @@ export class GenesisProtocolForm extends Form<
         ),
 
       daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "1")
-        .validators(requiredText, validBigNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
           "This is multiplied by the average downstake on boosted proposals to calculate how large the DAO’s automatic downstake should be."
@@ -149,7 +147,7 @@ export class GenesisProtocolForm extends Form<
       )
         .validators(
           requiredText,
-          validBigNumber,
+          validNumber,
           greaterThan(1000),
           lessThanOrEqual(16000)
         )
@@ -177,7 +175,7 @@ export class GenesisProtocolForm extends Form<
         "REP",
         form ? form.$.proposingRepReward.value : "0"
       )
-        .validators(requiredText, validBigNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Proposing Rep Reward")
         .setDescription(
           "The amount of voting power given out as a reward for submitting a proposal that the DAO passes."
@@ -233,28 +231,22 @@ export class GenesisProtocolForm extends Form<
     } else {
       return new GenesisProtocol({
         config: {
-          queuedVoteRequiredPercentage: toBN(
+          queuedVoteRequiredPercentage: Number(
             this.$.queuedVoteRequiredPercentage.value
           ),
-          queuedVotePeriodLimit: toBN(this.$.queuedVotePeriodLimit.toSeconds()),
-          thresholdConst: toBN(this.$.thresholdConst.value),
-          proposingRepReward: toBN(this.$.proposingRepReward.value),
-          minimumDaoBounty: toBN(this.$.minimumDaoBounty.value),
-          boostedVotePeriodLimit: toBN(
-            this.$.boostedVotePeriodLimit.toSeconds()
-          ),
-          daoBountyConst: toBN(this.$.daoBountyConst.value),
+          queuedVotePeriodLimit: this.$.queuedVotePeriodLimit.toSeconds(),
+          thresholdConst: Number(this.$.thresholdConst.value),
+          proposingRepReward: Number(this.$.proposingRepReward.value),
+          minimumDaoBounty: Number(this.$.minimumDaoBounty.value),
+          boostedVotePeriodLimit: this.$.boostedVotePeriodLimit.toSeconds(),
+          daoBountyConst: Number(this.$.daoBountyConst.value),
           // TODO: future only is a hack for the editor, it won't work
           // if we're viewing past data froma already deployed DAO...
-          activationTime: toBN(this.$.activationTime.getunixTime()),
-          preBoostedVotePeriodLimit: toBN(
-            this.$.preBoostedVotePeriodLimit.toSeconds()
-          ),
-          quietEndingPeriod: toBN(this.$.quietEndingPeriod.toSeconds()),
+          activationTime: this.$.activationTime.getunixTime(),
+          preBoostedVotePeriodLimit: this.$.preBoostedVotePeriodLimit.toSeconds(),
+          quietEndingPeriod: this.$.quietEndingPeriod.toSeconds(),
           voteOnBehalf: this.$.voteOnBehalf.value,
-          votersReputationLossRatio: toBN(
-            this.$.votersReputationLossRatio.value
-          )
+          votersReputationLossRatio: this.$.votersReputationLossRatio.value
         }
       });
     }
@@ -264,23 +256,20 @@ export class GenesisProtocolForm extends Form<
     this._preset = state.preset;
 
     const config = state.config;
-    this.$.queuedVoteRequiredPercentage.value = config.queuedVoteRequiredPercentage.toNumber();
-    this.$.queuedVotePeriodLimit.fromSeconds(
-      config.queuedVotePeriodLimit.toNumber()
-    );
+    this.$.queuedVoteRequiredPercentage.value =
+      config.queuedVoteRequiredPercentage;
+    this.$.queuedVotePeriodLimit.fromSeconds(config.queuedVotePeriodLimit);
     this.$.thresholdConst.value = config.thresholdConst.toString();
     this.$.proposingRepReward.value = config.proposingRepReward.toString();
     this.$.minimumDaoBounty.value = config.minimumDaoBounty.toString();
-    this.$.boostedVotePeriodLimit.fromSeconds(
-      config.boostedVotePeriodLimit.toNumber()
-    );
+    this.$.boostedVotePeriodLimit.fromSeconds(config.boostedVotePeriodLimit);
     this.$.daoBountyConst.value = config.daoBountyConst.toString();
-    this.$.activationTime.fromUnixTime(config.activationTime.toNumber());
+    this.$.activationTime.fromUnixTime(config.activationTime);
     this.$.preBoostedVotePeriodLimit.fromSeconds(
-      config.preBoostedVotePeriodLimit.toNumber()
+      config.preBoostedVotePeriodLimit
     );
-    this.$.quietEndingPeriod.fromSeconds(config.quietEndingPeriod.toNumber());
+    this.$.quietEndingPeriod.fromSeconds(config.quietEndingPeriod);
     this.$.voteOnBehalf.value = config.voteOnBehalf;
-    this.$.votersReputationLossRatio.value = config.votersReputationLossRatio.toNumber();
+    this.$.votersReputationLossRatio.value = config.votersReputationLossRatio;
   }
 }
