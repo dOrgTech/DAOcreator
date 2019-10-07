@@ -5,95 +5,24 @@ import {
   WithStyles,
   withStyles,
   Card,
-  CardContent,
-  Button,
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  CardContent
 } from "@material-ui/core";
-import ReactPlayer from "react-player";
 import { DAOcreatorState, toDAOMigrationParams } from "lib/state";
-import { toJSON, DAOMigrationResult } from "lib/dependency/arc";
+import { DAOMigrationResult } from "lib/dependency/arc";
 import Migrator from "components/common/dao/Migrator";
-
-const FileSaver = require("file-saver");
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   dao: DAOcreatorState;
 }
 
-interface State {
-  exportOpen: boolean;
-}
-
-const initState: State = {
-  exportOpen: false
-};
-
-class DeployStep extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      ...initState
-    };
-  }
-
+class DeployStep extends React.Component<Props> {
   render() {
     const { dao, classes } = this.props;
-    const { exportOpen } = this.state;
-
-    const onSaveFile = () => {
-      var blob = new Blob([toJSON(toDAOMigrationParams(dao))], {
-        type: "text/plain;charset=utf-8"
-      });
-      FileSaver.saveAs(blob, "migration-params.json");
-    };
 
     return (
       <Card>
         <CardContent className={classes.root}>
-          {/*
-            <Button
-              variant={"contained"}
-              color={"primary"}
-              onClick={() => this.setState({ ...initState, exportOpen: true })}
-            >
-              Export Config
-            </Button>
-            <Dialog
-              open={exportOpen}
-              fullWidth
-              onClose={() => this.setState({ ...initState, exportOpen: false })}
-              aria-labelledby={"export-dao-config"}
-            >
-              <DialogTitle>Export JSON Config</DialogTitle>
-              <DialogContent className={classes.dialog}>
-                <DialogContentText>
-                  <div>
-                    Your DAO can be exported as a json configuration file that
-                    can be used with the daostack/migration project. Save your
-                    DAO's `migration-params.json` file using the button below,
-                    and watch the following tutorial to understand how to
-                    manually deploy your DAO with this file:
-                  </div>
-                  <ReactPlayer url="https://youtu.be/SXqaWr7veus" width={550} />
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  variant={"contained"}
-                  color={"primary"}
-                  onClick={onSaveFile}
-                >
-                  Export
-                </Button>
-              </DialogActions>
-            </Dialog>
-            */}
           <Migrator
             dao={toDAOMigrationParams(dao)}
             onComplete={(result: DAOMigrationResult) => {
@@ -114,9 +43,6 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       maxWidth: "100%"
-    },
-    dialog: {
-      maxWidth: "690px"
     }
   });
 

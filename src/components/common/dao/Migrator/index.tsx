@@ -14,7 +14,16 @@ import {
   Grid,
   Box,
   Divider,
-  CircularProgress
+  CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Link
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
@@ -22,6 +31,8 @@ import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import TransactionResultIcon from "@material-ui/icons/DoneOutline";
 import UserApprovalIcon from "@material-ui/icons/QuestionAnswerOutlined";
 import AbortedIcon from "@material-ui/icons/SmsFailedOutlined";
+import MoreInfoIcon from "@material-ui/icons/MoreVert";
+import ReactPlayer from "react-player";
 import {
   AnyLogLine,
   LogInfo,
@@ -35,8 +46,12 @@ import {
   DAOMigrationCallbacks,
   DAOMigrationParams,
   migrateDAO,
-  DAOMigrationResult
+  DAOMigrationResult,
+  toJSON
 } from "lib/dependency/arc";
+import { getNetworkName } from "lib/dependency/web3";
+
+const FileSaver = require("file-saver");
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -49,16 +64,22 @@ interface State {
   logLines: AnyLogLine[];
   started: boolean;
   finished: boolean;
+  ethSpent: number;
   result: DAOMigrationResult | undefined;
   logClosed: boolean;
+  menuAnchor: any;
+  exportOpen: boolean;
 }
 
 const initState: State = {
   logLines: [],
   started: false,
   finished: false,
+  ethSpent: 0,
   result: undefined,
-  logClosed: false
+  logClosed: false,
+  menuAnchor: undefined,
+  exportOpen: false
 };
 
 class Migrator extends React.Component<Props, State> {
@@ -94,6 +115,11 @@ class Migrator extends React.Component<Props, State> {
       error: (msg: string) => this.addLogLine(new LogError(msg)),
       txComplete: (msg: string, txHash: string, txCost: number) =>
         new Promise<void>(resolve => {
+          const { ethSpent } = this.state;
+          this.setState({
+            ...this.state,
+            ethSpent: Number(ethSpent) + Number(txCost)
+          });
           this.addLogLine(new LogTransactionResult(msg, txHash, txCost));
           resolve();
         }),
@@ -122,8 +148,17 @@ class Migrator extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes } = this.props;
-    const { started, finished, logLines, result, logClosed } = this.state;
+    const { dao, classes } = this.props;
+    const {
+      started,
+      finished,
+      logLines,
+      ethSpent,
+      result,
+      logClosed,
+      menuAnchor,
+      exportOpen
+    } = this.state;
 
     const Line: React.SFC<{
       index: number;
@@ -152,16 +187,38 @@ class Migrator extends React.Component<Props, State> {
               const error = line as LogError;
               return (
                 <Line index={index} icon={<ErrorIcon />}>
-                  <div style={{ alignSelf: "center" }}>{`${error.error}`}</div>
+                  <div style={{ alignSelf: "center", color: "red" }}>
+                    {`${error.error}`}
+                  </div>
                 </Line>
               );
             case LogType.TransactionResult:
               const result = line as LogTransactionResult;
               return (
                 <Line index={index} icon={<TransactionResultIcon />}>
-                  <div style={{ alignSelf: "center" }}>
-                    {`${result.msg} ${result.txHash} ${result.txCost} ETH`}
-                  </div>
+                  <Grid container direction={"column"}>
+                    <Typography>{result.msg}</Typography>
+                    <Typography>
+                      {"Transaction: "}
+                      <Link
+                        onClick={async () => {
+                          const network = await getNetworkName();
+                          let url = `etherscan.io/tx/${result.txHash}`;
+
+                          if (network !== "mainnet") {
+                            url = `https://${network}.${url}`;
+                          } else {
+                            url = `https://${url}`;
+                          }
+
+                          window.open(url);
+                        }}
+                      >
+                        {`${result.txHash.substr(0, 12)}...`}
+                      </Link>
+                    </Typography>
+                    <Typography>{`Cost: ${result.txCost} ETH`}</Typography>
+                  </Grid>
                 </Line>
               );
             case LogType.UserApproval:
@@ -208,7 +265,7 @@ class Migrator extends React.Component<Props, State> {
               const aborted = line as LogMigrationAborted;
               return (
                 <Line index={index} icon={<AbortedIcon />}>
-                  <div style={{ alignSelf: "center" }}>
+                  <div style={{ alignSelf: "center", color: "red" }}>
                     {`${aborted.error}`}
                   </div>
                 </Line>
@@ -220,47 +277,140 @@ class Migrator extends React.Component<Props, State> {
       </>
     );
 
+    const onOptionsClick = (event: any) => {
+      this.setState({
+        ...this.state,
+        menuAnchor: event.currentTarget
+      });
+    };
+
+    const onOptionsClose = () => {
+      this.setState({
+        ...this.state,
+        menuAnchor: undefined
+      });
+    };
+
+    const onSaveDAO = () => {
+      var blob = new Blob([toJSON(dao)], {
+        type: "text/plain;charset=utf-8"
+      });
+      FileSaver.saveAs(blob, "migration-params.json");
+    };
+
+    const ExportDialog = () => (
+      <Dialog
+        open={exportOpen}
+        fullWidth
+        onClose={() => this.setState({ ...this.state, exportOpen: false })}
+        aria-labelledby={"export-dao-config"}
+      >
+        <DialogTitle>Export JSON Config</DialogTitle>
+        <DialogContent className={classes.dialog}>
+          <DialogContentText>
+            <div>
+              Your DAO can be exported as a json configuration file that can be
+              used with the daostack/migration project. Save your DAO's
+              `migration-params.json` file using the button below, and watch the
+              following tutorial to understand how to manually deploy your DAO
+              with this file:
+            </div>
+            <ReactPlayer url="https://youtu.be/SXqaWr7veus" width={550} />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant={"contained"} color={"primary"} onClick={onSaveDAO}>
+            Export
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
     return (
-      <ExpansionPanel expanded={started && !logClosed}>
-        <ExpansionPanelSummary
-          expandIcon={
-            finished ? (
-              <ExpandMoreIcon
-                onClick={() =>
-                  this.setState({ ...this.state, logClosed: !logClosed })
-                }
-              />
-            ) : (
-              undefined
-            )
-          }
-        >
-          <Grid container justify={"space-between"} alignItems={"center"}>
-            <Typography variant={"subtitle1"}>Deployment Log</Typography>
-            {started && !finished ? (
-              <CircularProgress className={classes.progressBar} />
-            ) : (
-              <Button
-                onClick={this.onStart}
-                color={"primary"}
-                variant={"outlined"}
+      <>
+        <Typography variant={"subtitle2"} color={"error"}>
+          WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
+          this will break the deployment process. A fix is being worked on.
+        </Typography>
+        <ExpansionPanel expanded={started && !logClosed}>
+          <ExpansionPanelSummary
+            expandIcon={
+              finished ? (
+                <ExpandMoreIcon
+                  onClick={() =>
+                    this.setState({ ...this.state, logClosed: !logClosed })
+                  }
+                />
+              ) : (
+                undefined
+              )
+            }
+          >
+            <Grid container justify={"space-between"} alignItems={"center"}>
+              <IconButton
+                aria-haspopup="true"
+                onClick={onOptionsClick}
+                size={"small"}
               >
-                {finished
-                  ? result === undefined
-                    ? "Retry?"
-                    : "Re-Deploy"
-                  : "Deploy"}
-              </Button>
-            )}
-          </Grid>
-        </ExpansionPanelSummary>
-        <Divider />
-        <ExpansionPanelDetails>
-          <Grid container direction={"column-reverse"}>
-            <Log />
-          </Grid>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+                <MoreInfoIcon />
+              </IconButton>
+              <Menu
+                anchorEl={menuAnchor}
+                open={menuAnchor !== undefined}
+                keepMounted
+                onClose={onOptionsClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left"
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left"
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    this.setState({
+                      ...this.state,
+                      menuAnchor: undefined,
+                      exportOpen: true
+                    });
+                  }}
+                >
+                  Export DAO Config
+                </MenuItem>
+                <MenuItem onClick={onOptionsClose}>Export Log</MenuItem>
+              </Menu>
+              <Typography variant={"h6"}>Launch Your DAO</Typography>
+              {started && !finished ? (
+                <CircularProgress className={classes.progressBar} />
+              ) : (
+                <Button
+                  onClick={this.onStart}
+                  color={"primary"}
+                  variant={"outlined"}
+                >
+                  {finished
+                    ? result === undefined
+                      ? "Retry?"
+                      : "Re-Deploy"
+                    : "Deploy"}
+                </Button>
+              )}
+            </Grid>
+          </ExpansionPanelSummary>
+          <Divider />
+          <ExpansionPanelDetails>
+            <Grid container direction={"column-reverse"}>
+              <Log />
+              <Typography variant={"subtitle2"}>
+                {ethSpent} ETH Spent
+              </Typography>
+            </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExportDialog />
+      </>
     );
   }
 }
@@ -286,6 +436,9 @@ const styles = (theme: Theme) =>
     progressBar: {
       width: "23px !important",
       height: "23px  !important"
+    },
+    dialog: {
+      maxWidth: "690px"
     }
   });
 
