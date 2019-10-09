@@ -52,7 +52,8 @@ export const getDefaultOpts = async (): Promise<any> => {
   const block = await web3.eth.getBlock("latest");
   return {
     from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000
+    gas: block.gasLimit - 100000,
+    gasPrice: web3.utils.toWei("7", "gwei")
   };
 };
 

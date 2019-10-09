@@ -385,6 +385,18 @@ class Migrator extends React.Component<Props, State> {
         </Typography>
         <Divider className={classes.resultsDivider} />
         <Typography variant={"subtitle2"} color={"error"}>
+          WARNING: Mainnet deploy at your own risk! There are a few things being
+          worked on to improve mainnet transaction handling, you can find out
+          about them in the links below. The gas is currently set rather high (7
+          Gwei) to try and ensure transaction succeed within 50 blocks. This is
+          not fool proof.
+          <br />
+          https://github.com/daostack/migration/issues/211
+          <br />
+          https://github.com/daostack/migration/issues/206
+        </Typography>
+        <Divider className={classes.resultsDivider} />
+        <Typography variant={"subtitle2"} color={"error"}>
           WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
           this will break the deployment process. A fix is being worked on.
         </Typography>
