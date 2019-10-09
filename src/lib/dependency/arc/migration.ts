@@ -57,11 +57,10 @@ export const migrateDAO = async (
     return {
       arcVersion: arcVersion,
       name: result.name,
-      avatar: result.Avatar,
-      daoToken: result.DAOToken,
-      reputation: result.Reputation,
-      controller: result.Controller,
-      schemes: []
+      Avatar: result.Avatar,
+      DAOToken: result.DAOToken,
+      Reputation: result.Reputation,
+      Controller: result.Controller
     };
   } catch (e) {
     callbacks.migrationAborted(e);

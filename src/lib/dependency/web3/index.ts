@@ -52,8 +52,7 @@ export const getDefaultOpts = async (): Promise<any> => {
   const block = await web3.eth.getBlock("latest");
   return {
     from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000,
-    gasLimit: undefined
+    gas: block.gasLimit - 100000
   };
 };
 

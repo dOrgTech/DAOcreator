@@ -23,7 +23,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Link
+  Link,
+  TextareaAutosize
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
@@ -160,6 +161,41 @@ class Migrator extends React.Component<Props, State> {
       exportOpen
     } = this.state;
 
+    const onOptionsClick = (event: any) => {
+      this.setState({
+        ...this.state,
+        menuAnchor: event.currentTarget
+      });
+    };
+
+    const onOptionsClose = () => {
+      this.setState({
+        ...this.state,
+        menuAnchor: undefined
+      });
+    };
+
+    const onSaveDAO = () => {
+      var blob = new Blob([toJSON(dao)], {
+        type: "text/plain;charset=utf-8"
+      });
+      FileSaver.saveAs(blob, "migration-params.json");
+    };
+
+    const onCopyLog = () => {
+      let log = "";
+
+      logLines.map(line => {
+        log += line.toString() + "\n";
+      });
+
+      navigator.clipboard.writeText(log);
+      this.setState({
+        ...this.state,
+        menuAnchor: undefined
+      });
+    };
+
     const Line: React.SFC<{
       index: number;
       icon: any;
@@ -277,27 +313,6 @@ class Migrator extends React.Component<Props, State> {
       </>
     );
 
-    const onOptionsClick = (event: any) => {
-      this.setState({
-        ...this.state,
-        menuAnchor: event.currentTarget
-      });
-    };
-
-    const onOptionsClose = () => {
-      this.setState({
-        ...this.state,
-        menuAnchor: undefined
-      });
-    };
-
-    const onSaveDAO = () => {
-      var blob = new Blob([toJSON(dao)], {
-        type: "text/plain;charset=utf-8"
-      });
-      FileSaver.saveAs(blob, "migration-params.json");
-    };
-
     const ExportDialog = () => (
       <Dialog
         open={exportOpen}
@@ -326,12 +341,55 @@ class Migrator extends React.Component<Props, State> {
       </Dialog>
     );
 
+    const MigrationResults = () => {
+      const text = JSON.stringify(result, null, 2);
+      return (
+        <>
+          <Typography variant={"h6"} className={classes.successText}>
+            Deployment Successful!
+          </Typography>
+          <div className={classes.resultWrapper}>
+            <Paper className={classes.result}>
+              <Button
+                onClick={() => navigator.clipboard.writeText(text)}
+                variant={"outlined"}
+                size={"small"}
+                style={{ float: "right" }}
+              >
+                Copy
+              </Button>
+              {text}
+            </Paper>
+            <Typography variant={"subtitle2"}>
+              Now what? Copy the above text, email it to contact@dorg.tech along
+              with a description of your DAO, and we'll add it to the
+              https://github.com/daostack/subgraph repository for you.
+            </Typography>
+            <Typography variant={"subtitle2"}>
+              Have feedback? Click the icon in the bottom right and let us know
+              what you think!
+            </Typography>
+          </div>
+          <Divider className={classes.resultsDivider} />
+        </>
+      );
+    };
+
     return (
       <>
+        <Typography variant={"subtitle2"} color={"error"}>
+          NOTE: The DAO you deploy will not be available in Alchemy
+          automatically. This is actively being worked on. After the deployment
+          process is complete, you'll be required to send your results to an
+          email address to get it added to Alchemy.
+        </Typography>
+        <Divider className={classes.resultsDivider} />
         <Typography variant={"subtitle2"} color={"error"}>
           WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
           this will break the deployment process. A fix is being worked on.
         </Typography>
+        <Divider className={classes.resultsDivider} />
+        {result ? <MigrationResults /> : <></>}
         <ExpansionPanel expanded={started && !logClosed}>
           <ExpansionPanelSummary
             expandIcon={
@@ -345,6 +403,7 @@ class Migrator extends React.Component<Props, State> {
                 undefined
               )
             }
+            className={classes.logHeader}
           >
             <Grid container justify={"space-between"} alignItems={"center"}>
               <IconButton
@@ -379,9 +438,13 @@ class Migrator extends React.Component<Props, State> {
                 >
                   Export DAO Config
                 </MenuItem>
-                <MenuItem onClick={onOptionsClose}>Export Log</MenuItem>
+                <MenuItem onClick={onCopyLog}>Copy Log</MenuItem>
               </Menu>
-              <Typography variant={"h6"}>Launch Your DAO</Typography>
+              {started ? (
+                <Typography variant={"h6"}>Deployment Log</Typography>
+              ) : (
+                <Typography variant={"h6"}>Launch Your DAO</Typography>
+              )}
               {started && !finished ? (
                 <CircularProgress className={classes.progressBar} />
               ) : (
@@ -418,6 +481,9 @@ class Migrator extends React.Component<Props, State> {
 // STYLE
 const styles = (theme: Theme) =>
   createStyles({
+    logHeader: {
+      background: "#e4e4e4"
+    },
     lightLine: {
       padding: "10px",
       background: "#e4e4e4",
@@ -439,6 +505,27 @@ const styles = (theme: Theme) =>
     },
     dialog: {
       maxWidth: "690px"
+    },
+    result: {
+      width: "100%",
+      background: "#e4e4e4",
+      overflowX: "hidden",
+      padding: "10px",
+      whiteSpace: "pre"
+    },
+    resultWrapper: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center"
+    },
+    successText: {
+      width: "100%",
+      textAlign: "center"
+    },
+    resultsDivider: {
+      marginTop: "20px",
+      marginBottom: "20px"
     }
   });
 

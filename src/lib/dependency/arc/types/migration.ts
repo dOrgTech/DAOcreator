@@ -31,11 +31,10 @@ export interface DAOMigrationParams {
 export interface DAOMigrationResult {
   arcVersion: string;
   name: string;
-  avatar: Address;
-  daoToken: Address;
-  reputation: Address;
-  controller: Address;
-  schemes: string[];
+  Avatar: Address;
+  DAOToken: Address;
+  Reputation: Address;
+  Controller: Address;
 }
 
 export interface DAOMigrationCallbacks {
