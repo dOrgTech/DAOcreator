@@ -1,5 +1,5 @@
-import { ParamLink, VotingMachine } from "./index";
-import { Address, keccak256, encodeParameters } from "lib/dependency/web3";
+import { VotingMachine } from "./index";
+import { Address } from "lib/dependency/web3";
 
 export enum SchemeType {
   ContributionReward,
@@ -7,7 +7,7 @@ export enum SchemeType {
   GenericScheme
 }
 
-export interface Scheme extends ParamLink {
+export interface Scheme {
   type: SchemeType;
   permissions: string;
   votingMachine: VotingMachine;
@@ -21,16 +21,6 @@ export class ContributionReward implements Scheme {
   constructor(votingMachine: VotingMachine) {
     this.votingMachine = votingMachine;
   }
-
-  public getParameters(): any[] {
-    return [this.votingMachine.getParametersHash(), this.votingMachine.address];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "address"], this.getParameters())
-    );
-  }
 }
 
 // TODO: support multiple voting machine configurations
@@ -42,20 +32,6 @@ export class SchemeRegistrar implements Scheme {
   constructor(votingMachine: VotingMachine) {
     this.votingMachine = votingMachine;
   }
-
-  public getParameters(): any[] {
-    return [
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.address
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "bytes32", "address"], this.getParameters())
-    );
-  }
 }
 
 export class GenericScheme implements Scheme {
@@ -65,19 +41,5 @@ export class GenericScheme implements Scheme {
 
   constructor(public contractToCall: Address, votingMachine: VotingMachine) {
     this.votingMachine = votingMachine;
-  }
-
-  public getParameters(): any[] {
-    return [
-      this.votingMachine.getParametersHash(),
-      this.votingMachine.address,
-      this.contractToCall
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(["bytes32", "address", "address"], this.getParameters())
-    );
   }
 }

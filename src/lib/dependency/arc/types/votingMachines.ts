@@ -1,9 +1,7 @@
-import { ParamLink } from "./index";
-import { Address, keccak256, encodeParameters } from "lib/dependency/web3";
+import { Address } from "lib/dependency/web3";
 
-export interface VotingMachine extends ParamLink {
+export interface VotingMachine {
   typeName: string;
-  address: Address;
 }
 
 export interface GenesisProtocolConfig {
@@ -34,7 +32,6 @@ export interface GenesisProtocolOpts {
 
 export class GenesisProtocol implements VotingMachine {
   public typeName: string = "GenesisProtocol";
-  public address: Address = "TODO";
   public config: GenesisProtocolConfig;
   public preset?: GenesisProtocolPreset;
 
@@ -115,63 +112,5 @@ export class GenesisProtocol implements VotingMachine {
         "Invalid construction arguments. Please use a custom config or a preset."
       );
     }
-  }
-
-  public getParameters(): any[] {
-    return [
-      [
-        this.config.queuedVoteRequiredPercentage,
-        this.config.queuedVotePeriodLimit,
-        this.config.boostedVotePeriodLimit,
-        this.config.preBoostedVotePeriodLimit,
-        this.config.thresholdConst,
-        this.config.quietEndingPeriod,
-        this.config.proposingRepReward,
-        this.config.votersReputationLossRatio,
-        this.config.minimumDaoBounty,
-        this.config.daoBountyConst,
-        this.config.activationTime
-      ],
-      this.config.voteOnBehalf
-    ];
-  }
-
-  public getParametersHash(): string {
-    return keccak256(
-      encodeParameters(
-        ["bytes32", "address"],
-        [
-          encodeParameters(
-            [
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint",
-              "uint"
-            ],
-            [
-              this.config.queuedVoteRequiredPercentage,
-              this.config.queuedVotePeriodLimit,
-              this.config.boostedVotePeriodLimit,
-              this.config.preBoostedVotePeriodLimit,
-              this.config.thresholdConst,
-              this.config.quietEndingPeriod,
-              this.config.proposingRepReward,
-              this.config.votersReputationLossRatio,
-              this.config.minimumDaoBounty,
-              this.config.daoBountyConst,
-              this.config.activationTime
-            ]
-          ),
-          this.config.voteOnBehalf
-        ]
-      )
-    );
   }
 }

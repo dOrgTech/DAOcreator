@@ -1,4 +1,5 @@
 import { Member, GenesisProtocolConfig } from "./index";
+import { Address } from "lib/dependency/web3";
 
 export interface DAOMigrationParams {
   orgName: string;
@@ -7,24 +8,42 @@ export interface DAOMigrationParams {
   VotingMachinesParams: GenesisProtocolConfig[];
   schemes: {
     ContributionReward?: boolean;
-    GenericScheme?: boolean;
+    UGenericScheme?: boolean;
     SchemeRegistrar?: boolean;
   };
   ContributionReward?: {
     voteParams?: number;
-  };
-  GenericScheme?: {
+  }[];
+  UGenericScheme?: {
     voteParams?: number;
     targetContract: string;
-  };
+  }[];
   SchemeRegistrar?: {
     voteRegisterParams?: number;
     voteRemoveParams?: number;
-  };
+  }[];
   unregisterOwner: boolean;
   useUController: boolean;
   useDaoCreator: boolean;
   founders: Member[];
+}
+
+export interface DAOMigrationResult {
+  arcVersion: string;
+  name: string;
+  Avatar: Address;
+  DAOToken: Address;
+  Reputation: Address;
+  Controller: Address;
+}
+
+export interface DAOMigrationCallbacks {
+  userApproval: (msg: string) => Promise<boolean>;
+  info: (msg: string) => void;
+  error: (msg: string) => void;
+  txComplete: (msg: string, txHash: string, txCost: number) => Promise<void>;
+  migrationAborted: (err: Error) => void;
+  migrationComplete: (result: DAOMigrationResult) => void;
 }
 
 export const toJSON = (params: DAOMigrationParams): string => {

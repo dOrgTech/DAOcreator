@@ -1,0 +1,91 @@
+{
+  "orgName": "DAOcreator Test",
+  "tokenName": "DAOcreator Test",
+  "tokenSymbol": "TEST",
+  "unregisterOwner": true,
+  "useUController": false,
+  "useDaoCreator": true,
+  "schemes": {
+    "ContributionReward": true,
+    "SchemeRegistrar": true,
+    "UGenericScheme": true
+  },
+  "VotingMachinesParams": [
+    {
+      "queuedVoteRequiredPercentage": 50,
+      "queuedVotePeriodLimit": 2592000,
+      "thresholdConst": 1200,
+      "proposingRepReward": 50,
+      "minimumDaoBounty": 150,
+      "boostedVotePeriodLimit": 345600,
+      "daoBountyConst": 10,
+      "activationTime": 0,
+      "preBoostedVotePeriodLimit": 86400,
+      "quietEndingPeriod": 172800,
+      "voteOnBehalf": "0x0000000000000000000000000000000000000000",
+      "votersReputationLossRatio": 4
+    },
+    {
+      "queuedVoteRequiredPercentage": 50,
+      "queuedVotePeriodLimit": 5184000,
+      "thresholdConst": 1500,
+      "proposingRepReward": 200,
+      "minimumDaoBounty": 500,
+      "boostedVotePeriodLimit": 691200,
+      "daoBountyConst": 10,
+      "activationTime": 0,
+      "preBoostedVotePeriodLimit": 172800,
+      "quietEndingPeriod": 345600,
+      "voteOnBehalf": "0x0000000000000000000000000000000000000000",
+      "votersReputationLossRatio": 4
+    },
+    {
+      "queuedVoteRequiredPercentage": 50,
+      "queuedVotePeriodLimit": 2592000,
+      "thresholdConst": 1200,
+      "proposingRepReward": 50,
+      "minimumDaoBounty": 150,
+      "boostedVotePeriodLimit": 345600,
+      "daoBountyConst": 10,
+      "activationTime": 0,
+      "preBoostedVotePeriodLimit": 86400,
+      "quietEndingPeriod": 172800,
+      "voteOnBehalf": "0x0000000000000000000000000000000000000000",
+      "votersReputationLossRatio": 4
+    }
+  ],
+  "founders": [
+    {
+      "address": "0xB1B7586656116D546033e3bAFF69BFcD6592225E",
+      "tokens": 123,
+      "reputation": 123
+    },
+    {
+      "address": "0x00FCaf8C715F4E8b4710a73fdCF9E729972612e3",
+      "tokens": 123,
+      "reputation": 123
+    },
+    {
+      "address": "0xE031152cC359B64e4e20a5984Af3F27B0E7332eE",
+      "tokens": 222,
+      "reputation": 222
+    }
+  ],
+  "ContributionReward": [
+    {
+      "voteParams": 0
+    }
+  ],
+  "SchemeRegistrar": [
+    {
+      "voteRegisterParams": 1,
+      "voteRemoveParams": 1
+    }
+  ],
+  "UGenericScheme": [
+    {
+      "voteParams": 2,
+      "targetContract": "0xB1B7586656116D546033e3bAFF69BFcD6592225E"
+    }
+  ]
+}

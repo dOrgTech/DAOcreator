@@ -2,13 +2,16 @@
   "orgName": "Kyber DAO",
   "tokenName": "Kyber DAO Token",
   "tokenSymbol": "KDT",
-
-  "ContributionReward": {
-    "voteParams": 0
-  },
-  "SchemeRegistrar": {
-    "voteParams": 0
-  },
+  "ContributionReward": [
+    {
+      "voteParams": 0
+    }
+  ],
+  "SchemeRegistrar": [
+    {
+      "voteParams": 0
+    }
+  ],
   "VotingMachinesParams": [
     {
       "boostedVotePeriodLimit": 86400,
@@ -27,7 +30,7 @@
   ],
   "schemes": {
     "ContributionReward": true,
-    "GenericScheme": false,
+    "UGenericScheme": false,
     "SchemeRegistrar": true,
     "GlobalConstraintRegistrar": false,
     "UpgradeScheme": false
@@ -35,7 +38,6 @@
   "unregisterOwner": true,
   "useUController": false,
   "useDaoCreator": true,
-
   "founders": [
     {
       "address": "0xD3CC03C1d1e9D46F28aebc4Ba26c5990c7FFbC3e",
