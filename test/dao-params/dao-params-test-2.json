@@ -2,11 +2,13 @@
   "orgName": "Genesis Alpha",
   "tokenName": "Genesis Alpha Token",
   "tokenSymbol": "GAT",
-  "ContributionReward": {},
-  "SchemeRegistrar": {
-    "voteRegisterParams": 1,
-    "voteRemoveParams": 1
-  },
+  "ContributionReward": [{}],
+  "SchemeRegistrar": [
+    {
+      "voteRegisterParams": 1,
+      "voteRemoveParams": 1
+    }
+  ],
   "VotingMachinesParams": [
     {
       "boostedVotePeriodLimit": 345600,
@@ -39,7 +41,7 @@
   ],
   "schemes": {
     "ContributionReward": true,
-    "GenericScheme": false,
+    "UGenericScheme": false,
     "SchemeRegistrar": true,
     "GlobalConstraintRegistrar": false,
     "UpgradeScheme": false

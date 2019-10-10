@@ -47,6 +47,27 @@ export const getWeb3 = async (): Promise<any> => {
   return readyWeb3;
 };
 
+export const getDefaultOpts = async (): Promise<any> => {
+  const web3 = await getWeb3();
+  const block = await web3.eth.getBlock("latest");
+  return {
+    from: web3.eth.defaultAccount,
+    gas: block.gasLimit - 100000,
+    gasPrice: web3.utils.toWei("7", "gwei")
+  };
+};
+
+export const getNetworkName = async (): Promise<string> => {
+  const web3 = await getWeb3();
+  let network = await web3.eth.net.getNetworkType();
+
+  if (network === "main") {
+    network = "mainnet";
+  }
+
+  return network;
+};
+
 export const keccak256 = (value: string | BN): string => {
   if (readyWeb3 == null) {
     throw Error("Web3 not initialized. Please call 'getWeb3'");
