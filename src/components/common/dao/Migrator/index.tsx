@@ -23,8 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Link,
-  TextareaAutosize
+  Link
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
@@ -186,7 +185,7 @@ class Migrator extends React.Component<Props, State> {
       let log = "";
 
       logLines.map(line => {
-        log += line.toString() + "\n";
+        return (log += line.toString() + "\n");
       });
 
       navigator.clipboard.writeText(log);
