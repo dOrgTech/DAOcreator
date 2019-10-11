@@ -6,11 +6,11 @@ import {
   DAOMigrationResult
 } from "./types";
 import { getWeb3, getNetworkName, getDefaultOpts } from "lib/dependency/web3";
-const migrate = require("@daostack/migration/migrate-dao");
+import { dependencies } from "@daostack/migration/package.json";
+const migrateDaoPath = "@daostack/migration/migrate-dao";
+const migrate = require(`${migrateDaoPath}`);
 const addresses = require("@daostack/migration/migration.json");
-const arcVersion = require("@daostack/migration/package.json").dependencies[
-  "@daostack/arc"
-];
+const arcVersion = dependencies["@daostack/arc"];
 
 export const migrateDAO = async (
   dao: DAOMigrationParams,
