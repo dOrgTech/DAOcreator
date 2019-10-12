@@ -6,12 +6,7 @@ import {
   DAOMigrationResult
 } from "./types";
 import { getWeb3, getNetworkName, getDefaultOpts } from "lib/dependency/web3";
-
-// Needed to fool webpack, removes a build warning
-// See: https://github.com/webpack/webpack/issues/196
-const migrateDAOPath = "@daostack/migration/migrate-dao";
-const migrate = require(`${migrateDAOPath}`);
-
+import * as migrate from "@daostack/migration/migrate-dao";
 const addresses = require("@daostack/migration/migration.json");
 const arcVersion = require("@daostack/migration/package.json").dependencies[
   "@daostack/arc"
@@ -42,7 +37,7 @@ export const migrateDAO = async (
   callbacks.info(`Using Arc Version: ${arcVersion}`);
 
   try {
-    const migration = await migrate({
+    const migration = await migrate.default({
       migrationParams: dao,
       web3,
       spinner: {
