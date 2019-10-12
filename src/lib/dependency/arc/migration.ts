@@ -6,7 +6,12 @@ import {
   DAOMigrationResult
 } from "./types";
 import { getWeb3, getNetworkName, getDefaultOpts } from "lib/dependency/web3";
-const migrate = require("@daostack/migration/migrate-dao");
+
+// Needed to fool webpack, removes a build warning
+// See: https://github.com/webpack/webpack/issues/196
+const migrateDAOPath = "@daostack/migration/migrate-dao";
+const migrate = require(`${migrateDAOPath}`);
+
 const addresses = require("@daostack/migration/migration.json");
 const arcVersion = require("@daostack/migration/package.json").dependencies[
   "@daostack/arc"
