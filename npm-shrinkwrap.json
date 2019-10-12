@@ -1537,7 +1537,8 @@
           "integrity": "sha512-8p6ZLv+1JYa5Vs8oBn33Nn3VGFBbF+wVfO+b78RJS1Qf1uIOzjFVDk3XwYDD7rlz9G5BKpxhaQw+6EGQ7L02aw==",
           "requires": {
             "underscore": "1.8.3",
-            "web3-core-helpers": "1.0.0-beta.37"
+            "web3-core-helpers": "1.0.0-beta.37",
+            "websocket": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2"
           },
           "dependencies": {
             "websocket": {
@@ -9206,8 +9207,8 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "delegates": "^1.0.0",
-            "readable-stream": "^2.0.6"
+            "delegates": "1.0.0",
+            "readable-stream": "2.3.6"
           }
         },
         "balanced-match": {
@@ -9218,7 +9219,7 @@
           "version": "1.1.11",
           "bundled": true,
           "requires": {
-            "balanced-match": "^1.0.0",
+            "balanced-match": "1.0.0",
             "concat-map": "0.0.1"
           }
         },
@@ -9249,7 +9250,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "ms": "^2.1.1"
+            "ms": "2.1.1"
           }
         },
         "deep-extend": {
@@ -9272,7 +9273,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "minipass": "^2.2.1"
+            "minipass": "2.3.5"
           }
         },
         "fs.realpath": {
@@ -9285,14 +9286,14 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "aproba": "^1.0.3",
-            "console-control-strings": "^1.0.0",
-            "has-unicode": "^2.0.0",
-            "object-assign": "^4.1.0",
-            "signal-exit": "^3.0.0",
-            "string-width": "^1.0.1",
-            "strip-ansi": "^3.0.1",
-            "wide-align": "^1.1.0"
+            "aproba": "1.2.0",
+            "console-control-strings": "1.1.0",
+            "has-unicode": "2.0.1",
+            "object-assign": "4.1.1",
+            "signal-exit": "3.0.2",
+            "string-width": "1.0.2",
+            "strip-ansi": "3.0.1",
+            "wide-align": "1.1.3"
           }
         },
         "glob": {
@@ -9300,12 +9301,12 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "fs.realpath": "^1.0.0",
-            "inflight": "^1.0.4",
-            "inherits": "2",
-            "minimatch": "^3.0.4",
-            "once": "^1.3.0",
-            "path-is-absolute": "^1.0.0"
+            "fs.realpath": "1.0.0",
+            "inflight": "1.0.6",
+            "inherits": "2.0.3",
+            "minimatch": "3.0.4",
+            "once": "1.4.0",
+            "path-is-absolute": "1.0.1"
           }
         },
         "has-unicode": {
@@ -9318,7 +9319,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "safer-buffer": ">= 2.1.2 < 3"
+            "safer-buffer": "2.1.2"
           }
         },
         "ignore-walk": {
@@ -9326,7 +9327,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "minimatch": "^3.0.4"
+            "minimatch": "3.0.4"
           }
         },
         "inflight": {
@@ -9334,8 +9335,8 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "once": "^1.3.0",
-            "wrappy": "1"
+            "once": "1.4.0",
+            "wrappy": "1.0.2"
           }
         },
         "inherits": {
@@ -9351,7 +9352,7 @@
           "version": "1.0.0",
           "bundled": true,
           "requires": {
-            "number-is-nan": "^1.0.0"
+            "number-is-nan": "1.0.1"
           }
         },
         "isarray": {
@@ -9363,7 +9364,7 @@
           "version": "3.0.4",
           "bundled": true,
           "requires": {
-            "brace-expansion": "^1.1.7"
+            "brace-expansion": "1.1.11"
           }
         },
         "minimist": {
@@ -9374,8 +9375,8 @@
           "version": "2.3.5",
           "bundled": true,
           "requires": {
-            "safe-buffer": "^5.1.2",
-            "yallist": "^3.0.0"
+            "safe-buffer": "5.1.2",
+            "yallist": "3.0.3"
           }
         },
         "minizlib": {
@@ -9383,7 +9384,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "minipass": "^2.2.1"
+            "minipass": "2.3.5"
           }
         },
         "mkdirp": {
@@ -9403,9 +9404,9 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "debug": "^4.1.0",
-            "iconv-lite": "^0.4.4",
-            "sax": "^1.2.4"
+            "debug": "4.1.1",
+            "iconv-lite": "0.4.24",
+            "sax": "1.2.4"
           }
         },
         "node-pre-gyp": {
@@ -9413,16 +9414,16 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "detect-libc": "^1.0.2",
-            "mkdirp": "^0.5.1",
-            "needle": "^2.2.1",
-            "nopt": "^4.0.1",
-            "npm-packlist": "^1.1.6",
-            "npmlog": "^4.0.2",
-            "rc": "^1.2.7",
-            "rimraf": "^2.6.1",
-            "semver": "^5.3.0",
-            "tar": "^4"
+            "detect-libc": "1.0.3",
+            "mkdirp": "0.5.1",
+            "needle": "2.3.0",
+            "nopt": "4.0.1",
+            "npm-packlist": "1.4.1",
+            "npmlog": "4.1.2",
+            "rc": "1.2.8",
+            "rimraf": "2.6.3",
+            "semver": "5.7.0",
+            "tar": "4.4.8"
           }
         },
         "nopt": {
@@ -9430,8 +9431,8 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "abbrev": "1",
-            "osenv": "^0.1.4"
+            "abbrev": "1.1.1",
+            "osenv": "0.1.5"
           }
         },
         "npm-bundled": {
@@ -9444,8 +9445,8 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "ignore-walk": "^3.0.1",
-            "npm-bundled": "^1.0.1"
+            "ignore-walk": "3.0.1",
+            "npm-bundled": "1.0.6"
           }
         },
         "npmlog": {
@@ -9453,10 +9454,10 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "are-we-there-yet": "~1.1.2",
-            "console-control-strings": "~1.1.0",
-            "gauge": "~2.7.3",
-            "set-blocking": "~2.0.0"
+            "are-we-there-yet": "1.1.5",
+            "console-control-strings": "1.1.0",
+            "gauge": "2.7.4",
+            "set-blocking": "2.0.0"
           }
         },
         "number-is-nan": {
@@ -9472,7 +9473,7 @@
           "version": "1.4.0",
           "bundled": true,
           "requires": {
-            "wrappy": "1"
+            "wrappy": "1.0.2"
           }
         },
         "os-homedir": {
@@ -9490,8 +9491,8 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "os-homedir": "^1.0.0",
-            "os-tmpdir": "^1.0.0"
+            "os-homedir": "1.0.2",
+            "os-tmpdir": "1.0.2"
           }
         },
         "path-is-absolute": {
@@ -9509,10 +9510,10 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "deep-extend": "^0.6.0",
-            "ini": "~1.3.0",
-            "minimist": "^1.2.0",
-            "strip-json-comments": "~2.0.1"
+            "deep-extend": "0.6.0",
+            "ini": "1.3.5",
+            "minimist": "1.2.0",
+            "strip-json-comments": "2.0.1"
           },
           "dependencies": {
             "minimist": {
@@ -9527,13 +9528,13 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "core-util-is": "~1.0.0",
-            "inherits": "~2.0.3",
-            "isarray": "~1.0.0",
-            "process-nextick-args": "~2.0.0",
-            "safe-buffer": "~5.1.1",
-            "string_decoder": "~1.1.1",
-            "util-deprecate": "~1.0.1"
+            "core-util-is": "1.0.2",
+            "inherits": "2.0.3",
+            "isarray": "1.0.0",
+            "process-nextick-args": "2.0.0",
+            "safe-buffer": "5.1.2",
+            "string_decoder": "1.1.1",
+            "util-deprecate": "1.0.2"
           }
         },
         "rimraf": {
@@ -9541,7 +9542,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "glob": "^7.1.3"
+            "glob": "7.1.3"
           }
         },
         "safe-buffer": {
@@ -9577,9 +9578,9 @@
           "version": "1.0.2",
           "bundled": true,
           "requires": {
-            "code-point-at": "^1.0.0",
-            "is-fullwidth-code-point": "^1.0.0",
-            "strip-ansi": "^3.0.0"
+            "code-point-at": "1.1.0",
+            "is-fullwidth-code-point": "1.0.0",
+            "strip-ansi": "3.0.1"
           }
         },
         "string_decoder": {
@@ -9587,14 +9588,14 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "safe-buffer": "~5.1.0"
+            "safe-buffer": "5.1.2"
           }
         },
         "strip-ansi": {
           "version": "3.0.1",
           "bundled": true,
           "requires": {
-            "ansi-regex": "^2.0.0"
+            "ansi-regex": "2.1.1"
           }
         },
         "strip-json-comments": {
@@ -9607,13 +9608,13 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "chownr": "^1.1.1",
-            "fs-minipass": "^1.2.5",
-            "minipass": "^2.3.4",
-            "minizlib": "^1.1.1",
-            "mkdirp": "^0.5.0",
-            "safe-buffer": "^5.1.2",
-            "yallist": "^3.0.2"
+            "chownr": "1.1.1",
+            "fs-minipass": "1.2.5",
+            "minipass": "2.3.5",
+            "minizlib": "1.2.1",
+            "mkdirp": "0.5.1",
+            "safe-buffer": "5.1.2",
+            "yallist": "3.0.3"
           }
         },
         "util-deprecate": {
@@ -9626,7 +9627,7 @@
           "bundled": true,
           "optional": true,
           "requires": {
-            "string-width": "^1.0.2 || 2"
+            "string-width": "1.0.2"
           }
         },
         "wrappy": {
@@ -17330,6 +17331,25 @@
           "requires": {
             "asap": "2.0.6"
           }
+        }
+      }
+    },
+    "react-app-rewired": {
+      "version": "2.1.3",
+      "resolved": "https://registry.npmjs.org/react-app-rewired/-/react-app-rewired-2.1.3.tgz",
+      "integrity": "sha512-NXC2EsQrnEMV7xD70rHcBq0B4PSEzjY/K2m/e+GRgit2jZO/uZApnpCZSKvIX2leLRN69Sqf2id0VXZ1F62CDw==",
+      "dev": true,
+      "requires": {
+        "cross-spawn": "6.0.5",
+        "dotenv": "6.2.0",
+        "semver": "5.7.1"
+      },
+      "dependencies": {
+        "semver": {
+          "version": "5.7.1",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz",
+          "integrity": "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==",
+          "dev": true
         }
       }
     },
