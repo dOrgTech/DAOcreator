@@ -1,4 +1,5 @@
 // TODO: additional options (use DAOcreator, etc)
+/* eslint-disable */
 
 import {
   DAOMigrationParams,
@@ -6,6 +7,7 @@ import {
   DAOMigrationResult
 } from "./types";
 import { getWeb3, getNetworkName, getDefaultOpts } from "lib/dependency/web3";
+
 const migrate = require("@daostack/migration/migrate-dao");
 const addresses = require("@daostack/migration/migration.json");
 const arcVersion = require("@daostack/migration/package.json").dependencies[
@@ -52,7 +54,7 @@ export const migrateDAO = async (
     });
 
     // TODO: create an interface for the migration result
-    const result = migration.dao[arcVersion];
+    const result = migration!.dao[arcVersion];
     console.log(result);
     return {
       arcVersion: arcVersion,
