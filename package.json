@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "scripts": {
     "start": "react-scripts start",
-    "app-build": "react-scripts --max_old_space_size=4096 build && echo 'dorg.tech' > build/CNAME",
+    "app-build": "CI=false react-scripts --max_old_space_size=4096 build && echo 'dorg.tech' > build/CNAME",
     "app-eject": "react-scripts eject",
     "app-test": "react-scripts test"
   },

@@ -4,8 +4,6 @@ cache:
   directories:
     - node_modules
 
-warnings_are_errors: false
-
 script:
   - npm run app-build
 

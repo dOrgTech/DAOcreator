@@ -1050,14 +1050,13 @@
       "dev": true
     },
     "@daostack/arc": {
-      "version": "0.0.1-rc.30",
-      "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.30.tgz",
-      "integrity": "sha512-Qd+hxvz5PexGiKJf/i9Foa10a3XPa5SGizE5Zpsic2P1MQ1x8DA7nGxhRQcoQpRXzZ+UdIsIpiuETeuRFtg69g==",
+      "version": "0.0.1-rc.23",
+      "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.23.tgz",
+      "integrity": "sha512-3BbVfWgbB4MRQv971CB1b+oy+7piZohGwdurojEfANpvAJJHvkRun7Ds4YUcjRD8xSK73Cj2x1GsNezvjijE4Q==",
       "requires": {
         "@daostack/infra": "0.0.1-rc.14",
         "math": "0.0.3",
-        "openzeppelin-solidity": "2.3.0",
-        "truffle-flattener": "^1.4.2"
+        "openzeppelin-solidity": "2.1.3"
       }
     },
     "@daostack/arc-hive": {
@@ -1082,27 +1081,20 @@
       "requires": {
         "ethereumjs-abi": "^0.6.5",
         "openzeppelin-solidity": "2.1.3"
-      },
-      "dependencies": {
-        "openzeppelin-solidity": {
-          "version": "2.1.3",
-          "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.1.3.tgz",
-          "integrity": "sha512-Zz595xw6w4ZrNU3JJJTlPd8bHFbHv5OkJlkqsM2i+NBs6CzImoHI3dZ+nmhkfR+p52cGXKmayAGbnfdCum1SMg=="
-        }
       }
     },
     "@daostack/migration": {
-      "version": "git+https://github.com/cbrzn/migration.git#6a5cbda94c4a8aec022a3fe00208513a8a2a7d48",
-      "from": "git+https://github.com/cbrzn/migration.git",
+      "version": "0.0.1-rc.23-v3",
+      "resolved": "https://registry.npmjs.org/@daostack/migration/-/migration-0.0.1-rc.23-v3.tgz",
+      "integrity": "sha512-SfqyY2e9E5sexr9P2AHGW5Uxje9rdNa9dLnhjz/DuK/DFbl1fFUD+5T2iDRbL//XDgLGGhFhmMr6wX21nY81AA==",
       "requires": {
-        "@daostack/arc": "0.0.1-rc.30",
+        "@daostack/arc": "0.0.1-rc.23",
         "@daostack/arc-hive": "0.0.1-rc.4",
         "ethereumjs-wallet": "^0.6.3",
         "fstream": "^1.0.12",
         "ganache-cli": "^6.4.1",
         "hdwallet-accounts": "0.0.1",
         "inquirer": "^6.2.2",
-        "jsonschema": "^1.2.4",
         "mkdirp": "^0.5.1",
         "moment": "^2.24.0",
         "ora": "^3.2.0",
@@ -1545,19 +1537,8 @@
           "integrity": "sha512-8p6ZLv+1JYa5Vs8oBn33Nn3VGFBbF+wVfO+b78RJS1Qf1uIOzjFVDk3XwYDD7rlz9G5BKpxhaQw+6EGQ7L02aw==",
           "requires": {
             "underscore": "1.8.3",
-            "web3-core-helpers": "1.0.0-beta.37"
-          },
-          "dependencies": {
-            "websocket": {
-              "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "from": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "requires": {
-                "debug": "^2.2.0",
-                "nan": "^2.3.3",
-                "typedarray-to-buffer": "^3.1.2",
-                "yaeti": "^0.0.6"
-              }
-            }
+            "web3-core-helpers": "1.0.0-beta.37",
+            "websocket": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2"
           }
         },
         "web3-shh": {
@@ -3019,44 +3000,6 @@
         "once": "^1.4.0",
         "universal-user-agent": "^3.0.0",
         "url-template": "^2.0.8"
-      }
-    },
-    "@resolver-engine/core": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/@resolver-engine/core/-/core-0.2.1.tgz",
-      "integrity": "sha512-nsLQHmPJ77QuifqsIvqjaF5B9aHnDzJjp73Q1z6apY3e9nqYrx4Dtowhpsf7Jwftg/XzVDEMQC+OzUBNTS+S1A==",
-      "requires": {
-        "debug": "^3.1.0",
-        "request": "^2.85.0"
-      }
-    },
-    "@resolver-engine/fs": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/@resolver-engine/fs/-/fs-0.2.1.tgz",
-      "integrity": "sha512-7kJInM1Qo2LJcKyDhuYzh9ZWd+mal/fynfL9BNjWOiTcOpX+jNfqb/UmGUqros5pceBITlWGqS4lU709yHFUbg==",
-      "requires": {
-        "@resolver-engine/core": "^0.2.1",
-        "debug": "^3.1.0"
-      }
-    },
-    "@resolver-engine/imports": {
-      "version": "0.2.2",
-      "resolved": "https://registry.npmjs.org/@resolver-engine/imports/-/imports-0.2.2.tgz",
-      "integrity": "sha512-u5/HUkvo8q34AA+hnxxqqXGfby5swnH0Myw91o3Sm2TETJlNKXibFGSKBavAH+wvWdBi4Z5gS2Odu0PowgVOUg==",
-      "requires": {
-        "@resolver-engine/core": "^0.2.1",
-        "debug": "^3.1.0",
-        "hosted-git-info": "^2.6.0"
-      }
-    },
-    "@resolver-engine/imports-fs": {
-      "version": "0.2.2",
-      "resolved": "https://registry.npmjs.org/@resolver-engine/imports-fs/-/imports-fs-0.2.2.tgz",
-      "integrity": "sha512-gFCgMvCwyppjwq0UzIjde/WI+yDs3oatJhozG9xdjJdewwtd7LiF0T5i9lrHAUtqrQbqoFE4E+ZMRVHWpWHpKQ==",
-      "requires": {
-        "@resolver-engine/fs": "^0.2.1",
-        "@resolver-engine/imports": "^0.2.2",
-        "debug": "^3.1.0"
       }
     },
     "@sindresorhus/is": {
@@ -13453,11 +13396,6 @@
       "resolved": "https://registry.npmjs.org/jsonparse/-/jsonparse-1.3.1.tgz",
       "integrity": "sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA="
     },
-    "jsonschema": {
-      "version": "1.2.4",
-      "resolved": "https://registry.npmjs.org/jsonschema/-/jsonschema-1.2.4.tgz",
-      "integrity": "sha512-lz1nOH69GbsVHeVgEdvyavc/33oymY1AZwtePMiMj4HZPMbP5OIKK3zT9INMWjwua/V4Z4yq7wSlBbSG+g4AEw=="
-    },
     "jsprim": {
       "version": "1.4.1",
       "resolved": "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz",
@@ -15206,9 +15144,9 @@
       }
     },
     "openzeppelin-solidity": {
-      "version": "2.3.0",
-      "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.3.0.tgz",
-      "integrity": "sha512-QYeiPLvB1oSbDt6lDQvvpx7k8ODczvE474hb2kLXZBPKMsxKT1WxTCHBYrCU7kS7hfAku4DcJ0jqOyL+jvjwQw=="
+      "version": "2.1.3",
+      "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.1.3.tgz",
+      "integrity": "sha512-Zz595xw6w4ZrNU3JJJTlPd8bHFbHv5OkJlkqsM2i+NBs6CzImoHI3dZ+nmhkfR+p52cGXKmayAGbnfdCum1SMg=="
     },
     "opn": {
       "version": "5.5.0",
@@ -19327,11 +19265,6 @@
         }
       }
     },
-    "solidity-parser-antlr": {
-      "version": "0.4.11",
-      "resolved": "https://registry.npmjs.org/solidity-parser-antlr/-/solidity-parser-antlr-0.4.11.tgz",
-      "integrity": "sha512-4jtxasNGmyC0midtjH/lTFPZYvTTUMy6agYcF+HoMnzW8+cqo3piFrINb4ZCzpPW+7tTVFCGa5ubP34zOzeuMg=="
-    },
     "sort-keys": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/sort-keys/-/sort-keys-2.0.0.tgz",
@@ -20511,18 +20444,6 @@
       "integrity": "sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=",
       "dev": true
     },
-    "truffle-flattener": {
-      "version": "1.4.2",
-      "resolved": "https://registry.npmjs.org/truffle-flattener/-/truffle-flattener-1.4.2.tgz",
-      "integrity": "sha512-7qUIzaW8a4vI4nui14wsytht2oaqvqnZ1Iet2wRq2T0bCJ0wb6HByMKQhZKpU46R+n5BMTY4K5n+0ITyeNlmuQ==",
-      "requires": {
-        "@resolver-engine/imports-fs": "^0.2.2",
-        "find-up": "^2.1.0",
-        "mkdirp": "^0.5.1",
-        "solidity-parser-antlr": "^0.4.11",
-        "tsort": "0.0.1"
-      }
-    },
     "ts-pnp": {
       "version": "1.1.4",
       "resolved": "https://registry.npmjs.org/ts-pnp/-/ts-pnp-1.1.4.tgz",
@@ -20539,11 +20460,6 @@
       "version": "1.10.0",
       "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.10.0.tgz",
       "integrity": "sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ=="
-    },
-    "tsort": {
-      "version": "0.0.1",
-      "resolved": "https://registry.npmjs.org/tsort/-/tsort-0.0.1.tgz",
-      "integrity": "sha1-4igPXoF/i/QnVlf9D5rr1E9aJ4Y="
     },
     "tsutils": {
       "version": "3.17.1",
