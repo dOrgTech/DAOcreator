@@ -11049,8 +11049,8 @@
       "resolved": "https://registry.npmjs.org/hash.js/-/hash.js-1.1.7.tgz",
       "integrity": "sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==",
       "requires": {
-        "inherits": "2.0.4",
-        "minimalistic-assert": "1.0.1"
+        "inherits": "^2.0.3",
+        "minimalistic-assert": "^1.0.1"
       }
     },
     "hdkey": {
@@ -11058,9 +11058,9 @@
       "resolved": "https://registry.npmjs.org/hdkey/-/hdkey-1.1.1.tgz",
       "integrity": "sha512-DvHZ5OuavsfWs5yfVJZestsnc3wzPvLWNk6c2nRUfo6X+OtxypGt20vDDf7Ba+MJzjL3KS1og2nw2eBbLCOUTA==",
       "requires": {
-        "coinstring": "2.3.0",
-        "safe-buffer": "5.2.0",
-        "secp256k1": "3.7.1"
+        "coinstring": "^2.0.0",
+        "safe-buffer": "^5.1.1",
+        "secp256k1": "^3.0.1"
       }
     },
     "hdwallet-accounts": {
@@ -11068,19 +11068,8 @@
       "resolved": "https://registry.npmjs.org/hdwallet-accounts/-/hdwallet-accounts-0.0.1.tgz",
       "integrity": "sha512-+WOrxDunVDTht6EGuGqb34ZnI3+7u3t0no0hnmdtgnRAqdNgGzZH8NO13SuJKA4DxTDrqW4GNqd/SAjcoEbY+w==",
       "requires": {
-        "bip39": "2.6.0",
-        "hdkey": "0.7.1"
-      },
-      "dependencies": {
-        "hdkey": {
-          "version": "0.7.1",
-          "resolved": "https://registry.npmjs.org/hdkey/-/hdkey-0.7.1.tgz",
-          "integrity": "sha1-yu5L6BqneSHpCbjSKN0PKayu5jI=",
-          "requires": {
-            "coinstring": "2.3.0",
-            "secp256k1": "3.7.1"
-          }
-        }
+        "inherits": "2.0.4",
+        "minimalistic-assert": "1.0.1"
       }
     },
     "he": {
@@ -21856,8 +21845,8 @@
       "resolved": "https://registry.npmjs.org/window-size/-/window-size-1.1.1.tgz",
       "integrity": "sha512-5D/9vujkmVQ7pSmc0SCBmHXbkv6eaHwXEx65MywhmUMsI8sGqJ972APq1lotfcwMKPFLuCFfL8xGHLIp7jaBmA==",
       "requires": {
-        "define-property": "1.0.0",
-        "is-number": "3.0.0"
+        "define-property": "^1.0.0",
+        "is-number": "^3.0.0"
       },
       "dependencies": {
         "define-property": {
@@ -21865,7 +21854,7 @@
           "resolved": "https://registry.npmjs.org/define-property/-/define-property-1.0.0.tgz",
           "integrity": "sha1-dp66rz9KY6rTr56NMEybvnm/sOY=",
           "requires": {
-            "is-descriptor": "1.0.2"
+            "is-descriptor": "^1.0.0"
           }
         },
         "is-accessor-descriptor": {
@@ -21873,7 +21862,7 @@
           "resolved": "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-1.0.0.tgz",
           "integrity": "sha512-m5hnHTkcVsPfqx3AKlyttIPb7J+XykHvJP2B9bZDjlhLIoEq4XoK64Vg7boZlVWYK6LUY94dYPEE7Lh0ZkZKcQ==",
           "requires": {
-            "kind-of": "6.0.2"
+            "kind-of": "^6.0.0"
           }
         },
         "is-data-descriptor": {
@@ -21881,7 +21870,7 @@
           "resolved": "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-1.0.0.tgz",
           "integrity": "sha512-jbRXy1FmtAoCjQkVmIVYwuuqDFUbaOeDjmed1tOGPrsMhtJA4rD9tkgA0F1qJ3gRFRXcHYVkdeaP50Q5rE/jLQ==",
           "requires": {
-            "kind-of": "6.0.2"
+            "kind-of": "^6.0.0"
           }
         },
         "is-descriptor": {
@@ -21889,9 +21878,9 @@
           "resolved": "https://registry.npmjs.org/is-descriptor/-/is-descriptor-1.0.2.tgz",
           "integrity": "sha512-2eis5WqQGV7peooDyLmNEPUrps9+SXX5c9pL3xEB+4e9HnGuDa7mB7kHxHw4CbqS9k1T2hOH3miL8n8WtiYVtg==",
           "requires": {
-            "is-accessor-descriptor": "1.0.0",
-            "is-data-descriptor": "1.0.0",
-            "kind-of": "6.0.2"
+            "is-accessor-descriptor": "^1.0.0",
+            "is-data-descriptor": "^1.0.0",
+            "kind-of": "^6.0.2"
           }
         }
       }
