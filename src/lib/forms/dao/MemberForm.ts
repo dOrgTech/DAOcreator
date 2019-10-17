@@ -7,7 +7,8 @@ import {
   validNumber,
   requireElement,
   noDuplicates,
-  nonZeroAddress
+  nonZeroAddress,
+  greaterThan
 } from "lib/forms";
 import { Member } from "lib/state";
 import csvParse from "csv-parse";
@@ -35,14 +36,14 @@ export class MemberForm extends Form<
         .setDescription("The member's public address."),
 
       reputation: new TokenField("REP", form ? form.$.reputation.value : "")
-        .validators(requiredText, validNumber)
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Reputation")
         .setDescription(
           "The member's reputation (voting power) within the DAO."
         ),
 
       tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
-        .validators(requiredText, validNumber)
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
     });
