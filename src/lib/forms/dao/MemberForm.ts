@@ -136,9 +136,9 @@ export class MembersForm extends Form<Member[], MemberForm[]> {
       rows.forEach(async (row: any, index: number) => {
         // Create the member
         const member = new MemberForm(this._getDAOTokenSymbol);
-        member.$.address.value = row.address;
-        member.$.reputation.value = row.reputation;
-        member.$.tokens.value = row.tokens;
+        member.$.address.value = row.address.replace(/\s/g, "");
+        member.$.reputation.value = row.reputation.replace(/\s/g, "");
+        member.$.tokens.value = row.tokens.replace(/\s/g, "");
 
         // Validate the member
         const memberValidate = await member.validate();
