@@ -26,6 +26,7 @@ interface Props {
 
 interface State {
   editing: boolean;
+  selected: string | number;
 }
 
 @observer
@@ -36,7 +37,8 @@ export default class GenesisProtocolPresetEditor extends React.Component<
   constructor(props: Props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
+      selected: 0
     };
   }
 
@@ -53,6 +55,7 @@ export default class GenesisProtocolPresetEditor extends React.Component<
       }
 
       form.preset = value;
+      this.setState({ selected: value });
       this.forceUpdate();
     };
 
@@ -93,7 +96,7 @@ export default class GenesisProtocolPresetEditor extends React.Component<
                 native
                 fullWidth
                 disabled={!editable}
-                value={form.preset === undefined ? 0 : form.preset}
+                value={this.state.selected}
                 onChange={onChange}
                 input={<FilledInput name="protocol" id="protocol" />}
               >
