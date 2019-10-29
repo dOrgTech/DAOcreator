@@ -8,7 +8,8 @@ import {
   requireElement,
   noDuplicates,
   nonZeroAddress,
-  greaterThan
+  greaterThan,
+  greaterThanOrEqual
 } from "lib/forms";
 import { Member } from "lib/state";
 import csvParse from "csv-parse";
@@ -43,7 +44,7 @@ export class MemberForm extends Form<
         ),
 
       tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
-        .validators(requiredText, validNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThanOrEqual(0))
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
     });
