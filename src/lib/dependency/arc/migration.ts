@@ -56,6 +56,7 @@ export const migrateDAO = async (
     // TODO: create an interface for the migration result
     const result = migration!.dao[arcVersion];
     console.log(result);
+
     return {
       arcVersion: arcVersion,
       name: result.name,
