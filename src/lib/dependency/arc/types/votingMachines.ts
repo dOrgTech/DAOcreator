@@ -92,6 +92,8 @@ export class GenesisProtocol implements VotingMachine {
         opts.preset = Number(opts.preset);
       }
 
+      this.preset = opts.preset;
+
       switch (opts.preset) {
         case GenesisProtocolPreset.Easy:
           this.config = GenesisProtocol.EasyConfig;

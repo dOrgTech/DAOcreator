@@ -7,7 +7,12 @@ import {
   validAddress,
   nonZeroAddress
 } from "lib/forms";
-import { SchemeType, GenericScheme, GenesisProtocol } from "lib/state";
+import {
+  SchemeType,
+  GenericScheme,
+  GenesisProtocol,
+  GenesisProtocolPreset
+} from "lib/state";
 
 // TODO: support custom permissions
 // TODO: support custom addresses / versions?
@@ -20,7 +25,9 @@ export class GenericSchemeForm extends SchemeForm<
 > {
   constructor(form?: GenericSchemeForm) {
     super(SchemeType.GenericScheme, {
-      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm({}),
+      votingMachine: form
+        ? form.$.votingMachine
+        : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Normal }),
 
       contractToCall: new AddressField(
         form
