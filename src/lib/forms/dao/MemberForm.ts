@@ -7,7 +7,9 @@ import {
   validNumber,
   requireElement,
   noDuplicates,
-  nonZeroAddress
+  nonZeroAddress,
+  greaterThan,
+  greaterThanOrEqual
 } from "lib/forms";
 import { Member } from "lib/state";
 import csvParse from "csv-parse";
@@ -35,14 +37,14 @@ export class MemberForm extends Form<
         .setDescription("The member's public address."),
 
       reputation: new TokenField("REP", form ? form.$.reputation.value : "")
-        .validators(requiredText, validNumber)
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Reputation")
         .setDescription(
           "The member's reputation (voting power) within the DAO."
         ),
 
       tokens: new TokenField(getDAOTokenSymbol, form ? form.$.tokens.value : "")
-        .validators(requiredText, validNumber)
+        .validators(requiredText, validNumber, greaterThanOrEqual(0))
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
     });
@@ -136,9 +138,9 @@ export class MembersForm extends Form<Member[], MemberForm[]> {
       rows.forEach(async (row: any, index: number) => {
         // Create the member
         const member = new MemberForm(this._getDAOTokenSymbol);
-        member.$.address.value = row.address;
-        member.$.reputation.value = row.reputation;
-        member.$.tokens.value = row.tokens;
+        member.$.address.value = row.address.replace(/\s/g, "");
+        member.$.reputation.value = row.reputation.replace(/\s/g, "");
+        member.$.tokens.value = row.tokens.replace(/\s/g, "");
 
         // Validate the member
         const memberValidate = await member.validate();
