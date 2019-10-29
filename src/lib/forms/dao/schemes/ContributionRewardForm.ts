@@ -1,6 +1,11 @@
 import { SchemeForm } from "lib/forms/dao/SchemeForm";
 import { AnyField, GenesisProtocolForm } from "lib/forms";
-import { SchemeType, ContributionReward, GenesisProtocol } from "lib/state";
+import {
+  SchemeType,
+  ContributionReward,
+  GenesisProtocol,
+  GenesisProtocolPreset
+} from "lib/state";
 
 export class ContributionRewardForm extends SchemeForm<
   ContributionReward,
@@ -10,7 +15,9 @@ export class ContributionRewardForm extends SchemeForm<
 > {
   constructor(form?: ContributionRewardForm) {
     super(SchemeType.ContributionReward, {
-      votingMachine: form ? form.$.votingMachine : new GenesisProtocolForm({})
+      votingMachine: form
+        ? form.$.votingMachine
+        : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Normal })
     });
 
     this.setDisplayName("Contribution Reward");
