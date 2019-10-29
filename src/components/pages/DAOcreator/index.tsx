@@ -8,8 +8,11 @@ import {
   Step,
   StepLabel,
   Card,
-  Button
+  Button,
+  Dialog,
+  DialogTitle
 } from "@material-ui/core";
+
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
@@ -23,6 +26,7 @@ interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
+  open: boolean;
 }
 
 interface Step {
@@ -40,8 +44,52 @@ class DAOcreator extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 0
+      step: 0,
+      open: false
     };
+    this.onUnload = this.onUnload.bind(this);
+    this.onClose = this.onClose.bind(this);
+  }
+
+  onUnload() {
+    const daoCreatorSetup = {
+      step: this.state.step,
+      form: this.form
+    };
+    const daoCreatorSetupJSON = JSON.stringify(daoCreatorSetup);
+    localStorage.setItem("DAO_CREATOR_SETUP", daoCreatorSetupJSON);
+  }
+
+  componentDidMount() {
+    this.checkSavedData();
+    window.addEventListener("beforeunload", this.onUnload);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.onUnload);
+  }
+
+  savedData(data: any) {
+    const parsedDAOCreatorSetup: any = JSON.parse(data);
+    this.setState({
+      step: parsedDAOCreatorSetup.step,
+      open: true
+    });
+    console.log("this.forn", this.form);
+    console.log("parsedDAOCreatorSetup.form", parsedDAOCreatorSetup.form);
+    // this.form = new DAOForm()
+    // this.form = parsedDAOCreatorSetup.form
+  }
+
+  checkSavedData() {
+    const DAO_CREATOR_SETUP = localStorage.getItem("DAO_CREATOR_SETUP");
+    if (DAO_CREATOR_SETUP) {
+      this.savedData(DAO_CREATOR_SETUP);
+    }
+  }
+
+  onClose() {
+    this.setState({ open: false });
   }
 
   render() {
@@ -94,7 +142,7 @@ class DAOcreator extends React.Component<Props, State> {
       }
     ];
     const { classes } = this.props;
-    const { step } = this.state;
+    const { step, open } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
@@ -124,7 +172,33 @@ class DAOcreator extends React.Component<Props, State> {
         }
       }
     };
-
+    const SavedDataDialog = () => (
+      <Dialog onClose={this.onClose} open={open}>
+        <DialogTitle id="simple-dialog-title">
+          We have saved data from last session do you want to resume with it?
+        </DialogTitle>
+        <Button
+          onClick={() => {
+            console.log("Resume");
+          }}
+          size={"small"}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Resume
+        </Button>
+        <Button
+          onClick={() => {
+            console.log("Start Over");
+          }}
+          size={"small"}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Start Over
+        </Button>
+      </Dialog>
+    );
     return (
       <>
         <div className={classes.root}>
@@ -165,6 +239,7 @@ class DAOcreator extends React.Component<Props, State> {
           </div>
         </div>
         <Support />
+        <SavedDataDialog />
       </>
     );
   }
