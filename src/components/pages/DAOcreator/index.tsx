@@ -20,6 +20,8 @@ import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
 import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
+import { toDAOMigrationParams } from "lib/state";
+import { toJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -27,6 +29,7 @@ interface Props extends WithStyles<typeof styles> {}
 interface State {
   step: number;
   open: boolean;
+  daoCreatorSetup: any;
 }
 
 interface Step {
@@ -40,24 +43,14 @@ interface Step {
 
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
-
+  DAO_CREATOR_SETUP: string | null = localStorage.getItem("DAO_CREATOR_SETUP");
   constructor(props: Props) {
     super(props);
     this.state = {
       step: 0,
-      open: false
+      open: false,
+      daoCreatorSetup: null
     };
-    this.onUnload = this.onUnload.bind(this);
-    this.onClose = this.onClose.bind(this);
-  }
-
-  onUnload() {
-    const daoCreatorSetup = {
-      step: this.state.step,
-      form: this.form
-    };
-    const daoCreatorSetupJSON = JSON.stringify(daoCreatorSetup);
-    localStorage.setItem("DAO_CREATOR_SETUP", daoCreatorSetupJSON);
   }
 
   componentDidMount() {
@@ -69,28 +62,70 @@ class DAOcreator extends React.Component<Props, State> {
     window.removeEventListener("beforeunload", this.onUnload);
   }
 
-  savedData(data: any) {
-    const parsedDAOCreatorSetup: any = JSON.parse(data);
-    this.setState({
-      step: parsedDAOCreatorSetup.step,
-      open: true
-    });
-    console.log("this.forn", this.form);
-    console.log("parsedDAOCreatorSetup.form", parsedDAOCreatorSetup.form);
-    // this.form = new DAOForm()
-    // this.form = parsedDAOCreatorSetup.form
-  }
-
   checkSavedData() {
-    const DAO_CREATOR_SETUP = localStorage.getItem("DAO_CREATOR_SETUP");
-    if (DAO_CREATOR_SETUP) {
-      this.savedData(DAO_CREATOR_SETUP);
+    if (this.DAO_CREATOR_SETUP) {
+      this.setSavedData(this.DAO_CREATOR_SETUP);
     }
   }
 
-  onClose() {
-    this.setState({ open: false });
+  setSavedData(data: any) {
+    const { form } = JSON.parse(data);
+    this.setState({
+      open: true,
+      daoCreatorSetup: JSON.parse(form)
+    });
   }
+
+  onUnload = () => {
+    const daoState = this.form.toState();
+    const daoParams = toDAOMigrationParams(daoState);
+    const json = toJSON(daoParams);
+    const daoCreatorSetup = {
+      step: this.state.step,
+      form: json
+    };
+    const daoCreatorSetupJSON = JSON.stringify(daoCreatorSetup);
+    localStorage.setItem("DAO_CREATOR_SETUP", daoCreatorSetupJSON);
+  };
+
+  loadSavedData = () => {
+    const { step } = JSON.parse(this.DAO_CREATOR_SETUP as string);
+    const {
+      orgName,
+      tokenName,
+      tokenSymbol,
+      founders
+    } = this.state.daoCreatorSetup;
+    const daoCreatorState = {
+      config: {
+        daoName: orgName,
+        tokenName,
+        tokenSymbol
+      },
+      members: founders,
+      // TODO
+      // Need to figure out how to create the array of schemes.
+      // Here is were i am stuck, i dont know how to format this property based of the whats inside of localStorage/this.state.daoCreatorSetup
+      schemes: []
+    };
+    this.setState({
+      step,
+      open: false
+    });
+    this.form.fromState(daoCreatorState);
+  };
+
+  resetSavedData = () => {
+    this.setState({
+      step: 0,
+      open: false,
+      daoCreatorSetup: null
+    });
+  };
+
+  onClose = () => {
+    this.setState({ open: false });
+  };
 
   render() {
     const steps: Step[] = [
@@ -178,9 +213,7 @@ class DAOcreator extends React.Component<Props, State> {
           We have saved data from last session do you want to resume with it?
         </DialogTitle>
         <Button
-          onClick={() => {
-            console.log("Resume");
-          }}
+          onClick={this.loadSavedData}
           size={"small"}
           color={"primary"}
           variant={"contained"}
@@ -188,9 +221,7 @@ class DAOcreator extends React.Component<Props, State> {
           Resume
         </Button>
         <Button
-          onClick={() => {
-            console.log("Start Over");
-          }}
+          onClick={this.resetSavedData}
           size={"small"}
           color={"primary"}
           variant={"contained"}
