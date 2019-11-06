@@ -316,6 +316,7 @@ const DateTimeFieldView = observer(
         variant={"dialog"}
         inputVariant={"filled"}
         ampm={false}
+        error={field.hasError}
         style={{
           marginTop: "5px",
           marginBottom: "4px"
@@ -324,6 +325,7 @@ const DateTimeFieldView = observer(
           startAdornment: FieldInformation(popupState)
         }}
       />
+      <FieldError field={field} />
     </MuiPickersUtilsProvider>
   )
 );
