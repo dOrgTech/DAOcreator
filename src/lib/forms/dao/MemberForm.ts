@@ -8,8 +8,6 @@ import {
   requireElement,
   noDuplicates,
   nonZeroAddress,
-  greaterThan,
-  greaterThanOrEqual,
   notBothOnZero
 } from "lib/forms";
 import { Member } from "lib/state";
