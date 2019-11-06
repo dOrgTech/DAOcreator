@@ -197,3 +197,12 @@ export const noDuplicates = (
     }
   }
 };
+
+export const notBothOnZero = (aName: string, bName: string, values: (a: any) => {aValue: string, bValue: string}) =>
+ (form: any) => {
+  const error = `${aName} and ${bName} cannot be both 0`;
+  const {aValue, bValue} = values(form);
+  if(Number(aValue) == 0 && Number(bValue) == 0){
+    return error;
+  }
+}
