@@ -80,7 +80,6 @@ class MembersEditor extends React.Component<Props> {
       this.addError = undefined;
       // Check the new member for errors
       const memberValidate = await newMemberForm.validate();
-      if (memberValidate.hasError) return;
       if (memberValidate.hasError) {
         this.addError = this.newMemberForm.formError;
         return;
