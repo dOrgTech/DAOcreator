@@ -77,15 +77,14 @@ class MembersEditor extends React.Component<Props> {
 
     //Adds a new memberForm to form
     const onAdd = async () => {
+      this.addError = undefined;
       // Check the new member for errors
       const memberValidate = await newMemberForm.validate();
       if (memberValidate.hasError) return;
       if (memberValidate.hasError) {
-        this.addError = undefined;
-        newMemberForm.reset();
-        this.forceUpdate();
-        return
-      };
+        this.addError = this.newMemberForm.formError;
+        return;
+      }
 
       // See if the new member can be added to the array
       // without any errors
@@ -93,12 +92,10 @@ class MembersEditor extends React.Component<Props> {
 
       const membersValidate = await form.validate();
       if (membersValidate.hasError) {
-        this.addError = form.error;
         form.$.pop();
         return;
       }
 
-      this.addError = undefined;
       newMemberForm.reset();
       this.forceUpdate();
     };
@@ -121,12 +118,10 @@ class MembersEditor extends React.Component<Props> {
 
       const membersValidate = await form.validate();
       if (membersValidate.hasError) {
-        this.addError = form.error;
         form.$[index].setValues(selected.backup);
         return;
       }
 
-      this.addError = undefined;
       resetSelected();
       this.forceUpdate();
     };
@@ -168,7 +163,7 @@ class MembersEditor extends React.Component<Props> {
             <Fab
               size={"small"}
               color={"primary"}
-              disabled={newMemberForm.hasError}
+              disabled={newMemberForm.hasFieldError}
               onClick={onAdd}
             >
               <AddIcon />
