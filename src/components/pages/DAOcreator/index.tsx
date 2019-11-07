@@ -20,11 +20,11 @@ import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
 import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
-import { toDAOMigrationParams } from "lib/state";
-import { toJSON } from "lib/dependency/arc/types";
+import { toDAOMigrationParams, Scheme } from "lib/state";
+import { toJSON, SchemeType, ContributionReward, GenesisProtocol, GenesisProtocolConfig, SchemeRegistrar, GenericScheme } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> { }
 
 interface State {
   step: number;
@@ -103,10 +103,7 @@ class DAOcreator extends React.Component<Props, State> {
         tokenSymbol
       },
       members: founders,
-      // TODO
-      // Need to figure out how to create the array of schemes.
-      // Here is were i am stuck, i dont know how to format this property based of the whats inside of localStorage/this.state.daoCreatorSetup
-      schemes: []
+      schemes: this.restoreSchemes(this.state.daoCreatorSetup)
     };
     this.setState({
       step,
@@ -122,6 +119,46 @@ class DAOcreator extends React.Component<Props, State> {
       daoCreatorSetup: null
     });
   };
+
+  restoreSchemes = (daoCreatorSetup: any): Array<Scheme> => {
+    console.log(daoCreatorSetup)
+    let schemes: Scheme[] = [];
+    for (let schemeType of Object.keys(daoCreatorSetup.schemes)) {
+      let scheme: Scheme | null;
+      switch (schemeType) {
+        case "ContributionReward": {
+          let votingMachine = {
+            typeName: "GenesisProtocol",
+            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.ContributionReward[0].voteParams] as GenesisProtocolConfig,
+          } as GenesisProtocol
+          console.log(votingMachine)
+          scheme = new ContributionReward(votingMachine);
+          break;
+        }
+        case "SchemeRegistrar": {
+          let votingMachine = {
+            typeName: "GenesisProtocol",
+            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.SchemeRegistrar[0].voteRegisterParams] as GenesisProtocolConfig
+          } as GenesisProtocol
+          scheme = new SchemeRegistrar(votingMachine);
+          break;
+        }
+        case "UGenericScheme": {
+          let votingMachine = {
+            typeName: "GenesisProtocol",
+            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.UGenericScheme[0].voteParams] as GenesisProtocolConfig
+          } as GenesisProtocol
+          scheme = new GenericScheme(daoCreatorSetup.UGenericScheme[0].targetContract, votingMachine);
+          break;
+        }
+        default : {
+          throw Error(`Schema type ${schemeType} not recognized and cannot be restored from localStorage`);
+        }
+      }
+      schemes.push(scheme)
+    }
+    return schemes;
+  }
 
   onClose = () => {
     this.setState({ open: false });
@@ -258,15 +295,15 @@ class DAOcreator extends React.Component<Props, State> {
             {isLastStep ? (
               <></>
             ) : (
-              <Button
-                variant={"contained"}
-                color={"primary"}
-                onClick={nextStep}
-                className={classes.button}
-              >
-                Next
+                <Button
+                  variant={"contained"}
+                  color={"primary"}
+                  onClick={nextStep}
+                  className={classes.button}
+                >
+                  Next
               </Button>
-            )}
+              )}
           </div>
         </div>
         <Support />
