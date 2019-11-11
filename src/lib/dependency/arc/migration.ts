@@ -53,6 +53,13 @@ export const migrateDAO = async (
       customabislocation: undefined
     });
 
+    if (migration === undefined) {
+      throw Error(
+        "Something terrible has gone wrong! Please be sure to hit 'yes' on the prompts asking" +
+          " for your approval. If this isn't your issue, please report this as a bug."
+      );
+    }
+
     // TODO: create an interface for the migration result
     const result = migration!.dao[arcVersion];
     console.log(result);
