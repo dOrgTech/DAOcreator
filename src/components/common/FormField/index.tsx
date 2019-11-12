@@ -226,7 +226,7 @@ const DurationFieldView = observer(
         <TextField
           name={props.name}
           label={props.name}
-          value={field[props.name]}
+          value={Number(field[props.name]).toString()}
           disabled={editable === undefined ? false : !editable}
           onChange={onChange}
           variant={"outlined"}
