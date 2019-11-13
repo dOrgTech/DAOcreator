@@ -10,7 +10,8 @@ import {
   Card,
   Button,
   Dialog,
-  DialogTitle
+  DialogTitle,
+  DialogActions
 } from "@material-ui/core";
 
 import NamingStep from "./NamingStep";
@@ -20,16 +21,15 @@ import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
 import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
-import { toDAOMigrationParams, Scheme } from "lib/state";
-import { toJSON, SchemeType, ContributionReward, GenesisProtocol, GenesisProtocolConfig, SchemeRegistrar, GenericScheme } from "lib/dependency/arc/types";
+import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
+import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> { }
+interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
   open: boolean;
-  daoCreatorSetup: any;
 }
 
 interface Step {
@@ -41,127 +41,80 @@ interface Step {
   };
 }
 
+// Local Storage Key + Values
+const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
+interface DAO_CREATOR_STATE {
+  step: number;
+  form: string;
+}
+
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
-  DAO_CREATOR_SETUP: string | null = localStorage.getItem("DAO_CREATOR_SETUP");
+
   constructor(props: Props) {
     super(props);
     this.state = {
       step: 0,
-      open: false,
-      daoCreatorSetup: null
+      open: false
     };
   }
 
   componentDidMount() {
-    this.checkSavedData();
-    window.addEventListener("beforeunload", this.onUnload);
+    if (localStorage.getItem(DAO_CREATOR_STATE)) {
+      this.setState({
+        ...this.state,
+        open: true
+      });
+    }
+
+    window.addEventListener("beforeunload", this.saveLocalStorage);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.onUnload);
+    window.removeEventListener("beforeunload", this.saveLocalStorage);
   }
 
-  checkSavedData() {
-    if (this.DAO_CREATOR_SETUP) {
-      this.setSavedData(this.DAO_CREATOR_SETUP);
-    }
-  }
-
-  setSavedData(data: any) {
-    const { form } = JSON.parse(data);
-    this.setState({
-      open: true,
-      daoCreatorSetup: JSON.parse(form)
-    });
-  }
-
-  onUnload = () => {
+  saveLocalStorage = () => {
     const daoState = this.form.toState();
     const daoParams = toDAOMigrationParams(daoState);
     const json = toJSON(daoParams);
-    const daoCreatorSetup = {
+    const daoCreatorState: DAO_CREATOR_STATE = {
       step: this.state.step,
       form: json
     };
-    const daoCreatorSetupJSON = JSON.stringify(daoCreatorSetup);
-    localStorage.setItem("DAO_CREATOR_SETUP", daoCreatorSetupJSON);
+
+    localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
   };
 
-  loadSavedData = () => {
-    const { step } = JSON.parse(this.DAO_CREATOR_SETUP as string);
-    const {
-      orgName,
-      tokenName,
-      tokenSymbol,
-      founders
-    } = this.state.daoCreatorSetup;
-    const daoCreatorState = {
-      config: {
-        daoName: orgName,
-        tokenName,
-        tokenSymbol
-      },
-      members: founders,
-      schemes: this.restoreSchemes(this.state.daoCreatorSetup)
-    };
+  resetLocalStorage = () => {
+    localStorage.removeItem(DAO_CREATOR_STATE);
+
+    this.setState({
+      step: 0,
+      open: false
+    });
+  };
+
+  loadLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+
+    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    this.form.fromState(daoState);
+
     this.setState({
       step,
       open: false
     });
-    this.form.fromState(daoCreatorState);
   };
-
-  resetSavedData = () => {
-    this.setState({
-      step: 0,
-      open: false,
-      daoCreatorSetup: null
-    });
-  };
-
-  restoreSchemes = (daoCreatorSetup: any): Array<Scheme> => {
-    console.log(daoCreatorSetup)
-    let schemes: Scheme[] = [];
-    for (let schemeType of Object.keys(daoCreatorSetup.schemes)) {
-      let scheme: Scheme | null;
-      switch (schemeType) {
-        case "ContributionReward": {
-          let votingMachine = {
-            typeName: "GenesisProtocol",
-            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.ContributionReward[0].voteParams] as GenesisProtocolConfig,
-          } as GenesisProtocol
-          console.log(votingMachine)
-          scheme = new ContributionReward(votingMachine);
-          break;
-        }
-        case "SchemeRegistrar": {
-          let votingMachine = {
-            typeName: "GenesisProtocol",
-            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.SchemeRegistrar[0].voteRegisterParams] as GenesisProtocolConfig
-          } as GenesisProtocol
-          scheme = new SchemeRegistrar(votingMachine);
-          break;
-        }
-        case "UGenericScheme": {
-          let votingMachine = {
-            typeName: "GenesisProtocol",
-            config: daoCreatorSetup.VotingMachinesParams[daoCreatorSetup.UGenericScheme[0].voteParams] as GenesisProtocolConfig
-          } as GenesisProtocol
-          scheme = new GenericScheme(daoCreatorSetup.UGenericScheme[0].targetContract, votingMachine);
-          break;
-        }
-        default : {
-          throw Error(`Schema type ${schemeType} not recognized and cannot be restored from localStorage`);
-        }
-      }
-      schemes.push(scheme)
-    }
-    return schemes;
-  }
 
   onClose = () => {
-    this.setState({ open: false });
+    this.setState({ ...this.state, open: false });
   };
 
   render() {
@@ -244,29 +197,33 @@ class DAOcreator extends React.Component<Props, State> {
         }
       }
     };
+
     const SavedDataDialog = () => (
-      <Dialog onClose={this.onClose} open={open}>
+      <Dialog open={open}>
         <DialogTitle id="simple-dialog-title">
-          We have saved data from last session do you want to resume with it?
+          Resume from where you left off?
         </DialogTitle>
-        <Button
-          onClick={this.loadSavedData}
-          size={"small"}
-          color={"primary"}
-          variant={"contained"}
-        >
-          Resume
-        </Button>
-        <Button
-          onClick={this.resetSavedData}
-          size={"small"}
-          color={"primary"}
-          variant={"contained"}
-        >
-          Start Over
-        </Button>
+        <DialogActions>
+          <Button
+            onClick={this.loadLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Resume
+          </Button>
+          <Button
+            onClick={this.resetLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Start Over
+          </Button>
+        </DialogActions>
       </Dialog>
     );
+
     return (
       <>
         <div className={classes.root}>
@@ -295,15 +252,15 @@ class DAOcreator extends React.Component<Props, State> {
             {isLastStep ? (
               <></>
             ) : (
-                <Button
-                  variant={"contained"}
-                  color={"primary"}
-                  onClick={nextStep}
-                  className={classes.button}
-                >
-                  Next
+              <Button
+                variant={"contained"}
+                color={"primary"}
+                onClick={nextStep}
+                className={classes.button}
+              >
+                Next
               </Button>
-              )}
+            )}
           </div>
         </div>
         <Support />
