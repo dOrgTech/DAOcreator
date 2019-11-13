@@ -9,10 +9,9 @@ import {
   WithStyles
 } from "@material-ui/core";
 import * as React from "react";
-import { DAO } from "lib/dependency/arc";
 
 interface Props extends WithStyles<typeof styles> {
-  dao: DAO | undefined;
+  dao: any | undefined;
 }
 
 const LiveDaoStep: React.SFC<Props> = ({ dao, classes }) => {

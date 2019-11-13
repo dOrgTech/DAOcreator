@@ -31,6 +31,7 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class MembersEditor extends React.Component<Props> {
   @observable addError: string | null | undefined = undefined;
+  @observable editError: string | null | undefined = undefined;
   @observable newMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
   @observable selected: {
     memberForm: MemberForm;
@@ -77,9 +78,14 @@ class MembersEditor extends React.Component<Props> {
 
     //Adds a new memberForm to form
     const onAdd = async () => {
+      this.addError = undefined;
+
       // Check the new member for errors
       const memberValidate = await newMemberForm.validate();
-      if (memberValidate.hasError) return;
+      if (memberValidate.hasError) {
+        this.addError = this.newMemberForm.formError;
+        return;
+      }
 
       // See if the new member can be added to the array
       // without any errors
@@ -92,7 +98,6 @@ class MembersEditor extends React.Component<Props> {
         return;
       }
 
-      this.addError = undefined;
       newMemberForm.reset();
       this.forceUpdate();
     };
@@ -104,10 +109,15 @@ class MembersEditor extends React.Component<Props> {
     };
 
     //Validates edit and updates form
-    const onEdit = async (index: number) => {
+    const onEditSubmit = async (index: number) => {
+      this.editError = undefined;
+
       // Check the edited member for errors
       const memberValidate = await selected.memberForm.validate();
-      if (memberValidate.hasError) return;
+      if (memberValidate.hasError) {
+        this.editError = selected.memberForm.error;
+        return;
+      }
 
       // See if the edited member can be reinserted into the array
       // without any errors
@@ -115,24 +125,22 @@ class MembersEditor extends React.Component<Props> {
 
       const membersValidate = await form.validate();
       if (membersValidate.hasError) {
-        this.addError = form.error;
+        this.editError = form.error;
         form.$[index].setValues(selected.backup);
         return;
       }
 
-      this.addError = undefined;
       resetSelected();
       this.forceUpdate();
     };
 
     //Selects a memberForm and enables editing
-    const onSelect = async (index: number) => {
+    const onEditSelect = async (index: number) => {
       if (index === selected.index) {
-        await onEdit(index);
+        await onEditSubmit(index);
         resetSelected();
         return;
       }
-      if (index > -1) await onEdit(selected.index);
       selected.index = index;
 
       //Create new memberform
@@ -171,9 +179,12 @@ class MembersEditor extends React.Component<Props> {
         </Grid>
 
         <Grid container justify={"center"}>
-          {this.addError && (
+          {(this.addError && (
             <Typography color={"error"}>{this.addError}</Typography>
-          )}
+          )) ||
+            (form.showFormError && (
+              <Typography color={"error"}>{form.error}</Typography>
+            ))}
         </Grid>
       </>
     );
@@ -203,7 +214,7 @@ class MembersEditor extends React.Component<Props> {
             key={`member-${index}`}
             justify={"center"}
             alignItems={"flex-start"}
-            onKeyDown={e => handleKeyDown(e) && onEdit(index)}
+            onKeyDown={e => handleKeyDown(e) && onEditSubmit(index)}
           >
             {index !== selected.index ? (
               <MemberEditor form={memberForm} editable={false} />
@@ -216,7 +227,7 @@ class MembersEditor extends React.Component<Props> {
                   <Fab
                     size={"small"}
                     color={"primary"}
-                    onClick={() => onSelect(index)}
+                    onClick={() => onEditSelect(index)}
                   >
                     {selected.index === index ? (
                       selected.memberForm.error ? (

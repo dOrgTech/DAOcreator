@@ -226,7 +226,7 @@ const DurationFieldView = observer(
         <TextField
           name={props.name}
           label={props.name}
-          value={field[props.name]}
+          value={Number(field[props.name]).toString()}
           disabled={editable === undefined ? false : !editable}
           onChange={onChange}
           variant={"outlined"}
@@ -316,6 +316,7 @@ const DateTimeFieldView = observer(
         variant={"dialog"}
         inputVariant={"filled"}
         ampm={false}
+        error={field.hasError}
         style={{
           marginTop: "5px",
           marginBottom: "4px"
@@ -324,6 +325,7 @@ const DateTimeFieldView = observer(
           startAdornment: FieldInformation(popupState)
         }}
       />
+      <FieldError field={field} />
     </MuiPickersUtilsProvider>
   )
 );
