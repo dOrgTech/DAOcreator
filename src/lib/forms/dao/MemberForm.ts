@@ -8,7 +8,6 @@ import {
   requireElement,
   noDuplicates,
   nonZeroAddress,
-  greaterThan,
   greaterThanOrEqual
 } from "lib/forms";
 import { Member } from "lib/state";
@@ -37,7 +36,7 @@ export class MemberForm extends Form<
         .setDescription("The member's public address."),
 
       reputation: new TokenField("REP", form ? form.$.reputation.value : "")
-        .validators(requiredText, validNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThanOrEqual(0))
         .setDisplayName("Reputation")
         .setDescription(
           "The member's reputation (voting power) within the DAO."
@@ -48,6 +47,7 @@ export class MemberForm extends Form<
         .setDisplayName("Tokens")
         .setDescription("The number of DAO tokens this member owns.")
     });
+
     this._getDAOTokenSymbol = getDAOTokenSymbol;
   }
 
