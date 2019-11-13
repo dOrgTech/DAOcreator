@@ -14,6 +14,7 @@ import {
   DialogActions
 } from "@material-ui/core";
 
+import InfoStep from "./InfoStep";
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
@@ -34,7 +35,7 @@ interface State {
 
 interface Step {
   title: string;
-  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   props?: {
     [name: string]: any;
@@ -120,6 +121,17 @@ class DAOcreator extends React.Component<Props, State> {
   render() {
     const steps: Step[] = [
       {
+        title: "Info",
+        Component: InfoStep,
+        props: {
+          toNamingStep: () => {
+            this.setState({
+              step: 1
+            });
+          }
+        }
+      },
+      {
         title: "Name",
         form: this.form.$.config,
         Component: NamingStep,
@@ -127,7 +139,7 @@ class DAOcreator extends React.Component<Props, State> {
           daoForm: this.form,
           toReviewStep: () => {
             this.setState({
-              step: 3
+              step: 4
             });
           }
         }
@@ -178,23 +190,29 @@ class DAOcreator extends React.Component<Props, State> {
     };
 
     const nextStep = async () => {
-      const res = await form.validate();
-      const { step } = this.state;
+      if (form) {
+        const res = await form.validate();
+        const { step } = this.state;
 
-      if (!res.hasError) {
+        if (!res.hasError) {
+          this.setState({
+            step: step + 1
+          });
+        } else {
+          if (form.error) {
+            this.setState({
+              step
+            });
+          } else {
+            this.setState({
+              step
+            });
+          }
+        }
+      } else {
         this.setState({
           step: step + 1
         });
-      } else {
-        if (form.error) {
-          this.setState({
-            step
-          });
-        } else {
-          this.setState({
-            step
-          });
-        }
       }
     };
 

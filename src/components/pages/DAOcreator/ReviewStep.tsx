@@ -64,13 +64,13 @@ export default class ReviewStep extends React.Component<Props> {
           <Divider />
           <Grid container spacing={3} direction={"column"}>
             <Grid item>
-              {titleText("Names", 0)}
+              {titleText("Names", 1)}
               <Grid container justify={"center"}>
                 <DAOConfigEditor form={config} editable={false} />
               </Grid>
             </Grid>
             <Grid item>
-              {titleText("Schemes", 1)}
+              {titleText("Schemes", 2)}
               <SchemesEditor form={schemes} editable={false} />
               {missingSchemeReg ? (
                 <Grid container direction={"row"}>
@@ -86,7 +86,7 @@ export default class ReviewStep extends React.Component<Props> {
               )}
             </Grid>
             <Grid item>
-              {titleText("Members", 2)}
+              {titleText("Members", 3)}
               <Grid container direction={"row"} justify={"center"}>
                 <MembersAnalytics data={members.toState()} />
               </Grid>
