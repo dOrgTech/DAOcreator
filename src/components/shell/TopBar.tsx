@@ -1,6 +1,4 @@
 import * as React from "react";
-import { connect } from "react-redux";
-import { push } from "connected-react-router";
 import {
   withStyles,
   Theme,
@@ -10,94 +8,31 @@ import {
   Toolbar,
   CardMedia,
   Grid,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText
+  IconButton
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import GitHubIcon from "components/common/icons/GitHub";
 import DiscordIcon from "components/common/icons/Discord";
 import "./NeonGlow.css";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  gotoHome: () => void;
-  gotoAbout: () => void;
-  gotoDapp: () => void;
-}
+interface Props extends WithStyles<typeof styles> {}
 
-const TopBar: React.SFC<Props> = ({
-  classes,
-  gotoHome,
-  gotoAbout,
-  gotoDapp
-}) => {
-  const [open, setOpen] = React.useState(false);
-
+const TopBar: React.SFC<Props> = ({ classes }) => {
   return (
     <AppBar position={"static"} className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        <IconButton
-          onClick={() => setOpen(true)}
-          className={classes.menuButton}
+        <a
+          href="https://dorg.tech"
+          className={classes.logoLink}
+          target="_blank"
         >
-          <MenuIcon className={classes.menuIcon} />
-        </IconButton>
-        <Drawer
-          open={open}
-          onClose={() => setOpen(false)}
-          anchor={"left"}
-          classes={{
-            paper: classes.menuPaper
-          }}
-        >
-          <List>
-            {[
-              { title: "Home", onClick: gotoHome },
-              { title: "About", onClick: gotoAbout },
-              { title: "Create A DAO", onClick: gotoDapp },
-              {
-                title: "Hire dOrg",
-                onClick: () =>
-                  window.open("https://dorgtech.typeform.com/to/Q1LOP1")
-              },
-              {
-                title: "Join dOrg",
-                onClick: () =>
-                  window.open("https://dorgtech.typeform.com/to/a1rMob")
-              },
-              {
-                title: "View Our DAO",
-                onClick: () =>
-                  window.open(
-                    "https://alchemy.daostack.io/dao/0xbe1a98d3452f6da6e0984589e545d4fc25af7526"
-                  )
-              }
-            ].map(item => (
-              <ListItem
-                button
-                key={item.title}
-                onClick={() => {
-                  item.onClick();
-                  setOpen(false);
-                }}
-              >
-                <ListItemText
-                  primary={item.title}
-                  className={classes.menuItem}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-        <Grid container justify={"center"} alignItems={"center"}>
-          <div className={classes.bracket}>{"{"}</div>
-          <CardMedia image={"/icons/dOrg.svg"} className={classes.image} />
-          <div className={classes.bracket}>{"}"}</div>
-        </Grid>
+          <Grid container justify={"center"} alignItems={"center"}>
+            <div className={classes.bracket}>{"{"}</div>
+            <CardMedia image={"/icons/dOrg.svg"} className={classes.image} />
+            <div className={classes.bracket}>{"}"}</div>
+          </Grid>
+        </a>
         <div className={classes.contactIcons}>
           <IconButton
             className={classes.contactIcon}
@@ -182,31 +117,11 @@ const styles = (theme: Theme) =>
         backgroundColor: "rgba(1, 1, 1, 0.2)"
       },
       margin: "10px"
+    },
+    logoLink: {
+      textDecoration: "none",
+      margin: "auto"
     }
   });
 
-const componentWithStyles = withStyles(styles)(TopBar);
-
-// STATE
-const mapStateToProps = (state: any) => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    gotoHome: () => {
-      dispatch(push("/"));
-    },
-    gotoAbout: () => {
-      dispatch(push("/about"));
-    },
-    gotoDapp: () => {
-      dispatch(push("/dapp"));
-    }
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(componentWithStyles);
+export default withStyles(styles)(TopBar);
