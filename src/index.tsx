@@ -1,28 +1,16 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
-import App from "./components/App"
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import App from "./components/App";
 
-import { MuiThemeProvider } from "@material-ui/core/styles"
-import CssBaseline from "@material-ui/core/CssBaseline"
-import { ConnectedRouter } from "connected-react-router"
-import { Provider } from "react-redux"
+import { MuiThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-import { configureStore } from "./lib/redux/store"
-import { createHashHistory } from "history"
-
-import theme from "./style/theme"
-
-const history = createHashHistory()
-const store = configureStore(history)
+import theme from "./style/theme";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </MuiThemeProvider>
-    </ConnectedRouter>
-  </Provider>,
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
+    <App />
+  </MuiThemeProvider>,
   document.getElementById("root") as HTMLElement
-)
+);
