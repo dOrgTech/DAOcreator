@@ -17,6 +17,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class DeployStep extends React.Component<Props> {
+
   render() {
     const { dao, classes } = this.props;
 

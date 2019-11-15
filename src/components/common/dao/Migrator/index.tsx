@@ -103,6 +103,11 @@ class Migrator extends React.Component<Props, State> {
   private async onStart() {
     const { onAbort, onComplete, dao } = this.props;
 
+    // Alert in case of user closing window while deploying
+    window.onbeforeunload = function () {
+      return "Your migration is still in progress. Do you really want to leave?";
+    };
+
     // Callbacks used for the migration
     const callbacks: DAOMigrationCallbacks = {
       userApproval: (msg: string): Promise<boolean> =>
@@ -115,6 +120,7 @@ class Migrator extends React.Component<Props, State> {
       error: (msg: string) => this.addLogLine(new LogError(msg)),
       txComplete: (msg: string, txHash: string, txCost: number) =>
         new Promise<void>(resolve => {
+
           const { ethSpent } = this.state;
           this.setState({
             ...this.state,
@@ -128,6 +134,9 @@ class Migrator extends React.Component<Props, State> {
         onAbort(err);
       },
       migrationComplete: (result: DAOMigrationResult) => {
+        window.onbeforeunload = function () {
+          return undefined;
+        };
         this.setState({
           ...this.state,
           finished: true,
@@ -411,8 +420,8 @@ class Migrator extends React.Component<Props, State> {
                   }
                 />
               ) : (
-                undefined
-              )
+                  undefined
+                )
             }
             className={classes.logHeader}
           >
@@ -454,23 +463,23 @@ class Migrator extends React.Component<Props, State> {
               {started ? (
                 <Typography variant={"h6"}>Deployment Log</Typography>
               ) : (
-                <Typography variant={"h6"}>Launch Your DAO</Typography>
-              )}
+                  <Typography variant={"h6"}>Launch Your DAO</Typography>
+                )}
               {started && !finished ? (
                 <CircularProgress className={classes.progressBar} />
               ) : (
-                <Button
-                  onClick={this.onStart}
-                  color={"primary"}
-                  variant={"outlined"}
-                >
-                  {finished
-                    ? result === undefined
-                      ? "Retry?"
-                      : "Re-Deploy"
-                    : "Deploy"}
-                </Button>
-              )}
+                  <Button
+                    onClick={this.onStart}
+                    color={"primary"}
+                    variant={"outlined"}
+                  >
+                    {finished
+                      ? result === undefined
+                        ? "Retry?"
+                        : "Re-Deploy"
+                      : "Deploy"}
+                  </Button>
+                )}
             </Grid>
           </ExpansionPanelSummary>
           <Divider />
