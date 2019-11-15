@@ -35,22 +35,38 @@ export const migrateDAO = async (
     }
   };
 
+  const prevState = callbacks.getState();
+  let restartDeployment = true;
+
+  if (Object.keys(prevState).length > 0) {
+    // TODO: differentiate between a finished deployment and one that's in progress
+    restartDeployment = !(await callbacks.userApproval(
+      "We found a deployment that's was in progress, pickup where you left off?"
+    ));
+  }
+
   // Report back to caller the version of Arc being used
   callbacks.info(`Using Arc Version: ${arcVersion}`);
 
   try {
     const migration = await migrate({
       migrationParams: dao,
+      arcVersion,
       web3,
       spinner: {
         start: callbacks.info,
-        fail: callbacks.error
+        fail: callbacks.error,
+        info: callbacks.info
       },
       confirm: callbacks.userApproval,
       logTx,
       opts,
       previousMigration: { ...addresses[network] },
-      customabislocation: undefined
+      customabislocation: undefined,
+      restart: restartDeployment,
+      getState: callbacks.getState,
+      setState: callbacks.setState,
+      cleanState: callbacks.cleanState
     });
 
     if (migration === undefined) {
