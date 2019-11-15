@@ -1112,14 +1112,6 @@
           "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-4.11.6.tgz",
           "integrity": "sha1-UzRK2xRhehP26N0s4okF0cC6MhU="
         },
-        "debug": {
-          "version": "2.6.9",
-          "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
-          "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
-          "requires": {
-            "ms": "2.0.0"
-          }
-        },
         "elliptic": {
           "version": "6.3.3",
           "resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.3.3.tgz",
@@ -1546,6 +1538,28 @@
             "underscore": "1.8.3",
             "web3-core-helpers": "1.0.0-beta.37",
             "websocket": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2"
+          },
+          "dependencies": {
+            "websocket": {
+              "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
+              "from": "websocket@git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
+              "requires": {
+                "debug": "^2.2.0",
+                "nan": "^2.3.3",
+                "typedarray-to-buffer": "^3.1.2",
+                "yaeti": "^0.0.6"
+              },
+              "dependencies": {
+                "debug": {
+                  "version": "2.6.9",
+                  "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
+                  "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
+                  "requires": {
+                    "ms": "2.0.0"
+                  }
+                }
+              }
+            }
           }
         },
         "web3-shh": {
@@ -1577,7 +1591,6 @@
           "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
           "from": "websocket@git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
           "requires": {
-            "debug": "^2.2.0",
             "nan": "^2.3.3",
             "typedarray-to-buffer": "^3.1.2",
             "yaeti": "^0.0.6"
@@ -6854,9 +6867,9 @@
       "integrity": "sha512-IcR3K0Nx+nJAkcU2eAglVR7DuHnxcuhUM2w2cR+aHOW7bZp2S5LyN2HF3zTkp6BV/DjR6ykoKznUm+AjnWcOKg=="
     },
     "csv-parse": {
-      "version": "4.4.5",
-      "resolved": "https://registry.npmjs.org/csv-parse/-/csv-parse-4.4.5.tgz",
-      "integrity": "sha512-koPV9m9AjNJCK3ig4ErgRJalZsLxWI7NP0Fd3+CO9hgDZt3FSljTeESnfWTbyRc8qk/3/LgX1s5naDqLxiuK9w=="
+      "version": "4.8.2",
+      "resolved": "https://registry.npmjs.org/csv-parse/-/csv-parse-4.8.2.tgz",
+      "integrity": "sha512-WfYwyJepTbjS5jWAWpVskOJ8Z10231HaFw6qJhSjGrpfMPf3yuoRohlasYsP/6/3YgTQcvZpTvoUo37eaei9Fw=="
     },
     "csv-stringify": {
       "version": "5.3.3",
@@ -10960,9 +10973,9 @@
       "dev": true
     },
     "handlebars": {
-      "version": "4.1.2",
-      "resolved": "https://registry.npmjs.org/handlebars/-/handlebars-4.1.2.tgz",
-      "integrity": "sha512-nvfrjqvt9xQ8Z/w0ijewdD/vvWDTOweBUm96NTr66Wfvo1mJenBLwcYmPs3TIBP5ruzYGD7Hx/DaM9RmhroGPw==",
+      "version": "4.5.2",
+      "resolved": "https://registry.npmjs.org/handlebars/-/handlebars-4.5.2.tgz",
+      "integrity": "sha512-29Zxv/cynYB7mkT1rVWQnV7mGX6v7H/miQ6dbEpYTKq5eJBN7PsRB+ViYJlcT6JINTSu4dVB9kOqEun78h6Exg==",
       "requires": {
         "neo-async": "^2.6.0",
         "optimist": "^0.6.1",
@@ -11404,9 +11417,9 @@
       "dev": true
     },
     "https-proxy-agent": {
-      "version": "2.2.2",
-      "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-2.2.2.tgz",
-      "integrity": "sha512-c8Ndjc9Bkpfx/vCJueCPy0jlP4ccCCSNDp8xwCZzPjKJUm+B+u9WX2x98Qx4n1PiMNTWo3D7KK5ifNV/yJyRzg==",
+      "version": "2.2.4",
+      "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-2.2.4.tgz",
+      "integrity": "sha512-OmvfoQ53WLjtA9HeYP9RNrWMJzzAz1JGaSFr1nijg0PVR1JaD/xbJq1mdEIIlxGpXp9eSe/O2LgU9DJmTPd0Eg==",
       "requires": {
         "agent-base": "^4.3.0",
         "debug": "^3.1.0"
@@ -20609,15 +20622,21 @@
       "integrity": "sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw=="
     },
     "uglify-js": {
-      "version": "3.6.0",
-      "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-3.6.0.tgz",
-      "integrity": "sha512-W+jrUHJr3DXKhrsS7NUVxn3zqMOFn0hL/Ei6v0anCIMoKC93TjcflTagwIHLW7SfMFfiQuktQyFVCFHGUE0+yg==",
+      "version": "3.6.9",
+      "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-3.6.9.tgz",
+      "integrity": "sha512-pcnnhaoG6RtrvHJ1dFncAe8Od6Nuy30oaJ82ts6//sGSXOP5UjBMEthiProjXmMNHOfd93sqlkztifFMcb+4yw==",
       "optional": true,
       "requires": {
-        "commander": "~2.20.0",
+        "commander": "~2.20.3",
         "source-map": "~0.6.1"
       },
       "dependencies": {
+        "commander": {
+          "version": "2.20.3",
+          "resolved": "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz",
+          "integrity": "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==",
+          "optional": true
+        },
         "source-map": {
           "version": "0.6.1",
           "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",

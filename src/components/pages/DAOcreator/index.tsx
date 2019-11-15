@@ -13,8 +13,8 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  Fab
+  Fab,
+  DialogContentText
 } from "@material-ui/core";
 import { getWeb3 } from "lib/dependency/web3";
 
@@ -40,6 +40,8 @@ interface State {
   open: boolean;
   isMigrating: boolean;
   showWeb3Dialog: boolean;
+  recoverPreviewOpen: boolean;
+  recoverNoticeOpen: boolean;
 }
 
 interface Step {
@@ -60,6 +62,7 @@ interface DAO_CREATOR_STATE {
 
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
+  recoveredForm = new DAOForm();
 
   constructor(props: Props) {
     super(props);
@@ -67,7 +70,9 @@ class DAOcreator extends React.Component<Props, State> {
       step: 0,
       showWeb3Dialog: true,
       open: false,
-      isMigrating: false
+      isMigrating: false,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
     };
   }
 
@@ -75,7 +80,7 @@ class DAOcreator extends React.Component<Props, State> {
     if (localStorage.getItem(DAO_CREATOR_STATE)) {
       this.setState({
         ...this.state,
-        open: true
+        recoverNoticeOpen: true
       });
     }
 
@@ -119,7 +124,8 @@ class DAOcreator extends React.Component<Props, State> {
 
     this.setState({
       step: 0,
-      open: false
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
     });
   };
 
@@ -137,12 +143,34 @@ class DAOcreator extends React.Component<Props, State> {
 
     this.setState({
       step,
-      open: false
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
+  };
+
+  previewLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+
+    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    this.recoveredForm.fromState(daoState);
+
+    this.setState({
+      recoverPreviewOpen: true
     });
   };
 
   onClose = () => {
-    this.setState({ ...this.state, open: false });
+    this.setState({
+      ...this.state,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
   };
 
   render() {
@@ -201,7 +229,11 @@ class DAOcreator extends React.Component<Props, State> {
       }
     ];
     const { classes } = this.props;
-    const { step, open, isMigrating, showWeb3Dialog } = this.state;
+    const { step,
+      recoverNoticeOpen,
+      recoverPreviewOpen,
+      isMigrating,
+      showWeb3Dialog } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
@@ -232,12 +264,49 @@ class DAOcreator extends React.Component<Props, State> {
       }
     };
 
-    const SavedDataDialog = () => (
-      <Dialog open={open} >
-        <DialogTitle id="simple-dialog-title">
-          Resume from where you left off?
-        </DialogTitle>
+    const PreviewDialog = () => (
+      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="lg">
+        <DialogTitle id="simple-dialog-title">Preview</DialogTitle>
+        <DialogContent>
+          <ReviewStep form={this.recoveredForm} />
+        </DialogContent>
         <DialogActions>
+          <Button
+            onClick={this.loadLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Resume
+          </Button>
+          <Button
+            onClick={this.resetLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Start Over
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
+    const SavedDataDialog = () => (
+      <Dialog open={recoverNoticeOpen} fullWidth={true}>
+        <DialogTitle id="simple-dialog-title">Saved DAO Detected.</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Resume from where you left off?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={this.previewLocalStorage}
+            size={"small"}
+            color={"default"}
+            variant={"contained"}
+          >
+            Preview
+          </Button>
+
           <Button
             onClick={this.loadLocalStorage}
             size={"small"}
@@ -333,8 +402,8 @@ class DAOcreator extends React.Component<Props, State> {
         </div>
         <Support />
         <SavedDataDialog />
-
         <NoWalletDialog />
+        <PreviewDialog />
       </>
     );
   }
@@ -344,13 +413,16 @@ class DAOcreator extends React.Component<Props, State> {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      padding: 30,
-      paddingTop: 50,
-      justifySelf: "center",
       // bring forward (infront of background)
-      position: "relative",
-      maxWidth: 1000,
-      margin: "auto"
+      zIndex: 2,
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      alignItems: 'stretch',
+      maxWidth: 1024,
+      flexGrow: 1,
+      padding: '3vh',
+      margin: '0 auto'
     },
     stepper: {
     },
@@ -359,13 +431,12 @@ const styles = (theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     fab: {
-      // backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why disabled buttons disapper, then fix it and remove this
     },
     rightFab: {
       float: 'right'
     },
     fabsContainer: {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(1),
       zIndex: 10
     },
     extendedIcon: {
