@@ -270,6 +270,9 @@ class DAOcreator extends React.Component<Props, State> {
           <DialogContentText>
             Resume from where you left off?
           </DialogContentText>
+
+        </DialogContent>
+        <DialogActions>
           <Button
             onClick={this.previewLocalStorage}
             size={"small"}
@@ -279,8 +282,6 @@ class DAOcreator extends React.Component<Props, State> {
             Preview
           </Button>
 
-        </DialogContent>
-        <DialogActions>
           <Button
             onClick={this.loadLocalStorage}
             size={"small"}
