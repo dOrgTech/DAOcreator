@@ -27,7 +27,7 @@ import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
 import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> { }
+interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
@@ -120,7 +120,6 @@ class DAOcreator extends React.Component<Props, State> {
     });
   };
 
-
   previewLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
@@ -128,7 +127,7 @@ class DAOcreator extends React.Component<Props, State> {
       return;
     }
 
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     this.recoveredForm.fromState(daoState);
@@ -228,17 +227,10 @@ class DAOcreator extends React.Component<Props, State> {
     };
 
     const PreviewDialog = () => (
-      <Dialog
-        open={recoverPreviewOpen}
-        fullWidth={true}
-        maxWidth="lg"
-      >
-        <DialogTitle id="simple-dialog-title">
-          Preview
-      </DialogTitle>
+      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="lg">
+        <DialogTitle id="simple-dialog-title">Preview</DialogTitle>
         <DialogContent>
-          <ReviewStep
-            form={this.recoveredForm} />
+          <ReviewStep form={this.recoveredForm} />
         </DialogContent>
         <DialogActions>
           <Button
@@ -259,18 +251,13 @@ class DAOcreator extends React.Component<Props, State> {
           </Button>
         </DialogActions>
       </Dialog>
-    )
+    );
 
     const SavedDataDialog = () => (
       <Dialog open={recoverNoticeOpen} fullWidth={true}>
-        <DialogTitle id="simple-dialog-title">
-          Saved DAO Detected.
-        </DialogTitle>
+        <DialogTitle id="simple-dialog-title">Saved DAO Detected.</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Resume from where you left off?
-          </DialogContentText>
-
+          <DialogContentText>Resume from where you left off?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
@@ -330,15 +317,15 @@ class DAOcreator extends React.Component<Props, State> {
             {isLastStep ? (
               <></>
             ) : (
-                <Button
-                  variant={"contained"}
-                  color={"primary"}
-                  onClick={nextStep}
-                  className={classes.button}
-                >
-                  Next
+              <Button
+                variant={"contained"}
+                color={"primary"}
+                onClick={nextStep}
+                className={classes.button}
+              >
+                Next
               </Button>
-              )}
+            )}
           </div>
         </div>
         <Support />
