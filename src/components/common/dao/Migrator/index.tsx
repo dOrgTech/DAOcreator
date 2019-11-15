@@ -146,6 +146,21 @@ class Migrator extends React.Component<Props, State> {
           result
         });
         onComplete(result);
+      },
+      getState: () => {
+        const state = localStorage.getItem("DAO_MIGRATION_STATE");
+
+        if (state) {
+          return JSON.parse(state);
+        } else {
+          return {};
+        }
+      },
+      setState: (state: any) => {
+        localStorage.setItem("DAO_MIGRATION_STATE", JSON.stringify(state));
+      },
+      cleanState: () => {
+        localStorage.removeItem("DAO_MIGRATION_STATE");
       }
     };
 
