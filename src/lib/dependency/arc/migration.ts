@@ -39,7 +39,6 @@ export const migrateDAO = async (
   let restartDeployment = true;
 
   if (Object.keys(prevState).length > 0) {
-    // TODO: differentiate between a finished deployment and one that's in progress
     restartDeployment = !(await callbacks.userApproval(
       "We found a deployment that's was in progress, pickup where you left off?"
     ));
