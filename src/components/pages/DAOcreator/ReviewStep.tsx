@@ -19,7 +19,7 @@ import { SchemeType } from "lib/state";
 interface Props {
   form: DAOForm;
   // TODO: don't use a number here, use an enum instead. This will break easily.
-  setStep: (step: number) => void;
+  setStep?: (step: number) => void;
 }
 
 export default class ReviewStep extends React.Component<Props> {
@@ -35,7 +35,10 @@ export default class ReviewStep extends React.Component<Props> {
     const modifyStep = (step: number) => (
       <Fab
         color={"primary"}
-        onClick={() => setStep(step)}
+        onClick={() => {
+          if (setStep)
+            setStep(step)
+        }}
         style={{
           height: "20px",
           width: "20px",
@@ -50,7 +53,7 @@ export default class ReviewStep extends React.Component<Props> {
 
     const titleText = (title: string, step: number) => (
       <Grid container direction={"row"}>
-        {modifyStep(step)}
+        {setStep ? modifyStep(step) : ''}
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
@@ -82,8 +85,8 @@ export default class ReviewStep extends React.Component<Props> {
                   </Typography>
                 </Grid>
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </Grid>
             <Grid item>
               {titleText("Members", 2)}
@@ -94,7 +97,7 @@ export default class ReviewStep extends React.Component<Props> {
                 form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
-                maxScrollHeight={"200px"}
+                maxScrollHeight={"215px"}
               />
             </Grid>
           </Grid>

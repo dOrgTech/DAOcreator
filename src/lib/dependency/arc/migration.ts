@@ -35,23 +35,45 @@ export const migrateDAO = async (
     }
   };
 
+  const prevState = callbacks.getState();
+  let restartDeployment = true;
+
+  if (Object.keys(prevState).length > 0) {
+    restartDeployment = !(await callbacks.userApproval(
+      "We found a deployment that's was in progress, pickup where you left off?"
+    ));
+  }
+
   // Report back to caller the version of Arc being used
   callbacks.info(`Using Arc Version: ${arcVersion}`);
 
   try {
     const migration = await migrate({
       migrationParams: dao,
+      arcVersion,
       web3,
       spinner: {
         start: callbacks.info,
-        fail: callbacks.error
+        fail: callbacks.error,
+        info: callbacks.info
       },
       confirm: callbacks.userApproval,
       logTx,
       opts,
       previousMigration: { ...addresses[network] },
-      customabislocation: undefined
+      customabislocation: undefined,
+      restart: restartDeployment,
+      getState: callbacks.getState,
+      setState: callbacks.setState,
+      cleanState: callbacks.cleanState
     });
+
+    if (migration === undefined) {
+      throw Error(
+        "Something terrible has gone wrong! Please be sure to hit 'yes' on the prompts asking" +
+          " for your approval. If this isn't your issue, please report this as a bug."
+      );
+    }
 
     // TODO: create an interface for the migration result
     const result = migration!.dao[arcVersion];

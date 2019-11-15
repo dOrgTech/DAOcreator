@@ -8,8 +8,14 @@ import {
   Step,
   StepLabel,
   Card,
-  Button
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText
 } from "@material-ui/core";
+
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
@@ -17,12 +23,16 @@ import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 import Support from "components/common/Support";
 import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
+import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
+import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
+  recoverPreviewOpen: boolean;
+  recoverNoticeOpen: boolean;
 }
 
 interface Step {
@@ -34,15 +44,106 @@ interface Step {
   };
 }
 
+// Local Storage Key + Values
+const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
+interface DAO_CREATOR_STATE {
+  step: number;
+  form: string;
+}
+
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
+  recoveredForm = new DAOForm();
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 0
+      step: 0,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
     };
   }
+
+  componentDidMount() {
+    if (localStorage.getItem(DAO_CREATOR_STATE)) {
+      this.setState({
+        ...this.state,
+        recoverNoticeOpen: true
+      });
+    }
+
+    window.addEventListener("beforeunload", this.saveLocalStorage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.saveLocalStorage);
+  }
+
+  saveLocalStorage = () => {
+    const daoState = this.form.toState();
+    const daoParams = toDAOMigrationParams(daoState);
+    const json = toJSON(daoParams);
+    const daoCreatorState: DAO_CREATOR_STATE = {
+      step: this.state.step,
+      form: json
+    };
+
+    localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
+  };
+
+  resetLocalStorage = () => {
+    localStorage.removeItem(DAO_CREATOR_STATE);
+
+    this.setState({
+      step: 0,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
+  };
+
+  loadLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+
+    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    this.form.fromState(daoState);
+
+    this.setState({
+      step,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
+  };
+
+  previewLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+
+    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    this.recoveredForm.fromState(daoState);
+
+    this.setState({
+      recoverPreviewOpen: true
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      ...this.state,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
+  };
 
   render() {
     const steps: Step[] = [
@@ -94,7 +195,7 @@ class DAOcreator extends React.Component<Props, State> {
       }
     ];
     const { classes } = this.props;
-    const { step } = this.state;
+    const { step, recoverNoticeOpen, recoverPreviewOpen } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
@@ -124,6 +225,69 @@ class DAOcreator extends React.Component<Props, State> {
         }
       }
     };
+
+    const PreviewDialog = () => (
+      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="lg">
+        <DialogTitle id="simple-dialog-title">Preview</DialogTitle>
+        <DialogContent>
+          <ReviewStep form={this.recoveredForm} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={this.loadLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Resume
+          </Button>
+          <Button
+            onClick={this.resetLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Start Over
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
+    const SavedDataDialog = () => (
+      <Dialog open={recoverNoticeOpen} fullWidth={true}>
+        <DialogTitle id="simple-dialog-title">Saved DAO Detected.</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Resume from where you left off?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={this.previewLocalStorage}
+            size={"small"}
+            color={"default"}
+            variant={"contained"}
+          >
+            Preview
+          </Button>
+
+          <Button
+            onClick={this.loadLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Resume
+          </Button>
+          <Button
+            onClick={this.resetLocalStorage}
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Start Over
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
 
     return (
       <>
@@ -165,6 +329,8 @@ class DAOcreator extends React.Component<Props, State> {
           </div>
         </div>
         <Support />
+        <SavedDataDialog />
+        <PreviewDialog />
       </>
     );
   }
