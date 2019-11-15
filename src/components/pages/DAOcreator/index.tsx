@@ -12,12 +12,14 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  DialogContent,
+  DialogContentText,
   Fab
 } from "@material-ui/core";
+import { getWeb3 } from "lib/dependency/web3";
+
 import ArrowBack from "@material-ui/icons/ArrowBackIos";
 import ArrowForward from "@material-ui/icons/ArrowForwardIos";
-
-
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
@@ -29,6 +31,7 @@ import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
 import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
 import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
+
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> { }
 
@@ -36,6 +39,7 @@ interface State {
   step: number;
   open: boolean;
   isMigrating: boolean;
+  showWeb3Dialog: boolean;
 }
 
 interface Step {
@@ -61,6 +65,7 @@ class DAOcreator extends React.Component<Props, State> {
     super(props);
     this.state = {
       step: 0,
+      showWeb3Dialog: true,
       open: false,
       isMigrating: false
     };
@@ -74,11 +79,27 @@ class DAOcreator extends React.Component<Props, State> {
       });
     }
 
+    window.addEventListener('load', async () => {
+      this.ensureNetworkConnected()
+    })
+
     window.addEventListener("beforeunload", this.saveLocalStorage);
   }
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.saveLocalStorage);
+  }
+
+  ensureNetworkConnected = () => {
+    const Web3 = require('web3');
+
+    // check again in 2 seconds to see if user has enabled wallet.
+    if (!Web3.givenProvider) {
+      setTimeout(this.ensureNetworkConnected, 2000)
+    } else {
+      this.setState({ showWeb3Dialog: false })
+    }
+
   }
 
   saveLocalStorage = () => {
@@ -180,7 +201,7 @@ class DAOcreator extends React.Component<Props, State> {
       }
     ];
     const { classes } = this.props;
-    const { step, open, isMigrating } = this.state;
+    const { step, open, isMigrating, showWeb3Dialog } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
@@ -237,6 +258,40 @@ class DAOcreator extends React.Component<Props, State> {
       </Dialog>
     );
 
+    const NoWalletDialog = () => (
+      <Dialog open={showWeb3Dialog} >
+        <DialogTitle id="simple-dialog-title">
+          We are unable to detect a connected wallet.
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You need a wallet in order to deploy a DAO. Please install the Metamask Chrome extension or Brave web browser to continue.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+
+          <Button
+            target="blank"
+            href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Metamask
+          </Button>
+          <Button
+            target="blank"
+            href="https://brave.com/download"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Brave
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
     return (
       <>
         <div className={classes.root}>
@@ -278,6 +333,8 @@ class DAOcreator extends React.Component<Props, State> {
         </div>
         <Support />
         <SavedDataDialog />
+
+        <NoWalletDialog />
       </>
     );
   }
