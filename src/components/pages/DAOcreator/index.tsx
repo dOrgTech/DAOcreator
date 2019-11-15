@@ -53,7 +53,7 @@ interface DAO_CREATOR_STATE {
 
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
-  savedForm = new DAOForm();
+  recoveredForm = new DAOForm();
 
   constructor(props: Props) {
     super(props);
@@ -131,7 +131,7 @@ class DAOcreator extends React.Component<Props, State> {
     const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
-    this.savedForm.fromState(daoState);
+    this.recoveredForm.fromState(daoState);
 
     this.setState({
       recoverPreviewOpen: true
@@ -139,7 +139,11 @@ class DAOcreator extends React.Component<Props, State> {
   };
 
   onClose = () => {
-    this.setState({ ...this.state, recoverNoticeOpen: false, recoverPreviewOpen: false });
+    this.setState({
+      ...this.state,
+      recoverNoticeOpen: false,
+      recoverPreviewOpen: false
+    });
   };
 
   render() {
@@ -226,14 +230,15 @@ class DAOcreator extends React.Component<Props, State> {
     const PreviewDialog = () => (
       <Dialog
         open={recoverPreviewOpen}
-        fullScreen={true}>
+        fullWidth={true}
+        maxWidth="lg"
+      >
         <DialogTitle id="simple-dialog-title">
           Preview
       </DialogTitle>
         <DialogContent>
           <ReviewStep
-            form={this.savedForm}
-            setStep={(step) => { }} />
+            form={this.recoveredForm} />
         </DialogContent>
         <DialogActions>
           <Button
