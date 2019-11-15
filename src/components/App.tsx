@@ -1,8 +1,6 @@
 import * as React from "react";
 import { SFC } from "react";
 
-import TopBar from "./shell/TopBar";
-import Background from "./shell/Background";
 import DAOcreator from "./pages/DAOcreator";
 
 const App: SFC = () => (
@@ -15,8 +13,6 @@ const App: SFC = () => (
       maxWidth: "100%"
     }}
   >
-    <Background />
-    <TopBar />
     <DAOcreator />
   </div>
 );
