@@ -58,6 +58,7 @@ interface Props extends WithStyles<typeof styles> {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult) => void;
   onAbort: (error: Error) => void;
+  onStart: () => void;
 }
 
 interface State {
@@ -107,6 +108,8 @@ class Migrator extends React.Component<Props, State> {
     window.onbeforeunload = function () {
       return "Your migration is still in progress. Do you really want to leave?";
     };
+
+    this.props.onStart()
 
     // Callbacks used for the migration
     const callbacks: DAOMigrationCallbacks = {

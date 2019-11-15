@@ -10,16 +10,9 @@ import Dapp from "./pages/Dapp";
 import DAOcreator from "./pages/DAOcreator";
 
 const App: SFC = () => (
-  <div
-    style={{
-      position: "absolute",
-      width: "100vw",
-      height: "100vh",
-      minWidth: "450px",
-      maxWidth: "100%"
-    }}
-  >
+  <div>
     <Background />
+
     <TopBar />
     <Switch>
       <Route exact path="/" component={Landing} />
@@ -27,6 +20,7 @@ const App: SFC = () => (
       <Route exact path="/dapp" component={Dapp} />
       <Route exact path="/dao-creator" component={DAOcreator} />
     </Switch>
+
   </div>
 );
 

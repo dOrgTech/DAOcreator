@@ -11,8 +11,13 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogActions
+  DialogActions,
+  Fab
 } from "@material-ui/core";
+import ArrowBack from "@material-ui/icons/ArrowBackIos";
+import ArrowForward from "@material-ui/icons/ArrowForwardIos";
+
+
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
@@ -25,11 +30,12 @@ import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
 import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> { }
 
 interface State {
   step: number;
   open: boolean;
+  isMigrating: boolean;
 }
 
 interface Step {
@@ -55,7 +61,8 @@ class DAOcreator extends React.Component<Props, State> {
     super(props);
     this.state = {
       step: 0,
-      open: false
+      open: false,
+      isMigrating: false
     };
   }
 
@@ -162,12 +169,18 @@ class DAOcreator extends React.Component<Props, State> {
         form: this.form,
         Component: DeployStep,
         props: {
-          dao: this.form.toState()
+          dao: this.form.toState(),
+          onStart: () => {
+            this.setState({ isMigrating: true })
+          },
+          onComplete: () => {
+            this.setState({ isMigrating: false })
+          }
         }
       }
     ];
     const { classes } = this.props;
-    const { step, open } = this.state;
+    const { step, open, isMigrating } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
@@ -199,7 +212,7 @@ class DAOcreator extends React.Component<Props, State> {
     };
 
     const SavedDataDialog = () => (
-      <Dialog open={open}>
+      <Dialog open={open} >
         <DialogTitle id="simple-dialog-title">
           Resume from where you left off?
         </DialogTitle>
@@ -239,28 +252,28 @@ class DAOcreator extends React.Component<Props, State> {
           <div className={classes.content}>
             <Component form={form} {...props} />
           </div>
-          <div>
-            <Button
-              variant={"contained"}
-              color={"primary"}
-              disabled={step === 0}
+          <div className={classes.fabsContainer}>
+            <Fab
+              variant="extended"
+              color="primary"
+              disabled={step === 0 || isMigrating}
               onClick={previousStep}
-              className={classes.button}
+              className={classes.fab}
+              size="large"
             >
-              Back
-            </Button>
-            {isLastStep ? (
-              <></>
-            ) : (
-              <Button
-                variant={"contained"}
-                color={"primary"}
+              <ArrowBack /> Back
+              </Fab>
+            {!isLastStep ?
+              <Fab
+                variant="extended"
+                color="primary"
                 onClick={nextStep}
-                className={classes.button}
+                className={classes.fab + ', ' + classes.rightFab}
+                size="large"
+
               >
-                Next
-              </Button>
-            )}
+                Next <ArrowForward className={classes.extendedIcon} />
+              </Fab> : ''}
           </div>
         </div>
         <Support />
@@ -279,22 +292,28 @@ const styles = (theme: Theme) =>
       justifySelf: "center",
       // bring forward (infront of background)
       position: "relative",
-      pointerEvents: "none",
       maxWidth: 1000,
       margin: "auto"
     },
     stepper: {
-      pointerEvents: "all"
     },
     content: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
-      pointerEvents: "all"
     },
-    button: {
-      marginRight: theme.spacing(1),
-      backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
-      pointerEvents: "all"
+    fab: {
+      // backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why disabled buttons disapper, then fix it and remove this
+    },
+    rightFab: {
+      float: 'right'
+    },
+    fabsContainer: {
+      marginTop: theme.spacing(2),
+      zIndex: 10
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(-.8),
+      marginLeft: theme.spacing(.9)
     }
   });
 
