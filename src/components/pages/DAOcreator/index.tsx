@@ -436,7 +436,6 @@ const styles = (theme: Theme) =>
       float: 'right'
     },
     fabsContainer: {
-      marginTop: theme.spacing(1),
       zIndex: 10
     },
     extendedIcon: {

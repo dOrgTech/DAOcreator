@@ -97,7 +97,6 @@ export default class ReviewStep extends React.Component<Props> {
                 form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
-                maxScrollHeight={"250px"}
               />
             </Grid>
           </Grid>
