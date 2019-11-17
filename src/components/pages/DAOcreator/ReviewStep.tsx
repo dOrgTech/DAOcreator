@@ -18,13 +18,14 @@ import { SchemeType } from "lib/state";
 
 interface Props {
   form: DAOForm;
+  disableHeader?: boolean;
   // TODO: don't use a number here, use an enum instead. This will break easily.
   setStep?: (step: number) => void;
 }
 
 export default class ReviewStep extends React.Component<Props> {
   render() {
-    const { form, setStep } = this.props;
+    const { form, disableHeader, setStep } = this.props;
     const { config, schemes, members } = form.$;
     const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
     const missingSchemeReg =
@@ -36,8 +37,7 @@ export default class ReviewStep extends React.Component<Props> {
       <Fab
         color={"primary"}
         onClick={() => {
-          if (setStep)
-            setStep(step)
+          if (setStep) setStep(step);
         }}
         style={{
           height: "20px",
@@ -53,7 +53,7 @@ export default class ReviewStep extends React.Component<Props> {
 
     const titleText = (title: string, step: number) => (
       <Grid container direction={"row"}>
-        {setStep ? modifyStep(step) : ''}
+        {setStep ? modifyStep(step) : ""}
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
@@ -63,8 +63,14 @@ export default class ReviewStep extends React.Component<Props> {
     return (
       <Card>
         <CardContent>
-          <Typography variant="h4">Review your new DAO:</Typography>
-          <Divider />
+          {!disableHeader ? (
+            <>
+              <Typography variant="h4">Everything look good?</Typography>
+              <Divider />
+            </>
+          ) : (
+            <></>
+          )}
           <Grid container spacing={3} direction={"column"}>
             <Grid item>
               {titleText("Names", 0)}
@@ -85,8 +91,8 @@ export default class ReviewStep extends React.Component<Props> {
                   </Typography>
                 </Grid>
               ) : (
-                  <></>
-                )}
+                <></>
+              )}
             </Grid>
             <Grid item>
               {titleText("Members", 2)}
@@ -97,7 +103,6 @@ export default class ReviewStep extends React.Component<Props> {
                 form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
-                maxScrollHeight={"215px"}
               />
             </Grid>
           </Grid>

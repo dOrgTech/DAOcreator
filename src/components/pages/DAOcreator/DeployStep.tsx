@@ -14,11 +14,14 @@ import Migrator from "components/common/dao/Migrator";
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
   dao: DAOcreatorState;
+  onStart: () => void;
+  onComplete: () => void;
+  onStop: () => void;
 }
 
 class DeployStep extends React.Component<Props> {
   render() {
-    const { dao, classes } = this.props;
+    const { dao, onStart, onComplete, onStop, classes } = this.props;
 
     return (
       <Card>
@@ -27,10 +30,14 @@ class DeployStep extends React.Component<Props> {
             dao={toDAOMigrationParams(dao)}
             onComplete={(result: DAOMigrationResult) => {
               console.log(result);
+              onComplete();
             }}
             onAbort={(error: Error) => {
               console.log(error.message);
+              onStop();
             }}
+            onStart={onStart}
+            onStop={onStop}
           />
         </CardContent>
       </Card>

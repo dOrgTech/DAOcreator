@@ -9,7 +9,7 @@ import {
 import Particles from "react-particles-js";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> { }
 
 const Background: React.SFC<Props> = ({ classes }) => (
   <Paper square={true} className={classes.background}>
@@ -25,6 +25,7 @@ const Background: React.SFC<Props> = ({ classes }) => (
           }
         },
         interactivity: {
+          detect_on: "window",
           events: {
             onhover: {
               enable: true,
