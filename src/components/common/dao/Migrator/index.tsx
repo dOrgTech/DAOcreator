@@ -31,7 +31,7 @@ import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import TransactionResultIcon from "@material-ui/icons/DoneOutline";
 import UserApprovalIcon from "@material-ui/icons/QuestionAnswerOutlined";
 import AbortedIcon from "@material-ui/icons/SmsFailedOutlined";
-import MoreInfoIcon from "@material-ui/icons/MoreVert";
+import SaveIcon from "@material-ui/icons/SaveSharp";
 import ReactPlayer from "react-player";
 import {
   AnyLogLine,
@@ -49,7 +49,7 @@ import {
   DAOMigrationResult,
   toJSON
 } from "lib/dependency/arc";
-import { getNetworkName } from "lib/dependency/web3";
+import { getNetworkName, getWeb3 } from "lib/dependency/web3";
 
 const FileSaver = require("file-saver");
 
@@ -58,6 +58,8 @@ interface Props extends WithStyles<typeof styles> {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult) => void;
   onAbort: (error: Error) => void;
+  onStart: () => void;
+  onStop: () => void;
 }
 
 interface State {
@@ -69,6 +71,7 @@ interface State {
   logClosed: boolean;
   menuAnchor: any;
   exportOpen: boolean;
+  noWeb3Open: boolean;
 }
 
 const initState: State = {
@@ -79,7 +82,8 @@ const initState: State = {
   result: undefined,
   logClosed: false,
   menuAnchor: undefined,
-  exportOpen: false
+  exportOpen: false,
+  noWeb3Open: false
 };
 
 class Migrator extends React.Component<Props, State> {
@@ -88,20 +92,41 @@ class Migrator extends React.Component<Props, State> {
     this.state = {
       ...initState
     };
-    this.onStart = this.onStart.bind(this);
   }
 
-  private addLogLine(line: AnyLogLine) {
+  addLogLine = (line: AnyLogLine) => {
     const { logLines } = this.state;
 
     this.setState({
       ...this.state,
       logLines: [...logLines, line]
     });
-  }
+  };
 
-  private async onStart() {
+  onStart = async () => {
     const { onAbort, onComplete, dao } = this.props;
+
+    // Make sure we have a web3 provider available. If not,
+    // tell the user they need to have one.
+    let web3 = undefined;
+
+    try {
+      web3 = await getWeb3();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!web3) {
+      this.setState({ ...this.state, noWeb3Open: true });
+      return;
+    }
+
+    // Alert in case of user closing window while deploying
+    window.onbeforeunload = function() {
+      return "Your migration is still in progress. Do you really want to leave?";
+    };
+
+    this.props.onStart();
 
     // Callbacks used for the migration
     const callbacks: DAOMigrationCallbacks = {
@@ -128,6 +153,9 @@ class Migrator extends React.Component<Props, State> {
         onAbort(err);
       },
       migrationComplete: (result: DAOMigrationResult) => {
+        window.onbeforeunload = function() {
+          return undefined;
+        };
         this.setState({
           ...this.state,
           finished: true,
@@ -160,7 +188,8 @@ class Migrator extends React.Component<Props, State> {
     });
     const result = await migrateDAO(dao, callbacks);
     this.setState({ ...this.state, finished: true, result });
-  }
+    this.props.onStop();
+  };
 
   render() {
     const { dao, classes } = this.props;
@@ -172,7 +201,8 @@ class Migrator extends React.Component<Props, State> {
       result,
       logClosed,
       menuAnchor,
-      exportOpen
+      exportOpen,
+      noWeb3Open
     } = this.state;
 
     const onOptionsClick = (event: any) => {
@@ -389,6 +419,44 @@ class Migrator extends React.Component<Props, State> {
       );
     };
 
+    const NoWeb3Dialog = () => (
+      <Dialog
+        open={noWeb3Open}
+        onClose={() => this.setState({ ...this.state, noWeb3Open: false })}
+      >
+        <DialogTitle id="simple-dialog-title">
+          Web3 Support Required
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            In order to deploy a DAO, your browser needs a Web3 wallet. We
+            recommend using the Metamask Chrome extension or the Brave web
+            browser:
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            target="blank"
+            href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Metamask
+          </Button>
+          <Button
+            target="blank"
+            href="https://brave.com/download"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Brave
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
     return (
       <>
         <Typography variant={"subtitle2"} color={"error"}>
@@ -433,11 +501,12 @@ class Migrator extends React.Component<Props, State> {
           >
             <Grid container justify={"space-between"} alignItems={"center"}>
               <IconButton
+                size={"small"}
+                color={"primary"}
                 aria-haspopup="true"
                 onClick={onOptionsClick}
-                size={"small"}
               >
-                <MoreInfoIcon />
+                <SaveIcon />
               </IconButton>
               <Menu
                 anchorEl={menuAnchor}
@@ -462,7 +531,7 @@ class Migrator extends React.Component<Props, State> {
                     });
                   }}
                 >
-                  Export DAO Config
+                  Save DAO
                 </MenuItem>
                 <MenuItem onClick={onCopyLog}>Copy Log</MenuItem>
               </Menu>
@@ -477,7 +546,7 @@ class Migrator extends React.Component<Props, State> {
                 <Button
                   onClick={this.onStart}
                   color={"primary"}
-                  variant={"outlined"}
+                  variant={"contained"}
                 >
                   {finished
                     ? result === undefined
@@ -499,6 +568,7 @@ class Migrator extends React.Component<Props, State> {
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExportDialog />
+        <NoWeb3Dialog />
       </>
     );
   }

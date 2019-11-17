@@ -18,36 +18,48 @@ export const migrateDAO = async (
   dao: DAOMigrationParams,
   callbacks: DAOMigrationCallbacks
 ): Promise<DAOMigrationResult | undefined> => {
-  const web3 = await getWeb3();
-  const opts = await getDefaultOpts();
-  const network = await getNetworkName();
-
-  const logTx = async ({ transactionHash, gasUsed }: any, msg: string) => {
-    const tx = await web3.eth.getTransaction(transactionHash);
-
-    if (tx != null) {
-      const gasPrice = tx.gasPrice;
-      const txCost = web3.utils.fromWei(
-        (gasUsed * gasPrice).toString(),
-        "ether"
-      );
-      callbacks.txComplete(msg, transactionHash, txCost);
-    }
-  };
-
-  const prevState = callbacks.getState();
-  let restartDeployment = true;
-
-  if (Object.keys(prevState).length > 0) {
-    restartDeployment = !(await callbacks.userApproval(
-      "We found a deployment that's was in progress, pickup where you left off?"
-    ));
-  }
-
-  // Report back to caller the version of Arc being used
-  callbacks.info(`Using Arc Version: ${arcVersion}`);
-
   try {
+    const web3 = await getWeb3();
+    const opts = await getDefaultOpts();
+    const network = await getNetworkName();
+
+    const logTx = async ({ transactionHash, gasUsed }: any, msg: string) => {
+      const tx = await web3.eth.getTransaction(transactionHash);
+
+      if (tx != null) {
+        const gasPrice = tx.gasPrice;
+        const txCost = web3.utils.fromWei(
+          (gasUsed * gasPrice).toString(),
+          "ether"
+        );
+        callbacks.txComplete(msg, transactionHash, txCost);
+      }
+    };
+
+    // If the user doesn't have a supported network chosen, abort
+    if (addresses[network] === undefined) {
+      throw Error(
+        `The network you have chosen (${network}) isn't supported. ` +
+          `Please select one of the supported networks: ${Object.keys(
+            addresses
+          )}`
+      );
+    }
+
+    // Get the stored deployment state, and ask the user if they'd like to
+    // resume it (if one exists)
+    const prevState = callbacks.getState();
+    let restartDeployment = true;
+
+    if (Object.keys(prevState).length > 0) {
+      restartDeployment = !(await callbacks.userApproval(
+        "We found a deployment that's was in progress, pickup where you left off?"
+      ));
+    }
+
+    // Report back to caller the version of Arc being used
+    callbacks.info(`Using Arc Version: ${arcVersion}`);
+
     const migration = await migrate({
       migrationParams: dao,
       arcVersion,
@@ -88,7 +100,7 @@ export const migrateDAO = async (
       Controller: result.Controller
     };
   } catch (e) {
-    callbacks.migrationAborted(e);
+    callbacks.migrationAborted(e.message);
     return undefined;
   }
 };

@@ -132,7 +132,7 @@ const styles = (theme: Theme) =>
       background: "rgba(2, 46, 46, 0.2)",
       pointerEvents: "all",
       // bring forward (infront of background)
-      position: "relative"
+      position: "relative",
     },
     toolbar: {
       marginBottom: "5px"

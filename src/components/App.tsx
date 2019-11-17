@@ -1,7 +1,6 @@
 import * as React from "react";
 import { SFC } from "react";
 import { Route, Switch } from "react-router";
-
 import TopBar from "./shell/TopBar";
 import Background from "./shell/Background";
 import Landing from "./pages/Landing";
@@ -12,11 +11,11 @@ import DAOcreator from "./pages/DAOcreator";
 const App: SFC = () => (
   <div
     style={{
-      position: "absolute",
+      display: "inline-flex",
+      minHeight: "100vh",
+      flexDirection: "column",
       width: "100vw",
-      height: "100vh",
-      minWidth: "450px",
-      maxWidth: "100%"
+      justifyContent: "stretch"
     }}
   >
     <Background />
