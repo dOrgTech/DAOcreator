@@ -16,11 +16,8 @@ import {
   Fab,
   DialogContentText
 } from "@material-ui/core";
-import { getWeb3 } from "lib/dependency/web3";
-
 import ArrowBack from "@material-ui/icons/ArrowBackIos";
 import ArrowForward from "@material-ui/icons/ArrowForwardIos";
-
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
@@ -31,17 +28,13 @@ import { DAOForm, DAOConfigForm, MembersForm, SchemesForm } from "lib/forms";
 import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
 import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
-
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> { }
+interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
-  open: boolean;
   isMigrating: boolean;
-  showWeb3Dialog: boolean;
   recoverPreviewOpen: boolean;
-  recoverNoticeOpen: boolean;
 }
 
 interface Step {
@@ -68,26 +61,14 @@ class DAOcreator extends React.Component<Props, State> {
     super(props);
     this.state = {
       step: 0,
-      showWeb3Dialog: true,
-      open: false,
       isMigrating: false,
-      recoverNoticeOpen: false,
       recoverPreviewOpen: false
     };
   }
 
   componentDidMount() {
-    if (localStorage.getItem(DAO_CREATOR_STATE)) {
-      this.setState({
-        ...this.state,
-        recoverNoticeOpen: true
-      });
-    }
-
-    window.addEventListener('load', async () => {
-      this.ensureNetworkConnected()
-    })
-
+    // Preview a saved DAO if one is found
+    this.previewLocalStorage();
     window.addEventListener("beforeunload", this.saveLocalStorage);
   }
 
@@ -95,20 +76,16 @@ class DAOcreator extends React.Component<Props, State> {
     window.removeEventListener("beforeunload", this.saveLocalStorage);
   }
 
-  ensureNetworkConnected = () => {
-    const Web3 = require('web3');
-
-    // check again in 2 seconds to see if user has enabled wallet.
-    if (!Web3.givenProvider) {
-      setTimeout(this.ensureNetworkConnected, 2000)
-    } else {
-      this.setState({ showWeb3Dialog: false })
-    }
-
-  }
-
   saveLocalStorage = () => {
     const daoState = this.form.toState();
+
+    // Check to see if the current form state hasn't been edited,
+    // and if so early out so we don't save an empty state
+    const nullForm = new DAOForm();
+    if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
+      return;
+    }
+
     const daoParams = toDAOMigrationParams(daoState);
     const json = toJSON(daoParams);
     const daoCreatorState: DAO_CREATOR_STATE = {
@@ -123,8 +100,8 @@ class DAOcreator extends React.Component<Props, State> {
     localStorage.removeItem(DAO_CREATOR_STATE);
 
     this.setState({
+      ...this.state,
       step: 0,
-      recoverNoticeOpen: false,
       recoverPreviewOpen: false
     });
   };
@@ -142,8 +119,8 @@ class DAOcreator extends React.Component<Props, State> {
     this.form.fromState(daoState);
 
     this.setState({
+      ...this.state,
       step,
-      recoverNoticeOpen: false,
       recoverPreviewOpen: false
     });
   };
@@ -161,6 +138,7 @@ class DAOcreator extends React.Component<Props, State> {
     this.recoveredForm.fromState(daoState);
 
     this.setState({
+      ...this.state,
       recoverPreviewOpen: true
     });
   };
@@ -168,7 +146,6 @@ class DAOcreator extends React.Component<Props, State> {
   onClose = () => {
     this.setState({
       ...this.state,
-      recoverNoticeOpen: false,
       recoverPreviewOpen: false
     });
   };
@@ -183,6 +160,7 @@ class DAOcreator extends React.Component<Props, State> {
           daoForm: this.form,
           toReviewStep: () => {
             this.setState({
+              ...this.state,
               step: 3
             });
           }
@@ -208,6 +186,7 @@ class DAOcreator extends React.Component<Props, State> {
         props: {
           setStep: (step: number) => {
             this.setState({
+              ...this.state,
               step
             });
           }
@@ -220,25 +199,34 @@ class DAOcreator extends React.Component<Props, State> {
         props: {
           dao: this.form.toState(),
           onStart: () => {
-            this.setState({ isMigrating: true })
+            this.setState({
+              ...this.state,
+              isMigrating: true
+            });
+          },
+          onStop: () => {
+            this.setState({
+              ...this.state,
+              isMigrating: false
+            });
           },
           onComplete: () => {
-            this.setState({ isMigrating: false })
+            this.setState({
+              ...this.state,
+              isMigrating: false
+            });
           }
         }
       }
     ];
     const { classes } = this.props;
-    const { step,
-      recoverNoticeOpen,
-      recoverPreviewOpen,
-      isMigrating,
-      showWeb3Dialog } = this.state;
+    const { step, recoverPreviewOpen, isMigrating } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
     const previousStep = async () => {
       this.setState({
+        ...this.state,
         step: this.state.step - 1
       });
     };
@@ -249,15 +237,18 @@ class DAOcreator extends React.Component<Props, State> {
 
       if (!res.hasError) {
         this.setState({
+          ...this.state,
           step: step + 1
         });
       } else {
         if (form.error) {
           this.setState({
+            ...this.state,
             step
           });
         } else {
           this.setState({
+            ...this.state,
             step
           });
         }
@@ -265,97 +256,29 @@ class DAOcreator extends React.Component<Props, State> {
     };
 
     const PreviewDialog = () => (
-      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="lg">
-        <DialogTitle id="simple-dialog-title">Preview</DialogTitle>
-        <DialogContent>
-          <ReviewStep form={this.recoveredForm} />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={this.loadLocalStorage}
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Resume
-          </Button>
-          <Button
-            onClick={this.resetLocalStorage}
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Start Over
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-
-    const SavedDataDialog = () => (
-      <Dialog open={recoverNoticeOpen} fullWidth={true}>
-        <DialogTitle id="simple-dialog-title">Saved DAO Detected.</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Resume from where you left off?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={this.previewLocalStorage}
-            size={"small"}
-            color={"default"}
-            variant={"contained"}
-          >
-            Preview
-          </Button>
-
-          <Button
-            onClick={this.loadLocalStorage}
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Resume
-          </Button>
-          <Button
-            onClick={this.resetLocalStorage}
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Start Over
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-
-    const NoWalletDialog = () => (
-      <Dialog open={showWeb3Dialog} >
+      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="md">
         <DialogTitle id="simple-dialog-title">
-          We are unable to detect a connected wallet.
+          In Progress DAO Detected
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            You need a wallet in order to deploy a DAO. Please install the Metamask Chrome extension or Brave web browser to continue.
-          </DialogContentText>
+          <ReviewStep form={this.recoveredForm} disableHeader />
         </DialogContent>
         <DialogActions>
-
           <Button
-            target="blank"
-            href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+            onClick={this.loadLocalStorage}
             size={"small"}
             color={"primary"}
             variant={"contained"}
           >
-            Download Metamask
+            Resume
           </Button>
           <Button
-            target="blank"
-            href="https://brave.com/download"
+            onClick={this.resetLocalStorage}
             size={"small"}
             color={"primary"}
             variant={"contained"}
           >
-            Download Brave
+            Start Over
           </Button>
         </DialogActions>
       </Dialog>
@@ -385,24 +308,26 @@ class DAOcreator extends React.Component<Props, State> {
               className={classes.fab}
               size="large"
             >
-              <ArrowBack /> Back
-              </Fab>
-            {!isLastStep ?
+              <ArrowBack />
+              Back
+            </Fab>
+            {!isLastStep ? (
               <Fab
                 variant="extended"
                 color="primary"
                 onClick={nextStep}
-                className={classes.fab + ', ' + classes.rightFab}
+                className={classes.fab + ", " + classes.rightFab}
                 size="large"
-
               >
-                Next <ArrowForward className={classes.extendedIcon} />
-              </Fab> : ''}
+                Next
+                <ArrowForward className={classes.extendedIcon} />
+              </Fab>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <Support />
-        <SavedDataDialog />
-        <NoWalletDialog />
         <PreviewDialog />
       </>
     );
@@ -415,32 +340,30 @@ const styles = (theme: Theme) =>
     root: {
       // bring forward (infront of background)
       zIndex: 2,
-      display: 'flex',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      alignItems: 'stretch',
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      alignItems: "stretch",
       maxWidth: 1024,
       flexGrow: 1,
-      padding: '3vh',
-      margin: '0 auto'
+      padding: "3vh",
+      margin: "0 auto"
     },
-    stepper: {
-    },
+    stepper: {},
     content: {
       marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(1)
     },
-    fab: {
-    },
+    fab: {},
     rightFab: {
-      float: 'right'
+      float: "right"
     },
     fabsContainer: {
       zIndex: 10
     },
     extendedIcon: {
-      marginRight: theme.spacing(-.8),
-      marginLeft: theme.spacing(.9)
+      marginRight: theme.spacing(-0.8),
+      marginLeft: theme.spacing(0.9)
     }
   });
 

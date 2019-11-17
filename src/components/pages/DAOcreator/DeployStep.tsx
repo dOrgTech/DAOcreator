@@ -16,12 +16,12 @@ interface Props extends WithStyles<typeof styles> {
   dao: DAOcreatorState;
   onStart: () => void;
   onComplete: () => void;
+  onStop: () => void;
 }
 
 class DeployStep extends React.Component<Props> {
-
   render() {
-    const { dao, classes } = this.props;
+    const { dao, onStart, onComplete, onStop, classes } = this.props;
 
     return (
       <Card>
@@ -30,12 +30,14 @@ class DeployStep extends React.Component<Props> {
             dao={toDAOMigrationParams(dao)}
             onComplete={(result: DAOMigrationResult) => {
               console.log(result);
-              this.props.onComplete();
+              onComplete();
             }}
             onAbort={(error: Error) => {
               console.log(error.message);
+              onStop();
             }}
-            onStart={this.props.onStart}
+            onStart={onStart}
+            onStop={onStop}
           />
         </CardContent>
       </Card>

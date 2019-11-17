@@ -1,12 +1,6 @@
 import * as React from "react";
 import { SFC } from "react";
 import { Route, Switch } from "react-router";
-import {
-  withStyles,
-  createStyles,
-  Theme
-} from "@material-ui/core";
-
 import TopBar from "./shell/TopBar";
 import Background from "./shell/Background";
 import Landing from "./pages/Landing";
@@ -15,13 +9,15 @@ import Dapp from "./pages/Dapp";
 import DAOcreator from "./pages/DAOcreator";
 
 const App: SFC = () => (
-  <div style={{
-    display: 'inline-flex',
-    minHeight: '100vh',
-    flexDirection: 'column',
-    width: '100vw',
-    justifyContent: 'stretch'
-  }}>
+  <div
+    style={{
+      display: "inline-flex",
+      minHeight: "100vh",
+      flexDirection: "column",
+      width: "100vw",
+      justifyContent: "stretch"
+    }}
+  >
     <Background />
     <TopBar />
     <Switch>
@@ -30,9 +26,7 @@ const App: SFC = () => (
       <Route exact path="/dapp" component={Dapp} />
       <Route exact path="/dao-creator" component={DAOcreator} />
     </Switch>
-
   </div>
 );
-
 
 export default App;

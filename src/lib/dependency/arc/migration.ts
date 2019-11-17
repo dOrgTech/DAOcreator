@@ -88,7 +88,7 @@ export const migrateDAO = async (
       Controller: result.Controller
     };
   } catch (e) {
-    callbacks.migrationAborted(e);
+    callbacks.migrationAborted(e.message);
     return undefined;
   }
 };
