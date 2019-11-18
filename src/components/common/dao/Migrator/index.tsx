@@ -33,6 +33,7 @@ import UserApprovalIcon from "@material-ui/icons/QuestionAnswerOutlined";
 import AbortedIcon from "@material-ui/icons/SmsFailedOutlined";
 import SaveIcon from "@material-ui/icons/SaveSharp";
 import ReactPlayer from "react-player";
+import Web3 from "web3";
 import {
   AnyLogLine,
   LogInfo,
@@ -49,7 +50,9 @@ import {
   DAOMigrationResult,
   toJSON
 } from "lib/dependency/arc";
-import { getNetworkName, getWeb3 } from "lib/dependency/web3";
+
+import { getNetworkName } from "lib/dependency/web3";
+import web3Connect from "components/common/Web3Connect"
 
 const FileSaver = require("file-saver");
 
@@ -71,7 +74,6 @@ interface State {
   logClosed: boolean;
   menuAnchor: any;
   exportOpen: boolean;
-  noWeb3Open: boolean;
 }
 
 const initState: State = {
@@ -82,16 +84,25 @@ const initState: State = {
   result: undefined,
   logClosed: false,
   menuAnchor: undefined,
-  exportOpen: false,
-  noWeb3Open: false
+  exportOpen: false
 };
 
 class Migrator extends React.Component<Props, State> {
+  web3Provider: any = {}
+
   constructor(props: Props) {
     super(props);
     this.state = {
       ...initState
     };
+  }
+
+  componentDidMount() {
+    web3Connect.on("connect", (provider: any) => {
+      (window as any).web3 = new Web3(provider)
+    });
+
+    web3Connect.toggleModal()
   }
 
   addLogLine = (line: AnyLogLine) => {
@@ -106,23 +117,8 @@ class Migrator extends React.Component<Props, State> {
   onStart = async () => {
     const { onAbort, onComplete, dao } = this.props;
 
-    // Make sure we have a web3 provider available. If not,
-    // tell the user they need to have one.
-    let web3 = undefined;
-
-    try {
-      web3 = await getWeb3();
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (!web3) {
-      this.setState({ ...this.state, noWeb3Open: true });
-      return;
-    }
-
     // Alert in case of user closing window while deploying
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
       return "Your migration is still in progress. Do you really want to leave?";
     };
 
@@ -153,7 +149,7 @@ class Migrator extends React.Component<Props, State> {
         onAbort(err);
       },
       migrationComplete: (result: DAOMigrationResult) => {
-        window.onbeforeunload = function() {
+        window.onbeforeunload = function () {
           return undefined;
         };
         this.setState({
@@ -202,7 +198,6 @@ class Migrator extends React.Component<Props, State> {
       logClosed,
       menuAnchor,
       exportOpen,
-      noWeb3Open
     } = this.state;
 
     const onOptionsClick = (event: any) => {
@@ -419,44 +414,6 @@ class Migrator extends React.Component<Props, State> {
       );
     };
 
-    const NoWeb3Dialog = () => (
-      <Dialog
-        open={noWeb3Open}
-        onClose={() => this.setState({ ...this.state, noWeb3Open: false })}
-      >
-        <DialogTitle id="simple-dialog-title">
-          Web3 Support Required
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            In order to deploy a DAO, your browser needs a Web3 wallet. We
-            recommend using the Metamask Chrome extension or the Brave web
-            browser:
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            target="blank"
-            href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Download Metamask
-          </Button>
-          <Button
-            target="blank"
-            href="https://brave.com/download"
-            size={"small"}
-            color={"primary"}
-            variant={"contained"}
-          >
-            Download Brave
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-
     return (
       <>
         <Typography variant={"subtitle2"} color={"error"}>
@@ -494,8 +451,8 @@ class Migrator extends React.Component<Props, State> {
                   }
                 />
               ) : (
-                undefined
-              )
+                  undefined
+                )
             }
             className={classes.logHeader}
           >
@@ -538,23 +495,23 @@ class Migrator extends React.Component<Props, State> {
               {started ? (
                 <Typography variant={"h6"}>Deployment Log</Typography>
               ) : (
-                <Typography variant={"h6"}>Launch Your DAO</Typography>
-              )}
+                  <Typography variant={"h6"}>Launch Your DAO</Typography>
+                )}
               {started && !finished ? (
                 <CircularProgress className={classes.progressBar} />
               ) : (
-                <Button
-                  onClick={this.onStart}
-                  color={"primary"}
-                  variant={"contained"}
-                >
-                  {finished
-                    ? result === undefined
-                      ? "Retry?"
-                      : "Re-Deploy"
-                    : "Deploy"}
-                </Button>
-              )}
+                  <Button
+                    onClick={this.onStart}
+                    color={"primary"}
+                    variant={"contained"}
+                  >
+                    {finished
+                      ? result === undefined
+                        ? "Retry?"
+                        : "Re-Deploy"
+                      : "Deploy"}
+                  </Button>
+                )}
             </Grid>
           </ExpansionPanelSummary>
           <Divider />
@@ -568,7 +525,6 @@ class Migrator extends React.Component<Props, State> {
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExportDialog />
-        <NoWeb3Dialog />
       </>
     );
   }

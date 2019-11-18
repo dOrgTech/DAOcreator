@@ -40,9 +40,9 @@ export const migrateDAO = async (
     if (addresses[network] === undefined) {
       throw Error(
         `The network you have chosen (${network}) isn't supported. ` +
-          `Please select one of the supported networks: ${Object.keys(
-            addresses
-          )}`
+        `Please select one of the supported networks: ${Object.keys(
+          addresses
+        )}`
       );
     }
 
@@ -83,7 +83,7 @@ export const migrateDAO = async (
     if (migration === undefined) {
       throw Error(
         "Something terrible has gone wrong! Please be sure to hit 'yes' on the prompts asking" +
-          " for your approval. If this isn't your issue, please report this as a bug."
+        " for your approval. If this isn't your issue, please report this as a bug."
       );
     }
 

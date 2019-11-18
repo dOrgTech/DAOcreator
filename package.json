@@ -17,6 +17,8 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/pickers": "3.2.2",
     "@material-ui/styles": "^4.3.0",
+    "@toruslabs/torus-embed": "^0.2.6",
+    "authereum": "0.0.4-beta.41",
     "bn.js": "^5.0.0",
     "connected-react-router": "^6.4.0",
     "csv": "^5.1.2",
@@ -42,6 +44,7 @@
     "redux-thunk": "^2.3.0",
     "uuid": "^3.3.2",
     "web3": "1.2.0",
+    "web3connect": "^1.0.0-beta.24",
     "websocket": "^1.0.29"
   },
   "devDependencies": {

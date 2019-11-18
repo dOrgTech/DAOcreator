@@ -29,7 +29,7 @@ import { toDAOMigrationParams, fromDAOMigrationParams } from "lib/state";
 import { toJSON, fromJSON } from "lib/dependency/arc/types";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> { }
 
 interface State {
   step: number;
@@ -323,8 +323,8 @@ class DAOcreator extends React.Component<Props, State> {
                 <ArrowForward className={classes.extendedIcon} />
               </Fab>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
         <Support />

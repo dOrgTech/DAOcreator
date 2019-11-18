@@ -11,10 +11,9 @@ import DAOcreator from "./pages/DAOcreator";
 const App: SFC = () => (
   <div
     style={{
-      display: "inline-flex",
+      display: "flex",
       minHeight: "100vh",
       flexDirection: "column",
-      width: "100vw",
       justifyContent: "stretch"
     }}
   >
