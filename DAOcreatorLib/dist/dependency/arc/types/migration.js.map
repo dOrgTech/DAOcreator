@@ -1,0 +1,1 @@
+{"version":3,"file":"migration.js","sourceRoot":"","sources":["../../../../src/dependency/arc/types/migration.ts"],"names":[],"mappings":";;AAgDa,QAAA,MAAM,GAAG,UAAC,MAA0B;IAC/C,OAAO,IAAI,CAAC,SAAS,CAAC,MAAM,EAAE,IAAI,EAAE,CAAC,CAAC,CAAC;AACzC,CAAC,CAAC;AAEW,QAAA,QAAQ,GAAG,UAAC,MAAc;IACrC,OAAO,IAAI,CAAC,KAAK,CAAC,MAAM,CAAC,CAAC;AAC5B,CAAC,CAAC"}

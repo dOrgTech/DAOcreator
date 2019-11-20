@@ -1,0 +1,4 @@
+{
+  "packages": ["DAOcreatorUI", "DAOcreatorLib"],
+  "version": "1.0.0"
+}
