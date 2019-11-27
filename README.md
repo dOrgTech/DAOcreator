@@ -1,6 +1,6 @@
 # DAOcreator Monorepo
 
-Making DAO configuration and deployment as simple as 1, 2, 3.
+Making DAO deployment as simple as 1, 2, 3.
 
 ## Packages
 

@@ -4,7 +4,7 @@ Utility library for configuring and deploying DAOstack DAOs.
 
 ## Why?
 
-Configuring DAOstack DAOs can be confusing, and building a UI around that process is an even greater task. This library aims to implement all the necessary logic and data types + validation for the configuration and deployment process. This helps simplify the UI drastically, and allows for other applications to support DAO configuration & deployment, for example a CLI.
+Configuring DAOstack DAOs can be confusing, and building a UI around that process is an even greater task. This library aims to implement all the necessary logic and data types (with sanitization) for the DAO's configuration and deployment process. This helps reduce the code needed for implementing new UI drastically, which will enable multiple DAOcreator experiences (Web UI, CLI, etc), without having to duplicate code.
 
 To see an existing UI that uses this library, see the [@dorgtech/daocreator-ui-v1](../ui_v1/) package.
 
