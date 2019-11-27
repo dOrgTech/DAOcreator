@@ -13,10 +13,10 @@ import {
   Collapse
 } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
+import { AnySchemeForm } from "@dorgtech/daocreator-lib";
 import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
 import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
-import { AnySchemeForm } from "@dorgtech/daocreator-lib";
-import FormField from "components/common/FormField";
+import FormField from "../FormField";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -61,7 +61,7 @@ class SchemeEditor extends React.Component<Props, State> {
               justify="space-between"
             >
               <Grid item>
-                <Typography variant="h4">{form.displayName}</Typography>
+                <Typography variant="h5">{form.displayName}</Typography>
               </Grid>
               <Grid item>
                 <Switch
@@ -123,7 +123,7 @@ class SchemeEditor extends React.Component<Props, State> {
 const styles = (theme: Theme) =>
   createStyles({
     card: {
-      minWidth: 410,
+      minWidth: 250,
       maxWidth: 420
     },
     schemeIcon: {

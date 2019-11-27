@@ -47,9 +47,9 @@ import {
   DAOMigrationParams,
   migrateDAO,
   DAOMigrationResult,
-  toJSON
+  toJSON,
+  getNetworkName
 } from "@dorgtech/daocreator-lib";
-import { getNetworkName } from "@dorgtech/daocreator-lib";
 
 const FileSaver = require("file-saver");
 

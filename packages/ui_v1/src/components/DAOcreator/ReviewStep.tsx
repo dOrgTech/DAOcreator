@@ -9,12 +9,11 @@ import {
 } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/WarningTwoTone";
 import EditIcon from "@material-ui/icons/Settings";
-import SchemesEditor from "components/common/dao/SchemesEditor";
-import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
-import MembersEditor from "components/common/dao/MembersEditor";
-import MembersAnalytics from "components/common/dao/MembersAnalytics";
-import { DAOForm } from "@dorgtech/daocreator-lib";
-import { SchemeType } from "@dorgtech/daocreator-lib";
+import { DAOForm, SchemeType } from "@dorgtech/daocreator-lib";
+import SchemesEditor from "../common/dao/SchemesEditor";
+import DAOConfigEditor from "../common/dao/DAOConfigEditor";
+import MembersEditor from "../common/dao/MembersEditor";
+import MembersAnalytics from "../common/dao/MembersAnalytics";
 
 interface Props {
   form: DAOForm;
@@ -64,13 +63,13 @@ export default class ReviewStep extends React.Component<Props> {
           <Divider />
           <Grid container spacing={3} direction={"column"}>
             <Grid item>
-              {titleText("Names", 1)}
+              {titleText("Names", 0)}
               <Grid container justify={"center"}>
                 <DAOConfigEditor form={config} editable={false} />
               </Grid>
             </Grid>
             <Grid item>
-              {titleText("Schemes", 2)}
+              {titleText("Schemes", 1)}
               <SchemesEditor form={schemes} editable={false} />
               {missingSchemeReg ? (
                 <Grid container direction={"row"}>
@@ -86,7 +85,7 @@ export default class ReviewStep extends React.Component<Props> {
               )}
             </Grid>
             <Grid item>
-              {titleText("Members", 3)}
+              {titleText("Members", 2)}
               <Grid container direction={"row"} justify={"center"}>
                 <MembersAnalytics data={members.toState()} />
               </Grid>

@@ -10,9 +10,9 @@ import {
   Grid,
   Typography
 } from "@material-ui/core";
-import MembersEditor from "components/common/dao/MembersEditor";
-import MembersAnalytics from "components/common/dao/MembersAnalytics";
 import { MembersForm } from "@dorgtech/daocreator-lib";
+import MembersEditor from "../common/dao/MembersEditor";
+import MembersAnalytics from "../common/dao/MembersAnalytics";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

@@ -14,14 +14,13 @@
     "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,
     "allowJs": false,
-    "baseUrl": "src",
-    "rootDirs": ["src"],
+    "baseUrl": "src/components",
+    "rootDirs": ["src/components"],
     "jsx": "preserve",
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "declaration": true
   },
-  "include": ["src"]
+  "include": ["src/components"]
 }

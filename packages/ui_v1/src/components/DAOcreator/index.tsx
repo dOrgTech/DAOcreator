@@ -13,25 +13,22 @@ import {
   DialogTitle,
   DialogActions
 } from "@material-ui/core";
-
-import InfoStep from "./InfoStep";
+import {
+  DAOForm,
+  DAOConfigForm,
+  MembersForm,
+  SchemesForm,
+  toDAOMigrationParams,
+  fromDAOMigrationParams,
+  toJSON,
+  fromJSON
+} from "@dorgtech/daocreator-lib";
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
-import Support from "components/common/Support";
-import {
-  DAOForm,
-  DAOConfigForm,
-  MembersForm,
-  SchemesForm
-} from "@dorgtech/daocreator-lib";
-import {
-  toDAOMigrationParams,
-  fromDAOMigrationParams
-} from "@dorgtech/daocreator-lib";
-import { toJSON, fromJSON } from "@dorgtech/daocreator-lib";
+import Support from "../common/Support";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -128,17 +125,6 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     const steps: Step[] = [
-      {
-        title: "Info",
-        Component: InfoStep,
-        props: {
-          toNamingStep: () => {
-            this.setState({
-              step: 1
-            });
-          }
-        }
-      },
       {
         title: "Name",
         form: this.form.$.config,
@@ -254,7 +240,11 @@ class DAOcreator extends React.Component<Props, State> {
       <>
         <div className={classes.root}>
           <Card>
-            <Stepper className={classes.stepper} activeStep={step}>
+            <Stepper
+              className={classes.stepper}
+              activeStep={step}
+              alternativeLabel
+            >
               {steps.map(thisStep => (
                 <Step key={thisStep.title}>
                   <StepLabel>{thisStep.title}</StepLabel>
@@ -265,7 +255,7 @@ class DAOcreator extends React.Component<Props, State> {
           <div className={classes.content}>
             <Component form={form} {...props} />
           </div>
-          <div>
+          <div className={classes.footer}>
             <Button
               variant={"contained"}
               color={"primary"}
@@ -300,22 +290,27 @@ class DAOcreator extends React.Component<Props, State> {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      padding: 30,
-      paddingTop: 50,
+      boxSizing: "unset",
+      width: "100vw",
+      height: "100vh",
+      minWidth: "450px",
+      maxWidth: "1000px",
       justifySelf: "center",
-      // bring forward (infront of background)
-      position: "relative",
+      padding: 30,
       pointerEvents: "none",
-      maxWidth: 1000,
       margin: "auto"
     },
     stepper: {
+      padding: "18px",
       pointerEvents: "all"
     },
     content: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
       pointerEvents: "all"
+    },
+    footer: {
+      marginBottom: theme.spacing(2)
     },
     button: {
       marginRight: theme.spacing(1),
@@ -324,4 +319,5 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(DAOcreator);
+const DAOcreatorStyled = withStyles(styles)(DAOcreator);
+export { DAOcreatorStyled as DAOcreator };

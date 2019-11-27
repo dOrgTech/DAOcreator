@@ -31,7 +31,7 @@ import {
   PercentageField,
   AddressField
 } from "@dorgtech/daocreator-lib";
-import EthAddressAvatar from "components/common/EthAddressAvatar";
+import EthAddressAvatar from "../EthAddressAvatar";
 
 export interface Props {
   field: AnyField;

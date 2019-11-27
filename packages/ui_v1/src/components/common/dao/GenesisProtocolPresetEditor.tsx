@@ -16,8 +16,10 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
-import { GenesisProtocolForm } from "@dorgtech/daocreator-lib";
-import { GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
+import {
+  GenesisProtocolForm,
+  GenesisProtocolPreset
+} from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: GenesisProtocolForm;

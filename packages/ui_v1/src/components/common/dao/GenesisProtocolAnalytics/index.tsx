@@ -10,8 +10,10 @@ import {
 } from "@material-ui/core";
 import AnalysisResultView from "./AnalysisResultView";
 import { analyzeField, AnalysisResult } from "./utils";
-import { GenesisProtocolForm } from "@dorgtech/daocreator-lib";
-import { GenesisProtocol as GP } from "@dorgtech/daocreator-lib";
+import {
+  GenesisProtocolForm,
+  GenesisProtocol as GP
+} from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

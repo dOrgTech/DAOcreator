@@ -1,16 +1,15 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import App from "./components/App";
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
+import { DAOcreator } from "./components";
 import theme from "./style/theme";
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
+    <DAOcreator />
   </MuiThemeProvider>,
   document.getElementById("root") as HTMLElement
 );

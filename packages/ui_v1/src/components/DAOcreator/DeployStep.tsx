@@ -9,10 +9,10 @@ import {
 } from "@material-ui/core";
 import {
   DAOcreatorState,
+  DAOMigrationResult,
   toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { DAOMigrationResult } from "@dorgtech/daocreator-lib";
-import Migrator from "components/common/dao/Migrator";
+import Migrator from "../common/dao/Migrator";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

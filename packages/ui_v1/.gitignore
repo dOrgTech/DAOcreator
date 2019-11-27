@@ -26,3 +26,6 @@ secret.json
 
 # vscode chrome debugger cache
 .vscode/chrome
+
+dist
+package
