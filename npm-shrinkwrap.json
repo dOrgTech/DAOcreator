@@ -1049,6 +1049,17 @@
       "integrity": "sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==",
       "dev": true
     },
+    "@daostack/arc": {
+      "version": "0.0.1-rc.33",
+      "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.33.tgz",
+      "integrity": "sha512-JIlf/gj2OSvyo9xWrZuMQNOo8UTDPvv7lrw0scYod3hjB/SkqnqEH5h8iU1xFyDvmo+nB4QJvAbMojfItqqgLg==",
+      "requires": {
+        "@daostack/infra": "0.0.1-rc.15",
+        "math": "0.0.3",
+        "openzeppelin-solidity": "2.3.0",
+        "truffle-flattener": "^1.4.2"
+      }
+    },
     "@daostack/arc-hive": {
       "version": "0.0.1-rc.4",
       "resolved": "https://registry.npmjs.org/@daostack/arc-hive/-/arc-hive-0.0.1-rc.4.tgz",
@@ -1064,12 +1075,21 @@
         }
       }
     },
-    "@daostack/migration": {
-      "version": "0.0.1-rc.32-v2",
-      "resolved": "https://registry.npmjs.org/@daostack/migration/-/migration-0.0.1-rc.32-v2.tgz",
-      "integrity": "sha512-Wq54ZO0137MiwoooKkwI7MHDtL66hJ3iHhO7+I3iGdrads4wK7AXJd32FO0AZzvjmU6/P7ld5ImnuogNieZNFQ==",
+    "@daostack/infra": {
+      "version": "0.0.1-rc.15",
+      "resolved": "https://registry.npmjs.org/@daostack/infra/-/infra-0.0.1-rc.15.tgz",
+      "integrity": "sha512-th/nb1okI7qDNxMCILDdX8I+31zIDvgfDJlPhe/dTPUAC3Zr55WCcrUa8oS7cOb6G1ki7OdGycDCbfnu2ndWgg==",
       "requires": {
-        "@daostack/arc": "0.0.1-rc.32",
+        "ethereumjs-abi": "^0.6.5",
+        "openzeppelin-solidity": "2.3.0"
+      }
+    },
+    "@daostack/migration": {
+      "version": "0.0.1-rc.33-v1",
+      "resolved": "https://registry.npmjs.org/@daostack/migration/-/migration-0.0.1-rc.33-v1.tgz",
+      "integrity": "sha512-rUk+SbZk9AC8YXH/qkl4VtzmgE8ILQiK+dBRYvrCezeuo6H/hiiurQWwPp8LejVkVmPCqW58ztdLbVY8g3OXmg==",
+      "requires": {
+        "@daostack/arc": "0.0.1-rc.33",
         "@daostack/arc-hive": "0.0.1-rc.4",
         "ethereumjs-wallet": "^0.6.3",
         "fstream": "^1.0.12",
@@ -1087,30 +1107,18 @@
         "yargs": "^12.0.2"
       },
       "dependencies": {
-        "@daostack/arc": {
-          "version": "0.0.1-rc.32",
-          "resolved": "https://registry.npmjs.org/@daostack/arc/-/arc-0.0.1-rc.32.tgz",
-          "integrity": "sha512-DU20DcDrGso4a+4IPVQg7zNUrT80Pzx+yvHzFo25W25CzSGV5fkTjZPVHIWrT7eq9SmcG/g37BjfuioWR1Nj5A==",
-          "requires": {
-            "@daostack/infra": "0.0.1-rc.15",
-            "math": "0.0.3",
-            "openzeppelin-solidity": "2.3.0",
-            "truffle-flattener": "^1.4.2"
-          }
-        },
-        "@daostack/infra": {
-          "version": "0.0.1-rc.15",
-          "resolved": "https://registry.npmjs.org/@daostack/infra/-/infra-0.0.1-rc.15.tgz",
-          "integrity": "sha512-th/nb1okI7qDNxMCILDdX8I+31zIDvgfDJlPhe/dTPUAC3Zr55WCcrUa8oS7cOb6G1ki7OdGycDCbfnu2ndWgg==",
-          "requires": {
-            "ethereumjs-abi": "^0.6.5",
-            "openzeppelin-solidity": "2.3.0"
-          }
-        },
         "bn.js": {
           "version": "4.11.6",
           "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-4.11.6.tgz",
           "integrity": "sha1-UzRK2xRhehP26N0s4okF0cC6MhU="
+        },
+        "debug": {
+          "version": "2.6.9",
+          "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
+          "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
+          "requires": {
+            "ms": "2.0.0"
+          }
         },
         "elliptic": {
           "version": "6.3.3",
@@ -1221,11 +1229,6 @@
           "requires": {
             "http-https": "^1.0.0"
           }
-        },
-        "openzeppelin-solidity": {
-          "version": "2.3.0",
-          "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.3.0.tgz",
-          "integrity": "sha512-QYeiPLvB1oSbDt6lDQvvpx7k8ODczvE474hb2kLXZBPKMsxKT1WxTCHBYrCU7kS7hfAku4DcJ0jqOyL+jvjwQw=="
         },
         "p-cancelable": {
           "version": "0.3.0",
@@ -1425,9 +1428,9 @@
           },
           "dependencies": {
             "elliptic": {
-              "version": "6.5.1",
-              "resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.1.tgz",
-              "integrity": "sha512-xvJINNLbTeWQjrl6X+7eQCrIy/YPv5XCpKW6kB5mKvtnGILoLDcySuwomfdzt0BMdLNVnuRNTuzKNHj0bva1Cg==",
+              "version": "6.5.2",
+              "resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.2.tgz",
+              "integrity": "sha512-f4x70okzZbIQl/NSRLkI/+tteV/9WqL98zx+SQ69KbXxmVrmjwsNUPn/gYJJ0sHvEak24cZgHIPegRePAtA/xw==",
               "requires": {
                 "bn.js": "^4.4.0",
                 "brorand": "^1.0.1",
@@ -1538,28 +1541,6 @@
             "underscore": "1.8.3",
             "web3-core-helpers": "1.0.0-beta.37",
             "websocket": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2"
-          },
-          "dependencies": {
-            "websocket": {
-              "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "from": "websocket@git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-              "requires": {
-                "debug": "^2.2.0",
-                "nan": "^2.3.3",
-                "typedarray-to-buffer": "^3.1.2",
-                "yaeti": "^0.0.6"
-              },
-              "dependencies": {
-                "debug": {
-                  "version": "2.6.9",
-                  "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
-                  "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
-                  "requires": {
-                    "ms": "2.0.0"
-                  }
-                }
-              }
-            }
           }
         },
         "web3-shh": {
@@ -1589,8 +1570,9 @@
         },
         "websocket": {
           "version": "git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
-          "from": "websocket@git://github.com/frozeman/WebSocket-Node.git#6c72925e3f8aaaea8dc8450f97627e85263999f2",
+          "from": "git://github.com/frozeman/WebSocket-Node.git#browserifyCompatible",
           "requires": {
+            "debug": "^2.2.0",
             "nan": "^2.3.3",
             "typedarray-to-buffer": "^3.1.2",
             "yaeti": "^0.0.6"
@@ -3288,7 +3270,6 @@
       "version": "4.11.5",
       "resolved": "https://registry.npmjs.org/@types/bn.js/-/bn.js-4.11.5.tgz",
       "integrity": "sha512-AEAZcIZga0JgVMHNtl1CprA/hXX7/wPt79AgR4XqaDt7jyj3QWYw6LPoOiznPtugDmlubUnAahMs2PFxGcQrng==",
-      "dev": true,
       "requires": {
         "@types/node": "*"
       }
@@ -8321,16 +8302,16 @@
       }
     },
     "ethereumjs-util": {
-      "version": "6.1.0",
-      "resolved": "https://registry.npmjs.org/ethereumjs-util/-/ethereumjs-util-6.1.0.tgz",
-      "integrity": "sha512-URESKMFbDeJxnAxPppnk2fN6Y3BIatn9fwn76Lm8bQlt+s52TpG8dN9M66MLPuRAiAOIqL3dfwqWJf0sd0fL0Q==",
+      "version": "6.2.0",
+      "resolved": "https://registry.npmjs.org/ethereumjs-util/-/ethereumjs-util-6.2.0.tgz",
+      "integrity": "sha512-vb0XN9J2QGdZGIEKG2vXM+kUdEivUfU6Wmi5y0cg+LRhDYKnXIZ/Lz7XjFbHRR9VIKq2lVGLzGBkA++y2nOdOQ==",
       "requires": {
+        "@types/bn.js": "^4.11.3",
         "bn.js": "^4.11.0",
         "create-hash": "^1.1.2",
         "ethjs-util": "0.1.6",
-        "keccak": "^1.0.2",
-        "rlp": "^2.0.0",
-        "safe-buffer": "^5.1.1",
+        "keccak": "^2.0.0",
+        "rlp": "^2.2.3",
         "secp256k1": "^3.0.1"
       },
       "dependencies": {
@@ -9261,13 +9242,11 @@
         },
         "balanced-match": {
           "version": "1.0.0",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "brace-expansion": {
           "version": "1.1.11",
           "bundled": true,
-          "optional": true,
           "requires": {
             "balanced-match": "^1.0.0",
             "concat-map": "0.0.1"
@@ -9280,18 +9259,15 @@
         },
         "code-point-at": {
           "version": "1.1.0",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "concat-map": {
           "version": "0.0.1",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "console-control-strings": {
           "version": "1.1.0",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "core-util-is": {
           "version": "1.0.2",
@@ -9394,8 +9370,7 @@
         },
         "inherits": {
           "version": "2.0.3",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "ini": {
           "version": "1.3.5",
@@ -9405,7 +9380,6 @@
         "is-fullwidth-code-point": {
           "version": "1.0.0",
           "bundled": true,
-          "optional": true,
           "requires": {
             "number-is-nan": "^1.0.0"
           }
@@ -9418,20 +9392,17 @@
         "minimatch": {
           "version": "3.0.4",
           "bundled": true,
-          "optional": true,
           "requires": {
             "brace-expansion": "^1.1.7"
           }
         },
         "minimist": {
           "version": "0.0.8",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "minipass": {
           "version": "2.3.5",
           "bundled": true,
-          "optional": true,
           "requires": {
             "safe-buffer": "^5.1.2",
             "yallist": "^3.0.0"
@@ -9448,7 +9419,6 @@
         "mkdirp": {
           "version": "0.5.1",
           "bundled": true,
-          "optional": true,
           "requires": {
             "minimist": "0.0.8"
           }
@@ -9521,8 +9491,7 @@
         },
         "number-is-nan": {
           "version": "1.0.1",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "object-assign": {
           "version": "4.1.1",
@@ -9532,7 +9501,6 @@
         "once": {
           "version": "1.4.0",
           "bundled": true,
-          "optional": true,
           "requires": {
             "wrappy": "1"
           }
@@ -9638,7 +9606,6 @@
         "string-width": {
           "version": "1.0.2",
           "bundled": true,
-          "optional": true,
           "requires": {
             "code-point-at": "^1.0.0",
             "is-fullwidth-code-point": "^1.0.0",
@@ -13577,9 +13544,9 @@
       "integrity": "sha1-h/zPrv/AtozRnVX2cilD+SnqNeo="
     },
     "keccak": {
-      "version": "1.4.0",
-      "resolved": "https://registry.npmjs.org/keccak/-/keccak-1.4.0.tgz",
-      "integrity": "sha512-eZVaCpblK5formjPjeTBik7TAg+pqnDrMHIffSvi9Lh7PQgM1+hSzakUeZFCk9DVVG0dacZJuaz2ntwlzZUIBw==",
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/keccak/-/keccak-2.0.0.tgz",
+      "integrity": "sha512-rKe/lRr0KGhjoz97cwg+oeT1Rj/Y4cjae6glArioUC8JBF9ROGZctwIaaruM7d7naovME4Q8WcQSO908A8qcyQ==",
       "requires": {
         "bindings": "^1.2.1",
         "inherits": "^2.0.3",
@@ -15219,6 +15186,11 @@
       "requires": {
         "is-wsl": "^1.1.0"
       }
+    },
+    "openzeppelin-solidity": {
+      "version": "2.3.0",
+      "resolved": "https://registry.npmjs.org/openzeppelin-solidity/-/openzeppelin-solidity-2.3.0.tgz",
+      "integrity": "sha512-QYeiPLvB1oSbDt6lDQvvpx7k8ODczvE474hb2kLXZBPKMsxKT1WxTCHBYrCU7kS7hfAku4DcJ0jqOyL+jvjwQw=="
     },
     "opn": {
       "version": "5.5.0",
@@ -18518,12 +18490,11 @@
       }
     },
     "rlp": {
-      "version": "2.2.3",
-      "resolved": "https://registry.npmjs.org/rlp/-/rlp-2.2.3.tgz",
-      "integrity": "sha512-l6YVrI7+d2vpW6D6rS05x2Xrmq8oW7v3pieZOJKBEdjuTF4Kz/iwk55Zyh1Zaz+KOB2kC8+2jZlp2u9L4tTzCQ==",
+      "version": "2.2.4",
+      "resolved": "https://registry.npmjs.org/rlp/-/rlp-2.2.4.tgz",
+      "integrity": "sha512-fdq2yYCWpAQBhwkZv+Z8o/Z4sPmYm1CUq6P7n6lVTOdb949CnqA0sndXal5C1NleSVSZm6q5F3iEbauyVln/iw==",
       "requires": {
-        "bn.js": "^4.11.1",
-        "safe-buffer": "^5.1.1"
+        "bn.js": "^4.11.1"
       },
       "dependencies": {
         "bn.js": {

@@ -36,6 +36,43 @@ export const migrateDAO = async (
       }
     };
 
+    const sendTx = async (
+      tx: any,
+      msg: string
+    ): Promise<{ receipt: any; result: any }> => {
+      callbacks.info(msg);
+
+      let gas = 0;
+      const nonce = await web3.eth.getTransactionCount(web3.eth.defaultAccount);
+      const blockLimit = await web3.eth.getBlock("latest").gasLimit;
+
+      try {
+        gas = await tx.estimateGas();
+        if (gas * 1.1 < blockLimit - 100000) {
+          gas *= 1.1;
+        }
+      } catch (error) {
+        gas = blockLimit - 100000;
+      }
+
+      let result = tx.send({ gas, nonce });
+      let receipt = await new Promise(resolve =>
+        result.on("receipt", resolve).on("error", async (error: Error) => {
+          callbacks.error("Transaction failed: " + error);
+          resolve();
+        })
+      );
+
+      if (receipt === "failed") {
+        return sendTx(tx, "Retrying...");
+      }
+
+      result = await result;
+      return { receipt, result };
+    };
+
+    const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
+
     // If the user doesn't have a supported network chosen, abort
     if (addresses[network] === undefined) {
       throw Error(
@@ -61,16 +98,18 @@ export const migrateDAO = async (
     callbacks.info(`Using Arc Version: ${arcVersion}`);
 
     const migration = await migrate({
-      migrationParams: dao,
       arcVersion,
+      getArcVersionNumber,
+      migrationParams: dao,
       web3,
       spinner: {
         start: callbacks.info,
         fail: callbacks.error,
-        info: callbacks.info
+        succeed: callbacks.info
       },
       confirm: callbacks.userApproval,
       logTx,
+      sendTx,
       opts,
       previousMigration: { ...addresses[network] },
       customabislocation: undefined,

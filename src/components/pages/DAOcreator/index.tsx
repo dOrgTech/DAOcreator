@@ -13,8 +13,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Fab,
-  DialogContentText
+  Fab
 } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBackIos";
 import ArrowForward from "@material-ui/icons/ArrowForwardIos";
@@ -341,7 +340,6 @@ const styles = (theme: Theme) =>
       // bring forward (infront of background)
       zIndex: 2,
       display: "flex",
-      justifyContent: "center",
       flexDirection: "column",
       alignItems: "stretch",
       maxWidth: 1024,
