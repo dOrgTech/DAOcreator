@@ -98,7 +98,6 @@ class Migrator extends React.Component<Props, State> {
     const { logLines } = this.state;
 
     this.setState({
-      ...this.state,
       logLines: [...logLines, line]
     });
   };
@@ -117,7 +116,7 @@ class Migrator extends React.Component<Props, State> {
     }
 
     if (!web3) {
-      this.setState({ ...this.state, noWeb3Open: true });
+      this.setState({ noWeb3Open: true });
       return;
     }
 
@@ -142,7 +141,6 @@ class Migrator extends React.Component<Props, State> {
         new Promise<void>(resolve => {
           const { ethSpent } = this.state;
           this.setState({
-            ...this.state,
             ethSpent: Number(ethSpent) + Number(txCost)
           });
           this.addLogLine(new LogTransactionResult(msg, txHash, txCost));
@@ -157,7 +155,6 @@ class Migrator extends React.Component<Props, State> {
           return undefined;
         };
         this.setState({
-          ...this.state,
           finished: true,
           result
         });
@@ -181,13 +178,12 @@ class Migrator extends React.Component<Props, State> {
     };
 
     this.setState({
-      ...initState,
       finished: false,
       started: true,
       result: undefined
     });
     const result = await migrateDAO(dao, callbacks);
-    this.setState({ ...this.state, finished: true, result });
+    this.setState({ finished: true, result });
     this.props.onStop();
   };
 
@@ -207,14 +203,12 @@ class Migrator extends React.Component<Props, State> {
 
     const onOptionsClick = (event: any) => {
       this.setState({
-        ...this.state,
         menuAnchor: event.currentTarget
       });
     };
 
     const onOptionsClose = () => {
       this.setState({
-        ...this.state,
         menuAnchor: undefined
       });
     };
@@ -235,7 +229,6 @@ class Migrator extends React.Component<Props, State> {
 
       navigator.clipboard.writeText(log);
       this.setState({
-        ...this.state,
         menuAnchor: undefined
       });
     };
@@ -361,7 +354,7 @@ class Migrator extends React.Component<Props, State> {
       <Dialog
         open={exportOpen}
         fullWidth
-        onClose={() => this.setState({ ...this.state, exportOpen: false })}
+        onClose={() => this.setState({ exportOpen: false })}
         aria-labelledby={"export-dao-config"}
       >
         <DialogTitle>Export JSON Config</DialogTitle>
@@ -386,29 +379,33 @@ class Migrator extends React.Component<Props, State> {
     );
 
     const MigrationResults = () => {
-      const text = JSON.stringify(result, null, 2);
+      if (!result) {
+        return <></>;
+      }
+
+      const json = JSON.stringify(result, null, 2);
+      const url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+
       return (
         <>
           <Typography variant={"h6"} className={classes.successText}>
             Deployment Successful!
           </Typography>
+          <a href={url} target="blank">
+            View DAO in Alchemy (Keep This Link!)
+          </a>
           <div className={classes.resultWrapper}>
             <Paper className={classes.result}>
               <Button
-                onClick={() => navigator.clipboard.writeText(text)}
+                onClick={() => navigator.clipboard.writeText(json)}
                 variant={"outlined"}
                 size={"small"}
                 style={{ float: "right" }}
               >
                 Copy
               </Button>
-              {text}
+              {json}
             </Paper>
-            <Typography variant={"subtitle2"}>
-              Now what? Copy the above text, email it to contact@dorg.tech along
-              with a description of your DAO, and we'll add it to the
-              https://github.com/daostack/subgraph repository for you.
-            </Typography>
             <Typography variant={"subtitle2"}>
               Have feedback? Click the icon in the bottom right and let us know
               what you think!
@@ -422,7 +419,7 @@ class Migrator extends React.Component<Props, State> {
     const NoWeb3Dialog = () => (
       <Dialog
         open={noWeb3Open}
-        onClose={() => this.setState({ ...this.state, noWeb3Open: false })}
+        onClose={() => this.setState({ noWeb3Open: false })}
       >
         <DialogTitle id="simple-dialog-title">
           Web3 Support Required
@@ -460,25 +457,6 @@ class Migrator extends React.Component<Props, State> {
     return (
       <>
         <Typography variant={"subtitle2"} color={"error"}>
-          NOTE: The DAO you deploy will not be available in Alchemy
-          automatically. This is actively being worked on. After the deployment
-          process is complete, you'll be required to send your results to an
-          email address to get it added to Alchemy.
-        </Typography>
-        <Divider className={classes.resultsDivider} />
-        <Typography variant={"subtitle2"} color={"error"}>
-          WARNING: Mainnet deploy at your own risk! There are a few things being
-          worked on to improve mainnet transaction handling, you can find out
-          about them in the links below. The gas is currently set rather high (7
-          Gwei) to try and ensure transaction succeed within 50 blocks. This is
-          not fool proof.
-          <br />
-          https://github.com/daostack/migration/issues/211
-          <br />
-          https://github.com/daostack/migration/issues/206
-        </Typography>
-        <Divider className={classes.resultsDivider} />
-        <Typography variant={"subtitle2"} color={"error"}>
           WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
           this will break the deployment process. A fix is being worked on.
         </Typography>
@@ -489,9 +467,7 @@ class Migrator extends React.Component<Props, State> {
             expandIcon={
               finished ? (
                 <ExpandMoreIcon
-                  onClick={() =>
-                    this.setState({ ...this.state, logClosed: !logClosed })
-                  }
+                  onClick={() => this.setState({ logClosed: !logClosed })}
                 />
               ) : (
                 undefined
@@ -525,7 +501,6 @@ class Migrator extends React.Component<Props, State> {
                 <MenuItem
                   onClick={() => {
                     this.setState({
-                      ...this.state,
                       menuAnchor: undefined,
                       exportOpen: true
                     });
