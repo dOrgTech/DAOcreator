@@ -7,8 +7,11 @@ import {
   Card,
   CardContent
 } from "@material-ui/core";
-import { DAOcreatorState, toDAOMigrationParams } from "@dorgtech/daocreatorlib";
-import { DAOMigrationResult } from "@dorgtech/daocreatorlib";
+import {
+  DAOcreatorState,
+  toDAOMigrationParams
+} from "@dorgtech/daocreator-lib";
+import { DAOMigrationResult } from "@dorgtech/daocreator-lib";
 import Migrator from "components/common/dao/Migrator";
 
 // eslint-disable-next-line

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import MembersEditor from "components/common/dao/MembersEditor";
 import MembersAnalytics from "components/common/dao/MembersAnalytics";
-import { MembersForm } from "@dorgtech/daocreatorlib";
+import { MembersForm } from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

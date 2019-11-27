@@ -26,12 +26,12 @@ import {
   DAOConfigForm,
   MembersForm,
   SchemesForm
-} from "@dorgtech/daocreatorlib";
+} from "@dorgtech/daocreator-lib";
 import {
   toDAOMigrationParams,
   fromDAOMigrationParams
-} from "@dorgtech/daocreatorlib";
-import { toJSON, fromJSON } from "@dorgtech/daocreatorlib";
+} from "@dorgtech/daocreator-lib";
+import { toJSON, fromJSON } from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}

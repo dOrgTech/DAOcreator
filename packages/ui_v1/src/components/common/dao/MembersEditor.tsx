@@ -16,9 +16,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import CheckIcon from "@material-ui/icons/Check";
 import ErrorIcon from "@material-ui/icons/Error";
 import MemberEditor from "./MemberEditor";
-import { MemberForm, MembersForm } from "@dorgtech/daocreatorlib";
+import { MemberForm, MembersForm } from "@dorgtech/daocreator-lib";
 import MembersSaveLoad from "./MembersSaveLoad";
-import { Member } from "@dorgtech/daocreatorlib";
+import { Member } from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

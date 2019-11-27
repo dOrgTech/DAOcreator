@@ -13,8 +13,8 @@ import SchemesEditor from "components/common/dao/SchemesEditor";
 import DAOConfigEditor from "components/common/dao/DAOConfigEditor";
 import MembersEditor from "components/common/dao/MembersEditor";
 import MembersAnalytics from "components/common/dao/MembersAnalytics";
-import { DAOForm } from "@dorgtech/daocreatorlib";
-import { SchemeType } from "@dorgtech/daocreatorlib";
+import { DAOForm } from "@dorgtech/daocreator-lib";
+import { SchemeType } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: DAOForm;

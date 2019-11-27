@@ -20,8 +20,8 @@ import {
   GenericSchemeForm,
   ContributionRewardForm,
   SchemeRegistrarForm
-} from "@dorgtech/daocreatorlib";
-import { SchemeType } from "@dorgtech/daocreatorlib";
+} from "@dorgtech/daocreator-lib";
+import { SchemeType } from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {

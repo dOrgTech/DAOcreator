@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Grid } from "@material-ui/core";
 import FormField from "components/common/FormField";
-import { DAOConfigForm } from "@dorgtech/daocreatorlib";
+import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: DAOConfigForm;

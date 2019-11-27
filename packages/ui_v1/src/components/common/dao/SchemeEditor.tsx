@@ -15,7 +15,7 @@ import {
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import GenesisProtocolPresetEditor from "./GenesisProtocolPresetEditor";
 import GenesisProtocolAnalytics from "./GenesisProtocolAnalytics";
-import { AnySchemeForm } from "@dorgtech/daocreatorlib";
+import { AnySchemeForm } from "@dorgtech/daocreator-lib";
 import FormField from "components/common/FormField";
 
 // eslint-disable-next-line

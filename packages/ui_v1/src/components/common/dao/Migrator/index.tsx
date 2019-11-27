@@ -48,8 +48,8 @@ import {
   migrateDAO,
   DAOMigrationResult,
   toJSON
-} from "@dorgtech/daocreatorlib";
-import { getNetworkName } from "@dorgtech/daocreatorlib";
+} from "@dorgtech/daocreator-lib";
+import { getNetworkName } from "@dorgtech/daocreator-lib";
 
 const FileSaver = require("file-saver");
 

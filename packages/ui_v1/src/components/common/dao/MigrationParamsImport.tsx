@@ -9,7 +9,7 @@ import {
   Button
 } from "@material-ui/core";
 import ImportIcon from "@material-ui/icons/Unarchive";
-import { DAOForm } from "@dorgtech/daocreatorlib";
+import { DAOForm } from "@dorgtech/daocreator-lib";
 
 interface ImportError {
   file: string;

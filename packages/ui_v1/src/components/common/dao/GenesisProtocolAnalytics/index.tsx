@@ -10,8 +10,8 @@ import {
 } from "@material-ui/core";
 import AnalysisResultView from "./AnalysisResultView";
 import { analyzeField, AnalysisResult } from "./utils";
-import { GenesisProtocolForm } from "@dorgtech/daocreatorlib";
-import { GenesisProtocol as GP } from "@dorgtech/daocreatorlib";
+import { GenesisProtocolForm } from "@dorgtech/daocreator-lib";
+import { GenesisProtocol as GP } from "@dorgtech/daocreator-lib";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {
@@ -164,7 +164,7 @@ class GenesisProtocolAnalytics extends React.Component<Props> {
   }
 }
 
-// TODO: make this into a "DateTime" dependency in the @dorgtech/daocreatorlib when
+// TODO: make this into a "DateTime" dependency in the @dorgtech/daocreator-lib when
 // that field view is made
 const secondsToDays = (seconds: number): number => {
   return seconds / 86400;

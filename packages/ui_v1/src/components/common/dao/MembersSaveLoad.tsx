@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import DownloadIcon from "@material-ui/icons/Archive";
 import ImportIcon from "@material-ui/icons/Unarchive";
-import { MembersForm } from "@dorgtech/daocreatorlib";
+import { MembersForm } from "@dorgtech/daocreator-lib";
 import { saveAs } from "file-saver";
 
 interface ImportError {

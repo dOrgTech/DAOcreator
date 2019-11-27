@@ -30,7 +30,7 @@ import {
   DateTimeField,
   PercentageField,
   AddressField
-} from "@dorgtech/daocreatorlib";
+} from "@dorgtech/daocreator-lib";
 import EthAddressAvatar from "components/common/EthAddressAvatar";
 
 export interface Props {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import FormField from "components/common/FormField";
-import { GenesisProtocolForm } from "@dorgtech/daocreatorlib";
+import { GenesisProtocolForm } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: GenesisProtocolForm;
