@@ -1,0 +1,18 @@
+language: node_js
+
+cache:
+  directories:
+    - node_modules
+    - packages/ui_v1/node_modules
+    - packages/lib/node_modules
+
+script:
+  - npm run build
+# TODO automatically deploy npm packages to npmjs when merged to master
+# deploy:
+# provider: npmjs
+# skip-cleanup: true
+# github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+# local_dir: build
+# on:
+# branch: master
