@@ -384,16 +384,28 @@ class Migrator extends React.Component<Props, State> {
       }
 
       const json = JSON.stringify(result, null, 2);
-      const url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
 
       return (
         <>
           <Typography variant={"h6"} className={classes.successText}>
             Deployment Successful!
           </Typography>
-          <a href={url} target="blank">
+          <Link
+            onClick={async () => {
+              const network = await getNetworkName();
+              let url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+
+              if (network === "rinkeby") {
+                url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+              } else {
+                url = result.Avatar;
+              }
+
+              window.open(url);
+            }}
+          >
             View DAO in Alchemy (Save This Link!)
-          </a>
+          </Link>
           <div className={classes.resultWrapper}>
             <Paper className={classes.result}>
               <Button
