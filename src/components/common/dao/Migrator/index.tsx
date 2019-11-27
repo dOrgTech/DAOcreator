@@ -392,7 +392,7 @@ class Migrator extends React.Component<Props, State> {
             Deployment Successful!
           </Typography>
           <a href={url} target="blank">
-            View DAO in Alchemy (Keep This Link!)
+            View DAO in Alchemy (Save This Link!)
           </a>
           <div className={classes.resultWrapper}>
             <Paper className={classes.result}>
