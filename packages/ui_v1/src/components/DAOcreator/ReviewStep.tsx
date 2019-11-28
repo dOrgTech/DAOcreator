@@ -17,13 +17,14 @@ import MembersAnalytics from "../common/dao/MembersAnalytics";
 
 interface Props {
   form: DAOForm;
+  disableHeader?: boolean;
   // TODO: don't use a number here, use an enum instead. This will break easily.
-  setStep: (step: number) => void;
+  setStep?: (step: number) => void;
 }
 
 export default class ReviewStep extends React.Component<Props> {
   render() {
-    const { form, setStep } = this.props;
+    const { form, disableHeader, setStep } = this.props;
     const { config, schemes, members } = form.$;
     const getDAOTokenSymbol = () => config.$.tokenSymbol.value;
     const missingSchemeReg =
@@ -34,7 +35,9 @@ export default class ReviewStep extends React.Component<Props> {
     const modifyStep = (step: number) => (
       <Fab
         color={"primary"}
-        onClick={() => setStep(step)}
+        onClick={() => {
+          if (setStep) setStep(step);
+        }}
         style={{
           height: "20px",
           width: "20px",
@@ -49,7 +52,7 @@ export default class ReviewStep extends React.Component<Props> {
 
     const titleText = (title: string, step: number) => (
       <Grid container direction={"row"}>
-        {modifyStep(step)}
+        {setStep ? modifyStep(step) : ""}
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
@@ -59,8 +62,14 @@ export default class ReviewStep extends React.Component<Props> {
     return (
       <Card>
         <CardContent>
-          <Typography variant="h4">Review your new DAO:</Typography>
-          <Divider />
+          {!disableHeader ? (
+            <>
+              <Typography variant="h4">Everything look good?</Typography>
+              <Divider />
+            </>
+          ) : (
+            <></>
+          )}
           <Grid container spacing={3} direction={"column"}>
             <Grid item>
               {titleText("Names", 0)}
@@ -93,7 +102,6 @@ export default class ReviewStep extends React.Component<Props> {
                 form={members}
                 editable={false}
                 getDAOTokenSymbol={getDAOTokenSymbol}
-                maxScrollHeight={"200px"}
               />
             </Grid>
           </Grid>

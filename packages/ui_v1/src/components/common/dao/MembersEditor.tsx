@@ -154,7 +154,7 @@ class MembersEditor extends React.Component<Props> {
       <>
         <Grid>
           <Typography variant="h6">Members</Typography>
-          <MembersSaveLoad form={form} />
+          <MembersSaveLoad form={form} onImport={() => this.forceUpdate()} />
         </Grid>
         <Grid
           container

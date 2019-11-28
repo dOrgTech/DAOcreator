@@ -11,8 +11,8 @@ import {
   greaterThanOrEqual
 } from "../../forms";
 import { Member } from "../../dependency/arc";
-import csvParse from "csv-parse";
-import csvStringify from "csv-stringify";
+import * as csvParse from "csv-parse";
+import * as csvStringify from "csv-stringify";
 
 export class MemberForm extends Form<
   Member,
@@ -128,12 +128,14 @@ export class MembersForm extends Form<Member[], MemberForm[]> {
       const colNames = Object.keys(rows[0]);
 
       // Verify all necessary columns are present
-      ["address", "reputation", "tokens"].forEach(name => {
-        if (colNames.findIndex(column => column === name) === -1) {
+      let columns = ["address", "reputation", "tokens"];
+
+      for (const column of columns) {
+        if (colNames.findIndex(name => column === name) === -1) {
           reject(new Error(`Missing '${name}' column.`));
           return;
         }
-      });
+      }
 
       rows.forEach(async (row: any, index: number) => {
         // Create the member

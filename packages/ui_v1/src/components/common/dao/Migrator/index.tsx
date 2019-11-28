@@ -31,7 +31,7 @@ import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import TransactionResultIcon from "@material-ui/icons/DoneOutline";
 import UserApprovalIcon from "@material-ui/icons/QuestionAnswerOutlined";
 import AbortedIcon from "@material-ui/icons/SmsFailedOutlined";
-import MoreInfoIcon from "@material-ui/icons/MoreVert";
+import SaveIcon from "@material-ui/icons/SaveSharp";
 import ReactPlayer from "react-player";
 import {
   AnyLogLine,
@@ -48,7 +48,8 @@ import {
   migrateDAO,
   DAOMigrationResult,
   toJSON,
-  getNetworkName
+  getNetworkName,
+  getWeb3
 } from "@dorgtech/daocreator-lib";
 
 const FileSaver = require("file-saver");
@@ -58,6 +59,8 @@ interface Props extends WithStyles<typeof styles> {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult) => void;
   onAbort: (error: Error) => void;
+  onStart: () => void;
+  onStop: () => void;
 }
 
 interface State {
@@ -69,6 +72,7 @@ interface State {
   logClosed: boolean;
   menuAnchor: any;
   exportOpen: boolean;
+  noWeb3Open: boolean;
 }
 
 const initState: State = {
@@ -79,7 +83,8 @@ const initState: State = {
   result: undefined,
   logClosed: false,
   menuAnchor: undefined,
-  exportOpen: false
+  exportOpen: false,
+  noWeb3Open: false
 };
 
 class Migrator extends React.Component<Props, State> {
@@ -88,20 +93,40 @@ class Migrator extends React.Component<Props, State> {
     this.state = {
       ...initState
     };
-    this.onStart = this.onStart.bind(this);
   }
 
-  private addLogLine(line: AnyLogLine) {
+  addLogLine = (line: AnyLogLine) => {
     const { logLines } = this.state;
 
     this.setState({
-      ...this.state,
       logLines: [...logLines, line]
     });
-  }
+  };
 
-  private async onStart() {
+  onStart = async () => {
     const { onAbort, onComplete, dao } = this.props;
+
+    // Make sure we have a web3 provider available. If not,
+    // tell the user they need to have one.
+    let web3 = undefined;
+
+    try {
+      web3 = await getWeb3();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!web3) {
+      this.setState({ noWeb3Open: true });
+      return;
+    }
+
+    // Alert in case of user closing window while deploying
+    window.onbeforeunload = function() {
+      return "Your migration is still in progress. Do you really want to leave?";
+    };
+
+    this.props.onStart();
 
     // Callbacks used for the migration
     const callbacks: DAOMigrationCallbacks = {
@@ -117,7 +142,6 @@ class Migrator extends React.Component<Props, State> {
         new Promise<void>(resolve => {
           const { ethSpent } = this.state;
           this.setState({
-            ...this.state,
             ethSpent: Number(ethSpent) + Number(txCost)
           });
           this.addLogLine(new LogTransactionResult(msg, txHash, txCost));
@@ -128,24 +152,41 @@ class Migrator extends React.Component<Props, State> {
         onAbort(err);
       },
       migrationComplete: (result: DAOMigrationResult) => {
+        window.onbeforeunload = function() {
+          return undefined;
+        };
         this.setState({
-          ...this.state,
           finished: true,
           result
         });
         onComplete(result);
+      },
+      getState: () => {
+        const state = localStorage.getItem("DAO_MIGRATION_STATE");
+
+        if (state) {
+          return JSON.parse(state);
+        } else {
+          return {};
+        }
+      },
+      setState: (state: any) => {
+        localStorage.setItem("DAO_MIGRATION_STATE", JSON.stringify(state));
+      },
+      cleanState: () => {
+        localStorage.removeItem("DAO_MIGRATION_STATE");
       }
     };
 
     this.setState({
-      ...initState,
       finished: false,
       started: true,
       result: undefined
     });
     const result = await migrateDAO(dao, callbacks);
-    this.setState({ ...this.state, finished: true, result });
-  }
+    this.setState({ finished: true, result });
+    this.props.onStop();
+  };
 
   render() {
     const { dao, classes } = this.props;
@@ -157,19 +198,18 @@ class Migrator extends React.Component<Props, State> {
       result,
       logClosed,
       menuAnchor,
-      exportOpen
+      exportOpen,
+      noWeb3Open
     } = this.state;
 
     const onOptionsClick = (event: any) => {
       this.setState({
-        ...this.state,
         menuAnchor: event.currentTarget
       });
     };
 
     const onOptionsClose = () => {
       this.setState({
-        ...this.state,
         menuAnchor: undefined
       });
     };
@@ -190,7 +230,6 @@ class Migrator extends React.Component<Props, State> {
 
       navigator.clipboard.writeText(log);
       this.setState({
-        ...this.state,
         menuAnchor: undefined
       });
     };
@@ -316,7 +355,7 @@ class Migrator extends React.Component<Props, State> {
       <Dialog
         open={exportOpen}
         fullWidth
-        onClose={() => this.setState({ ...this.state, exportOpen: false })}
+        onClose={() => this.setState({ exportOpen: false })}
         aria-labelledby={"export-dao-config"}
       >
         <DialogTitle>Export JSON Config</DialogTitle>
@@ -341,29 +380,45 @@ class Migrator extends React.Component<Props, State> {
     );
 
     const MigrationResults = () => {
-      const text = JSON.stringify(result, null, 2);
+      if (!result) {
+        return <></>;
+      }
+
+      const json = JSON.stringify(result, null, 2);
+
       return (
         <>
           <Typography variant={"h6"} className={classes.successText}>
             Deployment Successful!
           </Typography>
+          <Link
+            onClick={async () => {
+              const network = await getNetworkName();
+              let url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+
+              if (network === "rinkeby") {
+                url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+              } else {
+                url = result.Avatar;
+              }
+
+              window.open(url);
+            }}
+          >
+            View DAO in Alchemy (Save This Link!)
+          </Link>
           <div className={classes.resultWrapper}>
             <Paper className={classes.result}>
               <Button
-                onClick={() => navigator.clipboard.writeText(text)}
+                onClick={() => navigator.clipboard.writeText(json)}
                 variant={"outlined"}
                 size={"small"}
                 style={{ float: "right" }}
               >
                 Copy
               </Button>
-              {text}
+              {json}
             </Paper>
-            <Typography variant={"subtitle2"}>
-              Now what? Copy the above text, email it to contact@dorg.tech along
-              with a description of your DAO, and we'll add it to the
-              https://github.com/daostack/subgraph repository for you.
-            </Typography>
             <Typography variant={"subtitle2"}>
               Have feedback? Click the icon in the bottom right and let us know
               what you think!
@@ -374,27 +429,46 @@ class Migrator extends React.Component<Props, State> {
       );
     };
 
+    const NoWeb3Dialog = () => (
+      <Dialog
+        open={noWeb3Open}
+        onClose={() => this.setState({ noWeb3Open: false })}
+      >
+        <DialogTitle id="simple-dialog-title">
+          Web3 Support Required
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            In order to deploy a DAO, your browser needs a Web3 wallet. We
+            recommend using the Metamask Chrome extension or the Brave web
+            browser:
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            target="blank"
+            href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Metamask
+          </Button>
+          <Button
+            target="blank"
+            href="https://brave.com/download"
+            size={"small"}
+            color={"primary"}
+            variant={"contained"}
+          >
+            Download Brave
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+
     return (
       <>
-        <Typography variant={"subtitle2"} color={"error"}>
-          NOTE: The DAO you deploy will not be available in Alchemy
-          automatically. This is actively being worked on. After the deployment
-          process is complete, you'll be required to send your results to an
-          email address to get it added to Alchemy.
-        </Typography>
-        <Divider className={classes.resultsDivider} />
-        <Typography variant={"subtitle2"} color={"error"}>
-          WARNING: Mainnet deploy at your own risk! There are a few things being
-          worked on to improve mainnet transaction handling, you can find out
-          about them in the links below. The gas is currently set rather high (7
-          Gwei) to try and ensure transaction succeed within 50 blocks. This is
-          not fool proof.
-          <br />
-          https://github.com/daostack/migration/issues/211
-          <br />
-          https://github.com/daostack/migration/issues/206
-        </Typography>
-        <Divider className={classes.resultsDivider} />
         <Typography variant={"subtitle2"} color={"error"}>
           WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
           this will break the deployment process. A fix is being worked on.
@@ -406,9 +480,7 @@ class Migrator extends React.Component<Props, State> {
             expandIcon={
               finished ? (
                 <ExpandMoreIcon
-                  onClick={() =>
-                    this.setState({ ...this.state, logClosed: !logClosed })
-                  }
+                  onClick={() => this.setState({ logClosed: !logClosed })}
                 />
               ) : (
                 undefined
@@ -418,11 +490,12 @@ class Migrator extends React.Component<Props, State> {
           >
             <Grid container justify={"space-between"} alignItems={"center"}>
               <IconButton
+                size={"small"}
+                color={"primary"}
                 aria-haspopup="true"
                 onClick={onOptionsClick}
-                size={"small"}
               >
-                <MoreInfoIcon />
+                <SaveIcon />
               </IconButton>
               <Menu
                 anchorEl={menuAnchor}
@@ -441,13 +514,12 @@ class Migrator extends React.Component<Props, State> {
                 <MenuItem
                   onClick={() => {
                     this.setState({
-                      ...this.state,
                       menuAnchor: undefined,
                       exportOpen: true
                     });
                   }}
                 >
-                  Export DAO Config
+                  Save DAO
                 </MenuItem>
                 <MenuItem onClick={onCopyLog}>Copy Log</MenuItem>
               </Menu>
@@ -462,7 +534,7 @@ class Migrator extends React.Component<Props, State> {
                 <Button
                   onClick={this.onStart}
                   color={"primary"}
-                  variant={"outlined"}
+                  variant={"contained"}
                 >
                   {finished
                     ? result === undefined
@@ -484,6 +556,7 @@ class Migrator extends React.Component<Props, State> {
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExportDialog />
+        <NoWeb3Dialog />
       </>
     );
   }

@@ -75,9 +75,11 @@ const styles = (theme: Theme) =>
       textAlign: "center"
     },
     questionIcon: {
-      width: "100%",
-      height: "75%",
-      alignSelf: "center"
+      width: "240px",
+      height: "240px",
+      justifySelf: "center",
+      alignSelf: "center",
+      color: "#dadadd"
     }
   });
 

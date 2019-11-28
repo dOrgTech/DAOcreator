@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import {
   FormControl,
   Dialog,
@@ -20,6 +21,7 @@ interface ImportError {
 
 interface Props {
   form: MembersForm;
+  onImport: () => void;
 }
 
 interface State {
@@ -41,7 +43,7 @@ export default class MembersSaveLoad extends React.Component<Props, State> {
   }
 
   render() {
-    const { form } = this.props;
+    const { form, onImport } = this.props;
     const { open, error } = this.state;
 
     const onOpen = () =>
@@ -94,6 +96,7 @@ export default class MembersSaveLoad extends React.Component<Props, State> {
       form.$.splice(0, form.$.length);
       form.$.push(...formClone.$);
 
+      onImport();
       onClose();
     };
 

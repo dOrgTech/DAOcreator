@@ -11,7 +11,9 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogActions
+  DialogActions,
+  DialogContent,
+  Fab
 } from "@material-ui/core";
 import {
   DAOForm,
@@ -23,6 +25,8 @@ import {
   toJSON,
   fromJSON
 } from "@dorgtech/daocreator-lib";
+import ArrowBack from "@material-ui/icons/ArrowBackIos";
+import ArrowForward from "@material-ui/icons/ArrowForwardIos";
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
@@ -35,7 +39,8 @@ interface Props extends WithStyles<typeof styles> {}
 
 interface State {
   step: number;
-  open: boolean;
+  isMigrating: boolean;
+  recoverPreviewOpen: boolean;
 }
 
 interface Step {
@@ -56,23 +61,20 @@ interface DAO_CREATOR_STATE {
 
 class DAOcreator extends React.Component<Props, State> {
   form = new DAOForm();
+  recoveredForm = new DAOForm();
 
   constructor(props: Props) {
     super(props);
     this.state = {
       step: 0,
-      open: false
+      isMigrating: false,
+      recoverPreviewOpen: false
     };
   }
 
   componentDidMount() {
-    if (localStorage.getItem(DAO_CREATOR_STATE)) {
-      this.setState({
-        ...this.state,
-        open: true
-      });
-    }
-
+    // Preview a saved DAO if one is found
+    this.previewLocalStorage();
     window.addEventListener("beforeunload", this.saveLocalStorage);
   }
 
@@ -82,6 +84,14 @@ class DAOcreator extends React.Component<Props, State> {
 
   saveLocalStorage = () => {
     const daoState = this.form.toState();
+
+    // Check to see if the current form state hasn't been edited,
+    // and if so early out so we don't save an empty state
+    const nullForm = new DAOForm();
+    if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
+      return;
+    }
+
     const daoParams = toDAOMigrationParams(daoState);
     const json = toJSON(daoParams);
     const daoCreatorState: DAO_CREATOR_STATE = {
@@ -96,8 +106,9 @@ class DAOcreator extends React.Component<Props, State> {
     localStorage.removeItem(DAO_CREATOR_STATE);
 
     this.setState({
+      ...this.state,
       step: 0,
-      open: false
+      recoverPreviewOpen: false
     });
   };
 
@@ -114,13 +125,35 @@ class DAOcreator extends React.Component<Props, State> {
     this.form.fromState(daoState);
 
     this.setState({
+      ...this.state,
       step,
-      open: false
+      recoverPreviewOpen: false
+    });
+  };
+
+  previewLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+
+    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    this.recoveredForm.fromState(daoState);
+
+    this.setState({
+      ...this.state,
+      recoverPreviewOpen: true
     });
   };
 
   onClose = () => {
-    this.setState({ ...this.state, open: false });
+    this.setState({
+      ...this.state,
+      recoverPreviewOpen: false
+    });
   };
 
   render() {
@@ -133,7 +166,8 @@ class DAOcreator extends React.Component<Props, State> {
           daoForm: this.form,
           toReviewStep: () => {
             this.setState({
-              step: 4
+              ...this.state,
+              step: 3
             });
           }
         }
@@ -158,6 +192,7 @@ class DAOcreator extends React.Component<Props, State> {
         props: {
           setStep: (step: number) => {
             this.setState({
+              ...this.state,
               step
             });
           }
@@ -168,17 +203,36 @@ class DAOcreator extends React.Component<Props, State> {
         form: this.form,
         Component: DeployStep,
         props: {
-          dao: this.form.toState()
+          dao: this.form.toState(),
+          onStart: () => {
+            this.setState({
+              ...this.state,
+              isMigrating: true
+            });
+          },
+          onStop: () => {
+            this.setState({
+              ...this.state,
+              isMigrating: false
+            });
+          },
+          onComplete: () => {
+            this.setState({
+              ...this.state,
+              isMigrating: false
+            });
+          }
         }
       }
     ];
     const { classes } = this.props;
-    const { step, open } = this.state;
+    const { step, recoverPreviewOpen, isMigrating } = this.state;
     const isLastStep = step === steps.length - 1;
     const { form, Component, props } = steps[step];
 
     const previousStep = async () => {
       this.setState({
+        ...this.state,
         step: this.state.step - 1
       });
     };
@@ -210,11 +264,14 @@ class DAOcreator extends React.Component<Props, State> {
       }
     };
 
-    const SavedDataDialog = () => (
-      <Dialog open={open}>
+    const PreviewDialog = () => (
+      <Dialog open={recoverPreviewOpen} fullWidth={true} maxWidth="md">
         <DialogTitle id="simple-dialog-title">
-          Resume from where you left off?
+          In Progress DAO Detected
         </DialogTitle>
+        <DialogContent>
+          <ReviewStep form={this.recoveredForm} disableHeader />
+        </DialogContent>
         <DialogActions>
           <Button
             onClick={this.loadLocalStorage}
@@ -255,32 +312,36 @@ class DAOcreator extends React.Component<Props, State> {
           <div className={classes.content}>
             <Component form={form} {...props} />
           </div>
-          <div className={classes.footer}>
-            <Button
-              variant={"contained"}
-              color={"primary"}
-              disabled={step === 0}
+          <div className={classes.fabsContainer}>
+            <Fab
+              variant="extended"
+              color="primary"
+              disabled={step === 0 || isMigrating}
               onClick={previousStep}
-              className={classes.button}
+              className={classes.fab}
+              size="large"
             >
+              <ArrowBack />
               Back
-            </Button>
-            {isLastStep ? (
-              <></>
-            ) : (
-              <Button
-                variant={"contained"}
-                color={"primary"}
+            </Fab>
+            {!isLastStep ? (
+              <Fab
+                variant="extended"
+                color="primary"
                 onClick={nextStep}
-                className={classes.button}
+                className={classes.fab + ", " + classes.rightFab}
+                size="large"
               >
                 Next
-              </Button>
+                <ArrowForward className={classes.extendedIcon} />
+              </Fab>
+            ) : (
+              ""
             )}
           </div>
         </div>
         <Support />
-        <SavedDataDialog />
+        <PreviewDialog />
       </>
     );
   }
@@ -307,13 +368,24 @@ const styles = (theme: Theme) =>
       marginBottom: theme.spacing(1),
       pointerEvents: "all"
     },
-    footer: {
-      marginBottom: theme.spacing(2)
+    fab: {
+      pointerEvents: "all"
+    },
+    rightFab: {
+      pointerEvents: "all",
+      float: "right"
+    },
+    fabsContainer: {
+      zIndex: 10
     },
     button: {
       marginRight: theme.spacing(1),
       backgroundColor: "rgba(167, 167, 167, 0.77)!important", //TODO: find out why desabled buttons disapper, then fix it and remove this
       pointerEvents: "all"
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(-0.8),
+      marginLeft: theme.spacing(0.9)
     }
   });
 
