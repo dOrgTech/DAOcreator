@@ -58,7 +58,7 @@ export const migrateDAO = async (
       let result = tx.send({ gas, nonce });
       let receipt = await new Promise(resolve =>
         result.on("receipt", resolve).on("error", async (error: Error) => {
-          callbacks.error("Transaction failed: " + error);
+          callbacks.error("Transaction failed: " + error.message);
           resolve();
         })
       );

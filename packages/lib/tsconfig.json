@@ -18,7 +18,8 @@
     "baseUrl": "src",
     "rootDirs": ["src"],
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": ["src"]
 }

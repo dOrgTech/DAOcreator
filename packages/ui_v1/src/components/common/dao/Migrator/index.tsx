@@ -126,6 +126,11 @@ class Migrator extends React.Component<Props, State> {
       return "Your migration is still in progress. Do you really want to leave?";
     };
 
+    // Clear the log
+    this.setState({
+      logLines: []
+    });
+
     this.props.onStart();
 
     // Callbacks used for the migration

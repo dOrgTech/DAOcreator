@@ -11,8 +11,8 @@ import {
   greaterThanOrEqual
 } from "../../forms";
 import { Member } from "../../dependency/arc";
-import * as csvParse from "csv-parse";
-import * as csvStringify from "csv-stringify";
+import csvParse from "csv-parse";
+import csvStringify from "csv-stringify";
 
 export class MemberForm extends Form<
   Member,

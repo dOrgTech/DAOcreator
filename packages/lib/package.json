@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "0.2.1-rc.3",
+  "version": "0.2.1-rc.4",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -9,7 +9,7 @@
     "release": "npm run build:release && npm run package:release && npm publish ./package --access public"
   },
   "dependencies": {
-    "@daostack/migration": "0.0.1-rc.23-v3",
+    "@daostack/migration": "0.0.1-rc.33-v1",
     "bn.js": "^5.0.0",
     "csv": "^5.1.2",
     "csv-stringify": "^5.3.3",
