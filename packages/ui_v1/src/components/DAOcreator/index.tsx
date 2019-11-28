@@ -291,8 +291,6 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       boxSizing: "unset",
-      width: "100vw",
-      height: "100vh",
       minWidth: "450px",
       maxWidth: "1000px",
       justifySelf: "center",
@@ -319,5 +317,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-const DAOcreatorStyled = withStyles(styles)(DAOcreator);
-export { DAOcreatorStyled as DAOcreator };
+export default withStyles(styles)(DAOcreator);

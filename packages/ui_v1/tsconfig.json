@@ -16,7 +16,7 @@
     "allowJs": false,
     "baseUrl": "src",
     "rootDirs": ["src"],
-    "jsx": "preserve",
+    "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
