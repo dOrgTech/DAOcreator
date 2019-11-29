@@ -399,9 +399,11 @@ class Migrator extends React.Component<Props, State> {
           <Link
             onClick={async () => {
               const network = await getNetworkName();
-              let url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+              let url;
 
-              if (network === "rinkeby") {
+              if (network === "mainnet") {
+                url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+              } else if (network === "rinkeby") {
                 url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
               } else {
                 url = result.Avatar;
