@@ -13,7 +13,8 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Fab
+  Fab,
+  Grid
 } from "@material-ui/core";
 import {
   DAOForm,
@@ -27,12 +28,12 @@ import {
 } from "@dorgtech/daocreator-lib";
 import ArrowBack from "@material-ui/icons/ArrowBackIos";
 import ArrowForward from "@material-ui/icons/ArrowForwardIos";
+import SupportIcon from "@material-ui/icons/ContactSupport";
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
-import Support from "../common/Support";
 
 // eslint-disable-next-line
 interface Props extends WithStyles<typeof styles> {}
@@ -312,7 +313,7 @@ class DAOcreator extends React.Component<Props, State> {
           <div className={classes.content}>
             <Component form={form} {...props} />
           </div>
-          <div className={classes.fabsContainer}>
+          <Grid container justify="space-between">
             <Fab
               variant="extended"
               color="primary"
@@ -324,23 +325,33 @@ class DAOcreator extends React.Component<Props, State> {
               <ArrowBack />
               Back
             </Fab>
+            <Fab
+              variant="round"
+              color="primary"
+              className={classes.fab}
+              size="small"
+              onClick={() =>
+                window.open("https://dorgtech.typeform.com/to/IaeXKv")
+              }
+            >
+              <SupportIcon />
+            </Fab>
             {!isLastStep ? (
               <Fab
                 variant="extended"
                 color="primary"
                 onClick={nextStep}
-                className={classes.fab + ", " + classes.rightFab}
+                className={classes.fab}
                 size="large"
               >
                 Next
                 <ArrowForward className={classes.extendedIcon} />
               </Fab>
             ) : (
-              ""
+              <div style={{ width: "94px" }} />
             )}
-          </div>
+          </Grid>
         </div>
-        <Support />
         <PreviewDialog />
       </>
     );
@@ -370,10 +381,6 @@ const styles = (theme: Theme) =>
     },
     fab: {
       pointerEvents: "all"
-    },
-    rightFab: {
-      pointerEvents: "all",
-      float: "right"
     },
     fabsContainer: {
       zIndex: 10
