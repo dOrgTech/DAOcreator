@@ -4,7 +4,8 @@
   "scripts": {
     "postinstall": "npx lerna bootstrap",
     "start": "cd packages/ui_v1 && npm run start",
-    "build": "cd packages/lib && npm run build && cd ../ui_v1 && npm run build"
+    "build": "cd packages/lib && npm run build && cd ../ui_v1 && npm run build",
+    "start-v2": "cd packages/ui_v2 && npm run start"
   },
   "devDependencies": {
     "lerna": "^3.18.4"
