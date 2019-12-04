@@ -1,25 +1,18 @@
 import * as React from "react";
-import { MuiThemeProvider, Theme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import DAOcreator from "./DAOcreator";
-import defaultTheme from "./theme";
+import { ThemeProvider } from "@chakra-ui/core";
+
+import DAOcreatorV2 from "./DAOcreatorV2";
+import theme from "./theme";
 
 interface Props {
-  theme?: Theme;
+  theme?: any;
 }
 
-const Index: React.FC<Props> = ({ theme }) => {
-  let useTheme = defaultTheme;
-
-  if (theme) {
-    useTheme = theme;
-  }
-
+const Index: React.FC<Props> = () => {
   return (
-    <MuiThemeProvider theme={useTheme}>
-      <CssBaseline />
-      <DAOcreator />
-    </MuiThemeProvider>
+    <ThemeProvider theme={theme}>
+      <DAOcreatorV2 />
+    </ThemeProvider>
   );
 };
 
