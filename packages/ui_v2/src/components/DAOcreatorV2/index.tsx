@@ -9,12 +9,13 @@ import {
   toJSON,
   fromJSON
 } from "@dorgtech/daocreator-lib";
-import { Card, Accordion } from "react-rainbow-components";
+import { Accordion } from "react-rainbow-components";
+import { Box } from "@chakra-ui/core";
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
-
+import InstallStep from "./InstallStep";
 // eslint-disable-next-line
 interface Props {}
 
@@ -23,15 +24,6 @@ interface State {
   isMigrating: boolean;
   recoverPreviewOpen: boolean;
 }
-
-// interface Step {
-//   title: string;
-//   form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
-//   Component: any;
-//   props?: {
-//     [name: string]: any;
-//   };
-// }
 
 // Local Storage Key + Values
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
@@ -139,35 +131,35 @@ class DAOcreator extends React.Component<Props, State> {
 
   render() {
     return (
-      <div style={styles.root}>
-        <Card style={styles.container}>
-          <h3 style={styles.header}>Create Organisation</h3>
-          <Accordion id="accordion">
-            <NamingStep
-              form={this.form}
-              daoForm={this.form}
-              toReviewStep={() => {
-                this.setState({ ...this.state, step: 3 });
-              }}
-            />
-            <SchemesStep form={this.form.$.schemes} />
-            <MembersStep
-              form={this.form.$.members}
-              getDAOTokenSymbol={(): any => {}}
-            />
-          </Accordion>
-        </Card>
-      </div>
+      <Box style={styles.root}>
+        <h3 style={styles.header}>Create Organisation</h3>
+        <Accordion id="accordion">
+          <NamingStep
+            form={this.form}
+            daoForm={this.form}
+            toReviewStep={() => {
+              this.setState({ ...this.state, step: 3 });
+            }}
+          />
+          <SchemesStep form={this.form.$.schemes} />
+          <MembersStep
+            form={this.form.$.members}
+            getDAOTokenSymbol={(): any => {}}
+          />
+          <InstallStep form={this.form} daoForm={this.form} />
+        </Accordion>
+      </Box>
     );
   }
 }
 
-// STYLE
 const styles = {
-  root: {},
-  container: {
+  root: {
+    fontFamily: "Roboto",
     maxWidth: 734,
-    maxHeight: "100%"
+    border: "1px solid #EAEDF3",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
+    borderRadius: 4
   },
   header: {
     paddingLeft: "36.5%"

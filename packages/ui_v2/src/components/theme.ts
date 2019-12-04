@@ -4,9 +4,9 @@ const customTheme = {
   ...theme,
   breakpoints: ["30em", "48em", "62em", "80em"],
   fonts: {
-    heading: '"Avenir Next", sans-serif',
-    body: "system-ui, sans-serif",
-    mono: "Menlo, monospace"
+    heading: '"Roboto", sans-serif',
+    body: "Roboto, sans-serif",
+    mono: "Roboto, monospace"
   },
   fontSizes: {
     xs: "0.75rem",

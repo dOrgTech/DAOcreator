@@ -9,6 +9,12 @@ interface Props {
 }
 
 const Index: React.FC<Props> = () => {
+  // To be used later
+  // let useTheme = {};
+  //
+  // if (theme) {
+  //   useTheme = theme;
+  // }
   return (
     <ThemeProvider theme={theme}>
       <DAOcreatorV2 />
