@@ -24,7 +24,9 @@ import {
   toDAOMigrationParams,
   fromDAOMigrationParams,
   toJSON,
-  fromJSON
+  fromJSON,
+  setWeb3Provider,
+  ProviderOrGetter
 } from "@dorgtech/daocreator-lib";
 import ArrowBack from "@material-ui/icons/ArrowBackIos";
 import ArrowForward from "@material-ui/icons/ArrowForwardIos";
@@ -36,7 +38,9 @@ import ReviewStep from "./ReviewStep";
 import DeployStep from "./DeployStep";
 
 // eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  setWeb3Provider?: ProviderOrGetter;
+}
 
 interface State {
   step: number;
@@ -74,8 +78,17 @@ class DAOcreator extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    // Allow users of the component to bypass
+    // the default behaviour of getting the web3
+    // provider from the window instance
+    if (this.props.setWeb3Provider) {
+      setWeb3Provider(this.props.setWeb3Provider);
+    }
+
     // Preview a saved DAO if one is found
     this.previewLocalStorage();
+
+    // Save progress if the window is closed
     window.addEventListener("beforeunload", this.saveLocalStorage);
   }
 
