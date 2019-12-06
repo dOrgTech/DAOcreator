@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Grid } from "@material-ui/core";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
-import FormField from "../FormField";
+import { Grid, Box, FormControl, FormLabel, Input } from "@chakra-ui/core";
 
 interface Props {
   form: DAOConfigForm;
@@ -10,20 +9,31 @@ interface Props {
 
 export default class DAOConfigEditor extends React.Component<Props> {
   render() {
-    const { form, editable } = this.props;
-
+    // const { form, editable } = this.props;
     return (
       <>
-        <Grid item xs={12} md={7}>
-          <Grid item xs={12}>
-            <FormField field={form.$.daoName} editable={editable} />
-          </Grid>
-          <Grid item xs={12}>
-            <FormField field={form.$.tokenName} editable={editable} />
-          </Grid>
-          <Grid item xs={12}>
-            <FormField field={form.$.tokenSymbol} editable={editable} />
-          </Grid>
+        <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+          <Box w="100%" h="10">
+            <FormControl isRequired>
+              <FormLabel htmlFor="daoName" color="#9EA0A5" fontWeight={300}>
+                Organisation Name
+              </FormLabel>
+              <Input
+                id="daoName"
+                placeholder="DAO Name"
+                size="sm"
+                width={267}
+              />
+            </FormControl>
+          </Box>
+          <Box w="100%" h="10">
+            <FormControl isRequired>
+              <FormLabel htmlFor="daoSymbol" color="#9EA0A5" fontWeight={300}>
+                Symbol
+              </FormLabel>
+              <Input id="daoSymbol" placeholder="DXDD" size="sm" width={267} />
+            </FormControl>
+          </Box>
         </Grid>
       </>
     );

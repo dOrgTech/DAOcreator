@@ -1,14 +1,8 @@
 import * as React from "react";
 import { DAOConfigForm, DAOForm } from "@dorgtech/daocreator-lib";
 import { AccordionSection } from "react-rainbow-components";
-import {
-  Box,
-  Grid,
-  FormLabel,
-  FormControl,
-  Input,
-  Button
-} from "@chakra-ui/core";
+import { Box, Grid, Button } from "@chakra-ui/core";
+import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
 
 // eslint-disable-next-line
 interface Props {
@@ -22,34 +16,7 @@ class NamingStep extends React.Component<Props> {
     return (
       <>
         <AccordionSection label={true ? "1 Set Description" : "1 Description"}>
-          <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-            <Box w="100%" h="10">
-              <FormControl isRequired>
-                <FormLabel htmlFor="daoName" color="#9EA0A5" fontWeight={300}>
-                  Organisation Name
-                </FormLabel>
-                <Input
-                  id="daoName"
-                  placeholder="DAO Name"
-                  size="sm"
-                  width={267}
-                />
-              </FormControl>
-            </Box>
-            <Box w="100%" h="10">
-              <FormControl isRequired>
-                <FormLabel htmlFor="daoSymbol" color="#9EA0A5" fontWeight={300}>
-                  Symbol
-                </FormLabel>
-                <Input
-                  id="daoSymbol"
-                  placeholder="DXDD"
-                  size="sm"
-                  width={267}
-                />
-              </FormControl>
-            </Box>
-          </Grid>
+          <DAOConfigEditor form={this.props.form} editable={true} />
           <Grid
             templateColumns="repeat(1, 1fr)"
             gap={1}
