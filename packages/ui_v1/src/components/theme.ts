@@ -1,6 +1,17 @@
-import { createMuiTheme } from "@material-ui/core";
+export interface CustomTheme {
+  palette: {
+    primary: {
+      main: string;
+      contrastText: string;
+    };
+    secondary: {
+      main: string;
+      contrastText: string;
+    };
+  };
+}
 
-const theme = createMuiTheme({
+const defaultTheme: CustomTheme = {
   palette: {
     primary: {
       main: "#2c4b56",
@@ -11,6 +22,6 @@ const theme = createMuiTheme({
       contrastText: "#1a1a1a"
     }
   }
-});
+};
 
-export default theme;
+export default defaultTheme;

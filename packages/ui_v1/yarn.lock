@@ -1047,10 +1047,10 @@
     "@devexpress/dx-core" "2.3.0"
     prop-types "^15.7.2"
 
-"@dorgtech/daocreator-lib@0.2.1-rc.7":
-  version "0.2.1-rc.7"
-  resolved "https://registry.yarnpkg.com/@dorgtech/daocreator-lib/-/daocreator-lib-0.2.1-rc.7.tgz#f1293fc3afc72e30ad97b97bd22543bd4707ac51"
-  integrity sha512-Y2/EZA/pvEEHuccnNERKr4lFzmwv5o3Mw3YC82dN//zWgfAT40BJJVA2OOXdN1BclBBW0PPyuSMmLWbVv8iJpw==
+"@dorgtech/daocreator-lib@0.2.1-rc.11":
+  version "0.2.1-rc.11"
+  resolved "https://registry.yarnpkg.com/@dorgtech/daocreator-lib/-/daocreator-lib-0.2.1-rc.11.tgz#41b7f2248734ae6416c534e010e5ac083b24c723"
+  integrity sha512-uIWJqPfdS/T2c/0PZGpkjzMLv9+bVTZ2m2CM+cHt/FWhaN7qHuyIJePeOVGhsl9t9+W466QG40SXom2XlN6kCg==
   dependencies:
     "@daostack/migration" "0.0.1-rc.33-v1"
     bn.js "^5.0.0"
@@ -12933,7 +12933,6 @@ websocket-extensions@>=0.1.1:
 
 "websocket@github:frozeman/WebSocket-Node#browserifyCompatible":
   version "1.0.26"
-  uid "6c72925e3f8aaaea8dc8450f97627e85263999f2"
   resolved "https://codeload.github.com/frozeman/WebSocket-Node/tar.gz/6c72925e3f8aaaea8dc8450f97627e85263999f2"
   dependencies:
     debug "^2.2.0"

@@ -7,26 +7,36 @@ export * from "./types";
 export const TypeValidation = typeValidation;
 export const TypeConversion = typeConversion;
 
-let readyWeb3: Web3;
+export type ProviderOrGetter = any | (() => Promise<any>);
+let web3Provider: ProviderOrGetter;
+
+export const setWeb3Provider = (providerOrGetter: ProviderOrGetter) => {
+  web3Provider = providerOrGetter;
+};
 
 export const getWeb3 = async (): Promise<any> => {
-  if (readyWeb3 != null) {
-    const accounts = await readyWeb3.eth.getAccounts();
-    readyWeb3.eth.defaultAccount = accounts[0];
-    return readyWeb3;
-  }
+  let readyWeb3;
+
+  // Default behaviour is to look for an injected
+  // web3 instance in the window
   const ethereum = (window as any).ethereum;
   const web3 = (window as any).web3;
 
-  if (ethereum) {
+  // Ignore the window injection if a specific getter has
+  // been set.
+  if (web3Provider) {
+    let provider = web3Provider;
+    if (typeof provider === "function") {
+      provider = await provider();
+    }
+    readyWeb3 = new Web3(provider);
+  } else if (ethereum) {
     try {
       // Request account access if needed
       await ethereum.enable();
 
       // Acccounts now exposed
       readyWeb3 = new Web3(ethereum);
-      const accounts = await readyWeb3.eth.getAccounts();
-      readyWeb3.eth.defaultAccount = accounts[0];
     } catch (error) {
       return Promise.reject("User denied account access...");
     }
@@ -34,8 +44,6 @@ export const getWeb3 = async (): Promise<any> => {
   // Legacy dapp browsers...
   else if (web3) {
     readyWeb3 = new Web3(web3.currentProvider);
-    const accounts = await readyWeb3.eth.getAccounts();
-    readyWeb3.eth.defaultAccount = accounts[0];
   }
   // Non-dapp browsers...
   else {
@@ -43,6 +51,9 @@ export const getWeb3 = async (): Promise<any> => {
       "Non-Ethereum browser detected. You should consider trying MetaMask!"
     );
   }
+
+  const accounts = await readyWeb3.eth.getAccounts();
+  readyWeb3.eth.defaultAccount = accounts[0];
 
   return readyWeb3;
 };
@@ -69,14 +80,12 @@ export const getNetworkName = async (): Promise<string> => {
 };
 
 export const keccak256 = (value: string | BN): string => {
-  if (readyWeb3 == null) {
-    throw Error("Web3 not initialized. Please call 'getWeb3'");
-  }
+  const web3 = new Web3();
 
   if (typeof value === "string") {
-    return readyWeb3.utils.keccak256(value);
+    return web3.utils.keccak256(value);
   } else {
-    return readyWeb3.utils.keccak256(value.toString());
+    return web3.utils.keccak256(value.toString());
   }
 };
 
@@ -84,9 +93,6 @@ export const encodeParameters = (
   types: string[],
   parameters: any[]
 ): string => {
-  if (readyWeb3 == null) {
-    throw Error("Web3 not initialized. Please call 'getWeb3'");
-  }
-
-  return readyWeb3.eth.abi.encodeParameters(types, parameters);
+  const web3 = new Web3();
+  return web3.eth.abi.encodeParameters(types, parameters);
 };
