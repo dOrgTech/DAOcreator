@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ThemeProvider } from "@chakra-ui/core";
 
-import DAOcreatorV2 from "./DAOcreatorV2";
+import DAOcreatorV2 from "./DAOcreatorV2/index";
 import theme from "./theme";
 
 interface Props {

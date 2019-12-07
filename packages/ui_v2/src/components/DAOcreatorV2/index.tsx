@@ -1,9 +1,6 @@
 import * as React from "react";
 import {
   DAOForm,
-  // DAOConfigForm,
-  // MembersForm,
-  // SchemesForm,
   toDAOMigrationParams,
   fromDAOMigrationParams,
   toJSON,
@@ -16,47 +13,34 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-// eslint-disable-next-line
-interface Props {}
 
-interface State {
-  step: number;
-  isMigrating: boolean;
-  recoverPreviewOpen: boolean;
-}
-
-// Local Storage Key + Values
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
-interface DAO_CREATOR_STATE {
+interface DAO_CREATOR_INTERFACE {
   step: number;
   form: string;
 }
 
-class DAOcreator extends React.Component<Props, State> {
-  form = new DAOForm();
-  recoveredForm = new DAOForm();
+export default function DAOcreator() {
+  const daoForm = new DAOForm();
+  const recoveredForm = new DAOForm();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      step: 0,
-      isMigrating: false,
-      recoverPreviewOpen: false
+  const [step, setStep] = React.useState<number>(0);
+  const [isMigrating, setIsMigrating] = React.useState<boolean>(false);
+
+  const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
+    false
+  );
+  React.useEffect(() => {
+    previewLocalStorage();
+    window.addEventListener("beforeunload", saveLocalStorage);
+
+    return () => {
+      window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }
+  });
 
-  componentDidMount() {
-    // Preview a saved DAO if one is found
-    this.previewLocalStorage();
-    window.addEventListener("beforeunload", this.saveLocalStorage);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.saveLocalStorage);
-  }
-
-  saveLocalStorage = () => {
-    const daoState = this.form.toState();
+  const saveLocalStorage = () => {
+    const daoState = daoForm.toState();
 
     // Check to see if the current form state hasn't been edited,
     // and if so early out so we don't save an empty state
@@ -67,90 +51,74 @@ class DAOcreator extends React.Component<Props, State> {
 
     const daoParams = toDAOMigrationParams(daoState);
     const json = toJSON(daoParams);
-    const daoCreatorState: DAO_CREATOR_STATE = {
-      step: this.state.step,
+    const daoCreatorState: DAO_CREATOR_INTERFACE = {
+      step,
       form: json
     };
 
     localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
   };
 
-  resetLocalStorage = () => {
+  const previewLocalStorage = () => {
+    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+
+    if (!daoCreatorState) {
+      return;
+    }
+    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+    const daoParams = fromJSON(form);
+    const daoState = fromDAOMigrationParams(daoParams);
+    recoveredForm.fromState(daoState);
+
+    setRecoverPreviewOpen(true);
+  };
+
+  const resetLocalStorage = () => {
     localStorage.removeItem(DAO_CREATOR_STATE);
-
-    this.setState({
-      ...this.state,
-      step: 0,
-      recoverPreviewOpen: false
-    });
+    setStep(0);
+    setRecoverPreviewOpen(false);
   };
 
-  loadLocalStorage = () => {
+  const loadLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
     if (!daoCreatorState) {
       return;
     }
 
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
+    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
-    this.form.fromState(daoState);
+    daoForm.fromState(daoState);
 
-    this.setState({
-      ...this.state,
-      step,
-      recoverPreviewOpen: false
-    });
+    setStep(step);
+    setRecoverPreviewOpen(false);
   };
 
-  previewLocalStorage = () => {
-    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
-    if (!daoCreatorState) {
-      return;
-    }
-
-    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_STATE;
-    const daoParams = fromJSON(form);
-    const daoState = fromDAOMigrationParams(daoParams);
-    this.recoveredForm.fromState(daoState);
-
-    this.setState({
-      ...this.state,
-      recoverPreviewOpen: true
-    });
+  const onClose = () => {
+    setRecoverPreviewOpen(false);
   };
 
-  onClose = () => {
-    this.setState({
-      ...this.state,
-      recoverPreviewOpen: false
-    });
-  };
-
-  render() {
-    return (
-      <Box style={styles.root}>
-        <h3 style={styles.header}>Create Organisation</h3>
-        <Accordion id="accordion">
-          <NamingStep
-            form={this.form}
-            daoForm={this.form}
-            toReviewStep={() => {
-              this.setState({ ...this.state, step: 3 });
-            }}
-          />
-          <SchemesStep form={this.form.$.schemes} />
-          <MembersStep
-            form={this.form.$.members}
-            getDAOTokenSymbol={(): any => {}}
-          />
-          <InstallStep form={this.form} daoForm={this.form} />
-        </Accordion>
-      </Box>
-    );
-  }
+  return (
+    <Box style={styles.root}>
+      <h3 style={styles.header}>Create Organisation</h3>
+      <Accordion id="accordion">
+        <NamingStep
+          form={daoForm}
+          daoForm={daoForm}
+          toReviewStep={() => {
+            setStep(3);
+          }}
+        />
+        <SchemesStep form={daoForm.$.schemes} />
+        <MembersStep
+          form={daoForm.$.members}
+          getDAOTokenSymbol={(): any => daoForm.$.config.$.tokenSymbol.value}
+        />
+        <InstallStep form={daoForm} daoForm={daoForm} />
+      </Accordion>
+    </Box>
+  );
 }
 
 const styles = {
@@ -165,5 +133,3 @@ const styles = {
     paddingLeft: "36.5%"
   }
 };
-
-export default DAOcreator;

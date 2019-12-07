@@ -3,6 +3,9 @@ import { observer } from "mobx-react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { AccordionSection, Table, Column } from "react-rainbow-components";
 import { Grid, Box, Text, Progress, Input, Button } from "@chakra-ui/core";
+import MembersEditor from "components/commonV2/dao/MembersEditor";
+import MembersEditorV from "components/commonV2/MembersEditorV";
+
 // eslint-disable-next-line
 interface Props {
   form: MembersForm;
@@ -10,19 +13,19 @@ interface Props {
 }
 const dummyData = [
   {
-    member: "0x5Db06acd673531218B10430bA6dE9b69913Ad545",
+    address: "0x5Db06acd673531218B10430bA6dE9b69913Ad545",
     reputation: 50,
-    token: 100
+    tokens: 100
   },
   {
-    member: "0x11bb17983E193A3cB0691505232331634B8FCa01",
+    address: "0x11bb17983E193A3cB0691505232331634B8FCa01",
     reputation: 30,
-    token: 60
+    tokens: 60
   },
   {
-    member: "0x37Cc82371336Dc991527C31CE65da11Bd89A1e2B",
+    address: "0x37Cc82371336Dc991527C31CE65da11Bd89A1e2B",
     reputation: 40,
-    token: 80
+    tokens: 80
   }
 ];
 @observer
@@ -45,27 +48,7 @@ class MembersStep extends React.Component<Props> {
               <Progress value={100} style={styles.distributionBar} />
             </Grid>
           </Box>
-
-          <Box>
-            <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-              <Input placeholder="0x..." />
-              <Button
-                variantColor="blue"
-                variant="solid"
-                style={styles.addMemberBtn}
-              >
-                Add Member
-              </Button>
-            </Grid>
-          </Box>
-
-          <Box>
-            <Table data={dummyData} keyField="id">
-              <Column header="Members" field="member" />
-              <Column header="Reputation" field="reputation" />
-              <Column header="Token" field="token" />
-            </Table>
-          </Box>
+          <MembersEditorV form={this.props.form} getDAOTokenSymbol={this.props.getDAOTokenSymbol} dummyData={dummyData}></MembersEditorV>
         </Box>
       </AccordionSection>
     );
