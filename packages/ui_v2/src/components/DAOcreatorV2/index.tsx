@@ -8,6 +8,9 @@ import {
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
@@ -25,11 +28,11 @@ export default function DAOcreator() {
   const recoveredForm = new DAOForm();
 
   const [step, setStep] = React.useState<number>(0);
-  const [isMigrating, setIsMigrating] = React.useState<boolean>(false);
 
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
+
   React.useEffect(() => {
     previewLocalStorage();
     window.addEventListener("beforeunload", saveLocalStorage);
@@ -71,32 +74,6 @@ export default function DAOcreator() {
     recoveredForm.fromState(daoState);
 
     setRecoverPreviewOpen(true);
-  };
-
-  const resetLocalStorage = () => {
-    localStorage.removeItem(DAO_CREATOR_STATE);
-    setStep(0);
-    setRecoverPreviewOpen(false);
-  };
-
-  const loadLocalStorage = () => {
-    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
-    if (!daoCreatorState) {
-      return;
-    }
-
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
-    const daoParams = fromJSON(form);
-    const daoState = fromDAOMigrationParams(daoParams);
-    daoForm.fromState(daoState);
-
-    setStep(step);
-    setRecoverPreviewOpen(false);
-  };
-
-  const onClose = () => {
-    setRecoverPreviewOpen(false);
   };
 
   return (

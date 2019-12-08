@@ -26,9 +26,6 @@ export default class SchemesStep extends React.Component<Props> {
           rounded="lg"
         >
           <SchemesEditor form={form} editable={true} />
-          <Button variantColor="blue" variant="solid">
-            Set Configuration
-          </Button>
         </Box>
       </AccordionSection>
     );
