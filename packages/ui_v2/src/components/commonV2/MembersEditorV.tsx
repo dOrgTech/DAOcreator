@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Column, ButtonIcon } from "react-rainbow-components";
+import { ButtonIcon } from "react-rainbow-components";
 import { Grid, Box, Button } from "@chakra-ui/core";
 import { MemberForm, Member } from "@dorgtech/daocreator-lib";
 import FormField from "../commonV2/FormField";
@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { faPencilAlt, faMinus, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Typography } from "@material-ui/core";
 
 const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form: any, getDAOTokenSymbol: any }) => {
 
@@ -22,25 +23,21 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
     memberForm.$.reputation.value = '100';
     memberForm.$.tokens.value = '100';
 
-    console.log(editedMemberForm)
-
     const onSubmit = async (event: any) => {
         event.preventDefault();
-        let error = undefined;
         const validate = await memberForm.validate()
+
         if (validate.hasError) {
-            console.log(memberForm)
-            error = memberForm.formError
+            updateState(Math.random())
             return;
         }
 
         membersForm.$.push(new MemberForm(memberForm.getDAOTokenSymbol, memberForm))
         const membersValidate = await membersForm.validate();
-        console.log(membersValidate)
+
         if (membersValidate.hasError) {
-            console.log(membersForm)
-            error = membersForm.error;
             membersForm.$.pop();
+            updateState(Math.random())
             return;
         }
         updateState(Math.random())
@@ -53,30 +50,27 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
     }
 
     const onEdit = async (index: number) => {
-        let editError = undefined;
         const backup = membersForm.$[index].getValues();
-
-        // Check the edited member for errors
         const memberValidate = await editedMemberForm.validate();
+
         if (memberValidate.hasError) {
-            editError = editedMemberForm.error;
+            updateState(Math.random())
             return;
         }
 
-        // See if the edited member can be reinserted into the array
-        // without any errors
         membersForm.$[index].setValues(editedMemberForm.values);
 
         const membersValidate = await membersForm.validate();
+
         if (membersValidate.hasError) {
-            editError = membersForm.error;
             membersForm.$[index].setValues(backup);
+            updateState(Math.random())
             return;
         }
         setEditing(-1)
     }
 
-    const onDelete = async (index:number) =>{
+    const onDelete = async (index: number) => {
         membersForm.$.splice(index, 1);
         updateState(Math.random())
     }
@@ -96,6 +90,11 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                         </Button>
                     </form>
                 </Grid>
+            </Box>
+            <Box>
+                {(membersForm.showFormError && (
+                    <Typography color={"error"}>{membersForm.error}</Typography>
+                ))}
             </Box>
             <Table>
                 <TableHead>
@@ -144,7 +143,6 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                                         <ButtonIcon variant="border" size="small" icon={<FontAwesomeIcon icon={faMinus} />} />
                                     </div>
                                 </TableCell>
-
                             </TableRow>
                         )
                     )}

@@ -194,12 +194,6 @@ const TokenFieldView = observer(
         disabled={editable === undefined ? false : !editable}
         onChange={e => field.onChange(e.target.value)}
         onBlur={field.enableAutoValidationAndValidate}
-        InputProps={{
-          startAdornment: FieldInformation(popupState),
-          endAdornment: (
-            <InputAdornment position="end">{field.symbol}</InputAdornment>
-          )
-        }}
       />
       <FieldError field={field} />
     </>
@@ -420,7 +414,6 @@ const AddressFieldView = observer(
         onChange={e => field.onChange(e.target.value)}
         onBlur={field.enableAutoValidationAndValidate}
         InputProps={{
-          startAdornment: FieldInformation(popupState),
           endAdornment: <EthAddressAvatar address={field.value} />
         }}
       />
