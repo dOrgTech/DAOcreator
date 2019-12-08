@@ -10,7 +10,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { faPencilAlt, faMinus, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MaterialTable from 'material-table';
 
 const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form: any, getDAOTokenSymbol: any }) => {
 
@@ -44,13 +43,12 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
             membersForm.$.pop();
             return;
         }
-        updateState(memberForm.$.address.value)
+        updateState(Math.random())
         memberForm.$.address.reset();
     }
 
-    const selectEdit = (index: number) =>{
+    const selectEdit = (index: number) => {
         editedMemberForm.setValues(membersForm.$[index].values)
-        console.log(editedMemberForm.$)
         setEditing(index);
     }
 
@@ -76,6 +74,11 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
             return;
         }
         setEditing(-1)
+    }
+
+    const onDelete = async (index:number) =>{
+        membersForm.$.splice(index, 1);
+        updateState(Math.random())
     }
 
     return (
@@ -116,7 +119,7 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                                 </div>
                             </TableCell>
                             <TableCell align="center">
-                                <div className="rainbow-p-right_large">
+                                <div className="rainbow-p-right_large" onClick={() => { onDelete(index) }}>
                                     <ButtonIcon variant="border" size="small" icon={<FontAwesomeIcon icon={faMinus} />} />
                                 </div>
                             </TableCell>
@@ -137,13 +140,13 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                                     </div>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <div className="rainbow-p-right_large">
+                                    <div className="rainbow-p-right_large" onClick={() => { onDelete(index) }}>
                                         <ButtonIcon variant="border" size="small" icon={<FontAwesomeIcon icon={faMinus} />} />
                                     </div>
                                 </TableCell>
+
                             </TableRow>
                         )
-
                     )}
                 </TableBody>
             </Table>
