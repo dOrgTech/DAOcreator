@@ -11,10 +11,13 @@ import TableRow from '@material-ui/core/TableRow';
 import { faPencilAlt, faMinus, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography } from "@material-ui/core";
+import { useForceUpdate } from '../../util/hooks';
+import { truncateString } from '../../util';
+import EthAddressAvatar from '../commonV2/EthAddressAvatar'
 
 const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form: any, getDAOTokenSymbol: any }) => {
 
-    const [, updateState] = useState()
+    const forceUpdate = useForceUpdate();
     const [memberForm] = useState(new MemberForm(getDAOTokenSymbol))
     const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol))
     const [membersForm] = useState(form)
@@ -27,20 +30,17 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
         event.preventDefault();
         const validate = await memberForm.validate()
 
-        if (validate.hasError) {
-            updateState(Math.random())
-            return;
-        }
+        if (validate.hasError) return;
 
         membersForm.$.push(new MemberForm(memberForm.getDAOTokenSymbol, memberForm))
         const membersValidate = await membersForm.validate();
 
         if (membersValidate.hasError) {
             membersForm.$.pop();
-            updateState(Math.random())
+            forceUpdate()
             return;
         }
-        updateState(Math.random())
+        forceUpdate()
         memberForm.$.address.reset();
     }
 
@@ -54,7 +54,7 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
         const memberValidate = await editedMemberForm.validate();
 
         if (memberValidate.hasError) {
-            updateState(Math.random())
+            forceUpdate()
             return;
         }
 
@@ -64,7 +64,7 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
 
         if (membersValidate.hasError) {
             membersForm.$[index].setValues(backup);
-            updateState(Math.random())
+            forceUpdate()
             return;
         }
         setEditing(-1)
@@ -72,24 +72,27 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
 
     const onDelete = async (index: number) => {
         membersForm.$.splice(index, 1);
-        updateState(Math.random())
+        forceUpdate()
     }
 
     return (
         <Box>
             <Box>
-                <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-                    <form onSubmit={onSubmit}>
-                        Field
-                        <FormField field={memberForm.$.address} editable={true}></FormField>
-                        <Button
-                            variantColor="blue"
-                            variant="solid"
-                            type="submit">
-                            Add Member
+                <form onSubmit={onSubmit}>
+                    <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+                        <Box w="80%">
+                            <FormField field={memberForm.$.address} editable={true}></FormField>
+                        </Box>
+                        <Box w="20%">
+                            <Button
+                                variantColor="blue"
+                                variant="solid"
+                                type="submit">
+                                Add Member
                         </Button>
-                    </form>
-                </Grid>
+                        </Box>
+                    </Grid>
+                </form>
             </Box>
             <Box>
                 {(membersForm.showFormError && (
@@ -99,6 +102,7 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell align="center"></TableCell>
                         <TableCell align="center">Member</TableCell>
                         <TableCell align="center">Reputation</TableCell>
                         <TableCell align="center">Tokens</TableCell>
@@ -109,7 +113,12 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                 <TableBody>
                     {membersForm.$.map((memberForm: MemberForm, index: number) => editing !== index ? (
                         <TableRow key={index}>
-                            <TableCell align="center">{memberForm.values.address}</TableCell>
+                            <TableCell align="center"> <EthAddressAvatar address={memberForm.values.address} /></TableCell>
+                            <TableCell align="center">
+                                <a href={`https://etherscan.io/address/${memberForm.values.address}`}>
+                                    {truncateString(memberForm.values.address, 6, 4)}
+                                </a>
+                            </TableCell>
                             <TableCell align="center">{memberForm.values.reputation}</TableCell>
                             <TableCell align="center">{memberForm.values.tokens}</TableCell>
                             <TableCell align="center">
@@ -126,7 +135,8 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
                     )
                         : (
                             <TableRow key={index}>
-                                <TableCell align="center">{memberForm.values.address}</TableCell>
+                                <TableCell align="center"> <EthAddressAvatar address={memberForm.values.address} /></TableCell>
+                                <TableCell align="center">{truncateString(memberForm.values.address, 6, 4)}</TableCell>
                                 <TableCell align="center">
                                     <FormField field={editedMemberForm.$.reputation} editable={true}></FormField>
                                 </TableCell>
