@@ -38,16 +38,6 @@ class MembersStep extends React.Component<Props> {
     return (
       <AccordionSection label={headerSection}>
         <Box style={styles.container}>
-          <Box>
-            <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-              <Text fontSize="md">Reputation Distribution</Text>
-              <Progress value={100} style={styles.distributionBar} />
-            </Grid>
-            <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-              <Text fontSize="md">DXD Token Distribution</Text>
-              <Progress value={100} style={styles.distributionBar} />
-            </Grid>
-          </Box>
           <MembersEditorV form={this.props.form} getDAOTokenSymbol={this.props.getDAOTokenSymbol} dummyData={dummyData}></MembersEditorV>
         </Box>
       </AccordionSection>

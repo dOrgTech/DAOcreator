@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ButtonIcon } from "react-rainbow-components";
 import { Grid, Box, Button } from "@chakra-ui/core";
-import { MemberForm, Member } from "@dorgtech/daocreator-lib";
+import { MemberForm, Member, MembersForm } from "@dorgtech/daocreator-lib";
 import FormField from "../commonV2/FormField";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,6 +14,7 @@ import { Typography } from "@material-ui/core";
 import { useForceUpdate } from '../../util/hooks';
 import { truncateString } from '../../util';
 import EthAddressAvatar from '../commonV2/EthAddressAvatar'
+import PieChart from '../commonV2/PieChart';
 
 const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form: any, getDAOTokenSymbol: any }) => {
 
@@ -77,6 +78,28 @@ const MembersEditor = ({ form, getDAOTokenSymbol }: { dummyData: Member[], form:
 
     return (
         <Box>
+            <Box>
+                Token Distribution
+                    <PieChart
+                    data={membersForm.toState()}
+                    config={{
+                        size: 240,
+                        dataKey: "tokens",
+                        nameKey: "address"
+                    }}
+                />
+            </Box>
+            <Box>
+                Reputation Distribution
+                    <PieChart
+                    data={membersForm.toState()}
+                    config={{
+                        size: 240,
+                        dataKey: "reputation",
+                        nameKey: "address"
+                    }}
+                />
+            </Box>
             <Box>
                 <form onSubmit={onSubmit}>
                     <Grid templateColumns="repeat(2, 1fr)" gap={2}>
