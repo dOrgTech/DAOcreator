@@ -2,9 +2,9 @@ import * as React from "react";
 import {
   DAOForm,
   toDAOMigrationParams,
-  fromDAOMigrationParams,
-  toJSON,
-  fromJSON
+  // fromDAOMigrationParams,
+  toJSON
+  // fromJSON
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
@@ -14,7 +14,12 @@ import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
 
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
+
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
+
 interface DAO_CREATOR_INTERFACE {
   step: number;
   form: string;
@@ -22,16 +27,17 @@ interface DAO_CREATOR_INTERFACE {
 
 export default function DAOcreator() {
   const daoForm = new DAOForm();
-  const recoveredForm = new DAOForm();
+  // const recoveredForm = new DAOForm();
 
   const [step, setStep] = React.useState<number>(0);
-  const [isMigrating, setIsMigrating] = React.useState<boolean>(false);
+  // const [isMigrating, setIsMigrating] = React.useState<boolean>(false);
 
-  const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
-    false
-  );
+  // const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
+  //   false
+  // );
+
   React.useEffect(() => {
-    previewLocalStorage();
+    // previewLocalStorage();
     window.addEventListener("beforeunload", saveLocalStorage);
 
     return () => {
@@ -59,45 +65,45 @@ export default function DAOcreator() {
     localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
   };
 
-  const previewLocalStorage = () => {
-    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+  // const previewLocalStorage = () => {
+  //   const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+  //
+  //   if (!daoCreatorState) {
+  //     return;
+  //   }
+  //   const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+  //   const daoParams = fromJSON(form);
+  //   const daoState = fromDAOMigrationParams(daoParams);
+  //   recoveredForm.fromState(daoState);
+  //
+  //   setRecoverPreviewOpen(true);
+  // };
 
-    if (!daoCreatorState) {
-      return;
-    }
-    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
-    const daoParams = fromJSON(form);
-    const daoState = fromDAOMigrationParams(daoParams);
-    recoveredForm.fromState(daoState);
+  // const resetLocalStorage = () => {
+  //   localStorage.removeItem(DAO_CREATOR_STATE);
+  //   setStep(0);
+  //   setRecoverPreviewOpen(false);
+  // };
 
-    setRecoverPreviewOpen(true);
-  };
+  // const loadLocalStorage = () => {
+  //   const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
+  //
+  //   if (!daoCreatorState) {
+  //     return;
+  //   }
+  //
+  //   const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+  //   const daoParams = fromJSON(form);
+  //   const daoState = fromDAOMigrationParams(daoParams);
+  //   daoForm.fromState(daoState);
+  //
+  //   setStep(step);
+  //   setRecoverPreviewOpen(false);
+  // };
 
-  const resetLocalStorage = () => {
-    localStorage.removeItem(DAO_CREATOR_STATE);
-    setStep(0);
-    setRecoverPreviewOpen(false);
-  };
-
-  const loadLocalStorage = () => {
-    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
-    if (!daoCreatorState) {
-      return;
-    }
-
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
-    const daoParams = fromJSON(form);
-    const daoState = fromDAOMigrationParams(daoParams);
-    daoForm.fromState(daoState);
-
-    setStep(step);
-    setRecoverPreviewOpen(false);
-  };
-
-  const onClose = () => {
-    setRecoverPreviewOpen(false);
-  };
+  // const onClose = () => {
+  //   setRecoverPreviewOpen(false);
+  // };
 
   return (
     <Box style={styles.root}>
