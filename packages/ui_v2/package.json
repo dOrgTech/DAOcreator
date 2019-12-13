@@ -33,6 +33,7 @@
     "emotion-theming": "^10.0.19",
     "file-saver": "^2.0.2",
     "material-ui-popup-state": "^1.4.0",
+    "mdbreact": "^4.23.0",
     "mobx": "^5.11.0",
     "mobx-react": "^6.1.1",
     "prop-types": "^15.6.0",

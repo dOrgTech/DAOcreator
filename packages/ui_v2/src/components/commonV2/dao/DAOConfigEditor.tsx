@@ -1,41 +1,86 @@
-import * as React from "react";
-import { DAOConfigForm } from "@dorgtech/daocreator-lib";
-import { Grid, Box, FormControl, FormLabel, Input } from "@chakra-ui/core";
+import React, { useState, FormEvent } from "react";
+import {
+  DAOConfigForm,
+  DAOConfig,
+  StringField
+} from "@dorgtech/daocreator-lib";
+import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput } from "mdbreact";
+import { observer } from "mobx-react";
 
 interface Props {
   form: DAOConfigForm;
   editable: boolean;
 }
 
-export default class DAOConfigEditor extends React.Component<Props> {
-  render() {
-    // const { form, editable } = this.props;
-    return (
-      <>
-        <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-          <Box w="100%" h="10">
-            <FormControl isRequired>
-              <FormLabel htmlFor="daoName" color="#9EA0A5" fontWeight={300}>
-                Organisation Name
-              </FormLabel>
-              <Input
-                id="daoName"
-                placeholder="DAO Name"
-                size="sm"
-                width={267}
-              />
-            </FormControl>
-          </Box>
-          <Box w="100%" h="10">
-            <FormControl isRequired>
-              <FormLabel htmlFor="daoSymbol" color="#9EA0A5" fontWeight={300}>
-                Symbol
-              </FormLabel>
-              <Input id="daoSymbol" placeholder="DXDD" size="sm" width={267} />
-            </FormControl>
-          </Box>
-        </Grid>
-      </>
-    );
-  }
+function DAOConfigEditor(props: Props) {
+  // const { form } = props;
+  const [daoName, setDAOName] = useState<StringField | string>("" as any);
+  const [daoSymbol, setDAOSymbol] = useState<StringField | string>("" as any);
+  const handleClick = (event: FormEvent) => {
+    // set DAOConfigEditor with names and daoSymbols
+    const daoConfigForm: DAOConfig | any = {
+      daoName,
+      tokenSymbol: daoSymbol,
+      tokenName: daoSymbol
+    };
+    // form.$.push(daoConfigForm);
+    return daoConfigForm;
+  };
+
+  const onChange = (value: string, property: string) => {
+    switch (property) {
+      case "daoName":
+        setDAOName(value);
+        break;
+      case "daoSymbol":
+        setDAOSymbol(value);
+        break;
+    }
+  };
+
+  return (
+    <MDBContainer>
+      <MDBRow>
+        <MDBCol>
+          <MDBInput
+            id="daoName"
+            label="Organisation Name"
+            placeholder="DAO Name"
+            onChange={(event: any) => onChange(event.target.value, "daoName")}
+          />
+        </MDBCol>
+        <MDBCol>
+          <MDBInput
+            id="daoSymbol"
+            label="Symbol"
+            placeholder="DXDD"
+            onChange={(event: any) => onChange(event.target.value, "daoSymbol")}
+          />
+        </MDBCol>
+      </MDBRow>
+      <MDBRow>
+        <MDBCol>
+          <MDBBtn
+            color="blue darken-4"
+            size="sm"
+            name="decisonSpeed"
+            value="slow"
+            style={styles.setDescriptionButton}
+            onClick={handleClick}
+          >
+            Set Description
+          </MDBBtn>
+        </MDBCol>
+      </MDBRow>
+    </MDBContainer>
+  );
 }
+
+export default observer(DAOConfigEditor);
+
+const styles = {
+  setDescriptionButton: {
+    borderRadius: "0.37rem",
+    fontWeight: 700
+  }
+};
