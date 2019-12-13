@@ -1,10 +1,10 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
-import { AccordionSection, Table, Column } from "react-rainbow-components";
-import { Grid, Box, Text, Progress, Input, Button } from "@chakra-ui/core";
+import { AccordionSection } from "react-rainbow-components";
+import { Box } from "@chakra-ui/core";
+
 import MembersEditor from "components/commonV2/dao/MembersEditor";
-import MembersEditorV from "components/commonV2/MembersEditorV";
 
 // eslint-disable-next-line
 interface Props {
@@ -38,7 +38,11 @@ class MembersStep extends React.Component<Props> {
     return (
       <AccordionSection label={headerSection}>
         <Box style={styles.container}>
-          <MembersEditorV form={this.props.form} getDAOTokenSymbol={this.props.getDAOTokenSymbol} dummyData={dummyData}></MembersEditorV>
+          <MembersEditor
+            form={this.props.form}
+            getDAOTokenSymbol={this.props.getDAOTokenSymbol}
+            dummyData={dummyData}
+          ></MembersEditor>
         </Box>
       </AccordionSection>
     );

@@ -113,7 +113,7 @@ export default function DAOcreator() {
       <h3 style={styles.header}>Create Organisation</h3>
       <Accordion id="accordion">
         <NamingStep
-          form={daoForm}
+          form={daoForm.$.config}
           daoForm={daoForm}
           toReviewStep={() => {
             setStep(3);

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { AccordionSection } from "react-rainbow-components";
-import { Box, Button } from "@chakra-ui/core";
+import { Box } from "@chakra-ui/core";
 import { SchemesForm } from "@dorgtech/daocreator-lib";
 
 import SchemesEditor from "../commonV2/dao/SchemesEditor";

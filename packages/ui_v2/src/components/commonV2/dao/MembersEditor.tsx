@@ -1,279 +1,255 @@
-import React from "react";
-import { observer } from "mobx-react";
-import { observable } from "mobx";
+import React, { useState } from "react";
+import { ButtonIcon } from "react-rainbow-components";
+import { Grid, Box, Button } from "@chakra-ui/core";
+import { MemberForm, Member } from "@dorgtech/daocreator-lib";
+import FormField from "components/commonV2/FormField";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import {
-  WithStyles,
-  Theme,
-  createStyles,
-  withStyles,
-  Grid,
-  Fab,
-  Typography
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import RemIcon from "@material-ui/icons/Remove";
-import EditIcon from "@material-ui/icons/Edit";
-import CheckIcon from "@material-ui/icons/Check";
-import ErrorIcon from "@material-ui/icons/Error";
-import { MemberForm, MembersForm, Member } from "@dorgtech/daocreator-lib";
-import MemberEditor from "./MemberEditor";
-import MembersSaveLoad from "./MembersSaveLoad";
+  faPencilAlt,
+  faMinus,
+  faCheck
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Typography } from "@material-ui/core";
 
-// eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  form: MembersForm;
-  editable: boolean;
-  getDAOTokenSymbol: () => string;
-  maxScrollHeight?: string;
-}
+import { useForceUpdate } from "util/hooks";
+import { truncateString } from "util/";
+import EthAddressAvatar from "components/commonV2/EthAddressAvatar";
+import PieChart from "components/commonV2/PieChart";
 
-@observer
-class MembersEditor extends React.Component<Props> {
-  @observable addError: string | null | undefined = undefined;
-  @observable editError: string | null | undefined = undefined;
-  @observable newMemberForm = new MemberForm(this.props.getDAOTokenSymbol);
-  @observable selected: {
-    memberForm: MemberForm;
-    index: number;
-    backup: { [key in keyof Member]: string };
-  } = {
-    memberForm: new MemberForm(this.props.getDAOTokenSymbol),
-    index: -1,
-    backup: { address: "", reputation: "", tokens: "" }
-  };
+const MembersEditor = ({
+  form,
+  getDAOTokenSymbol
+}: {
+  dummyData: Member[];
+  form: any;
+  getDAOTokenSymbol: any;
+}) => {
+  const forceUpdate = useForceUpdate();
+  const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
+  const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
+  const [membersForm] = useState(form);
+  const [editing, setEditing] = useState(-1);
 
-  handleKeyDown = (event: { key: string }) => {
-    if (event.key === "Escape") {
-      this.selected = {
-        memberForm: new MemberForm(this.props.getDAOTokenSymbol),
-        index: -1,
-        backup: { address: "", reputation: "", tokens: "" }
-      };
-      return false;
-    }
-    if (event.key === "Enter") {
-      return true;
-    }
-    return false;
-  };
+  memberForm.$.reputation.value = "100";
+  memberForm.$.tokens.value = "100";
 
-  render() {
-    const {
-      classes,
-      form,
-      editable,
-      getDAOTokenSymbol,
-      maxScrollHeight
-    } = this.props;
-    const newMemberForm = this.newMemberForm;
-    const selected = this.selected;
-    const handleKeyDown = this.handleKeyDown;
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    const validate = await memberForm.validate();
 
-    const resetSelected = () => {
-      selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
-      selected.index = -1;
-      selected.backup = { address: "", reputation: "", tokens: "" };
-    };
+    if (validate.hasError) return;
 
-    //Adds a new memberForm to form
-    const onAdd = async () => {
-      this.addError = undefined;
-
-      // Check the new member for errors
-      const memberValidate = await newMemberForm.validate();
-      if (memberValidate.hasError) {
-        this.addError = this.newMemberForm.formError;
-        return;
-      }
-
-      // See if the new member can be added to the array
-      // without any errors
-      form.$.push(new MemberForm(getDAOTokenSymbol, newMemberForm));
-
-      const membersValidate = await form.validate();
-      if (membersValidate.hasError) {
-        this.addError = form.error;
-        form.$.pop();
-        return;
-      }
-
-      newMemberForm.reset();
-      this.forceUpdate();
-    };
-
-    const onRemove = (index: number) => {
-      resetSelected();
-      form.$.splice(index, 1);
-      this.forceUpdate();
-    };
-
-    //Validates edit and updates form
-    const onEditSubmit = async (index: number) => {
-      this.editError = undefined;
-
-      // Check the edited member for errors
-      const memberValidate = await selected.memberForm.validate();
-      if (memberValidate.hasError) {
-        this.editError = selected.memberForm.error;
-        return;
-      }
-
-      // See if the edited member can be reinserted into the array
-      // without any errors
-      form.$[index].setValues(selected.memberForm.values);
-
-      const membersValidate = await form.validate();
-      if (membersValidate.hasError) {
-        this.editError = form.error;
-        form.$[index].setValues(selected.backup);
-        return;
-      }
-
-      resetSelected();
-      this.forceUpdate();
-    };
-
-    //Selects a memberForm and enables editing
-    const onEditSelect = async (index: number) => {
-      if (index === selected.index) {
-        await onEditSubmit(index);
-        resetSelected();
-        return;
-      }
-      selected.index = index;
-
-      //Create new memberform
-      selected.memberForm = new MemberForm(this.props.getDAOTokenSymbol);
-
-      //Set backup to revert to in case of errors
-      selected.backup = form.$[index].values;
-      selected.memberForm.setValues(selected.backup);
-    };
-
-    const editing = (
-      <>
-        <Grid>
-          <Typography variant="h6">Members</Typography>
-          <MembersSaveLoad form={form} onImport={() => this.forceUpdate()} />
-        </Grid>
-        <Grid
-          container
-          key={"new-member"}
-          spacing={1}
-          justify={"center"}
-          alignItems={"flex-start"}
-          onKeyDown={e => handleKeyDown(e) && onAdd()}
-        >
-          <MemberEditor form={newMemberForm} editable={true} />
-          <Grid item className={classes.addButton}>
-            <Fab
-              size={"small"}
-              color={"primary"}
-              disabled={newMemberForm.hasError}
-              onClick={onAdd}
-            >
-              <AddIcon />
-            </Fab>
-          </Grid>
-        </Grid>
-
-        <Grid container justify={"center"}>
-          {(this.addError && (
-            <Typography color={"error"}>{this.addError}</Typography>
-          )) ||
-            (form.showFormError && (
-              <Typography color={"error"}>{form.error}</Typography>
-            ))}
-        </Grid>
-      </>
+    membersForm.$.push(
+      new MemberForm(memberForm.getDAOTokenSymbol, memberForm)
     );
+    const membersValidate = await membersForm.validate();
 
-    const members = (
-      <Grid
-        container
-        style={
-          maxScrollHeight
-            ? {
-                maxHeight: maxScrollHeight,
-                overflowY: "auto",
-                scrollbarWidth: "thin"
-              }
-            : {}
-        }
-      >
-        {form.$.map((memberForm, index) => (
-          <Grid
-            container
-            spacing={1}
-            style={{
-              // Removes useless scrollbars caused by spacing={1}
-              margin: "0",
-              width: "100%"
-            }}
-            key={`member-${index}`}
-            justify={"center"}
-            alignItems={"flex-start"}
-            onKeyDown={e => handleKeyDown(e) && onEditSubmit(index)}
-          >
-            {index !== selected.index ? (
-              <MemberEditor form={memberForm} editable={false} />
+    if (membersValidate.hasError) {
+      membersForm.$.pop();
+      forceUpdate();
+      return;
+    }
+    forceUpdate();
+    memberForm.$.address.reset();
+  };
+
+  const selectEdit = (index: number) => {
+    editedMemberForm.setValues(membersForm.$[index].values);
+    setEditing(index);
+  };
+
+  const onEdit = async (index: number) => {
+    const backup = membersForm.$[index].getValues();
+    const memberValidate = await editedMemberForm.validate();
+
+    if (memberValidate.hasError) {
+      forceUpdate();
+      return;
+    }
+
+    membersForm.$[index].setValues(editedMemberForm.values);
+
+    const membersValidate = await membersForm.validate();
+
+    if (membersValidate.hasError) {
+      membersForm.$[index].setValues(backup);
+      forceUpdate();
+      return;
+    }
+    setEditing(-1);
+  };
+
+  const onDelete = async (index: number) => {
+    membersForm.$.splice(index, 1);
+    forceUpdate();
+  };
+
+  return (
+    <Box>
+      <Box>
+        Token Distribution
+        <PieChart
+          data={membersForm.toState()}
+          config={{
+            size: 240,
+            dataKey: "tokens",
+            nameKey: "address"
+          }}
+        />
+      </Box>
+      <Box>
+        Reputation Distribution
+        <PieChart
+          data={membersForm.toState()}
+          config={{
+            size: 240,
+            dataKey: "reputation",
+            nameKey: "address"
+          }}
+        />
+      </Box>
+      <Box>
+        <form onSubmit={onSubmit}>
+          <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+            <Box w="80%">
+              <FormField
+                field={memberForm.$.address}
+                editable={true}
+              ></FormField>
+            </Box>
+            <Box w="20%">
+              <Button variantColor="blue" variant="solid" type="submit">
+                Add Member
+              </Button>
+            </Box>
+          </Grid>
+        </form>
+      </Box>
+      <Box>
+        {membersForm.showFormError && (
+          <Typography color={"error"}>{membersForm.error}</Typography>
+        )}
+      </Box>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center">Member</TableCell>
+            <TableCell align="center">Reputation</TableCell>
+            <TableCell align="center">Tokens</TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {membersForm.$.map((memberForm: MemberForm, index: number) =>
+            editing !== index ? (
+              <TableRow key={index}>
+                <TableCell align="center">
+                  {" "}
+                  <EthAddressAvatar address={memberForm.values.address} />
+                </TableCell>
+                <TableCell align="center">
+                  <a
+                    href={`https://etherscan.io/address/${memberForm.values.address}`}
+                  >
+                    {truncateString(memberForm.values.address, 6, 4)}
+                  </a>
+                </TableCell>
+                <TableCell align="center">
+                  {memberForm.values.reputation}
+                </TableCell>
+                <TableCell align="center">{memberForm.values.tokens}</TableCell>
+                <TableCell align="center">
+                  <div
+                    className="rainbow-p-right_large"
+                    onClick={() => {
+                      selectEdit(index);
+                    }}
+                  >
+                    <ButtonIcon
+                      variant="border"
+                      size="small"
+                      icon={<FontAwesomeIcon icon={faPencilAlt} />}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div
+                    className="rainbow-p-right_large"
+                    onClick={() => {
+                      onDelete(index);
+                    }}
+                  >
+                    <ButtonIcon
+                      variant="border"
+                      size="small"
+                      icon={<FontAwesomeIcon icon={faMinus} />}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
             ) : (
-              <MemberEditor form={selected.memberForm} editable />
-            )}
-            {editable && (
-              <>
-                <Grid item className={classes.editButtons}>
-                  <Fab
-                    size={"small"}
-                    color={"primary"}
-                    onClick={() => onEditSelect(index)}
+              <TableRow key={index}>
+                <TableCell align="center">
+                  {" "}
+                  <EthAddressAvatar address={memberForm.values.address} />
+                </TableCell>
+                <TableCell align="center">
+                  {truncateString(memberForm.values.address, 6, 4)}
+                </TableCell>
+                <TableCell align="center">
+                  <FormField
+                    field={editedMemberForm.$.reputation}
+                    editable={true}
+                  ></FormField>
+                </TableCell>
+                <TableCell align="center">
+                  <FormField
+                    field={editedMemberForm.$.tokens}
+                    editable={true}
+                  ></FormField>
+                </TableCell>
+                <TableCell align="center">
+                  <div
+                    className="rainbow-p-right_large"
+                    onClick={() => {
+                      onEdit(index);
+                    }}
                   >
-                    {selected.index === index ? (
-                      selected.memberForm.error ? (
-                        <ErrorIcon />
-                      ) : (
-                        <CheckIcon />
-                      )
-                    ) : (
-                      <EditIcon />
-                    )}
-                  </Fab>
-                </Grid>
-                <Grid item className={classes.editButtons}>
-                  <Fab
-                    size={"small"}
-                    color={"primary"}
-                    onClick={() => onRemove(index)}
+                    <ButtonIcon
+                      variant="border"
+                      size="small"
+                      icon={<FontAwesomeIcon icon={faCheck} />}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div
+                    className="rainbow-p-right_large"
+                    onClick={() => {
+                      onDelete(index);
+                    }}
                   >
-                    <RemIcon />
-                  </Fab>
-                </Grid>
-              </>
-            )}
-          </Grid>
-        ))}
-      </Grid>
-    );
+                    <ButtonIcon
+                      variant="border"
+                      size="small"
+                      icon={<FontAwesomeIcon icon={faMinus} />}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            )
+          )}
+        </TableBody>
+      </Table>
+    </Box>
+  );
+};
 
-    return (
-      <>
-        {editable && editing}
-        {members}
-      </>
-    );
-  }
-}
-
-const styles = (theme: Theme) =>
-  createStyles({
-    addButton: {
-      marginTop: "12px",
-      marginLeft: "22px",
-      paddingRight: "34px !important"
-    },
-    editButtons: {
-      marginTop: "12px"
-    }
-  });
-
-export default withStyles(styles)(MembersEditor);
+export default MembersEditor;

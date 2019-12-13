@@ -10,7 +10,6 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  InputAdornment,
   Grid,
   Slider,
   Input

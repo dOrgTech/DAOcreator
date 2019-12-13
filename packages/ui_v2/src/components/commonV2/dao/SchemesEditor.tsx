@@ -18,11 +18,6 @@ interface Props {
   editable: boolean;
 }
 
-interface SchemeFormDrawers {
-  form: AnySchemeForm;
-  enabled: boolean;
-}
-
 @observer
 class SchemesEditor extends React.Component<Props> {
   fillers: { [type: number]: AnySchemeForm & IObservableObject } = {};
@@ -57,5 +52,4 @@ class SchemesEditor extends React.Component<Props> {
   }
 }
 
-const styles = {};
 export default SchemesEditor;
