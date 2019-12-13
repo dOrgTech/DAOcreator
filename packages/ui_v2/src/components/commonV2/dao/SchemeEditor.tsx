@@ -1,59 +1,308 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { Button, Text, CheckboxGroup, Checkbox } from "@chakra-ui/core";
-// import { AnySchemeForm } from "@dorgtech/daocreator-lib";
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBTooltip,
+  MDBIcon
+} from "mdbreact";
 
-// eslint-disable-next-line
 interface Props {
-  // form: AnySchemeForm;
   form: any;
   editable: boolean;
   enabled: boolean;
   onToggle: (toggled: boolean) => void;
 }
 
-interface State {
-  enabled: boolean;
+type decisionSpeed = "slow" | "medium" | "fast";
+
+function SchemeEditor(props: Props) {
+  const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
+    false
+  );
+  const [rewardPropEnabled, setRewardPropEnabled] = React.useState<boolean>(
+    false
+  );
+  const [rewardVoterEnabled, setRewardVoterEnabled] = React.useState<boolean>(
+    false
+  );
+  const [penalizeEnabled, setPenalizeEnabled] = React.useState<boolean>(false);
+  const [autobetEnabled, setAutobetEnabled] = React.useState<boolean>(false);
+  const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
+    "medium"
+  );
+
+  const handleClick = (e: any) => setDecisionSpeed(e.target.value);
+  const showState = () => {
+    const states = {
+      distributionEnabled,
+      rewardPropEnabled,
+      rewardVoterEnabled,
+      penalizeEnabled,
+      autobetEnabled,
+      decisionSpeed
+    };
+    console.log(states);
+  };
+  return (
+    <>
+      <MDBContainer>
+        <MDBRow>
+          <MDBCol>
+            <p className="text-left">Recommend Configuration</p>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow>
+          <MDBCol>
+            <p className="text-left">
+              Your proposal uses a proposal-vote structure and can securely
+              scale to a big organisation
+            </p>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.box}>
+          <MDBCol size="3">
+            <MDBRow>
+              <span style={styles.marginText} className="text-left">
+                Decision making
+              </span>
+              <MDBTooltip placement="bottom" clickable>
+                <MDBBtn
+                  floating
+                  size="lg"
+                  color="transparent"
+                  style={styles.info}
+                >
+                  <MDBIcon icon="info-circle" />
+                </MDBBtn>
+                <span>Some example</span>
+              </MDBTooltip>
+            </MDBRow>
+          </MDBCol>
+          <MDBCol>
+            <MDBRow style={styles.alignEnd}>
+              <MDBBtn
+                color="blue darken-4"
+                size="sm"
+                name="decisonSpeed"
+                value="fast"
+                outline={!(decisionSpeed === "fast")}
+                style={styles.buttonColor}
+                onClick={handleClick}
+              >
+                Fast
+              </MDBBtn>
+              <MDBBtn
+                color="blue darken-4"
+                size="sm"
+                name="decisonSpeed"
+                value="medium"
+                style={styles.buttonColor}
+                outline={!(decisionSpeed === "medium")}
+                onClick={handleClick}
+              >
+                Medium
+              </MDBBtn>
+              <MDBBtn
+                color="blue darken-4"
+                size="sm"
+                name="decisonSpeed"
+                value="slow"
+                style={styles.buttonColor}
+                outline={!(decisionSpeed === "slow")}
+                onClick={handleClick}
+              >
+                Slow
+              </MDBBtn>
+            </MDBRow>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.paddingRow}>
+          <MDBCol size="10" style={styles.noPadding}>
+            <span style={styles.marginText} className="text-left">
+              Distribute Dxdao token
+            </span>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>Some example</span>
+            </MDBTooltip>
+          </MDBCol>
+          <MDBCol>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="distributionEnabled"
+                onChange={() => setDistributionEnabled(!distributionEnabled)}
+                readOnly
+              />
+              <label
+                className="custom-control-label"
+                htmlFor="distributionEnabled"
+              ></label>
+            </div>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.paddingRow}>
+          <MDBCol size="10" style={styles.noPadding}>
+            <span style={styles.marginText} className="text-left">
+              Reward successful proposer
+            </span>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>Some example</span>
+            </MDBTooltip>
+          </MDBCol>
+          <MDBCol>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="rewardPropEnabled"
+                readOnly
+                onChange={() => setRewardPropEnabled(!rewardPropEnabled)}
+              />
+              <label
+                className="custom-control-label"
+                htmlFor="rewardPropEnabled"
+              ></label>
+            </div>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.paddingRow}>
+          <MDBCol size="10" style={styles.noPadding}>
+            <span style={styles.marginText} className="text-left">
+              Reward voters who side with the mayority
+            </span>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>Some example</span>
+            </MDBTooltip>
+          </MDBCol>
+          <MDBCol>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="rewardVoterEnabled"
+                readOnly
+                onChange={() => setRewardVoterEnabled(!rewardVoterEnabled)}
+              />
+              <label
+                className="custom-control-label"
+                htmlFor="rewardVoterEnabled"
+              ></label>
+            </div>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.paddingRow}>
+          <MDBCol size="10" style={styles.noPadding}>
+            <span style={styles.marginText} className="text-left">
+              Penalize voters who side against the mayority
+            </span>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>Some example</span>
+            </MDBTooltip>
+          </MDBCol>
+          <MDBCol>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="penalizeEnabled"
+                readOnly
+                onChange={() => setPenalizeEnabled(!penalizeEnabled)}
+              />
+              <label
+                className="custom-control-label"
+                htmlFor="penalizeEnabled"
+              ></label>
+            </div>
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow style={styles.paddingRow}>
+          <MDBCol size="10" style={styles.noPadding}>
+            <span style={styles.marginText} className="text-left">
+              Auto-bet against every proposal to incentive curation of valuable
+            </span>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>Some example</span>
+            </MDBTooltip>
+          </MDBCol>
+          <MDBCol>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="autobetEnabled"
+                readOnly
+                onChange={() => setAutobetEnabled(!autobetEnabled)}
+              />
+              <label
+                className="custom-control-label"
+                htmlFor="autobetEnabled"
+              ></label>
+            </div>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
+
+      <MDBBtn
+        color="blue darken-4"
+        onClick={showState}
+        style={styles.configButton}
+      >
+        Set Configuration
+      </MDBBtn>
+    </>
+  );
 }
-
-@observer
-class SchemeEditor extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { enabled: props.enabled };
-  }
-
-  render() {
-    return (
-      <>
-        <Text fontSize="md">Recommend Configuration</Text>
-        <Text fontSize="xs">
-          Your proposal uses a proposal-vote structure and can securely scale to
-          a big organisation
-        </Text>
-        <CheckboxGroup
-          variantColor="green"
-          defaultValue={["reward", "penalize", "autobet"]}
-        >
-          <Checkbox value="reward">
-            Reward voters who side with the mayority
-          </Checkbox>
-          <Checkbox value="penalize">
-            Penalize voters who side against the mayority
-          </Checkbox>
-          <Checkbox value="autobet">
-            Auto-bet against every proposal to incentive curation of valuable
-            proposals
-          </Checkbox>
-        </CheckboxGroup>
-        <Button variantColor="blue" variant="solid">
-          Set Configuration
-        </Button>
-      </>
-    );
-  }
-}
-
 const styles = {
   card: {
     minWidth: 250,
@@ -65,7 +314,49 @@ const styles = {
   },
   schemeDescription: {
     marginBottom: 15
+  },
+  column: {
+    alignItems: "center"
+  },
+  box: {
+    borderTop: "1px solid lightgray",
+    borderBottom: "1px solid lightgray",
+    padding: "10px"
+  },
+  buttonColor: {
+    color: "#fff",
+    /* background-color: #4285f4 !important; */
+    backgroundColor: "#3182ce !important",
+    borderRadius: "0.25rem",
+    fontWeight: 600,
+    width: "28%",
+    padding: "5px !important",
+    height: "38px"
+  },
+  info: {
+    backgroundColor: "transparent !important",
+    color: "lightgray",
+    boxShadow: "none",
+    fontSize: "large",
+    border: "none",
+    outline: "none"
+  },
+  marginText: {
+    marginTop: "6px"
+  },
+  alignEnd: {
+    flexDirection: "row-reverse"
+  },
+  paddingRow: {
+    padding: "10px"
+  },
+  noPadding: {
+    padding: 0
+  },
+  configButton: {
+    borderRadius: "0.37rem",
+    fontWeight: 700
   }
 };
 
-export default SchemeEditor;
+export default observer(SchemeEditor);

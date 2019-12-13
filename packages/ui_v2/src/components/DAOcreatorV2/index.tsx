@@ -8,6 +8,9 @@ import {
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
