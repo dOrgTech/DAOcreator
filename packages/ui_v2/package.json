@@ -25,13 +25,14 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
-    "@material-ui/core": "^4.3.1",
+    "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/pickers": "3.2.2",
     "@material-ui/styles": "^4.3.0",
     "date-fns": "2.1.0",
     "emotion-theming": "^10.0.19",
     "file-saver": "^2.0.2",
+    "material-table": "^1.54.1",
     "material-ui-popup-state": "^1.4.0",
     "mdbreact": "^4.23.0",
     "mobx": "^5.11.0",
@@ -42,6 +43,7 @@
     "react-rainbow-components": "^1.11.0"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "@types/file-saver": "^2.0.1",
     "@types/node": "^10.12.18",
     "@types/react": "^16.8.15",
