@@ -16,8 +16,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@material-ui/core";
 
-import { useForceUpdate } from "util/hooks";
-import { truncateString } from "util/";
+import { useForceUpdate } from "utils/hooks/";
+import { truncateString } from "utils";
+
 import EthAddressAvatar from "components/commonV2/EthAddressAvatar";
 import PieChart from "components/commonV2/PieChart";
 
