@@ -13,7 +13,16 @@ class InstallStep extends React.Component<Props> {
   render() {
     return (
       <>
-        <AccordionSection label="4 Install Organisation"></AccordionSection>
+        <AccordionSection label="4 Install Organisation">
+          <a
+            onClick={() =>
+              console.log("this.props.daoForm", this.props.daoForm)
+            }
+          >
+            {" "}
+            Print Form
+          </a>
+        </AccordionSection>
       </>
     );
   }

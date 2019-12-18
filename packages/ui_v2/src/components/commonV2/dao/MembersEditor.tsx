@@ -1,26 +1,30 @@
 import React, { useState } from "react";
+import { MemberForm, Member } from "@dorgtech/daocreator-lib";
+
 import { ButtonIcon } from "react-rainbow-components";
 import { Grid, Box, Button } from "@chakra-ui/core";
-import { MemberForm, Member } from "@dorgtech/daocreator-lib";
-import FormField from "components/commonV2/FormField";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import {
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
 import {
   faPencilAlt,
   faMinus,
   faCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Typography } from "@material-ui/core";
 
 import { useForceUpdate } from "utils/hooks/";
 import { truncateString } from "utils";
 
 import EthAddressAvatar from "components/commonV2/EthAddressAvatar";
 import PieChart from "components/commonV2/PieChart";
+import FormField from "components/commonV2/FormField";
+import MemberEditor from "components/commonV2/dao/MemberEditor";
 
 const MembersEditor = ({
   form,
@@ -33,31 +37,31 @@ const MembersEditor = ({
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
-  const [membersForm] = useState(form);
+  const membersForm = form;
   const [editing, setEditing] = useState(-1);
 
   memberForm.$.reputation.value = "100";
   memberForm.$.tokens.value = "100";
 
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    const validate = await memberForm.validate();
-
-    if (validate.hasError) return;
-
-    membersForm.$.push(
-      new MemberForm(memberForm.getDAOTokenSymbol, memberForm)
-    );
-    const membersValidate = await membersForm.validate();
-
-    if (membersValidate.hasError) {
-      membersForm.$.pop();
-      forceUpdate();
-      return;
-    }
-    forceUpdate();
-    memberForm.$.address.reset();
-  };
+  // const onSubmit = async (event: any) => {
+  //   event.preventDefault();
+  //   const validate = await memberForm.validate();
+  //
+  //   if (validate.hasError) return;
+  //
+  //   membersForm.$.push(
+  //     new MemberForm(memberForm.getDAOTokenSymbol, memberForm)
+  //   );
+  //   const membersValidate = await membersForm.validate();
+  //
+  //   if (membersValidate.hasError) {
+  //     membersForm.$.pop();
+  //     forceUpdate();
+  //     return;
+  //   }
+  //   forceUpdate();
+  //   memberForm.$.address.reset();
+  // };
 
   const selectEdit = (index: number) => {
     editedMemberForm.setValues(membersForm.$[index].values);
@@ -103,6 +107,7 @@ const MembersEditor = ({
           }}
         />
       </Box>
+
       <Box>
         Reputation Distribution
         <PieChart
@@ -114,7 +119,8 @@ const MembersEditor = ({
           }}
         />
       </Box>
-      <Box>
+      <MemberEditor form={membersForm} getDAOTokenSymbol={getDAOTokenSymbol} />
+      {/*<Box>
         <form onSubmit={onSubmit}>
           <Grid templateColumns="repeat(2, 1fr)" gap={2}>
             <Box w="80%">
@@ -130,12 +136,14 @@ const MembersEditor = ({
             </Box>
           </Grid>
         </form>
-      </Box>
+      </Box>*/}
+
       <Box>
         {membersForm.showFormError && (
           <Typography color={"error"}>{membersForm.error}</Typography>
         )}
       </Box>
+
       <Table>
         <TableHead>
           <TableRow>

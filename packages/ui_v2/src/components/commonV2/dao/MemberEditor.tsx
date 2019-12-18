@@ -1,29 +1,59 @@
-import * as React from "react";
-import { Grid } from "@material-ui/core";
-import { MemberForm } from "@dorgtech/daocreator-lib";
-import FormField from "../FormField";
+import React, { useState } from "react";
+import { Grid, Box, Button } from "@chakra-ui/core";
+import { MemberForm, Member } from "@dorgtech/daocreator-lib";
+import FormField from "components/commonV2/FormField";
 
-interface Props {
-  form: MemberForm;
-  editable: boolean;
-}
+import { useForceUpdate } from "utils/hooks/";
 
-export default class MemberEditor extends React.Component<Props> {
-  render() {
-    const { form, editable } = this.props;
+const MemberEditor = ({
+  form,
+  getDAOTokenSymbol
+}: {
+  form: any;
+  getDAOTokenSymbol: any;
+}) => {
+  const forceUpdate = useForceUpdate();
+  const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
+  // const [membersForm] = useState(form);
+  memberForm.$.reputation.value = "100";
+  memberForm.$.tokens.value = "100";
 
-    return (
-      <>
-        <Grid item sm={4} xs={12}>
-          <FormField field={form.$.address} editable={editable} />
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    const validate = await memberForm.validate();
+
+    if (validate.hasError) return;
+
+    form.$.push(new MemberForm(memberForm.getDAOTokenSymbol, memberForm));
+    const membersValidate = await form.validate();
+
+    if (membersValidate.hasError) {
+      console.log("membersValidate", membersValidate);
+      console.log("hasError");
+      form.$.pop();
+      forceUpdate();
+      return;
+    }
+    forceUpdate();
+    memberForm.$.address.reset();
+  };
+
+  return (
+    <Box>
+      <form onSubmit={onSubmit}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+          <Box w="80%">
+            <FormField field={memberForm.$.address} editable={true}></FormField>
+          </Box>
+          <Box w="20%">
+            <Button variantColor="blue" variant="solid" type="submit">
+              Add Member
+            </Button>
+          </Box>
         </Grid>
-        <Grid item sm={3} xs={12}>
-          <FormField field={form.$.reputation} editable={editable} />
-        </Grid>
-        <Grid item sm={3} xs={12}>
-          <FormField field={form.$.tokens} editable={editable} />
-        </Grid>
-      </>
-    );
-  }
-}
+      </form>
+    </Box>
+  );
+};
+
+export default MemberEditor;
