@@ -5,6 +5,8 @@ import { Box } from "@chakra-ui/core";
 import { SchemesForm } from "@dorgtech/daocreator-lib";
 
 import SchemesEditor from "../commonV2/dao/SchemesEditor";
+import ModalConfig from "components/commonV2/Modal";
+import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: SchemesForm;
@@ -17,8 +19,14 @@ export default class SchemesStep extends React.Component<Props> {
     const headerSection = true ? "2 Configure Organization" : "2 Configuration";
     return (
       <AccordionSection label={headerSection}>
+        <MDBRow>
+          <MDBCol md="4"></MDBCol>
+          <MDBCol md="4" className="offset-md-4">
+            <ModalConfig></ModalConfig>
+          </MDBCol>
+        </MDBRow>
         <Box
-          width={"80%"}
+          width={"90%"}
           borderBottomColor="#eaedf3"
           borderTopColor="#eaedf3"
           borderRightColor="#eaedf3"
