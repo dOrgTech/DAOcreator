@@ -1,86 +1,31 @@
-import * as React from "react";
-import {
-  WithStyles,
-  Theme,
-  createStyles,
-  withStyles,
-  Grid,
-  Typography
-} from "@material-ui/core";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import { Member } from "@dorgtech/daocreator-lib";
-import PieChart from "../PieChart";
+import React from "react";
+import { Box } from "@chakra-ui/core";
 
-// eslint-disable-next-line
-interface Props extends WithStyles<typeof styles> {
-  data: Member[];
-}
+import PieChart from "components/commonV2/PieChart";
 
-class MembersAnalytics extends React.Component<Props> {
-  render() {
-    const { classes, data } = this.props;
+export const MembersAnalytics = ({ data }: { data: any }) => {
+  const tokenDistributionConfig = {
+    size: 240,
+    dataKey: "tokens",
+    nameKey: "address"
+  };
+  const reputationDistributionConfig = {
+    size: 240,
+    dataKey: "reputation",
+    nameKey: "address"
+  };
 
-    return (
-      <>
-        <Grid item xs={12} sm={6} md={3}>
-          <Typography
-            variant="h6"
-            className={classes.pieChartHeadlines}
-            gutterBottom
-          >
-            Reputation Distribution
-          </Typography>
-          {data.length > 0 ? (
-            <PieChart
-              data={data}
-              config={{
-                size: 240,
-                dataKey: "reputation",
-                nameKey: "address"
-              }}
-            />
-          ) : (
-            <QuestionIcon color={"primary"} className={classes.questionIcon} />
-          )}
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Typography
-            variant="h6"
-            className={classes.pieChartHeadlines}
-            gutterBottom
-          >
-            Tokens Distribution
-          </Typography>
-          {data.length > 0 ? (
-            <PieChart
-              data={data}
-              config={{
-                size: 240,
-                dataKey: "tokens",
-                nameKey: "address"
-              }}
-            />
-          ) : (
-            <QuestionIcon color={"primary"} className={classes.questionIcon} />
-          )}
-        </Grid>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Box>
+        Token Distribution
+        <PieChart data={data} config={tokenDistributionConfig} />
+      </Box>
 
-const styles = (theme: Theme) =>
-  createStyles({
-    pieChartHeadlines: {
-      textAlign: "center"
-    },
-    questionIcon: {
-      width: "240px",
-      height: "240px",
-      justifySelf: "center",
-      alignSelf: "center",
-      color: "#dadadd"
-    }
-  });
-
-export default withStyles(styles)(MembersAnalytics);
+      <Box>
+        Reputation Distribution
+        <PieChart data={data} config={reputationDistributionConfig} />
+      </Box>
+    </>
+  );
+};
