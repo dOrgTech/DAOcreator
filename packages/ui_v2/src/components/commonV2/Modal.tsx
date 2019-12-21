@@ -1,89 +1,119 @@
 import * as React from "react";
 import {
-  Chart,
-  PieSeries,
-  Tooltip
-} from "@devexpress/dx-react-chart-material-ui";
-import { Animation, EventTracker } from "@devexpress/dx-react-chart";
-import {
-  MDBContainer,
   MDBBtn,
   MDBModal,
   MDBModalHeader,
   MDBModalBody,
   MDBModalFooter,
-  MDBNav,
-  MDBNavItem,
-  MDBNavLink,
   MDBIcon,
-  MDBTabContent,
-  MDBTabPane,
   MDBRow,
   MDBCol,
   MDBTooltip
 } from "mdbreact";
-import { Component, Fragment } from "react";
-
-export interface PieChartConfig {
-  size: number;
-  dataKey: string;
-  nameKey: string;
-}
-
+import { Fragment } from "react";
 export interface Props {
-  data: any[];
-  config: PieChartConfig;
+  changeFormInformation: any;
 }
 
-interface State {
-  targetItem: any;
-}
+function ModalConfig(props: Props) {
+  // const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(false);
+  const [toggleState, setToggleState] = React.useState<boolean>(false);
+  const [modalState, setModalState] = React.useState<boolean>(false);
+  const [queuedDaysState, setQueuedDaysState] = React.useState<any>("16");
+  const [queuedHoursState, setQueuedHoursState] = React.useState<string>(
+    "09:00"
+  );
+  const [preBoostedDayState, setPreBoostedDayState] = React.useState<any>("16");
+  const [preBoostedHoursState, setPreBoostedHoursState] = React.useState<
+    string
+  >("09:00");
+  const [boostedDayState, setBoostedDayState] = React.useState<any>("16");
+  const [boostedHoursState, setBoostedHoursState] = React.useState<string>(
+    "09:00"
+  );
+  const [quietDayState, setQuietDayState] = React.useState<any>("16");
+  const [quietHoursState, setQuietHoursState] = React.useState<string>("09:00");
+  const [lockingDayState, setLockingDayState] = React.useState<any>("16");
+  const [lockingHoursState, setLockingHoursState] = React.useState<string>(
+    "09:00"
+  );
+  const [queuedVoteState, setQueuedVoteState] = React.useState<number>(50);
+  const [minimumDaoState, setMinimumDaoState] = React.useState<number>(150);
+  const [theresholdState, setTheresholdState] = React.useState<number>(50);
+  const [votersReputationState, setVotersReputationState] = React.useState<
+    number
+  >(150);
+  const [rewardSuccessfulState, setRewardSuccessfulState] = React.useState<
+    number
+  >(150);
+  const [activationDateState, setActivationDateState] = React.useState<any>(
+    new Date().toISOString().substr(0, 10)
+  );
+  const [activationHoursState, setActivationHoursState] = React.useState<
+    string
+  >("15:30");
+  const [voteBehalfState, setVoteBehalfState] = React.useState<string>("");
 
-class ModalConfig extends Component {
-  state = {
-    modal: false,
-    activeItemJustified: "1"
+  const showState = () => {
+    const states = {
+      modalState,
+      toggleState,
+      queuedDaysState,
+      queuedHoursState,
+      preBoostedDayState,
+      preBoostedHoursState,
+      boostedDayState,
+      boostedHoursState,
+      quietDayState,
+      quietHoursState,
+      lockingDayState,
+      lockingHoursState,
+      queuedVoteState,
+      minimumDaoState,
+      theresholdState,
+      votersReputationState,
+      rewardSuccessfulState,
+      activationDateState,
+      activationHoursState,
+      voteBehalfState
+    };
+    console.log(states);
+    return states;
   };
 
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal
-    });
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <MDBBtn
-          outline
-          //   color="black"
-          style={styles.button}
-          onClick={this.toggle}
-        >
+  return (
+    <Fragment>
+      <MDBBtn
+        outline
+        //   color="black"
+        style={styles.button}
+        onClick={() => setModalState(!modalState)}
+      >
+        Advance Configuration
+      </MDBBtn>
+      <MDBModal
+        isOpen={modalState}
+        toggle={() => setModalState(!modalState)}
+        style={styles.modal}
+        size="lg"
+      >
+        <MDBModalHeader toggle={() => setModalState(!modalState)}>
           Advance Configuration
-        </MDBBtn>
-        <MDBModal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-          style={styles.modal}
-          size="lg"
-        >
-          <MDBModalHeader toggle={this.toggle}>
-            Advance Configuration
-          </MDBModalHeader>
-          <MDBModalBody>
-            <MDBRow style={styles.rowTab}>
-              <MDBCol style={styles.tab}>
-                <button style={styles.buttonTab}>Contribution Reward</button>
-              </MDBCol>
-              <MDBCol style={styles.tab}>
-                <button style={styles.buttonTab}>Scheme Registry</button>
-              </MDBCol>
-              <MDBCol style={styles.tab}>
-                <button style={styles.buttonTab}>Generic Scheme</button>
-              </MDBCol>
-            </MDBRow>
+        </MDBModalHeader>
+        <MDBModalBody>
+          <MDBRow style={styles.rowTab}>
+            <MDBCol style={styles.tab}>
+              <button style={styles.buttonTab}>Contribution Reward</button>
+            </MDBCol>
+            <MDBCol style={styles.tab}>
+              <button style={styles.buttonTab}>Scheme Registry</button>
+            </MDBCol>
+            <MDBCol style={styles.tab}>
+              <button style={styles.buttonTab}>Generic Scheme</button>
+            </MDBCol>
+          </MDBRow>
 
+          <div style={styles.divForm}>
             <MDBRow style={styles.borderRow}>
               <MDBCol>
                 <span>Deploy Contribution Reward Sheme</span>
@@ -104,12 +134,13 @@ class ModalConfig extends Component {
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="autobetEnabled"
+                    id="toggle"
                     readOnly
+                    onChange={() => setToggleState(!toggleState)}
                   />
                   <label
                     className="custom-control-label"
-                    htmlFor="autobetEnabled"
+                    htmlFor="toggle"
                   ></label>
                 </div>
               </MDBCol>
@@ -134,19 +165,20 @@ class ModalConfig extends Component {
                 <input
                   style={styles.date}
                   type="number"
-                  name="quantity"
-                  min="1"
-                  max="5"
-                  placeholder="16"
+                  name="queuedDays"
+                  placeholder={queuedDaysState}
+                  id="queuedDays"
+                  onChange={(e: any) => setQueuedDaysState(e.target.value)}
+                  required
                 />
                 <input
-                  style={styles.date}
+                  style={styles.dateTime}
                   type="time"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
+                  name="queuedHours"
+                  value={queuedHoursState}
+                  onChange={(e: any) => setQueuedHoursState(e.target.value)}
                   required
+                  id="queuedHours"
                 ></input>
               </MDBCol>
             </MDBRow>
@@ -170,17 +202,18 @@ class ModalConfig extends Component {
                   style={styles.date}
                   type="number"
                   name="quantity"
-                  min="1"
-                  max="5"
-                  placeholder="16"
+                  placeholder={preBoostedDayState}
+                  id="preBoostedDay"
+                  required
+                  onChange={(e: any) => setPreBoostedDayState(e.target.value)}
                 />
                 <input
                   style={styles.date}
                   type="time"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
+                  id="preBoostedHours"
+                  name="preBoostedHours"
+                  value={preBoostedHoursState}
+                  onChange={(e: any) => setPreBoostedHoursState(e.target.value)}
                   required
                 ></input>
               </MDBCol>
@@ -204,19 +237,20 @@ class ModalConfig extends Component {
                 <input
                   style={styles.date}
                   type="number"
-                  name="quantity"
-                  min="1"
-                  max="5"
-                  placeholder="16"
+                  name="boostedDay"
+                  placeholder={boostedDayState}
+                  id="boostedDay"
+                  required
+                  onChange={(e: any) => setBoostedDayState(e.target.value)}
                 />
                 <input
                   style={styles.date}
                   type="time"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
+                  id="boostedHours"
+                  name="boostedHours"
+                  value={boostedHoursState}
                   required
+                  onChange={(e: any) => setBoostedHoursState(e.target.value)}
                 ></input>
               </MDBCol>
             </MDBRow>
@@ -239,23 +273,24 @@ class ModalConfig extends Component {
                 <input
                   style={styles.date}
                   type="number"
-                  name="quantity"
-                  min="1"
-                  max="5"
-                  placeholder="16"
+                  name="quietDay"
+                  id="quietDay"
+                  placeholder={quietDayState}
+                  required
+                  onChange={(e: any) => setQuietDayState(e.target.value)}
                 />
                 <input
                   style={styles.date}
                   type="time"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
+                  id="quietHours"
+                  name="quietHours"
+                  value={quietHoursState}
                   required
+                  onChange={(e: any) => setQuietHoursState(e.target.value)}
                 ></input>
               </MDBCol>
             </MDBRow>
-            <MDBRow center style={styles.lastRow}>
+            <MDBRow style={styles.lastRow}>
               <MDBCol>
                 <span>Locking / Activation Time</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -274,24 +309,25 @@ class ModalConfig extends Component {
                 <input
                   style={styles.date}
                   type="number"
-                  name="quantity"
-                  min="1"
-                  max="5"
-                  placeholder="16"
+                  name="lockingDay"
+                  id="lockingDay"
+                  placeholder={lockingDayState}
+                  onChange={(e: any) => setLockingDayState(e.target.value)}
+                  required
                 />
                 <input
                   style={styles.date}
                   type="time"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
+                  id="lockingHours"
+                  name="lockingHours"
+                  value={lockingHoursState}
                   required
+                  onChange={(e: any) => setLockingHoursState(e.target.value)}
                 ></input>
               </MDBCol>
             </MDBRow>
 
-            <MDBRow center style={styles.paddingRow}>
+            <MDBRow style={styles.paddingRow}>
               <MDBCol size="6">
                 <span>QUEUED VOTE REQUIRED</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -306,9 +342,18 @@ class ModalConfig extends Component {
                   <span>Some example</span>
                 </MDBTooltip>
                 <br></br>
-                <input type="text" id="Name" name="Name" />
+                <input
+                  type="number"
+                  id="queuedVote"
+                  name="queuedVote"
+                  placeholder={queuedVoteState.toString()}
+                  style={styles.inputStyle}
+                  onChange={(e: any) =>
+                    setQueuedVoteState(Number(e.target.value))
+                  }
+                />
               </MDBCol>
-              <MDBCol size="6" style={styles.save}>
+              <MDBCol size="6">
                 <span>MINIMUM DAO BOUNTY</span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
@@ -322,7 +367,16 @@ class ModalConfig extends Component {
                   <span>Some example</span>
                 </MDBTooltip>
                 <br></br>
-                <input type="text" id="Name" name="Name" />
+                <input
+                  type="text"
+                  id="minimumDao"
+                  name="minimumDao"
+                  placeholder={minimumDaoState.toString()}
+                  style={styles.inputStyle}
+                  onChange={(e: any) =>
+                    setMinimumDaoState(Number(e.target.value))
+                  }
+                />
               </MDBCol>
             </MDBRow>
 
@@ -341,9 +395,18 @@ class ModalConfig extends Component {
                   <span>Some example</span>
                 </MDBTooltip>
                 <br></br>
-                <input type="text" id="Name" name="Name" />
+                <input
+                  type="text"
+                  id="thereshold"
+                  name="thereshold"
+                  placeholder={theresholdState.toString()}
+                  style={styles.inputStyle}
+                  onChange={(e: any) =>
+                    setTheresholdState(Number(e.target.value))
+                  }
+                />
               </MDBCol>
-              <MDBCol size="6" style={styles.save}>
+              <MDBCol size="6">
                 <span>VOTERS REPUTATION LOSS RATIO</span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
@@ -357,11 +420,45 @@ class ModalConfig extends Component {
                   <span>Some example</span>
                 </MDBTooltip>
                 <br></br>
-                <input type="text" id="Name" name="Name" />
+                <input
+                  type="text"
+                  id="votersReputation"
+                  name="votersReputation"
+                  placeholder={votersReputationState.toString()}
+                  style={styles.inputStyle}
+                  onChange={(e: any) =>
+                    setVotersReputationState(Number(e.target.value))
+                  }
+                />
               </MDBCol>
             </MDBRow>
 
             <MDBRow style={styles.paddingRow}>
+              <MDBCol size="6">
+                <span>REWARD SUCCESSFUL PROPOSER</span>
+                <MDBTooltip placement="bottom" clickable>
+                  <MDBBtn
+                    floating
+                    size="lg"
+                    color="transparent"
+                    style={styles.info}
+                  >
+                    <MDBIcon icon="info-circle" />
+                  </MDBBtn>
+                  <span>Some example</span>
+                </MDBTooltip>
+                <br></br>
+                <input
+                  type="text"
+                  id="rewardSuccessful"
+                  name="rewardSuccessful"
+                  placeholder={rewardSuccessfulState.toString()}
+                  style={styles.inputStyle}
+                  onChange={(e: any) =>
+                    setRewardSuccessfulState(Number(e.target.value))
+                  }
+                />
+              </MDBCol>
               <MDBCol size="6">
                 <span>ACTIVATION TIME</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -379,16 +476,30 @@ class ModalConfig extends Component {
 
                 <input
                   type="date"
-                  id="start"
-                  name="trip-start"
-                  value="2019-07-22"
-                  min="2018-01-01"
-                  max="2018-12-31"
+                  id="activationDate"
+                  name="activationDate"
+                  placeholder="Date"
+                  value={activationDateState}
+                  style={styles.inputDiv}
+                  onChange={(e: any) => {
+                    setActivationDateState(e.target.value);
+                  }}
+                />
+
+                <input
+                  type="time"
+                  name="activationHours"
+                  id="activationHours"
+                  value={activationHoursState}
+                  style={styles.inputDiv}
+                  onChange={(e: any) => {
+                    setActivationHoursState(e.target.value);
+                  }}
                 />
               </MDBCol>
             </MDBRow>
 
-            <MDBRow center style={styles.paddingRow}>
+            <MDBRow style={styles.paddingRow}>
               <MDBCol>
                 <span>VOTE ON BEHALF</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -403,33 +514,42 @@ class ModalConfig extends Component {
                   <span>Some example</span>
                 </MDBTooltip>
                 <br></br>
-                <input type="text" id="Name" name="Name" />
+                <input
+                  type="text"
+                  id="voteBehalf"
+                  name="voteBehalf"
+                  placeholder="0x..."
+                  style={styles.inputStyle}
+                  onChange={(e: any) => setVoteBehalfState(e.target.value)}
+                />
               </MDBCol>
             </MDBRow>
-          </MDBModalBody>
-          <MDBModalFooter>
-            <MDBRow style={styles.buttonsRow}>
-              <MDBCol size="6">
-                <MDBBtn color="secondary" onClick={this.toggle}>
-                  Close
-                </MDBBtn>
-              </MDBCol>
-              <MDBCol style={styles.save}>
-                <MDBBtn color="primary">Save changes</MDBBtn>
-              </MDBCol>
-            </MDBRow>
-          </MDBModalFooter>
-        </MDBModal>
-      </Fragment>
-    );
-  }
+          </div>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBRow style={styles.buttonsRow}>
+            <MDBCol size="6">
+              <MDBBtn onClick={() => setModalState(!modalState)}>Cancel</MDBBtn>
+            </MDBCol>
+            <MDBCol style={styles.save}>
+              <MDBBtn
+                color="primary"
+                onClick={() => props.changeFormInformation(showState())}
+              >
+                Save Configuration
+              </MDBBtn>
+            </MDBCol>
+          </MDBRow>
+        </MDBModalFooter>
+      </MDBModal>
+    </Fragment>
+  );
 }
 
 const styles = {
   button: {
     width: "inherit",
     height: "42px",
-    /* text-align: start; */
     padding: 0
   },
   tab: {
@@ -477,6 +597,11 @@ const styles = {
     width: "50%",
     height: "100%"
   },
+  dateTime: {
+    width: "50%",
+    height: "100%",
+    content: "04:00 h"
+  },
   lastRow: {
     borderBottom: "0.5px solid lightgray",
     paddingTop: "14px",
@@ -487,6 +612,15 @@ const styles = {
   },
   save: {
     textAlign: "right"
+  },
+  inputStyle: {
+    width: "100%"
+  },
+  divForm: {
+    padding: "14px"
+  },
+  inputDiv: {
+    width: "50%"
   }
 };
 

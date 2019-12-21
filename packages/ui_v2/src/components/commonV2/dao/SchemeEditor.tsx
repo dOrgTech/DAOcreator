@@ -9,6 +9,8 @@ import {
   MDBIcon
 } from "mdbreact";
 
+import ModalConfig from "../Modal";
+
 interface Props {
   form: any;
   editable: boolean;
@@ -33,6 +35,10 @@ function SchemeEditor(props: Props) {
   const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
     "medium"
   );
+  const [formInformation, setFormInformation] = React.useState<any>({});
+
+  const changeFormInformation = (modalInfo: any) =>
+    setFormInformation(modalInfo);
 
   const handleClick = (e: any) => setDecisionSpeed(e.target.value);
   const showState = () => {
@@ -42,13 +48,22 @@ function SchemeEditor(props: Props) {
       rewardVoterEnabled,
       penalizeEnabled,
       autobetEnabled,
-      decisionSpeed
+      decisionSpeed,
+      formInformation
     };
     console.log(states);
   };
   return (
     <>
       <MDBContainer>
+        <MDBRow>
+          <MDBCol md="4"></MDBCol>
+          <MDBCol md="4" className="offset-md-4">
+            <ModalConfig
+              changeFormInformation={changeFormInformation}
+            ></ModalConfig>
+          </MDBCol>
+        </MDBRow>
         <MDBRow>
           <MDBCol>
             <p className="text-left">Recommend Configuration</p>
