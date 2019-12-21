@@ -36,7 +36,7 @@ class MembersStep extends React.Component<Props> {
   render() {
     const headerSection = true ? "3 Add Members" : "3 Members";
     return (
-      <AccordionSection label={headerSection}>
+      <AccordionSection name="2" label={headerSection}>
         <Box style={styles.container}>
           <MembersEditor
             form={this.props.form}

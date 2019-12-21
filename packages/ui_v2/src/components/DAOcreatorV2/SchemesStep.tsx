@@ -18,7 +18,7 @@ export default class SchemesStep extends React.Component<Props> {
     const { form } = this.props;
     const headerSection = true ? "2 Configure Organization" : "2 Configuration";
     return (
-      <AccordionSection label={headerSection}>
+      <AccordionSection name="1" label={headerSection}>
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">

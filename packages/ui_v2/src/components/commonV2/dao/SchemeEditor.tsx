@@ -59,7 +59,7 @@ function SchemeEditor(props: Props) {
           <MDBCol>
             <p className="text-left">
               Your proposal uses a proposal-vote structure and can securely
-              scale to a big organisation
+              scale to a big organization
             </p>
           </MDBCol>
         </MDBRow>

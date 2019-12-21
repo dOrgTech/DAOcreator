@@ -5,15 +5,17 @@ import { AccordionSection } from "react-rainbow-components";
 
 // eslint-disable-next-line
 interface Props {
-  form: DAOConfigForm | any;
-  daoForm: DAOForm | any;
+  daoForm: DAOForm;
 }
 
 class InstallStep extends React.Component<Props> {
   render() {
     return (
       <>
-        <AccordionSection label="4 Install Organisation"></AccordionSection>
+        <AccordionSection
+          name="3"
+          label="4 Install Organization"
+        ></AccordionSection>
       </>
     );
   }
