@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@chakra-ui/core";
+import { MDBBox } from "mdbreact";
 
 import PieChart from "components/commonV2/PieChart";
 
@@ -14,18 +14,18 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
     dataKey: "reputation",
     nameKey: "address"
   };
-
-  return (
+  const AnalyticsBoxes = () => (
     <>
-      <Box>
+      <MDBBox>
         Token Distribution
         <PieChart data={data} config={tokenDistributionConfig} />
-      </Box>
+      </MDBBox>
 
-      <Box>
+      <MDBBox>
         Reputation Distribution
         <PieChart data={data} config={reputationDistributionConfig} />
-      </Box>
+      </MDBBox>
     </>
   );
+  return data.length > 0 ? <AnalyticsBoxes /> : null;
 };

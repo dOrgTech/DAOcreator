@@ -1,3 +1,1 @@
-import { useForceUpdate } from "./forceUpdate.hook";
-
-export { useForceUpdate };
+export * from "./forceUpdate.hook";

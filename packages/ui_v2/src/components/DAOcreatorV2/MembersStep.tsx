@@ -1,9 +1,9 @@
 import * as React from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { AccordionSection } from "react-rainbow-components";
-import { Box } from "@chakra-ui/core";
+import { MDBBox } from "mdbreact";
 
-import MembersEditor from "components/commonV2/dao/MembersEditor";
+import MembersEditor from "components/commonV2/dao/Members/MembersEditor";
 
 // eslint-disable-next-line
 interface Props {
@@ -19,27 +19,15 @@ class MembersStep extends React.Component<Props> {
     const headerSection = true ? "3 Add Members" : "3 Members";
     return (
       <AccordionSection label={headerSection}>
-        <Box style={styles.container}>
+        <MDBBox>
           <MembersEditor
             form={this.props.form}
             getDAOTokenSymbol={this.props.getDAOTokenSymbol}
           />
-        </Box>
+        </MDBBox>
       </AccordionSection>
     );
   }
 }
 
-const styles = {
-  container: {
-    maxWidth: 622
-  },
-  distributionBar: {
-    width: 100
-  },
-  addMemberBtn: {
-    marginLeft: "5em",
-    width: 121
-  }
-};
 export default MembersStep;

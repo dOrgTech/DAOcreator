@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { Box } from "@chakra-ui/core";
-import { Typography } from "@material-ui/core";
+import { MDBBox, MDBTypography } from "mdbreact";
 
 import { useForceUpdate } from "utils/hooks/";
 import {
   MemberEditor,
   MembersAnalytics,
   MembersTable
-} from "components/commonV2/dao";
+} from "components/commonV2/dao/Members";
 
 const MembersEditor = ({
   form,
@@ -78,15 +77,17 @@ const MembersEditor = ({
   };
 
   const MemberFormError = () => (
-    <Box>
+    <MDBBox>
       {membersForm.showFormError && (
-        <Typography color={"error"}>{membersForm.error}</Typography>
+        <MDBTypography tag="p" colorText="red">
+          {membersForm.error}
+        </MDBTypography>
       )}
-    </Box>
+    </MDBBox>
   );
 
   return (
-    <Box>
+    <MDBBox>
       <MembersAnalytics data={membersForm.toState()} />
       <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
       <MemberFormError />
@@ -98,7 +99,7 @@ const MembersEditor = ({
         onDelete={onDelete}
         selectEdit={selectEdit}
       />
-    </Box>
+    </MDBBox>
   );
 };
 
