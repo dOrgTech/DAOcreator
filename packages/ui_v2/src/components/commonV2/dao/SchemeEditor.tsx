@@ -8,6 +8,11 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
+import {
+  Scheme,
+  SchemeType,
+  GenesisProtocolPreset
+} from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: any;
@@ -16,17 +21,24 @@ interface Props {
   onToggle: (toggled: boolean) => void;
 }
 
+enum DAOSpeed {
+  Slow,
+  Medium,
+  Fast
+}
+
 type decisionSpeed = "slow" | "medium" | "fast";
 
 function SchemeEditor(props: Props) {
+  const { form } = props;
+
   const [decisionSpeed, setDecisionSpeed] = useState<decisionSpeed>("medium");
   const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
 
-  const handleClick = (e: any) => setDecisionSpeed(e.target.value);
-  const showState = () => {
+  const debug = () => {
     const states = {
       decisionSpeed,
       distribution,
@@ -35,6 +47,68 @@ function SchemeEditor(props: Props) {
       autobet
     };
     console.log(states);
+  };
+
+  class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
+  class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
+
+  const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
+    [
+      DAOSpeed.Slow,
+      new SchemePresets([
+        [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
+        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+        [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
+      ])
+    ],
+    [
+      DAOSpeed.Medium,
+      new SchemePresets([
+        [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
+        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+        [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
+      ])
+    ],
+    [
+      DAOSpeed.Fast,
+      new SchemePresets([
+        [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
+        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
+        [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
+      ])
+    ]
+  ]);
+
+  // form.$.schemes.$.forEach((scheme: Scheme) => {
+  //   const preset = schemeSpeeds[decisionSpeed][scheme.type];
+
+  //   if (preset === undefined) {
+  //     throw Error("Unimplemented Scheme Speed Configuration");
+  //   }
+
+  //   const votingMachine = scheme.$.votingMachine; // Is voting machine a pre existing property?
+
+  //   // Initialize the scheme's voting machine to the Genesis Protocol Preset
+  //   votingMachine.preset = preset;
+
+  //   // Apply the effects of the toggles
+  //   //if(!distribution)
+
+  //   if (!rewardSuccess) {
+  //     votingMachine.$.proposingRepReward.value = "0";
+  //   }
+  //   if (!rewardAndPenVoters) {
+  //     votingMachine.$.votersReputationLossRatio.value = "0";
+  //   }
+  //   if (!autobet) {
+  //     votingMachine.$.minimumDaoBounty.value = "0";
+  //   }
+
+  //   console.log(votingMachine);
+  // });
+
+  const handleClick = (e: any) => {
+    setDecisionSpeed(e.target.value);
   };
 
   return (
@@ -80,9 +154,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="fast"
-                outline={!(decisionSpeed === "fast")}
+                value={DAOSpeed.Fast}
                 style={styles.buttonColor}
+                outline={!(decisionSpeed === "fast")}
                 onClick={handleClick}
               >
                 Fast
@@ -91,7 +165,7 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="medium"
+                value={DAOSpeed.Medium}
                 style={styles.buttonColor}
                 outline={!(decisionSpeed === "medium")}
                 onClick={handleClick}
@@ -102,7 +176,7 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="slow"
+                value={DAOSpeed.Slow}
                 style={styles.buttonColor}
                 outline={!(decisionSpeed === "slow")}
                 onClick={handleClick}
@@ -117,7 +191,6 @@ function SchemeEditor(props: Props) {
           id={"distribution"}
           text={"Distribute Dxdao token"}
           example={"Some example"}
-          toggled={distribution}
           toggle={() => {
             setDistribution(!distribution);
           }}
@@ -127,7 +200,6 @@ function SchemeEditor(props: Props) {
           id={"rewardSuccess"}
           text={"Reward successful proposer"}
           example={"Some example"}
-          toggled={rewardSuccess}
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
@@ -137,7 +209,6 @@ function SchemeEditor(props: Props) {
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
           example={"Some example"}
-          toggled={rewardAndPenVoters}
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
@@ -147,16 +218,11 @@ function SchemeEditor(props: Props) {
           id={"autobet"}
           text={"Auto-bet against every proposal to incentivise curation"}
           example={"Some example"}
-          toggled={autobet}
           toggle={() => setAutobet(!autobet)}
         />
       </MDBContainer>
 
-      <MDBBtn
-        color="blue darken-4"
-        onClick={showState}
-        style={styles.configButton}
-      >
+      <MDBBtn color="blue darken-4" onClick={debug} style={styles.configButton}>
         Set Configuration
       </MDBBtn>
     </>
@@ -167,11 +233,10 @@ interface ToggleProps {
   id: string;
   text: string;
   example: string;
-  toggled: boolean;
   toggle: () => void;
 }
 
-function Toggleable({ id, text, example, toggled, toggle }: ToggleProps) {
+function Toggleable({ id, text, example, toggle }: ToggleProps) {
   return (
     <MDBRow style={styles.paddingRow}>
       <MDBCol size="10" style={styles.noPadding}>
