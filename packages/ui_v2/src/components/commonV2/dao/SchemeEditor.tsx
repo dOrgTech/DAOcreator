@@ -11,11 +11,13 @@ import {
 import {
   Scheme,
   SchemeType,
-  GenesisProtocolPreset
+  GenesisProtocolPreset,
+  DAOForm
 } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: any;
+  daoForm: DAOForm;
   editable: boolean;
   enabled: boolean;
   onToggle: (toggled: boolean) => void;
@@ -30,8 +32,7 @@ enum DAOSpeed {
 type decisionSpeed = "slow" | "medium" | "fast";
 
 function SchemeEditor(props: Props) {
-  const { form } = props;
-
+  const { form, daoForm } = props;
   const [decisionSpeed, setDecisionSpeed] = useState<decisionSpeed>("medium");
   const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
@@ -39,6 +40,7 @@ function SchemeEditor(props: Props) {
   const [autobet, setAutobet] = useState<boolean>(false);
 
   const debug = () => {
+    configureVotingMachine();
     const states = {
       decisionSpeed,
       distribution,
@@ -79,33 +81,42 @@ function SchemeEditor(props: Props) {
     ]
   ]);
 
-  // form.$.schemes.$.forEach((scheme: Scheme) => {
-  //   const preset = schemeSpeeds[decisionSpeed][scheme.type];
+  const configureVotingMachine = () => {
+    //console.log(daoForm);
 
-  //   if (preset === undefined) {
-  //     throw Error("Unimplemented Scheme Speed Configuration");
-  //   }
+    //console.log(form.$);
+    //Looks like props.daoForm.schemes are equal to props.form
+    //form.map((scheme: any) => {
+    daoForm.$.schemes.$.forEach(scheme => {
+      const preset = schemeSpeeds[decisionSpeed][scheme.type];
+      // console.log("preset:");
+      // console.log(preset);
+      if (preset === undefined) {
+        throw Error("Unimplemented Scheme Speed Configuration");
+      }
 
-  //   const votingMachine = scheme.$.votingMachine; // Is voting machine a pre existing property?
+      const votingMachine = scheme.$.votingMachine; // Is voting machine a pre existing property?
 
-  //   // Initialize the scheme's voting machine to the Genesis Protocol Preset
-  //   votingMachine.preset = preset;
+      // Initialize the scheme's voting machine to the Genesis Protocol Preset
+      votingMachine.preset = preset;
 
-  //   // Apply the effects of the toggles
-  //   //if(!distribution)
+      // Apply the effects of the toggles
+      //if(!distribution)
 
-  //   if (!rewardSuccess) {
-  //     votingMachine.$.proposingRepReward.value = "0";
-  //   }
-  //   if (!rewardAndPenVoters) {
-  //     votingMachine.$.votersReputationLossRatio.value = "0";
-  //   }
-  //   if (!autobet) {
-  //     votingMachine.$.minimumDaoBounty.value = "0";
-  //   }
+      if (!rewardSuccess) {
+        votingMachine.$.proposingRepReward.value = "0";
+      }
+      if (!rewardAndPenVoters) {
+        votingMachine.$.votersReputationLossRatio.value = 0;
+      }
+      if (!autobet) {
+        votingMachine.$.minimumDaoBounty.value = "0";
+      }
 
-  //   console.log(votingMachine);
-  // });
+      console.log("votingMachine");
+      console.log(votingMachine);
+    });
+  };
 
   const handleClick = (e: any) => {
     setDecisionSpeed(e.target.value);
@@ -154,7 +165,7 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={DAOSpeed.Fast}
+                value={"fast"}
                 style={styles.buttonColor}
                 outline={!(decisionSpeed === "fast")}
                 onClick={handleClick}
@@ -165,7 +176,7 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={DAOSpeed.Medium}
+                value={"medium"}
                 style={styles.buttonColor}
                 outline={!(decisionSpeed === "medium")}
                 onClick={handleClick}
@@ -176,7 +187,7 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={DAOSpeed.Slow}
+                value={"slow"}
                 style={styles.buttonColor}
                 outline={!(decisionSpeed === "slow")}
                 onClick={handleClick}
