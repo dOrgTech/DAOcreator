@@ -10,12 +10,12 @@ interface Props {
 
 class InstallStep extends React.Component<Props> {
   render() {
+    const printDAOForm = () => console.log("this.props.daoForm", this.props.daoForm);
     return (
       <>
-        <AccordionSection
-          name="3"
-          label="4 Install Organization"
-        ></AccordionSection>
+        <AccordionSection name="3" label="4 Install Organisation">
+          <p onClick={() => printDAOForm()}>Print Form</p>
+        </AccordionSection>
       </>
     );
   }
