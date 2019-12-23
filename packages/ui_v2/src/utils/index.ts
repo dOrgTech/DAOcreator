@@ -1,3 +1,1 @@
-import { truncateString } from "./truncateString";
-
-export { truncateString };
+export * from "./stringUtils";
