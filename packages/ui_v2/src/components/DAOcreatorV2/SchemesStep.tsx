@@ -1,7 +1,11 @@
 import * as React from "react";
 import { AccordionSection } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
-import { SchemesForm } from "@dorgtech/daocreator-lib";
+import {
+  SchemesForm,
+  ContributionRewardForm,
+  SchemeRegistrarForm
+} from "@dorgtech/daocreator-lib";
 
 import SchemeEditor from "../commonV2/dao/SchemeEditor";
 
@@ -12,6 +16,11 @@ interface Props {
 
 function SchemesStep(props: Props) {
   const { form, nextStep } = props;
+
+  React.useEffect(() => {
+    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+  }, [form.$]);
+
   const headerSection = true ? "2 Configure Organization" : "2 Configuration";
   return (
     <AccordionSection name="1" label={headerSection}>
