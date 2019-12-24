@@ -10,11 +10,14 @@ import {
 } from "mdbreact";
 import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
 
+import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
+
 interface Props {
   form: any;
   editable: boolean;
-  enabled: boolean;
-  onToggle: (toggled: boolean) => void;
+  nextStep: () => void;
+  enabled?: boolean;
+  onToggle?: (toggled: boolean) => void;
 }
 
 enum DAOSpeed {
@@ -54,23 +57,42 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form } = props;
-  const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
-  const [distribution, setDistribution] = useState<boolean>(false);
-  const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
-  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
-  const [autobet, setAutobet] = useState<boolean>(false);
+  const { form, nextStep } = props;
+  const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
+    false
+  );
+  const [rewardPropEnabled, setRewardPropEnabled] = React.useState<boolean>(
+    false
+  );
+  const [rewardVoterEnabled, setRewardVoterEnabled] = React.useState<boolean>(
+    false
+  );
+  const [penalizeEnabled, setPenalizeEnabled] = React.useState<boolean>(false);
+  const [autobetEnabled, setAutobetEnabled] = React.useState<boolean>(false);
+  const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
+    "medium"
+  );
+  const [formInformation, setFormInformation] = React.useState<any>({});
 
-  const showStates = () => {
-    const states = {
-      decisionSpeed,
-      distribution,
-      rewardSuccess,
-      rewardAndPenVoters,
-      autobet
-    };
-    console.log("states:");
-    console.log(states);
+  const changeFormInformation = (modalInfo: any) =>
+    setFormInformation(modalInfo);
+
+  const handleClick = (e: any) => setDecisionSpeed(e.target.value);
+  const showState = () => {
+    if (form.$.length > 0) {
+      nextStep();
+    } else {
+      const states = {
+        distributionEnabled,
+        rewardPropEnabled,
+        rewardVoterEnabled,
+        penalizeEnabled,
+        autobetEnabled,
+        decisionSpeed,
+        formInformation
+      };
+      console.log(states);
+    }
   };
 
   // Updates voting machines on toggle
@@ -111,6 +133,15 @@ function SchemeEditor(props: Props) {
     <>
       <MDBContainer>
         <MDBRow>
+          <MDBCol md="4"></MDBCol>
+          <MDBCol md="4" className="offset-md-4">
+            <AdvanceSchemeEditor
+              form={form}
+              changeFormInformation={changeFormInformation}
+            />
+          </MDBCol>
+        </MDBRow>
+        <MDBRow>
           <MDBCol>
             <p className="text-left">Recommend Configuration</p>
           </MDBCol>
@@ -120,7 +151,7 @@ function SchemeEditor(props: Props) {
           <MDBCol>
             <p className="text-left">
               Your proposal uses a proposal-vote structure and can securely
-              scale to a big organisation
+              scale to a big organization
             </p>
           </MDBCol>
         </MDBRow>
