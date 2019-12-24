@@ -19,7 +19,7 @@ export default class SchemesStep extends React.Component<Props> {
     const headerSection = true ? "2 Configure Organization" : "2 Configuration";
     return (
       <Box
-        width={"90%"}
+        width={"100%"}
         borderBottomColor="#eaedf3"
         borderTopColor="#eaedf3"
         borderRightColor="#eaedf3"

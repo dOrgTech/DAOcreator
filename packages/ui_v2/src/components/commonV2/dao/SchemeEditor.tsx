@@ -8,6 +8,7 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
+import ModalConfig from "../Modal";
 
 interface Props {
   form: any;
@@ -30,10 +31,14 @@ function SchemeEditor(props: Props) {
   );
   const [penalizeEnabled, setPenalizeEnabled] = React.useState<boolean>(false);
   const [autobetEnabled, setAutobetEnabled] = React.useState<boolean>(false);
+  const [formInformation, setFormInformation] = React.useState<any>({});
   const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
     "medium"
   );
 
+  const changeFormInformation = (modalInfo: any) =>
+    setFormInformation(modalInfo);
+  // const changeFormInformation = (modalInfo: any) => console.log(modalInfo);
   const handleClick = (e: any) => setDecisionSpeed(e.target.value);
   const showState = () => {
     const states = {
@@ -42,22 +47,34 @@ function SchemeEditor(props: Props) {
       rewardVoterEnabled,
       penalizeEnabled,
       autobetEnabled,
-      decisionSpeed
+      decisionSpeed,
+      formInformation
     };
+
     console.log(states);
   };
   return (
     <>
-      <MDBContainer>
+      <MDBContainer style={styles.paddingContainer}>
+        <MDBRow>
+          <MDBCol md="4"></MDBCol>
+          <MDBCol md="4" className="offset-md-4">
+            <ModalConfig
+            // changeFormInformation={changeFormInformation}
+            ></ModalConfig>
+          </MDBCol>
+        </MDBRow>
         <MDBRow>
           <MDBCol>
-            <p className="text-left">Recommend Configuration</p>
+            <p className="text-left" style={styles.title}>
+              Recommend Configuration
+            </p>
           </MDBCol>
         </MDBRow>
 
         <MDBRow>
           <MDBCol>
-            <p className="text-left">
+            <p className="text-left" style={styles.subtitle}>
               Your proposal uses a proposal-vote structure and can securely
               scale to a big organisation
             </p>
@@ -65,7 +82,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.box}>
-          <MDBCol size="3">
+          <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">
                 Decision making
@@ -85,45 +102,48 @@ function SchemeEditor(props: Props) {
           </MDBCol>
           <MDBCol>
             <MDBRow style={styles.alignEnd}>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              <button
                 name="decisonSpeed"
                 value="fast"
-                outline={!(decisionSpeed === "fast")}
-                style={styles.buttonColor}
+                style={
+                  !(decisionSpeed === "fast")
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Fast
-              </MDBBtn>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              </button>
+              <button
                 name="decisonSpeed"
                 value="medium"
-                style={styles.buttonColor}
-                outline={!(decisionSpeed === "medium")}
+                style={
+                  !(decisionSpeed === "medium")
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Medium
-              </MDBBtn>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              </button>
+              <button
                 name="decisonSpeed"
                 value="slow"
-                style={styles.buttonColor}
-                outline={!(decisionSpeed === "slow")}
+                style={
+                  !(decisionSpeed === "slow")
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Slow
-              </MDBBtn>
+              </button>
             </MDBRow>
           </MDBCol>
         </MDBRow>
 
         <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
+          <MDBCol size="11" style={styles.noPadding}>
             <span style={styles.marginText} className="text-left">
               Distribute Dxdao token
             </span>
@@ -139,7 +159,7 @@ function SchemeEditor(props: Props) {
               <span>Some example</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={styles.noPadding}>
             <div className="custom-control custom-switch">
               <input
                 type="checkbox"
@@ -157,7 +177,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
+          <MDBCol size="11" style={styles.noPadding}>
             <span style={styles.marginText} className="text-left">
               Reward successful proposer
             </span>
@@ -173,7 +193,7 @@ function SchemeEditor(props: Props) {
               <span>Some example</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={styles.noPadding}>
             <div className="custom-control custom-switch">
               <input
                 type="checkbox"
@@ -191,7 +211,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
+          <MDBCol size="11" style={styles.noPadding}>
             <span style={styles.marginText} className="text-left">
               Reward voters who side with the mayority
             </span>
@@ -207,7 +227,7 @@ function SchemeEditor(props: Props) {
               <span>Some example</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={styles.noPadding}>
             <div className="custom-control custom-switch">
               <input
                 type="checkbox"
@@ -225,7 +245,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
+          <MDBCol size="11" style={styles.noPadding}>
             <span style={styles.marginText} className="text-left">
               Penalize voters who side against the mayority
             </span>
@@ -241,7 +261,7 @@ function SchemeEditor(props: Props) {
               <span>Some example</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={styles.noPadding}>
             <div className="custom-control custom-switch">
               <input
                 type="checkbox"
@@ -259,7 +279,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
+          <MDBCol size="11" style={styles.noPadding}>
             <span style={styles.marginText} className="text-left">
               Auto-bet against every proposal to incentive curation of valuable
             </span>
@@ -275,7 +295,7 @@ function SchemeEditor(props: Props) {
               <span>Some example</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={styles.noPadding}>
             <div className="custom-control custom-switch">
               <input
                 type="checkbox"
@@ -291,15 +311,16 @@ function SchemeEditor(props: Props) {
             </div>
           </MDBCol>
         </MDBRow>
+        <MDBRow>
+          <button
+            color="blue darken-4"
+            onClick={showState}
+            style={styles.configButton}
+          >
+            Set Configuration
+          </button>
+        </MDBRow>
       </MDBContainer>
-
-      <MDBBtn
-        color="blue darken-4"
-        onClick={showState}
-        style={styles.configButton}
-      >
-        Set Configuration
-      </MDBBtn>
     </>
   );
 }
@@ -324,14 +345,23 @@ const styles = {
     padding: "10px"
   },
   buttonColor: {
-    color: "#fff",
-    /* background-color: #4285f4 !important; */
-    backgroundColor: "#3182ce !important",
+    color: "black",
     borderRadius: "0.25rem",
-    fontWeight: 600,
+    fontWeight: 300,
     width: "28%",
-    padding: "5px !important",
-    height: "38px"
+    height: "38px",
+    fontSize: "14px",
+    margin: "auto"
+  },
+  buttonColorActive: {
+    color: "white",
+    borderRadius: "0.25rem",
+    fontWeight: 300,
+    width: "28%",
+    height: "38px",
+    fontSize: "14px",
+    backgroundColor: "#1976d2",
+    margin: "auto"
   },
   info: {
     backgroundColor: "transparent !important",
@@ -342,20 +372,55 @@ const styles = {
     outline: "none"
   },
   marginText: {
-    marginTop: "6px"
+    marginTop: "6px",
+    color: "black",
+    fontSize: "16px"
   },
   alignEnd: {
     flexDirection: "row-reverse"
   },
   paddingRow: {
-    padding: "10px"
+    paddingLeft: "10px",
+    paddingTop: "6px"
   },
   noPadding: {
     padding: 0
   },
   configButton: {
     borderRadius: "0.37rem",
-    fontWeight: 700
+    marginTop: "28px",
+    // marginBottom: '15px',
+    height: "45px",
+    marginLeft: "6px",
+    fontWeight: 300,
+    backgroundColor: "#1976d2",
+    color: "white",
+    width: "145px",
+    padding: "7px"
+  },
+  modalButton: {
+    width: "174px",
+    height: "42px",
+    padding: "4px",
+    fontSize: "small",
+    border: "1px solid lightgray",
+    boxShadow: "none",
+    borderRadius: "4px"
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: "17px"
+  },
+  subtitle: {
+    fontSize: "15px",
+    color: "gray",
+    fontFamily: "inherit"
+  },
+  toggle: {
+    textAlign: '"right"'
+  },
+  paddingContainer: {
+    padding: "21px"
   }
 };
 
