@@ -29,21 +29,31 @@ export interface Props {
 
 function ModalConfig(props: Props) {
   const { form } = props;
-  const [scheme, setScheme] = React.useState<Number>(
+  const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
   const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
 
-  const showNewScheme = (schemeIndex: Number) => {
-    setScheme(schemeIndex);
-    checkSchemeIsAdded(Object.keys(form.$).includes(schemeIndex.toString()));
+  const handleToggle = (index: number) => {
+    checkSchemeIsAdded(
+      form.$.some((scheme: AnySchemeForm) => scheme.type === index)
+    );
   };
 
-  const handleScheme = (schemeIndex: Number) => {
-    const added = form.$.length > 0;
+  const showNewScheme = (schemeIndex: number) => {
+    setScheme(schemeIndex);
+    handleToggle(schemeIndex);
+  };
+
+  const handleScheme = (schemeIndex: number) => {
+    const added = form.$.length > 0 && schemeIsAdded;
 
     const removeScheme = () => {
-      form.$ = Object.keys(form.$).filter((x: any) => scheme !== +x);
+      form.$ = form.$.map((x: AnySchemeForm) => {
+        if (scheme !== x.type) {
+          return x;
+        }
+      }).filter((x: AnySchemeForm | undefined) => x);
     };
 
     const addScheme = (scheme: AnySchemeForm & IObservableObject) => {
@@ -51,17 +61,7 @@ function ModalConfig(props: Props) {
     };
 
     if (added) {
-      switch (schemeIndex) {
-        case 0:
-          removeScheme();
-          break;
-        case 1:
-          removeScheme();
-          break;
-        case 2:
-          removeScheme();
-          break;
-      }
+      removeScheme();
     } else {
       switch (schemeIndex) {
         case 0:
@@ -69,16 +69,16 @@ function ModalConfig(props: Props) {
           addScheme(constributionReward);
           break;
         case 1:
-          const genericScheme = observable(new GenericSchemeForm());
-          addScheme(genericScheme);
-          break;
-        case 2:
           const schemeRegistrar = observable(new SchemeRegistrarForm());
           addScheme(schemeRegistrar);
           break;
+        case 2:
+          const genericScheme = observable(new GenericSchemeForm());
+          addScheme(genericScheme);
+          break;
       }
     }
-    checkSchemeIsAdded(Object.keys(form.$).includes(schemeIndex.toString()));
+    handleToggle(schemeIndex);
   };
   console.log("form", form);
   // const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(false);
