@@ -85,20 +85,19 @@ function SchemeEditor(props: Props) {
   };
 
   const configureVotingMachine = () => {
-    //console.log(daoForm);
+    createSchemes();
 
-    //console.log(form.$);
-    //Looks like props.daoForm.schemes are equal to props.form
-    //form.map((scheme: any) => {
-    daoForm.$.schemes.$.forEach(scheme => {
-      const preset = schemeSpeeds[decisionSpeed][scheme.type];
-      // console.log("preset:");
-      // console.log(preset);
-      if (preset === undefined) {
+    form.$.forEach((scheme: any) => {
+      //not using Scheme interface because $ does not exist on it
+      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
+      let preset;
+      if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
+
+      if (preset === undefined)
         throw Error("Unimplemented Scheme Speed Configuration");
-      }
 
-      const votingMachine = scheme.$.votingMachine; // Is voting machine a pre existing property?
+      const votingMachine = scheme.$.votingMachine;
 
       // Initialize the scheme's voting machine to the Genesis Protocol Preset
       votingMachine.preset = preset;
@@ -106,17 +105,14 @@ function SchemeEditor(props: Props) {
       // Apply the effects of the toggles
       //if(!distribution)
 
-      if (!rewardSuccess) {
-        votingMachine.$.proposingRepReward.value = "0";
-      }
-      if (!rewardAndPenVoters) {
-        votingMachine.$.votersReputationLossRatio.value = 0;
-      }
-      if (!autobet) {
-        votingMachine.$.minimumDaoBounty.value = "0";
-      }
+      if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
 
-      console.log("votingMachine");
+      if (!rewardAndPenVoters)
+        votingMachine.$.votersReputationLossRatio.value = "0";
+
+      if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+
+      console.log("votingMachine:");
       console.log(votingMachine);
     });
   };
