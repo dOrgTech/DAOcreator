@@ -74,7 +74,6 @@ function SchemeEditor(props: Props) {
   };
 
   useEffect(() => {
-    console.log("call");
     form.$.forEach((scheme: any) => {
       //not using Scheme interface because $ does not exist on it
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
