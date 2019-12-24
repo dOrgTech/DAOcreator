@@ -91,13 +91,11 @@ function AdvanceSchemeEditor(props: Props) {
   };
   console.log("form", form);
 
-  const [toggleState, setToggleState] = React.useState<boolean>(false);
   const [modalState, setModalState] = React.useState<boolean>(false);
 
   const showState = () => {
     const states = {
-      modalState,
-      toggleState
+      modalState
     };
     console.log(states);
     return states;

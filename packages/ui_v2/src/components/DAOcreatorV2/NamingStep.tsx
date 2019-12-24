@@ -1,5 +1,5 @@
 import React from "react";
-import { DAOConfigForm, DAOForm } from "@dorgtech/daocreator-lib";
+import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import { AccordionSection } from "react-rainbow-components";
 import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
 import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";

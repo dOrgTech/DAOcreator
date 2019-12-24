@@ -5,7 +5,6 @@ import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
 import {
-  MDBContainer,
   MDBBtn,
   MDBModal,
   MDBModalBody,
@@ -163,16 +162,19 @@ export default function DAOcreator() {
     }
   ];
 
-  const currentForm = steps[+step].form;
+  /* when good looking UI is attached this is going to be 
+  const currentForm = steps[1].form
+  instead of a static number */
+
+  const currentForm = steps[1].form;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
-      console.log(res);
       if (!res.hasError) {
-        setStep(step + 1);
+        // setStep(step + 1);
       }
     } else {
-      setStep(step + 1);
+      // setStep(step + 1);
     }
   };
 

@@ -5,7 +5,6 @@ import { Box } from "@chakra-ui/core";
 import { SchemesForm } from "@dorgtech/daocreator-lib";
 
 import SchemeEditor from "../commonV2/dao/SchemeEditor";
-import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: SchemesForm;
