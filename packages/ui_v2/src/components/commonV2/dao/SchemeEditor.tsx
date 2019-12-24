@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import {
   MDBBtn,
@@ -8,13 +8,7 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
-import {
-  Scheme,
-  SchemeType,
-  GenesisProtocolPreset,
-  ContributionRewardForm,
-  SchemeRegistrarForm
-} from "@dorgtech/daocreator-lib";
+import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: any;
@@ -29,6 +23,36 @@ enum DAOSpeed {
   Fast
 }
 
+class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
+class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
+
+const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
+  [
+    DAOSpeed.Slow,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
+    ])
+  ],
+  [
+    DAOSpeed.Medium,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
+    ])
+  ],
+  [
+    DAOSpeed.Fast,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
+    ])
+  ]
+]);
+
 function SchemeEditor(props: Props) {
   const { form } = props;
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
@@ -37,8 +61,7 @@ function SchemeEditor(props: Props) {
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
 
-  const debug = () => {
-    configureVotingMachine();
+  const showStates = () => {
     const states = {
       decisionSpeed,
       distribution,
@@ -50,45 +73,7 @@ function SchemeEditor(props: Props) {
     console.log(states);
   };
 
-  class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
-  class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
-
-  const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
-    [
-      DAOSpeed.Slow,
-      new SchemePresets([
-        [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
-        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
-        [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
-      ])
-    ],
-    [
-      DAOSpeed.Medium,
-      new SchemePresets([
-        [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
-        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
-        [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
-      ])
-    ],
-    [
-      DAOSpeed.Fast,
-      new SchemePresets([
-        [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
-        [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
-        [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
-      ])
-    ]
-  ]);
-
-  const createSchemes = () => {
-    if (form.$.length !== 0) return;
-    form.$.push(new ContributionRewardForm());
-    form.$.push(new SchemeRegistrarForm());
-  };
-
   const configureVotingMachine = () => {
-    createSchemes();
-
     form.$.forEach((scheme: any) => {
       //not using Scheme interface because $ does not exist on it
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -113,11 +98,12 @@ function SchemeEditor(props: Props) {
         votingMachine.$.votersReputationLossRatio.value = "0";
 
       if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-
-      console.log("votingMachine:");
-      console.log(votingMachine);
     });
   };
+
+  useEffect(() => {
+    configureVotingMachine();
+  }, [decisionSpeed, distribution, rewardSuccess, rewardAndPenVoters, autobet]);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
@@ -234,7 +220,11 @@ function SchemeEditor(props: Props) {
         />
       </MDBContainer>
 
-      <MDBBtn color="blue darken-4" onClick={debug} style={styles.configButton}>
+      <MDBBtn
+        color="blue darken-4"
+        onClick={showStates}
+        style={styles.configButton}
+      >
         Set Configuration
       </MDBBtn>
     </>
