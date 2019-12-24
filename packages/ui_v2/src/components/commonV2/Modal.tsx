@@ -10,6 +10,15 @@ import {
   MDBCol,
   MDBTooltip
 } from "mdbreact";
+import { observable, IObservableObject } from "mobx";
+import {
+  SchemesForm,
+  AnySchemeForm,
+  GenericSchemeForm,
+  ContributionRewardForm,
+  SchemeRegistrarForm,
+  SchemeType
+} from "@dorgtech/daocreator-lib";
 import { Fragment } from "react";
 import FormField from "components/commonV2/FormField";
 
@@ -20,6 +29,57 @@ export interface Props {
 
 function ModalConfig(props: Props) {
   const { form } = props;
+  const [scheme, setScheme] = React.useState<Number>(
+    SchemeType.ContributionReward
+  );
+  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+
+  const showNewScheme = (schemeIndex: Number) => {
+    setScheme(schemeIndex);
+    checkSchemeIsAdded(Object.keys(form.$).includes(schemeIndex.toString()));
+  };
+
+  const handleScheme = (schemeIndex: Number) => {
+    const added = form.$.length > 0;
+
+    const removeScheme = () => {
+      form.$ = Object.keys(form.$).filter((x: any) => scheme !== +x);
+    };
+
+    const addScheme = (scheme: AnySchemeForm & IObservableObject) => {
+      form.$.push(scheme);
+    };
+
+    if (added) {
+      switch (schemeIndex) {
+        case 0:
+          removeScheme();
+          break;
+        case 1:
+          removeScheme();
+          break;
+        case 2:
+          removeScheme();
+          break;
+      }
+    } else {
+      switch (schemeIndex) {
+        case 0:
+          const constributionReward = observable(new ContributionRewardForm());
+          addScheme(constributionReward);
+          break;
+        case 1:
+          const genericScheme = observable(new GenericSchemeForm());
+          addScheme(genericScheme);
+          break;
+        case 2:
+          const schemeRegistrar = observable(new SchemeRegistrarForm());
+          addScheme(schemeRegistrar);
+          break;
+      }
+    }
+    checkSchemeIsAdded(Object.keys(form.$).includes(schemeIndex.toString()));
+  };
   console.log("form", form);
   // const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(false);
   const [toggleState, setToggleState] = React.useState<boolean>(false);
@@ -121,20 +181,35 @@ function ModalConfig(props: Props) {
         <MDBModalBody>
           <MDBRow style={styles.rowTab}>
             <MDBCol style={styles.tab}>
-              <button style={styles.buttonTab}>Contribution Reward</button>
+              <button
+                style={styles.buttonTab}
+                onClick={() => showNewScheme(SchemeType.ContributionReward)}
+              >
+                Contribution Reward
+              </button>
             </MDBCol>
             <MDBCol style={styles.tab}>
-              <button style={styles.buttonTab}>Scheme Registry</button>
+              <button
+                style={styles.buttonTab}
+                onClick={() => showNewScheme(SchemeType.SchemeRegistrar)}
+              >
+                Scheme Registry
+              </button>
             </MDBCol>
             <MDBCol style={styles.tab}>
-              <button style={styles.buttonTab}>Generic Scheme</button>
+              <button
+                style={styles.buttonTab}
+                onClick={() => showNewScheme(SchemeType.GenericScheme)}
+              >
+                Generic Scheme
+              </button>
             </MDBCol>
           </MDBRow>
 
           <div style={styles.divForm}>
             <MDBRow style={styles.borderRow}>
               <MDBCol>
-                <span>Deploy Contribution Reward Sheme</span>
+                <span>Deploy Contribution Reward Shceme</span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
                     floating
@@ -153,8 +228,8 @@ function ModalConfig(props: Props) {
                     type="checkbox"
                     className="custom-control-input"
                     id="toggle"
-                    readOnly
-                    onChange={() => setToggleState(!toggleState)}
+                    checked={schemeIsAdded}
+                    onChange={e => handleScheme(scheme)}
                   />
                   <label
                     className="custom-control-label"
