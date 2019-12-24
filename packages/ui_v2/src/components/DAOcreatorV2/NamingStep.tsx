@@ -4,7 +4,6 @@ import { AccordionSection } from "react-rainbow-components";
 import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
 import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 
-// eslint-disable-next-line
 interface Props {
   form: DAOConfigForm;
   toReviewStep: () => void;

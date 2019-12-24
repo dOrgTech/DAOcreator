@@ -166,7 +166,7 @@ export default function DAOcreator() {
   const currentForm = steps[1].form
   instead of a static number */
 
-  const currentForm = steps[1].form;
+  const currentForm = steps[2].form;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
@@ -193,6 +193,7 @@ export default function DAOcreator() {
         <MembersStep
           form={daoForm.$.members}
           getDAOTokenSymbol={(): any => daoForm.$.config.$.tokenSymbol.value}
+          nextStep={nextStep}
         />
         <InstallStep daoForm={daoForm} />
       </Accordion>
