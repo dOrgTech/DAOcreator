@@ -44,9 +44,9 @@ export interface DAOMigrationCallbacks {
   txComplete: (msg: string, txHash: string, txCost: number) => Promise<void>;
   migrationAborted: (err: Error) => void;
   migrationComplete: (result: DAOMigrationResult) => void;
-  getState: () => any;
-  setState: (state: any) => void;
-  cleanState: () => void;
+  getState: (network: string) => any;
+  setState: (state: any, network: string) => void;
+  cleanState: (network: string) => void;
 }
 
 export const toJSON = (params: DAOMigrationParams): string => {
