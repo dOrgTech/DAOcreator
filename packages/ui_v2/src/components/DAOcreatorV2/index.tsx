@@ -8,6 +8,9 @@ import {
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
+import { MDBContainer, MDBRow } from "mdbreact";
+import CustomStep from "components/commonV2/CustomStep";
+import StepContainer from "components/commonV2/StepComponent";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -105,24 +108,99 @@ export default function DAOcreator() {
   // };
 
   return (
-    <Box style={styles.root}>
-      <h3 style={styles.header}>Create Organisation</h3>
-      <Accordion id="accordion">
-        <NamingStep
-          form={daoForm.$.config}
-          daoForm={daoForm}
-          toReviewStep={() => {
-            setStep(3);
-          }}
-        />
-        <SchemesStep form={daoForm.$.schemes} />
-        <MembersStep
-          form={daoForm.$.members}
-          getDAOTokenSymbol={(): any => daoForm.$.config.$.tokenSymbol.value}
-        />
-        <InstallStep form={daoForm} daoForm={daoForm} />
-      </Accordion>
-    </Box>
+    <MDBContainer style={styles.paddingContainer}>
+      <Box style={styles.root}>
+        <MDBRow style={styles.headerTop}></MDBRow>
+        <div
+          className="row justify-content-center"
+          style={styles.titleContainer}
+        >
+          <h3 style={styles.fontStyle}>Create Organisation</h3>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <ul className="stepper stepper-vertical" style={styles.noPadding}>
+              <li className="completed">
+                <a role="button">
+                  <span className="circle">1</span>
+                  <span className="label" style={styles.active}>
+                    Set Description
+                  </span>
+                </a>
+                <MDBRow
+                  className="justify-content-end"
+                  style={styles.stepContent}
+                >
+                  <NamingStep
+                    form={daoForm.$.config}
+                    daoForm={daoForm}
+                    toReviewStep={() => {
+                      setStep(3);
+                    }}
+                  />
+                </MDBRow>
+              </li>
+
+              <li>
+                <a role="button">
+                  <span className="circle" style={styles.noActive}>
+                    2
+                  </span>
+                  <span className="label" style={styles.noActiveLabel}>
+                    Configure Organization
+                  </span>
+                </a>
+                <MDBRow
+                  className="justify-content-end"
+                  style={styles.stepContent}
+                >
+                  <SchemesStep form={daoForm.$.schemes} />
+                </MDBRow>
+              </li>
+
+              <li>
+                <a role="button">
+                  <span className="circle" style={styles.noActive}>
+                    3
+                  </span>
+                  <span className="label" style={styles.noActiveLabel}>
+                    Add Members
+                  </span>
+                </a>
+                <MDBRow
+                  className="justify-content-end"
+                  style={styles.stepContent}
+                >
+                  <MembersStep
+                    form={daoForm.$.members}
+                    getDAOTokenSymbol={(): any =>
+                      daoForm.$.config.$.tokenSymbol.value
+                    }
+                  />
+                </MDBRow>
+              </li>
+
+              <li>
+                <a role="button">
+                  <span className="circle" style={styles.noActive}>
+                    4
+                  </span>
+                  <span className="label" style={styles.noActiveLabel}>
+                    Install Organisation
+                  </span>
+                </a>
+                <MDBRow
+                  className="justify-content-end"
+                  style={styles.stepContent}
+                >
+                  <InstallStep form={daoForm} daoForm={daoForm} />
+                </MDBRow>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Box>
+    </MDBContainer>
   );
 }
 
@@ -132,9 +210,54 @@ const styles = {
     maxWidth: 734,
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
-    borderRadius: 4
+    borderRadius: 4,
+    margin: "auto"
   },
   header: {
     paddingLeft: "36.5%"
+  },
+  paddingContainer: {
+    padding: "1%",
+    height: "50px"
+  },
+  fontStyle: {
+    fontize: "1.45rem",
+    fontWeight: 400,
+    fontFamily: "inherit"
+  },
+  noPadding: {
+    paddingTop: 0
+  },
+  stepContent: {
+    width: "80%",
+    padding: "6px",
+    margin: "0px 0px 0px 14%",
+    border: "1px solid lightgray",
+    borderRadius: "6px"
+  },
+  headerTop: {
+    height: "30px"
+  },
+  titleContainer: {
+    paddingBottom: "13px",
+    borderBottom: "1px solid",
+    borderColor: "inherit",
+    marginRight: 0,
+    marginLeft: 0
+  },
+  active: {
+    fontWeight: 400,
+    color: "#4285f4"
+  },
+  noActive: {
+    color: "gray",
+    backgroundColor: "white",
+    borderColor: "white",
+    border: "0.9px solid lightgray",
+    fontWeight: 500
+  },
+  noActiveLabel: {
+    color: "gray",
+    fontWeight: 400
   }
 };

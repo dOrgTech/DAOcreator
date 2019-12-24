@@ -18,14 +18,12 @@ class MembersStep extends React.Component<Props> {
   render() {
     const headerSection = true ? "3 Add Members" : "3 Members";
     return (
-      <AccordionSection label={headerSection}>
-        <MDBBox>
-          <MembersEditor
-            form={this.props.form}
-            getDAOTokenSymbol={this.props.getDAOTokenSymbol}
-          />
-        </MDBBox>
-      </AccordionSection>
+      <MDBBox>
+        <MembersEditor
+          form={this.props.form}
+          getDAOTokenSymbol={this.props.getDAOTokenSymbol}
+        />
+      </MDBBox>
     );
   }
 }

@@ -14,9 +14,7 @@ class NamingStep extends React.Component<Props> {
   render() {
     return (
       <>
-        <AccordionSection label={true ? "1 Set Description" : "1 Description"}>
-          <DAOConfigEditor form={this.props.form} editable={true} />
-        </AccordionSection>
+        <DAOConfigEditor form={this.props.form} editable={true} />
       </>
     );
   }

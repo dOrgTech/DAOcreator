@@ -40,32 +40,42 @@ function DAOConfigEditor(props: Props) {
 
   return (
     <MDBContainer>
+      <br />
       <MDBRow>
-        <MDBCol>
-          <MDBInput
+        <MDBCol style={styles.marginZero}>
+          <label htmlFor="daoName" style={styles.labelStyle}>
+            ORGANIZATION NAME
+          </label>
+          <input
+            type="text"
+            style={styles.inputStyle}
             id="daoName"
-            label="Organisation Name"
             placeholder="DAO Name"
             onChange={(event: any) => onChange(event.target.value, "daoName")}
           />
         </MDBCol>
         <MDBCol>
-          <MDBInput
+          <label htmlFor="daoSymbol" style={styles.labelStyle}>
+            SYMBOL
+          </label>
+          <input
+            type="text"
+            style={styles.inputStyle}
             id="daoSymbol"
-            label="Symbol"
             placeholder="DXDD"
             onChange={(event: any) => onChange(event.target.value, "daoSymbol")}
           />
         </MDBCol>
       </MDBRow>
-      <MDBRow>
+      <br />
+      <MDBRow style={styles.paddingBottom}>
         <MDBCol>
           <MDBBtn
             color="blue darken-4"
             size="sm"
             name="decisonSpeed"
             value="slow"
-            style={styles.setDescriptionButton}
+            style={styles.buttonStyle}
             onClick={handleClick}
           >
             Set Description
@@ -79,8 +89,32 @@ function DAOConfigEditor(props: Props) {
 export default observer(DAOConfigEditor);
 
 const styles = {
-  setDescriptionButton: {
-    borderRadius: "0.37rem",
-    fontWeight: 700
+  inputStyle: {
+    border: "1px solid",
+    color: "black",
+    backgroundColor: "inherit",
+    borderColor: "lightgray",
+    borderRadius: "4px",
+    width: "100%",
+    padding: "2%",
+    fontFamily: "inherit",
+    fontWeight: 300
+  },
+  marginZero: {
+    margin: 0
+  },
+  labelStyle: {
+    color: "gray",
+    fontSize: "smaller",
+    fontWeight: 400
+  },
+  paddingBottom: {
+    paddingBottom: "2%"
+  },
+  buttonStyle: {
+    border: "inherit",
+    borderRadius: "4px",
+    height: "38px",
+    fontFamily: "inherit"
   }
 };
