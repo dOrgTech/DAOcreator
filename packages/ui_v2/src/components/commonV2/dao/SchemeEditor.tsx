@@ -46,6 +46,7 @@ function SchemeEditor(props: Props) {
       rewardAndPenVoters,
       autobet
     };
+    console.log("states:");
     console.log(states);
   };
 
