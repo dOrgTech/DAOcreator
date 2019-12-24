@@ -73,37 +73,34 @@ function SchemeEditor(props: Props) {
     console.log(states);
   };
 
-  const configureVotingMachine = () => {
+  useEffect(() => {
+    console.log("call");
     form.$.forEach((scheme: any) => {
       //not using Scheme interface because $ does not exist on it
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-
       let preset;
       if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
-
-      if (preset === undefined)
-        throw Error("Unimplemented Scheme Speed Configuration");
-
-      const votingMachine = scheme.$.votingMachine;
+      else throw Error("Unimplemented Scheme Speed Configuration");
 
       // Initialize the scheme's voting machine to the Genesis Protocol Preset
+      const votingMachine = scheme.$.votingMachine;
       votingMachine.preset = preset;
 
       // Apply the effects of the toggles
       //if(!distribution)
-
       if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-
       if (!rewardAndPenVoters)
         votingMachine.$.votersReputationLossRatio.value = "0";
-
       if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
     });
-  };
-
-  useEffect(() => {
-    configureVotingMachine();
-  }, [decisionSpeed, distribution, rewardSuccess, rewardAndPenVoters, autobet]);
+  }, [
+    form.$,
+    decisionSpeed,
+    distribution,
+    rewardSuccess,
+    rewardAndPenVoters,
+    autobet
+  ]);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
