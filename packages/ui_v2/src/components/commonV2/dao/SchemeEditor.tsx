@@ -80,6 +80,7 @@ function SchemeEditor(props: Props) {
   ]);
 
   const createSchemes = () => {
+    if (form.$.length !== 0) return;
     form.$.push(new ContributionRewardForm());
     form.$.push(new SchemeRegistrarForm());
   };
