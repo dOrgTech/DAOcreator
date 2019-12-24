@@ -12,12 +12,12 @@ import {
   Scheme,
   SchemeType,
   GenesisProtocolPreset,
-  DAOForm
+  ContributionRewardForm,
+  SchemeRegistrarForm
 } from "@dorgtech/daocreator-lib";
 
 interface Props {
   form: any;
-  daoForm: DAOForm;
   editable: boolean;
   enabled: boolean;
   onToggle: (toggled: boolean) => void;
@@ -29,11 +29,9 @@ enum DAOSpeed {
   Fast
 }
 
-type decisionSpeed = "slow" | "medium" | "fast";
-
 function SchemeEditor(props: Props) {
-  const { form, daoForm } = props;
-  const [decisionSpeed, setDecisionSpeed] = useState<decisionSpeed>("medium");
+  const { form } = props;
+  const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
@@ -119,7 +117,7 @@ function SchemeEditor(props: Props) {
   };
 
   const handleClick = (e: any) => {
-    setDecisionSpeed(e.target.value);
+    setDecisionSpeed(parseInt(e.target.value));
   };
 
   return (
@@ -165,9 +163,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={"fast"}
+                value={DAOSpeed.Slow}
                 style={styles.buttonColor}
-                outline={!(decisionSpeed === "fast")}
+                outline={!(decisionSpeed === DAOSpeed.Slow)}
                 onClick={handleClick}
               >
                 Fast
@@ -176,9 +174,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={"medium"}
+                value={DAOSpeed.Medium}
                 style={styles.buttonColor}
-                outline={!(decisionSpeed === "medium")}
+                outline={!(decisionSpeed === DAOSpeed.Medium)}
                 onClick={handleClick}
               >
                 Medium
@@ -187,9 +185,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value={"slow"}
+                value={DAOSpeed.Fast}
                 style={styles.buttonColor}
-                outline={!(decisionSpeed === "slow")}
+                outline={!(decisionSpeed === DAOSpeed.Fast)}
                 onClick={handleClick}
               >
                 Slow
