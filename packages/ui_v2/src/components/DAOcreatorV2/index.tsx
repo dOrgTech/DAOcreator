@@ -3,7 +3,9 @@ import {
   DAOForm,
   toDAOMigrationParams,
   // fromDAOMigrationParams,
-  toJSON
+  toJSON,
+  ContributionRewardForm,
+  SchemeRegistrarForm
   // fromJSON
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
@@ -26,6 +28,12 @@ interface DAO_CREATOR_INTERFACE {
 
 export default function DAOcreator() {
   const daoForm = new DAOForm();
+  // Default schemes
+  daoForm.$.schemes.$.push(
+    new ContributionRewardForm(),
+    new SchemeRegistrarForm()
+  );
+
   // const recoveredForm = new DAOForm();
 
   const [step, setStep] = React.useState<number>(0);
