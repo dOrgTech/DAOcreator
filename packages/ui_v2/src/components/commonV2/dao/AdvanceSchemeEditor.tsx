@@ -22,7 +22,6 @@ import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import { Fragment } from "react";
 
 export interface Props {
-  changeFormInformation: any;
   form: any;
 }
 
@@ -92,14 +91,6 @@ function AdvanceSchemeEditor(props: Props) {
   console.log("form", form);
 
   const [modalState, setModalState] = React.useState<boolean>(false);
-
-  const showState = () => {
-    const states = {
-      modalState
-    };
-    console.log(states);
-    return states;
-  };
 
   return (
     <Fragment>
@@ -574,10 +565,7 @@ function AdvanceSchemeEditor(props: Props) {
               <MDBBtn onClick={() => setModalState(!modalState)}>Cancel</MDBBtn>
             </MDBCol>
             <MDBCol style={styles.save}>
-              <MDBBtn
-                color="primary"
-                onClick={() => props.changeFormInformation(showState())}
-              >
+              <MDBBtn color="primary" onClick={() => {}}>
                 Save Configuration
               </MDBBtn>
             </MDBCol>

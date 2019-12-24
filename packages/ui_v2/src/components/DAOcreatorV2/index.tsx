@@ -2,11 +2,7 @@ import * as React from "react";
 import {
   DAOForm,
   toDAOMigrationParams,
-  // fromDAOMigrationParams,
-  toJSON,
-  ContributionRewardForm,
-  SchemeRegistrarForm
-  // fromJSON
+  toJSON
 } from "@dorgtech/daocreator-lib";
 import { Accordion } from "react-rainbow-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -23,13 +19,10 @@ import {
 
 import { Box } from "@chakra-ui/core";
 import {
-  DAOForm,
   DAOConfigForm,
   MembersForm,
   SchemesForm,
-  toDAOMigrationParams,
   fromDAOMigrationParams,
-  toJSON,
   fromJSON
 } from "@dorgtech/daocreator-lib";
 
@@ -52,16 +45,11 @@ interface Step {
 
 export default function DAOcreator() {
   const daoForm = new DAOForm();
-  daoForm.$.schemes.$.push(
-    new ContributionRewardForm(),
-    new SchemeRegistrarForm()
-  );
-
 
   const recoveredForm = new DAOForm();
   daoForm.$.config.$.tokenName.$ = "test";
   daoForm.$.config.$.tokenName.value = "test";
-    
+
   const [step, setStep] = React.useState<number>(0);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
@@ -181,10 +169,12 @@ export default function DAOcreator() {
   const currentForm = steps[1].form
   instead of a static number */
 
-  const currentForm = steps[2].form;
+  const currentForm = steps[1].form;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
+      console.log(currentForm);
+      console.log(res);
       if (!res.hasError) {
         // setStep(step + 1);
       }

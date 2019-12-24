@@ -58,42 +58,12 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 
 function SchemeEditor(props: Props) {
   const { form, nextStep } = props;
-  const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
-    false
-  );
-  const [rewardPropEnabled, setRewardPropEnabled] = React.useState<boolean>(
-    false
-  );
-  const [rewardVoterEnabled, setRewardVoterEnabled] = React.useState<boolean>(
-    false
-  );
-  const [penalizeEnabled, setPenalizeEnabled] = React.useState<boolean>(false);
-  const [autobetEnabled, setAutobetEnabled] = React.useState<boolean>(false);
-  const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
-    "medium"
-  );
-  const [formInformation, setFormInformation] = React.useState<any>({});
 
-  const changeFormInformation = (modalInfo: any) =>
-    setFormInformation(modalInfo);
-
-  const handleClick = (e: any) => setDecisionSpeed(e.target.value);
-  const showState = () => {
-    if (form.$.length > 0) {
-      nextStep();
-    } else {
-      const states = {
-        distributionEnabled,
-        rewardPropEnabled,
-        rewardVoterEnabled,
-        penalizeEnabled,
-        autobetEnabled,
-        decisionSpeed,
-        formInformation
-      };
-      console.log(states);
-    }
-  };
+  const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
+  const [distribution, setDistribution] = useState<boolean>(false);
+  const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
+  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
+  const [autobet, setAutobet] = useState<boolean>(false);
 
   // Updates voting machines on toggle
   useEffect(() => {
@@ -135,10 +105,12 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor
-              form={form}
-              changeFormInformation={changeFormInformation}
-            />
+            <AdvanceSchemeEditor form={form} />
+          </MDBCol>
+        </MDBRow>
+        <MDBRow>
+          <MDBCol>
+            <p className="text-left">Recommend Configuration</p>
           </MDBCol>
         </MDBRow>
         <MDBRow>
@@ -251,7 +223,7 @@ function SchemeEditor(props: Props) {
 
       <MDBBtn
         color="blue darken-4"
-        onClick={showStates}
+        onClick={nextStep}
         style={styles.configButton}
       >
         Set Configuration
