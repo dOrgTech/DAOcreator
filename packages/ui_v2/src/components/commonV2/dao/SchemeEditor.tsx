@@ -79,6 +79,11 @@ function SchemeEditor(props: Props) {
     ]
   ]);
 
+  const createSchemes = () => {
+    form.$.push(new ContributionRewardForm());
+    form.$.push(new SchemeRegistrarForm());
+  };
+
   const configureVotingMachine = () => {
     //console.log(daoForm);
 
