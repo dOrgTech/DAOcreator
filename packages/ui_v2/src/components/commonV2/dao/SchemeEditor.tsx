@@ -73,9 +73,11 @@ function SchemeEditor(props: Props) {
     console.log(states);
   };
 
+  // Updates voting machines on toggle
   useEffect(() => {
+    // Not using Scheme interface because $ does not exist on it
     form.$.forEach((scheme: any) => {
-      //not using Scheme interface because $ does not exist on it
+      // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
       let preset;
       if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
@@ -86,7 +88,7 @@ function SchemeEditor(props: Props) {
       votingMachine.preset = preset;
 
       // Apply the effects of the toggles
-      //if(!distribution)
+      // if(!distribution) // TODO: distribution does not currently affect the voting machine
       if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
       if (!rewardAndPenVoters)
         votingMachine.$.votersReputationLossRatio.value = "0";
