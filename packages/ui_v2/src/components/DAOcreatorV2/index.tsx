@@ -167,6 +167,7 @@ export default function DAOcreator() {
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
+      console.log(res);
       if (!res.hasError) {
         setStep(step + 1);
       }
@@ -186,7 +187,7 @@ export default function DAOcreator() {
           }}
           nextStep={nextStep}
         />
-        <SchemesStep form={daoForm.$.schemes} />
+        <SchemesStep form={daoForm.$.schemes} nextStep={nextStep} />
         <MembersStep
           form={daoForm.$.members}
           getDAOTokenSymbol={(): any => daoForm.$.config.$.tokenSymbol.value}

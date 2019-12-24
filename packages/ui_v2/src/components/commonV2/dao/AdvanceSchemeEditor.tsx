@@ -12,22 +12,27 @@ import {
 } from "mdbreact";
 import { observable, IObservableObject } from "mobx";
 import {
-  SchemesForm,
   AnySchemeForm,
   GenericSchemeForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
   SchemeType
 } from "@dorgtech/daocreator-lib";
+import GenesisProtocolEditor from "./GenesisProtocolEditor";
 import { Fragment } from "react";
-import FormField from "components/commonV2/FormField";
 
 export interface Props {
   changeFormInformation: any;
   form: any;
 }
 
-function ModalConfig(props: Props) {
+const schemeName = {
+  0: "Contribution Reward",
+  1: "Scheme Registrar",
+  2: "Generic Scheme"
+};
+
+function AdvanceSchemeEditor(props: Props) {
   const { form } = props;
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
@@ -45,15 +50,19 @@ function ModalConfig(props: Props) {
     handleToggle(schemeIndex);
   };
 
+  const selectedForm = form.$.filter(
+    (x: AnySchemeForm) => x.type === scheme
+  ).pop();
+
   const handleScheme = (schemeIndex: number) => {
     const added = form.$.length > 0 && schemeIsAdded;
 
     const removeScheme = () => {
-      form.$ = form.$.map((x: AnySchemeForm) => {
-        if (scheme !== x.type) {
-          return x;
-        }
-      }).filter((x: AnySchemeForm | undefined) => x);
+      const filterSchemes = (x: AnySchemeForm) => {
+        if (scheme !== x.type) return x;
+      };
+      const removeUndefined = (x: AnySchemeForm | undefined) => x;
+      form.$ = form.$.map(filterSchemes).filter(removeUndefined);
     };
 
     const addScheme = (scheme: AnySchemeForm & IObservableObject) => {
@@ -81,79 +90,14 @@ function ModalConfig(props: Props) {
     handleToggle(schemeIndex);
   };
   console.log("form", form);
-  // const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(false);
+
   const [toggleState, setToggleState] = React.useState<boolean>(false);
   const [modalState, setModalState] = React.useState<boolean>(false);
-  const [queuedDaysState, setQueuedDaysState] = React.useState<any>("16");
-  const [queuedHoursState, setQueuedHoursState] = React.useState<string>(
-    "09:00"
-  );
-  const [preBoostedDayState, setPreBoostedDayState] = React.useState<any>("16");
-  const [preBoostedHoursState, setPreBoostedHoursState] = React.useState<
-    string
-  >("09:00");
-  const [boostedDayState, setBoostedDayState] = React.useState<any>("16");
-  const [boostedHoursState, setBoostedHoursState] = React.useState<string>(
-    "09:00"
-  );
-  const [quietDayState, setQuietDayState] = React.useState<any>("16");
-  const [quietHoursState, setQuietHoursState] = React.useState<string>("09:00");
-  const [lockingDayState, setLockingDayState] = React.useState<any>("16");
-  const [lockingHoursState, setLockingHoursState] = React.useState<string>(
-    "09:00"
-  );
-  const [queuedVoteState, setQueuedVoteState] = React.useState<number>(50);
-  const [minimumDaoState, setMinimumDaoState] = React.useState<number>(150);
-  const [theresholdState, setTheresholdState] = React.useState<number>(50);
-  const [votersReputationState, setVotersReputationState] = React.useState<
-    number
-  >(150);
-  const [rewardSuccessfulState, setRewardSuccessfulState] = React.useState<
-    number
-  >(150);
-  const [activationDateState, setActivationDateState] = React.useState<any>(
-    new Date().toISOString().substr(0, 10)
-  );
-  const [activationHoursState, setActivationHoursState] = React.useState<
-    string
-  >("15:30");
-  const [voteBehalfState, setVoteBehalfState] = React.useState<string>("");
-  const schemesVoting = {
-    activationTime: "(...)",
-    boostedVotePeriodLimit: "(...)",
-    daoBountyConst: "(...)",
-    minimumDaoBounty: "(...)",
-    preBoostedVotePeriodLimit: "(...)",
-    proposingRepReward: "(...)",
-    queuedVotePeriodLimit: "(...)",
-    queuedVoteRequiredPercentage: "(...)",
-    quietEndingPeriod: "(...)",
-    thresholdConst: "(...)",
-    voteOnBehalf: "(...)",
-    votersReputationLossRatio: ""
-  };
+
   const showState = () => {
     const states = {
       modalState,
-      toggleState,
-      queuedDaysState,
-      queuedHoursState,
-      preBoostedDayState,
-      preBoostedHoursState,
-      boostedDayState,
-      boostedHoursState,
-      quietDayState,
-      quietHoursState,
-      lockingDayState,
-      lockingHoursState,
-      queuedVoteState,
-      minimumDaoState,
-      theresholdState,
-      votersReputationState,
-      rewardSuccessfulState,
-      activationDateState,
-      activationHoursState,
-      voteBehalfState
+      toggleState
     };
     console.log(states);
     return states;
@@ -209,7 +153,7 @@ function ModalConfig(props: Props) {
           <div style={styles.divForm}>
             <MDBRow style={styles.borderRow}>
               <MDBCol>
-                <span>Deploy Contribution Reward Shceme</span>
+                <span>Deploy {schemeName[scheme]}</span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
                     floating
@@ -238,8 +182,15 @@ function ModalConfig(props: Props) {
                 </div>
               </MDBCol>
             </MDBRow>
-
-            <MDBRow style={styles.paddingRow}>
+            {schemeIsAdded ? (
+              <GenesisProtocolEditor
+                form={selectedForm.$.votingMachine}
+                editable={true}
+              />
+            ) : (
+              ""
+            )}
+            {/* <MDBRow style={styles.paddingRow}>
               <MDBCol>
                 <span>Queued Vote Period Limit</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -255,7 +206,6 @@ function ModalConfig(props: Props) {
                 </MDBTooltip>
               </MDBCol>
               <MDBCol size="3">
-                {/*<FormField field={form.$.queuedVotePeriodLimit} />*/}
                 <input
                   style={styles.date}
                   type="number"
@@ -275,8 +225,8 @@ function ModalConfig(props: Props) {
                   id="queuedHours"
                 ></input>
               </MDBCol>
-            </MDBRow>
-            <MDBRow style={styles.paddingRow}>
+            </MDBRow> */}
+            {/* <MDBRow style={styles.paddingRow}>
               <MDBCol>
                 <span>Pre-Boosted Vote Period Limit</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -311,8 +261,8 @@ function ModalConfig(props: Props) {
                   required
                 ></input>
               </MDBCol>
-            </MDBRow>
-            <MDBRow style={styles.paddingRow}>
+            </MDBRow> */}
+            {/* <MDBRow style={styles.paddingRow}>
               <MDBCol>
                 <span>Boosted Vote Period</span>
                 <MDBTooltip placement="bottom" clickable>
@@ -617,7 +567,7 @@ function ModalConfig(props: Props) {
                   onChange={(e: any) => setVoteBehalfState(e.target.value)}
                 />
               </MDBCol>
-            </MDBRow>
+            </MDBRow> */}
           </div>
         </MDBModalBody>
         <MDBModalFooter>
@@ -718,4 +668,4 @@ const styles = {
   }
 };
 
-export default ModalConfig;
+export default AdvanceSchemeEditor;

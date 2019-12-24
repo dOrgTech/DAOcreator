@@ -4,17 +4,18 @@ import { AccordionSection } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
 import { SchemesForm } from "@dorgtech/daocreator-lib";
 
-import SchemesEditor from "../commonV2/dao/SchemesEditor";
+import SchemeEditor from "../commonV2/dao/SchemeEditor";
 import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: SchemesForm;
+  nextStep: () => void;
 }
 
 @observer
 export default class SchemesStep extends React.Component<Props> {
   render() {
-    const { form } = this.props;
+    const { form, nextStep } = this.props;
     const headerSection = true ? "2 Configure Organization" : "2 Configuration";
     return (
       <AccordionSection name="1" label={headerSection}>
@@ -26,7 +27,7 @@ export default class SchemesStep extends React.Component<Props> {
           borderLeftColor="#eaedf3"
           rounded="lg"
         >
-          <SchemesEditor form={form} editable={true} />
+          <SchemeEditor form={form} editable={true} nextStep={nextStep} />
         </Box>
       </AccordionSection>
     );

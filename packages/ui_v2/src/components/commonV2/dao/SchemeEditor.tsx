@@ -9,19 +9,20 @@ import {
   MDBIcon
 } from "mdbreact";
 
-import ModalConfig from "../Modal";
+import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 
 interface Props {
   form: any;
   editable: boolean;
-  enabled: boolean;
-  onToggle: (toggled: boolean) => void;
+  nextStep: () => void;
+  enabled?: boolean;
+  onToggle?: (toggled: boolean) => void;
 }
 
 type decisionSpeed = "slow" | "medium" | "fast";
 
 function SchemeEditor(props: Props) {
-  const { form } = props;
+  const { form, nextStep } = props;
   const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
     false
   );
@@ -43,16 +44,20 @@ function SchemeEditor(props: Props) {
 
   const handleClick = (e: any) => setDecisionSpeed(e.target.value);
   const showState = () => {
-    const states = {
-      distributionEnabled,
-      rewardPropEnabled,
-      rewardVoterEnabled,
-      penalizeEnabled,
-      autobetEnabled,
-      decisionSpeed,
-      formInformation
-    };
-    console.log(states);
+    if (form.$.length > 0) {
+      nextStep();
+    } else {
+      const states = {
+        distributionEnabled,
+        rewardPropEnabled,
+        rewardVoterEnabled,
+        penalizeEnabled,
+        autobetEnabled,
+        decisionSpeed,
+        formInformation
+      };
+      console.log(states);
+    }
   };
   return (
     <>
@@ -60,10 +65,10 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <ModalConfig
+            <AdvanceSchemeEditor
               form={form}
               changeFormInformation={changeFormInformation}
-            ></ModalConfig>
+            />
           </MDBCol>
         </MDBRow>
         <MDBRow>
