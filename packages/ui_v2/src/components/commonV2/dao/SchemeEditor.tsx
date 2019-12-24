@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import {
   MDBBtn,
@@ -8,47 +8,111 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
+import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
+
+import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 
 interface Props {
   form: any;
   editable: boolean;
-  enabled: boolean;
-  onToggle: (toggled: boolean) => void;
+  nextStep: () => void;
+  enabled?: boolean;
+  onToggle?: (toggled: boolean) => void;
 }
 
-type decisionSpeed = "slow" | "medium" | "fast";
+enum DAOSpeed {
+  Slow,
+  Medium,
+  Fast
+}
+
+class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
+class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
+
+const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
+  [
+    DAOSpeed.Slow,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
+    ])
+  ],
+  [
+    DAOSpeed.Medium,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
+    ])
+  ],
+  [
+    DAOSpeed.Fast,
+    new SchemePresets([
+      [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
+      [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
+    ])
+  ]
+]);
 
 function SchemeEditor(props: Props) {
-  const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
-    false
-  );
-  const [rewardPropEnabled, setRewardPropEnabled] = React.useState<boolean>(
-    false
-  );
-  const [rewardVoterEnabled, setRewardVoterEnabled] = React.useState<boolean>(
-    false
-  );
-  const [penalizeEnabled, setPenalizeEnabled] = React.useState<boolean>(false);
-  const [autobetEnabled, setAutobetEnabled] = React.useState<boolean>(false);
-  const [decisionSpeed, setDecisionSpeed] = React.useState<decisionSpeed>(
-    "medium"
-  );
+  const { form, nextStep } = props;
 
-  const handleClick = (e: any) => setDecisionSpeed(e.target.value);
-  const showState = () => {
-    const states = {
-      distributionEnabled,
-      rewardPropEnabled,
-      rewardVoterEnabled,
-      penalizeEnabled,
-      autobetEnabled,
-      decisionSpeed
-    };
-    console.log(states);
+  const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
+  const [distribution, setDistribution] = useState<boolean>(false);
+  const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
+  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
+  const [autobet, setAutobet] = useState<boolean>(false);
+
+  // Updates voting machines on toggle
+  useEffect(() => {
+    // Not using Scheme interface because $ does not exist on it
+    form.$.forEach((scheme: any) => {
+      // Get voting machine preset using the decisionSpeed and scheme type
+      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+      let preset;
+      if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
+      else throw Error("Unimplemented Scheme Speed Configuration");
+
+      // Initialize the scheme's voting machine to the Genesis Protocol Preset
+      const votingMachine = scheme.$.votingMachine;
+      votingMachine.preset = preset;
+
+      // Apply the effects of the toggles
+      // if(!distribution) // TODO: distribution does not currently affect the voting machine
+      if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
+      if (!rewardAndPenVoters)
+        votingMachine.$.votersReputationLossRatio.value = "0";
+      if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+    });
+  }, [
+    form.$,
+    decisionSpeed,
+    distribution,
+    rewardSuccess,
+    rewardAndPenVoters,
+    autobet
+  ]);
+
+  const handleClick = (e: any) => {
+    setDecisionSpeed(parseInt(e.target.value));
   };
+
   return (
     <>
       <MDBContainer>
+        <MDBRow>
+          <MDBCol md="4"></MDBCol>
+          <MDBCol md="4" className="offset-md-4">
+            <AdvanceSchemeEditor form={form} />
+          </MDBCol>
+        </MDBRow>
+        <MDBRow>
+          <MDBCol>
+            <p className="text-left">Recommend Configuration</p>
+          </MDBCol>
+        </MDBRow>
         <MDBRow>
           <MDBCol>
             <p className="text-left">Recommend Configuration</p>
@@ -59,7 +123,7 @@ function SchemeEditor(props: Props) {
           <MDBCol>
             <p className="text-left">
               Your proposal uses a proposal-vote structure and can securely
-              scale to a big organisation
+              scale to a big organization
             </p>
           </MDBCol>
         </MDBRow>
@@ -89,9 +153,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="fast"
-                outline={!(decisionSpeed === "fast")}
+                value={DAOSpeed.Slow}
                 style={styles.buttonColor}
+                outline={!(decisionSpeed === DAOSpeed.Slow)}
                 onClick={handleClick}
               >
                 Fast
@@ -100,9 +164,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="medium"
+                value={DAOSpeed.Medium}
                 style={styles.buttonColor}
-                outline={!(decisionSpeed === "medium")}
+                outline={!(decisionSpeed === DAOSpeed.Medium)}
                 onClick={handleClick}
               >
                 Medium
@@ -111,9 +175,9 @@ function SchemeEditor(props: Props) {
                 color="blue darken-4"
                 size="sm"
                 name="decisonSpeed"
-                value="slow"
+                value={DAOSpeed.Fast}
                 style={styles.buttonColor}
-                outline={!(decisionSpeed === "slow")}
+                outline={!(decisionSpeed === DAOSpeed.Fast)}
                 onClick={handleClick}
               >
                 Slow
@@ -122,180 +186,44 @@ function SchemeEditor(props: Props) {
           </MDBCol>
         </MDBRow>
 
-        <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
-            <span style={styles.marginText} className="text-left">
-              Distribute Dxdao token
-            </span>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>Some example</span>
-            </MDBTooltip>
-          </MDBCol>
-          <MDBCol>
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="distributionEnabled"
-                onChange={() => setDistributionEnabled(!distributionEnabled)}
-                readOnly
-              />
-              <label
-                className="custom-control-label"
-                htmlFor="distributionEnabled"
-              ></label>
-            </div>
-          </MDBCol>
-        </MDBRow>
+        <Toggleable
+          id={"distribution"}
+          text={"Distribute Dxdao token"}
+          example={"Some example"}
+          toggle={() => {
+            setDistribution(!distribution);
+          }}
+        />
 
-        <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
-            <span style={styles.marginText} className="text-left">
-              Reward successful proposer
-            </span>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>Some example</span>
-            </MDBTooltip>
-          </MDBCol>
-          <MDBCol>
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="rewardPropEnabled"
-                readOnly
-                onChange={() => setRewardPropEnabled(!rewardPropEnabled)}
-              />
-              <label
-                className="custom-control-label"
-                htmlFor="rewardPropEnabled"
-              ></label>
-            </div>
-          </MDBCol>
-        </MDBRow>
+        <Toggleable
+          id={"rewardSuccess"}
+          text={"Reward successful proposer"}
+          example={"Some example"}
+          toggle={() => {
+            setRewardSuccess(!rewardSuccess);
+          }}
+        />
 
-        <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
-            <span style={styles.marginText} className="text-left">
-              Reward voters who side with the mayority
-            </span>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>Some example</span>
-            </MDBTooltip>
-          </MDBCol>
-          <MDBCol>
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="rewardVoterEnabled"
-                readOnly
-                onChange={() => setRewardVoterEnabled(!rewardVoterEnabled)}
-              />
-              <label
-                className="custom-control-label"
-                htmlFor="rewardVoterEnabled"
-              ></label>
-            </div>
-          </MDBCol>
-        </MDBRow>
+        <Toggleable
+          id={"rewardAndPenVoters"}
+          text={"Reward correct voters and penalize incorrect voters"}
+          example={"Some example"}
+          toggle={() => {
+            setRewardAndPenVoters(!rewardAndPenVoters);
+          }}
+        />
 
-        <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
-            <span style={styles.marginText} className="text-left">
-              Penalize voters who side against the mayority
-            </span>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>Some example</span>
-            </MDBTooltip>
-          </MDBCol>
-          <MDBCol>
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="penalizeEnabled"
-                readOnly
-                onChange={() => setPenalizeEnabled(!penalizeEnabled)}
-              />
-              <label
-                className="custom-control-label"
-                htmlFor="penalizeEnabled"
-              ></label>
-            </div>
-          </MDBCol>
-        </MDBRow>
-
-        <MDBRow style={styles.paddingRow}>
-          <MDBCol size="10" style={styles.noPadding}>
-            <span style={styles.marginText} className="text-left">
-              Auto-bet against every proposal to incentive curation of valuable
-            </span>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>Some example</span>
-            </MDBTooltip>
-          </MDBCol>
-          <MDBCol>
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="autobetEnabled"
-                readOnly
-                onChange={() => setAutobetEnabled(!autobetEnabled)}
-              />
-              <label
-                className="custom-control-label"
-                htmlFor="autobetEnabled"
-              ></label>
-            </div>
-          </MDBCol>
-        </MDBRow>
+        <Toggleable
+          id={"autobet"}
+          text={"Auto-bet against every proposal to incentivise curation"}
+          example={"Some example"}
+          toggle={() => setAutobet(!autobet)}
+        />
       </MDBContainer>
 
       <MDBBtn
         color="blue darken-4"
-        onClick={showState}
+        onClick={nextStep}
         style={styles.configButton}
       >
         Set Configuration
@@ -303,6 +231,43 @@ function SchemeEditor(props: Props) {
     </>
   );
 }
+
+interface ToggleProps {
+  id: string;
+  text: string;
+  example: string;
+  toggle: () => void;
+}
+
+function Toggleable({ id, text, example, toggle }: ToggleProps) {
+  return (
+    <MDBRow style={styles.paddingRow}>
+      <MDBCol size="10" style={styles.noPadding}>
+        <span style={styles.marginText} className="text-left">
+          {text}
+        </span>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{example}</span>
+        </MDBTooltip>
+      </MDBCol>
+      <MDBCol>
+        <div className="custom-control custom-switch">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            id={id}
+            onChange={() => toggle()}
+          />
+          <label className="custom-control-label" htmlFor={id}></label>
+        </div>
+      </MDBCol>
+    </MDBRow>
+  );
+}
+
 const styles = {
   card: {
     minWidth: 250,
