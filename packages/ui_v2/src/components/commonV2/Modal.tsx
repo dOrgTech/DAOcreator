@@ -11,11 +11,16 @@ import {
   MDBTooltip
 } from "mdbreact";
 import { Fragment } from "react";
+import FormField from "components/commonV2/FormField";
+
 export interface Props {
   changeFormInformation: any;
+  form: any;
 }
 
 function ModalConfig(props: Props) {
+  const { form } = props;
+  console.log("form", form);
   // const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(false);
   const [toggleState, setToggleState] = React.useState<boolean>(false);
   const [modalState, setModalState] = React.useState<boolean>(false);
@@ -53,7 +58,20 @@ function ModalConfig(props: Props) {
     string
   >("15:30");
   const [voteBehalfState, setVoteBehalfState] = React.useState<string>("");
-
+  const schemesVoting = {
+    activationTime: "(...)",
+    boostedVotePeriodLimit: "(...)",
+    daoBountyConst: "(...)",
+    minimumDaoBounty: "(...)",
+    preBoostedVotePeriodLimit: "(...)",
+    proposingRepReward: "(...)",
+    queuedVotePeriodLimit: "(...)",
+    queuedVoteRequiredPercentage: "(...)",
+    quietEndingPeriod: "(...)",
+    thresholdConst: "(...)",
+    voteOnBehalf: "(...)",
+    votersReputationLossRatio: ""
+  };
   const showState = () => {
     const states = {
       modalState,
@@ -162,6 +180,7 @@ function ModalConfig(props: Props) {
                 </MDBTooltip>
               </MDBCol>
               <MDBCol size="3">
+                {/*<FormField field={form.$.queuedVotePeriodLimit} />*/}
                 <input
                   style={styles.date}
                   type="number"

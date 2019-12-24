@@ -21,6 +21,7 @@ interface Props {
 type decisionSpeed = "slow" | "medium" | "fast";
 
 function SchemeEditor(props: Props) {
+  const { form } = props;
   const [distributionEnabled, setDistributionEnabled] = React.useState<boolean>(
     false
   );
@@ -60,6 +61,7 @@ function SchemeEditor(props: Props) {
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
             <ModalConfig
+              form={form}
               changeFormInformation={changeFormInformation}
             ></ModalConfig>
           </MDBCol>
