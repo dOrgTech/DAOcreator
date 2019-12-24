@@ -30,6 +30,7 @@ import {
   PercentageField,
   AddressField
 } from "@dorgtech/daocreator-lib";
+import { MDBInput } from "mdbreact";
 import EthAddressAvatar from "../EthAddressAvatar";
 
 export interface Props {
@@ -37,85 +38,80 @@ export interface Props {
   editable?: boolean;
 }
 
-class FormField extends React.Component<Props> {
-  render() {
-    const { field, editable } = this.props;
+function FormField(props: Props) {
+  const { field, editable } = props;
+  return (
+    <PopupState variant="popover" popupId="popup-popover">
+      {(popupState: any) => {
+        let FieldView;
 
-    return (
-      <PopupState variant="popover" popupId="popup-popover">
-        {(popupState: any) => {
-          let FieldView;
+        switch (field.type) {
+          case FieldType.String:
+            FieldView = StringFieldView;
+            break;
+          case FieldType.Token:
+            FieldView = TokenFieldView;
+            break;
+          case FieldType.DateTime:
+            FieldView = DateTimeFieldView;
+            break;
+          case FieldType.Duration:
+            FieldView = DurationFieldView;
+            break;
+          case FieldType.Address:
+            FieldView = AddressFieldView;
+            break;
+          case FieldType.Percentage:
+            FieldView = PercentageFieldView;
+            break;
+          default:
+            throw Error(`Field type "${FieldType[field.type]}" unimplemented.`);
+        }
 
-          switch (field.type) {
-            case FieldType.String:
-              FieldView = StringFieldView;
-              break;
-            case FieldType.Token:
-              FieldView = TokenFieldView;
-              break;
-            case FieldType.DateTime:
-              FieldView = DateTimeFieldView;
-              break;
-            case FieldType.Duration:
-              FieldView = DurationFieldView;
-              break;
-            case FieldType.Address:
-              FieldView = AddressFieldView;
-              break;
-            case FieldType.Percentage:
-              FieldView = PercentageFieldView;
-              break;
-            default:
-              throw Error(
-                `Field type "${FieldType[field.type]}" unimplemented.`
-              );
-          }
-
-          return (
-            <>
-              <FormControl fullWidth>
-                <FieldView
-                  field={field as any}
-                  popupState={popupState}
-                  editable={editable}
-                />
-              </FormControl>
-              <Popover
-                {...bindPopover(popupState)}
-                anchorReference="anchorPosition"
-                anchorPosition={{ top: 100, left: 20 }}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left"
-                }}
-                transformOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left"
-                }}
-              >
-                {field.story === "" ? (
-                  <Typography style={{ maxWidth: 400, margin: 20 }}>
-                    <b>{field.displayName}:</b> {field.description}
-                  </Typography>
-                ) : (
-                  <ExpansionPanel style={{ maxWidth: 400 }}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography>
-                        <b>{field.displayName}:</b> {field.description}
-                      </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <Typography>{field.story}</Typography>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                )}
-              </Popover>
-            </>
-          );
-        }}
-      </PopupState>
-    );
-  }
+        return (
+          <>
+            <FormControl fullWidth>
+              <FieldView
+                field={field as any}
+                popupState={popupState}
+                editable={editable}
+              />
+            </FormControl>
+            <Popover
+              {...bindPopover(popupState)}
+              anchorReference="anchorPosition"
+              anchorPosition={{ top: 100, left: 20 }}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+              transformOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+            >
+              {field.story === "" ? (
+                <Typography style={{ maxWidth: 400, margin: 20 }}>
+                  <b>{field.displayName}:</b> {field.description}
+                </Typography>
+              ) : (
+                <ExpansionPanel style={{ maxWidth: 400 }}>
+                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>
+                      <b>{field.displayName}:</b> {field.description}
+                    </Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <Typography>{field.story}</Typography>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              )}
+            </Popover>
+          </>
+        );
+      }}
+    </PopupState>
+  );
 }
 
 const FieldInformation = (popupState: any, style?: any) => (
@@ -146,12 +142,7 @@ interface FieldProps<T> {
 const FieldError = ({ field }: any) => (
   <>
     {field.hasError ? (
-      <FormHelperText
-        error={field.hasError}
-        style={{ marginBottom: 5, marginTop: 5 }}
-      >
-        {field.error}
-      </FormHelperText>
+      <FormHelperText error={field.hasError}>{field.error}</FormHelperText>
     ) : (
       <></>
     )}
@@ -161,19 +152,12 @@ const FieldError = ({ field }: any) => (
 const StringFieldView = observer(
   ({ field, popupState, editable }: FieldProps<StringField>) => (
     <>
-      <TextField
-        fullWidth
-        variant={"filled"}
-        margin={"dense"}
-        label={field.displayName}
-        error={field.hasError}
+      <input
+        style={styles.inputStyle}
         value={field.value}
         disabled={editable === undefined ? false : !editable}
-        onChange={e => field.onChange(e.target.value)}
+        onChange={(event: any) => field.onChange(event.target.value)}
         onBlur={field.enableAutoValidationAndValidate}
-        InputProps={{
-          startAdornment: FieldInformation(popupState)
-        }}
       />
       <FieldError field={field} />
     </>
@@ -183,15 +167,14 @@ const StringFieldView = observer(
 const TokenFieldView = observer(
   ({ field, popupState, editable }: FieldProps<TokenField>) => (
     <>
-      <TextField
-        fullWidth
+      <MDBInput
         variant={"filled"}
         margin={"dense"}
         label={field.displayName}
-        error={field.hasError}
+        error={field.hasError ? field.error : ""}
         value={field.value}
         disabled={editable === undefined ? false : !editable}
-        onChange={e => field.onChange(e.target.value)}
+        onChange={(event: any) => field.onChange(event.target.value)}
         onBlur={field.enableAutoValidationAndValidate}
       />
       <FieldError field={field} />
@@ -422,3 +405,17 @@ const AddressFieldView = observer(
 );
 
 export default FormField;
+
+const styles = {
+  inputStyle: {
+    border: "1px solid",
+    color: "black",
+    backgroundColor: "inherit",
+    borderColor: "lightgray",
+    borderRadius: "4px",
+    width: "100%",
+    padding: "2%",
+    fontFamily: "inherit",
+    fontWeight: 300
+  }
+};
