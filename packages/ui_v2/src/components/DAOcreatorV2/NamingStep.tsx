@@ -13,7 +13,7 @@ function NamingStep(props: Props) {
   const { form, toggleCollapse } = props;
   return (
     <>
-      <div>
+      <div style={styles.paddingTotal}>
         <br />
         <DAOConfigEditor form={form} editable={true} />
         <br />
@@ -49,6 +49,9 @@ const styles = {
   },
   paddingBottom: {
     paddingBottom: "2%"
+  },
+  paddingTotal: {
+    padding: "6px"
   }
 };
 

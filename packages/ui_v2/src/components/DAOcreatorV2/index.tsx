@@ -367,7 +367,7 @@ const styles = {
     paddingTop: 0
   },
   stepContent: {
-    width: "80%",
+    width: "100%",
     padding: "6px",
     margin: "0px 0px 0px 14%",
     border: "1px solid lightgray",

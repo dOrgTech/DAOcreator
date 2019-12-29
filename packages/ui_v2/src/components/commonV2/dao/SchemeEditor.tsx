@@ -366,7 +366,7 @@ const styles = {
     textAlign: '"right"'
   },
   paddingContainer: {
-    padding: "21px"
+    padding: "8px"
   }
 };
 
