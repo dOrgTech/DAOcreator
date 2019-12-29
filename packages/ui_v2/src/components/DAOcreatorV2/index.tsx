@@ -167,10 +167,10 @@ export default function DAOcreator() {
   ];
 
   /* when good looking UI is attached this is going to be 
-  const currentForm = steps[1].form
+  const currentForm = steps[step].form
   instead of a static number */
 
-  const currentForm = steps[1].form;
+  const currentForm = steps[0].form;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();

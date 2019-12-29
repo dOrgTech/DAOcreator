@@ -13,7 +13,7 @@ function NamingStep(props: Props) {
   const { form, nextStep } = props;
   return (
     <>
-      <MDBContainer>
+      <div>
         <br />
         <DAOConfigEditor form={form} editable={true} />
         <br />
@@ -31,7 +31,7 @@ function NamingStep(props: Props) {
             </MDBBtn>
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
+      </div>
     </>
   );
 }

@@ -1,1 +1,1 @@
-declare module "material-ui-popup-state";
+declare module "react-datepicker";

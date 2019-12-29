@@ -39,6 +39,7 @@
     "mobx-react": "^6.1.1",
     "prop-types": "^15.6.0",
     "react-blockies": "^1.4.0",
+    "react-datepicker": "^2.10.1",
     "react-player": "^1.11.2",
     "react-rainbow-components": "^1.11.0"
   },
