@@ -7,12 +7,11 @@ import MembersEditor from "components/commonV2/dao/Members/MembersEditor";
 interface Props {
   form: MembersForm;
   getDAOTokenSymbol: () => string;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function MembersStep(props: Props) {
-  const { form, getDAOTokenSymbol, nextStep } = props;
-  const headerSection = true ? "3 Add Members" : "3 Members";
+  const { form, getDAOTokenSymbol, toggleCollapse } = props;
   return (
     <MDBBox>
       <MembersEditor form={form} getDAOTokenSymbol={getDAOTokenSymbol} />
@@ -24,7 +23,7 @@ function MembersStep(props: Props) {
             name="decisonSpeed"
             value="slow"
             style={styles.setDescriptionButton}
-            onClick={() => nextStep()}
+            onClick={() => toggleCollapse()}
           >
             Set members
           </MDBBtn>

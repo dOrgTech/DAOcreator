@@ -15,9 +15,9 @@ import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 interface Props {
   form: any;
   editable: boolean;
-  nextStep: () => void;
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
+  toggleCollapse: () => void;
 }
 
 enum DAOSpeed {
@@ -57,7 +57,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -224,7 +224,7 @@ function SchemeEditor(props: Props) {
 
       <MDBBtn
         color="blue darken-4"
-        onClick={nextStep}
+        onClick={() => toggleCollapse()}
         style={styles.configButton}
       >
         Set Configuration

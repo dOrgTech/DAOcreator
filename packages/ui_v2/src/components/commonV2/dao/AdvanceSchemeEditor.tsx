@@ -38,6 +38,12 @@ function AdvanceSchemeEditor(props: Props) {
   );
   const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
 
+  const schemeEditorsMock: AnySchemeForm[] = [
+    observable(new ContributionRewardForm()),
+    observable(new SchemeRegistrarForm()),
+    observable(new GenericSchemeForm())
+  ];
+
   const handleToggle = (index: number) => {
     checkSchemeIsAdded(
       form.$.some((scheme: AnySchemeForm) => scheme.type === index)
@@ -88,17 +94,13 @@ function AdvanceSchemeEditor(props: Props) {
     }
     handleToggle(schemeIndex);
   };
-  console.log("form", form);
+  console.log("form", form.$);
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
   return (
     <Fragment>
-      <button
-        //   color="black"
-        style={styles.button}
-        onClick={() => setModalState(!modalState)}
-      >
+      <button style={styles.button} onClick={() => setModalState(!modalState)}>
         Advance Configuration
       </button>
       <MDBModal
@@ -174,14 +176,14 @@ function AdvanceSchemeEditor(props: Props) {
                 </div>
               </MDBCol>
             </MDBRow>
-            {schemeIsAdded ? (
-              <GenesisProtocolEditor
-                form={selectedForm.$.votingMachine}
-                editable={true}
-              />
-            ) : (
-              ""
-            )}
+            <GenesisProtocolEditor
+              form={
+                schemeIsAdded
+                  ? selectedForm.$.votingMachine
+                  : schemeEditorsMock[scheme].$.votingMachine
+              }
+              editable={schemeIsAdded}
+            />
           </div>
         </MDBModalBody>
         <MDBModalFooter>

@@ -6,11 +6,11 @@ import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 interface Props {
   form: DAOConfigForm;
   toReviewStep: () => void;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function NamingStep(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
   return (
     <>
       <div>
@@ -25,7 +25,7 @@ function NamingStep(props: Props) {
               name="decisonSpeed"
               value="slow"
               style={styles.buttonStyle}
-              onClick={() => nextStep()}
+              onClick={() => toggleCollapse()}
             >
               Set Description
             </MDBBtn>

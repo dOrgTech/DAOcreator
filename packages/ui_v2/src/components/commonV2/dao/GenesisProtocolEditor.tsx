@@ -18,7 +18,7 @@ export default function GenesisProtocolEditor(props: Props) {
   for (i in paramsNames) {
     let key = paramsNames[i];
     let field = formState[key];
-    let secondKey = i == 7 ? paramsNames[10] : paramsNames[i - 1];
+    let secondKey = i === 7 ? paramsNames[10] : paramsNames[i - 1];
     let secondField = formState[secondKey];
     if (i <= 3 || i > 10) {
       votingMachingParamsList.push(
@@ -29,7 +29,7 @@ export default function GenesisProtocolEditor(props: Props) {
         />
       );
     } else {
-      if (i % 2 == 0) continue;
+      if (i % 2 === 0) continue;
       votingMachingParamsList.push(
         <MDBRow key={`genproto-field-${i}`}>
           <FormField field={field} editable={editable} />

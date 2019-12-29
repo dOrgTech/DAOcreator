@@ -15,7 +15,9 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBContainer,
-  MDBRow
+  MDBRow,
+  MDBCollapse,
+  MDBIcon
 } from "mdbreact";
 
 import { Box } from "@chakra-ui/core";
@@ -166,119 +168,177 @@ export default function DAOcreator() {
     }
   ];
 
-  /* when good looking UI is attached this is going to be 
-  const currentForm = steps[step].form
-  instead of a static number */
-
-  const currentForm = steps[0].form;
+  const currentForm = steps[step].form;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
-      console.log(currentForm);
-      console.log(res);
-      if (!res.hasError) {
-        // setStep(step + 1);
-      }
+      // if (!res.hasError) {
+      setStep(step + 1);
+      // }
     } else {
-      // setStep(step + 1);
+      setStep(step + 1);
     }
   };
 
   return (
-    <MDBContainer style={styles.paddingContainer}>
-      <Box style={styles.root}>
-        <MDBRow style={styles.headerTop}></MDBRow>
-        <div
-          className="row justify-content-center"
-          style={styles.titleContainer}
-        >
-          <h3 style={styles.fontStyle}>Create Organization</h3>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <ul className="stepper stepper-vertical" style={styles.noPadding}>
-              <li className="completed">
-                <a role="button">
-                  <span className="circle">1</span>
-                  <span className="label" style={styles.active}>
-                    Set Description
-                  </span>
-                </a>
-                <MDBRow
-                  className="justify-content-end"
-                  style={styles.stepContent}
-                >
-                  <NamingStep
-                    form={daoForm.$.config}
-                    toReviewStep={() => {
-                      setStep(3);
-                    }}
-                    nextStep={nextStep}
-                  />
-                </MDBRow>
-              </li>
-
-              <li>
-                <a role="button">
-                  <span className="circle" style={styles.noActive}>
-                    2
-                  </span>
-                  <span className="label" style={styles.noActiveLabel}>
-                    Configure Organization
-                  </span>
-                </a>
-                <MDBRow
-                  className="justify-content-end"
-                  style={styles.stepContent}
-                >
-                  <SchemesStep form={daoForm.$.schemes} nextStep={nextStep} />
-                </MDBRow>
-              </li>
-
-              <li>
-                <a role="button">
-                  <span className="circle" style={styles.noActive}>
-                    3
-                  </span>
-                  <span className="label" style={styles.noActiveLabel}>
-                    Add Members
-                  </span>
-                </a>
-                <MDBRow
-                  className="justify-content-end"
-                  style={styles.stepContent}
-                >
-                  <MembersStep
-                    form={daoForm.$.members}
-                    getDAOTokenSymbol={(): any =>
-                      daoForm.$.config.$.tokenSymbol.value
-                    }
-                    nextStep={nextStep}
-                  />
-                </MDBRow>
-              </li>
-
-              <li>
-                <a role="button">
-                  <span className="circle" style={styles.noActive}>
-                    4
-                  </span>
-                  <span className="label" style={styles.noActiveLabel}>
-                    Install Organization
-                  </span>
-                </a>
-                <MDBRow
-                  className="justify-content-end"
-                  style={styles.stepContent}
-                >
-                  <InstallStep daoForm={daoForm} />
-                </MDBRow>
-              </li>
-            </ul>
+    <>
+      <MDBContainer style={styles.paddingContainer}>
+        <Box style={styles.root}>
+          <MDBRow style={styles.headerTop}></MDBRow>
+          <div
+            className="row justify-content-center"
+            style={styles.titleContainer}
+          >
+            <h3 style={styles.fontStyle}>Create Organization</h3>
           </div>
-        </div>
-      </Box>
-    </MDBContainer>
+          <div className="row">
+            <div className="col-md-12">
+              <ul className="stepper stepper-vertical" style={styles.noPadding}>
+                <li className={step === 0 ? "completed" : ""}>
+                  <MDBRow
+                    style={styles.specialRow}
+                    className="justify-content-space-between"
+                  >
+                    <a role="button">
+                      <span
+                        className="circle"
+                        style={
+                          step === 0 ? styles.circleActive : styles.noActive
+                        }
+                      >
+                        1
+                      </span>
+                      <span
+                        className="label"
+                        style={
+                          step === 0 ? styles.active : styles.noActiveLabel
+                        }
+                      >
+                        Set Description
+                      </span>
+                    </a>
+                    <a>
+                      <MDBBtn
+                        hidden={step === 0}
+                        floating
+                        size="lg"
+                        color="transparent"
+                        className="btn"
+                        onClick={() => setStep(0)}
+                        style={styles.icon}
+                      >
+                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+                      </MDBBtn>
+                    </a>
+                  </MDBRow>
+
+                  <MDBCollapse id="0" isOpen={step.toString()}>
+                    <MDBRow
+                      className="justify-content-end"
+                      style={styles.stepContent}
+                    >
+                      <NamingStep
+                        form={daoForm.$.config}
+                        toReviewStep={() => {
+                          setStep(3);
+                        }}
+                        toggleCollapse={nextStep}
+                      />
+                    </MDBRow>
+                  </MDBCollapse>
+                </li>
+
+                <li className={step === 1 ? "completed" : ""}>
+                  <a role="button">
+                    <span
+                      className="circle"
+                      style={step === 1 ? styles.circleActive : styles.noActive}
+                    >
+                      2
+                    </span>
+                    <span
+                      className="label"
+                      style={step === 1 ? styles.active : styles.noActiveLabel}
+                    >
+                      Configure Organization
+                    </span>
+                  </a>
+                  <MDBCollapse id="1" isOpen={step.toString()}>
+                    <MDBRow
+                      className="justify-content-end"
+                      style={styles.stepContent}
+                    >
+                      <SchemesStep
+                        form={daoForm.$.schemes}
+                        toggleCollapse={nextStep}
+                      />
+                    </MDBRow>
+                  </MDBCollapse>
+                </li>
+
+                <li className={step === 2 ? "completed" : ""}>
+                  <a role="button">
+                    <span
+                      className="circle"
+                      style={step === 2 ? styles.circleActive : styles.noActive}
+                    >
+                      3
+                    </span>
+                    <span
+                      className="label"
+                      style={step === 2 ? styles.active : styles.noActiveLabel}
+                    >
+                      Add Members
+                    </span>
+                  </a>
+                  <MDBCollapse id="2" isOpen={step.toString()}>
+                    <MDBRow
+                      className="justify-content-end"
+                      style={styles.stepContent}
+                    >
+                      <MembersStep
+                        form={daoForm.$.members}
+                        getDAOTokenSymbol={(): any =>
+                          daoForm.$.config.$.tokenSymbol.value
+                        }
+                        toggleCollapse={nextStep}
+                      />
+                    </MDBRow>
+                  </MDBCollapse>
+                </li>
+
+                <li className={step === 3 ? "completed" : ""}>
+                  <a role="button">
+                    <span
+                      className="circle"
+                      style={step === 3 ? styles.circleActive : styles.noActive}
+                    >
+                      4
+                    </span>
+                    <span
+                      className="label"
+                      style={step === 3 ? styles.active : styles.noActiveLabel}
+                    >
+                      {" "}
+                      Install Organization
+                    </span>
+                  </a>
+                  <MDBCollapse id="3" isOpen={step.toString()}>
+                    <MDBRow
+                      className="justify-content-end"
+                      style={styles.stepContent}
+                    >
+                      <InstallStep daoForm={daoForm} />
+                    </MDBRow>
+                  </MDBCollapse>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Box>
+      </MDBContainer>
+      <PreviewDialog />
+    </>
   );
 }
 
@@ -337,5 +397,29 @@ const styles = {
   noActiveLabel: {
     color: "gray",
     fontWeight: 400
+  },
+  circleActive: {
+    fontWeight: 400,
+    backgroundColor: "rgb(66, 133, 244) !important",
+    color: "white",
+    borderColor: "white",
+    border: "0.9px solid lightgray",
+    background: "rgb(66, 133, 244) !important"
+  },
+  specialRow: {
+    marginLeft: 0,
+    marginRight: 0,
+    width: "100%",
+    justifyContent: "space-between"
+  },
+  icon: {
+    background: "white",
+    boxShadow: "none",
+    color: "blue !important",
+    padding: 5,
+    height: 40,
+    width: 40, //The Width must be the same as the height
+    borderRadius: 400,
+    border: "1px solid lightgrey"
   }
 };
