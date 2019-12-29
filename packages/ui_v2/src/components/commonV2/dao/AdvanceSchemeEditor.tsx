@@ -23,6 +23,7 @@ import { Fragment } from "react";
 
 export interface Props {
   form: any;
+  setAdvanceMode: any;
 }
 
 const schemeName = {
@@ -32,7 +33,7 @@ const schemeName = {
 };
 
 function AdvanceSchemeEditor(props: Props) {
-  const { form } = props;
+  const { form, setAdvanceMode } = props;
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
@@ -88,7 +89,6 @@ function AdvanceSchemeEditor(props: Props) {
     }
     handleToggle(schemeIndex);
   };
-  console.log("form", form);
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
@@ -561,10 +561,22 @@ function AdvanceSchemeEditor(props: Props) {
         <MDBModalFooter>
           <MDBRow style={styles.buttonsRow}>
             <MDBCol size="6">
-              <MDBBtn onClick={() => setModalState(!modalState)}>Cancel</MDBBtn>
+              <MDBBtn
+                onClick={() => {
+                  setAdvanceMode(false);
+                  setModalState(!modalState);
+                }}
+              >
+                Cancel
+              </MDBBtn>
             </MDBCol>
             <MDBCol style={styles.save}>
-              <MDBBtn color="primary" onClick={() => {}}>
+              <MDBBtn
+                color="primary"
+                onClick={() => {
+                  setModalState(!modalState);
+                }}
+              >
                 Save Configuration
               </MDBBtn>
             </MDBCol>

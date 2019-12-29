@@ -64,11 +64,11 @@ function SchemeEditor(props: Props) {
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
+  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
 
   // Updates voting machines on toggle
   useEffect(() => {
     // Not using Scheme interface because $ does not exist on it
-    console.log(form.$);
     form.$.forEach((scheme: any) => {
       // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -106,7 +106,7 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor form={form} />
+            <AdvanceSchemeEditor form={form} setAdvanceMode={setAdvanceMode} />
           </MDBCol>
         </MDBRow>
         <MDBRow>
@@ -194,6 +194,7 @@ function SchemeEditor(props: Props) {
           toggle={() => {
             setDistribution(!distribution);
           }}
+          disabled={advanceMode}
         />
 
         <Toggleable
@@ -203,6 +204,7 @@ function SchemeEditor(props: Props) {
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
+          disabled={advanceMode}
         />
 
         <Toggleable
@@ -212,6 +214,7 @@ function SchemeEditor(props: Props) {
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
+          disabled={advanceMode}
         />
 
         <Toggleable
@@ -219,6 +222,7 @@ function SchemeEditor(props: Props) {
           text={"Auto-bet against every proposal to incentivise curation"}
           example={"Some example"}
           toggle={() => setAutobet(!autobet)}
+          disabled={advanceMode}
         />
       </MDBContainer>
 
@@ -238,9 +242,10 @@ interface ToggleProps {
   text: string;
   example: string;
   toggle: () => void;
+  disabled: boolean;
 }
 
-function Toggleable({ id, text, example, toggle }: ToggleProps) {
+function Toggleable({ id, text, example, toggle, disabled }: ToggleProps) {
   return (
     <MDBRow style={styles.paddingRow}>
       <MDBCol size="10" style={styles.noPadding}>
@@ -262,6 +267,7 @@ function Toggleable({ id, text, example, toggle }: ToggleProps) {
             className="custom-control-input"
             id={id}
             onChange={() => toggle()}
+            disabled={disabled}
           />
           <label className="custom-control-label" htmlFor={id}></label>
         </div>
