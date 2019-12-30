@@ -15,12 +15,9 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBContainer,
-  MDBRow,
-  MDBCollapse,
-  MDBIcon
+  MDBRow
 } from "mdbreact";
 
-import { Box } from "@chakra-ui/core";
 import {
   DAOConfigForm,
   MembersForm,
@@ -33,7 +30,7 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-import Accordion from "../commonv2/dao/Accordion";
+import Accordion from "components/commonV2/Accordion";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -45,6 +42,8 @@ interface DAO_CREATOR_INTERFACE {
 interface Step {
   title: string;
   form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  Component: any;
+  callbacks?: Object;
 }
 
 export default function DAOcreator() {
@@ -55,7 +54,6 @@ export default function DAOcreator() {
   daoForm.$.config.$.tokenName.value = "test";
 
   const [step, setStep] = React.useState<number>(0);
-  const [collapseID, setCollapseID] = React.useState<any>("stepOne");
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
@@ -151,26 +149,7 @@ export default function DAOcreator() {
     </MDBModal>
   );
 
-  const steps: Step[] = [
-    {
-      title: "Config",
-      form: daoForm.$.config
-    },
-    {
-      title: "Schemes",
-      form: daoForm.$.schemes
-    },
-    {
-      title: "Members",
-      form: daoForm.$.members
-    },
-    {
-      title: "Deploy",
-      form: daoForm
-    }
-  ];
-
-  const currentForm = steps[step].form;
+  let currentForm = daoForm.$.config;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
@@ -182,10 +161,47 @@ export default function DAOcreator() {
     }
   };
 
+  const steps: Step[] = [
+    {
+      title: "Set Description",
+      form: daoForm.$.config,
+      Component: NamingStep,
+      callbacks: {
+        toReviewStep: setStep,
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Configure Schemes",
+      form: daoForm.$.schemes,
+      Component: SchemesStep,
+      callbacks: {
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Add Members",
+      form: daoForm.$.members,
+      Component: MembersStep,
+      callbacks: {
+        getDAOTokenSymbol: () => daoForm.$.config.$.tokenSymbol.value,
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Install Organization",
+      form: daoForm,
+      Component: InstallStep
+    }
+  ];
+
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
-        <Box style={styles.root}>
+        <div style={styles.root}>
           <MDBRow style={styles.headerTop}></MDBRow>
           <div
             className="row justify-content-center"
@@ -196,200 +212,24 @@ export default function DAOcreator() {
           <div className="row">
             <div className="col-md-12">
               <ul className="stepper stepper-vertical" style={styles.noPadding}>
-                <li className={step === 0 || step > 0 ? "completed" : ""}>
-                  <MDBRow
-                    style={styles.specialRow}
-                    className="justify-content-space-between"
-                  >
-                    <a role="button">
-                      <span
-                        className="circle"
-                        style={
-                          step > 0 ? styles.completedStep : styles.completedStep
-                        }
-                      >
-                        1
-                      </span>
-                      <span
-                        className="label"
-                        style={
-                          step === 0 ? styles.active : styles.noActiveLabel
-                        }
-                      >
-                        Set Description
-                      </span>
-                    </a>
-                    <a>
-                      <MDBBtn
-                        hidden={step === 0}
-                        floating
-                        size="lg"
-                        color="transparent"
-                        className="btn"
-                        onClick={() => setStep(0)}
-                        style={styles.icon}
-                      >
-                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
-                      </MDBBtn>
-                    </a>
-                  </MDBRow>
-
-                  <MDBCollapse id="0" isOpen={step.toString()}>
-                    <MDBRow
-                      className="justify-content-end"
-                      style={styles.stepContent}
-                    >
-                      <NamingStep
-                        form={daoForm.$.config}
-                        toReviewStep={() => {
-                          setStep(3);
-                        }}
-                        toggleCollapse={nextStep}
-                      />
-                    </MDBRow>
-                  </MDBCollapse>
-                </li>
-
-                <li className={step === 1 || step > 1 ? "completed" : ""}>
-                  <MDBRow
-                    style={styles.specialRow}
-                    className="justify-content-space-between"
-                  >
-                    <a role="button">
-                      <span
-                        className="circle"
-                        style={
-                          step === 1 || step > 1
-                            ? styles.circleActive
-                            : styles.noActive
-                        }
-                      >
-                        2
-                      </span>
-                      <span
-                        className="label"
-                        style={
-                          step === 1 ? styles.active : styles.noActiveLabel
-                        }
-                      >
-                        Configure Organization
-                      </span>
-                    </a>
-                    <a>
-                      <MDBBtn
-                        hidden={step === 1 || step < 1}
-                        floating
-                        size="lg"
-                        color="transparent"
-                        className="btn"
-                        onClick={() => setStep(1)}
-                        style={styles.icon}
-                      >
-                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
-                      </MDBBtn>
-                    </a>
-                  </MDBRow>
-                  <MDBCollapse id="1" isOpen={step.toString()}>
-                    <MDBRow
-                      className="justify-content-end"
-                      style={styles.stepContent}
-                    >
-                      <SchemesStep
-                        form={daoForm.$.schemes}
-                        toggleCollapse={nextStep}
-                      />
-                    </MDBRow>
-                  </MDBCollapse>
-                </li>
-
-                <li className={step === 2 || step > 2 ? "completed" : ""}>
-                  <MDBRow
-                    style={styles.specialRow}
-                    className="justify-content-space-between"
-                  >
-                    <a role="button">
-                      <span
-                        className="circle"
-                        style={
-                          step === 2 || step > 2
-                            ? styles.circleActive
-                            : styles.noActive
-                        }
-                      >
-                        3
-                      </span>
-                      <span
-                        className="label"
-                        style={
-                          step === 2 ? styles.active : styles.noActiveLabel
-                        }
-                      >
-                        Add Members
-                      </span>
-                    </a>
-                    <a>
-                      <MDBBtn
-                        hidden={step === 2 || step < 2}
-                        floating
-                        size="lg"
-                        color="transparent"
-                        className="btn"
-                        onClick={() => setStep(2)}
-                        style={styles.icon}
-                      >
-                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
-                      </MDBBtn>
-                    </a>
-                  </MDBRow>
-                  <MDBCollapse id="2" isOpen={step.toString()}>
-                    <MDBRow
-                      className="justify-content-end"
-                      style={styles.stepContent}
-                    >
-                      <MembersStep
-                        form={daoForm.$.members}
-                        getDAOTokenSymbol={(): any =>
-                          daoForm.$.config.$.tokenSymbol.value
-                        }
-                        toggleCollapse={nextStep}
-                      />
-                    </MDBRow>
-                  </MDBCollapse>
-                </li>
-
-                <li className={step === 3 ? "completed" : ""}>
-                  <a role="button">
-                    <span
-                      className="circle"
-                      style={
-                        step === 3 || step > 3
-                          ? styles.circleActive
-                          : styles.noActive
-                      }
-                    >
-                      4
-                    </span>
-                    <span
-                      className="label"
-                      style={step === 3 ? styles.active : styles.noActiveLabel}
-                    >
-                      {" "}
-                      Install Organization
-                    </span>
-                  </a>
-                  <MDBCollapse id="3" isOpen={step.toString()}>
-                    <MDBRow
-                      className="justify-content-end"
-                      style={styles.stepContent}
-                    >
-                      <InstallStep daoForm={daoForm} />
-                    </MDBRow>
-                  </MDBCollapse>
-                </li>
+                {steps.map((actualStep: Step, index: number) => {
+                  let { form, title, Component, callbacks } = actualStep;
+                  return (
+                    <Accordion
+                      key={`step${index}`}
+                      form={form}
+                      title={title}
+                      step={step}
+                      index={index}
+                      Component={Component}
+                      callbacks={callbacks}
+                    />
+                  );
+                })}
               </ul>
             </div>
           </div>
-        </Box>
+        </div>
       </MDBContainer>
       <PreviewDialog />
     </>
@@ -405,9 +245,6 @@ const styles = {
     borderRadius: 4,
     margin: "auto"
   },
-  header: {
-    paddingLeft: "36.5%"
-  },
   paddingContainer: {
     padding: "1%",
     height: "50px"
@@ -420,13 +257,6 @@ const styles = {
   noPadding: {
     paddingTop: 0
   },
-  stepContent: {
-    width: "100%",
-    padding: "6px",
-    margin: "0px 0px 0px 14%",
-    border: "1px solid lightgray",
-    borderRadius: "6px"
-  },
   headerTop: {
     height: "30px"
   },
@@ -436,50 +266,5 @@ const styles = {
     borderColor: "inherit",
     marginRight: 0,
     marginLeft: 0
-  },
-  active: {
-    fontWeight: 400,
-    color: "#4285f4"
-  },
-  noActive: {
-    color: "gray",
-    backgroundColor: "white",
-    borderColor: "white",
-    border: "0.9px solid lightgray",
-    fontWeight: 500
-  },
-  noActiveLabel: {
-    color: "gray",
-    fontWeight: 400
-  },
-  circleActive: {
-    fontWeight: 400,
-    backgroundColor: "rgb(66, 133, 244) !important",
-    color: "white",
-    borderColor: "white",
-    border: "0.9px solid lightgray",
-    background: "rgb(66, 133, 244) !important"
-  },
-  specialRow: {
-    marginLeft: 0,
-    marginRight: 0,
-    width: "100%",
-    justifyContent: "space-between"
-  },
-  icon: {
-    background: "white",
-    boxShadow: "none",
-    color: "blue !important",
-    padding: 5,
-    height: 40,
-    width: 40, //The Width must be the same as the height
-    borderRadius: 400,
-    border: "1px solid lightgrey"
-  },
-  completedStep: {
-    fontWeight: 400,
-    color: "#4285f4 !important",
-    border: "0.9px solid #4285f4 !important",
-    background: "white !important"
   }
 };

@@ -11,33 +11,31 @@ interface Props {
 export default function GenesisProtocolEditor(props: Props) {
   const { form, editable } = props;
   const formState = form.$ as any;
+  const paramsNames = Object.keys(formState);
 
-  const votingMachingParamsList: Array<any> = [];
-  let paramsNames = Object.keys(formState);
-  let i: any;
-  for (i in paramsNames) {
-    let key = paramsNames[i];
-    let field = formState[key];
-    let secondKey = paramsNames[i - 1];
-    let secondField = formState[secondKey];
-    if (i <= 3) {
-      votingMachingParamsList.push(
-        <FormField
-          field={field}
-          editable={editable}
-          key={`genproto-field-${i}`}
-        />
-      );
-    } else {
-      if (i % 2 === 0) continue;
-      votingMachingParamsList.push(
-        <MDBRow key={`genproto-field-${i}`}>
-          <FormField field={field} editable={editable} />
-          <FormField field={secondField} editable={editable} />
-        </MDBRow>
-      );
-    }
-  }
-
-  return <>{votingMachingParamsList.map(param => param)}</>;
+  return (
+    <>
+      {paramsNames.map((param: any, index: any) => {
+        let currentParam = formState[param];
+        let previousKey = paramsNames[index - 1];
+        let previousParam = formState[previousKey];
+        if (index <= 3) {
+          return (
+            <FormField
+              field={currentParam}
+              editable={editable}
+              key={`genproto-field-${index}`}
+            />
+          );
+        } else if (index % 2 !== 0) {
+          return (
+            <MDBRow key={`genproto-field-${index}`}>
+              <FormField field={currentParam} editable={editable} />
+              <FormField field={previousParam} editable={editable} />
+            </MDBRow>
+          );
+        }
+      })}
+    </>
+  );
 }

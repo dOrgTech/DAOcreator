@@ -1,8 +1,9 @@
 import React from "react";
-import { DAOConfigForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBCol } from "mdbreact";
-import FormField from "../FormField";
 import { observer } from "mobx-react";
+import { MDBRow } from "mdbreact";
+
+import { DAOConfigForm } from "@dorgtech/daocreator-lib";
+import FormField from "../FormField";
 
 interface Props {
   form: DAOConfigForm;
