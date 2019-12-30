@@ -10,11 +10,11 @@ import SchemeEditor from "../commonV2/dao/SchemeEditor";
 
 interface Props {
   form: SchemesForm;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function SchemesStep(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
 
   React.useEffect(() => {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
@@ -30,7 +30,11 @@ function SchemesStep(props: Props) {
       borderLeftColor="#eaedf3"
       rounded="lg"
     >
-      <SchemeEditor form={form} editable={true} nextStep={nextStep} />
+      <SchemeEditor
+        form={form}
+        editable={true}
+        toggleCollapse={toggleCollapse}
+      />{" "}
     </Box>
   );
 }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { GenesisProtocolForm } from "@dorgtech/daocreator-lib";
 import FormField from "../FormField";
+import { MDBRow } from "mdbreact";
 
 interface Props {
   form: GenesisProtocolForm;
@@ -11,18 +12,32 @@ export default function GenesisProtocolEditor(props: Props) {
   const { form, editable } = props;
   const formState = form.$ as any;
 
-  // TODO: make this the default behaviour of all form components
-  // All editors should just be this, and the fields themselves should contain
-  // a type. Then overrides can be made.
-  return (
-    <>
-      {Object.keys(formState).map((propName: string, index: number) => (
+  const votingMachingParamsList: Array<any> = [];
+  let paramsNames = Object.keys(formState);
+  let i: any;
+  for (i in paramsNames) {
+    let key = paramsNames[i];
+    let field = formState[key];
+    let secondKey = paramsNames[i - 1];
+    let secondField = formState[secondKey];
+    if (i <= 3) {
+      votingMachingParamsList.push(
         <FormField
-          field={formState[propName]}
+          field={field}
           editable={editable}
-          key={`genproto-field-${index}`}
+          key={`genproto-field-${i}`}
         />
-      ))}
-    </>
-  );
+      );
+    } else {
+      if (i % 2 === 0) continue;
+      votingMachingParamsList.push(
+        <MDBRow key={`genproto-field-${i}`}>
+          <FormField field={field} editable={editable} />
+          <FormField field={secondField} editable={editable} />
+        </MDBRow>
+      );
+    }
+  }
+
+  return <>{votingMachingParamsList.map(param => param)}</>;
 }

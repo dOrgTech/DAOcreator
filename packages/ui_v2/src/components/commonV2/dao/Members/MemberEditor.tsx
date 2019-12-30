@@ -11,32 +11,24 @@ export const MemberEditor = ({
   onSubmit: any;
 }) => {
   return (
-    <MDBBox>
-      <form onSubmit={onSubmit}>
-        <MDBRow>
-          <MDBCol md="6">
-            <MDBBox>
-              <FormField
-                field={memberForm.$.address}
-                editable={true}
-              ></FormField>
-            </MDBBox>
-          </MDBCol>
-          <MDBCol md="6">
-            <MDBBox>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
-                type="submit"
-                style={styles.setDescriptionButton}
-              >
-                Add Member
-              </MDBBtn>
-            </MDBBox>
-          </MDBCol>
-        </MDBRow>
-      </form>
-    </MDBBox>
+    <MDBRow>
+      <FormField
+        field={memberForm.$.address}
+        editable={true}
+        colSize="9"
+      ></FormField>
+      <MDBCol size="3" style={styles.buttonRow}>
+        <MDBBtn
+          color="blue darken-4"
+          size="sm"
+          type="submit"
+          style={styles.setDescriptionButton}
+          onClick={onSubmit}
+        >
+          Add Member
+        </MDBBtn>
+      </MDBCol>
+    </MDBRow>
   );
 };
 
@@ -44,5 +36,6 @@ const styles = {
   setDescriptionButton: {
     borderRadius: "0.37rem",
     fontWeight: 700
-  }
+  },
+  buttonRow: {}
 };

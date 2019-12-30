@@ -6,14 +6,14 @@ import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 interface Props {
   form: DAOConfigForm;
   toReviewStep: () => void;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function NamingStep(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
   return (
     <>
-      <MDBContainer>
+      <div style={styles.paddingTotal}>
         <br />
         <DAOConfigEditor form={form} editable={true} />
         <br />
@@ -25,13 +25,13 @@ function NamingStep(props: Props) {
               name="decisonSpeed"
               value="slow"
               style={styles.buttonStyle}
-              onClick={() => nextStep()}
+              onClick={() => toggleCollapse()}
             >
               Set Description
             </MDBBtn>
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
+      </div>
     </>
   );
 }
@@ -49,6 +49,9 @@ const styles = {
   },
   paddingBottom: {
     paddingBottom: "2%"
+  },
+  paddingTotal: {
+    padding: "6px"
   }
 };
 
