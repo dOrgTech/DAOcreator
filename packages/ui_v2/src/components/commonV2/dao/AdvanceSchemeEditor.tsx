@@ -202,6 +202,7 @@ function AdvanceSchemeEditor(props: Props) {
               <MDBBtn
                 color="primary"
                 onClick={() => {
+                  setAdvanceMode(true);
                   setModalState(!modalState);
                 }}
               >
