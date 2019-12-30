@@ -33,6 +33,7 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
+import Accordion from "../commonv2/dao/Accordion";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -54,6 +55,7 @@ export default function DAOcreator() {
   daoForm.$.config.$.tokenName.value = "test";
 
   const [step, setStep] = React.useState<number>(0);
+  const [collapseID, setCollapseID] = React.useState<any>("stepOne");
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
@@ -194,7 +196,7 @@ export default function DAOcreator() {
           <div className="row">
             <div className="col-md-12">
               <ul className="stepper stepper-vertical" style={styles.noPadding}>
-                <li className={step === 0 ? "completed" : ""}>
+                <li className={step === 0 || step > 0 ? "completed" : ""}>
                   <MDBRow
                     style={styles.specialRow}
                     className="justify-content-space-between"
@@ -203,7 +205,7 @@ export default function DAOcreator() {
                       <span
                         className="circle"
                         style={
-                          step === 0 ? styles.circleActive : styles.noActive
+                          step > 0 ? styles.completedStep : styles.completedStep
                         }
                       >
                         1
@@ -248,21 +250,45 @@ export default function DAOcreator() {
                   </MDBCollapse>
                 </li>
 
-                <li className={step === 1 ? "completed" : ""}>
-                  <a role="button">
-                    <span
-                      className="circle"
-                      style={step === 1 ? styles.circleActive : styles.noActive}
-                    >
-                      2
-                    </span>
-                    <span
-                      className="label"
-                      style={step === 1 ? styles.active : styles.noActiveLabel}
-                    >
-                      Configure Organization
-                    </span>
-                  </a>
+                <li className={step === 1 || step > 1 ? "completed" : ""}>
+                  <MDBRow
+                    style={styles.specialRow}
+                    className="justify-content-space-between"
+                  >
+                    <a role="button">
+                      <span
+                        className="circle"
+                        style={
+                          step === 1 || step > 1
+                            ? styles.circleActive
+                            : styles.noActive
+                        }
+                      >
+                        2
+                      </span>
+                      <span
+                        className="label"
+                        style={
+                          step === 1 ? styles.active : styles.noActiveLabel
+                        }
+                      >
+                        Configure Organization
+                      </span>
+                    </a>
+                    <a>
+                      <MDBBtn
+                        hidden={step === 1 || step < 1}
+                        floating
+                        size="lg"
+                        color="transparent"
+                        className="btn"
+                        onClick={() => setStep(1)}
+                        style={styles.icon}
+                      >
+                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+                      </MDBBtn>
+                    </a>
+                  </MDBRow>
                   <MDBCollapse id="1" isOpen={step.toString()}>
                     <MDBRow
                       className="justify-content-end"
@@ -276,21 +302,45 @@ export default function DAOcreator() {
                   </MDBCollapse>
                 </li>
 
-                <li className={step === 2 ? "completed" : ""}>
-                  <a role="button">
-                    <span
-                      className="circle"
-                      style={step === 2 ? styles.circleActive : styles.noActive}
-                    >
-                      3
-                    </span>
-                    <span
-                      className="label"
-                      style={step === 2 ? styles.active : styles.noActiveLabel}
-                    >
-                      Add Members
-                    </span>
-                  </a>
+                <li className={step === 2 || step > 2 ? "completed" : ""}>
+                  <MDBRow
+                    style={styles.specialRow}
+                    className="justify-content-space-between"
+                  >
+                    <a role="button">
+                      <span
+                        className="circle"
+                        style={
+                          step === 2 || step > 2
+                            ? styles.circleActive
+                            : styles.noActive
+                        }
+                      >
+                        3
+                      </span>
+                      <span
+                        className="label"
+                        style={
+                          step === 2 ? styles.active : styles.noActiveLabel
+                        }
+                      >
+                        Add Members
+                      </span>
+                    </a>
+                    <a>
+                      <MDBBtn
+                        hidden={step === 2 || step < 2}
+                        floating
+                        size="lg"
+                        color="transparent"
+                        className="btn"
+                        onClick={() => setStep(2)}
+                        style={styles.icon}
+                      >
+                        <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+                      </MDBBtn>
+                    </a>
+                  </MDBRow>
                   <MDBCollapse id="2" isOpen={step.toString()}>
                     <MDBRow
                       className="justify-content-end"
@@ -311,7 +361,11 @@ export default function DAOcreator() {
                   <a role="button">
                     <span
                       className="circle"
-                      style={step === 3 ? styles.circleActive : styles.noActive}
+                      style={
+                        step === 3 || step > 3
+                          ? styles.circleActive
+                          : styles.noActive
+                      }
                     >
                       4
                     </span>
@@ -421,5 +475,11 @@ const styles = {
     width: 40, //The Width must be the same as the height
     borderRadius: 400,
     border: "1px solid lightgrey"
+  },
+  completedStep: {
+    fontWeight: 400,
+    color: "#4285f4 !important",
+    border: "0.9px solid #4285f4 !important",
+    background: "white !important"
   }
 };

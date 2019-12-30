@@ -10,15 +10,7 @@ import {
   PercentageField,
   AddressField
 } from "@dorgtech/daocreator-lib";
-import {
-  MDBInput,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBTooltip,
-  MDBBtn,
-  MDBIcon
-} from "mdbreact";
+import { MDBRow, MDBCol, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 import EthAddressAvatar from "../EthAddressAvatar";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -26,11 +18,12 @@ import "react-datepicker/dist/react-datepicker.css";
 export interface Props {
   field: AnyField;
   editable?: boolean;
-  fullWidth?: boolean;
+  colSize?: any;
 }
 
 function FormField(props: Props) {
-  const { field, editable, fullWidth } = props;
+  const { field, editable, colSize } = props;
+  const size = colSize ? colSize : 6;
   let FieldView;
 
   switch (field.type) {
@@ -55,10 +48,9 @@ function FormField(props: Props) {
     default:
       throw Error(`Field type "${FieldType[field.type]}" unimplemented.`);
   }
-  const colSize = fullWidth ? "12" : "6";
   return (
     <>
-      <FieldView field={field as any} editable={editable} colSize={colSize} />
+      <FieldView field={field as any} editable={editable} colSize={size} />
     </>
   );
 }
@@ -66,7 +58,7 @@ function FormField(props: Props) {
 interface FieldProps<T> {
   field: T;
   editable?: boolean;
-  colSize: any;
+  colSize?: any;
 }
 
 const FieldError = ({ field }: any) =>
@@ -77,9 +69,9 @@ const FieldError = ({ field }: any) =>
   );
 
 const StringFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<StringField>) => (
+  ({ field, editable }: FieldProps<StringField>) => (
     <>
-      <MDBCol size={colSize} style={styles.largeMargin}>
+      <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
@@ -105,9 +97,9 @@ const StringFieldView = observer(
 );
 
 const TokenFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<TokenField>) => (
+  ({ field, editable }: FieldProps<TokenField>) => (
     <>
-      <MDBCol size={colSize} style={styles.largeMargin}>
+      <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
@@ -185,9 +177,9 @@ const DurationFieldView = observer(
 );
 
 const DateTimeFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<DateTimeField>) => (
+  ({ field, editable }: FieldProps<DateTimeField>) => (
     <>
-      <MDBCol size={colSize} style={styles.largeMargin}>
+      <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
@@ -220,10 +212,10 @@ const DateTimeFieldView = observer(
 );
 
 const PercentageFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<PercentageField>) => {
+  ({ field, editable }: FieldProps<PercentageField>) => {
     return (
       <>
-        <MDBCol size={colSize} style={styles.largeMargin}>
+        <MDBCol size="6" style={styles.largeMargin}>
           <label style={styles.labelStyle}>{field.displayName}</label>
           <MDBTooltip placement="bottom" clickable>
             <MDBBtn floating size="lg" color="transparent" style={styles.info}>
@@ -248,29 +240,27 @@ const PercentageFieldView = observer(
 );
 
 const AddressFieldView = observer(
-  ({ field, editable }: FieldProps<AddressField>) => (
+  ({ field, editable, colSize }: FieldProps<AddressField>) => (
     <>
-      <MDBRow style={styles.largeMargin}>
-        <MDBCol size="12" style={styles.largeMargin}>
-          <label style={styles.labelStyle}>{field.displayName}</label>
-          <MDBTooltip placement="bottom" clickable>
-            <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-              {" "}
-              <MDBIcon icon="info-circle" />
-            </MDBBtn>
-            <span>Some example</span>
-          </MDBTooltip>
-          <input
-            style={styles.inputStyle}
-            placeholder="0x..."
-            value={field.value}
-            disabled={editable === undefined ? false : !editable}
-            onChange={e => field.onChange(e.target.value)}
-            onBlur={field.enableAutoValidationAndValidate}
-          />
-          <FieldError field={field} />
-        </MDBCol>
-      </MDBRow>
+      <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
+        <label style={styles.labelStyle}>{field.displayName}</label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>Some example</span>
+        </MDBTooltip>
+        <input
+          style={styles.inputStyle}
+          placeholder="0x..."
+          value={field.value}
+          disabled={editable === undefined ? false : !editable}
+          onChange={e => field.onChange(e.target.value)}
+          onBlur={field.enableAutoValidationAndValidate}
+        />
+        <FieldError field={field} />
+      </MDBCol>
     </>
   )
 );

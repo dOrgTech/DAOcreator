@@ -18,9 +18,9 @@ export default function GenesisProtocolEditor(props: Props) {
   for (i in paramsNames) {
     let key = paramsNames[i];
     let field = formState[key];
-    let secondKey = i === 7 ? paramsNames[10] : paramsNames[i - 1];
+    let secondKey = paramsNames[i - 1];
     let secondField = formState[secondKey];
-    if (i <= 3 || i > 10) {
+    if (i <= 3) {
       votingMachingParamsList.push(
         <FormField
           field={field}
