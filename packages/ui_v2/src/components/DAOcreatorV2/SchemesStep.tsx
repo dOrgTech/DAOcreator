@@ -20,7 +20,6 @@ function SchemesStep(props: Props) {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
   }, [form.$]);
 
-  const headerSection = true ? "2 Configure Organization" : "2 Configuration";
   return (
     <Box
       width={"100%"}

@@ -1,7 +1,7 @@
 import React from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
-import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;

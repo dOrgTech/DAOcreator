@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBBox, MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
 
 import FormField from "components/commonV2/FormField";
 
