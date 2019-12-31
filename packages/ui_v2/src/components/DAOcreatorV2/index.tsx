@@ -2,7 +2,8 @@ import * as React from "react";
 import {
   DAOForm,
   toDAOMigrationParams,
-  toJSON
+  toJSON,
+  MemberForm
 } from "@dorgtech/daocreator-lib";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
@@ -31,6 +32,8 @@ import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
 import Accordion from "components/commonV2/Accordion";
+import { getProvider } from "web3/core";
+import { useForceUpdate } from "utils/hooks/";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -54,23 +57,31 @@ export default function DAOcreator() {
   daoForm.$.config.$.tokenName.value = "test";
 
   const [step, setStep] = React.useState<number>(0);
+  const [defaultAddress, setDefaultAddress] = React.useState<
+    string | undefined
+  >();
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
 
   React.useEffect(() => {
+    setLoading(true);
+    handleMetamask();
     previewLocalStorage();
     window.addEventListener("beforeunload", saveLocalStorage);
-
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  });
+  }, []);
+
+  const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const previewLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
     if (!daoCreatorState) {
+      setLoading(false);
       return;
     }
 
@@ -186,7 +197,7 @@ export default function DAOcreator() {
       form: daoForm.$.members,
       Component: MembersStep,
       callbacks: {
-        getDAOTokenSymbol: () => daoForm.$.config.$.tokenSymbol.value,
+        getDAOTokenSymbol,
         toggleCollapse: nextStep,
         setStep
       }
@@ -197,6 +208,22 @@ export default function DAOcreator() {
       Component: InstallStep
     }
   ];
+
+  const handleMetamask = async () => {
+    try {
+      const address = await getProvider();
+      setDefaultAddress(address);
+      const member = new MemberForm(getDAOTokenSymbol);
+      member.$.address.value = address;
+      member.$.reputation.value = "0";
+      member.$.tokens.value = "0";
+      const firstMember = new MemberForm(member.getDAOTokenSymbol, member);
+      daoForm.$.members.$.push(firstMember);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -211,22 +238,41 @@ export default function DAOcreator() {
           </div>
           <div className="row">
             <div className="col-md-12">
-              <ul className="stepper stepper-vertical" style={styles.noPadding}>
-                {steps.map((actualStep: Step, index: number) => {
-                  let { form, title, Component, callbacks } = actualStep;
-                  return (
-                    <Accordion
-                      key={`step${index}`}
-                      form={form}
-                      title={title}
-                      step={step}
-                      index={index}
-                      Component={Component}
-                      callbacks={callbacks}
-                    />
-                  );
-                })}
-              </ul>
+              {loading ? (
+                <div
+                  style={styles.spinner}
+                  className="spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : !defaultAddress ? (
+                <div className="row justify-content-center">
+                  <h4 style={styles.fontStyle}>
+                    You must allow metamask to continue
+                  </h4>
+                </div>
+              ) : (
+                <ul
+                  className="stepper stepper-vertical"
+                  style={styles.noPadding}
+                >
+                  {steps.map((actualStep: Step, index: number) => {
+                    let { form, title, Component, callbacks } = actualStep;
+                    return (
+                      <Accordion
+                        key={`step${index}`}
+                        form={form}
+                        title={title}
+                        step={step}
+                        index={index}
+                        Component={Component}
+                        callbacks={callbacks}
+                      />
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -261,10 +307,12 @@ const styles = {
     height: "30px"
   },
   titleContainer: {
-    paddingBottom: "13px",
     borderBottom: "1px solid",
     borderColor: "inherit",
     marginRight: 0,
     marginLeft: 0
+  },
+  spinner: {
+    display: "inline-block"
   }
 };
