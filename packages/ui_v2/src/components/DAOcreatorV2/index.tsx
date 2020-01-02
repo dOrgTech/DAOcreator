@@ -128,7 +128,7 @@ export default function DAOcreator() {
         In Progress DAO Detected
       </MDBModalHeader>
       <MDBModalBody>
-        <InstallStep daoForm={recoveredForm} />
+        <InstallStep form={recoveredForm} />
       </MDBModalBody>
       <MDBModalFooter></MDBModalFooter>
 
