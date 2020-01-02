@@ -11,32 +11,38 @@ interface Props {
   form: DAOForm;
 }
 
-// interface Props extends WithStyles<typeof styles> {
-//   dao: DAOMigrationParams;
-//   onComplete: (result: DAOMigrationResult) => void;
-//   onAbort: (error: Error) => void;
-//   onStart: () => void;
-//   onStop: () => void;
-// }
+/*
+  Type issue for form.$
 
+  Argument of type '{ config: DAOConfigForm; members: MembersForm; schemes: SchemesForm; }' is not assignable to parameter of type 'DAOcreatorState'.
+    Types of property 'config' are incompatible.
+      Type 'DAOConfigForm' is missing the following properties from type 'DAOConfig': daoName, tokenName, tokenSymbol
+*/
 function InstallStep(props: any) {
   const { form } = props;
+  console.log(form.$);
 
   const onComplete = () => {
     console.log("onComplete");
-    // Update UI
+    // Previously set daoCreator state:
+    // isMigrating = false
   };
+
   const onStart = () => {
     console.log("onStart");
-    // Update UI
+    // Previously set daoCreator state:
+    // isMigrating = true
   };
+
   const onAbort = (error: Error) => {
     console.log(error.message);
     onStop();
   };
+
   const onStop = () => {
     console.log("onStop");
-    // Update UI
+    // Previously set daoCreator state:
+    // isMigrating = false
   };
 
   return (
