@@ -7,11 +7,11 @@
     "postinstall": "node scripts/optimizeABIs.js",
     "build": "tsc",
     "build:release": "rm -rf ./dist && tsc",
-    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json yarn.lock ./package && cp -r ./src ./package/src",
-    "release": "npm run build:release && npm run package:release && npm publish ./package --access public"
+    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src",
+    "release": "yarn build:release && yarn package:release && yarn publish ./package --access public"
   },
   "dependencies": {
-    "@daostack/migration": "0.0.1-rc.36-v2",
+    "@daostack/migration": "0.0.1-rc.36-v4",
     "bn.js": "^5.0.0",
     "csv": "^5.1.2",
     "csv-stringify": "^5.3.3",
