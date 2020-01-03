@@ -38,6 +38,12 @@ function AdvanceSchemeEditor(props: Props) {
   );
   const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
 
+  const schemeEditorsMock: AnySchemeForm[] = [
+    observable(new ContributionRewardForm()),
+    observable(new SchemeRegistrarForm()),
+    observable(new GenericSchemeForm())
+  ];
+
   const handleToggle = (index: number) => {
     checkSchemeIsAdded(
       form.$.some((scheme: AnySchemeForm) => scheme.type === index)
@@ -88,50 +94,49 @@ function AdvanceSchemeEditor(props: Props) {
     }
     handleToggle(schemeIndex);
   };
-  console.log("form", form);
+  console.log("form", form.$);
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
   return (
     <Fragment>
-      <MDBBtn
-        outline
-        //   color="black"
-        style={styles.button}
-        onClick={() => setModalState(!modalState)}
-      >
+      <button style={styles.button} onClick={() => setModalState(!modalState)}>
         Advance Configuration
-      </MDBBtn>
+      </button>
       <MDBModal
         isOpen={modalState}
         toggle={() => setModalState(!modalState)}
         style={styles.modal}
         size="lg"
       >
-        <MDBModalHeader toggle={() => setModalState(!modalState)}>
+        <MDBModalHeader
+          toggle={() => setModalState(!modalState)}
+          style={styles.bold}
+        >
+          {" "}
           Advance Configuration
         </MDBModalHeader>
         <MDBModalBody>
           <MDBRow style={styles.rowTab}>
-            <MDBCol style={styles.tab}>
+            <MDBCol>
               <button
-                style={styles.buttonTab}
+                style={scheme === 0 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.ContributionReward)}
               >
                 Contribution Reward
               </button>
             </MDBCol>
-            <MDBCol style={styles.tab}>
+            <MDBCol>
               <button
-                style={styles.buttonTab}
+                style={scheme === 1 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.SchemeRegistrar)}
               >
                 Scheme Registry
               </button>
             </MDBCol>
-            <MDBCol style={styles.tab}>
+            <MDBCol>
               <button
-                style={styles.buttonTab}
+                style={scheme === 2 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.GenericScheme)}
               >
                 Generic Scheme
@@ -171,392 +176,14 @@ function AdvanceSchemeEditor(props: Props) {
                 </div>
               </MDBCol>
             </MDBRow>
-            {schemeIsAdded ? (
-              <GenesisProtocolEditor
-                form={selectedForm.$.votingMachine}
-                editable={true}
-              />
-            ) : (
-              ""
-            )}
-            {/* <MDBRow style={styles.paddingRow}>
-              <MDBCol>
-                <span>Queued Vote Period Limit</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-              </MDBCol>
-              <MDBCol size="3">
-                <input
-                  style={styles.date}
-                  type="number"
-                  name="queuedDays"
-                  placeholder={queuedDaysState}
-                  id="queuedDays"
-                  onChange={(e: any) => setQueuedDaysState(e.target.value)}
-                  required
-                />
-                <input
-                  style={styles.dateTime}
-                  type="time"
-                  name="queuedHours"
-                  value={queuedHoursState}
-                  onChange={(e: any) => setQueuedHoursState(e.target.value)}
-                  required
-                  id="queuedHours"
-                ></input>
-              </MDBCol>
-            </MDBRow> */}
-            {/* <MDBRow style={styles.paddingRow}>
-              <MDBCol>
-                <span>Pre-Boosted Vote Period Limit</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-              </MDBCol>
-              <MDBCol size="3">
-                <input
-                  style={styles.date}
-                  type="number"
-                  name="quantity"
-                  placeholder={preBoostedDayState}
-                  id="preBoostedDay"
-                  required
-                  onChange={(e: any) => setPreBoostedDayState(e.target.value)}
-                />
-                <input
-                  style={styles.date}
-                  type="time"
-                  id="preBoostedHours"
-                  name="preBoostedHours"
-                  value={preBoostedHoursState}
-                  onChange={(e: any) => setPreBoostedHoursState(e.target.value)}
-                  required
-                ></input>
-              </MDBCol>
-            </MDBRow> */}
-            {/* <MDBRow style={styles.paddingRow}>
-              <MDBCol>
-                <span>Boosted Vote Period</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-              </MDBCol>
-              <MDBCol size="3">
-                <input
-                  style={styles.date}
-                  type="number"
-                  name="boostedDay"
-                  placeholder={boostedDayState}
-                  id="boostedDay"
-                  required
-                  onChange={(e: any) => setBoostedDayState(e.target.value)}
-                />
-                <input
-                  style={styles.date}
-                  type="time"
-                  id="boostedHours"
-                  name="boostedHours"
-                  value={boostedHoursState}
-                  required
-                  onChange={(e: any) => setBoostedHoursState(e.target.value)}
-                ></input>
-              </MDBCol>
-            </MDBRow>
-            <MDBRow style={styles.paddingRow}>
-              <MDBCol>
-                <span>Quiet Ending Period</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-              </MDBCol>
-              <MDBCol size="3">
-                <input
-                  style={styles.date}
-                  type="number"
-                  name="quietDay"
-                  id="quietDay"
-                  placeholder={quietDayState}
-                  required
-                  onChange={(e: any) => setQuietDayState(e.target.value)}
-                />
-                <input
-                  style={styles.date}
-                  type="time"
-                  id="quietHours"
-                  name="quietHours"
-                  value={quietHoursState}
-                  required
-                  onChange={(e: any) => setQuietHoursState(e.target.value)}
-                ></input>
-              </MDBCol>
-            </MDBRow>
-            <MDBRow style={styles.lastRow}>
-              <MDBCol>
-                <span>Locking / Activation Time</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-              </MDBCol>
-              <MDBCol size="3">
-                <input
-                  style={styles.date}
-                  type="number"
-                  name="lockingDay"
-                  id="lockingDay"
-                  placeholder={lockingDayState}
-                  onChange={(e: any) => setLockingDayState(e.target.value)}
-                  required
-                />
-                <input
-                  style={styles.date}
-                  type="time"
-                  id="lockingHours"
-                  name="lockingHours"
-                  value={lockingHoursState}
-                  required
-                  onChange={(e: any) => setLockingHoursState(e.target.value)}
-                ></input>
-              </MDBCol>
-            </MDBRow>
-
-            <MDBRow style={styles.paddingRow}>
-              <MDBCol size="6">
-                <span>QUEUED VOTE REQUIRED</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="number"
-                  id="queuedVote"
-                  name="queuedVote"
-                  placeholder={queuedVoteState.toString()}
-                  style={styles.inputStyle}
-                  onChange={(e: any) =>
-                    setQueuedVoteState(Number(e.target.value))
-                  }
-                />
-              </MDBCol>
-              <MDBCol size="6">
-                <span>MINIMUM DAO BOUNTY</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="text"
-                  id="minimumDao"
-                  name="minimumDao"
-                  placeholder={minimumDaoState.toString()}
-                  style={styles.inputStyle}
-                  onChange={(e: any) =>
-                    setMinimumDaoState(Number(e.target.value))
-                  }
-                />
-              </MDBCol>
-            </MDBRow>
-
-            <MDBRow style={styles.paddingRow}>
-              <MDBCol size="6">
-                <span>THERESHOLD CONSTANT</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="text"
-                  id="thereshold"
-                  name="thereshold"
-                  placeholder={theresholdState.toString()}
-                  style={styles.inputStyle}
-                  onChange={(e: any) =>
-                    setTheresholdState(Number(e.target.value))
-                  }
-                />
-              </MDBCol>
-              <MDBCol size="6">
-                <span>VOTERS REPUTATION LOSS RATIO</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="text"
-                  id="votersReputation"
-                  name="votersReputation"
-                  placeholder={votersReputationState.toString()}
-                  style={styles.inputStyle}
-                  onChange={(e: any) =>
-                    setVotersReputationState(Number(e.target.value))
-                  }
-                />
-              </MDBCol>
-            </MDBRow>
-
-            <MDBRow style={styles.paddingRow}>
-              <MDBCol size="6">
-                <span>REWARD SUCCESSFUL PROPOSER</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="text"
-                  id="rewardSuccessful"
-                  name="rewardSuccessful"
-                  placeholder={rewardSuccessfulState.toString()}
-                  style={styles.inputStyle}
-                  onChange={(e: any) =>
-                    setRewardSuccessfulState(Number(e.target.value))
-                  }
-                />
-              </MDBCol>
-              <MDBCol size="6">
-                <span>ACTIVATION TIME</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-
-                <input
-                  type="date"
-                  id="activationDate"
-                  name="activationDate"
-                  placeholder="Date"
-                  value={activationDateState}
-                  style={styles.inputDiv}
-                  onChange={(e: any) => {
-                    setActivationDateState(e.target.value);
-                  }}
-                />
-
-                <input
-                  type="time"
-                  name="activationHours"
-                  id="activationHours"
-                  value={activationHoursState}
-                  style={styles.inputDiv}
-                  onChange={(e: any) => {
-                    setActivationHoursState(e.target.value);
-                  }}
-                />
-              </MDBCol>
-            </MDBRow>
-
-            <MDBRow style={styles.paddingRow}>
-              <MDBCol>
-                <span>VOTE ON BEHALF</span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>Some example</span>
-                </MDBTooltip>
-                <br></br>
-                <input
-                  type="text"
-                  id="voteBehalf"
-                  name="voteBehalf"
-                  placeholder="0x..."
-                  style={styles.inputStyle}
-                  onChange={(e: any) => setVoteBehalfState(e.target.value)}
-                />
-              </MDBCol>
-            </MDBRow> */}
+            <GenesisProtocolEditor
+              form={
+                schemeIsAdded
+                  ? selectedForm.$.votingMachine
+                  : schemeEditorsMock[scheme].$.votingMachine
+              }
+              editable={schemeIsAdded}
+            />
           </div>
         </MDBModalBody>
         <MDBModalFooter>
@@ -578,9 +205,15 @@ function AdvanceSchemeEditor(props: Props) {
 
 const styles = {
   button: {
-    width: "inherit",
+    width: "174px",
     height: "42px",
-    padding: 0
+    padding: "4px",
+    border: "1px solid gray",
+    boxShadow: "none",
+    borderRadius: "4px",
+    fontFamily: '"Roboto", sans-serif',
+    fontWeight: 300,
+    fontSize: "15px"
   },
   tab: {
     padding: "0px"
@@ -594,6 +227,18 @@ const styles = {
     boxShadow: "none",
     borderTop: "none",
     borderBottom: "0.5px solid lightgray",
+    borderLeft: "0.5px solid lightgray",
+    borderRight: "0.5px solid lightgray"
+  },
+  buttonTabActive: {
+    width: "100%",
+    margin: "auto",
+    backgroundColor: "white !important",
+    color: "black",
+    height: "52px",
+    boxShadow: "none",
+    borderTop: "none",
+    borderBottom: "3px solid #4285f4",
     borderLeft: "0.5px solid lightgray",
     borderRight: "0.5px solid lightgray"
   },
@@ -651,7 +296,9 @@ const styles = {
   },
   inputDiv: {
     width: "50%"
+  },
+  bold: {
+    fontWeight: 400
   }
 };
-
 export default AdvanceSchemeEditor;

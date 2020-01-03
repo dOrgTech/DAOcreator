@@ -4,7 +4,6 @@ import {
   toDAOMigrationParams,
   toJSON
 } from "@dorgtech/daocreator-lib";
-import { Accordion } from "react-rainbow-components";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -14,10 +13,11 @@ import {
   MDBModal,
   MDBModalBody,
   MDBModalHeader,
-  MDBModalFooter
+  MDBModalFooter,
+  MDBContainer,
+  MDBRow
 } from "mdbreact";
 
-import { Box } from "@chakra-ui/core";
 import {
   DAOConfigForm,
   MembersForm,
@@ -30,6 +30,7 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
+import Accordion from "components/commonV2/Accordion";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -41,6 +42,8 @@ interface DAO_CREATOR_INTERFACE {
 interface Step {
   title: string;
   form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  Component: any;
+  callbacks?: Object;
 }
 
 export default function DAOcreator() {
@@ -146,64 +149,90 @@ export default function DAOcreator() {
     </MDBModal>
   );
 
-  const steps: Step[] = [
-    {
-      title: "Config",
-      form: daoForm.$.config
-    },
-    {
-      title: "Schemes",
-      form: daoForm.$.schemes
-    },
-    {
-      title: "Members",
-      form: daoForm.$.members
-    },
-    {
-      title: "Deploy",
-      form: daoForm
-    }
-  ];
-
-  /* when good looking UI is attached this is going to be 
-  const currentForm = steps[1].form
-  instead of a static number */
-
-  const currentForm = steps[1].form;
+  let currentForm = daoForm.$.config;
   const nextStep = async () => {
     if (currentForm) {
       const res = await currentForm.validate();
-      console.log(currentForm);
-      console.log(res);
-      if (!res.hasError) {
-        // setStep(step + 1);
-      }
+      // if (!res.hasError) {
+      setStep(step + 1);
+      // }
     } else {
-      // setStep(step + 1);
+      setStep(step + 1);
     }
   };
 
+  const steps: Step[] = [
+    {
+      title: "Set Description",
+      form: daoForm.$.config,
+      Component: NamingStep,
+      callbacks: {
+        toReviewStep: setStep,
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Configure Schemes",
+      form: daoForm.$.schemes,
+      Component: SchemesStep,
+      callbacks: {
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Add Members",
+      form: daoForm.$.members,
+      Component: MembersStep,
+      callbacks: {
+        getDAOTokenSymbol: () => daoForm.$.config.$.tokenSymbol.value,
+        toggleCollapse: nextStep,
+        setStep
+      }
+    },
+    {
+      title: "Install Organization",
+      form: daoForm,
+      Component: InstallStep
+    }
+  ];
+
   return (
-    <Box style={styles.root}>
-      <h3 style={styles.header}>Create Organization</h3>
-      <Accordion id="accordion" activeSectionNames={step.toString()}>
-        <NamingStep
-          form={daoForm.$.config}
-          toReviewStep={() => {
-            setStep(3);
-          }}
-          nextStep={nextStep}
-        />
-        <SchemesStep form={daoForm.$.schemes} nextStep={nextStep} />
-        <MembersStep
-          form={daoForm.$.members}
-          getDAOTokenSymbol={(): any => daoForm.$.config.$.tokenSymbol.value}
-          nextStep={nextStep}
-        />
-        <InstallStep daoForm={daoForm} />
-      </Accordion>
+    <>
+      <MDBContainer style={styles.paddingContainer}>
+        <div style={styles.root}>
+          <MDBRow style={styles.headerTop}></MDBRow>
+          <div
+            className="row justify-content-center"
+            style={styles.titleContainer}
+          >
+            <h3 style={styles.fontStyle}>Create Organization</h3>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <ul className="stepper stepper-vertical" style={styles.noPadding}>
+                {steps.map((actualStep: Step, index: number) => {
+                  let { form, title, Component, callbacks } = actualStep;
+                  return (
+                    <Accordion
+                      key={`step${index}`}
+                      form={form}
+                      title={title}
+                      step={step}
+                      index={index}
+                      Component={Component}
+                      callbacks={callbacks}
+                    />
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </MDBContainer>
       <PreviewDialog />
-    </Box>
+    </>
   );
 }
 
@@ -213,9 +242,29 @@ const styles = {
     maxWidth: 734,
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
-    borderRadius: 4
+    borderRadius: 4,
+    margin: "auto"
   },
-  header: {
-    paddingLeft: "36.5%"
+  paddingContainer: {
+    padding: "1%",
+    height: "50px"
+  },
+  fontStyle: {
+    fontize: "1.45rem",
+    fontWeight: 400,
+    fontFamily: "inherit"
+  },
+  noPadding: {
+    paddingTop: 0
+  },
+  headerTop: {
+    height: "30px"
+  },
+  titleContainer: {
+    paddingBottom: "13px",
+    borderBottom: "1px solid",
+    borderColor: "inherit",
+    marginRight: 0,
+    marginLeft: 0
   }
 };

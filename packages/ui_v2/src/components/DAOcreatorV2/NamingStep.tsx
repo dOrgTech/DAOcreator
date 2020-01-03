@@ -1,49 +1,57 @@
 import React from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
-import { AccordionSection } from "react-rainbow-components";
 import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
-import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;
   toReviewStep: () => void;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function NamingStep(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
   return (
     <>
-      <AccordionSection
-        name="0"
-        label={true ? "1 Set Description" : "1 Description"}
-      >
-        <MDBContainer>
-          <DAOConfigEditor form={form} editable={true} />
-          <MDBRow>
-            <MDBCol>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
-                name="decisonSpeed"
-                value="slow"
-                style={styles.setDescriptionButton}
-                onClick={() => nextStep()}
-              >
-                Set Description
-              </MDBBtn>
-            </MDBCol>
-          </MDBRow>
-        </MDBContainer>
-      </AccordionSection>
+      <div style={styles.paddingTotal}>
+        <br />
+        <DAOConfigEditor form={form} editable={true} />
+        <br />
+        <MDBRow style={styles.paddingBottom}>
+          <MDBCol>
+            <MDBBtn
+              color="blue darken-4"
+              size="sm"
+              name="decisonSpeed"
+              value="slow"
+              style={styles.buttonStyle}
+              onClick={() => toggleCollapse()}
+            >
+              Set Description
+            </MDBBtn>
+          </MDBCol>
+        </MDBRow>
+      </div>
     </>
   );
 }
 
 const styles = {
-  setDescriptionButton: {
+  buttonStyle: {
     borderRadius: "0.37rem",
-    fontWeight: 700
+    height: "45px",
+    fontWeight: 300,
+    backgroundColor: "#1976d2",
+    color: "white",
+    width: "145px",
+    padding: "7px",
+    marginBottom: "11px"
+  },
+  paddingBottom: {
+    paddingBottom: "2%"
+  },
+  paddingTotal: {
+    padding: "6px"
   }
 };
 

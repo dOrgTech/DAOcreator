@@ -1,5 +1,4 @@
 import * as React from "react";
-import { AccordionSection } from "react-rainbow-components";
 import { Box } from "@chakra-ui/core";
 import {
   SchemesForm,
@@ -11,30 +10,31 @@ import SchemeEditor from "../commonV2/dao/SchemeEditor";
 
 interface Props {
   form: SchemesForm;
-  nextStep: () => void;
+  toggleCollapse: () => void;
 }
 
 function SchemesStep(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
 
   React.useEffect(() => {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
   }, [form.$]);
 
-  const headerSection = true ? "2 Configure Organization" : "2 Configuration";
   return (
-    <AccordionSection name="1" label={headerSection}>
-      <Box
-        width={"90%"}
-        borderBottomColor="#eaedf3"
-        borderTopColor="#eaedf3"
-        borderRightColor="#eaedf3"
-        borderLeftColor="#eaedf3"
-        rounded="lg"
-      >
-        <SchemeEditor form={form} editable={true} nextStep={nextStep} />
-      </Box>
-    </AccordionSection>
+    <Box
+      width={"100%"}
+      borderBottomColor="#eaedf3"
+      borderTopColor="#eaedf3"
+      borderRightColor="#eaedf3"
+      borderLeftColor="#eaedf3"
+      rounded="lg"
+    >
+      <SchemeEditor
+        form={form}
+        editable={true}
+        toggleCollapse={toggleCollapse}
+      />{" "}
+    </Box>
   );
 }
 

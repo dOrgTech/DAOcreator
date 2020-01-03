@@ -15,9 +15,9 @@ import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 interface Props {
   form: any;
   editable: boolean;
-  nextStep: () => void;
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
+  toggleCollapse: () => void;
 }
 
 enum DAOSpeed {
@@ -57,7 +57,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, nextStep } = props;
+  const { form, toggleCollapse } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -68,6 +68,7 @@ function SchemeEditor(props: Props) {
   // Updates voting machines on toggle
   useEffect(() => {
     // Not using Scheme interface because $ does not exist on it
+    console.log(form.$);
     form.$.forEach((scheme: any) => {
       // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -101,7 +102,7 @@ function SchemeEditor(props: Props) {
 
   return (
     <>
-      <MDBContainer>
+      <MDBContainer style={styles.paddingContainer}>
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
@@ -110,18 +111,15 @@ function SchemeEditor(props: Props) {
         </MDBRow>
         <MDBRow>
           <MDBCol>
-            <p className="text-left">Recommend Configuration</p>
-          </MDBCol>
-        </MDBRow>
-        <MDBRow>
-          <MDBCol>
-            <p className="text-left">Recommend Configuration</p>
+            <p className="text-left" style={styles.title}>
+              Recommend Configuration
+            </p>
           </MDBCol>
         </MDBRow>
 
         <MDBRow>
           <MDBCol>
-            <p className="text-left">
+            <p className="text-left" style={styles.subtitle}>
               Your proposal uses a proposal-vote structure and can securely
               scale to a big organization
             </p>
@@ -129,7 +127,7 @@ function SchemeEditor(props: Props) {
         </MDBRow>
 
         <MDBRow style={styles.box}>
-          <MDBCol size="3">
+          <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">
                 Decision making
@@ -149,39 +147,42 @@ function SchemeEditor(props: Props) {
           </MDBCol>
           <MDBCol>
             <MDBRow style={styles.alignEnd}>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              <button
                 name="decisonSpeed"
-                value={DAOSpeed.Slow}
-                style={styles.buttonColor}
-                outline={!(decisionSpeed === DAOSpeed.Slow)}
+                value={DAOSpeed.Fast}
+                style={
+                  !(decisionSpeed === DAOSpeed.Fast)
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Fast
-              </MDBBtn>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              </button>
+              <button
                 name="decisonSpeed"
                 value={DAOSpeed.Medium}
-                style={styles.buttonColor}
-                outline={!(decisionSpeed === DAOSpeed.Medium)}
+                style={
+                  !(decisionSpeed === DAOSpeed.Medium)
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Medium
-              </MDBBtn>
-              <MDBBtn
-                color="blue darken-4"
-                size="sm"
+              </button>
+              <button
                 name="decisonSpeed"
-                value={DAOSpeed.Fast}
-                style={styles.buttonColor}
-                outline={!(decisionSpeed === DAOSpeed.Fast)}
+                value={DAOSpeed.Slow}
+                style={
+                  !(decisionSpeed === DAOSpeed.Slow)
+                    ? styles.buttonColor
+                    : styles.buttonColorActive
+                }
                 onClick={handleClick}
               >
                 Slow
-              </MDBBtn>
+              </button>
             </MDBRow>
           </MDBCol>
         </MDBRow>
@@ -223,7 +224,7 @@ function SchemeEditor(props: Props) {
 
       <MDBBtn
         color="blue darken-4"
-        onClick={nextStep}
+        onClick={() => toggleCollapse()}
         style={styles.configButton}
       >
         Set Configuration
@@ -248,12 +249,13 @@ function Toggleable({ id, text, example, toggle }: ToggleProps) {
         </span>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
           <span>{example}</span>
         </MDBTooltip>
       </MDBCol>
-      <MDBCol>
+      <MDBCol style={styles.noPadding}>
         <div className="custom-control custom-switch">
           <input
             type="checkbox"
@@ -289,14 +291,23 @@ const styles = {
     padding: "10px"
   },
   buttonColor: {
-    color: "#fff",
-    /* background-color: #4285f4 !important; */
-    backgroundColor: "#3182ce !important",
+    color: "black",
     borderRadius: "0.25rem",
-    fontWeight: 600,
+    fontWeight: 300,
     width: "28%",
-    padding: "5px !important",
-    height: "38px"
+    height: "38px",
+    fontSize: "14px",
+    margin: "auto"
+  },
+  buttonColorActive: {
+    color: "white",
+    borderRadius: "0.25rem",
+    fontWeight: 300,
+    width: "28%",
+    height: "38px",
+    fontSize: "14px",
+    backgroundColor: "#1976d2",
+    margin: "auto"
   },
   info: {
     backgroundColor: "transparent !important",
@@ -307,20 +318,55 @@ const styles = {
     outline: "none"
   },
   marginText: {
-    marginTop: "6px"
+    marginTop: "6px",
+    color: "black",
+    fontSize: "16px"
   },
   alignEnd: {
     flexDirection: "row-reverse"
   },
   paddingRow: {
-    padding: "10px"
+    paddingLeft: "10px",
+    paddingTop: "6px"
   },
   noPadding: {
     padding: 0
   },
   configButton: {
     borderRadius: "0.37rem",
-    fontWeight: 700
+    marginTop: "28px",
+    // marginBottom: '15px',
+    height: "45px",
+    marginLeft: "6px",
+    fontWeight: 300,
+    backgroundColor: "#1976d2",
+    color: "white",
+    width: "145px",
+    padding: "7px"
+  },
+  modalButton: {
+    width: "174px",
+    height: "42px",
+    padding: "4px",
+    fontSize: "small",
+    border: "1px solid lightgray",
+    boxShadow: "none",
+    borderRadius: "4px"
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: "17px"
+  },
+  subtitle: {
+    fontSize: "15px",
+    color: "gray",
+    fontFamily: "inherit"
+  },
+  toggle: {
+    textAlign: '"right"'
+  },
+  paddingContainer: {
+    padding: "8px"
   }
 };
 

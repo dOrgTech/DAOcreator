@@ -1,8 +1,9 @@
 import React from "react";
-import { DAOConfigForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBCol } from "mdbreact";
-import FormField from "../FormField";
 import { observer } from "mobx-react";
+import { MDBRow } from "mdbreact";
+
+import { DAOConfigForm } from "@dorgtech/daocreator-lib";
+import FormField from "../FormField";
 
 interface Props {
   form: DAOConfigForm;
@@ -13,14 +14,8 @@ function DAOConfigEditor(props: Props) {
   const { form, editable } = props;
   return (
     <MDBRow>
-      <MDBCol>
-        <FormField field={form.$.daoName} editable={editable} />
-      </MDBCol>
-      <MDBCol>
-        <MDBCol>
-          <FormField field={form.$.tokenSymbol} editable={editable} />
-        </MDBCol>
-      </MDBCol>
+      <FormField field={form.$.daoName} editable={editable} />
+      <FormField field={form.$.tokenSymbol} editable={editable} />
     </MDBRow>
   );
 }
