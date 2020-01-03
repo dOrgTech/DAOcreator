@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.2.0",
   "scripts": {
-    "start": "lerna exec start",
+    "start": "lerna exec --ignore @dorgtech/daocreator-lib -- yarn start",
     "build": "lerna exec build"
   },
   "devDependencies": {

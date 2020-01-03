@@ -1,13 +1,13 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "0.2.1-rc.12",
+  "version": "0.2.1-rc.13",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "postinstall": "node scripts/optimizeABIs.js",
     "build": "tsc",
     "build:release": "rm -rf ./dist && tsc",
-    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src",
+    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src && cp -r ./scripts/ ./package/scripts",
     "release": "yarn build:release && yarn package:release && yarn publish ./package --access public"
   },
   "dependencies": {

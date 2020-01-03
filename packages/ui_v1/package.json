@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-ui-v1",
-  "version": "0.2.0-rc.13",
+  "version": "0.2.0-rc.13.1",
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,7 @@
     "test": "react-scripts test",
     "build:release": "rm -rf ./dist && tsc --build ./tsconfig.release.json",
     "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json yarn.lock ./package && cp -r ./src ./package/src",
-    "release": "npm run build:release && npm run package:release && npm publish ./package --access public"
+    "release": "yarn run build:release && yarn run package:release && yarn publish ./package --access public"
   },
   "dependencies": {
     "@date-io/core": "^1.3.6",
@@ -19,7 +19,7 @@
     "@devexpress/dx-react-chart": "^2.0.2",
     "@devexpress/dx-react-chart-material-ui": "^2.0.2",
     "@devexpress/dx-react-core": "^2.0.2",
-    "@dorgtech/daocreator-lib": "0.2.1-rc.12",
+    "@dorgtech/daocreator-lib": "0.2.1-rc.13",
     "@material-ui/core": "^4.3.1",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/pickers": "3.2.2",
