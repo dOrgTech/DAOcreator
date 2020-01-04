@@ -124,21 +124,29 @@ const TokenFieldView = observer(
 
 const DurationFieldView = observer(
   ({ field, editable }: FieldProps<DurationField>) => {
-    const DurationPart = observer(
-      (props: { name: "days" | "hours" | "minutes" }) => (
-        <>
-          <input
-            type="text"
-            style={styles.inputDuration}
-            placeholder={field[props.name].toString() + " " + props.name}
-            value={Number(field[props.name]).toString()}
-            disabled={editable === undefined ? false : !editable}
-            onChange={(event: any) => field.onChange(event.target.value)}
-            onBlur={field.enableAutoValidationAndValidate}
-          />
-        </>
-      )
-    );
+    const onChange = (event: any) => {
+      const { name, value } = event.target;
+      const duration: any = {
+        days: field.days,
+        hours: field.hours
+      };
+      duration[name] = Number(value);
+      field.onChange(`${duration.days}:${duration.hours}:00`);
+    };
+
+    const DurationPart = observer((props: { name: "days" | "hours" }) => (
+      <>
+        <input
+          name={props.name}
+          style={styles.inputDuration}
+          placeholder={field[props.name].toString() + " " + props.name}
+          value={Number(field[props.name]).toString()}
+          disabled={editable === undefined ? false : !editable}
+          onChange={onChange}
+          onBlur={field.enableAutoValidationAndValidate}
+        />
+      </>
+    ));
 
     return (
       <>

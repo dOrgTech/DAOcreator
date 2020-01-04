@@ -11,15 +11,24 @@ import {
 
 const MembersEditor = ({
   form,
-  getDAOTokenSymbol
+  getDAOTokenSymbol,
+  address
 }: {
   form: any;
   getDAOTokenSymbol: any;
+  address: string;
 }) => {
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const membersForm = form;
+
+  // we add the current address of user
+  const member = new MemberForm(getDAOTokenSymbol);
+  member.$.address.value = address;
+  member.$.reputation.value = "0";
+  member.$.tokens.value = "0";
+  membersForm.$.push(new MemberForm(member.getDAOTokenSymbol, member));
   const [editing, setEditing] = useState(-1);
 
   memberForm.$.reputation.value = "100";
