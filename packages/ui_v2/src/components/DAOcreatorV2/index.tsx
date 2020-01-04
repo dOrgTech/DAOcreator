@@ -2,8 +2,7 @@ import * as React from "react";
 import {
   DAOForm,
   toDAOMigrationParams,
-  toJSON,
-  MemberForm
+  toJSON
 } from "@dorgtech/daocreator-lib";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
@@ -33,7 +32,6 @@ import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
 import Accordion from "components/commonV2/Accordion";
 import { getProvider } from "web3/core";
-import { useForceUpdate } from "utils/hooks/";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -65,17 +63,15 @@ export default function DAOcreator() {
     false
   );
 
-  React.useEffect(() => {
-    setLoading(true);
-    handleMetamask();
-    previewLocalStorage();
-    window.addEventListener("beforeunload", saveLocalStorage);
-    return () => {
-      window.removeEventListener("beforeunload", saveLocalStorage);
-    };
-  }, []);
-
-  const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
+  const handleMetamask = async () => {
+    try {
+      const address = await getProvider();
+      setDefaultAddress(address);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
 
   const previewLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
@@ -94,7 +90,6 @@ export default function DAOcreator() {
 
   const saveLocalStorage = () => {
     const daoState = daoForm.toState();
-
     // Check to see if the current form state hasn't been edited,
     // and if so early out so we don't save an empty state
     const nullForm = new DAOForm();
@@ -111,6 +106,18 @@ export default function DAOcreator() {
 
     localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
   };
+
+  React.useEffect(() => {
+    setLoading(true);
+    handleMetamask();
+    previewLocalStorage();
+    window.addEventListener("beforeunload", saveLocalStorage);
+    return () => {
+      window.removeEventListener("beforeunload", saveLocalStorage);
+    };
+  }, []);
+
+  const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const loadLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
@@ -199,7 +206,8 @@ export default function DAOcreator() {
       callbacks: {
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        address: defaultAddress
       }
     },
     {
@@ -208,22 +216,6 @@ export default function DAOcreator() {
       Component: InstallStep
     }
   ];
-
-  const handleMetamask = async () => {
-    try {
-      const address = await getProvider();
-      setDefaultAddress(address);
-      const member = new MemberForm(getDAOTokenSymbol);
-      member.$.address.value = address;
-      member.$.reputation.value = "0";
-      member.$.tokens.value = "0";
-      const firstMember = new MemberForm(member.getDAOTokenSymbol, member);
-      daoForm.$.members.$.push(firstMember);
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-  };
 
   return (
     <>
