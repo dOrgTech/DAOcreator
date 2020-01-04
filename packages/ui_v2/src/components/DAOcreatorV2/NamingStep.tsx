@@ -19,16 +19,14 @@ function NamingStep(props: Props) {
         <br />
         <MDBRow style={styles.paddingBottom}>
           <MDBCol>
-            <MDBBtn
-              color="blue darken-4"
-              size="sm"
+            <button
               name="decisonSpeed"
               value="slow"
               style={styles.buttonStyle}
               onClick={() => toggleCollapse()}
             >
               Set Description
-            </MDBBtn>
+            </button>
           </MDBCol>
         </MDBRow>
       </div>
@@ -45,7 +43,8 @@ const styles = {
     color: "white",
     width: "145px",
     padding: "7px",
-    marginBottom: "11px"
+    marginBottom: "11px",
+    fontSize: "smaller"
   },
   paddingBottom: {
     paddingBottom: "2%"

@@ -222,13 +222,13 @@ function SchemeEditor(props: Props) {
         />
       </MDBContainer>
 
-      <MDBBtn
-        color="blue darken-4"
+      <button
+        // color="blue darken-4"
         onClick={() => toggleCollapse()}
         style={styles.configButton}
       >
         Set Configuration
-      </MDBBtn>
+      </button>
     </>
   );
 }
@@ -243,7 +243,7 @@ interface ToggleProps {
 function Toggleable({ id, text, example, toggle }: ToggleProps) {
   return (
     <MDBRow style={styles.paddingRow}>
-      <MDBCol size="10" style={styles.noPadding}>
+      <MDBCol size="11" style={styles.noPadding}>
         <span style={styles.marginText} className="text-left">
           {text}
         </span>
@@ -342,7 +342,9 @@ const styles = {
     backgroundColor: "#1976d2",
     color: "white",
     width: "145px",
-    padding: "7px"
+    padding: "7px",
+    fontSize: "smaller",
+    marginBottom: "20px"
   },
   modalButton: {
     width: "174px",
