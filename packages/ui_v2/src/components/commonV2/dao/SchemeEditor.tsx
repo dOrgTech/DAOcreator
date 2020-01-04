@@ -65,36 +65,128 @@ function SchemeEditor(props: Props) {
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
   const [advanceMode, setAdvanceMode] = useState<boolean>(false);
-
+  const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
   // Updates voting machines on toggle
-  useEffect(() => {
-    // Not using Scheme interface because $ does not exist on it
-    form.$.forEach((scheme: any) => {
-      // Get voting machine preset using the decisionSpeed and scheme type
-      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-      let preset;
-      if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
-      else throw Error("Unimplemented Scheme Speed Configuration");
+  const updateVotingMachine = () => {
+    form.$.map(checkDefaultChange);
+    form.$.forEach(getVotingMachinePreset);
+  };
+  // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
+  // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
+  const checkDefaultChange = (scheme: any) => {
+    const {
+      queuedVotePeriodLimit,
+      preBoostedVotePeriodLimit,
+      boostedVotePeriodLimit
+    } = scheme.values.votingMachine.values;
+    switch (decisionSpeed) {
+      case 0:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "30:0:0:0" ||
+              preBoostedVotePeriodLimit !== "1:0:0:0" ||
+              boostedVotePeriodLimit !== "4:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+      case 1:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+      case 2:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "30:0:0:0" ||
+              preBoostedVotePeriodLimit !== "1:0:0:0" ||
+              boostedVotePeriodLimit !== "4:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+    }
+  };
+  // Not using Scheme interface because $ does not exist on it
+  const getVotingMachinePreset = (scheme: any) => {
+    // Get voting machine preset using the decisionSpeed and scheme type
+    const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
-      // Initialize the scheme's voting machine to the Genesis Protocol Preset
-      const votingMachine = scheme.$.votingMachine;
-      votingMachine.preset = preset;
+    let preset;
+    if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
+    else throw Error("Unimplemented Scheme Speed Configuration");
 
-      // Apply the effects of the toggles
-      // if(!distribution) // TODO: distribution does not currently affect the voting machine
-      if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-      if (!rewardAndPenVoters)
-        votingMachine.$.votersReputationLossRatio.value = "0";
-      if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-    });
-  }, [
+    // Initialize the scheme's voting machine to the Genesis Protocol Preset
+    const votingMachine = scheme.$.votingMachine;
+    votingMachine.preset = preset;
+
+    // Apply the effects of the toggles
+    // if(!distribution) // TODO: distribution does not currently affect the voting machine
+    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
+    if (!rewardAndPenVoters)
+      votingMachine.$.votersReputationLossRatio.value = "0";
+    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+    // console.log('votingMachine.values', votingMachine.values);
+  };
+
+  const dependeciesList = [
     form.$,
     decisionSpeed,
     distribution,
     rewardSuccess,
     rewardAndPenVoters,
-    autobet
-  ]);
+    autobet,
+    advanceMode
+  ];
+  // Updates voting machines on toggle
+  useEffect(updateVotingMachine, dependeciesList);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
@@ -151,11 +243,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Fast}
                 style={
-                  !(decisionSpeed === DAOSpeed.Fast)
+                  !(decisionSpeed === DAOSpeed.Fast) || !toggleSpeed
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={!toggleSpeed}
               >
                 Fast
               </button>
@@ -163,11 +256,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Medium}
                 style={
-                  !(decisionSpeed === DAOSpeed.Medium)
+                  !(decisionSpeed === DAOSpeed.Medium) || !toggleSpeed
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={!toggleSpeed}
               >
                 Medium
               </button>
@@ -175,11 +269,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Slow}
                 style={
-                  !(decisionSpeed === DAOSpeed.Slow)
+                  !(decisionSpeed === DAOSpeed.Slow) || !toggleSpeed
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={!toggleSpeed}
               >
                 Slow
               </button>
@@ -195,6 +290,7 @@ function SchemeEditor(props: Props) {
             setDistribution(!distribution);
           }}
           disabled={advanceMode}
+          checked={distribution}
         />
 
         <Toggleable
@@ -205,6 +301,7 @@ function SchemeEditor(props: Props) {
             setRewardSuccess(!rewardSuccess);
           }}
           disabled={advanceMode}
+          checked={rewardSuccess}
         />
 
         <Toggleable
@@ -215,6 +312,7 @@ function SchemeEditor(props: Props) {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
           disabled={advanceMode}
+          checked={rewardAndPenVoters}
         />
 
         <Toggleable
@@ -223,6 +321,7 @@ function SchemeEditor(props: Props) {
           example={"Some example"}
           toggle={() => setAutobet(!autobet)}
           disabled={advanceMode}
+          checked={autobet}
         />
       </MDBContainer>
 
@@ -243,9 +342,17 @@ interface ToggleProps {
   example: string;
   toggle: () => void;
   disabled: boolean;
+  checked: boolean;
 }
 
-function Toggleable({ id, text, example, toggle, disabled }: ToggleProps) {
+function Toggleable({
+  id,
+  text,
+  example,
+  toggle,
+  disabled,
+  checked
+}: ToggleProps) {
   return (
     <MDBRow style={styles.paddingRow}>
       <MDBCol size="10" style={styles.noPadding}>
@@ -268,6 +375,7 @@ function Toggleable({ id, text, example, toggle, disabled }: ToggleProps) {
             id={id}
             onChange={() => toggle()}
             disabled={disabled}
+            checked={checked}
           />
           <label className="custom-control-label" htmlFor={id}></label>
         </div>
