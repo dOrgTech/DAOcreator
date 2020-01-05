@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBTypography } from "mdbreact";
+import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
-import { useForceUpdate } from "utils/hooks";
+import { useForceUpdate } from "utils/hooks/";
 import {
   MemberEditor,
   MembersAnalytics,
@@ -38,6 +38,9 @@ const MembersEditor = ({
     setAddressAdded(false);
   }
   const membersForm = form;
+
+  memberForm.$.reputation.value = "100";
+  memberForm.$.tokens.value = "100";
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -102,19 +105,40 @@ const MembersEditor = ({
 
   return (
     <MDBBox>
-      <MembersAnalytics data={membersForm.toState()} />
-      <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
-      <MemberFormError />
-      <MembersTable
-        membersForm={membersForm}
-        editing={editing}
-        editedMemberForm={editedMemberForm}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        selectEdit={selectEdit}
-      />
+      <MDBContainer style={styles.noPadding}>
+        <MDBRow>
+          <MembersAnalytics data={membersForm.toState()} />
+        </MDBRow>
+        <MDBRow className="justify-content-start">
+          <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
+        </MDBRow>
+        <MDBRow>
+          <MemberFormError />
+        </MDBRow>
+        <br></br>
+
+        <MDBRow style={styles.tableWidth}>
+          <MembersTable
+            membersForm={membersForm}
+            editing={editing}
+            editedMemberForm={editedMemberForm}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            selectEdit={selectEdit}
+          />
+        </MDBRow>
+      </MDBContainer>
     </MDBBox>
   );
+};
+
+const styles = {
+  tableWidth: {
+    width: "-webkit-fill-available"
+  },
+  noPadding: {
+    padding: "1px"
+  }
 };
 
 export default MembersEditor;
