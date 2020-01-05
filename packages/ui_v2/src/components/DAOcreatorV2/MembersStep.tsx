@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCol, MDBBox } from "mdbreact";
 
@@ -9,16 +9,19 @@ interface Props {
   getDAOTokenSymbol: () => string;
   toggleCollapse: () => void;
   address: string;
+  step: number;
 }
 
 function MembersStep(props: Props) {
-  const { form, getDAOTokenSymbol, toggleCollapse, address } = props;
+  const { form, getDAOTokenSymbol, toggleCollapse, address, step } = props;
+
   return (
     <MDBBox>
       <MembersEditor
         form={form}
         getDAOTokenSymbol={getDAOTokenSymbol}
         address={address}
+        step={step}
       />
       <MDBRow>
         <MDBCol>

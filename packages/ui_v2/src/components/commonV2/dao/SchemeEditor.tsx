@@ -68,7 +68,6 @@ function SchemeEditor(props: Props) {
   // Updates voting machines on toggle
   useEffect(() => {
     // Not using Scheme interface because $ does not exist on it
-    console.log(form.$);
     form.$.forEach((scheme: any) => {
       // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);

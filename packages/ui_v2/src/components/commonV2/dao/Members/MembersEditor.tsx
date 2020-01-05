@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBTypography } from "mdbreact";
 
-import { useForceUpdate } from "utils/hooks/";
+import { useForceUpdate } from "utils/hooks";
 import {
   MemberEditor,
   MembersAnalytics,
@@ -12,27 +12,32 @@ import {
 const MembersEditor = ({
   form,
   getDAOTokenSymbol,
-  address
+  address,
+  step
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
+  step: number;
 }) => {
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
-  const membersForm = form;
-
-  // we add the current address of user
-  const member = new MemberForm(getDAOTokenSymbol);
-  member.$.address.value = address;
-  member.$.reputation.value = "0";
-  member.$.tokens.value = "0";
-  membersForm.$.push(new MemberForm(member.getDAOTokenSymbol, member));
   const [editing, setEditing] = useState(-1);
+  const [addressAdded, setAddressAdded] = useState(true);
 
   memberForm.$.reputation.value = "100";
   memberForm.$.tokens.value = "100";
+
+  if (step === 2 && addressAdded) {
+    const member = new MemberForm(form.getDAOTokenSymbol);
+    member.$.address.value = address;
+    member.$.reputation.value = "0";
+    member.$.tokens.value = "0";
+    form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
+    setAddressAdded(false);
+  }
+  const membersForm = form;
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
