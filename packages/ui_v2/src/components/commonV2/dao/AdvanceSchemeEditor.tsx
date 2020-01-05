@@ -94,7 +94,6 @@ function AdvanceSchemeEditor(props: Props) {
     }
     handleToggle(schemeIndex);
   };
-  console.log("form", form.$);
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
