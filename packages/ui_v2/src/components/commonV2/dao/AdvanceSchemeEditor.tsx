@@ -111,22 +111,23 @@ function AdvanceSchemeEditor(props: Props) {
       >
         <MDBModalHeader
           toggle={() => setModalState(!modalState)}
-          style={styles.bold}
+          style={styles.titlePadding}
         >
           {" "}
-          Advance Configuration
+          <span style={styles.bold}>Advance Configuration</span>
         </MDBModalHeader>
         <MDBModalBody>
           <MDBRow style={styles.rowTab}>
-            <MDBCol>
+            <MDBCol style={styles.tab}>
               <button
                 style={scheme === 0 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.ContributionReward)}
+                // style={scheme === selectedForm['type'] ? styles.buttonTabActive : styles.buttonTab}
               >
                 Contribution Reward
               </button>
             </MDBCol>
-            <MDBCol>
+            <MDBCol style={styles.tab}>
               <button
                 style={scheme === 1 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.SchemeRegistrar)}
@@ -134,7 +135,7 @@ function AdvanceSchemeEditor(props: Props) {
                 Scheme Registry
               </button>
             </MDBCol>
-            <MDBCol>
+            <MDBCol style={styles.tab}>
               <button
                 style={scheme === 2 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.GenericScheme)}
@@ -147,7 +148,7 @@ function AdvanceSchemeEditor(props: Props) {
           <div style={styles.divForm}>
             <MDBRow style={styles.borderRow}>
               <MDBCol>
-                <span>Deploy {schemeName[scheme]}</span>
+                <span style={styles.boldSpan}>Deploy {schemeName[scheme]}</span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
                     floating
@@ -207,7 +208,7 @@ function AdvanceSchemeEditor(props: Props) {
                 }}
               >
                 Save Configuration
-              </MDBBtn>
+              </MDBBtn>  
             </MDBCol>
           </MDBRow>
         </MDBModalFooter>
@@ -235,7 +236,7 @@ const styles = {
     width: "100%",
     margin: "auto",
     backgroundColor: "white !important",
-    color: "black",
+    color: "gray",
     height: "52px",
     boxShadow: "none",
     borderTop: "none",
@@ -296,7 +297,8 @@ const styles = {
     paddingBottom: "14px"
   },
   buttonsRow: {
-    width: "-webkit-fill-available"
+    width: "-webkit-fill-available",
+    margin: "inherit"
   },
   save: {
     textAlign: "right"
@@ -311,6 +313,25 @@ const styles = {
     width: "50%"
   },
   bold: {
+    fontWeight: 400,
+    fontSize: "23px"
+  },
+  saveButton: {
+    height: "44px",
+    borderRadius: "4px",
+    width: "200px",
+    color: "white",
+    backgroundColor: "#4285f4"
+  },
+  cancelButton: {
+    height: "44px",
+    borderRadius: "4px",
+    width: "100px"
+  },
+  titlePadding: {
+    padding: "26px"
+  },
+  boldSpan: {
     fontWeight: 400
   }
 };

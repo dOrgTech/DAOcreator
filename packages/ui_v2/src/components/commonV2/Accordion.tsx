@@ -26,7 +26,7 @@ export default function Accordion(props: Props) {
         <a role="button">
           <span
             className="circle"
-            style={step > index ? styles.completedStep : styles.completedStep}
+            style={step > index ? styles.circleActive : styles.noActive}
           >
             {index + 1}
           </span>
@@ -96,8 +96,8 @@ const styles = {
   },
   circleActive: {
     fontWeight: 400,
+    color: "#ffffff !important",
     backgroundColor: "rgb(66, 133, 244) !important",
-    color: "white",
     borderColor: "white",
     border: "0.9px solid lightgray",
     background: "rgb(66, 133, 244) !important"
