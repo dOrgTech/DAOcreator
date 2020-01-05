@@ -69,7 +69,7 @@ function SchemeEditor(props: Props) {
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
     form.$.map(checkDefaultChange);
-    form.$.forEach(getVotingMachinePreset);
+    form.$.map(getVotingMachinePreset);
   };
   // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
   // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
@@ -156,6 +156,7 @@ function SchemeEditor(props: Props) {
   };
   // Not using Scheme interface because $ does not exist on it
   const getVotingMachinePreset = (scheme: any) => {
+    console.log("asd");
     // Get voting machine preset using the decisionSpeed and scheme type
     const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
@@ -166,14 +167,30 @@ function SchemeEditor(props: Props) {
     // Initialize the scheme's voting machine to the Genesis Protocol Preset
     const votingMachine = scheme.$.votingMachine;
     votingMachine.preset = preset;
-
+    const {
+      proposingRepReward,
+      votersReputationLossRatio,
+      minimumDaoBounty
+    } = votingMachine.$;
+    console.log("proposingRepReward.value", proposingRepReward.value);
+    if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
+    else setRewardSuccess(false);
+    console.log(
+      "votersReputationLossRatio.value",
+      votersReputationLossRatio.value
+    );
+    if (Number(votersReputationLossRatio.value) > 0)
+      setRewardAndPenVoters(true);
+    else setRewardAndPenVoters(false);
+    console.log("minimumDaoBounty.value", minimumDaoBounty.value);
+    if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
+    else setAutobet(false);
     // Apply the effects of the toggles
     // if(!distribution) // TODO: distribution does not currently affect the voting machine
     if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
     if (!rewardAndPenVoters)
       votingMachine.$.votersReputationLossRatio.value = "0";
     if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-    // console.log('votingMachine.values', votingMachine.values);
   };
 
   const dependeciesList = [
