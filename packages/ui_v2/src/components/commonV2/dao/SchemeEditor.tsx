@@ -157,7 +157,6 @@ function SchemeEditor(props: Props) {
   };
   // Not using Scheme interface because $ does not exist on it
   const getVotingMachinePreset = (scheme: any) => {
-    console.log("asd");
     // Get voting machine preset using the decisionSpeed and scheme type
     const schemePresetMap = schemeSpeeds.get(decisionSpeed);
     let preset;
@@ -173,17 +172,11 @@ function SchemeEditor(props: Props) {
         votersReputationLossRatio,
         minimumDaoBounty
       } = votingMachine.$;
-      console.log("proposingRepReward.value", proposingRepReward.value);
       if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
       else setRewardSuccess(false);
-      console.log(
-        "votersReputationLossRatio.value",
-        votersReputationLossRatio.value
-      );
       if (Number(votersReputationLossRatio.value) > 0)
         setRewardAndPenVoters(true);
       else setRewardAndPenVoters(false);
-      console.log("minimumDaoBounty.value", minimumDaoBounty.value);
       if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
       else setAutobet(false);
     }

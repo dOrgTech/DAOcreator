@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { Fragment, useState } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -19,7 +19,6 @@ import {
   SchemeType
 } from "@dorgtech/daocreator-lib";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
-import { Fragment } from "react";
 
 export interface Props {
   form: any;
@@ -34,10 +33,8 @@ const schemeName = {
 
 function AdvanceSchemeEditor(props: Props) {
   const { form, setAdvanceMode } = props;
-  const [scheme, setScheme] = React.useState<number>(
-    SchemeType.ContributionReward
-  );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+  const [scheme, setScheme] = useState<number>(SchemeType.ContributionReward);
+  const [schemeIsAdded, checkSchemeIsAdded] = useState<boolean>(false);
 
   const schemeEditorsMock: AnySchemeForm[] = [
     observable(new ContributionRewardForm()),
@@ -96,7 +93,7 @@ function AdvanceSchemeEditor(props: Props) {
     handleToggle(schemeIndex);
   };
 
-  const [modalState, setModalState] = React.useState<boolean>(false);
+  const [modalState, setModalState] = useState<boolean>(false);
 
   return (
     <Fragment>
@@ -208,7 +205,7 @@ function AdvanceSchemeEditor(props: Props) {
                 }}
               >
                 Save Configuration
-              </MDBBtn>  
+              </MDBBtn>
             </MDBCol>
           </MDBRow>
         </MDBModalFooter>
