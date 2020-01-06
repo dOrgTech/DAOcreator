@@ -66,6 +66,7 @@ function SchemeEditor(props: Props) {
   const [autobet, setAutobet] = useState<boolean>(false);
   const [advanceMode, setAdvanceMode] = useState<boolean>(false);
   const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
+ 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
     form.$.map(checkDefaultChange);
@@ -159,7 +160,6 @@ function SchemeEditor(props: Props) {
     console.log("asd");
     // Get voting machine preset using the decisionSpeed and scheme type
     const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-
     let preset;
     if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
     else throw Error("Unimplemented Scheme Speed Configuration");

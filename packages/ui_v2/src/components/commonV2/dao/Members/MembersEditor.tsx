@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBTypography } from "mdbreact";
+import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
 import { useForceUpdate } from "utils/hooks/";
 import {
@@ -12,24 +12,32 @@ import {
 const MembersEditor = ({
   form,
   getDAOTokenSymbol,
-  address
+  address,
+  step
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
+  step: number;
 }) => {
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
-  const membersForm = form;
-
-  // we add the current address of user
-  const member = new MemberForm(getDAOTokenSymbol);
-  member.$.address.value = address;
-  member.$.reputation.value = "0";
-  member.$.tokens.value = "0";
-  membersForm.$.push(new MemberForm(member.getDAOTokenSymbol, member));
   const [editing, setEditing] = useState(-1);
+  const [addressAdded, setAddressAdded] = useState(true);
+
+  memberForm.$.reputation.value = "100";
+  memberForm.$.tokens.value = "100";
+
+  if (step === 2 && addressAdded) {
+    const member = new MemberForm(form.getDAOTokenSymbol);
+    member.$.address.value = address;
+    member.$.reputation.value = "0";
+    member.$.tokens.value = "0";
+    form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
+    setAddressAdded(false);
+  }
+  const membersForm = form;
 
   memberForm.$.reputation.value = "100";
   memberForm.$.tokens.value = "100";
@@ -97,19 +105,40 @@ const MembersEditor = ({
 
   return (
     <MDBBox>
-      <MembersAnalytics data={membersForm.toState()} />
-      <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
-      <MemberFormError />
-      <MembersTable
-        membersForm={membersForm}
-        editing={editing}
-        editedMemberForm={editedMemberForm}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        selectEdit={selectEdit}
-      />
+      <MDBContainer style={styles.noPadding}>
+        <MDBRow>
+          <MembersAnalytics data={membersForm.toState()} />
+        </MDBRow>
+        <MDBRow className="justify-content-start">
+          <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
+        </MDBRow>
+        <MDBRow>
+          <MemberFormError />
+        </MDBRow>
+        <br></br>
+
+        <MDBRow style={styles.tableWidth}>
+          <MembersTable
+            membersForm={membersForm}
+            editing={editing}
+            editedMemberForm={editedMemberForm}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            selectEdit={selectEdit}
+          />
+        </MDBRow>
+      </MDBContainer>
     </MDBBox>
   );
+};
+
+const styles = {
+  tableWidth: {
+    width: "-webkit-fill-available"
+  },
+  noPadding: {
+    padding: "1px"
+  }
 };
 
 export default MembersEditor;

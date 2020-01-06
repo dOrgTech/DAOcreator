@@ -207,7 +207,8 @@ export default function DAOcreator() {
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
         setStep,
-        address: defaultAddress
+        address: defaultAddress,
+        step
       }
     },
     {

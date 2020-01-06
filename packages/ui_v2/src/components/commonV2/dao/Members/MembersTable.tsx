@@ -1,7 +1,7 @@
 import React from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { ButtonIcon } from "react-rainbow-components";
-import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+import { MDBRow, MDBContainer } from "mdbreact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPencilAlt,
@@ -30,16 +30,19 @@ export const MembersTable = ({
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <tr key={index} className="test">
-        <td>
+      <tr key={index} className="test" style={styles.borderCell}>
+        <td style={styles.borderCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
-        <td>
-          <a href={`https://etherscan.io/address/${memberForm.values.address}`}>
+        <td style={styles.borderCell}>
+          <a
+            href={`https://etherscan.io/address/${memberForm.values.address}`}
+            style={styles.noPadding}
+          >
             {truncateString(memberForm.values.address, 6, 4)}
           </a>
         </td>
-        <td>
+        <td style={styles.borderCell}>
           {editing !== index ? (
             memberForm.values.reputation
           ) : (
@@ -49,7 +52,7 @@ export const MembersTable = ({
             ></FormField>
           )}
         </td>
-        <td>
+        <td style={styles.borderCell}>
           {editing !== index ? (
             memberForm.values.tokens
           ) : (
@@ -59,7 +62,7 @@ export const MembersTable = ({
             ></FormField>
           )}
         </td>
-        <td>
+        <td style={styles.borderCell}>
           <div
             className="rainbow-p-right_large"
             onClick={() => {
@@ -77,7 +80,7 @@ export const MembersTable = ({
             />
           </div>
         </td>
-        <td>
+        <td style={styles.borderCell}>
           <div
             className="rainbow-p-right_large"
             onClick={() => {
@@ -95,18 +98,49 @@ export const MembersTable = ({
     );
   };
   return membersForm.$.length > 0 ? (
-    <MDBTable>
-      <MDBTableHead>
-        <tr>
-          <th></th>
-          <th>Member</th>
-          <th>Reputation</th>
-          <th>Tokens</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </MDBTableHead>
-      <MDBTableBody>{membersForm.$.map(TableRows)}</MDBTableBody>
-    </MDBTable>
+    <MDBContainer>
+      <MDBRow style={styles.tableWidth}>
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={styles.titles}> MEMBERS</th>
+                <th></th>
+                <th style={styles.titles}>REPUTATION</th>
+                <th style={styles.titles}>TOKENS</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>{membersForm.$.map(TableRows)}</tbody>
+          </table>
+        </div>
+      </MDBRow>
+    </MDBContainer>
   ) : null;
+};
+
+const styles = {
+  tableWidth: {
+    width: "-webkit-fill-available",
+    marginLeft: "-10.5px",
+    marginRight: "-11.5px"
+  },
+  borderCell: {
+    borderBottom: "1px solid lightgray"
+  },
+  borderTitleLeft: {
+    borderLeft: "1px solid lightgray"
+  },
+  borderTitleRight: {
+    borderRight: "1px solid lightgray"
+  },
+  noPadding: {
+    padding: 0
+  },
+  titles: {
+    fontSize: "12px",
+    color: "gray"
+  }
 };
