@@ -30,7 +30,7 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-import Accordion from "components/commonV2/Accordion";
+import Stepper from "components/commonV2/Stepper";
 import { getProvider } from "web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
@@ -167,14 +167,10 @@ export default function DAOcreator() {
     </MDBModal>
   );
 
-  let currentForm = daoForm.$.config;
+  let currentForm: any = daoForm.$.config;
   const nextStep = async () => {
-    if (currentForm) {
-      const res = await currentForm.validate();
-      // if (!res.hasError) {
-      setStep(step + 1);
-      // }
-    } else {
+    const res = await currentForm.validate();
+    if (!res.hasError) {
       setStep(step + 1);
     }
   };
@@ -218,6 +214,7 @@ export default function DAOcreator() {
     }
   ];
 
+  currentForm = steps[+step].form;
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
@@ -232,13 +229,16 @@ export default function DAOcreator() {
           <div className="row">
             <div className="col-md-12">
               {loading ? (
-                <div
-                  style={styles.spinner}
-                  className="spinner-border text-primary"
-                  role="status"
-                >
-                  <span className="sr-only">Loading...</span>
-                </div>
+                <>
+                  <div
+                    style={styles.spinner}
+                    className="spinner-border text-primary"
+                    role="status"
+                  >
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                  <p style={styles.fontStyle}> Please allow metamask </p>
+                </>
               ) : !defaultAddress ? (
                 <div className="row justify-content-center">
                   <h4 style={styles.fontStyle}>
@@ -253,7 +253,7 @@ export default function DAOcreator() {
                   {steps.map((actualStep: Step, index: number) => {
                     let { form, title, Component, callbacks } = actualStep;
                     return (
-                      <Accordion
+                      <Stepper
                         key={`step${index}`}
                         form={form}
                         title={title}
