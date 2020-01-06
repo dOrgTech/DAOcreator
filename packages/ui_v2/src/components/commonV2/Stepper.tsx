@@ -15,7 +15,7 @@ interface Props {
   index: number;
 }
 
-export default function Accordion(props: Props) {
+export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
   return (
     <li className={step === index || step > index ? "completed" : ""}>
@@ -26,7 +26,13 @@ export default function Accordion(props: Props) {
         <a role="button">
           <span
             className="circle"
-            style={step > index ? styles.completedStep : styles.completedStep}
+            style={
+              step > index
+                ? styles.circleActive
+                : styles.noActive || step === index
+                ? styles.circleActive
+                : styles.noActive
+            }
           >
             {index + 1}
           </span>
@@ -52,8 +58,23 @@ export default function Accordion(props: Props) {
         </a>
       </MDBRow>
 
-      <MDBCollapse id={index.toString()} isOpen={step.toString()}>
-        <MDBRow className="justify-content-end" style={styles.stepContent}>
+      <MDBCollapse
+        id={index.toString()}
+        isOpen={step.toString()}
+        style={styles.maxWidth}
+      >
+        <MDBRow
+          className={
+            index === (2 || 4) ? "justify-content-end" : "justify-content-start"
+          }
+          style={
+            index === (1 || 3)
+              ? styles.stepContent
+              : styles.stepTwoContent && index === 2
+              ? styles.stepTwoContent
+              : styles.stepFourContent
+          }
+        >
           <Component form={form} {...props.callbacks} />
         </MDBRow>
       </MDBCollapse>
@@ -63,9 +84,23 @@ export default function Accordion(props: Props) {
 
 const styles = {
   stepContent: {
-    width: "100%",
+    width: "fit-content",
     padding: "6px",
-    margin: "0px 0px 0px 14%",
+    margin: "0px 5% 0px 14%",
+    border: "1px solid lightgray",
+    borderRadius: "6px"
+  },
+  stepTwoContent: {
+    width: "inherit",
+    padding: "6px",
+    margin: "0px 5% 0px 14%",
+    border: "1px solid lightgray",
+    borderRadius: "6px"
+  },
+  stepFourContent: {
+    width: "auto",
+    padding: "16px",
+    margin: "0px 5% 0px 14%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
@@ -96,8 +131,8 @@ const styles = {
   },
   circleActive: {
     fontWeight: 400,
-    backgroundColor: "rgb(66, 133, 244) !important",
     color: "white",
+    backgroundColor: "rgb(66, 133, 244) !important",
     borderColor: "white",
     border: "0.9px solid lightgray",
     background: "rgb(66, 133, 244) !important"
@@ -123,5 +158,8 @@ const styles = {
     color: "#4285f4 !important",
     border: "0.9px solid #4285f4 !important",
     background: "white !important"
+  },
+  maxWidth: {
+    width: "-webkit-fill-available"
   }
 };
