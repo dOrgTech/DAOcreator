@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "scripts": {
     "start": "lerna exec --ignore @dorgtech/daocreator-lib -- yarn start",
-    "build": "lerna exec build"
+    "build": "lerna exec -- yarn build"
   },
   "devDependencies": {
     "lerna": "^3.18.4"

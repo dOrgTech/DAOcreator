@@ -22,7 +22,10 @@ exports.importAbi = function (abiPath) {
   if (abi.rootVersion) {
     const abiName = abiPath.substring(abiPath.lastIndexOf('/') + 1)
     const abiFolder = path.dirname(abiPath)
-    abi = require(`${abiFolder}/../${abi.rootVersion}/${abiName}`)
+    const rootPath = path.join(
+      abiFolder, `../${abi.rootVersion}/${abiName}`
+    )
+    abi = require(`./${rootPath}`)
   }
   return abi
 }
