@@ -11,6 +11,8 @@ interface Props {
 
 function NamingStep(props: Props) {
   const { form, toggleCollapse } = props;
+  form.$.tokenName.$ = "0";
+  form.$.tokenName.value = "0";
   return (
     <>
       <div style={styles.paddingTotal}>
@@ -23,7 +25,7 @@ function NamingStep(props: Props) {
               name="decisonSpeed"
               value="slow"
               style={styles.buttonStyle}
-              onClick={() => toggleCollapse()}
+              onClick={toggleCollapse}
             >
               Set Description
             </button>
