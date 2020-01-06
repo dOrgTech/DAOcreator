@@ -66,7 +66,7 @@ function SchemeEditor(props: Props) {
   const [autobet, setAutobet] = useState<boolean>(false);
   const [advanceMode, setAdvanceMode] = useState<boolean>(false);
   const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
- 
+
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
     form.$.map(checkDefaultChange);
@@ -167,24 +167,26 @@ function SchemeEditor(props: Props) {
     // Initialize the scheme's voting machine to the Genesis Protocol Preset
     const votingMachine = scheme.$.votingMachine;
     votingMachine.preset = preset;
-    const {
-      proposingRepReward,
-      votersReputationLossRatio,
-      minimumDaoBounty
-    } = votingMachine.$;
-    console.log("proposingRepReward.value", proposingRepReward.value);
-    if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
-    else setRewardSuccess(false);
-    console.log(
-      "votersReputationLossRatio.value",
-      votersReputationLossRatio.value
-    );
-    if (Number(votersReputationLossRatio.value) > 0)
-      setRewardAndPenVoters(true);
-    else setRewardAndPenVoters(false);
-    console.log("minimumDaoBounty.value", minimumDaoBounty.value);
-    if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
-    else setAutobet(false);
+    if (advanceMode) {
+      const {
+        proposingRepReward,
+        votersReputationLossRatio,
+        minimumDaoBounty
+      } = votingMachine.$;
+      console.log("proposingRepReward.value", proposingRepReward.value);
+      if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
+      else setRewardSuccess(false);
+      console.log(
+        "votersReputationLossRatio.value",
+        votersReputationLossRatio.value
+      );
+      if (Number(votersReputationLossRatio.value) > 0)
+        setRewardAndPenVoters(true);
+      else setRewardAndPenVoters(false);
+      console.log("minimumDaoBounty.value", minimumDaoBounty.value);
+      if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
+      else setAutobet(false);
+    }
     // Apply the effects of the toggles
     // if(!distribution) // TODO: distribution does not currently affect the voting machine
     if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";

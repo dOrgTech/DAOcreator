@@ -15,7 +15,7 @@ interface Props {
   index: number;
 }
 
-export default function Accordion(props: Props) {
+export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
   return (
     <li className={step === index || step > index ? "completed" : ""}>
