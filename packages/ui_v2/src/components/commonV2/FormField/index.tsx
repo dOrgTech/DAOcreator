@@ -61,12 +61,9 @@ interface FieldProps<T> {
   colSize?: any;
 }
 
-const FieldError = ({ field }: any) =>
-  field.hasError ? (
-    <div className="invalid-feedback">You must agree before submitting.</div>
-  ) : (
-    <></>
-  );
+const FieldError = (field: any) => (
+  <>{field.hasError ? <p style={{ color: "red" }}>{field.error}</p> : <></>}</>
+);
 
 const StringFieldView = observer(
   ({ field, editable }: FieldProps<StringField>) => (
@@ -88,10 +85,8 @@ const StringFieldView = observer(
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
         />
-        <FieldError field={field} />
+        {FieldError(field)}
       </MDBCol>
-
-      <FieldError field={field} />
     </>
   )
 );
@@ -116,8 +111,8 @@ const TokenFieldView = observer(
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
         />
+        {FieldError(field)}
       </MDBCol>
-      <FieldError field={field} />
     </>
   )
 );
@@ -175,7 +170,7 @@ const DurationFieldView = observer(
               <DurationPart name={"days"} />
               <DurationPart name={"hours"} />
 
-              <FieldError field={field} />
+              {FieldError(field)}
             </MDBRow>
           </MDBCol>
         </MDBRow>
@@ -213,8 +208,8 @@ const DateTimeFieldView = observer(
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
         />
+        {FieldError(field)}
       </MDBCol>
-      <FieldError field={field} />
     </>
   )
 );
@@ -241,6 +236,7 @@ const PercentageFieldView = observer(
             onChange={(event: any) => field.onChange(event.target.value)}
             onBlur={field.enableAutoValidationAndValidate}
           />
+          {FieldError(field)}
         </MDBCol>
       </>
     );
@@ -267,7 +263,7 @@ const AddressFieldView = observer(
           onChange={e => field.onChange(e.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
         />
-        <FieldError field={field} />
+        {FieldError(field)}
       </MDBCol>
     </>
   )
