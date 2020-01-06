@@ -24,7 +24,11 @@ function NamingStep(props: Props) {
             <button
               name="decisonSpeed"
               value="slow"
-              style={styles.buttonStyle}
+              style={
+                form.hasError
+                  ? styles.buttonActivatedStyle
+                  : styles.buttonDeactivatedStyle
+              }
               onClick={toggleCollapse}
             >
               Set Description
@@ -37,12 +41,23 @@ function NamingStep(props: Props) {
 }
 
 const styles = {
-  buttonStyle: {
+  buttonDeactivatedStyle: {
     borderRadius: "0.37rem",
     height: "45px",
     fontWeight: 300,
     backgroundColor: "#1976d2",
     color: "white",
+    width: "145px",
+    padding: "7px",
+    marginBottom: "11px",
+    fontSize: "smaller"
+  },
+  buttonActivatedStyle: {
+    borderRadius: "0.37rem",
+    height: "45px",
+    fontWeight: 300,
+    backgroundColor: "white",
+    color: "#1976d2",
     width: "145px",
     padding: "7px",
     marginBottom: "11px",

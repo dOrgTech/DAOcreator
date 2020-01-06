@@ -18,6 +18,8 @@ interface Props {
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
   toggleCollapse: () => void;
+  modal: boolean;
+  setModal: any;
 }
 
 enum DAOSpeed {
@@ -57,7 +59,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse } = props;
+  const { form, toggleCollapse, modal, setModal } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -105,7 +107,11 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor form={form} />
+            <AdvanceSchemeEditor
+              form={form}
+              setModal={setModal}
+              modal={modal}
+            />
           </MDBCol>
         </MDBRow>
         <MDBRow>
