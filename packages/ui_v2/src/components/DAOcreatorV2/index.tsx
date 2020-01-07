@@ -32,6 +32,7 @@ import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
 import Stepper from "components/commonV2/Stepper";
 import { getProvider } from "web3/core";
+import { ImportModal } from "../commonV2/Stepper/ImportModal";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -62,6 +63,7 @@ export default function DAOcreator() {
   const [advanceSchemeConfig, setAdvanceSchemeConfig] = React.useState<boolean>(
     false
   );
+  const [importFile, setImportFile] = React.useState<string>("");
 
   const handleMetamask = async () => {
     try {
@@ -181,7 +183,6 @@ export default function DAOcreator() {
       form: daoForm.$.config,
       Component: NamingStep,
       callbacks: {
-        toReviewStep: setStep,
         toggleCollapse: nextStep,
         setStep,
         daoName: () => daoForm.$.config.$.daoName.value
@@ -234,6 +235,7 @@ export default function DAOcreator() {
                   size="lg"
                   color="transparent"
                   className="btn"
+                  onClick={() => setImportFile("Import configuration")}
                   style={styles.icon}
                 >
                   <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
@@ -241,7 +243,7 @@ export default function DAOcreator() {
               </div>
             </MDBCol>
           </MDBRow>
-          <hr />
+          <br />
           <hr />
           <div className="row">
             <div className="col-md-12">
@@ -288,6 +290,12 @@ export default function DAOcreator() {
         </div>
       </MDBContainer>
       <PreviewDialog />
+      <ImportModal
+        title={importFile}
+        form={daoForm}
+        reviewStep={setStep}
+        setTitle={setImportFile}
+      />
     </>
   );
 }

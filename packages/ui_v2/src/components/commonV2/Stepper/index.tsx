@@ -6,6 +6,9 @@ import {
   DAOForm
 } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
+
+import { UtilityButton } from "./UtilityButton";
+
 interface Props {
   form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
@@ -15,6 +18,18 @@ interface Props {
   index: number;
   daoName?: string;
 }
+const utilityButton = (step: any, index: any, props: any) => {
+  if (step === 1 && index === 1) {
+    return (
+      <UtilityButton
+        title={"Advanced Configuration"}
+        callback={props.setModal}
+      />
+    );
+  } else if (step === 2 && index === 2) {
+    return <UtilityButton title={"Import CSV"} callback={console.log} />;
+  }
+};
 
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
@@ -50,16 +65,7 @@ export default function Stepper(props: Props) {
           ""
         )}
         <div>
-          {step === 1 && index === 1 ? (
-            <button
-              style={styles.button}
-              onClick={() => props.callbacks.setModal(true)}
-            >
-              Advance Configuration
-            </button>
-          ) : (
-            <div></div>
-          )}
+          {utilityButton(step, index, props.callbacks)}
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -179,18 +185,5 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
-  },
-  button: {
-    width: "174px",
-    height: "42px",
-    padding: "4px",
-    marginRight: "36px",
-    marginTop: "20px",
-    border: "1px solid gray",
-    boxShadow: "none",
-    borderRadius: "4px",
-    fontFamily: '"Roboto", sans-serif',
-    fontWeight: 300,
-    fontSize: "15px"
   }
 };
