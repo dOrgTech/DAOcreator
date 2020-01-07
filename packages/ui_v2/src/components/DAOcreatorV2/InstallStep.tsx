@@ -20,7 +20,7 @@ interface Props {
 */
 function InstallStep(props: any) {
   const { form } = props;
-  console.log(form.$);
+  // console.log(form.$);
 
   const onComplete = () => {
     console.log("onComplete");
@@ -60,19 +60,19 @@ function InstallStep(props: any) {
     </MDBBox>
   );
 }
-const styles = {
-  setDescriptionButton: {
-    borderRadius: "0.37rem",
-    height: "45px",
-    fontWeight: 300,
-    backgroundColor: "#1976d2",
-    color: "white",
-    width: "145px",
-    padding: "7px",
-    marginBottom: "11px",
-    fontSize: "smaller"
-  }
-};
+// const styles = {
+//   setDescriptionButton: {
+//     borderRadius: "0.37rem",
+//     height: "45px",
+//     fontWeight: 300,
+//     backgroundColor: "#1976d2",
+//     color: "white",
+//     width: "145px",
+//     padding: "7px",
+//     marginBottom: "11px",
+//     fontSize: "smaller"
+//   }
+// };
 
 const styles = {};
 
