@@ -1,11 +1,11 @@
 import * as React from "react";
 import { DAOForm } from "@dorgtech/daocreator-lib";
 interface Props {
-  daoForm: DAOForm;
+  form: DAOForm;
 }
 
 function InstallStep(props: Props) {
-  const printDAOForm = () => console.log("this.props.daoForm", props.daoForm);
+  const printDAOForm = () => console.log("this.props.daoForm", props.form);
   return (
     <>
       <button

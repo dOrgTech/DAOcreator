@@ -13,6 +13,7 @@ interface Props {
   callbacks: any | undefined;
   step: Number;
   index: number;
+  daoName?: string;
 }
 
 export default function Stepper(props: Props) {
@@ -43,7 +44,12 @@ export default function Stepper(props: Props) {
             {title}
           </span>
         </a>
-        <a>
+        {step > 0 && index === 0 && callbacks.daoName() ? (
+          <p style={{ marginTop: "26px" }}>{callbacks.daoName()}</p>
+        ) : (
+          ""
+        )}
+        <div>
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -55,7 +61,7 @@ export default function Stepper(props: Props) {
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </MDBBtn>
-        </a>
+        </div>
       </MDBRow>
 
       <MDBCollapse
