@@ -1,16 +1,15 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "0.2.1-rc.11",
+  "version": "0.2.1-rc.15",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "build:release": "rm -rf ./dist && tsc",
-    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json yarn.lock ./package && cp -r ./src ./package/src",
-    "release": "npm run build:release && npm run package:release && npm publish ./package --access public"
+    "prep:arc": "node scripts/prepArc.js",
+    "build": "rimraf ./dist && tsc && copyfiles -u 1 src/**/*.js src/**/*.json dist",
+    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src",
+    "release": "yarn build && yarn package:release && yarn publish ./package --access public"
   },
   "dependencies": {
-    "@daostack/migration": "0.0.1-rc.33-v1",
     "bn.js": "^5.0.0",
     "csv": "^5.1.2",
     "csv-stringify": "^5.3.3",
@@ -18,10 +17,14 @@
     "web3": "1.2.0"
   },
   "devDependencies": {
+    "@daostack/migration": "0.0.1-rc.36-v4",
     "@types/bn.js": "^4.11.5",
     "@types/node": "^10.12.18",
     "@types/web3": "1.0.19",
-    "mobx": "3.0.0",
+    "copyfiles": "2.1.1",
+    "mobx": "5.15.1",
+    "ncp": "2.0.0",
+    "rimraf": "^3.0.0",
     "typescript": "3.4.5"
   },
   "peerDependencies": {

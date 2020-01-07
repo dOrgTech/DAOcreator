@@ -1,0 +1,1 @@
+{"contractName":"ControllerCreator","abi":[{"constant":false,"inputs":[{"internalType":"contract Avatar","name":"_avatar","type":"address"}],"name":"create","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}],"compiler":{"name":"solc","version":"0.5.13+commit.5b0b510c.Emscripten.clang"}}

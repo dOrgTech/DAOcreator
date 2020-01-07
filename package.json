@@ -1,12 +1,20 @@
 {
-  "name": "@dorgtech/daocreator",
+  "name": "root",
+  "private": true,
   "version": "0.2.0",
   "scripts": {
-    "postinstall": "npx lerna bootstrap",
-    "start": "cd packages/ui_v1 && npm run start",
-    "build": "cd packages/lib && npm run build && cd ../ui_v1 && npm run build"
+    "start": "lerna exec --ignore @dorgtech/daocreator-lib -- yarn start",
+    "build": "lerna exec -- yarn build"
   },
   "devDependencies": {
     "lerna": "^3.18.4"
+  },
+  "workspaces": {
+    "packages": [
+      "./packages/*"
+    ],
+    "nohoist": [
+      "./packages/lib"
+    ]
   }
 }

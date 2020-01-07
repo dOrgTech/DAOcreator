@@ -166,8 +166,8 @@ class Migrator extends React.Component<Props, State> {
         });
         onComplete(result);
       },
-      getState: () => {
-        const state = localStorage.getItem("DAO_MIGRATION_STATE");
+      getState: (network: string) => {
+        const state = localStorage.getItem(`DAO_MIGRATION_STATE_${network}`);
 
         if (state) {
           return JSON.parse(state);
@@ -175,11 +175,14 @@ class Migrator extends React.Component<Props, State> {
           return {};
         }
       },
-      setState: (state: any) => {
-        localStorage.setItem("DAO_MIGRATION_STATE", JSON.stringify(state));
+      setState: (state: any, network: string) => {
+        localStorage.setItem(
+          `DAO_MIGRATION_STATE_${network}`,
+          JSON.stringify(state)
+        );
       },
-      cleanState: () => {
-        localStorage.removeItem("DAO_MIGRATION_STATE");
+      cleanState: (network: string) => {
+        localStorage.removeItem(`DAO_MIGRATION_STATE_${network}`);
       }
     };
 
@@ -405,6 +408,8 @@ class Migrator extends React.Component<Props, State> {
                 url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
               } else if (network === "rinkeby") {
                 url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+              } else if (network === "private") {
+                url = `dao/${result.Avatar}`;
               } else {
                 url = result.Avatar;
               }
