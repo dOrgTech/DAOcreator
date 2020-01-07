@@ -1,9 +1,4 @@
 import * as React from "react";
-import {
-  DAOForm,
-  toDAOMigrationParams,
-  toJSON
-} from "@dorgtech/daocreator-lib";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -15,7 +10,9 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBContainer,
-  MDBRow
+  MDBRow,
+  MDBCol,
+  MDBIcon
 } from "mdbreact";
 
 import {
@@ -23,7 +20,10 @@ import {
   MembersForm,
   SchemesForm,
   fromDAOMigrationParams,
-  fromJSON
+  fromJSON,
+  DAOForm,
+  toDAOMigrationParams,
+  toJSON
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -57,6 +57,9 @@ export default function DAOcreator() {
   >();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
+    false
+  );
+  const [advanceSchemeConfig, setAdvanceSchemeConfig] = React.useState<boolean>(
     false
   );
 
@@ -190,7 +193,9 @@ export default function DAOcreator() {
       Component: SchemesStep,
       callbacks: {
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        modal: advanceSchemeConfig,
+        setModal: setAdvanceSchemeConfig
       }
     },
     {
@@ -217,13 +222,27 @@ export default function DAOcreator() {
     <>
       <MDBContainer style={styles.paddingContainer}>
         <div style={styles.root}>
-          <MDBRow style={styles.headerTop}></MDBRow>
-          <div
-            className="row justify-content-center"
-            style={styles.titleContainer}
-          >
-            <h3 style={styles.fontStyle}>Create Organization</h3>
-          </div>
+          <MDBRow style={styles.headerTop}>
+            <MDBCol size="3" />
+            <MDBCol size="6" style={styles.titleContainer}>
+              <h3 style={styles.fontStyle}>Create Organization</h3>
+            </MDBCol>
+            <MDBCol size="3">
+              <div>
+                <MDBBtn
+                  floating
+                  size="lg"
+                  color="transparent"
+                  className="btn"
+                  style={styles.icon}
+                >
+                  <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
+                </MDBBtn>
+              </div>
+            </MDBCol>
+          </MDBRow>
+          <hr />
+          <hr />
           <div className="row">
             <div className="col-md-12">
               {loading ? (
@@ -295,15 +314,27 @@ const styles = {
     paddingTop: 0
   },
   headerTop: {
-    height: "30px"
+    height: "40px"
   },
   titleContainer: {
-    borderBottom: "1px solid",
-    borderColor: "inherit",
-    marginRight: 0,
-    marginLeft: 0
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px"
   },
   spinner: {
     display: "inline-block"
+  },
+  icon: {
+    background: "white",
+    boxShadow: "none",
+    color: "blue !important",
+    padding: 5,
+    marginLeft: "93px",
+    marginTop: "18.5px",
+    height: 35,
+    width: 35, //The Width must be the same as the height
+    borderRadius: 400,
+    border: "1px solid lightgrey"
   }
 };

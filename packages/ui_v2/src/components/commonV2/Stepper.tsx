@@ -50,6 +50,16 @@ export default function Stepper(props: Props) {
           ""
         )}
         <div>
+          {step === 1 && index === 1 ? (
+            <button
+              style={styles.button}
+              onClick={() => props.callbacks.setModal(true)}
+            >
+              Advance Configuration
+            </button>
+          ) : (
+            <div></div>
+          )}
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -157,7 +167,9 @@ const styles = {
     height: 40,
     width: 40, //The Width must be the same as the height
     borderRadius: 400,
-    border: "1px solid lightgrey"
+    border: "1px solid lightgrey",
+    marginRight: "30px",
+    marginTop: "16px"
   },
   completedStep: {
     fontWeight: 400,
@@ -167,5 +179,18 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
+  },
+  button: {
+    width: "174px",
+    height: "42px",
+    padding: "4px",
+    marginRight: "36px",
+    marginTop: "20px",
+    border: "1px solid gray",
+    boxShadow: "none",
+    borderRadius: "4px",
+    fontFamily: '"Roboto", sans-serif',
+    fontWeight: 300,
+    fontSize: "15px"
   }
 };

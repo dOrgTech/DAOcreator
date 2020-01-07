@@ -23,6 +23,8 @@ import { Fragment } from "react";
 
 export interface Props {
   form: any;
+  modal: boolean;
+  setModal: any;
 }
 
 const schemeName = {
@@ -32,7 +34,7 @@ const schemeName = {
 };
 
 function AdvanceSchemeEditor(props: Props) {
-  const { form } = props;
+  const { form, modal, setModal } = props;
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
@@ -95,21 +97,16 @@ function AdvanceSchemeEditor(props: Props) {
     handleToggle(schemeIndex);
   };
 
-  const [modalState, setModalState] = React.useState<boolean>(false);
-
   return (
     <Fragment>
-      <button style={styles.button} onClick={() => setModalState(!modalState)}>
-        Advance Configuration
-      </button>
       <MDBModal
-        isOpen={modalState}
-        toggle={() => setModalState(!modalState)}
+        isOpen={modal}
+        toggle={() => setModal(!modal)}
         style={styles.modal}
         size="lg"
       >
         <MDBModalHeader
-          toggle={() => setModalState(!modalState)}
+          toggle={() => setModal(!modal)}
           style={styles.titlePadding}
         >
           {" "}
@@ -191,7 +188,7 @@ function AdvanceSchemeEditor(props: Props) {
             <MDBCol size="6">
               <button
                 style={styles.cancelButton}
-                onClick={() => setModalState(!modalState)}
+                onClick={() => setModal(!modal)}
               >
                 Cancel
               </button>
