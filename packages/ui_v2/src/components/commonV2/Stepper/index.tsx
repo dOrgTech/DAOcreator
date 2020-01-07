@@ -14,11 +14,11 @@ interface Props {
   Component: any;
   title: string;
   callbacks: any | undefined;
-  step: Number;
+  step: number;
   index: number;
   daoName?: string;
 }
-const utilityButton = (step: any, index: any, props: any) => {
+const utilityButton = (step: number, index: number, props: any) => {
   if (step === 1 && index === 1) {
     return (
       <UtilityButton

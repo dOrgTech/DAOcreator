@@ -45,6 +45,7 @@ export function ImportModal(props: Props) {
   const { title, form, reviewStep, setTitle } = props;
   const open = title ? true : false;
   const [error, setError] = useState<any>();
+  const [fileAdded, setFileAdded] = useState<boolean>(false);
 
   const onFilePicked = async (acceptedFiles: File[]) => {
     if (acceptedFiles === null) {
@@ -66,12 +67,15 @@ export function ImportModal(props: Props) {
       onError(file.name, e.message);
       return;
     }
-    onClose();
-    onImport();
+
+    setFileAdded(true);
   };
 
   const onImport = () => {
-    reviewStep(3);
+    if (!error && fileAdded) {
+      reviewStep(3);
+      onClose();
+    }
   };
 
   const onError = (file: string, message: string) => {
@@ -93,6 +97,8 @@ export function ImportModal(props: Props) {
 
   const onClose = () => {
     setTitle("");
+    setError(null);
+    setFileAdded(false);
   };
 
   return (
