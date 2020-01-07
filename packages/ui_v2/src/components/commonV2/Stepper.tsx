@@ -167,7 +167,9 @@ const styles = {
     height: 40,
     width: 40, //The Width must be the same as the height
     borderRadius: 400,
-    border: "1px solid lightgrey"
+    border: "1px solid lightgrey",
+    marginRight: "30px",
+    marginTop: "16px"
   },
   completedStep: {
     fontWeight: 400,
@@ -181,7 +183,9 @@ const styles = {
   button: {
     width: "174px",
     height: "42px",
-    padding: "100px",
+    padding: "4px",
+    marginRight: "36px",
+    marginTop: "20px",
     border: "1px solid gray",
     boxShadow: "none",
     borderRadius: "4px",

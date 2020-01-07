@@ -319,7 +319,8 @@ const styles = {
   titleContainer: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: "20px"
   },
   spinner: {
     display: "inline-block"
@@ -329,6 +330,8 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
+    marginLeft: "93px",
+    marginTop: "18.5px",
     height: 35,
     width: 35, //The Width must be the same as the height
     borderRadius: 400,
