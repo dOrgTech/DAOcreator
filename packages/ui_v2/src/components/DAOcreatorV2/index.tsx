@@ -47,13 +47,10 @@ interface Step {
   callbacks?: Object;
 }
 
+const daoForm = new DAOForm();
+const recoveredForm = new DAOForm();
+
 export default function DAOcreator() {
-  const daoForm = new DAOForm();
-
-  const recoveredForm = new DAOForm();
-  daoForm.$.config.$.tokenName.$ = "test";
-  daoForm.$.config.$.tokenName.value = "test";
-
   const [step, setStep] = React.useState<number>(0);
   const [defaultAddress, setDefaultAddress] = React.useState<
     string | undefined
@@ -183,7 +180,8 @@ export default function DAOcreator() {
       callbacks: {
         toReviewStep: setStep,
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        daoName: () => daoForm.$.config.$.daoName.value
       }
     },
     {
