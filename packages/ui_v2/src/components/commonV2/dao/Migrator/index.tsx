@@ -606,4 +606,4 @@ const styles = (theme: Theme) =>
     }
   });
 
-export default withStyles(styles)(Migrator);
+export default Migrator;
