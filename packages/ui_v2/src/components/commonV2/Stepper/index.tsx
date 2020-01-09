@@ -18,16 +18,16 @@ interface Props {
   index: number;
   daoName?: string;
 }
-const utilityButton = (step: number, index: number, props: any) => {
+const ImportButton = (props: { step: number; index: number; cb: any }) => {
+  const { step, index, cb } = props;
   if (step === 1 && index === 1) {
     return (
-      <UtilityButton
-        title={"Advanced Configuration"}
-        callback={props.setModal}
-      />
+      <UtilityButton title={"Advanced Configuration"} openModal={cb.setModal} />
     );
   } else if (step === 2 && index === 2) {
-    return <UtilityButton title={"Import CSV"} callback={console.log} />;
+    return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
+  } else {
+    return <></>;
   }
 };
 
@@ -65,7 +65,7 @@ export default function Stepper(props: Props) {
           ""
         )}
         <div>
-          {utilityButton(step, index, props.callbacks)}
+          <ImportButton step={step} index={index} cb={props.callbacks} />
           <MDBBtn
             hidden={step === index || step < index}
             floating

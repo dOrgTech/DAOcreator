@@ -32,7 +32,7 @@ import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
 import Stepper from "components/commonV2/Stepper";
 import { getProvider } from "web3/core";
-import { ImportModal } from "../commonV2/Stepper/ImportModal";
+import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -208,6 +208,7 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         setStep,
         address: defaultAddress,
+        setModal: setImportFile,
         step
       }
     },
@@ -290,7 +291,7 @@ export default function DAOcreator() {
         </div>
       </MDBContainer>
       <PreviewDialog />
-      <ImportModal
+      <ImporterModal
         title={importFile}
         form={daoForm}
         reviewStep={setStep}
