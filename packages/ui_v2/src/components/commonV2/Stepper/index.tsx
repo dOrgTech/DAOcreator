@@ -8,6 +8,7 @@ import {
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
+import { simpleOptionsSwitcher } from "utils";
 
 interface Props {
   form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
@@ -29,6 +30,21 @@ const ImportButton = (props: { step: number; index: number; cb: any }) => {
   } else {
     return <></>;
   }
+};
+
+// WIP
+const simpleConfigText = (form: any) => {
+  // checked?: boolean, text?: any, icon?: any
+  // TESTING Utility.
+  simpleOptionsSwitcher(form);
+  const fakeOptions = [true, false, true];
+  return fakeOptions.map((checked, index) =>
+    checked ? (
+      <span key={index}>checked</span>
+    ) : (
+      <span key={index}>not checked</span>
+    )
+  );
 };
 
 export default function Stepper(props: Props) {
@@ -64,6 +80,7 @@ export default function Stepper(props: Props) {
         ) : (
           ""
         )}
+        {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
           <ImportButton step={step} index={index} cb={props.callbacks} />
           <MDBBtn
