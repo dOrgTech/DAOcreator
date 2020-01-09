@@ -12,7 +12,9 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBIcon
+  MDBIcon,
+  MDBPopover,
+  MDBPopoverBody
 } from "mdbreact";
 
 import {
@@ -33,6 +35,7 @@ import InstallStep from "./InstallStep";
 import Stepper from "components/commonV2/Stepper";
 import { getProvider } from "web3/core";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
+import * as FileSaver from "file-saver";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -142,6 +145,14 @@ export default function DAOcreator() {
     setRecoverPreviewOpen(false);
   };
 
+  const exportDaoParams = () => {
+    const dao = toDAOMigrationParams(daoForm.toState());
+    const blob = new Blob([toJSON(dao)], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(blob, "migration-params.json");
+  };
+
   const PreviewDialog = () => (
     <MDBModal open={recoverPreviewOpen} fullWidth={true} maxWidth="md">
       <MDBModalHeader id="simple-dialog-title">
@@ -231,16 +242,26 @@ export default function DAOcreator() {
             </MDBCol>
             <MDBCol size="3">
               <div>
-                <MDBBtn
-                  floating
-                  size="lg"
-                  color="transparent"
-                  className="btn"
-                  onClick={() => setImportFile("Import configuration")}
-                  style={styles.icon}
-                >
-                  <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
-                </MDBBtn>
+                <MDBPopover placement="bottom" popover clickable>
+                  <MDBBtn
+                    floating
+                    size="lg"
+                    color="transparent"
+                    className="btn"
+                    style={styles.icon}
+                  >
+                    <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
+                  </MDBBtn>
+                  <div style={styles.divided}>
+                    <div onClick={() => setImportFile("Import configuration")}>
+                      <MDBPopoverBody>Import Configuration</MDBPopoverBody>
+                    </div>
+                    <div style={styles.divider} />
+                    <div onClick={() => exportDaoParams()}>
+                      <MDBPopoverBody>Export configuration</MDBPopoverBody>
+                    </div>
+                  </div>
+                </MDBPopover>
               </div>
             </MDBCol>
           </MDBRow>
@@ -345,5 +366,14 @@ const styles = {
     width: 35, //The Width must be the same as the height
     borderRadius: 400,
     border: "1px solid lightgrey"
+  },
+  divided: {
+    display: "flex",
+    alignItems: "center"
+  },
+  divider: {
+    flexGrow: 1,
+    borderBottom: "1px solid #6c757d",
+    margin: "5px"
   }
 };
