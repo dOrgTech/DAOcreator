@@ -18,7 +18,7 @@ interface IProps {
   config: ILineConfig;
 }
 
-const Line: FC<IProps> = ({ data, config }: IProps) => {
+const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
   const { height, symbol, dataKey, nameKey } = config;
 
   let totalAmount = 0;
@@ -69,4 +69,4 @@ const Line: FC<IProps> = ({ data, config }: IProps) => {
   );
 };
 
-export default Line;
+export default LineGraphic;
