@@ -2,7 +2,7 @@ import React from "react";
 import { MDBBox } from "mdbreact";
 
 import PieChart from "components/commonV2/PieChart";
-import Line from "components/commonV2/Line";
+import LineGraphic from "components/commonV2/LineGraphic";
 
 export const MembersAnalytics = ({ data }: { data: any }) => {
   // const tokenDistributionConfig = {
@@ -27,7 +27,7 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
   const newReputationConfig = {
     height: "10px",
     symbol: "REP",
-    dataKey: "tokens",
+    dataKey: "reputation",
     nameKey: "address"
   };
 
@@ -36,12 +36,12 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
       <MDBBox>
         Token Distribution
         {/* <PieChart data={data} config={tokenDistributionConfig} /> */}
-        <Line data={data} config={newTokenConfig} />
+        <LineGraphic data={data} config={newTokenConfig} />
       </MDBBox>
 
       <MDBBox>
         Reputation Distribution
-        <Line data={data} config={newReputationConfig} />
+        <LineGraphic data={data} config={newReputationConfig} />
         {/* <PieChart data={data} config={reputationDistributionConfig} /> */}
       </MDBBox>
     </>
