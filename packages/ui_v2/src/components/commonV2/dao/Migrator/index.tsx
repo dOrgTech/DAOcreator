@@ -86,9 +86,13 @@ const initState: State = {
   noWeb3Open: false
 };
 
-function Migrator(props: IProps) {
-  const { dao, onComplete, onAbort, onStart, onStop } = props;
-
+const Migrator: FC<IProps> = ({
+  dao,
+  onComplete,
+  onAbort,
+  onStart,
+  onStop
+}: IProps) => {
   const [state, setState] = useState(initState);
 
   const {
@@ -109,8 +113,6 @@ function Migrator(props: IProps) {
   };
 
   const start = async () => {
-    //const { onAbort, onComplete, dao } = this.props;
-
     // Make sure we have a web3 provider available. If not,
     // tell the user they need to have one.
     let web3 = undefined;
@@ -156,6 +158,7 @@ function Migrator(props: IProps) {
         onAbort(err); //TODO check
       },
       migrationComplete: (result: DAOMigrationResult) => {
+        // INFO
         window.onbeforeunload = function() {
           return undefined;
         };
@@ -189,20 +192,6 @@ function Migrator(props: IProps) {
     onStop(); // props
   };
 
-  // render() {
-  //const { dao, classes } = this.props; //TODO what is classes for
-  // const {
-  //   started,
-  //   finished,
-  //   logLines,
-  //   ethSpent,
-  //   result,
-  //   logClosed,
-  //   menuAnchor,
-  //   exportOpen,
-  //   noWeb3Open
-  // } = this.state;
-
   const onOptionsClick = (event: any) => {
     setState({ ...state, menuAnchor: event.currentTarget });
   };
@@ -229,6 +218,7 @@ function Migrator(props: IProps) {
     setState({ ...state, menuAnchor: undefined });
   };
 
+  // INFO
   const Line: FC<{
     index: number;
     icon: any;
@@ -243,6 +233,7 @@ function Migrator(props: IProps) {
     // </Paper>
   );
 
+  // INFO
   const Log = () => (
     <>
       {logLines.map((line: AnyLogLine, index: number) => {
@@ -469,6 +460,7 @@ function Migrator(props: IProps) {
         WARNING: Do not use the "Speed Up Transaction" feature in your wallet,
         this will break the deployment process. A fix is being worked on.
       </Typography>
+      {/* INFO */}
       {/* <Divider className={classes.resultsDivider} /> */}
       <div></div>
       {result ? <MigrationResults /> : <></>}
@@ -552,7 +544,7 @@ function Migrator(props: IProps) {
       <NoWeb3Dialog />
     </>
   );
-}
+};
 // }
 
 // STYLE
