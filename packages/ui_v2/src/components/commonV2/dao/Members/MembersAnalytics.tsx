@@ -19,7 +19,7 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
 
   const newTokenConfig = {
     height: "10px",
-    symbol: "token",
+    symbol: "token", // TODO get token symbol (?)
     dataKey: "tokens",
     nameKey: "address"
   };
