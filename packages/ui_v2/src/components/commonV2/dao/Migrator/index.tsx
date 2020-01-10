@@ -370,6 +370,9 @@ const Migrator: FC<IProps> = ({
 
     const json = JSON.stringify(result, null, 2);
 
+    {
+      /* INFO */
+    }
     return (
       <>
         {/* <Typography variant={"h6"} className={classes.successText}> */}
@@ -393,8 +396,10 @@ const Migrator: FC<IProps> = ({
         >
           View DAO in Alchemy (Save This Link!)
         </Link>
+        {/* INFO */}
         {/* <div className={classes.resultWrapper}> */}
         <div>
+          {/* INFO */}
           {/* <Paper className={classes.result}> */}
           <div>
             <Button
@@ -406,6 +411,7 @@ const Migrator: FC<IProps> = ({
               Copy
             </Button>
             {json}
+            {/* INFO */}
             {/* </Paper> */}
           </div>
           <Typography variant={"subtitle2"}>
@@ -413,6 +419,7 @@ const Migrator: FC<IProps> = ({
             what you think!
           </Typography>
         </div>
+        {/* INFO */}
         {/* <Divider className={classes.resultsDivider} /> */}
       </>
     );
@@ -548,54 +555,54 @@ const Migrator: FC<IProps> = ({
 // }
 
 // STYLE
-const styles = (theme: Theme) =>
-  createStyles({
-    logHeader: {
-      background: "#e4e4e4"
-    },
-    lightLine: {
-      padding: "10px",
-      background: "#e4e4e4",
-      maxWidth: "100%",
-      boxShadow: "none"
-    },
-    darkLine: {
-      padding: "10px",
-      background: "#c7c7c7",
-      maxWidth: "100%",
-      boxShadow: "none"
-    },
-    confirmButton: {
-      fontSize: "0.7125rem"
-    },
-    progressBar: {
-      width: "23px !important",
-      height: "23px  !important"
-    },
-    dialog: {
-      maxWidth: "690px"
-    },
-    result: {
-      width: "100%",
-      background: "#e4e4e4",
-      overflowX: "hidden",
-      padding: "10px",
-      whiteSpace: "pre"
-    },
-    resultWrapper: {
-      width: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center"
-    },
-    successText: {
-      width: "100%",
-      textAlign: "center"
-    },
-    resultsDivider: {
-      marginTop: "20px",
-      marginBottom: "20px"
-    }
-  });
+// const styles = (theme: Theme) =>
+//   createStyles({
+//     logHeader: {
+//       background: "#e4e4e4"
+//     },
+//     lightLine: {
+//       padding: "10px",
+//       background: "#e4e4e4",
+//       maxWidth: "100%",
+//       boxShadow: "none"
+//     },
+//     darkLine: {
+//       padding: "10px",
+//       background: "#c7c7c7",
+//       maxWidth: "100%",
+//       boxShadow: "none"
+//     },
+//     confirmButton: {
+//       fontSize: "0.7125rem"
+//     },
+//     progressBar: {
+//       width: "23px !important",
+//       height: "23px  !important"
+//     },
+//     dialog: {
+//       maxWidth: "690px"
+//     },
+//     result: {
+//       width: "100%",
+//       background: "#e4e4e4",
+//       overflowX: "hidden",
+//       padding: "10px",
+//       whiteSpace: "pre"
+//     },
+//     resultWrapper: {
+//       width: "100%",
+//       display: "flex",
+//       flexDirection: "column",
+//       justifyContent: "center"
+//     },
+//     successText: {
+//       width: "100%",
+//       textAlign: "center"
+//     },
+//     resultsDivider: {
+//       marginTop: "20px",
+//       marginBottom: "20px"
+//     }
+//   });
 
 export default Migrator;
