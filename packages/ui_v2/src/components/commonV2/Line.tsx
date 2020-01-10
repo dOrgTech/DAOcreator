@@ -3,37 +3,42 @@ import { MDBContainer, MDBProgress, MDBTooltip } from "mdbreact";
 
 export interface ILineConfig {
   height: string;
-  data: string;
-  name: string;
+  symbol?: string;
+  dataKey: string;
+  nameKey: string;
 }
 
 interface IData {
-  value: number;
-  name: string;
+  //TODO
+  [name: string]: string | number;
 }
 
 interface IProps {
-  data: IData[];
+  data: any; //IData[];
   config: ILineConfig;
 }
 
 const Line: FC<IProps> = ({ data, config }: IProps) => {
+  const { height, symbol, dataKey, nameKey } = config;
+
   let totalAmount = 0;
   for (let i = 0; i < data.length; i++) {
-    totalAmount += data[i].value;
+    totalAmount += data[i][dataKey];
   }
 
   const colours = ["success", "info", "warning", "danger"];
 
   return (
     <MDBContainer className="text-center">
-      {data.map(({ value, name }, index) => {
+      {data.map((element: any, index: number) => {
+        const value: number = element[dataKey];
+
         const percentage = `${(value / totalAmount) * 100}`
           .toString()
           .substr(0, 4);
 
         return (
-          <MDBTooltip key={index} placement="top" height={config.height}>
+          <MDBTooltip key={index} placement="top" height={height}>
             <div
               style={{
                 width: `${(value / totalAmount) * 100}%`,
@@ -51,9 +56,10 @@ const Line: FC<IProps> = ({ data, config }: IProps) => {
               </MDBProgress>
             </div>
             <div>
-              <p>{`(BLOCKY) ${name}`}</p>
+              {/* TODO Add address check for blocky(?) */}
+              <p>{`(BLOCKY) ${element[nameKey]}`}</p>
               <p>
-                {`${value} ${config.data}`} ({`${percentage}%`})
+                {`${value} ${symbol}`} ({`${percentage}%`})
               </p>
             </div>
           </MDBTooltip>
