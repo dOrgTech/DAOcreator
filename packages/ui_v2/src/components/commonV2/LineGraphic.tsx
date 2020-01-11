@@ -29,8 +29,8 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
 
   return (
     <MDBContainer className="text-center">
-      {data.map((element: any, index: number) => {
-        const value: number = element[dataKey];
+      {data.map((element: IData, index: number) => {
+        const value: number = element[dataKey] as number;
 
         const percentage = `${(value / totalAmount) * 100}`
           .toString()
@@ -56,7 +56,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
             </div>
             <div>
               {/* TODO Add address check for blocky(?) */}
-              <p>{`(BLOCKY) ${element[nameKey]}`}</p>
+              <p>{`(BLOCKY) ${element[nameKey] as string}`}</p>
               <p>
                 {`${value} ${symbol}`} ({`${percentage}%`})
               </p>
