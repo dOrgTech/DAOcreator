@@ -100,7 +100,7 @@ const Migrator: FC<IProps> = ({
     started,
     finished,
     ethSpent,
-    result, //what was resultDivider
+    result,
     logClosed,
     menuAnchor,
     exportOpen,
