@@ -9,12 +9,11 @@ export interface ILineConfig {
 }
 
 interface IData {
-  //TODO
   [name: string]: string | number;
 }
 
 interface IProps {
-  data: any; //IData[];
+  data: IData[];
   config: ILineConfig;
 }
 
@@ -23,7 +22,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
 
   let totalAmount = 0;
   for (let i = 0; i < data.length; i++) {
-    totalAmount += data[i][dataKey];
+    totalAmount += data[i][dataKey] as number;
   }
 
   const colours = ["success", "info", "warning", "danger"];
