@@ -13,9 +13,10 @@ interface Props {
   callbacks: any | undefined;
   step: Number;
   index: number;
+  daoName?: string;
 }
 
-export default function Accordion(props: Props) {
+export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
   return (
     <li className={step === index || step > index ? "completed" : ""}>
@@ -26,7 +27,13 @@ export default function Accordion(props: Props) {
         <a role="button">
           <span
             className="circle"
-            style={step > index ? styles.completedStep : styles.completedStep}
+            style={
+              step > index
+                ? styles.circleActive
+                : styles.noActive || step === index
+                ? styles.circleActive
+                : styles.noActive
+            }
           >
             {index + 1}
           </span>
@@ -37,7 +44,22 @@ export default function Accordion(props: Props) {
             {title}
           </span>
         </a>
-        <a>
+        {step > 0 && index === 0 && callbacks.daoName() ? (
+          <p style={{ marginTop: "26px" }}>{callbacks.daoName()}</p>
+        ) : (
+          ""
+        )}
+        <div>
+          {step === 1 && index === 1 ? (
+            <button
+              style={styles.button}
+              onClick={() => props.callbacks.setModal(true)}
+            >
+              Advance Configuration
+            </button>
+          ) : (
+            <div></div>
+          )}
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -49,11 +71,26 @@ export default function Accordion(props: Props) {
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </MDBBtn>
-        </a>
+        </div>
       </MDBRow>
 
-      <MDBCollapse id={index.toString()} isOpen={step.toString()}>
-        <MDBRow className="justify-content-end" style={styles.stepContent}>
+      <MDBCollapse
+        id={index.toString()}
+        isOpen={step.toString()}
+        style={styles.maxWidth}
+      >
+        <MDBRow
+          className={
+            index === (2 || 4) ? "justify-content-end" : "justify-content-start"
+          }
+          style={
+            index === (1 || 3)
+              ? styles.stepContent
+              : styles.stepTwoContent && index === 2
+              ? styles.stepTwoContent
+              : styles.stepFourContent
+          }
+        >
           <Component form={form} {...props.callbacks} />
         </MDBRow>
       </MDBCollapse>
@@ -63,9 +100,23 @@ export default function Accordion(props: Props) {
 
 const styles = {
   stepContent: {
-    width: "100%",
+    width: "fit-content",
     padding: "6px",
-    margin: "0px 0px 0px 14%",
+    margin: "0px 5% 0px 14%",
+    border: "1px solid lightgray",
+    borderRadius: "6px"
+  },
+  stepTwoContent: {
+    width: "inherit",
+    padding: "6px",
+    margin: "0px 5% 0px 14%",
+    border: "1px solid lightgray",
+    borderRadius: "6px"
+  },
+  stepFourContent: {
+    width: "auto",
+    padding: "16px",
+    margin: "0px 5% 0px 14%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
@@ -96,8 +147,8 @@ const styles = {
   },
   circleActive: {
     fontWeight: 400,
-    backgroundColor: "rgb(66, 133, 244) !important",
     color: "white",
+    backgroundColor: "rgb(66, 133, 244) !important",
     borderColor: "white",
     border: "0.9px solid lightgray",
     background: "rgb(66, 133, 244) !important"
@@ -116,12 +167,30 @@ const styles = {
     height: 40,
     width: 40, //The Width must be the same as the height
     borderRadius: 400,
-    border: "1px solid lightgrey"
+    border: "1px solid lightgrey",
+    marginRight: "30px",
+    marginTop: "16px"
   },
   completedStep: {
     fontWeight: 400,
     color: "#4285f4 !important",
     border: "0.9px solid #4285f4 !important",
     background: "white !important"
+  },
+  maxWidth: {
+    width: "-webkit-fill-available"
+  },
+  button: {
+    width: "174px",
+    height: "42px",
+    padding: "4px",
+    marginRight: "36px",
+    marginTop: "20px",
+    border: "1px solid gray",
+    boxShadow: "none",
+    borderRadius: "4px",
+    fontFamily: '"Roboto", sans-serif',
+    fontWeight: 300,
+    fontSize: "15px"
   }
 };

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { MDBBox } from "mdbreact";
+import { MDBBox, MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "components/commonV2/LineGraphic";
 
@@ -23,13 +23,24 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
 
   const AnalyticsBoxes = () => (
     <Fragment>
-      <MDBBox display="flex" flex="row">
-        <div style={{ whiteSpace: "nowrap" }}>Reputation Distribution</div>
-        <LineGraphic data={data} config={newReputationConfig} />
-      </MDBBox>
-      <MDBBox display="flex" flex="row">
-        <div style={{ whiteSpace: "nowrap" }}>Token Distribution</div>
-        <LineGraphic data={data} config={newTokenConfig} />
+      <MDBBox>
+        <MDBRow>
+          <MDBCol size="4">
+            <div>Reputation Distribution</div>
+          </MDBCol>
+          <MDBCol size="8">
+            <LineGraphic data={data} config={newReputationConfig} />
+          </MDBCol>
+        </MDBRow>
+        <br />
+        <MDBRow>
+          <MDBCol size="4">
+            <div>Token Distribution</div>
+          </MDBCol>
+          <MDBCol size="8">
+            <LineGraphic data={data} config={newTokenConfig} />
+          </MDBCol>
+        </MDBRow>
       </MDBBox>
     </Fragment>
   );

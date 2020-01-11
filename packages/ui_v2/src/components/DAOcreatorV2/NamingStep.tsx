@@ -1,7 +1,7 @@
 import React from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "components/commonV2/dao/DAOConfigEditor";
-import { MDBBtn, MDBRow, MDBCol } from "mdbreact";
+import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;
@@ -11,6 +11,8 @@ interface Props {
 
 function NamingStep(props: Props) {
   const { form, toggleCollapse } = props;
+  form.$.tokenName.$ = "0";
+  form.$.tokenName.value = "0";
   return (
     <>
       <div style={styles.paddingTotal}>
@@ -19,16 +21,18 @@ function NamingStep(props: Props) {
         <br />
         <MDBRow style={styles.paddingBottom}>
           <MDBCol>
-            <MDBBtn
-              color="blue darken-4"
-              size="sm"
+            <button
               name="decisonSpeed"
               value="slow"
-              style={styles.buttonStyle}
-              onClick={() => toggleCollapse()}
+              style={
+                form.hasError
+                  ? styles.buttonActivatedStyle
+                  : styles.buttonDeactivatedStyle
+              }
+              onClick={toggleCollapse}
             >
               Set Description
-            </MDBBtn>
+            </button>
           </MDBCol>
         </MDBRow>
       </div>
@@ -37,7 +41,7 @@ function NamingStep(props: Props) {
 }
 
 const styles = {
-  buttonStyle: {
+  buttonDeactivatedStyle: {
     borderRadius: "0.37rem",
     height: "45px",
     fontWeight: 300,
@@ -45,7 +49,19 @@ const styles = {
     color: "white",
     width: "145px",
     padding: "7px",
-    marginBottom: "11px"
+    marginBottom: "11px",
+    fontSize: "smaller"
+  },
+  buttonActivatedStyle: {
+    borderRadius: "0.37rem",
+    height: "45px",
+    fontWeight: 300,
+    backgroundColor: "white",
+    color: "#1976d2",
+    width: "145px",
+    padding: "7px",
+    marginBottom: "11px",
+    fontSize: "smaller"
   },
   paddingBottom: {
     paddingBottom: "2%"
