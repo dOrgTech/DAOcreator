@@ -1,31 +1,18 @@
 import React from "react";
 import { MDBBox } from "mdbreact";
 
-import PieChart from "components/commonV2/PieChart";
 import LineGraphic from "components/commonV2/LineGraphic";
 
 export const MembersAnalytics = ({ data }: { data: any }) => {
-  // const tokenDistributionConfig = {
-  //   size: 240,
-  //   dataKey: "tokens",
-  //   nameKey: "address"
-  // };
-
-  // const reputationDistributionConfig = {
-  //   size: 240,
-  //   dataKey: "reputation",
-  //   nameKey: "address"
-  // };
-
   const newTokenConfig = {
-    height: "1rem",
+    height: "0.5rem",
     symbol: "token", // TODO get token symbol (?)
     dataKey: "tokens",
     nameKey: "address"
   };
 
   const newReputationConfig = {
-    height: "1rem",
+    height: "0.5rem",
     symbol: "REP",
     dataKey: "reputation",
     nameKey: "address"
@@ -33,16 +20,18 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
 
   const AnalyticsBoxes = () => (
     <>
-      <MDBBox>
-        Token Distribution
-        {/* <PieChart data={data} config={tokenDistributionConfig} /> */}
+      <MDBBox display="flex" flex="row">
+        <div style={{ whiteSpace: "nowrap", width: "10rem" }}>
+          Token Distribution
+        </div>
         <LineGraphic data={data} config={newTokenConfig} />
       </MDBBox>
 
-      <MDBBox>
-        Reputation Distribution
+      <MDBBox display="flex" flex="row">
+        <div style={{ whiteSpace: "nowrap", width: "10rem" }}>
+          Reputation Distribution
+        </div>
         <LineGraphic data={data} config={newReputationConfig} />
-        {/* <PieChart data={data} config={reputationDistributionConfig} /> */}
       </MDBBox>
     </>
   );
