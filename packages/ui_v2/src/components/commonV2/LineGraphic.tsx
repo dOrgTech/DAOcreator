@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { MDBContainer, MDBProgress, MDBTooltip } from "mdbreact";
 
 export interface ILineConfig {
+  showPercentage: boolean;
   height: string;
   symbol?: string;
   dataKey: string;
@@ -18,7 +19,7 @@ interface IProps {
 }
 
 const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
-  const { height, symbol, dataKey, nameKey } = config;
+  const { showPercentage, height, symbol, dataKey, nameKey } = config;
 
   let totalAmount = 0;
   for (let i = 0; i < data.length; i++) {
@@ -36,6 +37,8 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
           .toString()
           .substr(0, 4);
 
+        const name = element[nameKey] as string;
+
         return (
           <MDBTooltip key={index} placement="top">
             <div
@@ -51,12 +54,12 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
                 height={height}
                 color={colours[index % 4]}
               >
-                {`${(value / totalAmount) * 100}`.toString().substr(0, 4)}%
+                {showPercentage && `${percentage}%`}
               </MDBProgress>
             </div>
             <div>
               {/* TODO Add address check for blocky(?) */}
-              <p>{`(BLOCKY) ${element[nameKey] as string}`}</p>
+              <p>{`(BLOCKY) ${name.substr(0, 8)}...`}</p>
               <p>
                 {`${value} ${symbol}`} ({`${percentage}%`})
               </p>
