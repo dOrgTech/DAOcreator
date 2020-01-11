@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
@@ -8,7 +8,7 @@ import {
 import { MDBBox } from "mdbreact";
 
 interface Props {
-  form: DAOForm;
+  form: any; //DAOForm;
 }
 
 /*
@@ -18,9 +18,10 @@ interface Props {
     Types of property 'config' are incompatible.
       Type 'DAOConfigForm' is missing the following properties from type 'DAOConfig': daoName, tokenName, tokenSymbol
 */
-function InstallStep(props: any) {
-  const { form } = props;
-  // console.log(form.$);
+const InstallStep: FC<Props> = ({ form }: Props) => {
+  /*
+   * Callbacks
+   */
 
   const onComplete = () => {
     console.log("onComplete");
@@ -59,21 +60,6 @@ function InstallStep(props: any) {
       />
     </MDBBox>
   );
-}
-// const styles = {
-//   setDescriptionButton: {
-//     borderRadius: "0.37rem",
-//     height: "45px",
-//     fontWeight: 300,
-//     backgroundColor: "#1976d2",
-//     color: "white",
-//     width: "145px",
-//     padding: "7px",
-//     marginBottom: "11px",
-//     fontSize: "smaller"
-//   }
-// };
-
-const styles = {};
+};
 
 export default InstallStep;
