@@ -33,17 +33,27 @@ const ImportButton = (props: { step: number; index: number; cb: any }) => {
 };
 
 // WIP
-const simpleConfigText = (form: any) => {
-  // checked?: boolean, text?: any, icon?: any
+const simpleConfigText = (form: any | undefined) => {
   // TESTING Utility.
-  simpleOptionsSwitcher(form);
+  simpleOptionsSwitcher(form, true);
   const fakeOptions = [true, false, true];
-  return fakeOptions.map((checked, index) =>
-    checked ? (
-      <span key={index}>checked</span>
-    ) : (
-      <span key={index}>not checked</span>
-    )
+  return (
+    <div>
+      <p>
+        <strong>Recommened</strong>
+      </p>
+      {fakeOptions.map((checked, index) =>
+        checked ? (
+          <div key={index}>
+            <p>checked</p>
+          </div>
+        ) : (
+          <div key={index}>
+            <p>not checked</p>
+          </div>
+        )
+      )}
+    </div>
   );
 };
 
@@ -80,6 +90,7 @@ export default function Stepper(props: Props) {
         ) : (
           ""
         )}
+
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
           <ImportButton step={step} index={index} cb={props.callbacks} />

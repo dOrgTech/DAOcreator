@@ -1,3 +1,40 @@
+export const simpleOptionsSwitcher = (
+  schemes: any | undefined | Array<any>,
+  advanceMode?: boolean,
+  setRewardSuccess: any = (setter: any) => setter,
+  setRewardAndPenVoters: any = (setter: any) => setter,
+  setAutobet: any = (setter: any) => setter
+) => {
+  // TODO: Need to pass logic here now.
+  const simpleOptions: any = [];
+  const simpleOptionsSwitcherToggle = (scheme: any) => {
+    const { votingMachine } = scheme.values;
+    if (advanceMode) {
+      const {
+        proposingRepReward,
+        votersReputationLossRatio,
+        minimumDaoBounty
+      } = votingMachine.$;
+      if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
+      else setRewardSuccess(false);
+      if (Number(votersReputationLossRatio.value) > 0)
+        setRewardAndPenVoters(true);
+      else setRewardAndPenVoters(false);
+      if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
+      else setAutobet(false);
+    }
+    let simpleOption = {
+      text: "",
+      checked: true
+    };
+    simpleOptions.push(simpleOption);
+  };
+
+  schemes.$.map(simpleOptionsSwitcherToggle);
+  return simpleOptions;
+};
+
+// WIP decisionSpeedSwitcher
 // This is one example of a condition to disable speeds
 const schemePeriodLimits = {
   queuedVotePeriodLimit: "30:0:0:0",
@@ -10,15 +47,6 @@ const {
   preBoostedVotePeriodLimit,
   boostedVotePeriodLimit
 } = schemePeriodLimits;
-
-export const simpleOptionsSwitcher = (schemes: any) => {
-  // TODO: Need to pass logic here now.
-  schemes.map((scheme: any) => {
-    console.log("scheme", scheme);
-  });
-};
-
-// WIP
 export const decisionSpeedSwitcher = (form: any, decisionSpeed: number) => {
   const scheme = form;
   switch (decisionSpeed) {
