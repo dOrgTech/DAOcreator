@@ -37,7 +37,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
           .substr(0, 4);
 
         return (
-          <MDBTooltip key={index} placement="top" height={height}>
+          <MDBTooltip key={index} placement="top">
             <div
               style={{
                 width: `${(value / totalAmount) * 100}%`,
@@ -48,7 +48,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
                 className="rounded-0"
                 material
                 value={100}
-                height="1rem"
+                height={height}
                 color={colours[index % 4]}
               >
                 {`${(value / totalAmount) * 100}`.toString().substr(0, 4)}%
