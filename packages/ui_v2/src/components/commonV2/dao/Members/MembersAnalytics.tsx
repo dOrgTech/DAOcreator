@@ -18,14 +18,14 @@ export const MembersAnalytics = ({ data }: { data: any }) => {
   // };
 
   const newTokenConfig = {
-    height: "10px",
+    height: "1rem",
     symbol: "token", // TODO get token symbol (?)
     dataKey: "tokens",
     nameKey: "address"
   };
 
   const newReputationConfig = {
-    height: "10px",
+    height: "1rem",
     symbol: "REP",
     dataKey: "reputation",
     nameKey: "address"
