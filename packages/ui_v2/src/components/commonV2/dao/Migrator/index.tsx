@@ -1,20 +1,13 @@
 import React, { FC, useState } from "react";
 import {
-  createStyles,
-  Theme,
-  WithStyles,
-  withStyles,
   Button,
   ButtonGroup,
   ExpansionPanel,
-  Paper,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Typography,
   Grid,
-  Box,
   Divider,
-  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
@@ -54,7 +47,7 @@ import {
 
 const FileSaver = require("file-saver");
 
-interface IProps {
+interface Props {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult) => void;
   onAbort: (error: Error) => void;
@@ -86,15 +79,14 @@ const initState: State = {
   noWeb3Open: false
 };
 
-const Migrator: FC<IProps> = ({
+const Migrator: FC<Props> = ({
   dao,
   onComplete,
   onAbort,
   onStart,
   onStop
-}: IProps) => {
+}: Props) => {
   const [state, setState] = useState(initState);
-
   const {
     logLines,
     started,
