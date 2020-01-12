@@ -36,6 +36,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
     let count = 0;
     data.map(element => {
       count += element[dataKey] as number;
+      return element;
     });
     setTotalAmount(count);
   }, [data, dataKey]);
