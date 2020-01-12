@@ -77,7 +77,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
               </MDBProgress>
             </div>
             <MDBBox className="align-middle justify-content-center">
-              <MDBRow className=" m-2">
+              <MDBRow className="m-2">
                 <Blockies seed={name} />
                 <div>
                   {`${name.substr(0, 6)}...${name.substring(name.length - 4)}`}
