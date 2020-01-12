@@ -1,5 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
-import { MDBContainer, MDBProgress, MDBTooltip } from "mdbreact";
+import {
+  MDBContainer,
+  MDBProgress,
+  MDBTooltip,
+  MDBBox,
+  MDBRow
+} from "mdbreact";
 import Blockies from "react-blockies";
 
 export interface ILineConfig {
@@ -49,10 +55,10 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
 
         return (
           <MDBTooltip
+            className="grey darken-3"
             domElement
             key={index}
             placement="top"
-            style={{ color: "black", backgroundColor: "white" }}
           >
             <div
               style={{
@@ -70,13 +76,19 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
                 {showPercentage && `${percentage}%`}
               </MDBProgress>
             </div>
-            <div>
-              <Blockies seed={name} />
-              <p>{`${name.substr(0, 8)}...`}</p>
-              <p>
-                {`${value} ${symbol}`} ({`${percentage}%`})
-              </p>
-            </div>
+            <MDBBox className="align-middle justify-content-center">
+              <MDBRow className=" m-2">
+                <Blockies seed={name} />
+                <div>
+                  {`${name.substr(0, 6)}...${name.substring(name.length - 4)}`}
+                </div>
+              </MDBRow>
+              <MDBRow className="m-2">
+                <div>
+                  {`${value} ${symbol}`} ({`${percentage}%`})
+                </div>
+              </MDBRow>
+            </MDBBox>
           </MDBTooltip>
         );
       })}
