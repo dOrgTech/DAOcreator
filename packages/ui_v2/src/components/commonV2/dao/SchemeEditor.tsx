@@ -18,6 +18,8 @@ interface Props {
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
   toggleCollapse: () => void;
+  modal: boolean;
+  setModal: any;
 }
 
 enum DAOSpeed {
@@ -57,7 +59,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse } = props;
+  const { form, toggleCollapse, modal, setModal } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -68,7 +70,6 @@ function SchemeEditor(props: Props) {
   // Updates voting machines on toggle
   useEffect(() => {
     // Not using Scheme interface because $ does not exist on it
-    console.log(form.$);
     form.$.forEach((scheme: any) => {
       // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -106,7 +107,11 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor form={form} />
+            <AdvanceSchemeEditor
+              form={form}
+              setModal={setModal}
+              modal={modal}
+            />
           </MDBCol>
         </MDBRow>
         <MDBRow>
@@ -222,13 +227,13 @@ function SchemeEditor(props: Props) {
         />
       </MDBContainer>
 
-      <MDBBtn
-        color="blue darken-4"
+      <button
+        // color="blue darken-4"
         onClick={() => toggleCollapse()}
         style={styles.configButton}
       >
         Set Configuration
-      </MDBBtn>
+      </button>
     </>
   );
 }
@@ -243,7 +248,7 @@ interface ToggleProps {
 function Toggleable({ id, text, example, toggle }: ToggleProps) {
   return (
     <MDBRow style={styles.paddingRow}>
-      <MDBCol size="10" style={styles.noPadding}>
+      <MDBCol size="11" style={styles.noPadding}>
         <span style={styles.marginText} className="text-left">
           {text}
         </span>
@@ -342,7 +347,9 @@ const styles = {
     backgroundColor: "#1976d2",
     color: "white",
     width: "145px",
-    padding: "7px"
+    padding: "7px",
+    fontSize: "smaller",
+    marginBottom: "20px"
   },
   modalButton: {
     width: "174px",

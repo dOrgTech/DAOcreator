@@ -1,9 +1,4 @@
 import * as React from "react";
-import {
-  DAOForm,
-  toDAOMigrationParams,
-  toJSON
-} from "@dorgtech/daocreator-lib";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -15,7 +10,9 @@ import {
   MDBModalHeader,
   MDBModalFooter,
   MDBContainer,
-  MDBRow
+  MDBRow,
+  MDBCol,
+  MDBIcon
 } from "mdbreact";
 
 import {
@@ -23,14 +20,18 @@ import {
   MembersForm,
   SchemesForm,
   fromDAOMigrationParams,
-  fromJSON
+  fromJSON,
+  DAOForm,
+  toDAOMigrationParams,
+  toJSON
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-import Accordion from "components/commonV2/Accordion";
+import Stepper from "components/commonV2/Stepper";
+import { getProvider } from "web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -46,31 +47,37 @@ interface Step {
   callbacks?: Object;
 }
 
+const daoForm = new DAOForm();
+const recoveredForm = new DAOForm();
+
 export default function DAOcreator() {
-  const daoForm = new DAOForm();
-
-  const recoveredForm = new DAOForm();
-  daoForm.$.config.$.tokenName.$ = "test";
-  daoForm.$.config.$.tokenName.value = "test";
-
   const [step, setStep] = React.useState<number>(0);
+  const [defaultAddress, setDefaultAddress] = React.useState<
+    string | undefined
+  >();
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
+  const [advanceSchemeConfig, setAdvanceSchemeConfig] = React.useState<boolean>(
+    false
+  );
 
-  React.useEffect(() => {
-    previewLocalStorage();
-    window.addEventListener("beforeunload", saveLocalStorage);
-
-    return () => {
-      window.removeEventListener("beforeunload", saveLocalStorage);
-    };
-  });
+  const handleMetamask = async () => {
+    try {
+      const address = await getProvider();
+      setDefaultAddress(address);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
 
   const previewLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
     if (!daoCreatorState) {
+      setLoading(false);
       return;
     }
 
@@ -83,7 +90,6 @@ export default function DAOcreator() {
 
   const saveLocalStorage = () => {
     const daoState = daoForm.toState();
-
     // Check to see if the current form state hasn't been edited,
     // and if so early out so we don't save an empty state
     const nullForm = new DAOForm();
@@ -100,6 +106,18 @@ export default function DAOcreator() {
 
     localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
   };
+
+  React.useEffect(() => {
+    setLoading(true);
+    handleMetamask();
+    previewLocalStorage();
+    window.addEventListener("beforeunload", saveLocalStorage);
+    return () => {
+      window.removeEventListener("beforeunload", saveLocalStorage);
+    };
+  }, []);
+
+  const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const loadLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
@@ -128,7 +146,7 @@ export default function DAOcreator() {
         In Progress DAO Detected
       </MDBModalHeader>
       <MDBModalBody>
-        <InstallStep daoForm={recoveredForm} />
+        <InstallStep form={recoveredForm} />
       </MDBModalBody>
       <MDBModalFooter></MDBModalFooter>
 
@@ -149,14 +167,10 @@ export default function DAOcreator() {
     </MDBModal>
   );
 
-  let currentForm = daoForm.$.config;
+  let currentForm: any = daoForm.$.config;
   const nextStep = async () => {
-    if (currentForm) {
-      const res = await currentForm.validate();
-      // if (!res.hasError) {
-      setStep(step + 1);
-      // }
-    } else {
+    const res = await currentForm.validate();
+    if (!res.hasError) {
       setStep(step + 1);
     }
   };
@@ -169,7 +183,8 @@ export default function DAOcreator() {
       callbacks: {
         toReviewStep: setStep,
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        daoName: () => daoForm.$.config.$.daoName.value
       }
     },
     {
@@ -178,7 +193,9 @@ export default function DAOcreator() {
       Component: SchemesStep,
       callbacks: {
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        modal: advanceSchemeConfig,
+        setModal: setAdvanceSchemeConfig
       }
     },
     {
@@ -186,9 +203,11 @@ export default function DAOcreator() {
       form: daoForm.$.members,
       Component: MembersStep,
       callbacks: {
-        getDAOTokenSymbol: () => daoForm.$.config.$.tokenSymbol.value,
+        getDAOTokenSymbol,
         toggleCollapse: nextStep,
-        setStep
+        setStep,
+        address: defaultAddress,
+        step
       }
     },
     {
@@ -198,35 +217,72 @@ export default function DAOcreator() {
     }
   ];
 
+  currentForm = steps[+step].form;
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
         <div style={styles.root}>
-          <MDBRow style={styles.headerTop}></MDBRow>
-          <div
-            className="row justify-content-center"
-            style={styles.titleContainer}
-          >
-            <h3 style={styles.fontStyle}>Create Organization</h3>
-          </div>
+          <MDBRow style={styles.headerTop}>
+            <MDBCol size="3" />
+            <MDBCol size="6" style={styles.titleContainer}>
+              <h3 style={styles.fontStyle}>Create Organization</h3>
+            </MDBCol>
+            <MDBCol size="3">
+              <div>
+                <MDBBtn
+                  floating
+                  size="lg"
+                  color="transparent"
+                  className="btn"
+                  style={styles.icon}
+                >
+                  <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
+                </MDBBtn>
+              </div>
+            </MDBCol>
+          </MDBRow>
+          <hr />
+          <hr />
           <div className="row">
             <div className="col-md-12">
-              <ul className="stepper stepper-vertical" style={styles.noPadding}>
-                {steps.map((actualStep: Step, index: number) => {
-                  let { form, title, Component, callbacks } = actualStep;
-                  return (
-                    <Accordion
-                      key={`step${index}`}
-                      form={form}
-                      title={title}
-                      step={step}
-                      index={index}
-                      Component={Component}
-                      callbacks={callbacks}
-                    />
-                  );
-                })}
-              </ul>
+              {loading ? (
+                <>
+                  <div
+                    style={styles.spinner}
+                    className="spinner-border text-primary"
+                    role="status"
+                  >
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                  <p style={styles.fontStyle}> Please allow metamask </p>
+                </>
+              ) : !defaultAddress ? (
+                <div className="row justify-content-center">
+                  <h4 style={styles.fontStyle}>
+                    You must allow metamask to continue
+                  </h4>
+                </div>
+              ) : (
+                <ul
+                  className="stepper stepper-vertical"
+                  style={styles.noPadding}
+                >
+                  {steps.map((actualStep: Step, index: number) => {
+                    let { form, title, Component, callbacks } = actualStep;
+                    return (
+                      <Stepper
+                        key={`step${index}`}
+                        form={form}
+                        title={title}
+                        step={step}
+                        index={index}
+                        Component={Component}
+                        callbacks={callbacks}
+                      />
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -258,13 +314,27 @@ const styles = {
     paddingTop: 0
   },
   headerTop: {
-    height: "30px"
+    height: "40px"
   },
   titleContainer: {
-    paddingBottom: "13px",
-    borderBottom: "1px solid",
-    borderColor: "inherit",
-    marginRight: 0,
-    marginLeft: 0
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px"
+  },
+  spinner: {
+    display: "inline-block"
+  },
+  icon: {
+    background: "white",
+    boxShadow: "none",
+    color: "blue !important",
+    padding: 5,
+    marginLeft: "93px",
+    marginTop: "18.5px",
+    height: 35,
+    width: 35, //The Width must be the same as the height
+    borderRadius: 400,
+    border: "1px solid lightgrey"
   }
 };
