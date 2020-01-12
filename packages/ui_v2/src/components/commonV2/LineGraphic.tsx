@@ -49,6 +49,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
 
         return (
           <MDBTooltip
+            domElement
             key={index}
             placement="top"
             style={{ color: "black", backgroundColor: "white" }}
