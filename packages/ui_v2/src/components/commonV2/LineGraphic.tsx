@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { MDBContainer, MDBProgress, MDBTooltip } from "mdbreact";
 
 export interface ILineConfig {
@@ -21,10 +21,17 @@ interface IProps {
 const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
   const { showPercentage, height, symbol, dataKey, nameKey } = config;
 
-  let totalAmount = 0;
-  for (let i = 0; i < data.length; i++) {
-    totalAmount += data[i][dataKey] as number;
-  }
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    if (!data) return;
+
+    let count = 0;
+    data.map(element => {
+      count += element[dataKey] as number;
+    });
+    setTotalAmount(count);
+  }, [data, dataKey]);
 
   const colours = ["success", "info", "warning", "danger"];
 
