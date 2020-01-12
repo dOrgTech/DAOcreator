@@ -42,6 +42,8 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
 
   const colours = ["success", "info", "warning", "danger"];
 
+  if (!data || data.length < 1) return null;
+
   return (
     <MDBContainer className="text-center">
       {data.map((element: IData, index: number) => {
