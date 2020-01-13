@@ -8,26 +8,59 @@ export const simpleOptionsSwitcher = (
   // TODO: Need to pass logic here now.
   const simpleOptions: any = [];
   const simpleOptionsSwitcherToggle = (scheme: any) => {
+    let simpleOption = {};
     const { votingMachine } = scheme.values;
-    if (advanceMode) {
-      const {
-        proposingRepReward,
-        votersReputationLossRatio,
-        minimumDaoBounty
-      } = votingMachine.$;
-      if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
-      else setRewardSuccess(false);
-      if (Number(votersReputationLossRatio.value) > 0)
-        setRewardAndPenVoters(true);
-      else setRewardAndPenVoters(false);
-      if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
-      else setAutobet(false);
+    // if (advanceMode) {
+    const {
+      proposingRepReward,
+      votersReputationLossRatio,
+      minimumDaoBounty
+    } = votingMachine.$;
+    if (Number(proposingRepReward.value) > 0) {
+      simpleOption = {
+        text: "Reward successful proposer",
+        checked: true
+      };
+      simpleOptions.push(simpleOption);
+      // setRewardSuccess(true);
+    } else {
+      // setRewardSuccess(false);
+      simpleOption = {
+        text: "Reward successful proposer",
+        checked: false
+      };
+      simpleOptions.push(simpleOption);
     }
-    let simpleOption = {
-      text: "",
-      checked: true
-    };
-    simpleOptions.push(simpleOption);
+    if (Number(votersReputationLossRatio.value) > 0) {
+      // setRewardAndPenVoters(true);
+      simpleOption = {
+        text: "Reward correct voters and penalize incorrect voters",
+        checked: true
+      };
+      simpleOptions.push(simpleOption);
+    } else {
+      // setRewardAndPenVoters(false);
+      simpleOption = {
+        text: "Reward correct voters and penalize incorrect voters",
+        checked: false
+      };
+      simpleOptions.push(simpleOption);
+    }
+    if (Number(minimumDaoBounty.value > 0)) {
+      // setAutobet(true);
+      simpleOption = {
+        text: "Auto-bet against every proposal to incentive curation",
+        checked: true
+      };
+      simpleOptions.push(simpleOption);
+    } else {
+      // setAutobet(false);
+      simpleOption = {
+        text: "Auto-bet against every proposal to incentive curation",
+        checked: false
+      };
+      simpleOptions.push(simpleOption);
+    }
   };
 
   schemes.$.map(simpleOptionsSwitcherToggle);

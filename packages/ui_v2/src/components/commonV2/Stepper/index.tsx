@@ -35,21 +35,26 @@ const ImportButton = (props: { step: number; index: number; cb: any }) => {
 // WIP
 const simpleConfigText = (form: any | undefined) => {
   // TESTING Utility.
-  simpleOptionsSwitcher(form, true);
-  const fakeOptions = [true, false, true];
+  const simpleOptions = simpleOptionsSwitcher(form, true);
+  const noDuplicateSimpleOptions = simpleOptions.slice(
+    0,
+    simpleOptions.length / 2
+  );
   return (
     <div>
       <p>
         <strong>Recommened</strong>
       </p>
-      {fakeOptions.map((checked, index) =>
-        checked ? (
+      {noDuplicateSimpleOptions.map((option: any, index: number) =>
+        option.checked ? (
           <div key={index}>
             <p>checked</p>
+            <p>{option.text}</p>
           </div>
         ) : (
           <div key={index}>
             <p>not checked</p>
+            <p>{option.text}</p>
           </div>
         )
       )}
