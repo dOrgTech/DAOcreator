@@ -106,17 +106,14 @@ const MembersEditor = ({
   return (
     <MDBBox>
       <MDBContainer style={styles.noPadding}>
-        <MDBRow>
-          <MembersAnalytics data={membersForm.toState()} />
-        </MDBRow>
+        <MembersAnalytics data={membersForm.toState()} />
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
         <MDBRow>
           <MemberFormError />
         </MDBRow>
-        <br></br>
-
+        <br />
         <MDBRow style={styles.tableWidth}>
           <MembersTable
             membersForm={membersForm}
