@@ -45,20 +45,20 @@ const Migrator: FC<IProps> = ({
     <MDBContainer>
       {/* Create Organisation */}
       <MDBRow>
-        <MDBCol>ICON</MDBCol>
-        <MDBCol>
+        <MDBCol size="2">ICON</MDBCol>
+        <MDBCol size="6">
           <div>Create Organisation</div>
         </MDBCol>
-        <MDBCol>{}</MDBCol>
+        <MDBCol size="4">{}</MDBCol>
       </MDBRow>
 
       {/* Configure Organisation */}
       <MDBRow>
-        <MDBCol>ICON</MDBCol>
-        <MDBCol>
+        <MDBCol size="2">ICON</MDBCol>
+        <MDBCol size="6">
           <div>Configure Organisation</div>
         </MDBCol>
-        <MDBCol>{}</MDBCol>
+        <MDBCol size="4">{}</MDBCol>
       </MDBRow>
     </MDBContainer>
   );
