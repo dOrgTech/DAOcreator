@@ -60,6 +60,13 @@ const Migrator: FC<IProps> = ({
         </MDBCol>
         <MDBCol size="4">{}</MDBCol>
       </MDBRow>
+
+      {/* Install Organisation Button */}
+      <MDBRow center>
+        <MDBBtn onClick={() => console.log("Start installation")}>
+          Install Organisation
+        </MDBBtn>
+      </MDBRow>
     </MDBContainer>
   );
 };
