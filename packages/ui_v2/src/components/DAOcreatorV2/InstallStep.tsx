@@ -47,18 +47,16 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
   };
 
   return (
-    <MDBBox>
-      <Migrator
-        dao={toDAOMigrationParams(form.$)}
-        onComplete={(result: DAOMigrationResult) => {
-          console.log(result);
-          onComplete();
-        }}
-        onStart={onStart}
-        onAbort={onAbort}
-        onStop={onStop}
-      />
-    </MDBBox>
+    <Migrator
+      dao={toDAOMigrationParams(form.$)}
+      onComplete={(result: DAOMigrationResult) => {
+        console.log(result);
+        onComplete();
+      }}
+      onStart={onStart}
+      onAbort={onAbort}
+      onStop={onStop}
+    />
   );
 };
 
