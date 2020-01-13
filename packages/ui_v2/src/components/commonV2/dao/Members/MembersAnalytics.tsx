@@ -1,9 +1,25 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { MDBBox, MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "components/commonV2/LineGraphic";
 
-export const MembersAnalytics: FC<any> = ({ data }: { data: any }) => {
+interface IData {
+  [name: string]: string | number;
+}
+
+interface ILineConfig {
+  showPercentage: boolean;
+  height: string;
+  symbol?: string;
+  dataKey: string;
+  nameKey: string;
+}
+
+interface IProps {
+  data: IData[]; // TODO Potentially update data type to flattened form type
+}
+
+export const MembersAnalytics: FC<IProps> = ({ data }: IProps) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -20,26 +36,71 @@ export const MembersAnalytics: FC<any> = ({ data }: { data: any }) => {
     nameKey: "address"
   };
 
-  const AnalyticsBoxes = () => (
-    <MDBBox>
+  const [totalTokenAmount, setTotalTokenAmount] = useState(0);
+  const [totalReputationAmount, setTotalReputationAmount] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    data.map((element: IData) => {
+      count += element[tokenConfig.dataKey] as number;
+      return element;
+    });
+    setTotalTokenAmount(count);
+  }, [data, tokenConfig.dataKey]);
+
+  useEffect(() => {
+    let count = 0;
+    data.map((element: IData) => {
+      count += element[reputationConfig.dataKey] as number;
+      return element;
+    });
+    setTotalReputationAmount(count);
+  }, [data, reputationConfig.dataKey]);
+
+  interface IBoxProps {
+    name: string;
+    total: number;
+    config: ILineConfig;
+  }
+
+  const Box: FC<IBoxProps> = ({ name, total, config }: IBoxProps) =>
+    total === 0 ? null : (
       <MDBRow>
         <MDBCol size="4">
-          <div>Reputation Distribution</div>
+          <div>{name}</div>
         </MDBCol>
         <MDBCol size="8">
-          <LineGraphic data={data} config={reputationConfig} />
+          <LineGraphic data={data} total={total} config={config} />
         </MDBCol>
       </MDBRow>
-      <br />
-      <MDBRow>
-        <MDBCol size="4">
-          <div>Token Distribution</div>
-        </MDBCol>
-        <MDBCol size="8">
-          <LineGraphic data={data} config={tokenConfig} />
-        </MDBCol>
-      </MDBRow>
-    </MDBBox>
-  );
-  return data.length > 0 ? <AnalyticsBoxes /> : null;
+    );
+
+  const AnalyticsBoxes: FC = () => {
+    const reputationBox = (
+      <Box
+        name={"Reputation Distribution"}
+        total={totalReputationAmount}
+        config={reputationConfig}
+      />
+    );
+    const tokenBox = (
+      <Box
+        name={"Token Distribution"}
+        total={totalTokenAmount}
+        config={tokenConfig}
+      />
+    );
+
+    if (totalReputationAmount === 0 && totalTokenAmount === 0) return null;
+
+    return (
+      <MDBBox>
+        {reputationBox}
+        {totalReputationAmount !== 0 && totalTokenAmount !== 0 && <br />}
+        {tokenBox}
+      </MDBBox>
+    );
+  };
+
+  return <AnalyticsBoxes />;
 };

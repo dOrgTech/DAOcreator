@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import {
   MDBContainer,
   MDBProgress,
@@ -8,7 +8,11 @@ import {
 } from "mdbreact";
 import Blockies from "react-blockies";
 
-export interface ILineConfig {
+interface IData {
+  [name: string]: string | number;
+}
+
+interface ILineConfig {
   showPercentage: boolean;
   height: string;
   symbol?: string;
@@ -16,43 +20,25 @@ export interface ILineConfig {
   nameKey: string;
 }
 
-interface IData {
-  [name: string]: string | number;
-}
-
 interface IProps {
   data: IData[];
+  total: number;
   config: ILineConfig;
 }
 
-const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
+const LineGraphic: FC<IProps> = ({ data, total, config }: IProps) => {
   const { showPercentage, height, symbol, dataKey, nameKey } = config;
-
-  const [totalAmount, setTotalAmount] = useState(0);
-
-  useEffect(() => {
-    if (!data) return;
-
-    let count = 0;
-    data.map(element => {
-      count += element[dataKey] as number;
-      return element;
-    });
-    setTotalAmount(count);
-  }, [data, dataKey]);
 
   const colours = ["success", "info", "warning", "danger"];
 
-  if (!data || data.length < 1) return null;
+  if (total === 0) return null;
 
   return (
     <MDBContainer className="text-center">
       {data.map((element: IData, index: number) => {
         const value: number = element[dataKey] as number;
 
-        const percentage = `${(value / totalAmount) * 100}`
-          .toString()
-          .substr(0, 4);
+        const percentage = `${(value / total) * 100}`.toString().substr(0, 4);
 
         const name = element[nameKey] as string;
 
@@ -65,7 +51,7 @@ const LineGraphic: FC<IProps> = ({ data, config }: IProps) => {
           >
             <div
               style={{
-                width: `${(value / totalAmount) * 100}%`,
+                width: `${(value / total) * 100}%`,
                 display: "inline-block"
               }}
             >
