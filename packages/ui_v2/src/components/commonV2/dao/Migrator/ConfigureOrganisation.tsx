@@ -1,6 +1,10 @@
 import React, { FC, useState } from "react";
 import { MDBRow, MDBCol } from "mdbreact";
 
+interface IProps {
+  nextStep: () => void;
+}
+
 enum STEP {
   Waiting, // Before installation
   Start,
@@ -10,7 +14,7 @@ enum STEP {
   Failed // Reset to start
 }
 
-export const ConfigureOrganisation: FC = () => {
+export const ConfigureOrganisation: FC<IProps> = ({ nextStep }: IProps) => {
   const [step, setStep] = useState(STEP.Waiting);
 
   return (

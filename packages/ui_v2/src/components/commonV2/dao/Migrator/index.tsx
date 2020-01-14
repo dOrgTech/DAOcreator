@@ -53,7 +53,7 @@ const Migrator: FC<IProps> = ({
   return (
     <MDBContainer>
       <CreateOrganisation nextStep={nextStep} />
-      <ConfigureOrganisation />
+      <ConfigureOrganisation nextStep={nextStep} />
 
       {/* Install Organisation Button */}
       <MDBRow center>
