@@ -1,10 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
-import { MDBRow, MDBCol } from "mdbreact";
-import { AnyLogLine } from "./LogLineTypes";
+import { MDBRow, MDBCol, MDBBtnGroup, MDBBtn, MDBBox } from "mdbreact";
+import { AnyLogLine, LogUserApproval } from "./LogLineTypes";
 
 interface IProps {
   nextStep: () => void;
-  logLines: AnyLogLine[];
+  logLines: string[];
+  running: boolean;
 }
 
 enum STEP {
@@ -18,7 +19,8 @@ enum STEP {
 
 export const CreateOrganisation: FC<IProps> = ({
   nextStep,
-  logLines
+  logLines,
+  running
 }: IProps) => {
   const [step, setStep] = useState(STEP.Waiting);
   const [output, setOutput] = useState(
@@ -26,11 +28,25 @@ export const CreateOrganisation: FC<IProps> = ({
   );
 
   useEffect(() => {
+    if (!running) {
+      setStep(STEP.Waiting);
+      return;
+    }
+    if (step === STEP.Waiting) setStep(STEP.Start);
+  }, [running]);
+
+  useEffect(() => {
     switch (step) {
       case STEP.Waiting:
         setOutput(<div style={{ float: "right" }}>Start Installation</div>);
+        break;
+      case STEP.Start:
+        setOutput(
+          <div style={{ float: "right" }}>{logLines[logLines.length - 1]}</div>
+        );
+        break;
     }
-  }, [step]);
+  }, [step, logLines]);
 
   return (
     <MDBRow>
