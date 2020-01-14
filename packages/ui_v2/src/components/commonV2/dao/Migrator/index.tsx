@@ -135,13 +135,14 @@ const Migrator: FC<IProps> = ({
     setFullLogLines([...fullLogLines, logLine]);
 
     let line;
-    const { UserApproval, Info } = LogType;
+    const { UserApproval, Info, Error } = LogType;
     switch (logLine.type) {
       case UserApproval:
         line = logLine as LogUserApproval;
         line.onResponse(true);
         console.log("answering true to: " + line.question);
         break;
+
       case Info:
         line = logLine as LogInfo;
         const { info } = line;
@@ -153,6 +154,15 @@ const Migrator: FC<IProps> = ({
             break;
         }
         break;
+
+      case Error:
+        line = logLine as LogError;
+        const { error } = line;
+        switch (error) {
+          case "MetaMask Tx Signature: User denied transaction signature.":
+            // Reset to last step (set button to tx rebroadcast attempt)
+            break;
+        }
     }
   };
 
