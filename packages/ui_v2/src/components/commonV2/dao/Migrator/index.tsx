@@ -69,6 +69,7 @@ const Migrator: FC<IProps> = ({
     undefined
   );
 
+  // TODO
   const resetState = () => {
     setStep(STEP.Waiting);
     setTxList({});
