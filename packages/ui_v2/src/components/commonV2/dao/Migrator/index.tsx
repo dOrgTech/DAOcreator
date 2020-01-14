@@ -13,7 +13,8 @@ import {
   LogError,
   LogTransactionResult,
   LogMigrationAborted,
-  AnyLogLine
+  AnyLogLine,
+  LogType
 } from "./LogLineTypes";
 import CreateOrganisation from "./CreateOrganisation";
 import ConfigureOrganisation from "./ConfigureOrganisation";
@@ -62,7 +63,7 @@ const Migrator: FC<IProps> = ({
   // Whether or not there is a web3 instance(?)
   const [noWeb3Open, setNoWeb3Open] = useState(false);
   const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
-  const [minimalLogLines, setMinimalLogLines] = useState([]);
+  const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
   const [ethSpent, setEthSpent] = useState(0);
   const [result, setResult] = useState<DAOMigrationResult | undefined>(
     undefined
@@ -131,6 +132,27 @@ const Migrator: FC<IProps> = ({
   const addLogLine = (logLine: AnyLogLine) => {
     console.log(logLine);
     setFullLogLines([...fullLogLines, logLine]);
+
+    let line;
+    const { UserApproval, Info } = LogType;
+    switch (logLine.type) {
+      case UserApproval:
+        line = logLine as LogUserApproval;
+        line.onResponse(true);
+        console.log("answering true to: " + line.question);
+        break;
+      case Info:
+        line = logLine as LogInfo;
+        const { info } = line;
+        switch (info) {
+          case "Migrating DAO...":
+            break;
+          case "Creating a new organization...":
+            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+            break;
+        }
+        break;
+    }
   };
 
   const getCallbacks = () => {
@@ -198,7 +220,11 @@ const Migrator: FC<IProps> = ({
 
   return (
     <MDBContainer>
-      <CreateOrganisation nextStep={nextStep} logLines={fullLogLines} />
+      <CreateOrganisation
+        nextStep={nextStep}
+        logLines={minimalLogLines}
+        running={step !== STEP.Waiting}
+      />
       <ConfigureOrganisation nextStep={nextStep} />
 
       {/* Install Organisation Button */}
