@@ -6,7 +6,6 @@ const optimizer = require("@daostack/migration/optimize-abis")
 
 async function optimizeABIs () {
   optimizer.initDirectory()
-  await optimizer.noDuplicates()
   await optimizer.noBytecode()
   await optimizer.noWhitespace()
 }
@@ -17,7 +16,7 @@ async function copyMigrationScript () {
     "utils.js",
     "sanitize.js",
     "migration.json",
-    "contracts-optimized"
+    "contracts-optimized/0.0.1-rc.33"
   ]
   const baseDir = path.dirname(require.resolve("@daostack/migration"))
   const destDir = path.join(__dirname, "../src/dependency/arc/src")
@@ -30,7 +29,14 @@ async function copyMigrationScript () {
   // Copy all required files to the destination directory
   toCopy.forEach(async (file) => {
     await new Promise((resolve, reject) => {
-      ncp(path.join(baseDir, file), path.join(destDir, file), (err) => {
+      // Create nested folders if there are any
+      const dest = path.join(destDir, file)
+      const dir = path.dirname(dest)
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir)
+      }
+
+      ncp(path.join(baseDir, file), dest, (err) => {
         if (err) {
           reject(err)
         } else {

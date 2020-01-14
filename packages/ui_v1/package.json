@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-ui-v1",
-  "version": "0.2.0-rc.15",
+  "version": "0.2.0-rc.17",
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -20,7 +20,7 @@
     "@devexpress/dx-react-chart": "^2.0.2",
     "@devexpress/dx-react-chart-material-ui": "^2.0.2",
     "@devexpress/dx-react-core": "^2.0.2",
-    "@dorgtech/daocreator-lib": "0.2.1-rc.15",
+    "@dorgtech/daocreator-lib": "0.2.1-rc.17",
     "@material-ui/core": "^4.3.1",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/pickers": "3.2.2",

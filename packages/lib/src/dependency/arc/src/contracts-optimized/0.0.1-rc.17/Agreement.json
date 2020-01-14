@@ -1,1 +1,0 @@
-{"contractName":"Agreement","abi":[{"constant":true,"inputs":[],"name":"getAgreementHash","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}],"compiler":{"name":"solc","version":"0.5.4+commit.9549d8ff.Emscripten.clang"}}

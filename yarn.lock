@@ -1016,10 +1016,10 @@
     ethereumjs-abi "^0.6.5"
     openzeppelin-solidity "2.3.0"
 
-"@daostack/migration@0.0.1-rc.36-v4":
-  version "0.0.1-rc.36-v4"
-  resolved "https://registry.yarnpkg.com/@daostack/migration/-/migration-0.0.1-rc.36-v4.tgz#bed9b9bfbaafe220aee4afa22f5f12b72f4c2ef5"
-  integrity sha512-fwk0B3M0sOYD3rrvOpCUqy0AL0uDKhhGoKidq1ZJ7p4LxlpTnrg6mOGUfiIVdwvNIsNN79clsyy7FUo79ETXLA==
+"@daostack/migration@0.0.1-rc.36-v5":
+  version "0.0.1-rc.36-v5"
+  resolved "https://registry.yarnpkg.com/@daostack/migration/-/migration-0.0.1-rc.36-v5.tgz#dde643d9adc29dbe4ba172c606836ac6a45cb78a"
+  integrity sha512-oUfgo4QeY/mXshentf3nZj5NDOxEft5Qgug2G6iBYmsem6LAANMpYZZ7rD4O+hoiSBNTm6ekrxTdLDsT7TfbVw==
   dependencies:
     "@daostack/arc" "0.0.1-rc.36"
     "@daostack/arc-hive" "0.0.1-rc.4"
@@ -8785,7 +8785,7 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-jsonschema@^1.2.4:
+jsonschema@^1.2.4, jsonschema@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/jsonschema/-/jsonschema-1.2.5.tgz#bab69d97fa28946aec0a56a9cc266d23fe80ae61"
   integrity sha512-kVTF+08x25PQ0CjuVc0gRM9EUPb0Fe9Ln/utFOgcdxEIOHuU7ooBk/UPTd7t1M91pP35m0MU1T8M5P7vP1bRRw==
