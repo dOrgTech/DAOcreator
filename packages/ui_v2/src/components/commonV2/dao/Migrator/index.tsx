@@ -25,7 +25,8 @@ const Migrator: FC<IProps> = ({
   // Migrator Step
   enum STEP {
     Create,
-    Configure
+    Configure,
+    Completed
   }
 
   // Possible state of each Tx
@@ -47,7 +48,7 @@ const Migrator: FC<IProps> = ({
 
   const nextStep = () => {
     console.log("Go to next step");
-    setStep(STEP.Configure);
+    setStep(step + 1);
   };
 
   return (
