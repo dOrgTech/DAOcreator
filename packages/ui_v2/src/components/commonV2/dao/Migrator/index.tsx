@@ -68,9 +68,6 @@ const Migrator: FC<IProps> = ({
     undefined
   );
 
-  // Full state for localStorage
-  const [state, setState] = useState({});
-
   const resetState = () => {
     setStep(STEP.Waiting);
     setTxList({});
@@ -133,6 +130,7 @@ const Migrator: FC<IProps> = ({
 
   const addLogLine = (logLine: AnyLogLine) => {
     console.log(logLine);
+    setFullLogLines([...fullLogLines, logLine]);
   };
 
   const getCallbacks = () => {
@@ -200,7 +198,7 @@ const Migrator: FC<IProps> = ({
 
   return (
     <MDBContainer>
-      <CreateOrganisation nextStep={nextStep} />
+      <CreateOrganisation nextStep={nextStep} logLines={fullLogLines} />
       <ConfigureOrganisation nextStep={nextStep} />
 
       {/* Install Organisation Button */}
