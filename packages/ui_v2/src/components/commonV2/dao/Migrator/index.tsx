@@ -24,8 +24,9 @@ const Migrator: FC<IProps> = ({
 }: IProps) => {
   // Migrator Step
   enum STEP {
-    Create,
-    Configure,
+    Waiting,
+    Creating,
+    Configuring,
     Completed
   }
 
@@ -38,17 +39,22 @@ const Migrator: FC<IProps> = ({
     Lost // If tx is taking an exceedingly long time
   }
 
-  const [step, setStep] = useState(STEP.Create);
+  const [step, setStep] = useState(STEP.Waiting);
   // Contains transactions
-  const [txState, setTxState] = useState({});
-
-  const startInstallation = () => {
-    console.log("Start Installation");
-  };
+  const [txList, setTxList] = useState({});
 
   const nextStep = () => {
     console.log("Go to next step");
     setStep(step + 1);
+  };
+
+  const startInstallation = () => {
+    console.log("Start Installation");
+    nextStep();
+  };
+
+  const openAlchemy = () => {
+    console.log("Open Alchemy");
   };
 
   return (
@@ -58,9 +64,16 @@ const Migrator: FC<IProps> = ({
 
       {/* Install Organisation Button */}
       <MDBRow center>
-        <MDBBtn onClick={() => startInstallation()}>
-          Install Organisation
-        </MDBBtn>
+        {step !== STEP.Completed ? (
+          <MDBBtn
+            disabled={step !== STEP.Waiting}
+            onClick={() => startInstallation()}
+          >
+            Install Organisation
+          </MDBBtn>
+        ) : (
+          <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
+        )}
       </MDBRow>
     </MDBContainer>
   );
