@@ -61,15 +61,12 @@ const Migrator: FC<IProps> = ({
   const [txList, setTxList] = useState({});
   // Whether or not there is a web3 instance(?)
   const [noWeb3Open, setNoWeb3Open] = useState(false);
-
-  const initFullLogLines: AnyLogLine[] = [];
-  const [fullLogLines, setFullLogLines] = useState(initFullLogLines);
+  const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
   const [minimalLogLines, setMinimalLogLines] = useState([]);
   const [ethSpent, setEthSpent] = useState(0);
-
-  // const initResult: undefined | DAOMigrationResult = undefined;
-  const initResult: DAOMigrationResult | any = undefined;
-  const [result, setResult] = useState(initResult);
+  const [result, setResult] = useState<DAOMigrationResult | undefined>(
+    undefined
+  );
 
   // Full state for localStorage
   const [state, setState] = useState({});
