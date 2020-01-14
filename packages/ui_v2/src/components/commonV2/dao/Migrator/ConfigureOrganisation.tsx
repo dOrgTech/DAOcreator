@@ -1,7 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { MDBRow, MDBCol } from "mdbreact";
 
+enum STEP {
+  Waiting, // Before installation
+  Start,
+  Sign,
+  View,
+  Confirmed, // Go to next step
+  Failed // Reset to start
+}
+
 export const ConfigureOrganisation: FC = () => {
+  const [step, setStep] = useState(STEP.Waiting);
+
   return (
     <MDBRow>
       <MDBCol size="2">ICON</MDBCol>
