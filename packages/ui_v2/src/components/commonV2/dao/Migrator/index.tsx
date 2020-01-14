@@ -2,9 +2,19 @@ import React, { FC, useState } from "react";
 import {
   DAOMigrationParams,
   DAOMigrationResult,
-  getWeb3
+  getWeb3,
+  DAOMigrationCallbacks,
+  migrateDAO
 } from "@dorgtech/daocreator-lib";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import {
+  LogUserApproval,
+  LogInfo,
+  LogError,
+  LogTransactionResult,
+  LogMigrationAborted,
+  AnyLogLine
+} from "./LogLineTypes";
 import CreateOrganisation from "./CreateOrganisation";
 import ConfigureOrganisation from "./ConfigureOrganisation";
 
@@ -19,9 +29,11 @@ interface IProps {
 // Migrator Steps
 enum STEP {
   Waiting,
-  Creating,
-  Configuring,
-  Completed
+  // Creating,
+  // Configuring,
+  Migrating, // This is what the Migrator gives, TODO potentially refactor for split
+  Completed,
+  Failed
 }
 
 // Possible state of each Tx
@@ -43,13 +55,24 @@ const Migrator: FC<IProps> = ({
   /*
    * State
    */
+
   const [step, setStep] = useState(STEP.Waiting);
   // Contains transactions
   const [txList, setTxList] = useState({});
   // Whether or not there is a web3 instance(?)
   const [noWeb3Open, setNoWeb3Open] = useState(false);
-  const [fullLogLines, setFullLogLines] = useState([]);
+
+  const initFullLogLines: AnyLogLine[] = [];
+  const [fullLogLines, setFullLogLines] = useState(initFullLogLines);
   const [minimalLogLines, setMinimalLogLines] = useState([]);
+  const [ethSpent, setEthSpent] = useState(0);
+
+  // const initResult: undefined | DAOMigrationResult = undefined;
+  const initResult: DAOMigrationResult | any = undefined;
+  const [result, setResult] = useState(initResult);
+
+  // Full state for localStorage
+  const [state, setState] = useState({});
 
   const resetState = () => {
     setStep(STEP.Waiting);
@@ -59,7 +82,7 @@ const Migrator: FC<IProps> = ({
 
   const nextStep = () => {
     console.log("Go to next step");
-    setStep(step + 1);
+    setStep(step => step++);
   };
 
   /*
@@ -95,12 +118,83 @@ const Migrator: FC<IProps> = ({
     setFullLogLines([]);
     setMinimalLogLines([]);
 
-    // Prop call
-    onStart();
+    onStart(); // props
 
-    // Migrate Dao
+    const callbacks: DAOMigrationCallbacks = getCallbacks();
+    setResult(undefined);
+    setStep(STEP.Migrating);
+    migrateDAO(dao, callbacks);
 
-    nextStep();
+    // Result used to be set here and within onComplete in callbacks (onStop was similar)
+
+    // nextStep();
+  };
+
+  /*
+   * Callbacks
+   */
+
+  const addLogLine = (logLine: AnyLogLine) => {
+    console.log(logLine);
+  };
+
+  const getCallbacks = () => {
+    const callbacks: DAOMigrationCallbacks = {
+      userApproval: (msg: string): Promise<boolean> =>
+        new Promise<boolean>(resolve =>
+          addLogLine(new LogUserApproval(msg, (resp: boolean) => resolve(resp)))
+        ),
+
+      info: (msg: string) => addLogLine(new LogInfo(msg)),
+
+      error: (msg: string) => addLogLine(new LogError(msg)),
+
+      txComplete: (msg: string, txHash: string, txCost: number) =>
+        new Promise<void>(resolve => {
+          setEthSpent(ethSpent => (ethSpent += Number(txCost)));
+          addLogLine(new LogTransactionResult(msg, txHash, txCost));
+          resolve();
+        }),
+
+      migrationAborted: (err: Error) => {
+        addLogLine(new LogMigrationAborted(err));
+        onAbort(err); // props
+
+        setStep(STEP.Failed);
+        onStop(); // props
+      },
+
+      migrationComplete: (result: DAOMigrationResult) => {
+        window.onbeforeunload = function() {
+          return undefined;
+        };
+
+        setResult(result);
+        setStep(STEP.Completed);
+
+        onComplete(result); // props
+        onStop(); // props
+      },
+
+      getState: () => {
+        const localState = localStorage.getItem("DAO_MIGRATION_STATE");
+
+        if (localState) {
+          return JSON.parse(localState);
+        } else {
+          return {};
+        }
+      },
+
+      setState: (state: any) => {
+        localStorage.setItem("DAO_MIGRATION_STATE", JSON.stringify(state));
+      },
+
+      cleanState: () => {
+        localStorage.removeItem("DAO_MIGRATION_STATE");
+      }
+    };
+    return callbacks;
   };
 
   const openAlchemy = () => {
