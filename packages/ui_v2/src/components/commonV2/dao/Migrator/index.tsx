@@ -4,6 +4,8 @@ import {
   DAOMigrationResult
 } from "@dorgtech/daocreator-lib";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import CreateOrganisation from "./CreateOrganisation";
+import ConfigureOrganisation from "./ConfigureOrganisation";
 
 interface IProps {
   dao: DAOMigrationParams;
@@ -35,35 +37,27 @@ const Migrator: FC<IProps> = ({
     Lost // If tx is taking an exceedingly long time
   }
 
+  const [step, setStep] = useState(STEP.Create);
   // Contains transactions
   const [txState, setTxState] = useState({});
-  const [step, setStep] = useState(STEP.Create);
 
-  // const start;
+  const startInstallation = () => {
+    console.log("Start Installation");
+  };
+
+  const nextStep = () => {
+    console.log("Go to next step");
+    setStep(STEP.Configure);
+  };
 
   return (
     <MDBContainer>
-      {/* Create Organisation */}
-      <MDBRow>
-        <MDBCol size="2">ICON</MDBCol>
-        <MDBCol size="6">
-          <div>Create Organisation</div>
-        </MDBCol>
-        <MDBCol size="4">{}</MDBCol>
-      </MDBRow>
-
-      {/* Configure Organisation */}
-      <MDBRow>
-        <MDBCol size="2">ICON</MDBCol>
-        <MDBCol size="6">
-          <div>Configure Organisation</div>
-        </MDBCol>
-        <MDBCol size="4">{}</MDBCol>
-      </MDBRow>
+      <CreateOrganisation nextStep={nextStep} />
+      <ConfigureOrganisation />
 
       {/* Install Organisation Button */}
       <MDBRow center>
-        <MDBBtn onClick={() => console.log("Start installation")}>
+        <MDBBtn onClick={() => startInstallation()}>
           Install Organisation
         </MDBBtn>
       </MDBRow>
