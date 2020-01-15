@@ -25,6 +25,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
 
   const onComplete = () => {
     console.log("onComplete");
+    onStop();
     // Previously set daoCreator state:
     // isMigrating = false
   };
