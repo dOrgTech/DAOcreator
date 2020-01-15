@@ -189,7 +189,6 @@ const Migrator: FC<IProps> = ({
         onAbort(err); // props
 
         setStep(STEP.Failed);
-        onStop(); // props
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
@@ -206,12 +205,7 @@ const Migrator: FC<IProps> = ({
 
       getState: () => {
         const localState = localStorage.getItem("DAO_MIGRATION_STATE");
-
-        if (localState) {
-          return JSON.parse(localState);
-        } else {
-          return {};
-        }
+        return localState ? JSON.parse(localState) : {};
       },
 
       setState: (state: any) => {
