@@ -216,22 +216,20 @@ const Migrator: FC<IProps> = ({
         }),
 
       migrationAborted: (err: Error) => {
+        setStep(STEP.Waiting);
+
         addLogLine(new LogMigrationAborted(err));
         onAbort(err); // props
-
-        setStep(STEP.Waiting);
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
         window.onbeforeunload = function() {
           return undefined;
         };
-
-        setResult(result);
         setStep(STEP.Completed);
+        setResult(result);
 
         onComplete(result); // props
-        onStop(); // props
       },
 
       getState: () => {
