@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, Fragment } from "react";
 import {
   DAOMigrationParams,
   DAOMigrationResult,
@@ -6,7 +6,7 @@ import {
   DAOMigrationCallbacks,
   migrateDAO
 } from "@dorgtech/daocreator-lib";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import { MDBContainer, MDBRow, MDBBtn, MDBBtnGroup } from "mdbreact";
 import {
   LogUserApproval,
   LogInfo,
@@ -68,6 +68,9 @@ const Migrator: FC<IProps> = ({
   const [result, setResult] = useState<DAOMigrationResult | undefined>(
     undefined
   );
+  const [approval, setApproval] = useState<
+    undefined | { msg: string; response: (res: boolean) => boolean }
+  >(undefined);
 
   // TODO
   const resetState = () => {
@@ -88,7 +91,12 @@ const Migrator: FC<IProps> = ({
   const startInstallation = async () => {
     console.log("Starting Installation");
 
-    if (step !== STEP.Waiting) return;
+    // Reset state
+    setNoWeb3Open(false);
+    setMinimalLogLines([]);
+    setEthSpent(0);
+    setResult(undefined);
+    setApproval(undefined);
 
     // Make sure we have a web3 provider available. If not,
     // tell the user they need to have one.
@@ -134,13 +142,29 @@ const Migrator: FC<IProps> = ({
     console.log(logLine);
     setFullLogLines([...fullLogLines, logLine]);
 
-    let line;
+    let line: any;
     const { UserApproval, Info, Error } = LogType;
     switch (logLine.type) {
       case UserApproval:
         line = logLine as LogUserApproval;
-        line.onResponse(true);
-        console.log("answering true to: " + line.question);
+        const { question } = line;
+        switch (question) {
+          case "About to migrate new DAO. Continue?":
+            line.onResponse(true);
+            console.log("Answering true to: " + question);
+            break;
+
+          case "We found a deployment that was in progress, pickup where you left off?":
+            setMinimalLogLines([...minimalLogLines, question]);
+            setApproval({
+              msg: question,
+              response: res => {
+                setApproval(undefined);
+                return line.onResponse(res);
+              }
+            });
+            break;
+        }
         break;
 
       case Info:
@@ -160,7 +184,14 @@ const Migrator: FC<IProps> = ({
         const { error } = line;
         switch (error) {
           case "MetaMask Tx Signature: User denied transaction signature.":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Failed to Sign Transaction"
+            ]);
             // Reset to last step (set button to tx rebroadcast attempt)
+            break;
+          default:
+            setMinimalLogLines([...minimalLogLines, error]);
             break;
         }
     }
@@ -188,7 +219,7 @@ const Migrator: FC<IProps> = ({
         addLogLine(new LogMigrationAborted(err));
         onAbort(err); // props
 
-        setStep(STEP.Failed);
+        setStep(STEP.Waiting);
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
@@ -225,6 +256,17 @@ const Migrator: FC<IProps> = ({
 
   return (
     <MDBContainer>
+      {approval && (
+        <Fragment>
+          <MDBRow center>
+            <div>{approval.msg}</div>
+          </MDBRow>
+          <MDBBtnGroup>
+            <MDBBtn onClick={() => approval.response(true)}>Yes</MDBBtn>
+            <MDBBtn onClick={() => approval.response(false)}>No</MDBBtn>
+          </MDBBtnGroup>
+        </Fragment>
+      )}
       <CreateOrganisation
         nextStep={nextStep}
         logLines={minimalLogLines}
