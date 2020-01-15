@@ -23,7 +23,7 @@ import {
   MDBTooltip
 } from "mdbreact";
 import { Component, Fragment } from "react";
-import NamingStep from "components/DAOcreatorV2/NamingStep";
+import NamingStep from "../DAOcreatorV2/NamingStep";
 
 export interface PieChartConfig {
   size: number;

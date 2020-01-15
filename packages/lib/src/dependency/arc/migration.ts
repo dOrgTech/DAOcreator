@@ -1,6 +1,3 @@
-// TODO: additional options (use DAOcreator, etc)
-/* eslint-disable */
-
 import {
   DAOMigrationParams,
   DAOMigrationCallbacks,
@@ -8,11 +5,8 @@ import {
 } from "./types";
 import { getWeb3, getNetworkName, getDefaultOpts } from "../../dependency/web3";
 
-const migrate = require("@daostack/migration/migrate-dao");
-const addresses = require("@daostack/migration/migration.json");
-const arcVersion = require("@daostack/migration/package.json").dependencies[
-  "@daostack/arc"
-];
+const migrate = require("./src/migrate-dao");
+const addresses = require("./src/migration.json");
 
 export const migrateDAO = async (
   dao: DAOMigrationParams,
@@ -71,6 +65,7 @@ export const migrateDAO = async (
       return { receipt, result };
     };
 
+    const arcVersion = "0.0.1-rc.33";
     const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
 
     // If the user doesn't have a supported network chosen, abort
@@ -85,7 +80,7 @@ export const migrateDAO = async (
 
     // Get the stored deployment state, and ask the user if they'd like to
     // resume it (if one exists)
-    const prevState = callbacks.getState();
+    const prevState = callbacks.getState(network);
     let restartDeployment = true;
 
     if (Object.keys(prevState).length > 0) {
@@ -116,7 +111,8 @@ export const migrateDAO = async (
       restart: restartDeployment,
       getState: callbacks.getState,
       setState: callbacks.setState,
-      cleanState: callbacks.cleanState
+      cleanState: callbacks.cleanState,
+      optimizedAbis: true
     });
 
     if (migration === undefined) {
@@ -126,7 +122,6 @@ export const migrateDAO = async (
       );
     }
 
-    // TODO: create an interface for the migration result
     const result = migration!.dao[arcVersion];
     console.log(result);
 

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
-import { useForceUpdate } from "utils/hooks/";
 import {
   MemberEditor,
   MembersAnalytics,
   MembersTable
-} from "components/commonV2/dao/Members";
+} from "./";
+import { useForceUpdate } from "../../../utils/hooks";
 
 const MembersEditor = ({
   form,

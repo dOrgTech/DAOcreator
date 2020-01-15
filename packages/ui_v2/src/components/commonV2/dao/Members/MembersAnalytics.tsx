@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { MDBBox, MDBRow, MDBCol } from "mdbreact";
 
-import LineGraphic from "components/commonV2/LineGraphic";
+import LineGraphic from "../../LineGraphic";
 
 interface IData {
   [name: string]: string | number;

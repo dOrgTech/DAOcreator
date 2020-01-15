@@ -1,14 +1,16 @@
 import * as React from "react";
-import { MuiThemeProvider, Theme } from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import DAOcreator from "./DAOcreator";
-import defaultTheme from "./theme";
+import defaultTheme, { CustomTheme } from "./theme";
+import { ProviderOrGetter } from "@dorgtech/daocreator-lib";
 
 interface Props {
-  theme?: Theme;
+  theme?: CustomTheme;
+  setWeb3Provider?: ProviderOrGetter;
 }
 
-const Index: React.FC<Props> = ({ theme }) => {
+const Index: React.FC<Props> = ({ theme, setWeb3Provider }) => {
   let useTheme = defaultTheme;
 
   if (theme) {
@@ -16,9 +18,9 @@ const Index: React.FC<Props> = ({ theme }) => {
   }
 
   return (
-    <MuiThemeProvider theme={useTheme}>
+    <MuiThemeProvider theme={createMuiTheme(useTheme)}>
       <CssBaseline />
-      <DAOcreator />
+      <DAOcreator setWeb3Provider={setWeb3Provider} />
     </MuiThemeProvider>
   );
 };

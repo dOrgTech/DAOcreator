@@ -9,9 +9,9 @@ import {
   faCheck
 } from "@fortawesome/free-solid-svg-icons";
 
-import EthAddressAvatar from "components/commonV2/EthAddressAvatar";
-import FormField from "components/commonV2/FormField";
-import { truncateString } from "utils";
+import EthAddressAvatar from "../../EthAddressAvatar";
+import FormField from "../../FormField";
+import { truncateString } from "../../../utils";
 
 export const MembersTable = ({
   membersForm,

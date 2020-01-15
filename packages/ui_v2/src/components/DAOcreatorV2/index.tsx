@@ -30,8 +30,8 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-import Stepper from "components/commonV2/Stepper";
-import { getProvider } from "web3/core";
+import Stepper from "../commonV2/Stepper";
+import { getProvider } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
