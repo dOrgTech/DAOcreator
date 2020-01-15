@@ -36,6 +36,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
   };
 
   const onAbort = (error: Error) => {
+    console.log("onAbort");
     console.log(error.message);
     onStop();
   };
