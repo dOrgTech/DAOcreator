@@ -3,21 +3,14 @@ import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
   DAOMigrationResult,
-  toDAOMigrationParams
+  toDAOMigrationParams,
+  DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBBox } from "mdbreact";
 
 interface Props {
-  form: any; //DAOForm;
+  form: DAOForm;
 }
 
-/*
-  Type issue for form.$
-
-  Argument of type '{ config: DAOConfigForm; members: MembersForm; schemes: SchemesForm; }' is not assignable to parameter of type 'DAOcreatorState'.
-    Types of property 'config' are incompatible.
-      Type 'DAOConfigForm' is missing the following properties from type 'DAOConfig': daoName, tokenName, tokenSymbol
-*/
 const InstallStep: FC<Props> = ({ form }: Props) => {
   /*
    * Callbacks
@@ -48,9 +41,10 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
     // isMigrating = false
   };
 
+  const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
   return (
     <Migrator
-      dao={toDAOMigrationParams(form.$)}
+      dao={dao}
       onComplete={(result: DAOMigrationResult) => {
         console.log(result);
         onComplete();
