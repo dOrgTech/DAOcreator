@@ -69,7 +69,7 @@ const Migrator: FC<IProps> = ({
     undefined
   );
   const [approval, setApproval] = useState<
-    undefined | { msg: string; response: (res: boolean) => boolean }
+    undefined | { msg: string; response: (res: boolean) => void }
   >(undefined);
 
   // TODO
@@ -114,7 +114,7 @@ const Migrator: FC<IProps> = ({
     }
 
     // Alert in case of user closing window while deploying
-    window.onbeforeunload = function() {
+    window.onbeforeunload = () => {
       return "Your migration is still in progress. Do you really want to leave?";
     };
 
@@ -142,15 +142,14 @@ const Migrator: FC<IProps> = ({
     console.log(logLine);
     setFullLogLines([...fullLogLines, logLine]);
 
-    let line: any;
     const { UserApproval, Info, Error } = LogType;
     switch (logLine.type) {
       case UserApproval:
-        line = logLine as LogUserApproval;
-        const { question } = line;
+        const approvalLine = logLine as LogUserApproval;
+        const { question } = approvalLine;
         switch (question) {
           case "About to migrate new DAO. Continue?":
-            line.onResponse(true);
+            approvalLine.onResponse(true);
             console.log("Answering true to: " + question);
             break;
 
@@ -158,9 +157,9 @@ const Migrator: FC<IProps> = ({
             setMinimalLogLines([...minimalLogLines, question]);
             setApproval({
               msg: question,
-              response: res => {
+              response: (res: boolean): void => {
                 setApproval(undefined);
-                return line.onResponse(res);
+                approvalLine.onResponse(res);
               }
             });
             break;
@@ -168,8 +167,8 @@ const Migrator: FC<IProps> = ({
         break;
 
       case Info:
-        line = logLine as LogInfo;
-        const { info } = line;
+        const infoLine = logLine as LogInfo;
+        const { info } = infoLine;
         switch (info) {
           case "Migrating DAO...":
             break;
@@ -180,8 +179,8 @@ const Migrator: FC<IProps> = ({
         break;
 
       case Error:
-        line = logLine as LogError;
-        const { error } = line;
+        const errorLine = logLine as LogError;
+        const { error } = errorLine;
         switch (error) {
           case "MetaMask Tx Signature: User denied transaction signature.":
             setMinimalLogLines([
@@ -216,14 +215,18 @@ const Migrator: FC<IProps> = ({
         }),
 
       migrationAborted: (err: Error) => {
+        window.onbeforeunload = () => {
+          return undefined;
+        };
         setStep(STEP.Waiting);
 
         addLogLine(new LogMigrationAborted(err));
+
         onAbort(err); // props
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
-        window.onbeforeunload = function() {
+        window.onbeforeunload = () => {
           return undefined;
         };
         setStep(STEP.Completed);
@@ -259,7 +262,7 @@ const Migrator: FC<IProps> = ({
           <MDBRow center>
             <div>{approval.msg}</div>
           </MDBRow>
-          <MDBBtnGroup>
+          <MDBBtnGroup center>
             <MDBBtn onClick={() => approval.response(true)}>Yes</MDBBtn>
             <MDBBtn onClick={() => approval.response(false)}>No</MDBBtn>
           </MDBBtnGroup>
