@@ -30,9 +30,8 @@ interface IProps {
 // Migrator Steps
 enum STEP {
   Waiting,
-  // Creating,
-  // Configuring,
-  Migrating, // This is what the Migrator gives, TODO potentially refactor for split
+  Creating,
+  Configuring,
   Completed,
   Failed
 }
@@ -159,7 +158,7 @@ const Migrator: FC<IProps> = ({
     console.log(logLine);
     setFullLogLines([...fullLogLines, logLine]);
 
-    const { UserApproval, Info, Error } = LogType;
+    const { UserApproval, Info, Error, TransactionResult } = LogType;
     switch (logLine.type) {
       case UserApproval:
         const approvalLine = logLine as LogUserApproval;
@@ -171,9 +170,13 @@ const Migrator: FC<IProps> = ({
             break;
 
           case "We found a deployment that was in progress, pickup where you left off?":
-            setMinimalLogLines([...minimalLogLines, question]);
+          case "We found a deployment that's was in progress, pickup where you left off?": // This was triggered, I haven't looked into why
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Continue previous deployment?"
+            ]);
             setApproval({
-              msg: question,
+              msg: "Continue previous deployment?",
               response: (res: boolean): void => {
                 setApproval(undefined);
                 approvalLine.onResponse(res);
@@ -199,15 +202,17 @@ const Migrator: FC<IProps> = ({
       case Info:
         const infoLine = logLine as LogInfo;
         const { info } = infoLine;
-        switch (info) {
-          case "Migrating DAO...":
+        switch (true) {
+          case info === "Migrating DAO...":
+          case info.startsWith("Using Arc Version:"):
+            console.log("continuing");
             break;
 
-          case "Creating a new organization...":
-            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+          case info === "Creating a new organization...":
+            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]); // Annoyingly, there is no implemented log to show that tx has been sent
             break;
 
-          case "DAO Migration has Finished Successfully!":
+          case info === "DAO Migration has Finished Successfully!":
             setMinimalLogLines([...minimalLogLines, "Confirmed"]);
             completeOrganisation(infoLine as any);
             break;
@@ -223,12 +228,17 @@ const Migrator: FC<IProps> = ({
       case Error:
         const errorLine = logLine as LogError;
         const { error } = errorLine;
-        switch (error) {
-          case "MetaMask Tx Signature: User denied transaction signature.":
+        switch (true) {
+          case error ===
+            "MetaMask Tx Signature: User denied transaction signature.":
             setMinimalLogLines([
               ...minimalLogLines,
               "Failed to Sign Transaction"
             ]);
+            // Reset to last step (set button to tx rebroadcast attempt)
+            break;
+          case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
+            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
@@ -236,6 +246,30 @@ const Migrator: FC<IProps> = ({
             console.log("Unhandled error log:");
             console.log(error);
             setMinimalLogLines([...minimalLogLines, error]);
+            break;
+        }
+
+      case TransactionResult:
+        const txLine = logLine as LogTransactionResult;
+        const { msg, txHash, txCost } = txLine;
+        switch (true) {
+          case msg === "Created new organization.":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Confirmed" // Should pass txHash onClick
+            ]);
+            configureOrganisation();
+            break;
+
+          case msg.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
+            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
+            // Reset to last step (set button to tx rebroadcast attempt)
+            break;
+
+          default:
+            console.log("Unhandled txResult log:");
+            console.log(msg);
+            setMinimalLogLines([...minimalLogLines, msg]);
             break;
         }
     }
@@ -302,23 +336,27 @@ const Migrator: FC<IProps> = ({
 
   return (
     <MDBContainer>
-      {approval && (
+      {approval && approval.msg && (
         <Fragment>
           <MDBRow center>
             <div>{approval.msg}</div>
           </MDBRow>
-          <MDBBtnGroup center>
-            <MDBBtn onClick={() => approval.response(true)}>Yes</MDBBtn>
-            <MDBBtn onClick={() => approval.response(false)}>No</MDBBtn>
+          <MDBBtnGroup>
+            <MDBRow center>
+              <MDBBtn onClick={() => approval.response(true)}>Yes</MDBBtn>
+              <MDBBtn onClick={() => approval.response(false)}>No</MDBBtn>
+            </MDBRow>
           </MDBBtnGroup>
         </Fragment>
       )}
       <CreateOrganisation
-        nextStep={nextStep}
+        active={step === STEP.Creating}
         logLines={minimalLogLines}
-        running={step !== STEP.Waiting}
       />
-      <ConfigureOrganisation nextStep={nextStep} />
+      <ConfigureOrganisation
+        active={step === STEP.Configuring}
+        logLines={minimalLogLines}
+      />
 
       {/* Install Organisation Button */}
       <MDBRow center>
