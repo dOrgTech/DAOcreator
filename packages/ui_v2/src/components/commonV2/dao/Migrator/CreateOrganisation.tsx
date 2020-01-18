@@ -1,39 +1,38 @@
 import React, { FC, useState, useEffect } from "react";
 import { MDBRow, MDBCol, MDBBtnGroup, MDBBtn, MDBBox } from "mdbreact";
-import { AnyLogLine, LogUserApproval } from "./LogLineTypes";
 
 interface IProps {
-  nextStep: () => void;
+  active: boolean;
   logLines: string[];
-  running: boolean;
 }
 
 enum STEP {
   Waiting, // Before installation
   Start,
-  Sign,
-  View,
+  // Sign,
+  // View, // View on Etherscan should display after tx is signed but we are not currently handling this TODO (?)
   Confirmed, // Go to next step
   Failed // Reset to start
 }
 
 export const CreateOrganisation: FC<IProps> = ({
-  nextStep,
-  logLines,
-  running
+  active,
+  logLines
 }: IProps) => {
   const [step, setStep] = useState(STEP.Waiting);
   const [output, setOutput] = useState(
     <div style={{ float: "right" }}>Start Installation</div>
   );
 
+  // Inactive states can only be STEP.Waiting and STEP.Confirmed
   useEffect(() => {
-    if (!running) {
+    if (!active) {
+      if (step === STEP.Confirmed) return;
       setStep(STEP.Waiting);
       return;
     }
     if (step === STEP.Waiting) setStep(STEP.Start);
-  }, [running]);
+  }, [active]);
 
   useEffect(() => {
     switch (step) {
@@ -43,6 +42,11 @@ export const CreateOrganisation: FC<IProps> = ({
       case STEP.Start:
         setOutput(
           <div style={{ float: "right" }}>{logLines[logLines.length - 1]}</div>
+        );
+        break;
+      case STEP.Confirmed:
+        setOutput(
+          <div style={{ float: "right" }}>Confirmed</div> // Should link to txHash
         );
         break;
     }
