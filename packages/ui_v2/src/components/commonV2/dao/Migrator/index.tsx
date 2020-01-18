@@ -210,14 +210,19 @@ const Migrator: FC<IProps> = ({
             break;
 
           case info === "Creating a new organization...":
-            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]); // Annoyingly, there is no implemented log to show that tx has been sent
+            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
             break;
 
           case info === "Setting DAO schemes...":
-            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]); // Annoyingly, there is no implemented log to show that tx has been sent
-            break;
-
           case info === "Deploying Controller":
+            if (step === STEP.Creating) {
+              // if resuming migration
+              setMinimalLogLines([
+                ...minimalLogLines,
+                "Confirmed" // Should pass txHash onClick
+              ]);
+              configureOrganisation();
+            }
             setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
             break;
 
