@@ -135,7 +135,7 @@ const Migrator: FC<IProps> = ({
   };
 
   const configureOrganisation = () => {
-    setMinimalLogLines([...minimalLogLines, "Waiting"]); // Prevents the first log shown to Line being "Confirmed"
+    setMinimalLogLines([...minimalLogLines, "Waiting"]); // Prevents the first log shown to second Line being "Confirmed"
     setStep(STEP.Configuring);
   };
 
@@ -226,7 +226,7 @@ const Migrator: FC<IProps> = ({
             setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
             break;
 
-          case info === "DAO Migration has Finished Successfully!":
+          case info === "DAO Migration has Finished Successfully!": // TODO state changes are happening too fast and this can get triggered in wrong state
             setMinimalLogLines([...minimalLogLines, "Confirmed"]);
             completeOrganisation(); // Hack to complete until callback is implemented
             break;
@@ -402,12 +402,12 @@ const Migrator: FC<IProps> = ({
           <MDBRow center>
             <div>{approval.msg}</div>
           </MDBRow>
-          <MDBBtnGroup>
-            <MDBRow center>
+          <MDBRow center>
+            <MDBBtnGroup>
               <MDBBtn onClick={() => approval.response(true)}>Yes</MDBBtn>
               <MDBBtn onClick={() => approval.response(false)}>No</MDBBtn>
-            </MDBRow>
-          </MDBBtnGroup>
+            </MDBBtnGroup>
+          </MDBRow>
         </Fragment>
       )}
       <OrganisationLine
