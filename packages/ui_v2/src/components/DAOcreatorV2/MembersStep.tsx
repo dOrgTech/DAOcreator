@@ -2,7 +2,7 @@ import * as React from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { MDBRow, MDBCol, MDBBox, MDBContainer } from "mdbreact";
 
-import MembersEditor from "components/commonV2/dao/Members/MembersEditor";
+import MembersEditor from "../commonV2/dao/Members/MembersEditor";
 
 interface Props {
   form: MembersForm;

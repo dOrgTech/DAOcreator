@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
-import { useForceUpdate } from "utils/hooks/";
-import {
-  MemberEditor,
-  MembersAnalytics,
-  MembersTable
-} from "components/commonV2/dao/Members";
+import { MemberEditor, MembersAnalytics, MembersTable } from "./";
+import { useForceUpdate } from "../../../utils/hooks";
 
 const MembersEditor = ({
   form,
@@ -106,17 +102,14 @@ const MembersEditor = ({
   return (
     <MDBBox>
       <MDBContainer style={styles.noPadding}>
-        <MDBRow>
-          <MembersAnalytics data={membersForm.toState()} />
-        </MDBRow>
+        <MembersAnalytics data={membersForm.toState()} />
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
         <MDBRow>
           <MemberFormError />
         </MDBRow>
-        <br></br>
-
+        <br />
         <MDBRow style={styles.tableWidth}>
           <MembersTable
             membersForm={membersForm}

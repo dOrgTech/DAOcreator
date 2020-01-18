@@ -11,6 +11,7 @@ import {
 import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
+import Toggle from "./Toggle";
 
 interface Props {
   form: any;
@@ -18,6 +19,8 @@ interface Props {
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
   toggleCollapse: () => void;
+  modal: boolean;
+  setModal: any;
 }
 
 enum DAOSpeed {
@@ -57,7 +60,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse } = props;
+  const { form, toggleCollapse, modal, setModal } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -210,7 +213,12 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor form={form} setAdvanceMode={setAdvanceMode} />
+            <AdvanceSchemeEditor
+              form={form}
+              setModal={setModal}
+              modal={modal}
+              setAdvanceMode={setAdvanceMode}
+            />
           </MDBCol>
         </MDBRow>
         <MDBRow>
@@ -294,7 +302,7 @@ function SchemeEditor(props: Props) {
           </MDBCol>
         </MDBRow>
 
-        <Toggleable
+        <Toggle
           id={"distribution"}
           text={"Distribute Dxdao token"}
           example={"Some example"}
@@ -305,7 +313,7 @@ function SchemeEditor(props: Props) {
           checked={distribution}
         />
 
-        <Toggleable
+        <Toggle
           id={"rewardSuccess"}
           text={"Reward successful proposer"}
           example={"Some example"}
@@ -316,7 +324,7 @@ function SchemeEditor(props: Props) {
           checked={rewardSuccess}
         />
 
-        <Toggleable
+        <Toggle
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
           example={"Some example"}
@@ -327,7 +335,7 @@ function SchemeEditor(props: Props) {
           checked={rewardAndPenVoters}
         />
 
-        <Toggleable
+        <Toggle
           id={"autobet"}
           text={"Auto-bet against every proposal to incentivise curation"}
           example={"Some example"}
@@ -337,62 +345,10 @@ function SchemeEditor(props: Props) {
         />
       </MDBContainer>
 
-      <button
-        // color="blue darken-4"
-        onClick={() => toggleCollapse()}
-        style={styles.configButton}
-      >
+      <button onClick={() => toggleCollapse()} style={styles.configButton}>
         Set Configuration
       </button>
     </>
-  );
-}
-
-interface ToggleProps {
-  id: string;
-  text: string;
-  example: string;
-  toggle: () => void;
-  disabled: boolean;
-  checked: boolean;
-}
-
-function Toggleable({
-  id,
-  text,
-  example,
-  toggle,
-  disabled,
-  checked
-}: ToggleProps) {
-  return (
-    <MDBRow style={styles.paddingRow}>
-      <MDBCol size="11" style={styles.noPadding}>
-        <span style={styles.marginText} className="text-left">
-          {text}
-        </span>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{example}</span>
-        </MDBTooltip>
-      </MDBCol>
-      <MDBCol style={styles.noPadding}>
-        <div className="custom-control custom-switch">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id={id}
-            onChange={() => toggle()}
-            disabled={disabled}
-            checked={checked}
-          />
-          <label className="custom-control-label" htmlFor={id}></label>
-        </div>
-      </MDBCol>
-    </MDBRow>
   );
 }
 
@@ -450,13 +406,6 @@ const styles = {
   },
   alignEnd: {
     flexDirection: "row-reverse"
-  },
-  paddingRow: {
-    paddingLeft: "10px",
-    paddingTop: "6px"
-  },
-  noPadding: {
-    padding: 0
   },
   configButton: {
     borderRadius: "0.37rem",

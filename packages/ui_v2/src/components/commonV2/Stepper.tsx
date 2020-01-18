@@ -7,16 +7,22 @@ import {
 } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 interface Props {
-  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   title: string;
   callbacks: any | undefined;
   step: Number;
   index: number;
+  daoName?: string;
 }
 
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
+
+  const openAdvanceConfigModal = () => {
+    props.callbacks.setModal(true);
+  };
+
   return (
     <li className={step === index || step > index ? "completed" : ""}>
       <MDBRow
@@ -43,7 +49,19 @@ export default function Stepper(props: Props) {
             {title}
           </span>
         </a>
-        <a>
+        {step > 0 && index === 0 && callbacks.daoName() ? (
+          <p style={{ marginTop: "26px" }}>{callbacks.daoName()}</p>
+        ) : (
+          ""
+        )}
+        <div>
+          {step === 1 && index === 1 ? (
+            <button style={styles.button} onClick={openAdvanceConfigModal}>
+              Advance Configuration
+            </button>
+          ) : (
+            <div></div>
+          )}
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -55,7 +73,7 @@ export default function Stepper(props: Props) {
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </MDBBtn>
-        </a>
+        </div>
       </MDBRow>
 
       <MDBCollapse
@@ -151,7 +169,9 @@ const styles = {
     height: 40,
     width: 40, //The Width must be the same as the height
     borderRadius: 400,
-    border: "1px solid lightgrey"
+    border: "1px solid lightgrey",
+    marginRight: "30px",
+    marginTop: "16px"
   },
   completedStep: {
     fontWeight: 400,
@@ -161,5 +181,18 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
+  },
+  button: {
+    width: "174px",
+    height: "42px",
+    padding: "4px",
+    marginRight: "36px",
+    marginTop: "20px",
+    border: "1px solid gray",
+    boxShadow: "none",
+    borderRadius: "4px",
+    fontFamily: '"Roboto", sans-serif',
+    fontWeight: 300,
+    fontSize: "15px"
   }
 };

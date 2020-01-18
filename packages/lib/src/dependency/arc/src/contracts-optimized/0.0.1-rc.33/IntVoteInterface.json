@@ -1,0 +1,264 @@
+{
+  "contractName": "IntVoteInterface",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "_proposalId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_numOfChoices",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_proposer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "_paramsHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "NewProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "_proposalId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_decision",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_totalReputation",
+          "type": "uint256"
+        }
+      ],
+      "name": "ExecuteProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "_proposalId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_voter",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_vote",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_reputation",
+          "type": "uint256"
+        }
+      ],
+      "name": "VoteProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "_proposalId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        }
+      ],
+      "name": "CancelProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "_proposalId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_voter",
+          "type": "address"
+        }
+      ],
+      "name": "CancelVoting",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_numOfChoices",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_proposalParameters",
+          "type": "bytes32"
+        },
+        { "internalType": "address", "name": "_proposer", "type": "address" },
+        {
+          "internalType": "address",
+          "name": "_organization",
+          "type": "address"
+        }
+      ],
+      "name": "propose",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "bytes32", "name": "_proposalId", "type": "bytes32" },
+        { "internalType": "uint256", "name": "_vote", "type": "uint256" },
+        { "internalType": "uint256", "name": "_rep", "type": "uint256" },
+        { "internalType": "address", "name": "_voter", "type": "address" }
+      ],
+      "name": "vote",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "bytes32", "name": "_proposalId", "type": "bytes32" }
+      ],
+      "name": "cancelVote",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "bytes32", "name": "_proposalId", "type": "bytes32" }
+      ],
+      "name": "getNumberOfChoices",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "bytes32", "name": "_proposalId", "type": "bytes32" }
+      ],
+      "name": "isVotable",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "bytes32", "name": "_proposalId", "type": "bytes32" },
+        { "internalType": "uint256", "name": "_choice", "type": "uint256" }
+      ],
+      "name": "voteStatus",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isAbstainAllow",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getAllowedRangeOfChoices",
+      "outputs": [
+        { "internalType": "uint256", "name": "min", "type": "uint256" },
+        { "internalType": "uint256", "name": "max", "type": "uint256" }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
+  }
+}

@@ -1,5 +1,15 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { MDBRow, MDBCol, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider
+} from "@material-ui/pickers";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import grey from "@material-ui/core/colors/grey";
+import blue from "@material-ui/core/colors/blue";
+import DateFnsUtils from "@date-io/date-fns";
+import EthAddressAvatar from "../EthAddressAvatar";
 import {
   AnyField,
   FieldType,
@@ -10,10 +20,6 @@ import {
   PercentageField,
   AddressField
 } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBCol, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
-import EthAddressAvatar from "../EthAddressAvatar";
-
-import "react-datepicker/dist/react-datepicker.css";
 
 export interface Props {
   field: AnyField;
@@ -179,9 +185,19 @@ const DurationFieldView = observer(
   }
 );
 
+const datePickerTheme = createMuiTheme({
+  palette: {
+    primary: grey,
+    secondary: blue
+  }
+});
+
 const DateTimeFieldView = observer(
-  ({ field, editable }: FieldProps<DateTimeField>) => (
-    <>
+  ({ field, editable }: FieldProps<DateTimeField>) => {
+    const [open, onOpen] = React.useState(false);
+    const disabled = editable === undefined ? false : !editable;
+
+    return (
       <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
         <MDBTooltip placement="bottom" clickable>
@@ -191,27 +207,68 @@ const DateTimeFieldView = observer(
           </MDBBtn>
           <span>Some example</span>
         </MDBTooltip>
-
-        <input
-          type="date"
-          style={styles.dateStyle}
-          placeholder={String(field.value)}
-          disabled={editable === undefined ? false : !editable}
-          onChange={(event: any) => field.onChange(event.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-        />
-        <input
-          type="time"
-          style={styles.dateStyle}
-          placeholder={String(field.value)}
-          disabled={editable === undefined ? false : !editable}
-          onChange={(event: any) => field.onChange(event.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-        />
+        <ThemeProvider theme={datePickerTheme}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDateTimePicker
+              value={field.value === undefined ? null : field.value}
+              disabled={disabled}
+              onChange={(date: Date | null) =>
+                date === null ? field.onChange(undefined) : field.onChange(date)
+              }
+              open={open}
+              onClose={() => onOpen(false)}
+              disablePast
+              format={"MM/dd/yyyy HH:mm"}
+              ampm={false}
+              variant={"dialog"}
+              DialogProps={{
+                disablePortal: true
+              }}
+              inputVariant={"outlined"}
+              error={field.hasError}
+              size={"small"}
+              TextFieldComponent={() => (
+                <>
+                  <input
+                    style={styles.inputStyle}
+                    placeholder="Pick a date and time..."
+                    readOnly={true}
+                    value={field.value ? field.value.toLocaleString() : ""}
+                    disabled={disabled}
+                  />
+                  <MDBBtn
+                    floating
+                    size="lg"
+                    color="transparent"
+                    style={styles.dateTimeEdit}
+                    onClick={() => onOpen(!open)}
+                    disabled={disabled}
+                  >
+                    <MDBIcon icon="calendar-alt" />
+                  </MDBBtn>
+                  {field.value ? (
+                    <MDBBtn
+                      floating
+                      size="lg"
+                      color="transparent"
+                      style={styles.dateTimeClear}
+                      onClick={() => field.onChange(undefined)}
+                      disabled={disabled}
+                    >
+                      <MDBIcon icon="times" />
+                    </MDBBtn>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )}
+            />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
         {FieldError(field)}
       </MDBCol>
-    </>
-  )
+    );
+  }
 );
 
 const PercentageFieldView = observer(
@@ -275,21 +332,9 @@ const styles = {
   inputStyle: {
     border: "1px solid",
     color: "black",
-    backgroundColor: "inherit",
     borderColor: "lightgray",
     borderRadius: "4px",
     width: "100%",
-    padding: "2%",
-    fontFamily: "inherit",
-    fontWeight: 300
-  },
-  dateStyle: {
-    border: "1px solid",
-    color: "black",
-    backgroundColor: "inherit",
-    borderColor: "lightgray",
-    borderRadius: "4px",
-    width: "50%",
     padding: "2%",
     fontFamily: "inherit",
     fontWeight: 300
@@ -338,5 +383,23 @@ const styles = {
   },
   color: {
     backgroundColor: "white !important"
+  },
+  dateTimeClear: {
+    backgroundColor: "transparent !important",
+    color: "#4285f4",
+    boxShadow: "none",
+    fontSize: "large",
+    border: "none",
+    outline: "none",
+    marginLeft: "-50px"
+  },
+  dateTimeEdit: {
+    backgroundColor: "transparent !important",
+    color: "#4285f4",
+    boxShadow: "none",
+    fontSize: "large",
+    border: "none",
+    outline: "none",
+    marginLeft: "-25px"
   }
 };
