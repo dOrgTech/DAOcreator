@@ -35,11 +35,15 @@ export const CreateOrganisation: FC<IProps> = ({
   }, [active]);
 
   useEffect(() => {
+    if (!active) return;
+
     switch (step) {
       case STEP.Waiting:
         setOutput(<div style={{ float: "right" }}>Start Installation</div>);
         break;
       case STEP.Start:
+        if (logLines[logLines.length - 1] === "Confirmed")
+          setStep(STEP.Confirmed);
         setOutput(
           <div style={{ float: "right" }}>{logLines[logLines.length - 1]}</div>
         );
