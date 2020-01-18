@@ -4,7 +4,8 @@ import {
   DAOMigrationResult,
   getWeb3,
   DAOMigrationCallbacks,
-  migrateDAO
+  migrateDAO,
+  getNetworkName
 } from "@dorgtech/daocreator-lib";
 import { MDBContainer, MDBRow, MDBBtn, MDBBtnGroup } from "mdbreact";
 import {
@@ -77,11 +78,6 @@ const Migrator: FC<IProps> = ({
     setNoWeb3Open(false);
   };
 
-  const nextStep = () => {
-    console.log("Go to next step");
-    setStep(step => step++);
-  };
-
   /*
    * Start
    */
@@ -125,13 +121,13 @@ const Migrator: FC<IProps> = ({
     const callbacks: DAOMigrationCallbacks = getCallbacks();
     setResult(undefined);
 
-    migrateDAO(dao, callbacks);
-
     createOrganisation();
 
-    // Result used to be set here and within onComplete in callbacks (onStop was similar)
-
-    // nextStep();
+    const result = await migrateDAO(dao, callbacks);
+    // Getting around unimplemented callback
+    if (!result) return;
+    onComplete(result);
+    setResult(result);
   };
 
   const createOrganisation = () => {
@@ -250,6 +246,7 @@ const Migrator: FC<IProps> = ({
             ]);
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
+
           case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
             setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
             // Reset to last step (set button to tx rebroadcast attempt)
@@ -305,12 +302,16 @@ const Migrator: FC<IProps> = ({
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
             break;
+
           default:
             console.log("Unhandled abortedMsg log:");
             console.log(abortedMsg);
             break;
         }
         break;
+
+      default:
+        throw "Unimplemented log type";
     }
   };
 
@@ -369,8 +370,24 @@ const Migrator: FC<IProps> = ({
     return callbacks;
   };
 
-  const openAlchemy = () => {
-    console.log("Open Alchemy");
+  const openAlchemy = async () => {
+    if (!result) {
+      console.log("Failed to open: Result wasn't set");
+      return;
+    }
+
+    const network = await getNetworkName();
+    let url;
+
+    if (network === "mainnet") {
+      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    } else if (network === "rinkeby") {
+      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    } else {
+      url = result.Avatar;
+    }
+
+    window.open(url);
   };
 
   return (
