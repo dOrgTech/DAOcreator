@@ -16,8 +16,7 @@ import {
   AnyLogLine,
   LogType
 } from "./LogLineTypes";
-import CreateOrganisation from "./CreateOrganisation";
-import ConfigureOrganisation from "./ConfigureOrganisation";
+import OrganisationLine from "./OrganisationLine";
 
 interface IProps {
   dao: DAOMigrationParams;
@@ -140,12 +139,12 @@ const Migrator: FC<IProps> = ({
   };
 
   const configureOrganisation = () => {
+    setMinimalLogLines([...minimalLogLines, "Waiting"]); // Prevents the first log shown to Line being "Confirmed"
     setStep(STEP.Configuring);
   };
 
-  const completeOrganisation = (result: DAOMigrationResult) => {
-    console.log("completeOrganisation result:");
-    console.log(result);
+  const completeOrganisation = () => {
+    //result: DAOMigrationResult // We're not getting this yet
     setStep(STEP.Completed);
     // onComplete(result);
   };
@@ -158,7 +157,13 @@ const Migrator: FC<IProps> = ({
     console.log(logLine);
     setFullLogLines([...fullLogLines, logLine]);
 
-    const { UserApproval, Info, Error, TransactionResult } = LogType;
+    const {
+      UserApproval,
+      Info,
+      Error,
+      TransactionResult,
+      MigrationAborted
+    } = LogType;
     switch (logLine.type) {
       case UserApproval:
         const approvalLine = logLine as LogUserApproval;
@@ -212,9 +217,17 @@ const Migrator: FC<IProps> = ({
             setMinimalLogLines([...minimalLogLines, "Sign Transaction"]); // Annoyingly, there is no implemented log to show that tx has been sent
             break;
 
+          case info === "Setting DAO schemes...":
+            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]); // Annoyingly, there is no implemented log to show that tx has been sent
+            break;
+
+          case info === "Deploying Controller":
+            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+            break;
+
           case info === "DAO Migration has Finished Successfully!":
             setMinimalLogLines([...minimalLogLines, "Confirmed"]);
-            completeOrganisation(infoLine as any);
+            completeOrganisation(); // Hack to complete until callback is implemented
             break;
 
           default:
@@ -242,12 +255,19 @@ const Migrator: FC<IProps> = ({
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
+          case error.startsWith(
+            "Transaction failed: Transaction has been reverted"
+          ):
+            setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
+            break;
+
           default:
             console.log("Unhandled error log:");
             console.log(error);
             setMinimalLogLines([...minimalLogLines, error]);
             break;
         }
+        break;
 
       case TransactionResult:
         const txLine = logLine as LogTransactionResult;
@@ -266,12 +286,31 @@ const Migrator: FC<IProps> = ({
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
+          case msg === "DAO schemes set.":
+            setMinimalLogLines([...minimalLogLines, msg]);
+            break;
+
           default:
             console.log("Unhandled txResult log:");
             console.log(msg);
             setMinimalLogLines([...minimalLogLines, msg]);
             break;
         }
+        break;
+
+      case MigrationAborted:
+        const abortedLine = logLine as LogMigrationAborted;
+        const abortedMsg = abortedLine.toString();
+        switch (true) {
+          case abortedMsg ===
+            "Returned values aren't valid, did it run Out of Gas?":
+            break;
+          default:
+            console.log("Unhandled abortedMsg log:");
+            console.log(abortedMsg);
+            break;
+        }
+        break;
     }
   };
 
@@ -349,11 +388,13 @@ const Migrator: FC<IProps> = ({
           </MDBBtnGroup>
         </Fragment>
       )}
-      <CreateOrganisation
+      <OrganisationLine
+        type={0}
         active={step === STEP.Creating}
         logLines={minimalLogLines}
       />
-      <ConfigureOrganisation
+      <OrganisationLine
+        type={1}
         active={step === STEP.Configuring}
         logLines={minimalLogLines}
       />
