@@ -126,12 +126,29 @@ const Migrator: FC<IProps> = ({
 
     const callbacks: DAOMigrationCallbacks = getCallbacks();
     setResult(undefined);
-    setStep(STEP.Migrating);
+
     migrateDAO(dao, callbacks);
+
+    createOrganisation();
 
     // Result used to be set here and within onComplete in callbacks (onStop was similar)
 
     // nextStep();
+  };
+
+  const createOrganisation = () => {
+    setStep(STEP.Creating);
+  };
+
+  const configureOrganisation = () => {
+    setStep(STEP.Configuring);
+  };
+
+  const completeOrganisation = (result: DAOMigrationResult) => {
+    console.log("completeOrganisation result:");
+    console.log(result);
+    setStep(STEP.Completed);
+    // onComplete(result);
   };
 
   /*
@@ -163,6 +180,19 @@ const Migrator: FC<IProps> = ({
               }
             });
             break;
+
+          default:
+            console.log("Unhandled approval log:");
+            console.log(question);
+            setMinimalLogLines([...minimalLogLines, question]);
+            setApproval({
+              msg: question,
+              response: (res: boolean): void => {
+                setApproval(undefined);
+                approvalLine.onResponse(res);
+              }
+            });
+            break;
         }
         break;
 
@@ -172,8 +202,20 @@ const Migrator: FC<IProps> = ({
         switch (info) {
           case "Migrating DAO...":
             break;
+
           case "Creating a new organization...":
             setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+            break;
+
+          case "DAO Migration has Finished Successfully!":
+            setMinimalLogLines([...minimalLogLines, "Confirmed"]);
+            completeOrganisation(infoLine as any);
+            break;
+
+          default:
+            console.log("Unhandled info log:");
+            console.log(info);
+            setMinimalLogLines([...minimalLogLines, info]);
             break;
         }
         break;
@@ -189,7 +231,10 @@ const Migrator: FC<IProps> = ({
             ]);
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
+
           default:
+            console.log("Unhandled error log:");
+            console.log(error);
             setMinimalLogLines([...minimalLogLines, error]);
             break;
         }
@@ -209,8 +254,8 @@ const Migrator: FC<IProps> = ({
 
       txComplete: (msg: string, txHash: string, txCost: number) =>
         new Promise<void>(resolve => {
-          setEthSpent(ethSpent => (ethSpent += Number(txCost)));
           addLogLine(new LogTransactionResult(msg, txHash, txCost));
+          setEthSpent(ethSpent => (ethSpent += Number(txCost)));
           resolve();
         }),
 
@@ -218,9 +263,9 @@ const Migrator: FC<IProps> = ({
         window.onbeforeunload = () => {
           return undefined;
         };
-        setStep(STEP.Waiting);
-
         addLogLine(new LogMigrationAborted(err));
+
+        setStep(STEP.Waiting);
 
         onAbort(err); // props
       },
@@ -229,8 +274,8 @@ const Migrator: FC<IProps> = ({
         window.onbeforeunload = () => {
           return undefined;
         };
-        setStep(STEP.Completed);
         setResult(result);
+        setStep(STEP.Completed);
 
         onComplete(result); // props
       },
