@@ -24,7 +24,9 @@ export const OrganisationLine: FC<IProps> = ({
   logLines
 }: IProps) => {
   const [step, setStep] = useState<STEP>(STEP.Waiting);
-  const [lastLog, setLastLog] = useState<string>("");
+  const [lastLog, setLastLog] = useState<string>(
+    type === 0 ? "Start Installation" : "Waiting"
+  );
 
   useEffect(() => {
     if (done) {
