@@ -42,12 +42,12 @@ export const OrganisationLine: FC<IProps> = ({
 
     if (step === STEP.Start) return;
     setStep(STEP.Start);
-  }, [active, done]);
+  }, [active, done, step]);
 
   useEffect(() => {
     if (!active || done) return;
     setLastLog(logLines[logLines.length - 1]);
-  }, [logLines]);
+  }, [logLines, active, done]);
 
   const Output: FC = () => {
     let text = undefined;
@@ -66,7 +66,7 @@ export const OrganisationLine: FC<IProps> = ({
         break;
 
       default:
-        throw "Something went wrong";
+        throw Error("Something went wrong");
     }
 
     return <div style={{ float: "right" }}>{text}</div>; // Should link to txHash
