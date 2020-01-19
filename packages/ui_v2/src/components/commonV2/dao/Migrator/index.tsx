@@ -256,7 +256,7 @@ const Migrator: FC<IProps> = ({
         break;
 
       default:
-        throw "Unimplemented log type";
+        console.log("Unimplemented log type");
     }
   };
 

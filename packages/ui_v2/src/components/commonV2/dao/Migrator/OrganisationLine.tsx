@@ -66,7 +66,7 @@ export const OrganisationLine: FC<IProps> = ({
         break;
 
       default:
-        throw Error("Something went wrong");
+        console.log("Unimplemented step");
     }
 
     return <div style={{ float: "right" }}>{text}</div>; // Should link to txHash
