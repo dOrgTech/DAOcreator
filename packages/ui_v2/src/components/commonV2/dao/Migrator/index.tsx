@@ -64,69 +64,20 @@ const Migrator: FC<IProps> = ({
     undefined | { msg: string; response: (res: boolean) => void }
   >(undefined);
 
-  // Migration result (sans schemes)
+  // Migration result (sans schemes), outdated if resuming
   const [result, setResult] = useState<DAOMigrationResult | undefined>(
     undefined
   );
 
   /*
-   * Start
+   * Step Transitions
    */
-
-  const startInstallation = async () => {
-    console.log("Starting Installation");
-
-    // Reset state
-    setNoWeb3Open(false);
-    setMinimalLogLines([]);
-    setEthSpent(0);
-    setResult(undefined);
-    setApproval(undefined);
-
-    // Make sure we have a web3 provider available. If not,
-    // tell the user they need to have one.
-    let web3 = undefined;
-
-    try {
-      web3 = await getWeb3();
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (!web3) {
-      setNoWeb3Open(true);
-      return;
-    }
-
-    // Alert in case of user closing window while deploying
-    window.onbeforeunload = () => {
-      return "Your migration is still in progress. Do you really want to leave?";
-    };
-
-    // Clear the log
-    setFullLogLines([]);
-    setMinimalLogLines([]);
-
-    onStart(); // props
-
-    const callbacks: DAOMigrationCallbacks = getCallbacks();
-    setResult(undefined);
-
-    createOrganisation();
-
-    const result = await migrateDAO(dao, callbacks);
-    // Getting around unimplemented callback
-    if (!result) return;
-    onComplete(result);
-    setResult(result);
-  };
 
   const createOrganisation = () => {
     setStep(STEP.Creating);
   };
 
   const configureOrganisation = () => {
-    setMinimalLogLines([...minimalLogLines, "Waiting"]); // Prevents the first log shown to second Line being "Confirmed"
     setStep(STEP.Configuring);
   };
 
@@ -165,7 +116,7 @@ const Migrator: FC<IProps> = ({
             break;
 
           case "We found a deployment that was in progress, pickup where you left off?":
-          case "We found a deployment that's was in progress, pickup where you left off?": // This was triggered, I haven't looked into why
+          case "We found a deployment that's was in progress, pickup where you left off?":
             setMinimalLogLines([
               ...minimalLogLines,
               "Continue previous deployment?"
@@ -173,6 +124,7 @@ const Migrator: FC<IProps> = ({
             setApproval({
               msg: "Continue previous deployment?",
               response: (res: boolean): void => {
+                res && configureOrganisation();
                 setApproval(undefined);
                 approvalLine.onResponse(res);
               }
@@ -209,14 +161,6 @@ const Migrator: FC<IProps> = ({
 
           case info === "Setting DAO schemes...":
           case info === "Deploying Controller":
-            if (step === STEP.Creating) {
-              // if resuming migration
-              setMinimalLogLines([
-                ...minimalLogLines,
-                "Confirmed" // Should pass txHash onClick
-              ]);
-              configureOrganisation();
-            }
             setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
             break;
 
@@ -238,7 +182,7 @@ const Migrator: FC<IProps> = ({
         const { error } = errorLine;
         switch (true) {
           case error ===
-            "MetaMask Tx Signature: User denied transaction signature.":
+            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.":
             setMinimalLogLines([
               ...minimalLogLines,
               "Failed to Sign Transaction"
@@ -299,6 +243,8 @@ const Migrator: FC<IProps> = ({
         const abortedMsg = abortedLine.toString();
         switch (true) {
           case abortedMsg ===
+            "MetaMask Tx Signature: User denied transaction signature.":
+          case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
             break;
 
@@ -333,9 +279,8 @@ const Migrator: FC<IProps> = ({
         }),
 
       migrationAborted: (err: Error) => {
-        window.onbeforeunload = () => {
-          return undefined;
-        };
+        window.onbeforeunload = () => {};
+
         addLogLine(new LogMigrationAborted(err));
 
         setStep(STEP.Waiting);
@@ -344,9 +289,7 @@ const Migrator: FC<IProps> = ({
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
-        window.onbeforeunload = () => {
-          return undefined;
-        };
+        window.onbeforeunload = () => {};
         setResult(result);
         setStep(STEP.Completed);
 
@@ -367,6 +310,58 @@ const Migrator: FC<IProps> = ({
       }
     };
     return callbacks;
+  };
+
+  /*
+   * Start
+   */
+
+  const startInstallation = async () => {
+    console.log("Starting Installation");
+
+    // Reset state
+    setNoWeb3Open(false);
+    setMinimalLogLines([]);
+    setEthSpent(0);
+    setResult(undefined);
+    setApproval(undefined);
+
+    // Make sure we have a web3 provider available. If not,
+    // tell the user they need to have one.
+    let web3 = undefined;
+
+    try {
+      web3 = await getWeb3();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (!web3) {
+      setNoWeb3Open(true);
+      return;
+    }
+
+    // Alert in case of user closing window while deploying, message is generic on modern browsers
+    window.onbeforeunload = () => {
+      return "Your migration is still in progress. Do you really want to leave?";
+    };
+
+    // Clear the log
+    setFullLogLines([]);
+    setMinimalLogLines([]);
+
+    onStart(); // props
+
+    const callbacks: DAOMigrationCallbacks = getCallbacks();
+    setResult(undefined);
+
+    createOrganisation();
+
+    const result = await migrateDAO(dao, callbacks);
+    // Getting around unimplemented callback
+    if (!result) return;
+    onComplete(result);
+    setResult(result);
   };
 
   const openAlchemy = async () => {
