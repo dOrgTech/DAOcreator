@@ -409,6 +409,7 @@ const Migrator: FC<IProps> = ({
       <OrganisationLine
         type={0}
         active={step === STEP.Creating}
+        done={step === STEP.Configuring || step === STEP.Completed}
         logLines={minimalLogLines}
       />
 
@@ -416,6 +417,7 @@ const Migrator: FC<IProps> = ({
       <OrganisationLine
         type={1}
         active={step === STEP.Configuring}
+        done={step === STEP.Completed}
         logLines={minimalLogLines}
       />
 
