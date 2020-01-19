@@ -4,6 +4,7 @@ import { MDBRow, MDBCol } from "mdbreact";
 interface IProps {
   type: number;
   active: boolean;
+  done: boolean;
   logLines: string[];
 }
 
@@ -19,50 +20,55 @@ enum STEP {
 export const OrganisationLine: FC<IProps> = ({
   type,
   active,
+  done,
   logLines
 }: IProps) => {
-  const [step, setStep] = useState(STEP.Waiting);
-  const [output, setOutput] = useState(
-    <div style={{ float: "right" }}>
-      {type === 0 ? "Start Installation" : "Waiting"}
-    </div>
-  );
+  const [step, setStep] = useState<STEP>(STEP.Waiting);
+  const [lastLog, setLastLog] = useState<string>("");
 
-  // Inactive states can only be STEP.Waiting and STEP.Confirmed
   useEffect(() => {
-    if (!active) {
+    if (done) {
       if (step === STEP.Confirmed) return;
-      setStep(STEP.Waiting);
+      setStep(STEP.Confirmed);
       return;
     }
-    if (step === STEP.Waiting) setStep(STEP.Start);
-  }, [active]);
+
+    if (!active) {
+      if (step === STEP.Waiting) return;
+      setStep(STEP.Waiting);
+    }
+
+    if (step === STEP.Start) return;
+    setStep(STEP.Start);
+  }, [active, done]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || done) return;
+    setLastLog(logLines[logLines.length - 1]);
+  }, [logLines]);
+
+  const Output: FC = () => {
+    let text = undefined;
 
     switch (step) {
       case STEP.Waiting:
-        setOutput(
-          <div style={{ float: "right" }}>
-            {type === 0 ? "Start Installation" : "Waiting"}
-          </div>
-        );
+        text = type === 0 ? "Start Installation" : "Waiting";
         break;
+
       case STEP.Start:
-        if (logLines[logLines.length - 1] === "Confirmed")
-          setStep(STEP.Confirmed);
-        setOutput(
-          <div style={{ float: "right" }}>{logLines[logLines.length - 1]}</div>
-        );
+        text = lastLog;
         break;
+
       case STEP.Confirmed:
-        setOutput(
-          <div style={{ float: "right" }}>Confirmed</div> // Should link to txHash
-        );
+        text = "Confirmed";
         break;
+
+      default:
+        throw "Something went wrong";
     }
-  }, [step, logLines]);
+
+    return <div style={{ float: "right" }}>{text}</div>; // Should link to txHash
+  };
 
   return (
     <MDBRow>
@@ -72,7 +78,9 @@ export const OrganisationLine: FC<IProps> = ({
           {type === 0 ? "Create Organisation" : "Configure Organisation"}
         </div>
       </MDBCol>
-      <MDBCol size="4">{output}</MDBCol>
+      <MDBCol size="4">
+        <Output />
+      </MDBCol>
     </MDBRow>
   );
 };
