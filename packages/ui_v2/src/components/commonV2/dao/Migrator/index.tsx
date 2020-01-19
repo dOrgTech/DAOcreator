@@ -48,26 +48,26 @@ const Migrator: FC<IProps> = ({
    */
 
   const [step, setStep] = useState(STEP.Waiting);
-  // Contains transactions
-  const [txList, setTxList] = useState({});
-  // Whether or not there is a web3 instance(?)
+
+  // Unimplemented
   const [noWeb3Open, setNoWeb3Open] = useState(false);
-  const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
-  const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
   const [ethSpent, setEthSpent] = useState(0);
-  const [result, setResult] = useState<DAOMigrationResult | undefined>(
-    undefined
-  );
+
+  // Array of log lines as given by callbacks
+  const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
+
+  // Heavily redacted log lines
+  const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
+
+  // User approval component
   const [approval, setApproval] = useState<
     undefined | { msg: string; response: (res: boolean) => void }
   >(undefined);
 
-  // TODO
-  const resetState = () => {
-    setStep(STEP.Waiting);
-    setTxList({});
-    setNoWeb3Open(false);
-  };
+  // Migration result (sans schemes)
+  const [result, setResult] = useState<DAOMigrationResult | undefined>(
+    undefined
+  );
 
   /*
    * Start
@@ -141,7 +141,7 @@ const Migrator: FC<IProps> = ({
    */
 
   const addLogLine = (logLine: AnyLogLine) => {
-    console.log(logLine);
+    const { type } = logLine;
     setFullLogLines([...fullLogLines, logLine]);
 
     const {
@@ -151,7 +151,10 @@ const Migrator: FC<IProps> = ({
       TransactionResult,
       MigrationAborted
     } = LogType;
-    switch (logLine.type) {
+
+    console.log(logLine);
+
+    switch (type) {
       case UserApproval:
         const approvalLine = logLine as LogUserApproval;
         const { question } = approvalLine;
@@ -401,11 +404,15 @@ const Migrator: FC<IProps> = ({
           </MDBRow>
         </Fragment>
       )}
+
+      {/* Create Organisation */}
       <OrganisationLine
         type={0}
         active={step === STEP.Creating}
         logLines={minimalLogLines}
       />
+
+      {/* Configure Organisation */}
       <OrganisationLine
         type={1}
         active={step === STEP.Configuring}
