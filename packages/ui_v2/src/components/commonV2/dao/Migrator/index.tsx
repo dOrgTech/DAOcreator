@@ -36,15 +36,6 @@ enum STEP {
   Failed
 }
 
-// Possible state of each Tx
-enum TX_STATE {
-  Broadcasting, // Waiting to be signed
-  Waiting, // Waiting to be mined
-  Confirmed,
-  Failed,
-  Lost // If tx is taking an exceedingly long time
-}
-
 const Migrator: FC<IProps> = ({
   dao,
   onComplete,
