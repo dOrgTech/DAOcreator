@@ -46,7 +46,7 @@ export const OrganisationLine: FC<IProps> = ({
 
   useEffect(() => {
     if (!active || done) return;
-    setLastLog(logLines[logLines.length - 1]);
+    if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
   }, [logLines, active, done]);
 
   const Output: FC = () => {
@@ -75,12 +75,12 @@ export const OrganisationLine: FC<IProps> = ({
   return (
     <MDBRow>
       <MDBCol size="2">ICON</MDBCol>
-      <MDBCol size="6">
+      <MDBCol size="5">
         <div>
           {type === 0 ? "Create Organisation" : "Configure Organisation"}
         </div>
       </MDBCol>
-      <MDBCol size="4">
+      <MDBCol size="5">
         <Output />
       </MDBCol>
     </MDBRow>
