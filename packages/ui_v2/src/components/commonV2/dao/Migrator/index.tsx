@@ -23,7 +23,7 @@ interface IProps {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult) => void;
   onStart: () => void;
-  onAbort: (error: Error) => void;
+  onAbort: (error: string) => void;
   onStop: () => void;
 }
 
@@ -306,7 +306,7 @@ const Migrator: FC<IProps> = ({
 
         addLogLine(new LogMigrationAborted(err));
 
-        onAbort(err); // props
+        onAbort(err.toString()); // props
       },
 
       migrationComplete: (result: DAOMigrationResult) => {

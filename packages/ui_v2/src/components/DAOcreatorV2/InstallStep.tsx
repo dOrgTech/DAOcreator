@@ -29,9 +29,9 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
     // isMigrating = true
   };
 
-  const onAbort = (error: Error) => {
+  const onAbort = (error: string) => {
     console.log("onAbort");
-    console.log(error.message);
+    console.log(error);
     onStop();
   };
 
