@@ -117,10 +117,7 @@ const Migrator: FC<IProps> = ({
 
           case "We found a deployment that was in progress, pickup where you left off?":
           case "We found a deployment that's was in progress, pickup where you left off?":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Continue previous deployment?"
-            ]);
+            setMinimalLogLines([...minimalLogLines, "Selecting deployment..."]);
             setApproval({
               msg: "Continue previous deployment?",
               response: (res: boolean): void => {
@@ -152,20 +149,24 @@ const Migrator: FC<IProps> = ({
         switch (true) {
           case info === "Migrating DAO...":
           case info.startsWith("Using Arc Version:"):
-            console.log("continuing");
             break;
 
           case info === "Creating a new organization...":
-            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Signing Create Org Tx..."
+            ]);
             break;
 
           case info === "Setting DAO schemes...":
           case info === "Deploying Controller":
-            setMinimalLogLines([...minimalLogLines, "Sign Transaction"]);
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Signing Config Org Txs..."
+            ]);
             break;
 
-          case info === "DAO Migration has Finished Successfully!": // TODO state changes are happening too fast and this can get triggered in wrong state
-            setMinimalLogLines([...minimalLogLines, "Confirmed"]);
+          case info === "DAO Migration has Finished Successfully!":
             completeOrganisation(); // Hack to complete until callback is implemented
             break;
 
@@ -182,17 +183,16 @@ const Migrator: FC<IProps> = ({
         const { error } = errorLine;
         switch (true) {
           case error ===
-            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Failed to Sign Transaction"
-            ]);
+            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // This causes an abort so the message shown in Line reverts back to default instead
+            // setMinimalLogLines([
+            //   ...minimalLogLines,
+            //   "Failed to Sign Transaction"
+            // ]);
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
           case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
             setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
-            // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
           case error.startsWith(
@@ -214,10 +214,6 @@ const Migrator: FC<IProps> = ({
         const { msg, txHash, txCost } = txLine;
         switch (true) {
           case msg === "Created new organization.":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Confirmed" // Should pass txHash onClick
-            ]);
             configureOrganisation();
             break;
 
@@ -242,15 +238,18 @@ const Migrator: FC<IProps> = ({
         const abortedLine = logLine as LogMigrationAborted;
         const abortedMsg = abortedLine.toString();
         switch (true) {
-          case abortedMsg ===
+          case abortedMsg === // Handled in Error
             "MetaMask Tx Signature: User denied transaction signature.":
+            break;
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
+            setMinimalLogLines([...minimalLogLines, abortedMsg]);
             break;
 
           default:
             console.log("Unhandled abortedMsg log:");
             console.log(abortedMsg);
+            setMinimalLogLines([...minimalLogLines, abortedMsg]);
             break;
         }
         break;
