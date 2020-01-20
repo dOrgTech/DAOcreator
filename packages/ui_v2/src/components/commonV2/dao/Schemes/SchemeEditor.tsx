@@ -263,12 +263,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Fast}
                 style={
-                  !(decisionSpeed === DAOSpeed.Fast) || !toggleSpeed
+                  !(decisionSpeed === DAOSpeed.Fast)
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={!toggleSpeed}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Fast
               </button>
@@ -276,12 +276,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Medium}
                 style={
-                  !(decisionSpeed === DAOSpeed.Medium) || !toggleSpeed
+                  !(decisionSpeed === DAOSpeed.Medium)
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={!toggleSpeed}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Medium
               </button>
@@ -289,12 +289,12 @@ function SchemeEditor(props: Props) {
                 name="decisonSpeed"
                 value={DAOSpeed.Slow}
                 style={
-                  !(decisionSpeed === DAOSpeed.Slow) || !toggleSpeed
+                  !(decisionSpeed === DAOSpeed.Slow)
                     ? styles.buttonColor
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={!toggleSpeed}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Slow
               </button>

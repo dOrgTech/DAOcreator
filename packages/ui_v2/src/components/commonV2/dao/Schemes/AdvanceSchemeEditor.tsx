@@ -39,7 +39,7 @@ function AdvanceSchemeEditor(props: Props) {
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(true);
 
   const schemeEditorsMock: AnySchemeForm[] = [
     observable(new ContributionRewardForm()),
@@ -102,12 +102,20 @@ function AdvanceSchemeEditor(props: Props) {
     setAdvanceMode(true);
     setModal(false);
     setScheme(SchemeType.ContributionReward);
+    const checkContributionReward = (scheme: AnySchemeForm) => {
+      return scheme.type === 0;
+    };
+    const contributionIsAdded = form.$.some(checkContributionReward);
+    checkSchemeIsAdded(contributionIsAdded);
   };
 
   const closeModal = () => {
     setAdvanceMode(false);
     setModal(false);
     setScheme(SchemeType.ContributionReward);
+    checkSchemeIsAdded(true);
+    form.$ = [];
+    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
   };
 
   return (
