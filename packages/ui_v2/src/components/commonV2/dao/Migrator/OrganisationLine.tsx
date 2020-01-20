@@ -5,22 +5,24 @@ interface IProps {
   type: number;
   active: boolean;
   done: boolean;
+  failed: boolean;
   logLines: string[];
 }
 
 enum STEP {
-  Waiting, // Before installation
+  Waiting,
   Start,
   // Sign,
   // View, // View on Etherscan should display after tx is signed but we are not currently handling this TODO (?)
-  Confirmed, // Go to next step
-  Failed // Reset to start
+  Confirmed,
+  Failed
 }
 
 export const OrganisationLine: FC<IProps> = ({
   type,
   active,
   done,
+  failed,
   logLines
 }: IProps) => {
   const [step, setStep] = useState<STEP>(STEP.Waiting);
@@ -35,14 +37,21 @@ export const OrganisationLine: FC<IProps> = ({
       return;
     }
 
+    if (failed) {
+      if (step === STEP.Failed) return;
+      setStep(STEP.Failed);
+      return;
+    }
+
     if (!active) {
       if (step === STEP.Waiting) return;
       setStep(STEP.Waiting);
+      return;
     }
 
     if (step === STEP.Start) return;
     setStep(STEP.Start);
-  }, [active, done, step]);
+  }, [active, done, step, failed]);
 
   useEffect(() => {
     if (!active || done) return;
@@ -63,6 +72,10 @@ export const OrganisationLine: FC<IProps> = ({
 
       case STEP.Confirmed:
         text = "Confirmed";
+        break;
+
+      case STEP.Failed:
+        text = lastLog;
         break;
 
       default:
