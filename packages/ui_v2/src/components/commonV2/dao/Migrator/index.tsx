@@ -36,6 +36,12 @@ enum STEP {
   Failed
 }
 
+// Migrator Steps
+enum FAILED {
+  Create,
+  Config
+}
+
 const Migrator: FC<IProps> = ({
   dao,
   onComplete,
@@ -68,6 +74,8 @@ const Migrator: FC<IProps> = ({
   const [result, setResult] = useState<DAOMigrationResult | undefined>(
     undefined
   );
+
+  const [failed, setFailed] = useState<FAILED | null>(null);
 
   /*
    * Step Transitions
@@ -183,12 +191,11 @@ const Migrator: FC<IProps> = ({
         const { error } = errorLine;
         switch (true) {
           case error ===
-            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // This causes an abort so the message shown in Line reverts back to default instead
+            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
             // setMinimalLogLines([
             //   ...minimalLogLines,
             //   "Failed to Sign Transaction"
             // ]);
-            // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
           case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
@@ -198,7 +205,8 @@ const Migrator: FC<IProps> = ({
           case error.startsWith(
             "Transaction failed: Transaction has been reverted"
           ):
-            setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
+          case error.startsWith("Transaction failed: Error"):
+            // setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;
 
           default:
@@ -237,13 +245,29 @@ const Migrator: FC<IProps> = ({
       case MigrationAborted:
         const abortedLine = logLine as LogMigrationAborted;
         const abortedMsg = abortedLine.toString();
+
+        /*
+         * TODO
+         * For some ungodly reason step is always equal to 0 in this method
+         * So the fail states do not work
+         */
+        if (step === STEP.Creating) setFailed(FAILED.Create);
+        else if (step === STEP.Configuring) setFailed(FAILED.Config);
+
+        setStep(STEP.Failed);
         switch (true) {
-          case abortedMsg === // Handled in Error
+          case abortedMsg ===
             "MetaMask Tx Signature: User denied transaction signature.":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Failed to Sign Transaction"
+            ]);
             break;
+
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
-            setMinimalLogLines([...minimalLogLines, abortedMsg]);
+          case abortedMsg.startsWith("Error: "):
+            setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;
 
           default:
@@ -281,8 +305,6 @@ const Migrator: FC<IProps> = ({
         window.onbeforeunload = () => {};
 
         addLogLine(new LogMigrationAborted(err));
-
-        setStep(STEP.Waiting);
 
         onAbort(err); // props
       },
@@ -324,6 +346,7 @@ const Migrator: FC<IProps> = ({
     setEthSpent(0);
     setResult(undefined);
     setApproval(undefined);
+    setFailed(null);
 
     // Make sure we have a web3 provider available. If not,
     // tell the user they need to have one.
@@ -404,6 +427,7 @@ const Migrator: FC<IProps> = ({
         type={0}
         active={step === STEP.Creating}
         done={step === STEP.Configuring || step === STEP.Completed}
+        failed={failed === FAILED.Create}
         logLines={minimalLogLines}
       />
 
@@ -412,6 +436,7 @@ const Migrator: FC<IProps> = ({
         type={1}
         active={step === STEP.Configuring}
         done={step === STEP.Completed}
+        failed={failed === FAILED.Config}
         logLines={minimalLogLines}
       />
 
@@ -419,10 +444,12 @@ const Migrator: FC<IProps> = ({
       <MDBRow center>
         {step !== STEP.Completed ? (
           <MDBBtn
-            disabled={step !== STEP.Waiting}
+            disabled={step !== STEP.Waiting && step !== STEP.Failed}
             onClick={() => startInstallation()}
           >
-            Install Organisation
+            {step === STEP.Failed
+              ? "Restart Installation"
+              : "Install Organisation"}
           </MDBBtn>
         ) : (
           <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
