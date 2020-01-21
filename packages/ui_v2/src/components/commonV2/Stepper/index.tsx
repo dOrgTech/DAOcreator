@@ -8,7 +8,7 @@ import {
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
-import { simpleOptionsSwitcher } from "components/utils";
+import { simpleOptionsSwitcher } from "../../utils";
 
 interface Props {
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
@@ -104,13 +104,6 @@ export default function Stepper(props: Props) {
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
           <ImportButton step={step} index={index} cb={props.callbacks} />
-          {step === 1 && index === 1 ? (
-            <button onClick={openAdvanceConfigModal}>
-              Advance Configuration
-            </button>
-          ) : (
-            <div></div>
-          )}
           <MDBBtn
             hidden={step === index || step < index}
             floating
