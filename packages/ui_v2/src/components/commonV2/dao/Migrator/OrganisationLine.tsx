@@ -39,6 +39,7 @@ export const OrganisationLine: FC<IProps> = ({
 
     if (failed) {
       if (step === STEP.Failed) return;
+      console.log("settin failed");
       setStep(STEP.Failed);
       return;
     }
@@ -54,7 +55,7 @@ export const OrganisationLine: FC<IProps> = ({
   }, [active, done, step, failed]);
 
   useEffect(() => {
-    if (!active || done) return;
+    if (done || (!active && !failed)) return;
     if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
   }, [logLines, active, done]);
 
