@@ -1,1 +1,1160 @@
-{"contractName":"RealMathTester","abi":[{"constant":true,"inputs":[{"internalType":"uint216","name":"num","type":"uint216"},{"internalType":"uint216","name":"den","type":"uint216"},{"internalType":"uint256","name":"exp","type":"uint256"}],"name":"power","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"internalType":"uint216","name":"num","type":"uint216"},{"internalType":"uint216","name":"den","type":"uint216"}],"name":"fraction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"}],"metadata":"{\"compiler\":{\"version\":\"0.5.11+commit.c082d0b4\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"uint216\",\"name\":\"num\",\"type\":\"uint216\"},{\"internalType\":\"uint216\",\"name\":\"den\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"exp\",\"type\":\"uint256\"}],\"name\":\"power\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint216\",\"name\":\"num\",\"type\":\"uint216\"},{\"internalType\":\"uint216\",\"name\":\"den\",\"type\":\"uint216\"}],\"name\":\"fraction\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol\":\"RealMathTester\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/infra/contracts/libs/RealMath.sol\":{\"keccak256\":\"0x93d598d59695003ed1b7fb37e631a665151e3e79f77c650a2cf5fcdbaf010d3f\",\"urls\":[\"bzz-raw://b5baed6a9e7e6386a4fd730e9f04aa67b2c3a4349e1675df3987f9b1b4cb995c\",\"dweb:/ipfs/QmekATn7QSZ2KGV6kENUgqEVzuL1i4Y3LxWDZcY7AL72Hb\"]},\"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol\":{\"keccak256\":\"0x5d6621bc8bfd477bb0048f0677ff310fcf77a06bf28cdae856623492e88c6f58\",\"urls\":[\"bzz-raw://53ae87e2e49af6d15e3eec1d9c6758091b591a13aab19e8734dd9dd35624a17a\",\"dweb:/ipfs/QmRVyyzQJbBYJytMTndDUuDJP431JcpjMeM1zciSMie8JM\"]}},\"version\":1}","sourceMap":"59:352:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;59:352:7;;;;;;;","deployedSourceMap":"59:352:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;59:352:7;;;;;;;;;;;;;;;;;;;;;;;;154:135;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;154:135:7;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;295:114;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;295:114:7;;;;;;;;;;:::i;154:135::-;228:7;254:28;278:3;255:17;-1:-1:-1;;;;;255:12:7;;268:3;255:17;:12;:17;:::i;:::-;254:23;:28;:23;:28;:::i;:::-;247:35;154:135;-1:-1:-1;;;;154:135:7:o;295:114::-;359:7;385:17;-1:-1:-1;;;;;385:12:7;;398:3;385:17;:12;:17;:::i;:::-;378:24;295:114;-1:-1:-1;;;295:114:7:o;1735:181:2:-;1816:7;1842:67;-1:-1:-1;;;;;1846:18:2;;;717:24;1846:29;;;;1877:20;;:31;1842:3;:67::i;821:845::-;893:7;936:8;977;717:24;1071:525;1078:17;;1071:525;;1162:12;1177:3;1162:18;1185:3;1161:27;1157:192;;;1305:29;1309:10;1321:12;1305:3;:29::i;:::-;1292:42;;1157:192;1434:1;1418:17;;;;;1453;;1449:137;;1540:31;1544:12;1558;1540:3;:31::i;:::-;1525:46;;1449:137;1071:525;;;1649:10;821:845;-1:-1:-1;;;;;821:845:2:o;2462:353::-;2545:7;2791:15;717:24;2746:33;;2791:15;2745:62;;;;;;2462:353;-1:-1:-1;;;2462:353:2:o;1996:383::-;2061:7;2261:13;;;2269:5;2261;:13;:5;2292:9;;;;;:18;2284:52;;;;;-1:-1:-1;;;2284:52:2;;;;;;;;;;;;-1:-1:-1;;;2284:52:2;;;;;;;;;;;;;;;613:2;2354:17;;1996:383;-1:-1:-1;;;1996:383:2:o","source":"pragma solidity ^0.5.11;\n\nimport \"../libs/RealMath.sol\";\n\n\ncontract RealMathTester {\n    using RealMath for uint216;\n    using RealMath for uint256;\n\n    function power(uint216 num, uint216 den, uint256 exp) public pure returns(uint256) {\n        return (num.fraction(den)).pow(exp);\n    }\n\n    function fraction(uint216 num, uint216 den) public pure returns(uint256) {\n        return num.fraction(den);\n    }\n}\n","sourcePath":"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol","ast":{"absolutePath":"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol","exportedSymbols":{"RealMathTester":[1293]},"id":1294,"nodeType":"SourceUnit","nodes":[{"id":1249,"literals":["solidity","^","0.5",".11"],"nodeType":"PragmaDirective","src":"0:24:7"},{"absolutePath":"/Users/oren/daostack/infra/contracts/libs/RealMath.sol","file":"../libs/RealMath.sol","id":1250,"nodeType":"ImportDirective","scope":1294,"sourceUnit":644,"src":"26:30:7","symbolAliases":[],"unitAlias":""},{"baseContracts":[],"contractDependencies":[],"contractKind":"contract","documentation":null,"fullyImplemented":true,"id":1293,"linearizedBaseContracts":[1293],"name":"RealMathTester","nodeType":"ContractDefinition","nodes":[{"id":1253,"libraryName":{"contractScope":null,"id":1251,"name":"RealMath","nodeType":"UserDefinedTypeName","referencedDeclaration":643,"src":"95:8:7","typeDescriptions":{"typeIdentifier":"t_contract$_RealMath_$643","typeString":"library RealMath"}},"nodeType":"UsingForDirective","src":"89:27:7","typeName":{"id":1252,"name":"uint216","nodeType":"ElementaryTypeName","src":"108:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}},{"id":1256,"libraryName":{"contractScope":null,"id":1254,"name":"RealMath","nodeType":"UserDefinedTypeName","referencedDeclaration":643,"src":"127:8:7","typeDescriptions":{"typeIdentifier":"t_contract$_RealMath_$643","typeString":"library RealMath"}},"nodeType":"UsingForDirective","src":"121:27:7","typeName":{"id":1255,"name":"uint256","nodeType":"ElementaryTypeName","src":"140:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}},{"body":{"id":1276,"nodeType":"Block","src":"237:52:7","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1273,"name":"exp","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1262,"src":"278:3:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint256","typeString":"uint256"}],"expression":{"argumentTypes":null,"components":[{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1269,"name":"den","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1260,"src":"268:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint216","typeString":"uint216"}],"expression":{"argumentTypes":null,"id":1267,"name":"num","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1258,"src":"255:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"id":1268,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"fraction","nodeType":"MemberAccess","referencedDeclaration":589,"src":"255:12:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$","typeString":"function (uint216,uint216) pure returns (uint256)"}},"id":1270,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"255:17:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"id":1271,"isConstant":false,"isInlineArray":false,"isLValue":false,"isPure":false,"lValueRequested":false,"nodeType":"TupleExpression","src":"254:19:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"id":1272,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"pow","nodeType":"MemberAccess","referencedDeclaration":566,"src":"254:23:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$","typeString":"function (uint256,uint256) pure returns (uint256)"}},"id":1274,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"254:28:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"functionReturnParameters":1266,"id":1275,"nodeType":"Return","src":"247:35:7"}]},"documentation":null,"id":1277,"implemented":true,"kind":"function","modifiers":[],"name":"power","nodeType":"FunctionDefinition","parameters":{"id":1263,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1258,"name":"num","nodeType":"VariableDeclaration","scope":1277,"src":"169:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1257,"name":"uint216","nodeType":"ElementaryTypeName","src":"169:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1260,"name":"den","nodeType":"VariableDeclaration","scope":1277,"src":"182:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1259,"name":"uint216","nodeType":"ElementaryTypeName","src":"182:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1262,"name":"exp","nodeType":"VariableDeclaration","scope":1277,"src":"195:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1261,"name":"uint256","nodeType":"ElementaryTypeName","src":"195:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"168:39:7"},"returnParameters":{"id":1266,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1265,"name":"","nodeType":"VariableDeclaration","scope":1277,"src":"228:7:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1264,"name":"uint256","nodeType":"ElementaryTypeName","src":"228:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"227:9:7"},"scope":1293,"src":"154:135:7","stateMutability":"pure","superFunction":null,"visibility":"public"},{"body":{"id":1291,"nodeType":"Block","src":"368:41:7","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1288,"name":"den","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1281,"src":"398:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint216","typeString":"uint216"}],"expression":{"argumentTypes":null,"id":1286,"name":"num","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1279,"src":"385:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"id":1287,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"fraction","nodeType":"MemberAccess","referencedDeclaration":589,"src":"385:12:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$","typeString":"function (uint216,uint216) pure returns (uint256)"}},"id":1289,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"385:17:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"functionReturnParameters":1285,"id":1290,"nodeType":"Return","src":"378:24:7"}]},"documentation":null,"id":1292,"implemented":true,"kind":"function","modifiers":[],"name":"fraction","nodeType":"FunctionDefinition","parameters":{"id":1282,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1279,"name":"num","nodeType":"VariableDeclaration","scope":1292,"src":"313:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1278,"name":"uint216","nodeType":"ElementaryTypeName","src":"313:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1281,"name":"den","nodeType":"VariableDeclaration","scope":1292,"src":"326:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1280,"name":"uint216","nodeType":"ElementaryTypeName","src":"326:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"}],"src":"312:26:7"},"returnParameters":{"id":1285,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1284,"name":"","nodeType":"VariableDeclaration","scope":1292,"src":"359:7:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1283,"name":"uint256","nodeType":"ElementaryTypeName","src":"359:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"358:9:7"},"scope":1293,"src":"295:114:7","stateMutability":"pure","superFunction":null,"visibility":"public"}],"scope":1294,"src":"59:352:7"}],"src":"0:412:7"},"legacyAST":{"absolutePath":"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol","exportedSymbols":{"RealMathTester":[1293]},"id":1294,"nodeType":"SourceUnit","nodes":[{"id":1249,"literals":["solidity","^","0.5",".11"],"nodeType":"PragmaDirective","src":"0:24:7"},{"absolutePath":"/Users/oren/daostack/infra/contracts/libs/RealMath.sol","file":"../libs/RealMath.sol","id":1250,"nodeType":"ImportDirective","scope":1294,"sourceUnit":644,"src":"26:30:7","symbolAliases":[],"unitAlias":""},{"baseContracts":[],"contractDependencies":[],"contractKind":"contract","documentation":null,"fullyImplemented":true,"id":1293,"linearizedBaseContracts":[1293],"name":"RealMathTester","nodeType":"ContractDefinition","nodes":[{"id":1253,"libraryName":{"contractScope":null,"id":1251,"name":"RealMath","nodeType":"UserDefinedTypeName","referencedDeclaration":643,"src":"95:8:7","typeDescriptions":{"typeIdentifier":"t_contract$_RealMath_$643","typeString":"library RealMath"}},"nodeType":"UsingForDirective","src":"89:27:7","typeName":{"id":1252,"name":"uint216","nodeType":"ElementaryTypeName","src":"108:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}},{"id":1256,"libraryName":{"contractScope":null,"id":1254,"name":"RealMath","nodeType":"UserDefinedTypeName","referencedDeclaration":643,"src":"127:8:7","typeDescriptions":{"typeIdentifier":"t_contract$_RealMath_$643","typeString":"library RealMath"}},"nodeType":"UsingForDirective","src":"121:27:7","typeName":{"id":1255,"name":"uint256","nodeType":"ElementaryTypeName","src":"140:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}},{"body":{"id":1276,"nodeType":"Block","src":"237:52:7","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1273,"name":"exp","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1262,"src":"278:3:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint256","typeString":"uint256"}],"expression":{"argumentTypes":null,"components":[{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1269,"name":"den","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1260,"src":"268:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint216","typeString":"uint216"}],"expression":{"argumentTypes":null,"id":1267,"name":"num","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1258,"src":"255:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"id":1268,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"fraction","nodeType":"MemberAccess","referencedDeclaration":589,"src":"255:12:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$","typeString":"function (uint216,uint216) pure returns (uint256)"}},"id":1270,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"255:17:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"id":1271,"isConstant":false,"isInlineArray":false,"isLValue":false,"isPure":false,"lValueRequested":false,"nodeType":"TupleExpression","src":"254:19:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"id":1272,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"pow","nodeType":"MemberAccess","referencedDeclaration":566,"src":"254:23:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$","typeString":"function (uint256,uint256) pure returns (uint256)"}},"id":1274,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"254:28:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"functionReturnParameters":1266,"id":1275,"nodeType":"Return","src":"247:35:7"}]},"documentation":null,"id":1277,"implemented":true,"kind":"function","modifiers":[],"name":"power","nodeType":"FunctionDefinition","parameters":{"id":1263,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1258,"name":"num","nodeType":"VariableDeclaration","scope":1277,"src":"169:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1257,"name":"uint216","nodeType":"ElementaryTypeName","src":"169:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1260,"name":"den","nodeType":"VariableDeclaration","scope":1277,"src":"182:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1259,"name":"uint216","nodeType":"ElementaryTypeName","src":"182:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1262,"name":"exp","nodeType":"VariableDeclaration","scope":1277,"src":"195:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1261,"name":"uint256","nodeType":"ElementaryTypeName","src":"195:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"168:39:7"},"returnParameters":{"id":1266,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1265,"name":"","nodeType":"VariableDeclaration","scope":1277,"src":"228:7:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1264,"name":"uint256","nodeType":"ElementaryTypeName","src":"228:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"227:9:7"},"scope":1293,"src":"154:135:7","stateMutability":"pure","superFunction":null,"visibility":"public"},{"body":{"id":1291,"nodeType":"Block","src":"368:41:7","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":1288,"name":"den","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1281,"src":"398:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_uint216","typeString":"uint216"}],"expression":{"argumentTypes":null,"id":1286,"name":"num","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":1279,"src":"385:3:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"id":1287,"isConstant":false,"isLValue":false,"isPure":false,"lValueRequested":false,"memberName":"fraction","nodeType":"MemberAccess","referencedDeclaration":589,"src":"385:12:7","typeDescriptions":{"typeIdentifier":"t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$","typeString":"function (uint216,uint216) pure returns (uint256)"}},"id":1289,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"385:17:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"functionReturnParameters":1285,"id":1290,"nodeType":"Return","src":"378:24:7"}]},"documentation":null,"id":1292,"implemented":true,"kind":"function","modifiers":[],"name":"fraction","nodeType":"FunctionDefinition","parameters":{"id":1282,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1279,"name":"num","nodeType":"VariableDeclaration","scope":1292,"src":"313:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1278,"name":"uint216","nodeType":"ElementaryTypeName","src":"313:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"},{"constant":false,"id":1281,"name":"den","nodeType":"VariableDeclaration","scope":1292,"src":"326:11:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"},"typeName":{"id":1280,"name":"uint216","nodeType":"ElementaryTypeName","src":"326:7:7","typeDescriptions":{"typeIdentifier":"t_uint216","typeString":"uint216"}},"value":null,"visibility":"internal"}],"src":"312:26:7"},"returnParameters":{"id":1285,"nodeType":"ParameterList","parameters":[{"constant":false,"id":1284,"name":"","nodeType":"VariableDeclaration","scope":1292,"src":"359:7:7","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":1283,"name":"uint256","nodeType":"ElementaryTypeName","src":"359:7:7","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"358:9:7"},"scope":1293,"src":"295:114:7","stateMutability":"pure","superFunction":null,"visibility":"public"}],"scope":1294,"src":"59:352:7"}],"src":"0:412:7"},"compiler":{"name":"solc","version":"0.5.11+commit.c082d0b4.Emscripten.clang"},"networks":{},"schemaVersion":"3.0.14","updatedAt":"2019-10-22T12:36:36.338Z","devdoc":{"methods":{}},"userdoc":{"methods":{}}}
+{
+  "contractName": "RealMathTester",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "uint216", "name": "num", "type": "uint216" },
+        { "internalType": "uint216", "name": "den", "type": "uint216" },
+        { "internalType": "uint256", "name": "exp", "type": "uint256" }
+      ],
+      "name": "power",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "uint216", "name": "num", "type": "uint216" },
+        { "internalType": "uint216", "name": "den", "type": "uint216" }
+      ],
+      "name": "fraction",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.11+commit.c082d0b4\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"uint216\",\"name\":\"num\",\"type\":\"uint216\"},{\"internalType\":\"uint216\",\"name\":\"den\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"exp\",\"type\":\"uint256\"}],\"name\":\"power\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint216\",\"name\":\"num\",\"type\":\"uint216\"},{\"internalType\":\"uint216\",\"name\":\"den\",\"type\":\"uint216\"}],\"name\":\"fraction\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol\":\"RealMathTester\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/infra/contracts/libs/RealMath.sol\":{\"keccak256\":\"0x93d598d59695003ed1b7fb37e631a665151e3e79f77c650a2cf5fcdbaf010d3f\",\"urls\":[\"bzz-raw://b5baed6a9e7e6386a4fd730e9f04aa67b2c3a4349e1675df3987f9b1b4cb995c\",\"dweb:/ipfs/QmekATn7QSZ2KGV6kENUgqEVzuL1i4Y3LxWDZcY7AL72Hb\"]},\"/Users/oren/daostack/infra/contracts/test/RealMathTester.sol\":{\"keccak256\":\"0x5d6621bc8bfd477bb0048f0677ff310fcf77a06bf28cdae856623492e88c6f58\",\"urls\":[\"bzz-raw://53ae87e2e49af6d15e3eec1d9c6758091b591a13aab19e8734dd9dd35624a17a\",\"dweb:/ipfs/QmRVyyzQJbBYJytMTndDUuDJP431JcpjMeM1zciSMie8JM\"]}},\"version\":1}",
+  "sourceMap": "59:352:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;59:352:7;;;;;;;",
+  "deployedSourceMap": "59:352:7:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;59:352:7;;;;;;;;;;;;;;;;;;;;;;;;154:135;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;154:135:7;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;295:114;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;295:114:7;;;;;;;;;;:::i;154:135::-;228:7;254:28;278:3;255:17;-1:-1:-1;;;;;255:12:7;;268:3;255:17;:12;:17;:::i;:::-;254:23;:28;:23;:28;:::i;:::-;247:35;154:135;-1:-1:-1;;;;154:135:7:o;295:114::-;359:7;385:17;-1:-1:-1;;;;;385:12:7;;398:3;385:17;:12;:17;:::i;:::-;378:24;295:114;-1:-1:-1;;;295:114:7:o;1735:181:2:-;1816:7;1842:67;-1:-1:-1;;;;;1846:18:2;;;717:24;1846:29;;;;1877:20;;:31;1842:3;:67::i;821:845::-;893:7;936:8;977;717:24;1071:525;1078:17;;1071:525;;1162:12;1177:3;1162:18;1185:3;1161:27;1157:192;;;1305:29;1309:10;1321:12;1305:3;:29::i;:::-;1292:42;;1157:192;1434:1;1418:17;;;;;1453;;1449:137;;1540:31;1544:12;1558;1540:3;:31::i;:::-;1525:46;;1449:137;1071:525;;;1649:10;821:845;-1:-1:-1;;;;;821:845:2:o;2462:353::-;2545:7;2791:15;717:24;2746:33;;2791:15;2745:62;;;;;;2462:353;-1:-1:-1;;;2462:353:2:o;1996:383::-;2061:7;2261:13;;;2269:5;2261;:13;:5;2292:9;;;;;:18;2284:52;;;;;-1:-1:-1;;;2284:52:2;;;;;;;;;;;;-1:-1:-1;;;2284:52:2;;;;;;;;;;;;;;;613:2;2354:17;;1996:383;-1:-1:-1;;;1996:383:2:o",
+  "source": "pragma solidity ^0.5.11;\n\nimport \"../libs/RealMath.sol\";\n\n\ncontract RealMathTester {\n    using RealMath for uint216;\n    using RealMath for uint256;\n\n    function power(uint216 num, uint216 den, uint256 exp) public pure returns(uint256) {\n        return (num.fraction(den)).pow(exp);\n    }\n\n    function fraction(uint216 num, uint216 den) public pure returns(uint256) {\n        return num.fraction(den);\n    }\n}\n",
+  "sourcePath": "/Users/oren/daostack/infra/contracts/test/RealMathTester.sol",
+  "ast": {
+    "absolutePath": "/Users/oren/daostack/infra/contracts/test/RealMathTester.sol",
+    "exportedSymbols": { "RealMathTester": [1293] },
+    "id": 1294,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1249,
+        "literals": ["solidity", "^", "0.5", ".11"],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "absolutePath": "/Users/oren/daostack/infra/contracts/libs/RealMath.sol",
+        "file": "../libs/RealMath.sol",
+        "id": 1250,
+        "nodeType": "ImportDirective",
+        "scope": 1294,
+        "sourceUnit": 644,
+        "src": "26:30:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1293,
+        "linearizedBaseContracts": [1293],
+        "name": "RealMathTester",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 1253,
+            "libraryName": {
+              "contractScope": null,
+              "id": 1251,
+              "name": "RealMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 643,
+              "src": "95:8:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RealMath_$643",
+                "typeString": "library RealMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "89:27:7",
+            "typeName": {
+              "id": 1252,
+              "name": "uint216",
+              "nodeType": "ElementaryTypeName",
+              "src": "108:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint216",
+                "typeString": "uint216"
+              }
+            }
+          },
+          {
+            "id": 1256,
+            "libraryName": {
+              "contractScope": null,
+              "id": 1254,
+              "name": "RealMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 643,
+              "src": "127:8:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RealMath_$643",
+                "typeString": "library RealMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "121:27:7",
+            "typeName": {
+              "id": 1255,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "140:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "body": {
+              "id": 1276,
+              "nodeType": "Block",
+              "src": "237:52:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 1273,
+                        "name": "exp",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1262,
+                        "src": "278:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "components": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [
+                              {
+                                "argumentTypes": null,
+                                "id": 1269,
+                                "name": "den",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 1260,
+                                "src": "268:3:7",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 1267,
+                                "name": "num",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 1258,
+                                "src": "255:3:7",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              },
+                              "id": 1268,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "fraction",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 589,
+                              "src": "255:12:7",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$",
+                                "typeString": "function (uint216,uint216) pure returns (uint256)"
+                              }
+                            },
+                            "id": 1270,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "255:17:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "id": 1271,
+                        "isConstant": false,
+                        "isInlineArray": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "TupleExpression",
+                        "src": "254:19:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 1272,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "pow",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 566,
+                      "src": "254:23:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 1274,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "254:28:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 1266,
+                  "id": 1275,
+                  "nodeType": "Return",
+                  "src": "247:35:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1277,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "power",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1263,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1258,
+                  "name": "num",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "169:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1257,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "169:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1260,
+                  "name": "den",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "182:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1259,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "182:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1262,
+                  "name": "exp",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "195:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1261,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "195:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "168:39:7"
+            },
+            "returnParameters": {
+              "id": 1266,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1265,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "228:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1264,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "228:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "227:9:7"
+            },
+            "scope": 1293,
+            "src": "154:135:7",
+            "stateMutability": "pure",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1291,
+              "nodeType": "Block",
+              "src": "368:41:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 1288,
+                        "name": "den",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1281,
+                        "src": "398:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1286,
+                        "name": "num",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1279,
+                        "src": "385:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      },
+                      "id": 1287,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "fraction",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 589,
+                      "src": "385:12:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$",
+                        "typeString": "function (uint216,uint216) pure returns (uint256)"
+                      }
+                    },
+                    "id": 1289,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "385:17:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 1285,
+                  "id": 1290,
+                  "nodeType": "Return",
+                  "src": "378:24:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1292,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fraction",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1282,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1279,
+                  "name": "num",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "313:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1278,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "313:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1281,
+                  "name": "den",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "326:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1280,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "326:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "312:26:7"
+            },
+            "returnParameters": {
+              "id": 1285,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1284,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "359:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1283,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "358:9:7"
+            },
+            "scope": 1293,
+            "src": "295:114:7",
+            "stateMutability": "pure",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1294,
+        "src": "59:352:7"
+      }
+    ],
+    "src": "0:412:7"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/oren/daostack/infra/contracts/test/RealMathTester.sol",
+    "exportedSymbols": { "RealMathTester": [1293] },
+    "id": 1294,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1249,
+        "literals": ["solidity", "^", "0.5", ".11"],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "absolutePath": "/Users/oren/daostack/infra/contracts/libs/RealMath.sol",
+        "file": "../libs/RealMath.sol",
+        "id": 1250,
+        "nodeType": "ImportDirective",
+        "scope": 1294,
+        "sourceUnit": 644,
+        "src": "26:30:7",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1293,
+        "linearizedBaseContracts": [1293],
+        "name": "RealMathTester",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 1253,
+            "libraryName": {
+              "contractScope": null,
+              "id": 1251,
+              "name": "RealMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 643,
+              "src": "95:8:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RealMath_$643",
+                "typeString": "library RealMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "89:27:7",
+            "typeName": {
+              "id": 1252,
+              "name": "uint216",
+              "nodeType": "ElementaryTypeName",
+              "src": "108:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint216",
+                "typeString": "uint216"
+              }
+            }
+          },
+          {
+            "id": 1256,
+            "libraryName": {
+              "contractScope": null,
+              "id": 1254,
+              "name": "RealMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 643,
+              "src": "127:8:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RealMath_$643",
+                "typeString": "library RealMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "121:27:7",
+            "typeName": {
+              "id": 1255,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "140:7:7",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "body": {
+              "id": 1276,
+              "nodeType": "Block",
+              "src": "237:52:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 1273,
+                        "name": "exp",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1262,
+                        "src": "278:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "components": [
+                          {
+                            "argumentTypes": null,
+                            "arguments": [
+                              {
+                                "argumentTypes": null,
+                                "id": 1269,
+                                "name": "den",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 1260,
+                                "src": "268:3:7",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": null,
+                                "id": 1267,
+                                "name": "num",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 1258,
+                                "src": "255:3:7",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint216",
+                                  "typeString": "uint216"
+                                }
+                              },
+                              "id": 1268,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "fraction",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 589,
+                              "src": "255:12:7",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$",
+                                "typeString": "function (uint216,uint216) pure returns (uint256)"
+                              }
+                            },
+                            "id": 1270,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "255:17:7",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "id": 1271,
+                        "isConstant": false,
+                        "isInlineArray": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "TupleExpression",
+                        "src": "254:19:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 1272,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "pow",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 566,
+                      "src": "254:23:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 1274,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "254:28:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 1266,
+                  "id": 1275,
+                  "nodeType": "Return",
+                  "src": "247:35:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1277,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "power",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1263,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1258,
+                  "name": "num",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "169:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1257,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "169:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1260,
+                  "name": "den",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "182:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1259,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "182:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1262,
+                  "name": "exp",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "195:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1261,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "195:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "168:39:7"
+            },
+            "returnParameters": {
+              "id": 1266,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1265,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1277,
+                  "src": "228:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1264,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "228:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "227:9:7"
+            },
+            "scope": 1293,
+            "src": "154:135:7",
+            "stateMutability": "pure",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1291,
+              "nodeType": "Block",
+              "src": "368:41:7",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 1288,
+                        "name": "den",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1281,
+                        "src": "398:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1286,
+                        "name": "num",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1279,
+                        "src": "385:3:7",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint216",
+                          "typeString": "uint216"
+                        }
+                      },
+                      "id": 1287,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "fraction",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 589,
+                      "src": "385:12:7",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint216_$_t_uint216_$returns$_t_uint256_$bound_to$_t_uint216_$",
+                        "typeString": "function (uint216,uint216) pure returns (uint256)"
+                      }
+                    },
+                    "id": 1289,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "385:17:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 1285,
+                  "id": 1290,
+                  "nodeType": "Return",
+                  "src": "378:24:7"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 1292,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "fraction",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1282,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1279,
+                  "name": "num",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "313:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1278,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "313:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1281,
+                  "name": "den",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "326:11:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint216",
+                    "typeString": "uint216"
+                  },
+                  "typeName": {
+                    "id": 1280,
+                    "name": "uint216",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "326:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint216",
+                      "typeString": "uint216"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "312:26:7"
+            },
+            "returnParameters": {
+              "id": 1285,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1284,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1292,
+                  "src": "359:7:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1283,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "358:9:7"
+            },
+            "scope": 1293,
+            "src": "295:114:7",
+            "stateMutability": "pure",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1294,
+        "src": "59:352:7"
+      }
+    ],
+    "src": "0:412:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.14",
+  "updatedAt": "2019-10-22T12:36:36.338Z",
+  "devdoc": { "methods": {} },
+  "userdoc": { "methods": {} }
+}

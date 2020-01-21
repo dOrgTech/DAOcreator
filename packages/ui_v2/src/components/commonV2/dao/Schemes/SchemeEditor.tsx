@@ -11,6 +11,7 @@ import {
 import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
+import Toggle from "./Toggle";
 
 interface Props {
   form: any;
@@ -66,36 +67,141 @@ function SchemeEditor(props: Props) {
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
+  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
+  const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
 
   // Updates voting machines on toggle
-  useEffect(() => {
-    // Not using Scheme interface because $ does not exist on it
-    form.$.forEach((scheme: any) => {
-      // Get voting machine preset using the decisionSpeed and scheme type
-      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-      let preset;
-      if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
-      else throw Error("Unimplemented Scheme Speed Configuration");
+  const updateVotingMachine = () => {
+    form.$.map(checkDefaultChange);
+    form.$.map(getVotingMachinePreset);
+  };
+  // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
+  // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
+  const checkDefaultChange = (scheme: any) => {
+    const {
+      queuedVotePeriodLimit,
+      preBoostedVotePeriodLimit,
+      boostedVotePeriodLimit
+    } = scheme.values.votingMachine.values;
+    switch (decisionSpeed) {
+      case 0:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "30:0:0:0" ||
+              preBoostedVotePeriodLimit !== "1:0:0:0" ||
+              boostedVotePeriodLimit !== "4:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+      case 1:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+      case 2:
+        switch (scheme.displayName) {
+          case "ContributionReward":
+            if (
+              queuedVotePeriodLimit !== "30:0:0:0" ||
+              preBoostedVotePeriodLimit !== "1:0:0:0" ||
+              boostedVotePeriodLimit !== "4:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+          case "Scheme Registrar":
+            if (
+              queuedVotePeriodLimit !== "60:0:0:0" ||
+              preBoostedVotePeriodLimit !== "2:0:0:0" ||
+              boostedVotePeriodLimit !== "8:0:0:0"
+            ) {
+              // disable buttons
+              setToggleSpeed(false);
+            }
+            break;
+        }
+        break;
+    }
+  };
+  // Not using Scheme interface because $ does not exist on it
+  const getVotingMachinePreset = (scheme: any) => {
+    // Get voting machine preset using the decisionSpeed and scheme type
+    const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+    let preset;
+    if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
+    else throw Error("Unimplemented Scheme Speed Configuration");
 
-      // Initialize the scheme's voting machine to the Genesis Protocol Preset
-      const votingMachine = scheme.$.votingMachine;
-      votingMachine.preset = preset;
+    // Initialize the scheme's voting machine to the Genesis Protocol Preset
+    const votingMachine = scheme.$.votingMachine;
+    votingMachine.preset = preset;
+    if (advanceMode) {
+      const {
+        proposingRepReward,
+        votersReputationLossRatio,
+        minimumDaoBounty
+      } = votingMachine.$;
+      if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
+      else setRewardSuccess(false);
+      if (Number(votersReputationLossRatio.value) > 0)
+        setRewardAndPenVoters(true);
+      else setRewardAndPenVoters(false);
+      if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
+      else setAutobet(false);
+    }
+    // Apply the effects of the toggles
+    // if(!distribution) // TODO: distribution does not currently affect the voting machine
+    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
+    if (!rewardAndPenVoters)
+      votingMachine.$.votersReputationLossRatio.value = "0";
+    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+  };
 
-      // Apply the effects of the toggles
-      // if(!distribution) // TODO: distribution does not currently affect the voting machine
-      if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-      if (!rewardAndPenVoters)
-        votingMachine.$.votersReputationLossRatio.value = "0";
-      if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-    });
-  }, [
+  const dependeciesList = [
     form.$,
     decisionSpeed,
     distribution,
     rewardSuccess,
     rewardAndPenVoters,
-    autobet
-  ]);
+    autobet,
+    advanceMode
+  ];
+  // Updates voting machines on toggle
+  useEffect(updateVotingMachine, dependeciesList);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
@@ -111,6 +217,7 @@ function SchemeEditor(props: Props) {
               form={form}
               setModal={setModal}
               modal={modal}
+              setAdvanceMode={setAdvanceMode}
             />
           </MDBCol>
         </MDBRow>
@@ -161,6 +268,7 @@ function SchemeEditor(props: Props) {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Fast
               </button>
@@ -173,6 +281,7 @@ function SchemeEditor(props: Props) {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Medium
               </button>
@@ -185,6 +294,7 @@ function SchemeEditor(props: Props) {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
+                disabled={advanceMode && !toggleSpeed}
               >
                 Slow
               </button>
@@ -192,86 +302,53 @@ function SchemeEditor(props: Props) {
           </MDBCol>
         </MDBRow>
 
-        <Toggleable
+        <Toggle
           id={"distribution"}
           text={"Distribute Dxdao token"}
           example={"Some example"}
           toggle={() => {
             setDistribution(!distribution);
           }}
+          disabled={advanceMode}
+          checked={distribution}
         />
 
-        <Toggleable
+        <Toggle
           id={"rewardSuccess"}
           text={"Reward successful proposer"}
           example={"Some example"}
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
+          disabled={advanceMode}
+          checked={rewardSuccess}
         />
 
-        <Toggleable
+        <Toggle
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
           example={"Some example"}
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
+          disabled={advanceMode}
+          checked={rewardAndPenVoters}
         />
 
-        <Toggleable
+        <Toggle
           id={"autobet"}
           text={"Auto-bet against every proposal to incentivise curation"}
           example={"Some example"}
           toggle={() => setAutobet(!autobet)}
+          disabled={advanceMode}
+          checked={autobet}
         />
       </MDBContainer>
 
-      <button
-        // color="blue darken-4"
-        onClick={() => toggleCollapse()}
-        style={styles.configButton}
-      >
+      <button onClick={() => toggleCollapse()} style={styles.configButton}>
         Set Configuration
       </button>
     </>
-  );
-}
-
-interface ToggleProps {
-  id: string;
-  text: string;
-  example: string;
-  toggle: () => void;
-}
-
-function Toggleable({ id, text, example, toggle }: ToggleProps) {
-  return (
-    <MDBRow style={styles.paddingRow}>
-      <MDBCol size="11" style={styles.noPadding}>
-        <span style={styles.marginText} className="text-left">
-          {text}
-        </span>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{example}</span>
-        </MDBTooltip>
-      </MDBCol>
-      <MDBCol style={styles.noPadding}>
-        <div className="custom-control custom-switch">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id={id}
-            onChange={() => toggle()}
-          />
-          <label className="custom-control-label" htmlFor={id}></label>
-        </div>
-      </MDBCol>
-    </MDBRow>
   );
 }
 
@@ -329,13 +406,6 @@ const styles = {
   },
   alignEnd: {
     flexDirection: "row-reverse"
-  },
-  paddingRow: {
-    paddingLeft: "10px",
-    paddingTop: "6px"
-  },
-  noPadding: {
-    padding: 0
   },
   configButton: {
     borderRadius: "0.37rem",

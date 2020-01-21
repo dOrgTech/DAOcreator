@@ -42,7 +42,7 @@ interface DAO_CREATOR_INTERFACE {
 
 interface Step {
   title: string;
-  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   callbacks?: Object;
 }

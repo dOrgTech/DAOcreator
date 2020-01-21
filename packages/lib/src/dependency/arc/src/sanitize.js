@@ -1,54 +1,57 @@
-const Web3Utils = require('web3-utils')
-const Validator = require('jsonschema').Validator
-const validator = new Validator()
+const Web3Utils = require("web3-utils");
+const Validator = require("jsonschema").Validator;
+const validator = new Validator();
 
 const requiredNumber = {
-  type: 'number',
+  type: "number",
   required: true
-}
+};
 
 const requiredString = {
-  type: 'string',
+  type: "string",
   required: true
-}
+};
 
-Validator.prototype.customFormats.address = function (input) {
-  const addr = input.toLowerCase()
-  return addr[0] === '0' && addr[1] === 'x' && Web3Utils.isAddress(addr)
-}
+Validator.prototype.customFormats.address = function(input) {
+  const addr = input.toLowerCase();
+  return addr[0] === "0" && addr[1] === "x" && Web3Utils.isAddress(addr);
+};
 
 const optionalAddress = {
   anyOf: [
     {
-      type: 'string'
+      type: "string"
     },
     {
-      type: 'object',
+      type: "object",
       minLength: 4
     }
   ]
-
-}
+};
 
 const requiredAddress = {
   ...optionalAddress,
   required: true
-}
+};
 
-Validator.prototype.customFormats.permission = function (input) {
-  return input[0] === '0' && input[1] === 'x' &&
-         input.length === 10 && Web3Utils.isHex(input)
-}
+Validator.prototype.customFormats.permission = function(input) {
+  return (
+    input[0] === "0" &&
+    input[1] === "x" &&
+    input.length === 10 &&
+    Web3Utils.isHex(input)
+  );
+};
 
 const requiredPermission = {
-  type: 'string',
-  format: 'permission',
+  type: "string",
+  format: "permission",
   required: true
-}
+};
 
 const genesisProtocol = {
-  id: 'GenesisProtocol',
-  type: 'object',
+  id: "GenesisProtocol",
+  type: "object",
   properties: {
     boostedVotePeriodLimit: requiredNumber,
     daoBountyConst: requiredNumber,
@@ -63,132 +66,132 @@ const genesisProtocol = {
     votersReputationLossRatio: requiredNumber,
     activationTime: requiredNumber
   }
-}
-validator.addSchema(genesisProtocol)
+};
+validator.addSchema(genesisProtocol);
 
 const votingMachineParams = {
-  id: 'VotingMachineParams',
-  type: 'array',
+  id: "VotingMachineParams",
+  type: "array",
   items: {
-    $ref: 'GenesisProtocol',
+    $ref: "GenesisProtocol",
     minItems: 1
   }
-}
-validator.addSchema(votingMachineParams)
+};
+validator.addSchema(votingMachineParams);
 
 const schemes = {
-  id: 'SchemeToggles',
-  type: 'object',
+  id: "SchemeToggles",
+  type: "object",
   properties: {
-    ContributionReward: { type: 'boolean' },
-    UGenericScheme: { type: 'boolean' },
-    SchemeRegistrar: { type: 'boolean' },
-    GlobalConstraintRegistrar: { type: 'boolean' },
-    UpgradeScheme: { type: 'boolean' }
+    ContributionReward: { type: "boolean" },
+    UGenericScheme: { type: "boolean" },
+    SchemeRegistrar: { type: "boolean" },
+    GlobalConstraintRegistrar: { type: "boolean" },
+    UpgradeScheme: { type: "boolean" }
   }
-}
-validator.addSchema(schemes)
+};
+validator.addSchema(schemes);
 
 const contributionReward = {
-  id: 'ContributionReward',
-  type: 'object',
+  id: "ContributionReward",
+  type: "object",
   properties: {
-    voteParams: { type: 'number' },
+    voteParams: { type: "number" },
     votingMachine: optionalAddress
   }
-}
-validator.addSchema(contributionReward)
+};
+validator.addSchema(contributionReward);
 
 const contributionRewards = {
-  id: 'ContributionRewards',
-  type: 'array',
+  id: "ContributionRewards",
+  type: "array",
   items: {
-    $ref: 'ContributionReward'
+    $ref: "ContributionReward"
   }
-}
-validator.addSchema(contributionRewards)
+};
+validator.addSchema(contributionRewards);
 
 const uGenericScheme = {
-  id: 'UGenericScheme',
-  type: 'object',
+  id: "UGenericScheme",
+  type: "object",
   properties: {
-    voteParams: { type: 'number' },
+    voteParams: { type: "number" },
     votingMachine: optionalAddress,
     targetContract: requiredAddress
   }
-}
-validator.addSchema(uGenericScheme)
+};
+validator.addSchema(uGenericScheme);
 
 const uGenericSchemes = {
-  id: 'UGenericSchemes',
-  type: 'array',
+  id: "UGenericSchemes",
+  type: "array",
   items: {
-    $ref: 'UGenericScheme'
+    $ref: "UGenericScheme"
   }
-}
-validator.addSchema(uGenericSchemes)
+};
+validator.addSchema(uGenericSchemes);
 
 const schemeRegistrar = {
-  id: 'SchemeRegistrar',
-  type: 'object',
+  id: "SchemeRegistrar",
+  type: "object",
   properties: {
-    voteRegisterParams: { type: 'number' },
-    voteRemoveParams: { type: 'number' },
+    voteRegisterParams: { type: "number" },
+    voteRemoveParams: { type: "number" },
     votingMachine: optionalAddress
   }
-}
-validator.addSchema(schemeRegistrar)
+};
+validator.addSchema(schemeRegistrar);
 
 const schemeRegistrars = {
-  id: 'SchemeRegistrars',
-  type: 'array',
+  id: "SchemeRegistrars",
+  type: "array",
   items: {
-    $ref: 'SchemeRegistrar'
+    $ref: "SchemeRegistrar"
   }
-}
-validator.addSchema(schemeRegistrars)
+};
+validator.addSchema(schemeRegistrars);
 
 const globalConstraintRegistrar = {
-  id: 'GlobalConstraintRegistrar',
-  type: 'object',
+  id: "GlobalConstraintRegistrar",
+  type: "object",
   properties: {
-    voteParams: { type: 'number' },
+    voteParams: { type: "number" },
     votingMachine: optionalAddress
   }
-}
-validator.addSchema(globalConstraintRegistrar)
+};
+validator.addSchema(globalConstraintRegistrar);
 
 const globalConstraintRegistrars = {
-  id: 'GlobalConstraintRegistrars',
-  type: 'array',
+  id: "GlobalConstraintRegistrars",
+  type: "array",
   items: {
-    $ref: 'GlobalConstraintRegistrar'
+    $ref: "GlobalConstraintRegistrar"
   }
-}
-validator.addSchema(globalConstraintRegistrars)
+};
+validator.addSchema(globalConstraintRegistrars);
 
 const upgradeScheme = {
-  id: 'UpgradeScheme',
-  type: 'object',
+  id: "UpgradeScheme",
+  type: "object",
   properties: {
-    voteParams: { type: 'number' },
+    voteParams: { type: "number" },
     votingMachine: optionalAddress
   }
-}
-validator.addSchema(upgradeScheme)
+};
+validator.addSchema(upgradeScheme);
 
 const upgradeSchemes = {
-  id: 'UpgradeSchemes',
-  type: 'array',
+  id: "UpgradeSchemes",
+  type: "array",
   items: {
-    $ref: 'UpgradeScheme'
+    $ref: "UpgradeScheme"
   }
-}
-validator.addSchema(upgradeSchemes)
+};
+validator.addSchema(upgradeSchemes);
 
 const customScheme = {
-  id: 'CustomScheme',
-  type: 'object',
+  id: "CustomScheme",
+  type: "object",
   properties: {
     // TODO: verify this contract exists in either
     // 1. @daostack/arc/build/contracts/${name}.json
@@ -196,90 +199,92 @@ const customScheme = {
     name: requiredString,
     alias: requiredString,
     address: optionalAddress,
-    fromArc: { type: 'boolean' },
-    isUniversal: { type: 'boolean' },
+    fromArc: { type: "boolean" },
+    isUniversal: { type: "boolean" },
     permissions: requiredPermission,
     // TODO: verify params array entries
-    params: { type: 'array' }
+    params: { type: "array" }
   }
-}
-validator.addSchema(customScheme)
+};
+validator.addSchema(customScheme);
 
 const customSchemes = {
-  id: 'CustomSchemes',
-  type: 'array',
+  id: "CustomSchemes",
+  type: "array",
   items: {
-    $ref: 'CustomScheme'
+    $ref: "CustomScheme"
   }
-}
-validator.addSchema(customSchemes)
+};
+validator.addSchema(customSchemes);
 
 const member = {
-  id: 'Member',
-  type: 'object',
+  id: "Member",
+  type: "object",
   properties: {
     address: requiredAddress,
-    tokens: { type: 'number' },
+    tokens: { type: "number" },
     reputation: requiredNumber
   }
-}
-validator.addSchema(member)
+};
+validator.addSchema(member);
 
 const founders = {
-  id: 'Founders',
-  type: 'array',
+  id: "Founders",
+  type: "array",
   items: {
-    $ref: 'Member',
+    $ref: "Member",
     minItems: 1
   }
-}
-validator.addSchema(founders)
+};
+validator.addSchema(founders);
 
 const paramsSchema = {
-  id: 'Params',
-  type: 'object',
+  id: "Params",
+  type: "object",
   properties: {
-    orgName: { type: 'string' },
-    tokenName: { type: 'string' },
-    tokenSymbol: { type: 'string' },
+    orgName: { type: "string" },
+    tokenName: { type: "string" },
+    tokenSymbol: { type: "string" },
     VotingMachineParams: {
-      $ref: 'VotingMachineParams',
+      $ref: "VotingMachineParams",
       required: true
     },
     schemes: {
-      $ref: 'SchemeToggles',
+      $ref: "SchemeToggles",
       require: true
     },
-    ContributionReward: { $ref: 'ContributionRewards' },
-    UGenericScheme: { $ref: 'UGenericSchemes' },
-    SchemeRegistrar: { $ref: 'SchemeRegistrars' },
-    GlobalConstraintRegistrar: { $ref: 'GlobalConstraintRegistrars' },
-    UpgradeScheme: { $ref: 'UpgradeSchemes' },
-    CustomSchemes: { $ref: 'CustomSchemes' },
-    unregisterOwner: { type: 'boolean' },
-    useUController: { type: 'boolean' },
-    useDaoCreator: { type: 'boolean' },
+    ContributionReward: { $ref: "ContributionRewards" },
+    UGenericScheme: { $ref: "UGenericSchemes" },
+    SchemeRegistrar: { $ref: "SchemeRegistrars" },
+    GlobalConstraintRegistrar: { $ref: "GlobalConstraintRegistrars" },
+    UpgradeScheme: { $ref: "UpgradeSchemes" },
+    CustomSchemes: { $ref: "CustomSchemes" },
+    unregisterOwner: { type: "boolean" },
+    useUController: { type: "boolean" },
+    useDaoCreator: { type: "boolean" },
     founders: {
-      $ref: 'Founders',
+      $ref: "Founders",
       required: true
     },
     // network overrides
-    mainnet: { type: 'object' },
-    rinkeby: { type: 'object' },
-    private: { type: 'object' },
-    ropsten: { type: 'object' },
-    kovan: { type: 'object' }
+    mainnet: { type: "object" },
+    rinkeby: { type: "object" },
+    private: { type: "object" },
+    ropsten: { type: "object" },
+    kovan: { type: "object" }
   }
-}
+};
 
-function sanitizeParams (paramsJsonObj) {
-  const result = validator.validate(paramsJsonObj, paramsSchema)
+function sanitizeParams(paramsJsonObj) {
+  const result = validator.validate(paramsJsonObj, paramsSchema);
 
   if (!result.valid) {
     throw Error(
-      `Params Malformed, Errors:\n${result.errors.map(error => error.toString())}`
-    )
+      `Params Malformed, Errors:\n${result.errors.map(error =>
+        error.toString()
+      )}`
+    );
   }
 }
 
-module.exports = sanitizeParams
+module.exports = sanitizeParams;

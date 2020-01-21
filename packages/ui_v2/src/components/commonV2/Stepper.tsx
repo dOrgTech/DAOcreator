@@ -7,7 +7,7 @@ import {
 } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 interface Props {
-  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   title: string;
   callbacks: any | undefined;
@@ -18,6 +18,11 @@ interface Props {
 
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
+
+  const openAdvanceConfigModal = () => {
+    props.callbacks.setModal(true);
+  };
+
   return (
     <li className={step === index || step > index ? "completed" : ""}>
       <MDBRow
@@ -51,10 +56,7 @@ export default function Stepper(props: Props) {
         )}
         <div>
           {step === 1 && index === 1 ? (
-            <button
-              style={styles.button}
-              onClick={() => props.callbacks.setModal(true)}
-            >
+            <button style={styles.button} onClick={openAdvanceConfigModal}>
               Advance Configuration
             </button>
           ) : (

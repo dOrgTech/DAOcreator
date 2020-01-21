@@ -129,25 +129,41 @@ const DurationFieldView = observer(
       const { name, value } = event.target;
       const duration: any = {
         days: field.days,
-        hours: field.hours
+        hours: field.hours,
+        minutes: field.minutes
       };
-      duration[name] = Number(value);
-      field.onChange(`${duration.days}:${duration.hours}:00`);
+
+      if (name === "days") {
+        duration["days"] = +value;
+      } else {
+        let [hours, minutes] = value.split(":");
+        duration.hours = isNaN(hours) ? 0 : +hours;
+        duration.minutes = isNaN(minutes) ? 0 : +minutes;
+      }
+      field.onChange(
+        `${duration.days}:${duration.hours}:${duration.minutes}:00`
+      );
     };
 
-    const DurationPart = observer((props: { name: "days" | "hours" }) => (
-      <>
-        <input
-          name={props.name}
-          style={styles.inputDuration}
-          placeholder={field[props.name].toString() + " " + props.name}
-          value={Number(field[props.name]).toString()}
-          disabled={editable === undefined ? false : !editable}
-          onChange={onChange}
-          onBlur={field.enableAutoValidationAndValidate}
-        />
-      </>
-    ));
+    const DurationPart = observer(
+      (props: { name: "days" | "hoursAndMinutes" }) => (
+        <>
+          <input
+            name={props.name}
+            style={
+              props.name === "days" ? styles.dayDuration : styles.hourDuration
+            }
+            value={field[props.name]}
+            disabled={editable === undefined ? false : !editable}
+            onChange={onChange}
+            type={props.name === "days" ? "number" : "time"}
+            min={0}
+            max={100}
+            onBlur={field.enableAutoValidationAndValidate}
+          />
+        </>
+      )
+    );
 
     return (
       <>
@@ -174,7 +190,7 @@ const DurationFieldView = observer(
           <MDBCol>
             <MDBRow>
               <DurationPart name={"days"} />
-              <DurationPart name={"hours"} />
+              <DurationPart name={"hoursAndMinutes"} />
 
               {FieldError(field)}
             </MDBRow>
@@ -354,11 +370,18 @@ const styles = {
     paddingTop: "14px",
     paddingBottom: "10px"
   },
-  inputDuration: {
+  dayDuration: {
     paddingTop: "5px",
     paddingBottom: "5px",
     height: "2em",
     width: "5.9em"
+  },
+  hourDuration: {
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    height: "2em",
+    width: "5.9em",
+    marginLeft: "-3px"
   },
   margin: {
     marginTop: "6px"

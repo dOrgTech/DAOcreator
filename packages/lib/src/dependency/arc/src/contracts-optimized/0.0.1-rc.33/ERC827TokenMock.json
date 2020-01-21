@@ -1,1 +1,754 @@
-{"contractName":"ERC827TokenMock","abi":[{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"transferAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_addedValue","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"increaseApprovalAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"transferFromAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"approveAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_subtractedValue","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"decreaseApprovalAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"initialAccount","type":"address"},{"internalType":"uint256","name":"initialBalance","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"}],"metadata":"{\"compiler\":{\"version\":\"0.5.11+commit.c082d0b4\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"addedValue\",\"type\":\"uint256\"}],\"name\":\"increaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"transferAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_addedValue\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"increaseApprovalAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"subtractedValue\",\"type\":\"uint256\"}],\"name\":\"decreaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"transferFromAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_subtractedValue\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"decreaseApprovalAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialAccount\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"initialBalance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"allowance(address,address)\":{\"details\":\"See `IERC20.allowance`.\"},\"approve(address,uint256)\":{\"details\":\"See `IERC20.approve`.     * Requirements:     * - `spender` cannot be the zero address.\"},\"approveAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. It allows to approve the transfer of value and execute a call with the sent data. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address that will spend the funds.\",\"_value\":\"The amount of tokens to be spent.\"},\"return\":\"true if the call function was executed successfully\"},\"balanceOf(address)\":{\"details\":\"See `IERC20.balanceOf`.\"},\"decreaseAllowance(address,uint256)\":{\"details\":\"Atomically decreases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address. - `spender` must have allowance for the caller of at least `subtractedValue`.\"},\"decreaseApprovalAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 methods. Decrease the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To decrement allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address which will spend the funds.\",\"_subtractedValue\":\"The amount of tokens to decrease the allowance by.\"}},\"increaseAllowance(address,uint256)\":{\"details\":\"Atomically increases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address.\"},\"increaseApprovalAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 methods. Increase the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To increment allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol\",\"params\":{\"_addedValue\":\"The amount of tokens to increase the allowance by.\",\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address which will spend the funds.\"}},\"totalSupply()\":{\"details\":\"See `IERC20.totalSupply`.\"},\"transfer(address,uint256)\":{\"details\":\"See `IERC20.transfer`.     * Requirements:     * - `recipient` cannot be the zero address. - the caller must have a balance of at least `amount`.\"},\"transferAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. Transfer tokens to a specified address and execute a call with the sent data on the same transaction\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_to` address.\",\"_to\":\"address The address which you want to transfer to\",\"_value\":\"uint256 the amout of tokens to be transfered\"},\"return\":\"true if the call function was executed successfully\"},\"transferFrom(address,address,uint256)\":{\"details\":\"See `IERC20.transferFrom`.     * Emits an `Approval` event indicating the updated allowance. This is not required by the EIP. See the note at the beginning of `ERC20`;     * Requirements: - `sender` and `recipient` cannot be the zero address. - `sender` must have a balance of at least `value`. - the caller must have allowance for `sender`'s tokens of at least `amount`.\"},\"transferFromAndCall(address,address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. Transfer tokens from one address to another and make a contract call on the same transaction\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_to` address.\",\"_from\":\"The address which you want to send tokens from\",\"_to\":\"The address which you want to transfer to\",\"_value\":\"The amout of tokens to be transferred\"},\"return\":\"true if the call function was executed successfully\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol\":\"ERC827TokenMock\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol\":{\"keccak256\":\"0x3eee306d24706cf0d5459bf5fd91d817b7e90e13c1551f30a2c7de11005f93bf\",\"urls\":[\"bzz-raw://ec24445c22c4e6f67a45fe95839e8f25482815c7a5b91a53b56326bb49440914\",\"dweb:/ipfs/QmTMhPFg1sfHUVL1VigZbu2ECL83Af98RxT6mP1NFE35X3\"]},\"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827.sol\":{\"keccak256\":\"0xec04362262d415f92c1d35e88c3d2baf5a5b0b09c7acc8c166fc4ca2dc26367e\",\"urls\":[\"bzz-raw://d37c465accfa410a48e0d5fb2b8e662dabae92b1b91d2d75c1dea6930496cbc1\",\"dweb:/ipfs/QmeHxdtvAvU27SJ3TpS5RkfdVgxdZmaVGS3AvHFpGu2mgA\"]},\"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol\":{\"keccak256\":\"0xe5688e3caf9ea613ad2d243378ba76a716479c0ee45b1b9c30fa0385e74046f3\",\"urls\":[\"bzz-raw://6394a94cba08292b21435ff3184fcaee681ea86baa6beb62fd3df8b1b6915908\",\"dweb:/ipfs/QmPWjaBQupJX2vZJQtCzKZW4J5FjLMUiiq7EcwtuW8K93c\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x4ccf2d7b51873db1ccfd54ca2adae5eac3b184f9699911ed4490438419f1c690\",\"urls\":[\"bzz-raw://d62d769b2219d5de39013093412623e624fa887f871826ea3bae6052ee893610\",\"dweb:/ipfs/QmV3yVktya1s617QmuzQR2CfuJgUi3dR2xEZY9ecmqZ2G1\"]},\"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x852793a3c2f86d336a683b30d688ec3dcfc57451af5a2bf5975cda3b7191a901\",\"urls\":[\"bzz-raw://4f5b57664069671648fb81f55b0082faecdf1b2f159eec6b1fa6cef9b7d73bc5\",\"dweb:/ipfs/QmcyytaLs7zFdb4Uu7C5PmQRhQdB3wA3fUdkV6mkYfdDFH\"]},\"openzeppelin-solidity/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x90e8c2521653bbb1768b05889c5760031e688d9cd361f167489b89215e201b95\",\"urls\":[\"bzz-raw://d0abb99bb8bfc2bc0a89902b8ed1dc0442ad08cc78cee64c291b3df6a27bcccc\",\"dweb:/ipfs/QmP5NaEwZthQeM2ESz4WTT3osrP7jhbvu7ocbttBi2JAw6\"]}},\"version\":1}","sourceMap":"102:171:5:-;;;149:121;8:9:-1;5:2;;;30:1;27;20:12;5:2;149:121:5;;;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;149:121:5;;;;;;;226:37;149:121;;-1:-1:-1;;;;;226:5:5;:37;:::i;:::-;149:121;;102:171;;5771:302:21;-1:-1:-1;;;;;5846:21:21;;5838:65;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5929:24;5946:6;5929:12;;:16;;;;;;:24;;;;:::i;:::-;5914:12;:39;-1:-1:-1;;;;;5984:18:21;;:9;:18;;;;;;;;;;;;:30;;6007:6;;5984:22;;;;;:30;;:::i;:::-;-1:-1:-1;;;;;5963:18:21;;:9;:18;;;;;;;;;;;:51;;;;6029:37;;;;;;;5963:18;;:9;;6029:37;;;;;;;;;;5771:302;;:::o;834:176:19:-;892:7;923:5;;;946:6;;;;938:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1002:1;834:176;-1:-1:-1;;;834:176:19:o;102:171:5:-;;;;;;;","deployedSourceMap":"102:171:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2453:145:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2453:145:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2453:145:21;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;1514:89;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1514:89:21;;;:::i;:::-;;;;;;;;;;;;;;;;3055:252;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3055:252:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;3055:252:21;;;;;;;;;;;;;;;;;:::i;3702:203::-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3702:203:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;3702:203:21;;;;;;;;:::i;2050:396:9:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;2050:396:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;2050:396:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;2050:396:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;2050:396:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;2050:396:9;;-1:-1:-1;2050:396:9;;-1:-1:-1;;;;;2050:396:9:i;1661:108:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1661:108:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1661:108:21;-1:-1:-1;;;;;1661:108:21;;:::i;3941:444:9:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;3941:444:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;3941:444:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;3941:444:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;3941:444:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;3941:444:9;;-1:-1:-1;3941:444:9;;-1:-1:-1;;;;;3941:444:9:i;4392:213:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4392:213:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;4392:213:21;;;;;;;;:::i;1972:153::-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1972:153:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;1972:153:21;;;;;;;;:::i;2918:426:9:-;;;;;;13:3:-1;8;5:12;2:2;;;30:1;27;20:12;2:2;-1:-1;;;;;2918:426:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;2918:426:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;2918:426:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;2918:426:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;2918:426:9;;-1:-1:-1;2918:426:9;;-1:-1:-1;;;;;2918:426:9:i;1205:415::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;1205:415:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;1205:415:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;1205:415:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;1205:415:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;1205:415:9;;-1:-1:-1;1205:415:9;;-1:-1:-1;;;;;1205:415:9:i;4987:454::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;4987:454:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;4987:454:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4987:454:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4987:454:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;4987:454:9;;-1:-1:-1;4987:454:9;;-1:-1:-1;;;;;4987:454:9:i;2183:132:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2183:132:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2183:132:21;;;;;;;;;;:::i;2453:145::-;2518:4;2534:36;2543:10;2555:7;2564:5;2534:8;:36::i;:::-;-1:-1:-1;2587:4:21;2453:145;;;;:::o;1514:89::-;1584:12;;1514:89;:::o;3055:252::-;3144:4;3160:36;3170:6;3178:9;3189:6;3160:9;:36::i;:::-;-1:-1:-1;;;;;3235:19:21;;;;;;:11;:19;;;;;;;;3223:10;3235:31;;;;;;;;;3206:73;;3215:6;;3235:43;;3271:6;3235:43;:35;:43;:::i;:::-;3206:8;:73::i;:::-;-1:-1:-1;3296:4:21;3055:252;;;;;:::o;3702:203::-;3807:10;3782:4;3828:23;;;:11;:23;;;;;;;;-1:-1:-1;;;;;3828:32:21;;;;;;;;;;3782:4;;3798:79;;3819:7;;3828:48;;3865:10;3828:48;:36;:48;:::i;2050:396:9:-;2190:4;-1:-1:-1;;;;;2218:20:9;;2233:4;2218:20;;2210:29;;;;;;2250:27;2265:3;2270:6;2250:14;:27::i;:::-;;2343:12;2360:3;-1:-1:-1;;;;;2360:8:9;2375:9;2386:5;2360:32;;;;;;;;;;;;;36:153:-1;66:2;61:3;58:11;36:153;;176:10;;164:23;;-1:-1;;139:12;;;;98:2;89:12;;;;114;36:153;;;274:1;267:3;263:2;259:12;254:3;250:22;246:30;315:4;311:9;305:3;299:10;295:26;356:4;350:3;344:10;340:21;389:7;380;377:20;372:3;365:33;3:399;;;2360:32:9;;;;;;;;;;;;;;;;;;;;;;;;;14:1:-1;21;16:31;;;;75:4;69:11;64:16;;144:4;140:9;133:4;115:16;111:27;107:43;104:1;100:51;94:4;87:65;169:16;166:1;159:27;225:16;222:1;215:4;212:1;208:12;193:49;7:242;;16:31;36:4;31:9;;7:242;;2342:50:9;;;2410:7;2402:16;;;;;;-1:-1:-1;2435:4:9;;2050:396;-1:-1:-1;;;;2050:396:9:o;1661:108:21:-;-1:-1:-1;;;;;1744:18:21;1718:7;1744:18;;;;;;;;;;;;1661:108::o;3941:444:9:-;4099:4;-1:-1:-1;;;;;4127:25:9;;4147:4;4127:25;;4119:34;;;;;;4164:46;4188:8;4198:11;4164:23;:46::i;4392:213:21:-;4502:10;4477:4;4523:23;;;:11;:23;;;;;;;;-1:-1:-1;;;;;4523:32:21;;;;;;;;;;4477:4;;4493:84;;4514:7;;4523:53;;4560:15;4523:53;:36;:53;:::i;1972:153::-;2041:4;2057:40;2067:10;2079:9;2090:6;2057:9;:40::i;2918:426:9:-;3077:4;-1:-1:-1;;;;;3105:20:9;;3120:4;3105:20;;3097:29;;;;;;3137:38;3156:5;3163:3;3168:6;3137:18;:38::i;:::-;;3241:12;3258:3;-1:-1:-1;;;;;3258:8:9;3273:9;3284:5;3258:32;;;;;;;;;;;;;36:153:-1;66:2;61:3;58:11;36:153;;176:10;;164:23;;-1:-1;;139:12;;;;98:2;89:12;;;;114;36:153;;;274:1;267:3;263:2;259:12;254:3;250:22;246:30;315:4;311:9;305:3;299:10;295:26;356:4;350:3;344:10;340:21;389:7;380;377:20;372:3;365:33;3:399;;;3258:32:9;;;;;;;;;;;;;;;;;;;;;;;;;14:1:-1;21;16:31;;;;75:4;69:11;64:16;;144:4;140:9;133:4;115:16;111:27;107:43;104:1;100:51;94:4;87:65;169:16;166:1;159:27;225:16;222:1;215:4;212:1;208:12;193:49;7:242;;16:31;36:4;31:9;;7:242;;3240:50:9;;;3308:7;3300:16;;;;;;-1:-1:-1;3333:4:9;;2918:426;-1:-1:-1;;;;;2918:426:9:o;1205:415::-;1349:4;-1:-1:-1;;;;;1377:25:9;;1397:4;1377:25;;1369:34;;;;;;1414:31;1428:8;1438:6;1414:13;:31::i;4987:454::-;5150:4;-1:-1:-1;;;;;5178:25:9;;5198:4;5178:25;;5170:34;;;;;;5215:51;5239:8;5249:16;5215:23;:51::i;2183:132:21:-;-1:-1:-1;;;;;2281:18:21;;;2255:7;2281:18;;;:11;:18;;;;;;;;:27;;;;;;;;;;;;;2183:132::o;7117:329::-;-1:-1:-1;;;;;7209:19:21;;7201:68;;;;-1:-1:-1;;;7201:68:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;7287:21:21;;7279:68;;;;-1:-1:-1;;;7279:68:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;7358:18:21;;;;;;;:11;:18;;;;;;;;:27;;;;;;;;;;;;;:35;;;7408:31;;;;;;;;;;;;;;;;;7117:329;;;:::o;5079:422::-;-1:-1:-1;;;;;5176:20:21;;5168:70;;;;-1:-1:-1;;;5168:70:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;5256:23:21;;5248:71;;;;-1:-1:-1;;;5248:71:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;5350:17:21;;:9;:17;;;;;;;;;;;:29;;5372:6;5350:29;:21;:29;:::i;:::-;-1:-1:-1;;;;;5330:17:21;;;:9;:17;;;;;;;;;;;:49;;;;5412:20;;;;;;;:32;;5437:6;5412:32;:24;:32;:::i;:::-;-1:-1:-1;;;;;5389:20:21;;;:9;:20;;;;;;;;;;;;:55;;;;5459:35;;;;;;;5389:20;;5459:35;;;;;;;;;;;;;5079:422;;;:::o;1274:179:19:-;1332:7;1364:1;1359;:6;;1351:49;;;;;-1:-1:-1;;;1351:49:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1422:5:19;;;1274:179::o;834:176::-;892:7;923:5;;;946:6;;;;938:46;;;;;-1:-1:-1;;;938:46:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;1002:1;834:176;-1:-1:-1;;;834:176:19:o","source":"pragma solidity ^0.5.11;\n\nimport \"../token/ERC827/ERC827Token.sol\";// mock class using ERC827 Token\n\n\ncontract ERC827TokenMock is ERC827Token {\n\n    constructor(address initialAccount, uint256 initialBalance) public {\n        _mint(initialAccount, initialBalance);\n    }\n\n}\n","sourcePath":"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol","ast":{"absolutePath":"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol","exportedSymbols":{"ERC827TokenMock":[952]},"id":953,"nodeType":"SourceUnit","nodes":[{"id":935,"literals":["solidity","^","0.5",".11"],"nodeType":"PragmaDirective","src":"0:24:5"},{"absolutePath":"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol","file":"../token/ERC827/ERC827Token.sol","id":936,"nodeType":"ImportDirective","scope":953,"sourceUnit":1567,"src":"26:41:5","symbolAliases":[],"unitAlias":""},{"baseContracts":[{"arguments":null,"baseName":{"contractScope":null,"id":937,"name":"ERC827Token","nodeType":"UserDefinedTypeName","referencedDeclaration":1566,"src":"130:11:5","typeDescriptions":{"typeIdentifier":"t_contract$_ERC827Token_$1566","typeString":"contract ERC827Token"}},"id":938,"nodeType":"InheritanceSpecifier","src":"130:11:5"}],"contractDependencies":[1334,1566,6567,6636],"contractKind":"contract","documentation":null,"fullyImplemented":true,"id":952,"linearizedBaseContracts":[952,1566,1334,6567,6636],"name":"ERC827TokenMock","nodeType":"ContractDefinition","nodes":[{"body":{"id":950,"nodeType":"Block","src":"216:54:5","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":946,"name":"initialAccount","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":940,"src":"232:14:5","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"}},{"argumentTypes":null,"id":947,"name":"initialBalance","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":942,"src":"248:14:5","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_address","typeString":"address"},{"typeIdentifier":"t_uint256","typeString":"uint256"}],"id":945,"name":"_mint","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":6453,"src":"226:5:5","typeDescriptions":{"typeIdentifier":"t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$","typeString":"function (address,uint256)"}},"id":948,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"226:37:5","typeDescriptions":{"typeIdentifier":"t_tuple$__$","typeString":"tuple()"}},"id":949,"nodeType":"ExpressionStatement","src":"226:37:5"}]},"documentation":null,"id":951,"implemented":true,"kind":"constructor","modifiers":[],"name":"","nodeType":"FunctionDefinition","parameters":{"id":943,"nodeType":"ParameterList","parameters":[{"constant":false,"id":940,"name":"initialAccount","nodeType":"VariableDeclaration","scope":951,"src":"161:22:5","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"},"typeName":{"id":939,"name":"address","nodeType":"ElementaryTypeName","src":"161:7:5","stateMutability":"nonpayable","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"}},"value":null,"visibility":"internal"},{"constant":false,"id":942,"name":"initialBalance","nodeType":"VariableDeclaration","scope":951,"src":"185:22:5","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":941,"name":"uint256","nodeType":"ElementaryTypeName","src":"185:7:5","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"160:48:5"},"returnParameters":{"id":944,"nodeType":"ParameterList","parameters":[],"src":"216:0:5"},"scope":952,"src":"149:121:5","stateMutability":"nonpayable","superFunction":null,"visibility":"public"}],"scope":953,"src":"102:171:5"}],"src":"0:274:5"},"legacyAST":{"absolutePath":"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol","exportedSymbols":{"ERC827TokenMock":[952]},"id":953,"nodeType":"SourceUnit","nodes":[{"id":935,"literals":["solidity","^","0.5",".11"],"nodeType":"PragmaDirective","src":"0:24:5"},{"absolutePath":"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol","file":"../token/ERC827/ERC827Token.sol","id":936,"nodeType":"ImportDirective","scope":953,"sourceUnit":1567,"src":"26:41:5","symbolAliases":[],"unitAlias":""},{"baseContracts":[{"arguments":null,"baseName":{"contractScope":null,"id":937,"name":"ERC827Token","nodeType":"UserDefinedTypeName","referencedDeclaration":1566,"src":"130:11:5","typeDescriptions":{"typeIdentifier":"t_contract$_ERC827Token_$1566","typeString":"contract ERC827Token"}},"id":938,"nodeType":"InheritanceSpecifier","src":"130:11:5"}],"contractDependencies":[1334,1566,6567,6636],"contractKind":"contract","documentation":null,"fullyImplemented":true,"id":952,"linearizedBaseContracts":[952,1566,1334,6567,6636],"name":"ERC827TokenMock","nodeType":"ContractDefinition","nodes":[{"body":{"id":950,"nodeType":"Block","src":"216:54:5","statements":[{"expression":{"argumentTypes":null,"arguments":[{"argumentTypes":null,"id":946,"name":"initialAccount","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":940,"src":"232:14:5","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"}},{"argumentTypes":null,"id":947,"name":"initialBalance","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":942,"src":"248:14:5","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}}],"expression":{"argumentTypes":[{"typeIdentifier":"t_address","typeString":"address"},{"typeIdentifier":"t_uint256","typeString":"uint256"}],"id":945,"name":"_mint","nodeType":"Identifier","overloadedDeclarations":[],"referencedDeclaration":6453,"src":"226:5:5","typeDescriptions":{"typeIdentifier":"t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$","typeString":"function (address,uint256)"}},"id":948,"isConstant":false,"isLValue":false,"isPure":false,"kind":"functionCall","lValueRequested":false,"names":[],"nodeType":"FunctionCall","src":"226:37:5","typeDescriptions":{"typeIdentifier":"t_tuple$__$","typeString":"tuple()"}},"id":949,"nodeType":"ExpressionStatement","src":"226:37:5"}]},"documentation":null,"id":951,"implemented":true,"kind":"constructor","modifiers":[],"name":"","nodeType":"FunctionDefinition","parameters":{"id":943,"nodeType":"ParameterList","parameters":[{"constant":false,"id":940,"name":"initialAccount","nodeType":"VariableDeclaration","scope":951,"src":"161:22:5","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"},"typeName":{"id":939,"name":"address","nodeType":"ElementaryTypeName","src":"161:7:5","stateMutability":"nonpayable","typeDescriptions":{"typeIdentifier":"t_address","typeString":"address"}},"value":null,"visibility":"internal"},{"constant":false,"id":942,"name":"initialBalance","nodeType":"VariableDeclaration","scope":951,"src":"185:22:5","stateVariable":false,"storageLocation":"default","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"},"typeName":{"id":941,"name":"uint256","nodeType":"ElementaryTypeName","src":"185:7:5","typeDescriptions":{"typeIdentifier":"t_uint256","typeString":"uint256"}},"value":null,"visibility":"internal"}],"src":"160:48:5"},"returnParameters":{"id":944,"nodeType":"ParameterList","parameters":[],"src":"216:0:5"},"scope":952,"src":"149:121:5","stateMutability":"nonpayable","superFunction":null,"visibility":"public"}],"scope":953,"src":"102:171:5"}],"src":"0:274:5"},"compiler":{"name":"solc","version":"0.5.11+commit.c082d0b4.Emscripten.clang"},"networks":{},"schemaVersion":"3.0.14","updatedAt":"2019-10-22T12:36:36.334Z","devdoc":{"methods":{"allowance(address,address)":{"details":"See `IERC20.allowance`."},"approve(address,uint256)":{"details":"See `IERC20.approve`.     * Requirements:     * - `spender` cannot be the zero address."},"approveAndCall(address,uint256,bytes)":{"details":"Addition to IERC20 token methods. It allows to approve the transfer of value and execute a call with the sent data. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729","params":{"_data":"ABI-encoded contract call to call `_spender` address.","_spender":"The address that will spend the funds.","_value":"The amount of tokens to be spent."},"return":"true if the call function was executed successfully"},"balanceOf(address)":{"details":"See `IERC20.balanceOf`."},"decreaseAllowance(address,uint256)":{"details":"Atomically decreases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address. - `spender` must have allowance for the caller of at least `subtractedValue`."},"decreaseApprovalAndCall(address,uint256,bytes)":{"details":"Addition to IERC20 methods. Decrease the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To decrement allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol","params":{"_data":"ABI-encoded contract call to call `_spender` address.","_spender":"The address which will spend the funds.","_subtractedValue":"The amount of tokens to decrease the allowance by."}},"increaseAllowance(address,uint256)":{"details":"Atomically increases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address."},"increaseApprovalAndCall(address,uint256,bytes)":{"details":"Addition to IERC20 methods. Increase the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To increment allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol","params":{"_addedValue":"The amount of tokens to increase the allowance by.","_data":"ABI-encoded contract call to call `_spender` address.","_spender":"The address which will spend the funds."}},"totalSupply()":{"details":"See `IERC20.totalSupply`."},"transfer(address,uint256)":{"details":"See `IERC20.transfer`.     * Requirements:     * - `recipient` cannot be the zero address. - the caller must have a balance of at least `amount`."},"transferAndCall(address,uint256,bytes)":{"details":"Addition to IERC20 token methods. Transfer tokens to a specified address and execute a call with the sent data on the same transaction","params":{"_data":"ABI-encoded contract call to call `_to` address.","_to":"address The address which you want to transfer to","_value":"uint256 the amout of tokens to be transfered"},"return":"true if the call function was executed successfully"},"transferFrom(address,address,uint256)":{"details":"See `IERC20.transferFrom`.     * Emits an `Approval` event indicating the updated allowance. This is not required by the EIP. See the note at the beginning of `ERC20`;     * Requirements: - `sender` and `recipient` cannot be the zero address. - `sender` must have a balance of at least `value`. - the caller must have allowance for `sender`'s tokens of at least `amount`."},"transferFromAndCall(address,address,uint256,bytes)":{"details":"Addition to IERC20 token methods. Transfer tokens from one address to another and make a contract call on the same transaction","params":{"_data":"ABI-encoded contract call to call `_to` address.","_from":"The address which you want to send tokens from","_to":"The address which you want to transfer to","_value":"The amout of tokens to be transferred"},"return":"true if the call function was executed successfully"}}},"userdoc":{"methods":{}}}
+{
+  "contractName": "ERC827TokenMock",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "spender", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
+      ],
+      "name": "approve",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "sender", "type": "address" },
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      ],
+      "name": "transferFrom",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "spender", "type": "address" },
+        { "internalType": "uint256", "name": "addedValue", "type": "uint256" }
+      ],
+      "name": "increaseAllowance",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_to", "type": "address" },
+        { "internalType": "uint256", "name": "_value", "type": "uint256" },
+        { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      ],
+      "name": "transferAndCall",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "address", "name": "account", "type": "address" }
+      ],
+      "name": "balanceOf",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_spender", "type": "address" },
+        { "internalType": "uint256", "name": "_addedValue", "type": "uint256" },
+        { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      ],
+      "name": "increaseApprovalAndCall",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "spender", "type": "address" },
+        {
+          "internalType": "uint256",
+          "name": "subtractedValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "decreaseAllowance",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      ],
+      "name": "transfer",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_from", "type": "address" },
+        { "internalType": "address", "name": "_to", "type": "address" },
+        { "internalType": "uint256", "name": "_value", "type": "uint256" },
+        { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      ],
+      "name": "transferFromAndCall",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_spender", "type": "address" },
+        { "internalType": "uint256", "name": "_value", "type": "uint256" },
+        { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      ],
+      "name": "approveAndCall",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_spender", "type": "address" },
+        {
+          "internalType": "uint256",
+          "name": "_subtractedValue",
+          "type": "uint256"
+        },
+        { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      ],
+      "name": "decreaseApprovalAndCall",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        { "internalType": "address", "name": "owner", "type": "address" },
+        { "internalType": "address", "name": "spender", "type": "address" }
+      ],
+      "name": "allowance",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "initialAccount",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "initialBalance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.11+commit.c082d0b4\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"addedValue\",\"type\":\"uint256\"}],\"name\":\"increaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"transferAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_addedValue\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"increaseApprovalAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"subtractedValue\",\"type\":\"uint256\"}],\"name\":\"decreaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"transferFromAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_subtractedValue\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"decreaseApprovalAndCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialAccount\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"initialBalance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"allowance(address,address)\":{\"details\":\"See `IERC20.allowance`.\"},\"approve(address,uint256)\":{\"details\":\"See `IERC20.approve`.     * Requirements:     * - `spender` cannot be the zero address.\"},\"approveAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. It allows to approve the transfer of value and execute a call with the sent data. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address that will spend the funds.\",\"_value\":\"The amount of tokens to be spent.\"},\"return\":\"true if the call function was executed successfully\"},\"balanceOf(address)\":{\"details\":\"See `IERC20.balanceOf`.\"},\"decreaseAllowance(address,uint256)\":{\"details\":\"Atomically decreases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address. - `spender` must have allowance for the caller of at least `subtractedValue`.\"},\"decreaseApprovalAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 methods. Decrease the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To decrement allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address which will spend the funds.\",\"_subtractedValue\":\"The amount of tokens to decrease the allowance by.\"}},\"increaseAllowance(address,uint256)\":{\"details\":\"Atomically increases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address.\"},\"increaseApprovalAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 methods. Increase the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To increment allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol\",\"params\":{\"_addedValue\":\"The amount of tokens to increase the allowance by.\",\"_data\":\"ABI-encoded contract call to call `_spender` address.\",\"_spender\":\"The address which will spend the funds.\"}},\"totalSupply()\":{\"details\":\"See `IERC20.totalSupply`.\"},\"transfer(address,uint256)\":{\"details\":\"See `IERC20.transfer`.     * Requirements:     * - `recipient` cannot be the zero address. - the caller must have a balance of at least `amount`.\"},\"transferAndCall(address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. Transfer tokens to a specified address and execute a call with the sent data on the same transaction\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_to` address.\",\"_to\":\"address The address which you want to transfer to\",\"_value\":\"uint256 the amout of tokens to be transfered\"},\"return\":\"true if the call function was executed successfully\"},\"transferFrom(address,address,uint256)\":{\"details\":\"See `IERC20.transferFrom`.     * Emits an `Approval` event indicating the updated allowance. This is not required by the EIP. See the note at the beginning of `ERC20`;     * Requirements: - `sender` and `recipient` cannot be the zero address. - `sender` must have a balance of at least `value`. - the caller must have allowance for `sender`'s tokens of at least `amount`.\"},\"transferFromAndCall(address,address,uint256,bytes)\":{\"details\":\"Addition to IERC20 token methods. Transfer tokens from one address to another and make a contract call on the same transaction\",\"params\":{\"_data\":\"ABI-encoded contract call to call `_to` address.\",\"_from\":\"The address which you want to send tokens from\",\"_to\":\"The address which you want to transfer to\",\"_value\":\"The amout of tokens to be transferred\"},\"return\":\"true if the call function was executed successfully\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol\":\"ERC827TokenMock\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol\":{\"keccak256\":\"0x3eee306d24706cf0d5459bf5fd91d817b7e90e13c1551f30a2c7de11005f93bf\",\"urls\":[\"bzz-raw://ec24445c22c4e6f67a45fe95839e8f25482815c7a5b91a53b56326bb49440914\",\"dweb:/ipfs/QmTMhPFg1sfHUVL1VigZbu2ECL83Af98RxT6mP1NFE35X3\"]},\"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827.sol\":{\"keccak256\":\"0xec04362262d415f92c1d35e88c3d2baf5a5b0b09c7acc8c166fc4ca2dc26367e\",\"urls\":[\"bzz-raw://d37c465accfa410a48e0d5fb2b8e662dabae92b1b91d2d75c1dea6930496cbc1\",\"dweb:/ipfs/QmeHxdtvAvU27SJ3TpS5RkfdVgxdZmaVGS3AvHFpGu2mgA\"]},\"/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol\":{\"keccak256\":\"0xe5688e3caf9ea613ad2d243378ba76a716479c0ee45b1b9c30fa0385e74046f3\",\"urls\":[\"bzz-raw://6394a94cba08292b21435ff3184fcaee681ea86baa6beb62fd3df8b1b6915908\",\"dweb:/ipfs/QmPWjaBQupJX2vZJQtCzKZW4J5FjLMUiiq7EcwtuW8K93c\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x4ccf2d7b51873db1ccfd54ca2adae5eac3b184f9699911ed4490438419f1c690\",\"urls\":[\"bzz-raw://d62d769b2219d5de39013093412623e624fa887f871826ea3bae6052ee893610\",\"dweb:/ipfs/QmV3yVktya1s617QmuzQR2CfuJgUi3dR2xEZY9ecmqZ2G1\"]},\"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x852793a3c2f86d336a683b30d688ec3dcfc57451af5a2bf5975cda3b7191a901\",\"urls\":[\"bzz-raw://4f5b57664069671648fb81f55b0082faecdf1b2f159eec6b1fa6cef9b7d73bc5\",\"dweb:/ipfs/QmcyytaLs7zFdb4Uu7C5PmQRhQdB3wA3fUdkV6mkYfdDFH\"]},\"openzeppelin-solidity/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x90e8c2521653bbb1768b05889c5760031e688d9cd361f167489b89215e201b95\",\"urls\":[\"bzz-raw://d0abb99bb8bfc2bc0a89902b8ed1dc0442ad08cc78cee64c291b3df6a27bcccc\",\"dweb:/ipfs/QmP5NaEwZthQeM2ESz4WTT3osrP7jhbvu7ocbttBi2JAw6\"]}},\"version\":1}",
+  "sourceMap": "102:171:5:-;;;149:121;8:9:-1;5:2;;;30:1;27;20:12;5:2;149:121:5;;;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;149:121:5;;;;;;;226:37;149:121;;-1:-1:-1;;;;;226:5:5;:37;:::i;:::-;149:121;;102:171;;5771:302:21;-1:-1:-1;;;;;5846:21:21;;5838:65;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5929:24;5946:6;5929:12;;:16;;;;;;:24;;;;:::i;:::-;5914:12;:39;-1:-1:-1;;;;;5984:18:21;;:9;:18;;;;;;;;;;;;:30;;6007:6;;5984:22;;;;;:30;;:::i;:::-;-1:-1:-1;;;;;5963:18:21;;:9;:18;;;;;;;;;;;:51;;;;6029:37;;;;;;;5963:18;;:9;;6029:37;;;;;;;;;;5771:302;;:::o;834:176:19:-;892:7;923:5;;;946:6;;;;938:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1002:1;834:176;-1:-1:-1;;;834:176:19:o;102:171:5:-;;;;;;;",
+  "deployedSourceMap": "102:171:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2453:145:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2453:145:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2453:145:21;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;1514:89;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1514:89:21;;;:::i;:::-;;;;;;;;;;;;;;;;3055:252;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3055:252:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;3055:252:21;;;;;;;;;;;;;;;;;:::i;3702:203::-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3702:203:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;3702:203:21;;;;;;;;:::i;2050:396:9:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;2050:396:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;2050:396:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;2050:396:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;2050:396:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;2050:396:9;;-1:-1:-1;2050:396:9;;-1:-1:-1;;;;;2050:396:9:i;1661:108:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1661:108:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1661:108:21;-1:-1:-1;;;;;1661:108:21;;:::i;3941:444:9:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;3941:444:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;3941:444:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;3941:444:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;3941:444:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;3941:444:9;;-1:-1:-1;3941:444:9;;-1:-1:-1;;;;;3941:444:9:i;4392:213:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4392:213:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;4392:213:21;;;;;;;;:::i;1972:153::-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1972:153:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;1972:153:21;;;;;;;;:::i;2918:426:9:-;;;;;;13:3:-1;8;5:12;2:2;;;30:1;27;20:12;2:2;-1:-1;;;;;2918:426:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;2918:426:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;2918:426:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;2918:426:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;2918:426:9;;-1:-1:-1;2918:426:9;;-1:-1:-1;;;;;2918:426:9:i;1205:415::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;1205:415:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;1205:415:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;1205:415:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;1205:415:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;1205:415:9;;-1:-1:-1;1205:415:9;;-1:-1:-1;;;;;1205:415:9:i;4987:454::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;4987:454:9;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;5:28;;2:2;;;46:1;43;36:12;2:2;4987:454:9;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4987:454:9;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;-1:-1;;;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4987:454:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;4987:454:9;;-1:-1:-1;4987:454:9;;-1:-1:-1;;;;;4987:454:9:i;2183:132:21:-;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2183:132:21;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2183:132:21;;;;;;;;;;:::i;2453:145::-;2518:4;2534:36;2543:10;2555:7;2564:5;2534:8;:36::i;:::-;-1:-1:-1;2587:4:21;2453:145;;;;:::o;1514:89::-;1584:12;;1514:89;:::o;3055:252::-;3144:4;3160:36;3170:6;3178:9;3189:6;3160:9;:36::i;:::-;-1:-1:-1;;;;;3235:19:21;;;;;;:11;:19;;;;;;;;3223:10;3235:31;;;;;;;;;3206:73;;3215:6;;3235:43;;3271:6;3235:43;:35;:43;:::i;:::-;3206:8;:73::i;:::-;-1:-1:-1;3296:4:21;3055:252;;;;;:::o;3702:203::-;3807:10;3782:4;3828:23;;;:11;:23;;;;;;;;-1:-1:-1;;;;;3828:32:21;;;;;;;;;;3782:4;;3798:79;;3819:7;;3828:48;;3865:10;3828:48;:36;:48;:::i;2050:396:9:-;2190:4;-1:-1:-1;;;;;2218:20:9;;2233:4;2218:20;;2210:29;;;;;;2250:27;2265:3;2270:6;2250:14;:27::i;:::-;;2343:12;2360:3;-1:-1:-1;;;;;2360:8:9;2375:9;2386:5;2360:32;;;;;;;;;;;;;36:153:-1;66:2;61:3;58:11;36:153;;176:10;;164:23;;-1:-1;;139:12;;;;98:2;89:12;;;;114;36:153;;;274:1;267:3;263:2;259:12;254:3;250:22;246:30;315:4;311:9;305:3;299:10;295:26;356:4;350:3;344:10;340:21;389:7;380;377:20;372:3;365:33;3:399;;;2360:32:9;;;;;;;;;;;;;;;;;;;;;;;;;14:1:-1;21;16:31;;;;75:4;69:11;64:16;;144:4;140:9;133:4;115:16;111:27;107:43;104:1;100:51;94:4;87:65;169:16;166:1;159:27;225:16;222:1;215:4;212:1;208:12;193:49;7:242;;16:31;36:4;31:9;;7:242;;2342:50:9;;;2410:7;2402:16;;;;;;-1:-1:-1;2435:4:9;;2050:396;-1:-1:-1;;;;2050:396:9:o;1661:108:21:-;-1:-1:-1;;;;;1744:18:21;1718:7;1744:18;;;;;;;;;;;;1661:108::o;3941:444:9:-;4099:4;-1:-1:-1;;;;;4127:25:9;;4147:4;4127:25;;4119:34;;;;;;4164:46;4188:8;4198:11;4164:23;:46::i;4392:213:21:-;4502:10;4477:4;4523:23;;;:11;:23;;;;;;;;-1:-1:-1;;;;;4523:32:21;;;;;;;;;;4477:4;;4493:84;;4514:7;;4523:53;;4560:15;4523:53;:36;:53;:::i;1972:153::-;2041:4;2057:40;2067:10;2079:9;2090:6;2057:9;:40::i;2918:426:9:-;3077:4;-1:-1:-1;;;;;3105:20:9;;3120:4;3105:20;;3097:29;;;;;;3137:38;3156:5;3163:3;3168:6;3137:18;:38::i;:::-;;3241:12;3258:3;-1:-1:-1;;;;;3258:8:9;3273:9;3284:5;3258:32;;;;;;;;;;;;;36:153:-1;66:2;61:3;58:11;36:153;;176:10;;164:23;;-1:-1;;139:12;;;;98:2;89:12;;;;114;36:153;;;274:1;267:3;263:2;259:12;254:3;250:22;246:30;315:4;311:9;305:3;299:10;295:26;356:4;350:3;344:10;340:21;389:7;380;377:20;372:3;365:33;3:399;;;3258:32:9;;;;;;;;;;;;;;;;;;;;;;;;;14:1:-1;21;16:31;;;;75:4;69:11;64:16;;144:4;140:9;133:4;115:16;111:27;107:43;104:1;100:51;94:4;87:65;169:16;166:1;159:27;225:16;222:1;215:4;212:1;208:12;193:49;7:242;;16:31;36:4;31:9;;7:242;;3240:50:9;;;3308:7;3300:16;;;;;;-1:-1:-1;3333:4:9;;2918:426;-1:-1:-1;;;;;2918:426:9:o;1205:415::-;1349:4;-1:-1:-1;;;;;1377:25:9;;1397:4;1377:25;;1369:34;;;;;;1414:31;1428:8;1438:6;1414:13;:31::i;4987:454::-;5150:4;-1:-1:-1;;;;;5178:25:9;;5198:4;5178:25;;5170:34;;;;;;5215:51;5239:8;5249:16;5215:23;:51::i;2183:132:21:-;-1:-1:-1;;;;;2281:18:21;;;2255:7;2281:18;;;:11;:18;;;;;;;;:27;;;;;;;;;;;;;2183:132::o;7117:329::-;-1:-1:-1;;;;;7209:19:21;;7201:68;;;;-1:-1:-1;;;7201:68:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;7287:21:21;;7279:68;;;;-1:-1:-1;;;7279:68:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;7358:18:21;;;;;;;:11;:18;;;;;;;;:27;;;;;;;;;;;;;:35;;;7408:31;;;;;;;;;;;;;;;;;7117:329;;;:::o;5079:422::-;-1:-1:-1;;;;;5176:20:21;;5168:70;;;;-1:-1:-1;;;5168:70:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;5256:23:21;;5248:71;;;;-1:-1:-1;;;5248:71:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;5350:17:21;;:9;:17;;;;;;;;;;;:29;;5372:6;5350:29;:21;:29;:::i;:::-;-1:-1:-1;;;;;5330:17:21;;;:9;:17;;;;;;;;;;;:49;;;;5412:20;;;;;;;:32;;5437:6;5412:32;:24;:32;:::i;:::-;-1:-1:-1;;;;;5389:20:21;;;:9;:20;;;;;;;;;;;;:55;;;;5459:35;;;;;;;5389:20;;5459:35;;;;;;;;;;;;;5079:422;;;:::o;1274:179:19:-;1332:7;1364:1;1359;:6;;1351:49;;;;;-1:-1:-1;;;1351:49:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1422:5:19;;;1274:179::o;834:176::-;892:7;923:5;;;946:6;;;;938:46;;;;;-1:-1:-1;;;938:46:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;1002:1;834:176;-1:-1:-1;;;834:176:19:o",
+  "source": "pragma solidity ^0.5.11;\n\nimport \"../token/ERC827/ERC827Token.sol\";// mock class using ERC827 Token\n\n\ncontract ERC827TokenMock is ERC827Token {\n\n    constructor(address initialAccount, uint256 initialBalance) public {\n        _mint(initialAccount, initialBalance);\n    }\n\n}\n",
+  "sourcePath": "/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol",
+  "ast": {
+    "absolutePath": "/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol",
+    "exportedSymbols": { "ERC827TokenMock": [952] },
+    "id": 953,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 935,
+        "literals": ["solidity", "^", "0.5", ".11"],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol",
+        "file": "../token/ERC827/ERC827Token.sol",
+        "id": 936,
+        "nodeType": "ImportDirective",
+        "scope": 953,
+        "sourceUnit": 1567,
+        "src": "26:41:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 937,
+              "name": "ERC827Token",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1566,
+              "src": "130:11:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC827Token_$1566",
+                "typeString": "contract ERC827Token"
+              }
+            },
+            "id": 938,
+            "nodeType": "InheritanceSpecifier",
+            "src": "130:11:5"
+          }
+        ],
+        "contractDependencies": [1334, 1566, 6567, 6636],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 952,
+        "linearizedBaseContracts": [952, 1566, 1334, 6567, 6636],
+        "name": "ERC827TokenMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 950,
+              "nodeType": "Block",
+              "src": "216:54:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 946,
+                        "name": "initialAccount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 940,
+                        "src": "232:14:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 947,
+                        "name": "initialBalance",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 942,
+                        "src": "248:14:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 945,
+                      "name": "_mint",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6453,
+                      "src": "226:5:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256)"
+                      }
+                    },
+                    "id": 948,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "226:37:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 949,
+                  "nodeType": "ExpressionStatement",
+                  "src": "226:37:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 951,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 943,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 940,
+                  "name": "initialAccount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 951,
+                  "src": "161:22:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 939,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "161:7:5",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 942,
+                  "name": "initialBalance",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 951,
+                  "src": "185:22:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 941,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "185:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "160:48:5"
+            },
+            "returnParameters": {
+              "id": 944,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "216:0:5"
+            },
+            "scope": 952,
+            "src": "149:121:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 953,
+        "src": "102:171:5"
+      }
+    ],
+    "src": "0:274:5"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/oren/daostack/infra/contracts/test/ERC827TokenMock.sol",
+    "exportedSymbols": { "ERC827TokenMock": [952] },
+    "id": 953,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 935,
+        "literals": ["solidity", "^", "0.5", ".11"],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "/Users/oren/daostack/infra/contracts/token/ERC827/ERC827Token.sol",
+        "file": "../token/ERC827/ERC827Token.sol",
+        "id": 936,
+        "nodeType": "ImportDirective",
+        "scope": 953,
+        "sourceUnit": 1567,
+        "src": "26:41:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 937,
+              "name": "ERC827Token",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1566,
+              "src": "130:11:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC827Token_$1566",
+                "typeString": "contract ERC827Token"
+              }
+            },
+            "id": 938,
+            "nodeType": "InheritanceSpecifier",
+            "src": "130:11:5"
+          }
+        ],
+        "contractDependencies": [1334, 1566, 6567, 6636],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 952,
+        "linearizedBaseContracts": [952, 1566, 1334, 6567, 6636],
+        "name": "ERC827TokenMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 950,
+              "nodeType": "Block",
+              "src": "216:54:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 946,
+                        "name": "initialAccount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 940,
+                        "src": "232:14:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 947,
+                        "name": "initialBalance",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 942,
+                        "src": "248:14:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 945,
+                      "name": "_mint",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6453,
+                      "src": "226:5:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256)"
+                      }
+                    },
+                    "id": 948,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "226:37:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 949,
+                  "nodeType": "ExpressionStatement",
+                  "src": "226:37:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 951,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 943,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 940,
+                  "name": "initialAccount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 951,
+                  "src": "161:22:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 939,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "161:7:5",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 942,
+                  "name": "initialBalance",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 951,
+                  "src": "185:22:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 941,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "185:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "160:48:5"
+            },
+            "returnParameters": {
+              "id": 944,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "216:0:5"
+            },
+            "scope": 952,
+            "src": "149:121:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 953,
+        "src": "102:171:5"
+      }
+    ],
+    "src": "0:274:5"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.14",
+  "updatedAt": "2019-10-22T12:36:36.334Z",
+  "devdoc": {
+    "methods": {
+      "allowance(address,address)": { "details": "See `IERC20.allowance`." },
+      "approve(address,uint256)": {
+        "details": "See `IERC20.approve`.     * Requirements:     * - `spender` cannot be the zero address."
+      },
+      "approveAndCall(address,uint256,bytes)": {
+        "details": "Addition to IERC20 token methods. It allows to approve the transfer of value and execute a call with the sent data. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729",
+        "params": {
+          "_data": "ABI-encoded contract call to call `_spender` address.",
+          "_spender": "The address that will spend the funds.",
+          "_value": "The amount of tokens to be spent."
+        },
+        "return": "true if the call function was executed successfully"
+      },
+      "balanceOf(address)": { "details": "See `IERC20.balanceOf`." },
+      "decreaseAllowance(address,uint256)": {
+        "details": "Atomically decreases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address. - `spender` must have allowance for the caller of at least `subtractedValue`."
+      },
+      "decreaseApprovalAndCall(address,uint256,bytes)": {
+        "details": "Addition to IERC20 methods. Decrease the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To decrement allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol",
+        "params": {
+          "_data": "ABI-encoded contract call to call `_spender` address.",
+          "_spender": "The address which will spend the funds.",
+          "_subtractedValue": "The amount of tokens to decrease the allowance by."
+        }
+      },
+      "increaseAllowance(address,uint256)": {
+        "details": "Atomically increases the allowance granted to `spender` by the caller.     * This is an alternative to `approve` that can be used as a mitigation for problems described in `IERC20.approve`.     * Emits an `Approval` event indicating the updated allowance.     * Requirements:     * - `spender` cannot be the zero address."
+      },
+      "increaseApprovalAndCall(address,uint256,bytes)": {
+        "details": "Addition to IERC20 methods. Increase the amount of tokens that an owner allowed to a spender and execute a call with the sent data. approve should be called when allowed[_spender] == 0. To increment allowed value is better to use this function to avoid 2 calls (and wait until the first transaction is mined) From MonolithDAO Token.sol",
+        "params": {
+          "_addedValue": "The amount of tokens to increase the allowance by.",
+          "_data": "ABI-encoded contract call to call `_spender` address.",
+          "_spender": "The address which will spend the funds."
+        }
+      },
+      "totalSupply()": { "details": "See `IERC20.totalSupply`." },
+      "transfer(address,uint256)": {
+        "details": "See `IERC20.transfer`.     * Requirements:     * - `recipient` cannot be the zero address. - the caller must have a balance of at least `amount`."
+      },
+      "transferAndCall(address,uint256,bytes)": {
+        "details": "Addition to IERC20 token methods. Transfer tokens to a specified address and execute a call with the sent data on the same transaction",
+        "params": {
+          "_data": "ABI-encoded contract call to call `_to` address.",
+          "_to": "address The address which you want to transfer to",
+          "_value": "uint256 the amout of tokens to be transfered"
+        },
+        "return": "true if the call function was executed successfully"
+      },
+      "transferFrom(address,address,uint256)": {
+        "details": "See `IERC20.transferFrom`.     * Emits an `Approval` event indicating the updated allowance. This is not required by the EIP. See the note at the beginning of `ERC20`;     * Requirements: - `sender` and `recipient` cannot be the zero address. - `sender` must have a balance of at least `value`. - the caller must have allowance for `sender`'s tokens of at least `amount`."
+      },
+      "transferFromAndCall(address,address,uint256,bytes)": {
+        "details": "Addition to IERC20 token methods. Transfer tokens from one address to another and make a contract call on the same transaction",
+        "params": {
+          "_data": "ABI-encoded contract call to call `_to` address.",
+          "_from": "The address which you want to send tokens from",
+          "_to": "The address which you want to transfer to",
+          "_value": "The amout of tokens to be transferred"
+        },
+        "return": "true if the call function was executed successfully"
+      }
+    }
+  },
+  "userdoc": { "methods": {} }
+}

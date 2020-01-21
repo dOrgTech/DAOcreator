@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
-import {
-  MemberEditor,
-  MembersAnalytics,
-  MembersTable
-} from "./";
+import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 
 const MembersEditor = ({
