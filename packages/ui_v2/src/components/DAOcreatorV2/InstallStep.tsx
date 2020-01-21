@@ -1,34 +1,59 @@
-import * as React from "react";
-import { DAOForm } from "@dorgtech/daocreator-lib";
+import React, { FC } from "react";
+import Migrator from "../commonV2/dao/Migrator";
+import {
+  DAOForm,
+  DAOMigrationResult,
+  toDAOMigrationParams,
+  DAOMigrationParams
+} from "@dorgtech/daocreator-lib";
+
 interface Props {
   form: DAOForm;
 }
 
-function InstallStep(props: Props) {
-  const printDAOForm = () => console.log("this.props.daoForm", props.form);
+const InstallStep: FC<Props> = ({ form }: Props) => {
+  /*
+   * Callbacks
+   */
+
+  const onComplete = () => {
+    console.log("onComplete");
+    onStop();
+    // Previously set daoCreator state:
+    // isMigrating = false
+  };
+
+  const onStart = () => {
+    console.log("onStart");
+    // Previously set daoCreator state:
+    // isMigrating = true
+  };
+
+  const onAbort = (error: string) => {
+    console.log("onAbort");
+    console.log(error);
+    onStop();
+  };
+
+  const onStop = () => {
+    console.log("onStop");
+    // Previously set daoCreator state:
+    // isMigrating = false
+  };
+
+  const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
   return (
-    <>
-      <button
-        style={styles.setDescriptionButton}
-        onClick={() => printDAOForm()}
-      >
-        Print Form
-      </button>
-    </>
+    <Migrator
+      dao={dao}
+      onComplete={(result: DAOMigrationResult) => {
+        console.log(result);
+        onComplete();
+      }}
+      onStart={onStart}
+      onAbort={onAbort}
+      onStop={onStop}
+    />
   );
-}
-const styles = {
-  setDescriptionButton: {
-    borderRadius: "0.37rem",
-    height: "45px",
-    fontWeight: 300,
-    backgroundColor: "#1976d2",
-    color: "white",
-    width: "145px",
-    padding: "7px",
-    marginBottom: "11px",
-    fontSize: "smaller"
-  }
 };
 
 export default InstallStep;
