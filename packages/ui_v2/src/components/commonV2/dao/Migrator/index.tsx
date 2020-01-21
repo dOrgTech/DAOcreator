@@ -1,4 +1,4 @@
-import React, { FC, useState, Fragment } from "react";
+import React, { FC, useState, Fragment, useEffect } from "react";
 import {
   DAOMigrationParams,
   DAOMigrationResult,
@@ -32,8 +32,7 @@ enum STEP {
   Waiting,
   Creating,
   Configuring,
-  Completed,
-  Failed
+  Completed
 }
 
 // Migrator Steps
@@ -75,7 +74,17 @@ const Migrator: FC<IProps> = ({
     undefined
   );
 
+  const [aborting, setAborting] = useState(false);
+
   const [failed, setFailed] = useState<FAILED | null>(null);
+
+  useEffect(() => {
+    if (!aborting) return;
+
+    setAborting(false);
+    if (step === STEP.Creating) setFailed(FAILED.Create);
+    else if (step === STEP.Configuring) setFailed(FAILED.Config);
+  }, [aborting, step]);
 
   /*
    * Step Transitions
@@ -98,7 +107,6 @@ const Migrator: FC<IProps> = ({
   /*
    * Callbacks
    */
-
   const addLogLine = (logLine: AnyLogLine) => {
     const { type } = logLine;
     setFullLogLines([...fullLogLines, logLine]);
@@ -246,15 +254,8 @@ const Migrator: FC<IProps> = ({
         const abortedLine = logLine as LogMigrationAborted;
         const abortedMsg = abortedLine.toString();
 
-        /*
-         * TODO
-         * For some ungodly reason step is always equal to 0 in this method
-         * So the fail states do not work
-         */
-        if (step === STEP.Creating) setFailed(FAILED.Create);
-        else if (step === STEP.Configuring) setFailed(FAILED.Config);
+        setAborting(true);
 
-        setStep(STEP.Failed);
         switch (true) {
           case abortedMsg ===
             "MetaMask Tx Signature: User denied transaction signature.":
@@ -310,6 +311,8 @@ const Migrator: FC<IProps> = ({
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
+        // Unimplemented callback
+
         window.onbeforeunload = () => {};
         setResult(result);
         setStep(STEP.Completed);
@@ -384,6 +387,7 @@ const Migrator: FC<IProps> = ({
     if (!result) return;
     onComplete(result);
     setResult(result);
+    window.onbeforeunload = () => {};
   };
 
   const openAlchemy = async () => {
@@ -444,12 +448,10 @@ const Migrator: FC<IProps> = ({
       <MDBRow center>
         {step !== STEP.Completed ? (
           <MDBBtn
-            disabled={step !== STEP.Waiting && step !== STEP.Failed}
+            disabled={step !== STEP.Waiting && failed === null}
             onClick={() => startInstallation()}
           >
-            {step === STEP.Failed
-              ? "Restart Installation"
-              : "Install Organisation"}
+            {failed === null ? "Install Organisation" : "Restart Installation"}
           </MDBBtn>
         ) : (
           <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
