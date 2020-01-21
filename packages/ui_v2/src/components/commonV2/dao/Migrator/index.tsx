@@ -46,18 +46,18 @@ const Migrator: FC<IProps> = ({
   dao,
   onComplete,
   onStart,
-  onAbort,
-  onStop
-}: IProps) => {
+  onAbort
+}: // onStop
+IProps) => {
   /*
    * State
    */
 
   const [step, setStep] = useState(STEP.Waiting);
 
-  // Unimplemented
-  const [noWeb3Open, setNoWeb3Open] = useState(false);
-  const [ethSpent, setEthSpent] = useState(0);
+  // Unimplemented noWeb3Open, ethSpent
+  const [, setNoWeb3Open] = useState(false);
+  const [, setEthSpent] = useState(0);
 
   // Array of log lines as given by callbacks
   const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
@@ -219,7 +219,7 @@ const Migrator: FC<IProps> = ({
 
       case TransactionResult:
         const txLine = logLine as LogTransactionResult;
-        const { msg, txHash, txCost } = txLine;
+        const { msg } = txLine;
         switch (true) {
           case msg === "Created new organization.":
             configureOrganisation();

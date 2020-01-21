@@ -29,7 +29,7 @@ export default function Stepper(props: Props) {
         style={styles.specialRow}
         className="justify-content-space-between"
       >
-        <a role="button">
+        <a role="button" href="#/" style={{ cursor: "unset" }}>
           <span
             className="circle"
             style={

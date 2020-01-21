@@ -9,7 +9,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import grey from "@material-ui/core/colors/grey";
 import blue from "@material-ui/core/colors/blue";
 import DateFnsUtils from "@date-io/date-fns";
-import EthAddressAvatar from "../EthAddressAvatar";
+// import EthAddressAvatar from "../EthAddressAvatar";
 import {
   AnyField,
   FieldType,
