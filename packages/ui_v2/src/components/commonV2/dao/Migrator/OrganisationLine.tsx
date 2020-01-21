@@ -57,7 +57,7 @@ export const OrganisationLine: FC<IProps> = ({
   useEffect(() => {
     if (done || (!active && !failed)) return;
     if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
-  }, [logLines, active, done]);
+  }, [logLines, active, done, failed]);
 
   const Output: FC = () => {
     let text = undefined;
