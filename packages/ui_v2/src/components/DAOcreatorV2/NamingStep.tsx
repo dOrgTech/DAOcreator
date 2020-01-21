@@ -5,7 +5,6 @@ import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;
-  toReviewStep: () => void;
   toggleCollapse: () => void;
 }
 

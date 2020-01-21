@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { Fragment } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -19,7 +19,6 @@ import {
   SchemeType
 } from "@dorgtech/daocreator-lib";
 import GenesisProtocolEditor from "../GenesisProtocolEditor";
-import { Fragment } from "react";
 
 export interface Props {
   form: any;

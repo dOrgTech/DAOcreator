@@ -6,15 +6,61 @@ import {
   DAOForm
 } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
+
+import { UtilityButton } from "./UtilityButton";
+import { simpleOptionsSwitcher } from "components/utils";
+
 interface Props {
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   title: string;
   callbacks: any | undefined;
-  step: Number;
+  step: number;
   index: number;
   daoName?: string;
 }
+const ImportButton = (props: { step: number; index: number; cb: any }) => {
+  const { step, index, cb } = props;
+  if (step === 1 && index === 1) {
+    return (
+      <UtilityButton title={"Advanced Configuration"} openModal={cb.setModal} />
+    );
+  } else if (step === 2 && index === 2) {
+    return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
+  } else {
+    return <></>;
+  }
+};
+
+// WIP
+const simpleConfigText = (form: any | undefined) => {
+  // TESTING Utility.
+  const simpleOptions = simpleOptionsSwitcher(form, true);
+  const noDuplicateSimpleOptions = simpleOptions.slice(
+    0,
+    simpleOptions.length / 2
+  );
+  return (
+    <div>
+      <p>
+        <strong>Recommened</strong>
+      </p>
+      {noDuplicateSimpleOptions.map((option: any, index: number) =>
+        option.checked ? (
+          <div key={index}>
+            <p>checked</p>
+            <p>{option.text}</p>
+          </div>
+        ) : (
+          <div key={index}>
+            <p>not checked</p>
+            <p>{option.text}</p>
+          </div>
+        )
+      )}
+    </div>
+  );
+};
 
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
@@ -54,9 +100,12 @@ export default function Stepper(props: Props) {
         ) : (
           ""
         )}
+
+        {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
+          <ImportButton step={step} index={index} cb={props.callbacks} />
           {step === 1 && index === 1 ? (
-            <button style={styles.button} onClick={openAdvanceConfigModal}>
+            <button onClick={openAdvanceConfigModal}>
               Advance Configuration
             </button>
           ) : (
@@ -181,18 +230,5 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
-  },
-  button: {
-    width: "174px",
-    height: "42px",
-    padding: "4px",
-    marginRight: "36px",
-    marginTop: "20px",
-    border: "1px solid gray",
-    boxShadow: "none",
-    borderRadius: "4px",
-    fontFamily: '"Roboto", sans-serif',
-    fontWeight: 300,
-    fontSize: "15px"
   }
 };
