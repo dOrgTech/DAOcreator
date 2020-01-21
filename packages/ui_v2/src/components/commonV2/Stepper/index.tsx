@@ -8,10 +8,10 @@ import {
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
-import { simpleOptionsSwitcher } from "utils";
+import { simpleOptionsSwitcher } from "components/utils";
 
 interface Props {
-  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   title: string;
   callbacks: any | undefined;
@@ -64,13 +64,18 @@ const simpleConfigText = (form: any | undefined) => {
 
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
+
+  const openAdvanceConfigModal = () => {
+    props.callbacks.setModal(true);
+  };
+
   return (
     <li className={step === index || step > index ? "completed" : ""}>
       <MDBRow
         style={styles.specialRow}
         className="justify-content-space-between"
       >
-        <a role="button">
+        <a role="button" href="#/" style={{ cursor: "unset" }}>
           <span
             className="circle"
             style={
@@ -99,6 +104,13 @@ export default function Stepper(props: Props) {
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
           <ImportButton step={step} index={index} cb={props.callbacks} />
+          {step === 1 && index === 1 ? (
+            <button onClick={openAdvanceConfigModal}>
+              Advance Configuration
+            </button>
+          ) : (
+            <div></div>
+          )}
           <MDBBtn
             hidden={step === index || step < index}
             floating

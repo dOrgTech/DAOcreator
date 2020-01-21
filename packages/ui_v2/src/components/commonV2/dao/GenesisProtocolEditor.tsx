@@ -35,6 +35,7 @@ export default function GenesisProtocolEditor(props: Props) {
             </MDBRow>
           );
         }
+        return null;
       })}
     </>
   );

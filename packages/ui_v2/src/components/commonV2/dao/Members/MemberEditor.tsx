@@ -1,7 +1,7 @@
 import React from "react";
 import { MDBRow, MDBCol } from "mdbreact";
 
-import FormField from "components/commonV2/FormField";
+import FormField from "../../FormField";
 
 export const MemberEditor = ({
   memberForm,

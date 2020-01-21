@@ -6,7 +6,7 @@ import {
   SchemeRegistrarForm
 } from "@dorgtech/daocreator-lib";
 
-import SchemeEditor from "../commonV2/dao/SchemeEditor";
+import SchemeEditor from "../commonV2/dao/Schemes/SchemeEditor";
 
 interface Props {
   form: SchemesForm;
@@ -20,7 +20,7 @@ function SchemesStep(props: Props) {
 
   React.useEffect(() => {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
-  }, [form.$]);
+  }, []);
 
   return (
     <>

@@ -18,12 +18,13 @@ import {
   SchemeRegistrarForm,
   SchemeType
 } from "@dorgtech/daocreator-lib";
-import GenesisProtocolEditor from "./GenesisProtocolEditor";
+import GenesisProtocolEditor from "../GenesisProtocolEditor";
 
 export interface Props {
   form: any;
   modal: boolean;
   setModal: any;
+  setAdvanceMode: any;
 }
 
 const schemeName = {
@@ -33,11 +34,11 @@ const schemeName = {
 };
 
 function AdvanceSchemeEditor(props: Props) {
-  const { form, modal, setModal } = props;
+  const { form, modal, setModal, setAdvanceMode } = props;
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(true);
 
   const schemeEditorsMock: AnySchemeForm[] = [
     observable(new ContributionRewardForm()),
@@ -96,6 +97,26 @@ function AdvanceSchemeEditor(props: Props) {
     handleToggle(schemeIndex);
   };
 
+  const saveConfig = () => {
+    setAdvanceMode(true);
+    setModal(false);
+    setScheme(SchemeType.ContributionReward);
+    const checkContributionReward = (scheme: AnySchemeForm) => {
+      return scheme.type === 0;
+    };
+    const contributionIsAdded = form.$.some(checkContributionReward);
+    checkSchemeIsAdded(contributionIsAdded);
+  };
+
+  const closeModal = () => {
+    setAdvanceMode(false);
+    setModal(false);
+    setScheme(SchemeType.ContributionReward);
+    checkSchemeIsAdded(true);
+    form.$ = [];
+    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+  };
+
   return (
     <Fragment>
       <MDBModal
@@ -104,10 +125,7 @@ function AdvanceSchemeEditor(props: Props) {
         style={styles.modal}
         size="lg"
       >
-        <MDBModalHeader
-          toggle={() => setModal(!modal)}
-          style={styles.titlePadding}
-        >
+        <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
           {" "}
           <span style={styles.bold}>Advance Configuration</span>
         </MDBModalHeader>
@@ -117,7 +135,6 @@ function AdvanceSchemeEditor(props: Props) {
               <button
                 style={scheme === 0 ? styles.buttonTabActive : styles.buttonTab}
                 onClick={() => showNewScheme(SchemeType.ContributionReward)}
-                // style={scheme === selectedForm['type'] ? styles.buttonTabActive : styles.buttonTab}
               >
                 Contribution Reward
               </button>
@@ -174,7 +191,7 @@ function AdvanceSchemeEditor(props: Props) {
             </MDBRow>
             <GenesisProtocolEditor
               form={
-                schemeIsAdded
+                schemeIsAdded && selectedForm
                   ? selectedForm.$.votingMachine
                   : schemeEditorsMock[scheme].$.votingMachine
               }
@@ -185,15 +202,12 @@ function AdvanceSchemeEditor(props: Props) {
         <MDBModalFooter>
           <MDBRow style={styles.buttonsRow}>
             <MDBCol size="6">
-              <button
-                style={styles.cancelButton}
-                onClick={() => setModal(!modal)}
-              >
+              <button style={styles.cancelButton} onClick={closeModal}>
                 Cancel
               </button>
             </MDBCol>
             <MDBCol style={styles.save}>
-              <button style={styles.saveButton} onClick={() => {}}>
+              <button style={styles.saveButton} onClick={saveConfig}>
                 Save Configuration
               </button>
             </MDBCol>

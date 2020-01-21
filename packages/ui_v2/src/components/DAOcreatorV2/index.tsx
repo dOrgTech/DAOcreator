@@ -32,10 +32,11 @@ import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
 import SchemesStep from "./SchemesStep";
 import InstallStep from "./InstallStep";
-import Stepper from "components/commonV2/Stepper";
-import { getProvider } from "web3/core";
+
+import FileSaver from "file-saver";
+import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import * as FileSaver from "file-saver";
+import { getProvider } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -46,7 +47,7 @@ interface DAO_CREATOR_INTERFACE {
 
 interface Step {
   title: string;
-  form?: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
+  form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   callbacks?: Object;
 }
