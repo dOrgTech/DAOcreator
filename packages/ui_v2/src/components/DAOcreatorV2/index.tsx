@@ -221,7 +221,8 @@ export default function DAOcreator() {
         setStep,
         address: defaultAddress,
         setModal: setImportFile,
-        step
+        step,
+        daoName: () => daoForm.$.config.$.tokenSymbol.value
       }
     },
     {
