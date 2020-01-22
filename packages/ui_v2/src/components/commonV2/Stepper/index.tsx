@@ -47,13 +47,15 @@ const simpleConfigText = (form: any | undefined) => {
       {noDuplicateSimpleOptions.map((option: any, index: number) =>
         option.checked ? (
           <div key={index}>
-            <MDBIcon icon="check" className="blue-text" />
-            <p>{option.text}</p>
+            <p>
+              <MDBIcon icon="check" className="blue-text" /> {option.text}
+            </p>
           </div>
         ) : (
           <div key={index}>
-            <MDBIcon icon="times" className="red-text" />
-            <p>{option.text}</p>
+            <p>
+              <MDBIcon icon="times" className="red-text" /> {option.text}
+            </p>
           </div>
         )
       )}
@@ -80,7 +82,7 @@ const membersPreview = (form: any | undefined, daoName: string) => {
   let totalTokenAmount = 0;
   form.toState().map((member: any) => {
     totalReputationAmount += member.reputation;
-    totalTokenAmount += member.token;
+    totalTokenAmount += member.tokens;
   });
   return (
     <div>
