@@ -65,10 +65,6 @@ const simpleConfigText = (form: any | undefined) => {
 export default function Stepper(props: Props) {
   const { form, title, Component, callbacks, step, index } = props;
 
-  const openAdvanceConfigModal = () => {
-    props.callbacks.setModal(true);
-  };
-
   return (
     <li className={step === index || step > index ? "completed" : ""}>
       <MDBRow
