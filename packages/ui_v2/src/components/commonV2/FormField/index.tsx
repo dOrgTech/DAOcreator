@@ -25,10 +25,11 @@ export interface Props {
   field: AnyField;
   editable?: boolean;
   colSize?: any;
+  tabIndex?: number | null;
 }
 
 function FormField(props: Props) {
-  const { field, editable, colSize } = props;
+  const { field, editable, colSize, tabIndex } = props;
   const size = colSize ? colSize : 6;
   let FieldView;
 
@@ -56,7 +57,12 @@ function FormField(props: Props) {
   }
   return (
     <>
-      <FieldView field={field as any} editable={editable} colSize={size} />
+      <FieldView
+        field={field as any}
+        editable={editable}
+        colSize={size}
+        tabIndex={tabIndex ? tabIndex : undefined}
+      />
     </>
   );
 }
@@ -65,6 +71,7 @@ interface FieldProps<T> {
   field: T;
   editable?: boolean;
   colSize?: any;
+  tabIndex?: number | undefined;
 }
 
 const FieldError = (field: any) => (
@@ -72,7 +79,7 @@ const FieldError = (field: any) => (
 );
 
 const StringFieldView = observer(
-  ({ field, editable }: FieldProps<StringField>) => (
+  ({ field, editable, tabIndex }: FieldProps<StringField>) => (
     <>
       <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
@@ -90,6 +97,7 @@ const StringFieldView = observer(
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
         />
         {FieldError(field)}
       </MDBCol>
