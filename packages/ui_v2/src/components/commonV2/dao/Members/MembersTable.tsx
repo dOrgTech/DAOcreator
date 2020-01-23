@@ -1,7 +1,7 @@
 import React from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { ButtonIcon } from "react-rainbow-components";
-import { MDBRow, MDBContainer } from "mdbreact";
+import { MDBRow, MDBContainer, MDBTooltip } from "mdbreact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPencilAlt,
@@ -35,12 +35,19 @@ export const MembersTable = ({
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
         <td style={styles.borderCell}>
-          <a
-            href={`https://etherscan.io/address/${memberForm.values.address}`}
-            style={styles.noPadding}
-          >
-            {truncateString(memberForm.values.address, 6, 4)}
-          </a>
+          <MDBTooltip domElement>
+            <a // TODO There is probably a better MDBReact component for this
+              onClick={() => {
+                navigator.clipboard.writeText(memberForm.values.address);
+              }}
+              // href={`https://etherscan.io/address/${memberForm.values.address}`}
+              href="#!"
+              style={styles.noPadding}
+            >
+              {truncateString(memberForm.values.address, 6, 4)}
+            </a>
+            <div>Copy</div>
+          </MDBTooltip>
         </td>
         <td style={styles.borderCell}>
           {editing !== index ? (
