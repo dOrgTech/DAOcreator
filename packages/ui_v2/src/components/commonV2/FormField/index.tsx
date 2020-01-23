@@ -75,13 +75,17 @@ const StringFieldView = observer(
   ({ field, editable }: FieldProps<StringField>) => (
     <>
       <MDBCol size="6" style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
+        <label style={styles.labelStyle}>
+          {field.displayName === "Token Symbol"
+            ? "DAO Symbol"
+            : field.displayName}
+        </label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           type="text"
@@ -107,7 +111,7 @@ const TokenFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           type="text"
@@ -184,7 +188,7 @@ const DurationFieldView = observer(
                 {" "}
                 <MDBIcon icon="info-circle" />
               </MDBBtn>
-              <span>Some example</span>
+              <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
           <MDBCol>
@@ -221,7 +225,7 @@ const DateTimeFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <ThemeProvider theme={datePickerTheme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -298,7 +302,7 @@ const PercentageFieldView = observer(
               {" "}
               <MDBIcon icon="info-circle" />
             </MDBBtn>
-            <span>Some example</span>
+            <span>{field.description}</span>
           </MDBTooltip>
           <input
             type="number"
@@ -326,7 +330,7 @@ const AddressFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           style={styles.inputStyle}
