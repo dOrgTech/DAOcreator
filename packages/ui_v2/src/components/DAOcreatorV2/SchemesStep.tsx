@@ -13,13 +13,14 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: any;
+  advancedScheme: any;
 }
 
 function SchemesStep(props: Props) {
-  const { form, toggleCollapse, modal, setModal } = props;
+  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
 
   React.useEffect(() => {
-    // form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
   }, []);
 
   return (
@@ -38,6 +39,7 @@ function SchemesStep(props: Props) {
           toggleCollapse={toggleCollapse}
           modal={modal}
           setModal={setModal}
+          advancedScheme={advancedScheme}
         />{" "}
       </Box>
     </>

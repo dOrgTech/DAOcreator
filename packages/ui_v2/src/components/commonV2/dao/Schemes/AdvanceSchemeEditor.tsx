@@ -88,11 +88,7 @@ function AdvanceSchemeEditor(props: Props) {
       setAdvanceMode(true);
       setModal(false);
       setScheme(SchemeType.ContributionReward);
-      const checkContributionReward = (scheme: AnySchemeForm) => {
-        return scheme.type === 0;
-      };
-      const contributionIsAdded = form.$.some(checkContributionReward);
-      checkSchemeIsAdded(contributionIsAdded);
+      handleToggle(0);
     }
   };
 
@@ -100,22 +96,13 @@ function AdvanceSchemeEditor(props: Props) {
     setAdvanceMode(false);
     setModal(false);
     setScheme(SchemeType.ContributionReward);
-    checkSchemeIsAdded(true);
-    form.$ = [];
-  };
-
-  const handleModal = () => {
-    setModal(!modal);
+    handleToggle(0);
+    form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
   };
 
   return (
     <Fragment>
-      <MDBModal
-        isOpen={modal}
-        toggle={handleModal}
-        style={styles.modal}
-        size="lg"
-      >
+      <MDBModal isOpen={modal} style={styles.modal} size="lg">
         <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
           {" "}
           <span style={styles.bold}>Advance Configuration</span>

@@ -8,12 +8,7 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
-import {
-  SchemeType,
-  GenesisProtocolPreset,
-  ContributionRewardForm,
-  SchemeRegistrarForm
-} from "@dorgtech/daocreator-lib";
+import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 import Toggle from "./Toggle";
@@ -26,6 +21,7 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: any;
+  advancedScheme: any;
 }
 
 enum DAOSpeed {
@@ -65,15 +61,16 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal } = props;
+  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
-  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
   const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
+
+  const { advanceMode, setAdvanceMode } = advancedScheme;
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
