@@ -25,10 +25,11 @@ export interface Props {
   field: AnyField;
   editable?: boolean;
   colSize?: any;
+  tabIndex?: number | null;
 }
 
 function FormField(props: Props) {
-  const { field, editable, colSize } = props;
+  const { field, editable, colSize, tabIndex } = props;
   const size = colSize ? colSize : 6;
   let FieldView;
 
@@ -56,7 +57,12 @@ function FormField(props: Props) {
   }
   return (
     <>
-      <FieldView field={field as any} editable={editable} colSize={size} />
+      <FieldView
+        field={field as any}
+        editable={editable}
+        colSize={size}
+        tabIndex={tabIndex ? tabIndex : undefined}
+      />
     </>
   );
 }
@@ -65,6 +71,7 @@ interface FieldProps<T> {
   field: T;
   editable?: boolean;
   colSize?: any;
+  tabIndex?: number | undefined;
 }
 
 const FieldError = (field: any) => (
@@ -72,16 +79,20 @@ const FieldError = (field: any) => (
 );
 
 const StringFieldView = observer(
-  ({ field, editable }: FieldProps<StringField>) => (
+  ({ field, editable, tabIndex }: FieldProps<StringField>) => (
     <>
       <MDBCol size="6" style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
+        <label style={styles.labelStyle}>
+          {field.displayName === "Token Symbol"
+            ? "DAO Symbol"
+            : field.displayName}
+        </label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           type="text"
@@ -90,6 +101,7 @@ const StringFieldView = observer(
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
         />
         {FieldError(field)}
       </MDBCol>
@@ -107,7 +119,7 @@ const TokenFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           type="text"
@@ -184,7 +196,7 @@ const DurationFieldView = observer(
                 {" "}
                 <MDBIcon icon="info-circle" />
               </MDBBtn>
-              <span>Some example</span>
+              <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
           <MDBCol>
@@ -221,7 +233,7 @@ const DateTimeFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <ThemeProvider theme={datePickerTheme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -298,7 +310,7 @@ const PercentageFieldView = observer(
               {" "}
               <MDBIcon icon="info-circle" />
             </MDBBtn>
-            <span>Some example</span>
+            <span>{field.description}</span>
           </MDBTooltip>
           <input
             type="number"
@@ -326,7 +338,7 @@ const AddressFieldView = observer(
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>Some example</span>
+          <span>{field.description}</span>
         </MDBTooltip>
         <input
           style={styles.inputStyle}

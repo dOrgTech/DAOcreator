@@ -14,8 +14,8 @@ function DAOConfigEditor(props: Props) {
   const { form, editable } = props;
   return (
     <MDBRow>
-      <FormField field={form.$.daoName} editable={editable} />
-      <FormField field={form.$.tokenSymbol} editable={editable} />
+      <FormField field={form.$.daoName} editable={editable} tabIndex={1} />
+      <FormField field={form.$.tokenSymbol} editable={editable} tabIndex={2} />
     </MDBRow>
   );
 }

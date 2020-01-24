@@ -162,7 +162,7 @@ export default function DAOcreator() {
       <MDBModalBody>
         <InstallStep form={recoveredForm} />
       </MDBModalBody>
-      <MDBModalFooter></MDBModalFooter>
+      <MDBModalFooter />
 
       <MDBBtn
         onClick={loadLocalStorage}
@@ -222,7 +222,8 @@ export default function DAOcreator() {
         setStep,
         address: defaultAddress,
         setModal: setImportFile,
-        step
+        step,
+        daoName: () => daoForm.$.config.$.tokenSymbol.value
       }
     },
     {

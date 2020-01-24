@@ -22,6 +22,7 @@ interface Props {
   modal: boolean;
   setModal: any;
   daoSymbol: () => string;
+  advancedScheme: any;
 }
 
 enum DAOSpeed {
@@ -61,20 +62,21 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal, daoSymbol } = props;
+  const { form, toggleCollapse, modal, setModal, daoSymbol, advancedScheme } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
-  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
   const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
+
+  const { advanceMode, setAdvanceMode } = advancedScheme;
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
-    form.$.map(checkDefaultChange);
-    form.$.map(getVotingMachinePreset);
+    form.$.forEach(checkDefaultChange);
+    form.$.forEach(getVotingMachinePreset);
   };
   // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
   // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
@@ -176,16 +178,11 @@ function SchemeEditor(props: Props) {
         votersReputationLossRatio,
         minimumDaoBounty
       } = votingMachine.$;
-      if (Number(proposingRepReward.value) > 0) setRewardSuccess(true);
-      else setRewardSuccess(false);
-      if (Number(votersReputationLossRatio.value) > 0)
-        setRewardAndPenVoters(true);
-      else setRewardAndPenVoters(false);
-      if (Number(minimumDaoBounty.value > 0)) setAutobet(true);
-      else setAutobet(false);
+      setRewardSuccess(Number(proposingRepReward.value) > 0);
+      setRewardAndPenVoters(Number(votersReputationLossRatio.value) > 0);
+      setAutobet(Number(minimumDaoBounty.value) > 0);
     }
     // Apply the effects of the toggles
-    // if(!distribution) // TODO: distribution does not currently affect the voting machine
     if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
     if (!rewardAndPenVoters)
       votingMachine.$.votersReputationLossRatio.value = "0";
@@ -193,7 +190,6 @@ function SchemeEditor(props: Props) {
   };
 
   const dependeciesList = [
-    form.$,
     decisionSpeed,
     distribution,
     rewardSuccess,
@@ -206,6 +202,10 @@ function SchemeEditor(props: Props) {
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
+  };
+
+  const setConfiguration = () => {
+    toggleCollapse();
   };
 
   return (
@@ -346,7 +346,7 @@ function SchemeEditor(props: Props) {
         />
       </MDBContainer>
 
-      <button onClick={() => toggleCollapse()} style={styles.configButton}>
+      <button onClick={setConfiguration} style={styles.configButton}>
         Set Configuration
       </button>
     </>
