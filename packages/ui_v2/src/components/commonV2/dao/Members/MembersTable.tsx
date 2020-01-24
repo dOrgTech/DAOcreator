@@ -1,13 +1,6 @@
 import React from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { ButtonIcon } from "react-rainbow-components";
-import { MDBRow, MDBContainer } from "mdbreact";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencilAlt,
-  faMinus,
-  faCheck
-} from "@fortawesome/free-solid-svg-icons";
+import { MDBRow, MDBContainer, MDBIcon } from "mdbreact";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
@@ -64,34 +57,20 @@ export const MembersTable = ({
         </td>
         <td style={styles.borderCell}>
           <div
-            className="rainbow-p-right_large"
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
             }}
           >
-            <ButtonIcon
-              variant="border"
-              size="small"
-              icon={
-                <FontAwesomeIcon
-                  icon={editing !== index ? faPencilAlt : faCheck}
-                />
-              }
-            />
+            <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
         </td>
         <td style={styles.borderCell}>
           <div
-            className="rainbow-p-right_large"
             onClick={() => {
               onDelete(index);
             }}
           >
-            <ButtonIcon
-              variant="border"
-              size="small"
-              icon={<FontAwesomeIcon icon={faMinus} />}
-            />
+            <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
         </td>
       </tr>
