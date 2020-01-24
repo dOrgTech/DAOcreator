@@ -19,7 +19,7 @@ function SchemesStep(props: Props) {
   const { form, toggleCollapse, modal, setModal } = props;
 
   React.useEffect(() => {
-    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+    // form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
   }, []);
 
   return (

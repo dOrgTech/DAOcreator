@@ -34,7 +34,7 @@ const schemeName = {
   2: "Generic Scheme"
 };
 
-const schemes: AnySchemeForm[] = [
+const schemes: Array<AnySchemeForm & IObservableObject> = [
   observable(new ContributionRewardForm()),
   observable(new SchemeRegistrarForm()),
   observable(new GenericSchemeForm())
@@ -45,7 +45,7 @@ function AdvanceSchemeEditor(props: Props) {
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(true);
+  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>("");
 
   const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
@@ -76,24 +76,7 @@ function AdvanceSchemeEditor(props: Props) {
       form.$.push(scheme);
     };
 
-    if (added) {
-      removeScheme();
-    } else {
-      switch (schemeIndex) {
-        case 0:
-          const constributionReward = observable(new ContributionRewardForm());
-          addScheme(constributionReward);
-          break;
-        case 1:
-          const schemeRegistrar = observable(new SchemeRegistrarForm());
-          addScheme(schemeRegistrar);
-          break;
-        case 2:
-          const genericScheme = observable(new GenericSchemeForm());
-          addScheme(genericScheme);
-          break;
-      }
-    }
+    added ? removeScheme() : addScheme(schemes[schemeIndex]);
     handleToggle(schemeIndex);
   };
 
@@ -119,14 +102,17 @@ function AdvanceSchemeEditor(props: Props) {
     setScheme(SchemeType.ContributionReward);
     checkSchemeIsAdded(true);
     form.$ = [];
-    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+  };
+
+  const handleModal = () => {
+    setModal(!modal);
   };
 
   return (
     <Fragment>
       <MDBModal
         isOpen={modal}
-        toggle={() => setModal(!modal)}
+        toggle={handleModal}
         style={styles.modal}
         size="lg"
       >

@@ -162,7 +162,7 @@ export default function DAOcreator() {
       <MDBModalBody>
         <InstallStep form={recoveredForm} />
       </MDBModalBody>
-      <MDBModalFooter></MDBModalFooter>
+      <MDBModalFooter />
 
       <MDBBtn
         onClick={loadLocalStorage}
