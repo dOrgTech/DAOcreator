@@ -21,6 +21,7 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: any;
+  daoSymbol: () => string;
 }
 
 enum DAOSpeed {
@@ -60,7 +61,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal } = props;
+  const { form, toggleCollapse, modal, setModal, daoSymbol } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -304,7 +305,7 @@ function SchemeEditor(props: Props) {
 
         <Toggle
           id={"distribution"}
-          text={"Distribute Dxdao token"}
+          text={`Distribute ${props.daoSymbol()} token`}
           example={"Some example"}
           toggle={() => {
             setDistribution(!distribution);
