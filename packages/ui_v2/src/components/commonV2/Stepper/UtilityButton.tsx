@@ -3,13 +3,18 @@ import React from "react";
 interface Props {
   title: string;
   openModal: (i: boolean | string) => void;
+  advanced?: any;
 }
 export function UtilityButton(props: Props) {
-  const { title, openModal } = props;
+  const { title, openModal, advanced } = props;
   const handledCallback = () => {
     if (title === "Import CSV") {
       openModal(title);
     } else {
+      const { advanceMode, _, form } = advanced;
+      if (!advanceMode) {
+        form.$ = [];
+      }
       openModal(true);
     }
   };

@@ -38,7 +38,7 @@ export default function Toggle({
             type="checkbox"
             className="custom-control-input"
             id={id}
-            onChange={() => toggle()}
+            onChange={toggle}
             disabled={disabled}
             checked={checked}
           />

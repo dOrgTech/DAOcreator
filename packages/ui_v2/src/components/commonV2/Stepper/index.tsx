@@ -19,11 +19,21 @@ interface Props {
   index: number;
   daoName?: string;
 }
-const ImportButton = (props: { step: number; index: number; cb: any }) => {
-  const { step, index, cb } = props;
+
+const ModalButton = (props: {
+  step: number;
+  index: number;
+  cb: any;
+  advanced?: any;
+}) => {
+  const { step, index, cb, advanced } = props;
   if (step === 1 && index === 1) {
     return (
-      <UtilityButton title={"Advanced Configuration"} openModal={cb.setModal} />
+      <UtilityButton
+        title={"Advanced Configuration"}
+        openModal={cb.setModal}
+        advanced={advanced}
+      />
     );
   } else if (step === 2 && index === 2) {
     return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
@@ -63,10 +73,13 @@ const simpleConfigText = (form: any | undefined) => {
 };
 
 export default function Stepper(props: Props) {
+  const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
   const { form, title, Component, callbacks, step, index } = props;
 
-  const openAdvanceConfigModal = () => {
-    props.callbacks.setModal(true);
+  const advancedState = {
+    advanceMode,
+    setAdvanceMode,
+    form
   };
 
   return (
@@ -103,7 +116,12 @@ export default function Stepper(props: Props) {
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         <div>
-          <ImportButton step={step} index={index} cb={props.callbacks} />
+          <ModalButton
+            step={step}
+            index={index}
+            cb={props.callbacks}
+            advanced={advancedState}
+          />
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -135,7 +153,11 @@ export default function Stepper(props: Props) {
               : styles.stepFourContent
           }
         >
-          <Component form={form} {...props.callbacks} />
+          <Component
+            form={form}
+            {...props.callbacks}
+            advancedScheme={advancedState}
+          />
         </MDBRow>
       </MDBCollapse>
     </li>
