@@ -25,7 +25,9 @@ const MembersEditor = ({
   const [addressAdded, setAddressAdded] = useState(true);
 
   memberForm.$.reputation.value = "100";
-  memberForm.$.tokens.value = "100";
+  tokenDistribution
+    ? (memberForm.$.tokens.value = "100")
+    : (memberForm.$.tokens.value = "0");
 
   if (step === 2 && addressAdded) {
     const member = new MemberForm(form.getDAOTokenSymbol);
@@ -38,7 +40,9 @@ const MembersEditor = ({
   const membersForm = form;
 
   memberForm.$.reputation.value = "100";
-  memberForm.$.tokens.value = "100";
+  tokenDistribution
+    ? (memberForm.$.tokens.value = "100")
+    : (memberForm.$.tokens.value = "0");
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
