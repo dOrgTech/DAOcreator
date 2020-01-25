@@ -256,14 +256,14 @@ export default function DAOcreator() {
                     <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
                   </MDBBtn>
                   <div style={styles.divided}>
-                    <div
+                    <div // There might be a better MDBReact component for this
                       style={{ cursor: "pointer" }}
                       onClick={() => setImportFile("Import configuration")}
                     >
                       <MDBPopoverBody>Import Configuration</MDBPopoverBody>
                     </div>
                     <div style={styles.divider} />
-                    <div
+                    <div // There might be a better MDBReact component for this
                       style={{ cursor: "pointer" }}
                       onClick={() => exportDaoParams()}
                     >
