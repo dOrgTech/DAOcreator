@@ -15,6 +15,7 @@ interface Props {
   setModal: any;
   advancedScheme: any;
   daoSymbol: () => string;
+  setTokenDistribution: (toggled: boolean) => void;
 }
 
 function SchemesStep(props: Props) {
@@ -24,7 +25,8 @@ function SchemesStep(props: Props) {
     modal,
     setModal,
     daoSymbol,
-    advancedScheme
+    advancedScheme,
+    setTokenDistribution
   } = props;
 
   React.useEffect(() => {
@@ -49,6 +51,7 @@ function SchemesStep(props: Props) {
           setModal={setModal}
           daoSymbol={daoSymbol}
           advancedScheme={advancedScheme}
+          setTokenDistribution={setTokenDistribution}
         />{" "}
       </Box>
     </>

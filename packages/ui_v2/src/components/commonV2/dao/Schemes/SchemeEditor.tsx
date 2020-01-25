@@ -23,6 +23,7 @@ interface Props {
   setModal: any;
   daoSymbol: () => string;
   advancedScheme: any;
+  setTokenDistribution: (toggled: boolean) => void;
 }
 
 enum DAOSpeed {
@@ -62,7 +63,15 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal, daoSymbol, advancedScheme } = props;
+  const {
+    form,
+    toggleCollapse,
+    modal,
+    setModal,
+    daoSymbol,
+    advancedScheme,
+    setTokenDistribution
+  } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [distribution, setDistribution] = useState<boolean>(false);
@@ -308,6 +317,7 @@ function SchemeEditor(props: Props) {
           text={`Distribute ${props.daoSymbol()} token`}
           example={"Some example"}
           toggle={() => {
+            setTokenDistribution(!distribution); // TODO
             setDistribution(!distribution);
           }}
           disabled={advanceMode}
