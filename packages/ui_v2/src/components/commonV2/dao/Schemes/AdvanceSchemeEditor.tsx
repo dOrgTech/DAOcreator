@@ -19,6 +19,7 @@ import {
   SchemeType
 } from "@dorgtech/daocreator-lib";
 import GenesisProtocolEditor from "../GenesisProtocolEditor";
+import FormField from "../../FormField";
 
 export interface Props {
   form: any;
@@ -33,33 +34,32 @@ const schemeName = {
   2: "Generic Scheme"
 };
 
+const schemes: Array<AnySchemeForm & IObservableObject> = [
+  observable(new ContributionRewardForm()),
+  observable(new SchemeRegistrarForm()),
+  observable(new GenericSchemeForm())
+];
+
 function AdvanceSchemeEditor(props: Props) {
   const { form, modal, setModal, setAdvanceMode } = props;
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(true);
+  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>("");
 
-  const schemeEditorsMock: AnySchemeForm[] = [
-    observable(new ContributionRewardForm()),
-    observable(new SchemeRegistrarForm()),
-    observable(new GenericSchemeForm())
-  ];
+  const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
+  const params = actualScheme!.getParams();
 
   const handleToggle = (index: number) => {
-    checkSchemeIsAdded(
-      form.$.some((scheme: AnySchemeForm) => scheme.type === index)
-    );
+    const added = form.$.some((scheme: AnySchemeForm) => scheme.type === index);
+    checkSchemeIsAdded(added);
   };
 
   const showNewScheme = (schemeIndex: number) => {
     setScheme(schemeIndex);
     handleToggle(schemeIndex);
   };
-
-  const selectedForm = form.$.filter(
-    (x: AnySchemeForm) => x.type === scheme
-  ).pop();
 
   const handleScheme = (schemeIndex: number) => {
     const added = form.$.length > 0 && schemeIsAdded;
@@ -76,55 +76,33 @@ function AdvanceSchemeEditor(props: Props) {
       form.$.push(scheme);
     };
 
-    if (added) {
-      removeScheme();
-    } else {
-      switch (schemeIndex) {
-        case 0:
-          const constributionReward = observable(new ContributionRewardForm());
-          addScheme(constributionReward);
-          break;
-        case 1:
-          const schemeRegistrar = observable(new SchemeRegistrarForm());
-          addScheme(schemeRegistrar);
-          break;
-        case 2:
-          const genericScheme = observable(new GenericSchemeForm());
-          addScheme(genericScheme);
-          break;
-      }
-    }
+    added ? removeScheme() : addScheme(schemes[schemeIndex]);
     handleToggle(schemeIndex);
   };
 
-  const saveConfig = () => {
-    setAdvanceMode(true);
-    setModal(false);
-    setScheme(SchemeType.ContributionReward);
-    const checkContributionReward = (scheme: AnySchemeForm) => {
-      return scheme.type === 0;
-    };
-    const contributionIsAdded = form.$.some(checkContributionReward);
-    checkSchemeIsAdded(contributionIsAdded);
+  const saveConfig = async () => {
+    const { hasError } = await form.validate();
+    if (hasError) {
+      setError(form.error);
+    } else {
+      setAdvanceMode(true);
+      setModal(false);
+      setScheme(SchemeType.ContributionReward);
+      handleToggle(0);
+    }
   };
 
   const closeModal = () => {
     setAdvanceMode(false);
     setModal(false);
     setScheme(SchemeType.ContributionReward);
-    checkSchemeIsAdded(true);
-    form.$ = [];
-    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+    handleToggle(0);
+    form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
   };
 
   return (
     <Fragment>
-      <MDBModal
-        isOpen={modal}
-        toggle={() => setModal(!modal)}
-        style={styles.modal}
-        size="lg"
-      >
+      <MDBModal isOpen={modal} style={styles.modal} size="lg">
         <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
           {" "}
           <span style={styles.bold}>Advance Configuration</span>
@@ -190,21 +168,39 @@ function AdvanceSchemeEditor(props: Props) {
               </MDBCol>
             </MDBRow>
             <GenesisProtocolEditor
-              form={
-                schemeIsAdded && selectedForm
-                  ? selectedForm.$.votingMachine
-                  : schemeEditorsMock[scheme].$.votingMachine
-              }
+              form={actualScheme!.$.votingMachine}
               editable={schemeIsAdded}
             />
+            {params!.length > 0 ? (
+              <>
+                {params!.map((param: any, index: any) => (
+                  <MDBRow key={`field-${index}`}>
+                    <FormField
+                      field={param}
+                      editable={schemeIsAdded}
+                      colSize={12}
+                    />
+                  </MDBRow>
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </MDBModalBody>
         <MDBModalFooter>
           <MDBRow style={styles.buttonsRow}>
-            <MDBCol size="6">
+            <MDBCol size="3">
               <button style={styles.cancelButton} onClick={closeModal}>
                 Cancel
               </button>
+            </MDBCol>
+            <MDBCol style={{ textAlign: "center" }}>
+              {
+                <>
+                  {error ? <p style={styles.errorMessage}>{error}</p> : <></>}
+                </>
+              }
             </MDBCol>
             <MDBCol style={styles.save}>
               <button style={styles.saveButton} onClick={saveConfig}>
@@ -232,6 +228,10 @@ const styles = {
   },
   tab: {
     padding: "0px"
+  },
+  errorMessage: {
+    color: "red",
+    marginTop: "10px"
   },
   buttonTab: {
     width: "100%",

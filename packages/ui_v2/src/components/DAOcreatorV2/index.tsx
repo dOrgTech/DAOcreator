@@ -162,7 +162,7 @@ export default function DAOcreator() {
       <MDBModalBody>
         <InstallStep form={recoveredForm} />
       </MDBModalBody>
-      <MDBModalFooter></MDBModalFooter>
+      <MDBModalFooter />
 
       <MDBBtn
         onClick={loadLocalStorage}
@@ -208,7 +208,8 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         setStep,
         modal: advanceSchemeConfig,
-        setModal: setAdvanceSchemeConfig
+        setModal: setAdvanceSchemeConfig,
+        daoSymbol: () => daoForm.$.config.$.tokenSymbol.value
       }
     },
     {
@@ -221,7 +222,8 @@ export default function DAOcreator() {
         setStep,
         address: defaultAddress,
         setModal: setImportFile,
-        step
+        step,
+        daoName: () => daoForm.$.config.$.tokenSymbol.value
       }
     },
     {
@@ -254,12 +256,18 @@ export default function DAOcreator() {
                     <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
                   </MDBBtn>
                   <div style={styles.divided}>
-                    <div onClick={() => setImportFile("Import configuration")}>
+                    <div // There might be a better MDBReact component for this
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setImportFile("Import configuration")}
+                    >
                       <MDBPopoverBody>Import Configuration</MDBPopoverBody>
                     </div>
                     <div style={styles.divider} />
-                    <div onClick={() => exportDaoParams()}>
-                      <MDBPopoverBody>Export configuration</MDBPopoverBody>
+                    <div // There might be a better MDBReact component for this
+                      style={{ cursor: "pointer" }}
+                      onClick={() => exportDaoParams()}
+                    >
+                      <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>
                   </div>
                 </MDBPopover>

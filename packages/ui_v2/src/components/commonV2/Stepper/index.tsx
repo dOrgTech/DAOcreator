@@ -9,6 +9,7 @@ import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
 import { simpleOptionsSwitcher } from "../../utils";
+import LineGraphic from "../LineGraphic";
 
 interface Props {
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
@@ -19,11 +20,21 @@ interface Props {
   index: number;
   daoName?: string;
 }
-const ImportButton = (props: { step: number; index: number; cb: any }) => {
-  const { step, index, cb } = props;
+
+const ModalButton = (props: {
+  step: number;
+  index: number;
+  cb: any;
+  advanced?: any;
+}) => {
+  const { step, index, cb, advanced } = props;
   if (step === 1 && index === 1) {
     return (
-      <UtilityButton title={"Advanced Configuration"} openModal={cb.setModal} />
+      <UtilityButton
+        title={"Advanced Configuration"}
+        openModal={cb.setModal}
+        advanced={advanced}
+      />
     );
   } else if (step === 2 && index === 2) {
     return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
@@ -32,9 +43,7 @@ const ImportButton = (props: { step: number; index: number; cb: any }) => {
   }
 };
 
-// WIP
 const simpleConfigText = (form: any | undefined) => {
-  // TESTING Utility.
   const simpleOptions = simpleOptionsSwitcher(form, true);
   const noDuplicateSimpleOptions = simpleOptions.slice(
     0,
@@ -48,13 +57,15 @@ const simpleConfigText = (form: any | undefined) => {
       {noDuplicateSimpleOptions.map((option: any, index: number) =>
         option.checked ? (
           <div key={index}>
-            <p>checked</p>
-            <p>{option.text}</p>
+            <p>
+              <MDBIcon icon="check" className="blue-text" /> {option.text}
+            </p>
           </div>
         ) : (
           <div key={index}>
-            <p>not checked</p>
-            <p>{option.text}</p>
+            <p>
+              <MDBIcon icon="times" className="grey-text" /> {option.text}
+            </p>
           </div>
         )
       )}
@@ -62,11 +73,58 @@ const simpleConfigText = (form: any | undefined) => {
   );
 };
 
+const membersPreview = (form: any | undefined, daoName: string) => {
+  const reputationConfig = {
+    showPercentage: false,
+    height: "0.5rem",
+    symbol: "REP",
+    dataKey: "reputation",
+    nameKey: "address"
+  };
+  const tokenConfig = {
+    showPercentage: false,
+    height: "0.5rem",
+    symbol: "token", // TODO get token symbol (?)
+    dataKey: "tokens",
+    nameKey: "address"
+  };
+  let totalReputationAmount = 0;
+  let totalTokenAmount = 0;
+  form.toState().map((member: any) => {
+    totalReputationAmount += member.reputation;
+    totalTokenAmount += member.tokens;
+  });
+  return (
+    <div>
+      <p>{form.$.length} Members</p>
+      <div style={{ width: "17.5em" }}>
+        <p>Reputation Distribution</p>
+        <LineGraphic
+          data={form.toState()}
+          total={totalReputationAmount}
+          config={reputationConfig}
+        />
+      </div>
+      <div style={{ width: "17.5em" }}>
+        <p>{daoName} Token Distribution</p>
+        <LineGraphic
+          data={form.toState()}
+          total={totalTokenAmount}
+          config={tokenConfig}
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function Stepper(props: Props) {
+  const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
   const { form, title, Component, callbacks, step, index } = props;
 
-  const openAdvanceConfigModal = () => {
-    props.callbacks.setModal(true);
+  const advancedState = {
+    advanceMode,
+    setAdvanceMode,
+    form
   };
 
   return (
@@ -102,8 +160,16 @@ export default function Stepper(props: Props) {
         )}
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
+        {step > 2 && index === 2
+          ? membersPreview(form, callbacks.daoName())
+          : ""}
         <div>
-          <ImportButton step={step} index={index} cb={props.callbacks} />
+          <ModalButton
+            step={step}
+            index={index}
+            cb={props.callbacks}
+            advanced={advancedState}
+          />
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -135,7 +201,11 @@ export default function Stepper(props: Props) {
               : styles.stepFourContent
           }
         >
-          <Component form={form} {...props.callbacks} />
+          <Component
+            form={form}
+            {...props.callbacks}
+            advancedScheme={advancedState}
+          />
         </MDBRow>
       </MDBCollapse>
     </li>

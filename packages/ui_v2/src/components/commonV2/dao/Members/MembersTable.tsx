@@ -19,7 +19,8 @@ export const MembersTable = ({
   editedMemberForm,
   onEdit,
   onDelete,
-  selectEdit
+  selectEdit,
+  tokenDistribution
 }: {
   membersForm: any;
   editing: number;
@@ -27,6 +28,7 @@ export const MembersTable = ({
   onEdit: any;
   onDelete: any;
   selectEdit: any;
+  tokenDistribution: boolean;
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
@@ -34,7 +36,6 @@ export const MembersTable = ({
         <td style={styles.borderCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
-        {/* <td style={(styles.borderCell, { display: "inline-block" })}> */}
         <td style={styles.borderCell}>
           <MDBTooltip domElement>
             <div //There is probably a better MDBReact component for this
@@ -74,46 +75,36 @@ export const MembersTable = ({
             ></FormField>
           )}
         </td>
-        <td style={styles.borderCell}>
-          {editing !== index ? (
-            memberForm.values.tokens
-          ) : (
-            <FormField
-              field={editedMemberForm.$.tokens}
-              editable={true}
-            ></FormField>
-          )}
-        </td>
+        {tokenDistribution ? (
+          <td style={styles.borderCell}>
+            {editing !== index ? (
+              memberForm.values.tokens
+            ) : (
+              <FormField
+                field={editedMemberForm.$.tokens}
+                editable={true}
+              ></FormField>
+            )}
+          </td>
+        ) : (
+          <td></td>
+        )}
         <td style={styles.borderCell}>
           <div
-            className="rainbow-p-right_large"
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
             }}
           >
-            <ButtonIcon
-              variant="border"
-              size="small"
-              icon={
-                <FontAwesomeIcon
-                  icon={editing !== index ? faPencilAlt : faCheck}
-                />
-              }
-            />
+            <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
         </td>
         <td style={styles.borderCell}>
           <div
-            className="rainbow-p-right_large"
             onClick={() => {
               onDelete(index);
             }}
           >
-            <ButtonIcon
-              variant="border"
-              size="small"
-              icon={<FontAwesomeIcon icon={faMinus} />}
-            />
+            <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
         </td>
       </tr>
@@ -129,7 +120,11 @@ export const MembersTable = ({
                 <th style={styles.titles}> MEMBERS</th>
                 <th></th>
                 <th style={styles.titles}>REPUTATION</th>
-                <th style={styles.titles}>TOKENS</th>
+                {tokenDistribution ? (
+                  <th style={styles.titles}>TOKENS</th>
+                ) : (
+                  <th></th>
+                )}
                 <th></th>
                 <th></th>
               </tr>

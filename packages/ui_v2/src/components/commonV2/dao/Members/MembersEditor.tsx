@@ -4,6 +4,7 @@ import { MDBBox, MDBTypography, MDBContainer, MDBRow } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
+import Toggle from "../Schemes/Toggle";
 
 const MembersEditor = ({
   form,
@@ -21,9 +22,13 @@ const MembersEditor = ({
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editing, setEditing] = useState(-1);
   const [addressAdded, setAddressAdded] = useState(true);
+  const [distribution, setDistribution] = useState(false);
 
-  memberForm.$.reputation.value = "100"; // Configurable(?)
-  memberForm.$.tokens.value = "100"; // Also Configurable if token option is selected
+  // Configurable(?)
+  memberForm.$.reputation.value = "100";
+  distribution
+    ? (memberForm.$.tokens.value = "100")
+    : (memberForm.$.tokens.value = "0");
 
   if (step === 2 && addressAdded) {
     const member = new MemberForm(form.getDAOTokenSymbol);
@@ -36,7 +41,9 @@ const MembersEditor = ({
   const membersForm = form;
 
   memberForm.$.reputation.value = "100";
-  memberForm.$.tokens.value = "100";
+  distribution
+    ? (memberForm.$.tokens.value = "100")
+    : (memberForm.$.tokens.value = "0");
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -102,6 +109,16 @@ const MembersEditor = ({
   return (
     <MDBBox>
       <MDBContainer style={styles.noPadding}>
+        <Toggle
+          id={"distribution"}
+          text={`Distribute ${getDAOTokenSymbol()} token`}
+          example={"Some example"}
+          toggle={() => {
+            setDistribution(!distribution);
+          }}
+          disabled={false}
+          checked={distribution}
+        />
         <MembersAnalytics data={membersForm.toState()} />
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
@@ -118,6 +135,7 @@ const MembersEditor = ({
             onEdit={onEdit}
             onDelete={onDelete}
             selectEdit={selectEdit}
+            tokenDistribution={distribution}
           />
         </MDBRow>
       </MDBContainer>
