@@ -214,10 +214,7 @@ export default function DAOcreator() {
         modal: advanceSchemeConfig,
         setModal: setAdvanceSchemeConfig,
         daoSymbol: () => daoForm.$.config.$.tokenSymbol.value,
-        setTokenDistribution: (dist: boolean) => {
-          setTokenDistribution(dist);
-          console.log("dist: " + dist);
-        }
+        setTokenDistribution: (dist: boolean) => setTokenDistribution(dist)
       }
     },
     {
