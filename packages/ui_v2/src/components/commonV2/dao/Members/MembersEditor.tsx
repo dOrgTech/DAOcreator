@@ -10,13 +10,11 @@ const MembersEditor = ({
   form,
   getDAOTokenSymbol,
   address,
-  // tokenDistribution,
   step
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
-  // tokenDistribution: boolean;
   step: number;
 }) => {
   const forceUpdate = useForceUpdate();
@@ -42,9 +40,6 @@ const MembersEditor = ({
   const membersForm = form;
 
   memberForm.$.reputation.value = "100";
-  // tokenDistribution
-  //   ? (memberForm.$.tokens.value = "100")
-  //   : (memberForm.$.tokens.value = "0");
   distribution
     ? (memberForm.$.tokens.value = "100")
     : (memberForm.$.tokens.value = "0");
