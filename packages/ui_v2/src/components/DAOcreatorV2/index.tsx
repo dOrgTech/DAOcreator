@@ -69,10 +69,6 @@ export default function DAOcreator() {
   );
   const [importFile, setImportFile] = React.useState<string>("");
 
-  const [tokenDistribution, setTokenDistribution] = React.useState<boolean>(
-    false
-  );
-
   const handleMetamask = async () => {
     try {
       const address = await getProvider();
@@ -213,8 +209,7 @@ export default function DAOcreator() {
         setStep,
         modal: advanceSchemeConfig,
         setModal: setAdvanceSchemeConfig,
-        daoSymbol: () => daoForm.$.config.$.tokenSymbol.value,
-        setTokenDistribution: (dist: boolean) => setTokenDistribution(dist)
+        daoSymbol: () => daoForm.$.config.$.tokenSymbol.value
       }
     },
     {
@@ -227,7 +222,6 @@ export default function DAOcreator() {
         setStep,
         address: defaultAddress,
         setModal: setImportFile,
-        tokenDistribution,
         step,
         daoName: () => daoForm.$.config.$.tokenSymbol.value
       }
