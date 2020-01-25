@@ -352,7 +352,7 @@ IProps) => {
     setFailed(null);
 
     // Make sure we have a web3 provider available. If not,
-    // tell the user they need to have one.
+    // tell the user they need to have one. TODO
     let web3 = undefined;
 
     try {
@@ -454,7 +454,10 @@ IProps) => {
             {failed === null ? "Install Organisation" : "Restart Installation"}
           </MDBBtn>
         ) : (
-          <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
+          <Fragment>
+            <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
+            <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
+          </Fragment>
         )}
       </MDBRow>
     </MDBContainer>
