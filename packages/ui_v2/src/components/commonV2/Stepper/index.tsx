@@ -64,7 +64,7 @@ const simpleConfigText = (form: any | undefined) => {
         ) : (
           <div key={index}>
             <p>
-              <MDBIcon icon="times" className="red-text" /> {option.text}
+              <MDBIcon icon="times" className="grey-text" /> {option.text}
             </p>
           </div>
         )

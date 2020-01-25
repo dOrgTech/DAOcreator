@@ -18,8 +18,14 @@ interface Props {
 }
 
 function SchemesStep(props: Props) {
-  const { form, toggleCollapse, modal, setModal, daoSymbol, advancedScheme } = props;
-}
+  const {
+    form,
+    toggleCollapse,
+    modal,
+    setModal,
+    daoSymbol,
+    advancedScheme
+  } = props;
 
   React.useEffect(() => {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
