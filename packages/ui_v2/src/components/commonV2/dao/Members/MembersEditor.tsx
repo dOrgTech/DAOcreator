@@ -22,8 +22,8 @@ const MembersEditor = ({
   const [editing, setEditing] = useState(-1);
   const [addressAdded, setAddressAdded] = useState(true);
 
-  memberForm.$.reputation.value = "100";
-  memberForm.$.tokens.value = "100";
+  memberForm.$.reputation.value = "100"; // Configurable(?)
+  memberForm.$.tokens.value = "100"; // Also Configurable if token option is selected
 
   if (step === 2 && addressAdded) {
     const member = new MemberForm(form.getDAOTokenSymbol);
