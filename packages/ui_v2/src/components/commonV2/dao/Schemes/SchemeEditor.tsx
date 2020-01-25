@@ -62,10 +62,16 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal, daoSymbol, advancedScheme } = props;
+  const {
+    form,
+    toggleCollapse,
+    modal,
+    setModal,
+    daoSymbol,
+    advancedScheme
+  } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
-  const [distribution, setDistribution] = useState<boolean>(false);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
   const [autobet, setAutobet] = useState<boolean>(false);
@@ -191,7 +197,6 @@ function SchemeEditor(props: Props) {
 
   const dependeciesList = [
     decisionSpeed,
-    distribution,
     rewardSuccess,
     rewardAndPenVoters,
     autobet,
@@ -302,17 +307,6 @@ function SchemeEditor(props: Props) {
             </MDBRow>
           </MDBCol>
         </MDBRow>
-
-        <Toggle
-          id={"distribution"}
-          text={`Distribute ${props.daoSymbol()} token`}
-          example={"Some example"}
-          toggle={() => {
-            setDistribution(!distribution);
-          }}
-          disabled={advanceMode}
-          checked={distribution}
-        />
 
         <Toggle
           id={"rewardSuccess"}
