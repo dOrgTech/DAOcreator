@@ -41,9 +41,12 @@ export const MembersTable = ({
               onClick={() => {
                 navigator.clipboard.writeText(memberForm.values.address);
               }}
-              style={(styles.noPadding, { cursor: "pointer" })}
+              style={
+                (styles.noPadding,
+                { cursor: "pointer", display: "inline-block" })
+              }
             >
-              {truncateString(memberForm.values.address, 6, 3)}
+              {truncateString(memberForm.values.address, 6, 4)}
             </div>
             <div>Copy</div>
           </MDBTooltip>
@@ -56,7 +59,7 @@ export const MembersTable = ({
             floating
             size="lg"
             color="transparent"
-            style={styles.info}
+            style={styles.link}
           >
             <MDBIcon icon="link" />
           </MDBBtn>
@@ -162,13 +165,15 @@ const styles = {
     fontSize: "12px",
     color: "gray"
   },
-  info: {
+  link: {
     backgroundColor: "transparent !important",
     color: "lightgray",
     boxShadow: "none",
-    fontSize: "small",
+    fontSize: "normal",
     border: "none",
     outline: "none",
-    padding: 0
+    padding: 0,
+    margin: "2px",
+    marginLeft: "14px"
   }
 };
