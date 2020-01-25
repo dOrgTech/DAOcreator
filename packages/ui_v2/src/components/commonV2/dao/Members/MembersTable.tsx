@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { ButtonIcon } from "react-rainbow-components";
-import { MDBRow, MDBContainer, MDBTooltip } from "mdbreact";
+import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPencilAlt,
@@ -34,20 +34,32 @@ export const MembersTable = ({
         <td style={styles.borderCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
+        {/* <td style={(styles.borderCell, { display: "inline-block" })}> */}
         <td style={styles.borderCell}>
           <MDBTooltip domElement>
-            <a // TODO There is probably a better MDBReact component for this
+            <div //There is probably a better MDBReact component for this
               onClick={() => {
                 navigator.clipboard.writeText(memberForm.values.address);
               }}
-              // href={`https://etherscan.io/address/${memberForm.values.address}`}
-              href="#!"
-              style={styles.noPadding}
+              style={(styles.noPadding, { cursor: "pointer" })}
             >
-              {truncateString(memberForm.values.address, 6, 4)}
-            </a>
+              {truncateString(memberForm.values.address, 6, 3)}
+            </div>
             <div>Copy</div>
           </MDBTooltip>
+          <MDBBtn
+            onClick={() =>
+              window.open(
+                `https://etherscan.io/address/${memberForm.values.address}`
+              )
+            }
+            floating
+            size="lg"
+            color="transparent"
+            style={styles.info}
+          >
+            <MDBIcon icon="link" />
+          </MDBBtn>
         </td>
         <td style={styles.borderCell}>
           {editing !== index ? (
@@ -149,5 +161,14 @@ const styles = {
   titles: {
     fontSize: "12px",
     color: "gray"
+  },
+  info: {
+    backgroundColor: "transparent !important",
+    color: "lightgray",
+    boxShadow: "none",
+    fontSize: "small",
+    border: "none",
+    outline: "none",
+    padding: 0
   }
 };
