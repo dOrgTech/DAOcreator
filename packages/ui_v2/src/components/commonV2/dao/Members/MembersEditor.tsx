@@ -9,11 +9,13 @@ const MembersEditor = ({
   form,
   getDAOTokenSymbol,
   address,
+  tokenDistribution,
   step
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
+  tokenDistribution: boolean;
   step: number;
 }) => {
   const forceUpdate = useForceUpdate();
@@ -118,6 +120,7 @@ const MembersEditor = ({
             onEdit={onEdit}
             onDelete={onDelete}
             selectEdit={selectEdit}
+            tokenDistribution={tokenDistribution}
           />
         </MDBRow>
       </MDBContainer>
