@@ -1,5 +1,4 @@
 import * as React from "react";
-import { IconButton } from "@material-ui/core";
 import Blockies from "react-blockies";
 
 export type Props = {
@@ -7,7 +6,7 @@ export type Props = {
 };
 
 const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
-  <IconButton
+  <div
     onClick={() => window.open(`https://etherscan.io/address/${address}`)}
     style={{
       padding: 0
@@ -15,7 +14,7 @@ const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
     tabIndex={-1}
   >
     <Blockies seed={address} />
-  </IconButton>
+  </div>
 );
 
 export default EthAddressAvatar;

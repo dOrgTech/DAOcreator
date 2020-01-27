@@ -23,7 +23,7 @@ function MembersStep(props: Props) {
           address={address}
           step={step}
         />
-        <MDBRow style={styles.rowPadding}>
+        <MDBRow style={styles.padding}>
           <MDBCol>
             <button
               style={styles.setDescriptionButton}
@@ -51,9 +51,6 @@ const styles = {
     fontSize: "smaller"
   },
   padding: {
-    padding: "4px"
-  },
-  rowPadding: {
     padding: "4px"
   }
 };

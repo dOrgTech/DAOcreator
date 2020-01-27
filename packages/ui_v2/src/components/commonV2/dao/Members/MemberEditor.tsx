@@ -12,11 +12,7 @@ export const MemberEditor = ({
 }) => {
   return (
     <MDBRow style={styles.rowPrincipal}>
-      <FormField
-        field={memberForm.$.address}
-        editable={true}
-        colSize="9"
-      ></FormField>
+      <FormField field={memberForm.$.address} editable={true} colSize="9" />
       <MDBCol size="3">
         <button
           type="submit"

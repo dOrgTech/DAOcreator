@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 
@@ -25,8 +25,8 @@ export const MembersTable = ({
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <tr key={index} className="test" style={styles.borderCell}>
-        <td style={styles.borderCell}>
+      <tr key={index} style={styles.borderCell}>
+        <td style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
         <td style={styles.borderCell}>
@@ -140,11 +140,13 @@ const styles = {
   borderCell: {
     borderBottom: "1px solid lightgray"
   },
-  borderTitleLeft: {
-    borderLeft: "1px solid lightgray"
+  addressCell: {
+    borderBottom: "1px solid lightgray",
+    marginLeft: "-5px"
   },
-  borderTitleRight: {
-    borderRight: "1px solid lightgray"
+  avatarCell: {
+    borderBottom: "1px solid lightgray",
+    width: "20px"
   },
   noPadding: {
     padding: 0
