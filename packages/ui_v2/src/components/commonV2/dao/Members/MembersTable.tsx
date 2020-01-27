@@ -1,13 +1,6 @@
 import React, { Fragment } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { ButtonIcon } from "react-rainbow-components";
 import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencilAlt,
-  faMinus,
-  faCheck
-} from "@fortawesome/free-solid-svg-icons";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
