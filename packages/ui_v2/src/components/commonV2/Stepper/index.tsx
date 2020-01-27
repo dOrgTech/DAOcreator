@@ -161,7 +161,7 @@ export default function Stepper(props: Props) {
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         {step > 2 && index === 2
-          ? membersPreview(form, callbacks.daoName())
+          ? membersPreview(form, callbacks.getDAOTokenSymbol())
           : ""}
         <div>
           <ModalButton
