@@ -275,7 +275,7 @@ export default function DAOcreator() {
             </MDBCol>
           </MDBRow>
           <br />
-          <hr />
+          <div style={styles.divider} />
           <div className="row">
             <div className="col-md-12">
               {loading ? (
@@ -382,7 +382,7 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    borderBottom: "1px solid #6c757d",
-    margin: "5px"
+    margin: "5px",
+    border: "1px solid lightgrey"
   }
 };
