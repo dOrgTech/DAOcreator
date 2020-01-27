@@ -93,6 +93,7 @@ const membersPreview = (form: any | undefined, daoName: string) => {
   form.toState().map((member: any) => {
     totalReputationAmount += member.reputation;
     totalTokenAmount += member.tokens;
+    return null;
   });
   return (
     <div>
