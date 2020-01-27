@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 
