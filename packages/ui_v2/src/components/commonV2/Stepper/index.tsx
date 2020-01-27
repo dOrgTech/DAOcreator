@@ -216,21 +216,21 @@ const styles = {
   stepContent: {
     width: "fit-content",
     padding: "6px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
   stepTwoContent: {
     width: "inherit",
     padding: "6px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
   stepFourContent: {
     width: "auto",
     padding: "16px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },

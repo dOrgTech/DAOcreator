@@ -17,7 +17,7 @@ export const MemberEditor = ({
         editable={true}
         colSize="9"
       ></FormField>
-      <MDBCol size="3" style={styles.buttonRow}>
+      <MDBCol size="3">
         <button
           type="submit"
           style={styles.setDescriptionButton}
@@ -38,7 +38,8 @@ const styles = {
     padding: "8px",
     fontFamily: "inherit",
     fontSize: "14px",
-    width: "inherit"
+    width: "inherit",
+    marginTop: "52%"
   },
   buttonRow: {
     alignSelf: "flex-end"

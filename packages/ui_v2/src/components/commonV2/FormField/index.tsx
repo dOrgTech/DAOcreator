@@ -92,14 +92,16 @@ const StringFieldView = observer(
     checkError,
     namingError
   }: FieldProps<StringField>) => {
-    const onChange = (event: any) => {
+    const onChange = async (event: any) => {
       field.onChange(event.target.value);
-      if (field.displayName === "Token Symbol") {
-        checkError!({ ...namingError, daoSymbol: field.hasError });
-      }
-      if (field.displayName === "DAO Name") {
-        checkError!({ ...namingError, daoName: field.hasError });
-      }
+      setTimeout(() => {
+        if (field.displayName === "Token Symbol") {
+          checkError!({ ...namingError, daoSymbol: field.hasError });
+        }
+        if (field.displayName === "DAO Name") {
+          checkError!({ ...namingError, daoName: field.hasError });
+        }
+      }, 250);
     };
     return (
       <>

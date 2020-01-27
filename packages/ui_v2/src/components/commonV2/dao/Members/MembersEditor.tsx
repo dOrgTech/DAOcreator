@@ -95,15 +95,14 @@ const MembersEditor = ({
     forceUpdate();
   };
 
-  const MemberFormError = () => (
-    <MDBBox>
-      {membersForm.showFormError && (
-        <MDBTypography tag="p" colorText="red">
-          {membersForm.error}
-        </MDBTypography>
-      )}
-    </MDBBox>
-  );
+  const MemberFormError = () =>
+    membersForm.showFormError ? (
+      <div style={{ marginRight: "-10px", color: "red" }}>
+        <p>{membersForm.error}</p>
+      </div>
+    ) : (
+      <></>
+    );
 
   return (
     <MDBBox>
@@ -122,10 +121,7 @@ const MembersEditor = ({
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
-        <MDBRow>
-          <MemberFormError />
-        </MDBRow>
-        <br />
+        <MemberFormError />
         <MDBRow style={styles.tableWidth}>
           <MembersTable
             membersForm={membersForm}

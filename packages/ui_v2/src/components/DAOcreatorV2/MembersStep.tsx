@@ -26,10 +26,8 @@ function MembersStep(props: Props) {
         <MDBRow style={styles.rowPadding}>
           <MDBCol>
             <button
-              name="decisonSpeed"
-              value="slow"
               style={styles.setDescriptionButton}
-              onClick={() => toggleCollapse()}
+              onClick={toggleCollapse}
             >
               Set members
             </button>
