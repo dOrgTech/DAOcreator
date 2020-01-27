@@ -181,7 +181,7 @@ function SchemeEditor(props: Props) {
       setAutobet(Number(minimumDaoBounty.value) > 0);
     }
     // Apply the effects of the toggles
-    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "1";
+    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
     if (!rewardAndPenVoters)
       votingMachine.$.votersReputationLossRatio.value = "0";
     if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
