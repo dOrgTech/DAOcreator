@@ -29,7 +29,7 @@ function MembersStep(props: Props) {
               name="decisonSpeed"
               value="slow"
               style={styles.setDescriptionButton}
-              onClick={() => toggleCollapse()}
+              onClick={toggleCollapse}
             >
               Set members
             </button>
