@@ -24,6 +24,7 @@ const MembersEditor = ({
   const [addressAdded, setAddressAdded] = useState(true);
   const [distribution, setDistribution] = useState(false);
 
+  // Configurable(?)
   memberForm.$.reputation.value = "100";
   distribution
     ? (memberForm.$.tokens.value = "100")
@@ -32,7 +33,7 @@ const MembersEditor = ({
   if (step === 2 && addressAdded) {
     const member = new MemberForm(form.getDAOTokenSymbol);
     member.$.address.value = address;
-    member.$.reputation.value = "0";
+    member.$.reputation.value = "100";
     member.$.tokens.value = "0";
     form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
     setAddressAdded(false);

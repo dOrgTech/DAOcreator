@@ -21,7 +21,6 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: any;
-  daoSymbol: () => string;
   advancedScheme: any;
 }
 
@@ -62,14 +61,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const {
-    form,
-    toggleCollapse,
-    modal,
-    setModal,
-    daoSymbol,
-    advancedScheme
-  } = props;
+  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
@@ -210,6 +202,7 @@ function SchemeEditor(props: Props) {
   };
 
   const setConfiguration = () => {
+    updateVotingMachine();
     toggleCollapse();
   };
 

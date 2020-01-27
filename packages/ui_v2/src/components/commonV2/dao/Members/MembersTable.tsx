@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBContainer, MDBIcon } from "mdbreact";
+import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
@@ -30,12 +30,33 @@ export const MembersTable = ({
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
         <td style={styles.borderCell}>
-          <a
-            href={`https://etherscan.io/address/${memberForm.values.address}`}
-            style={styles.noPadding}
+          <MDBTooltip domElement>
+            <div //There is probably a better MDBReact component for this
+              onClick={() => {
+                navigator.clipboard.writeText(memberForm.values.address);
+              }}
+              style={
+                (styles.noPadding,
+                { cursor: "pointer", display: "inline-block" })
+              }
+            >
+              {truncateString(memberForm.values.address, 6, 4)}
+            </div>
+            <div>Copy</div>
+          </MDBTooltip>
+          <MDBBtn
+            onClick={() =>
+              window.open(
+                `https://etherscan.io/address/${memberForm.values.address}`
+              )
+            }
+            floating
+            size="lg"
+            color="transparent"
+            style={styles.link}
           >
-            {truncateString(memberForm.values.address, 6, 4)}
-          </a>
+            <MDBIcon icon="link" />
+          </MDBBtn>
         </td>
         <td style={styles.borderCell}>
           {editing !== index ? (
@@ -131,5 +152,16 @@ const styles = {
   titles: {
     fontSize: "12px",
     color: "gray"
+  },
+  link: {
+    backgroundColor: "transparent !important",
+    color: "lightgray",
+    boxShadow: "none",
+    fontSize: "normal",
+    border: "none",
+    outline: "none",
+    padding: 0,
+    margin: "2px",
+    marginLeft: "14px"
   }
 };

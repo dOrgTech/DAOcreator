@@ -175,7 +175,7 @@ export class GenesisProtocolForm extends Form<
         "REP",
         form ? form.$.proposingRepReward.value : "0"
       )
-        .validators(requiredText, validNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThanOrEqual(0))
         .setDisplayName("Proposing Rep Reward")
         .setDescription(
           "The amount of voting power given out as a reward for submitting a proposal that the DAO passes."

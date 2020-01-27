@@ -208,8 +208,7 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         setStep,
         modal: advanceSchemeConfig,
-        setModal: setAdvanceSchemeConfig,
-        daoSymbol: () => daoForm.$.config.$.tokenSymbol.value
+        setModal: setAdvanceSchemeConfig
       }
     },
     {
@@ -222,8 +221,7 @@ export default function DAOcreator() {
         setStep,
         address: defaultAddress,
         setModal: setImportFile,
-        step,
-        daoName: () => daoForm.$.config.$.tokenSymbol.value
+        step
       }
     },
     {

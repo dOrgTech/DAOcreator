@@ -188,7 +188,17 @@ const DurationFieldView = observer(
           <input
             name={props.name}
             style={
-              props.name === "days" ? styles.dayDuration : styles.hourDuration
+              props.name === "days" && +field[props.name] < 10
+                ? styles.oneNumberDay
+                : props.name === "days" && +field[props.name] > 9
+                ? styles.twoNumbersDay
+                : {
+                    paddingTop: "3px",
+                    paddingBottom: "5px",
+                    height: "2em",
+                    width: "5.5em",
+                    textAlign: "center"
+                  }
             }
             value={field[props.name]}
             disabled={editable === undefined ? false : !editable}
@@ -198,6 +208,24 @@ const DurationFieldView = observer(
             max={100}
             onBlur={field.enableAutoValidationAndValidate}
           />
+          <div
+            style={
+              props.name === "days"
+                ? { paddingTop: "3px", marginRight: "-3px" }
+                : { paddingTop: "3px" }
+            }
+          >
+            <span
+              style={
+                props.name === "days"
+                  ? { marginLeft: "-50px" }
+                  : { marginLeft: "-38px" }
+              }
+            >
+              {" "}
+              {props.name === "days" ? "days" : "h"}
+            </span>
+          </div>
         </>
       )
     );
@@ -407,18 +435,19 @@ const styles = {
     paddingTop: "14px",
     paddingBottom: "10px"
   },
-  dayDuration: {
-    paddingTop: "5px",
+  twoNumbersDay: {
+    paddingTop: "3px",
     paddingBottom: "5px",
     height: "2em",
-    width: "5.9em"
+    width: "5.5em",
+    paddingLeft: "15px"
   },
-  hourDuration: {
-    paddingTop: "5px",
+  oneNumberDay: {
+    paddingTop: "3px",
     paddingBottom: "5px",
     height: "2em",
-    width: "5.9em",
-    marginLeft: "-3px"
+    width: "5.5em",
+    paddingLeft: "25px"
   },
   margin: {
     marginTop: "6px"

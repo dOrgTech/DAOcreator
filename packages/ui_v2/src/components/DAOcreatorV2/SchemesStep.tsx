@@ -18,14 +18,7 @@ interface Props {
 }
 
 function SchemesStep(props: Props) {
-  const {
-    form,
-    toggleCollapse,
-    modal,
-    setModal,
-    daoSymbol,
-    advancedScheme
-  } = props;
+  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
 
   React.useEffect(() => {
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
@@ -47,7 +40,6 @@ function SchemesStep(props: Props) {
           toggleCollapse={toggleCollapse}
           modal={modal}
           setModal={setModal}
-          daoSymbol={daoSymbol}
           advancedScheme={advancedScheme}
         />{" "}
       </Box>
