@@ -28,12 +28,6 @@ export interface Props {
   setAdvanceMode: any;
 }
 
-const schemeName = {
-  0: "Contribution Reward",
-  1: "Scheme Registrar",
-  2: "Generic Scheme"
-};
-
 const schemes: Array<AnySchemeForm & IObservableObject> = [
   observable(new ContributionRewardForm()),
   observable(new SchemeRegistrarForm()),
@@ -109,36 +103,25 @@ function AdvanceSchemeEditor(props: Props) {
         </MDBModalHeader>
         <MDBModalBody>
           <MDBRow style={styles.rowTab}>
-            <MDBCol style={styles.tab}>
-              <button
-                style={scheme === 0 ? styles.buttonTabActive : styles.buttonTab}
-                onClick={() => showNewScheme(SchemeType.ContributionReward)}
-              >
-                Contribution Reward
-              </button>
-            </MDBCol>
-            <MDBCol style={styles.tab}>
-              <button
-                style={scheme === 1 ? styles.buttonTabActive : styles.buttonTab}
-                onClick={() => showNewScheme(SchemeType.SchemeRegistrar)}
-              >
-                Scheme Registry
-              </button>
-            </MDBCol>
-            <MDBCol style={styles.tab}>
-              <button
-                style={scheme === 2 ? styles.buttonTabActive : styles.buttonTab}
-                onClick={() => showNewScheme(SchemeType.GenericScheme)}
-              >
-                Generic Scheme
-              </button>
-            </MDBCol>
+            {schemes.map((s, index) => (
+              <MDBCol style={styles.tab} key={"scheme-" + index}>
+                <button
+                  style={
+                    scheme === index ? styles.buttonTabActive : styles.buttonTab
+                  }
+                  onClick={() => showNewScheme(index)}
+                >
+                  {s.displayName}
+                </button>
+              </MDBCol>
+            ))}
           </MDBRow>
-
           <div style={styles.divForm}>
             <MDBRow style={styles.borderRow}>
               <MDBCol>
-                <span style={styles.boldSpan}>Deploy {schemeName[scheme]}</span>
+                <span style={styles.boldSpan}>
+                  Deploy {schemes[scheme].displayName}
+                </span>
                 <MDBTooltip placement="bottom" clickable>
                   <MDBBtn
                     floating
@@ -148,7 +131,7 @@ function AdvanceSchemeEditor(props: Props) {
                   >
                     <MDBIcon icon="info-circle" />
                   </MDBBtn>
-                  <span>Some example</span>
+                  <span>{schemes[scheme].description}</span>
                 </MDBTooltip>
               </MDBCol>
               <MDBCol size="1">
@@ -336,4 +319,5 @@ const styles = {
     fontWeight: 400
   }
 };
+
 export default AdvanceSchemeEditor;
