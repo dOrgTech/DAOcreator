@@ -25,10 +25,14 @@ interface Props {
 }
 
 function Dropzone(props: any) {
-  const { isMembersImport, fileAdded } = props;
-  const onDrop = useCallback(acceptedFiles => {
-    props.onFilePicked(acceptedFiles, isMembersImport);
-  }, []);
+  const { isMembersImport, fileAdded, onFilePicked } = props;
+
+  const onDrop = useCallback(
+    acceptedFiles => {
+      onFilePicked(acceptedFiles, isMembersImport);
+    },
+    [isMembersImport, onFilePicked]
+  );
 
   const MembersDropzone = () => (
     <>
