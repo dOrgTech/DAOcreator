@@ -95,7 +95,7 @@ const membersPreview = (form: any | undefined, daoName: string) => {
     totalTokenAmount += member.tokens;
   });
   return (
-    <div>
+    <div style={styles.stepPreview}>
       <p>{form.$.length} Members</p>
       <div style={{ width: "17.5em" }}>
         <p>Reputation Distribution</p>
