@@ -10,21 +10,23 @@ const MembersEditor = ({
   form,
   getDAOTokenSymbol,
   address,
-  step
+  step,
+  distributionState
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
   step: number;
+  distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editing, setEditing] = useState(-1);
   const [addressAdded, setAddressAdded] = useState(true);
-  const [distribution, setDistribution] = useState(false);
 
-  // Configurable(?)
+  const { distribution, setDistribution } = distributionState;
+
   memberForm.$.reputation.value = "100";
   distribution
     ? (memberForm.$.tokens.value = "100")

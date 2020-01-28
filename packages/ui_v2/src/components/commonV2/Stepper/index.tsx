@@ -73,7 +73,11 @@ const simpleConfigText = (form: any | undefined) => {
   );
 };
 
-const membersPreview = (form: any | undefined, daoName: string) => {
+const membersPreview = (
+  form: any | undefined,
+  daoName: string,
+  distribution: boolean
+) => {
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -94,11 +98,14 @@ const membersPreview = (form: any | undefined, daoName: string) => {
     totalReputationAmount += member.reputation;
     totalTokenAmount += member.tokens;
   });
+  const numberOfMembers = form.$.length;
   return (
     <div style={styles.stepPreview}>
-      <p>{form.$.length} Members</p>
+      <p>
+        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
+      </p>
       <div style={{ width: "17.5em" }}>
-        <p>Reputation Distribution</p>
+        <p style={{}}>Reputation Distribution</p>
         <LineGraphic
           data={form.toState()}
           total={totalReputationAmount}
@@ -106,27 +113,40 @@ const membersPreview = (form: any | undefined, daoName: string) => {
           style={styles.lineGraphic}
         />
       </div>
-      <div style={{ width: "17.5em" }}>
-        <p>{daoName} Token Distribution</p>
-        <LineGraphic
-          data={form.toState()}
-          total={totalTokenAmount}
-          config={tokenConfig}
-          style={styles.lineGraphic}
-        />
-      </div>
+      {distribution ? (
+        <>
+          <div style={{ width: "17.5em" }}>
+            <p>{daoName} Token Distribution</p>
+            <LineGraphic
+              data={form.toState()}
+              total={totalTokenAmount}
+              config={tokenConfig}
+              style={styles.lineGraphic}
+            />
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
 
 export default function Stepper(props: Props) {
+  const [distribution, setDistribution] = React.useState(false);
   const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
+
   const { form, title, Component, callbacks, step, index } = props;
 
   const advancedState = {
     advanceMode,
     setAdvanceMode,
     form
+  };
+
+  const distributionState = {
+    distribution,
+    setDistribution
   };
 
   return (
@@ -163,7 +183,7 @@ export default function Stepper(props: Props) {
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         {step > 2 && index === 2
-          ? membersPreview(form, callbacks.getDAOTokenSymbol())
+          ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)
           : ""}
         <div>
           <ModalButton
@@ -207,6 +227,7 @@ export default function Stepper(props: Props) {
             form={form}
             {...props.callbacks}
             advancedScheme={advancedState}
+            distributionState={distributionState}
           />
         </MDBRow>
       </MDBCollapse>

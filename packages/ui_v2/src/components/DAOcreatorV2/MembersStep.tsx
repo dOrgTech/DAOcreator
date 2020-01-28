@@ -10,10 +10,18 @@ interface Props {
   toggleCollapse: () => void;
   address: string;
   step: number;
+  distributionState: any;
 }
 
 function MembersStep(props: Props) {
-  const { form, getDAOTokenSymbol, toggleCollapse, address, step } = props;
+  const {
+    form,
+    getDAOTokenSymbol,
+    toggleCollapse,
+    address,
+    step,
+    distributionState
+  } = props;
   return (
     <MDBContainer style={styles.padding}>
       <MDBBox>
@@ -22,6 +30,7 @@ function MembersStep(props: Props) {
           getDAOTokenSymbol={getDAOTokenSymbol}
           address={address}
           step={step}
+          distributionState={distributionState}
         />
         <MDBRow style={styles.padding}>
           <MDBCol>

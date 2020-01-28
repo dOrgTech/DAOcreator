@@ -9,7 +9,7 @@ const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
   <div
     onClick={() => window.open(`https://etherscan.io/address/${address}`)}
     style={{
-      padding: 0
+      paddingLeft: "10px"
     }}
     tabIndex={-1}
   >

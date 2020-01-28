@@ -30,53 +30,61 @@ export const MembersTable = ({
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
         <td style={styles.borderCell}>
-          <MDBTooltip domElement>
-            <div //There is probably a better MDBReact component for this
-              onClick={() => {
-                navigator.clipboard.writeText(memberForm.values.address);
-              }}
-              style={
-                (styles.noPadding,
-                { cursor: "pointer", display: "inline-block" })
+          <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
+            <MDBTooltip domElement>
+              <div //There is probably a better MDBReact component for this
+                onClick={() => {
+                  navigator.clipboard.writeText(memberForm.values.address);
+                }}
+                style={
+                  (styles.noPadding,
+                  { cursor: "pointer", display: "inline-block" })
+                }
+              >
+                {truncateString(memberForm.values.address, 6, 4)}
+              </div>
+              <div>Copy</div>
+            </MDBTooltip>
+            <MDBBtn
+              onClick={() =>
+                window.open(
+                  `https://etherscan.io/address/${memberForm.values.address}`
+                )
               }
-            >
-              {truncateString(memberForm.values.address, 6, 4)}
-            </div>
-            <div>Copy</div>
-          </MDBTooltip>
-          <MDBBtn
-            onClick={() =>
-              window.open(
-                `https://etherscan.io/address/${memberForm.values.address}`
-              )
-            }
-            floating
-            size="lg"
-            color="transparent"
-            style={styles.link}
-          >
-            <MDBIcon icon="link" />
-          </MDBBtn>
+              floating
+              size="lg"
+              color="transparent"
+              style={styles.link}
+            ></MDBBtn>
+          </div>
         </td>
         <td style={styles.borderCell}>
           {editing !== index ? (
-            memberForm.values.reputation
+            <div style={{ marginTop: "5px" }}>
+              {memberForm.values.reputation}
+            </div>
           ) : (
-            <FormField
-              field={editedMemberForm.$.reputation}
-              editable={true}
-            ></FormField>
+            <div style={{ marginLeft: "-20px" }}>
+              <FormField
+                field={editedMemberForm.$.reputation}
+                editable={true}
+                colSize={12}
+              />
+            </div>
           )}
         </td>
         {tokenDistribution ? (
           <td style={styles.borderCell}>
             {editing !== index ? (
-              memberForm.values.tokens
+              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             ) : (
-              <FormField
-                field={editedMemberForm.$.tokens}
-                editable={true}
-              ></FormField>
+              <div style={{ marginLeft: "-20px" }}>
+                <FormField
+                  field={editedMemberForm.$.tokens}
+                  editable={true}
+                  colSize={12}
+                />
+              </div>
             )}
           </td>
         ) : (
@@ -87,6 +95,7 @@ export const MembersTable = ({
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
             }}
+            style={{ paddingTop: "5px" }}
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
@@ -96,6 +105,7 @@ export const MembersTable = ({
             onClick={() => {
               onDelete(index);
             }}
+            style={{ paddingTop: "5px" }}
           >
             <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
@@ -140,6 +150,10 @@ const styles = {
   borderCell: {
     borderBottom: "1px solid lightgray"
   },
+  // valuesCell: {
+  //   borderBottom: "1px solid lightgray"
+  //   padding
+  // },
   addressCell: {
     borderBottom: "1px solid lightgray",
     marginLeft: "-5px"
