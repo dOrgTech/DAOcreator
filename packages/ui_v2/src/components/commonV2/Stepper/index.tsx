@@ -50,9 +50,9 @@ const simpleConfigText = (form: any | undefined) => {
     simpleOptions.length / 2
   );
   return (
-    <div>
+    <div style={styles.stepPreview}>
       <p>
-        <strong>Recommened</strong>
+        <strong>Recommended</strong>
       </p>
       {noDuplicateSimpleOptions.map((option: any, index: number) =>
         option.checked ? (
@@ -293,5 +293,8 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
+  },
+  stepPreview: {
+    margin: 28
   }
 };
