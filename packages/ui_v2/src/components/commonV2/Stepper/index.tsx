@@ -103,6 +103,7 @@ const membersPreview = (form: any | undefined, daoName: string) => {
           data={form.toState()}
           total={totalReputationAmount}
           config={reputationConfig}
+          style={styles.lineGraphic}
         />
       </div>
       <div style={{ width: "17.5em" }}>
@@ -111,6 +112,7 @@ const membersPreview = (form: any | undefined, daoName: string) => {
           data={form.toState()}
           total={totalTokenAmount}
           config={tokenConfig}
+          style={styles.lineGraphic}
         />
       </div>
     </div>
@@ -296,5 +298,8 @@ const styles = {
   },
   stepPreview: {
     marginTop: 28
+  },
+  lineGraphic: {
+    padding: "unset"
   }
 };

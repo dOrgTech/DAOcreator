@@ -24,17 +24,18 @@ interface IProps {
   data: IData[];
   total: number;
   config: ILineConfig;
+  style?: any;
 }
 
-const LineGraphic: FC<IProps> = ({ data, total, config }: IProps) => {
+const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
   const { showPercentage, height, symbol, dataKey, nameKey } = config;
 
   const colours = ["success", "info", "warning", "danger"];
 
   if (total === 0) return null;
-
+  style = style ? style : null;
   return (
-    <MDBContainer className="text-center">
+    <MDBContainer className="text-center" style={style}>
       {data.map((element: IData, index: number) => {
         const value: number = element[dataKey] as number;
 
@@ -56,7 +57,7 @@ const LineGraphic: FC<IProps> = ({ data, total, config }: IProps) => {
               }}
             >
               <MDBProgress
-                className="rounded-0"
+                className="rounded-pill"
                 material
                 value={100}
                 height={height}
