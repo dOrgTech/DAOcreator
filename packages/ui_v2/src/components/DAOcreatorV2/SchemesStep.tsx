@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Box } from "@chakra-ui/core";
 import {
   SchemesForm,
   ContributionRewardForm,
@@ -25,23 +24,14 @@ function SchemesStep(props: Props) {
   }, []);
 
   return (
-    <Box
-      width={"100%"}
-      borderBottomColor="#eaedf3"
-      borderTopColor="#eaedf3"
-      borderRightColor="#eaedf3"
-      borderLeftColor="#eaedf3"
-      rounded="lg"
-    >
-      <SchemeEditor
-        form={form}
-        editable={true}
-        toggleCollapse={toggleCollapse}
-        modal={modal}
-        setModal={setModal}
-        advancedScheme={advancedScheme}
-      />{" "}
-    </Box>
+    <SchemeEditor
+      form={form}
+      editable={true}
+      toggleCollapse={toggleCollapse}
+      modal={modal}
+      setModal={setModal}
+      advancedScheme={advancedScheme}
+    />
   );
 }
 
