@@ -8,6 +8,7 @@ interface ToggleProps {
   toggle: () => void;
   disabled: boolean;
   checked: boolean;
+  style?: any;
 }
 
 export default function Toggle({
@@ -16,10 +17,11 @@ export default function Toggle({
   example,
   toggle,
   disabled,
-  checked
+  checked,
+  style
 }: ToggleProps) {
   return (
-    <MDBRow style={styles.paddingRow}>
+    <MDBRow style={style ? style : styles.paddingRow}>
       <MDBCol size="11" style={styles.noPadding}>
         <span style={styles.marginText} className="text-left">
           {text}

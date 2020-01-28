@@ -117,6 +117,7 @@ const MembersEditor = ({
           }}
           disabled={false}
           checked={distribution}
+          style={styles.toggle}
         />
         <MembersAnalytics data={membersForm.toState()} />
         <MDBRow className="justify-content-start">
@@ -145,6 +146,9 @@ const styles = {
   },
   noPadding: {
     padding: "1px"
+  },
+  toggle: {
+    paddingLeft: 15.35
   }
 };
 

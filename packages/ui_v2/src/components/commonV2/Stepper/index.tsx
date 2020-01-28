@@ -295,6 +295,6 @@ const styles = {
     width: "-webkit-fill-available"
   },
   stepPreview: {
-    margin: 28
+    marginTop: 28
   }
 };
