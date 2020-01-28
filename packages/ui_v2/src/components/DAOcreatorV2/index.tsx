@@ -274,8 +274,8 @@ export default function DAOcreator() {
           </MDBRow>
           <br />
           <div style={styles.divider} />
-          <div className="row">
-            <div className="col-md-12">
+          <div className="row justify-content-center">
+            <div className="col-md-12" style={styles.loading}>
               {loading ? (
                 <>
                   <div
@@ -285,7 +285,9 @@ export default function DAOcreator() {
                   >
                     <span className="sr-only">Loading...</span>
                   </div>
-                  <p style={styles.fontStyle}> Please allow metamask </p>
+                  <div style={styles.allowMetaMask}>
+                    <p style={styles.fontStyle}> Please allow metamask </p>
+                  </div>
                 </>
               ) : !defaultAddress ? (
                 <div className="row justify-content-center">
@@ -382,5 +384,11 @@ const styles = {
     flexGrow: 1,
     margin: "5px",
     border: "1px solid lightgrey"
+  },
+  loading: {
+    display: "flex"
+  },
+  allowMetaMask: {
+    margin: "auto"
   }
 };
