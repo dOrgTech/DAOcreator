@@ -35,7 +35,7 @@ const styles = {
     fontFamily: "inherit",
     fontSize: "14px",
     width: "inherit",
-    marginTop: "52%"
+    marginTop: "28px"
   },
   buttonRow: {
     alignSelf: "flex-end"
@@ -43,6 +43,6 @@ const styles = {
   rowPrincipal: {
     margin: 0,
     width: "100%",
-    padding: "4px"
+    paddingBottom: "25px"
   }
 };

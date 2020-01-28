@@ -13,7 +13,8 @@ export const MembersTable = ({
   onEdit,
   onDelete,
   selectEdit,
-  tokenDistribution
+  tokenDistribution,
+  getDAOTokenSymbol
 }: {
   membersForm: any;
   editing: number;
@@ -22,6 +23,7 @@ export const MembersTable = ({
   onDelete: any;
   selectEdit: any;
   tokenDistribution: boolean;
+  getDAOTokenSymbol: () => string;
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
@@ -38,7 +40,7 @@ export const MembersTable = ({
                 }}
                 style={
                   (styles.noPadding,
-                  { cursor: "pointer", display: "inline-block" })
+                  { cursor: "pointer", display: "inline-block", color: "blue" })
                 }
               >
                 {truncateString(memberForm.values.address, 6, 4)}
@@ -124,7 +126,7 @@ export const MembersTable = ({
                 <th></th>
                 <th style={styles.titles}>REPUTATION</th>
                 {tokenDistribution ? (
-                  <th style={styles.titles}>TOKENS</th>
+                  <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
                 ) : (
                   <th></th>
                 )}
@@ -150,10 +152,6 @@ const styles = {
   borderCell: {
     borderBottom: "1px solid lightgray"
   },
-  // valuesCell: {
-  //   borderBottom: "1px solid lightgray"
-  //   padding
-  // },
   addressCell: {
     borderBottom: "1px solid lightgray",
     marginLeft: "-5px"

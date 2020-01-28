@@ -399,14 +399,25 @@ const AddressFieldView = observer(
   ({ field, editable, colSize }: FieldProps<AddressField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{field.description}</span>
-        </MDBTooltip>
+        {field.description === "The member's public address." ? (
+          <></>
+        ) : (
+          <>
+            <label style={styles.labelStyle}>{field.displayName}</label>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                {" "}
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>{field.description}</span>
+            </MDBTooltip>
+          </>
+        )}
         <input
           style={styles.inputStyle}
           placeholder="0x..."

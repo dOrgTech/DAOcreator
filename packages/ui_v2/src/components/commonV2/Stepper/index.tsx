@@ -115,7 +115,7 @@ const membersPreview = (
       </div>
       {distribution ? (
         <>
-          <div style={{ width: "17.5em" }}>
+          <div style={{ paddingTop: "20px", width: "17.5em" }}>
             <p>{daoName} Token Distribution</p>
             <LineGraphic
               data={form.toState()}
