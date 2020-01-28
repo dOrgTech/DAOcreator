@@ -33,9 +33,8 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
   const colours = ["success", "info", "warning", "danger"];
 
   if (total === 0) return null;
-  style = style ? style : null;
   return (
-    <MDBContainer className="text-center" style={style}>
+    <MDBContainer className="text-center" style={style ? style : null}>
       {data.map((element: IData, index: number) => {
         const value: number = element[dataKey] as number;
 

@@ -275,7 +275,7 @@ export default function DAOcreator() {
           <br />
           <div style={styles.divider} />
           <div className="row justify-content-center">
-            <div className="col-md-12" style={styles.loading}>
+            <div className="col-md-12" style={loading ? styles.loading : {}}>
               {loading ? (
                 <>
                   <div
