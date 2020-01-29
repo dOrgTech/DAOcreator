@@ -12,12 +12,8 @@ export const MemberEditor = ({
 }) => {
   return (
     <MDBRow style={styles.rowPrincipal}>
-      <FormField
-        field={memberForm.$.address}
-        editable={true}
-        colSize="9"
-      ></FormField>
-      <MDBCol size="3" style={styles.buttonRow}>
+      <FormField field={memberForm.$.address} editable={true} colSize="9" />
+      <MDBCol size="3">
         <button
           type="submit"
           style={styles.setDescriptionButton}
@@ -38,7 +34,8 @@ const styles = {
     padding: "8px",
     fontFamily: "inherit",
     fontSize: "14px",
-    width: "inherit"
+    width: "inherit",
+    marginTop: "28px"
   },
   buttonRow: {
     alignSelf: "flex-end"
@@ -46,6 +43,6 @@ const styles = {
   rowPrincipal: {
     margin: 0,
     width: "100%",
-    padding: "4px"
+    paddingBottom: "25px"
   }
 };

@@ -10,13 +10,24 @@ interface Props {
 
 function NamingStep(props: Props) {
   const { form, toggleCollapse } = props;
+  const namingError = {
+    daoName: true,
+    daoSymbol: true
+  };
+  const [hasError, setHasError] = React.useState<any>(namingError);
   form.$.tokenName.$ = "0";
   form.$.tokenName.value = "0";
+
   return (
     <>
       <div style={styles.paddingTotal}>
         <br />
-        <DAOConfigEditor form={form} editable={true} />
+        <DAOConfigEditor
+          form={form}
+          editable={true}
+          namingError={hasError}
+          checkError={setHasError}
+        />
         <br />
         <MDBRow style={styles.paddingBottom}>
           <MDBCol>
@@ -24,10 +35,11 @@ function NamingStep(props: Props) {
               name="decisonSpeed"
               value="slow"
               style={
-                form.hasError
-                  ? styles.buttonActivatedStyle
-                  : styles.buttonDeactivatedStyle
+                hasError.daoName || hasError.daoSymbol
+                  ? styles.buttonDeactivatedStyle
+                  : styles.buttonActivatedStyle
               }
+              disabled={hasError.daoName || hasError.daoSymbol}
               onClick={toggleCollapse}
             >
               Set Description
@@ -40,7 +52,7 @@ function NamingStep(props: Props) {
 }
 
 const styles = {
-  buttonDeactivatedStyle: {
+  buttonActivatedStyle: {
     borderRadius: "0.37rem",
     height: "45px",
     fontWeight: 300,
@@ -51,7 +63,7 @@ const styles = {
     marginBottom: "11px",
     fontSize: "smaller"
   },
-  buttonActivatedStyle: {
+  buttonDeactivatedStyle: {
     borderRadius: "0.37rem",
     height: "45px",
     fontWeight: 300,

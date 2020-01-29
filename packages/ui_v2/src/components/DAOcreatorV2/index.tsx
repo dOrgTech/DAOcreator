@@ -279,20 +279,18 @@ export default function DAOcreator() {
             </MDBCol>
           </MDBRow>
           <br />
-          <hr />
-          <div className="row">
+          <div style={styles.divider} />
+          <div className="row justify-content-center">
             <div className="col-md-12">
               {loading ? (
-                <>
-                  <div
-                    style={styles.spinner}
-                    className="spinner-border text-primary"
-                    role="status"
-                  >
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                  <p style={styles.fontStyle}> Please allow metamask </p>
-                </>
+                <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
+                  <MDBRow className="justify-content-center">
+                    <div className="spinner-border text-primary" />
+                  </MDBRow>
+                  <MDBRow className="justify-content-center">
+                    <p style={styles.fontStyle}> Please allow metamask </p>
+                  </MDBRow>
+                </div>
               ) : !defaultAddress ? (
                 <div className="row justify-content-center">
                   <h4 style={styles.fontStyle}>
@@ -386,7 +384,7 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    borderBottom: "1px solid #6c757d",
-    margin: "5px"
+    margin: "5px",
+    border: "1px solid lightgrey"
   }
 };

@@ -50,9 +50,9 @@ const simpleConfigText = (form: any | undefined) => {
     simpleOptions.length / 2
   );
   return (
-    <div>
+    <div style={styles.schemePreview}>
       <p>
-        <strong>Recommened</strong>
+        <strong>Recommended</strong>
       </p>
       {noDuplicateSimpleOptions.map((option: any, index: number) =>
         option.checked ? (
@@ -73,7 +73,11 @@ const simpleConfigText = (form: any | undefined) => {
   );
 };
 
-const membersPreview = (form: any | undefined, daoName: string) => {
+const membersPreview = (
+  form: any | undefined,
+  daoName: string,
+  distribution: boolean
+) => {
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -95,37 +99,55 @@ const membersPreview = (form: any | undefined, daoName: string) => {
     totalTokenAmount += member.tokens;
     return null;
   });
+  const numberOfMembers = form.$.length;
   return (
-    <div>
-      <p>{form.$.length} Members</p>
+    <div style={styles.membersPreview}>
+      <p>
+        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
+      </p>
       <div style={{ width: "17.5em" }}>
-        <p>Reputation Distribution</p>
+        <p style={{}}>Reputation Distribution</p>
         <LineGraphic
           data={form.toState()}
           total={totalReputationAmount}
           config={reputationConfig}
+          style={styles.lineGraphic}
         />
       </div>
-      <div style={{ width: "17.5em" }}>
-        <p>{daoName} Token Distribution</p>
-        <LineGraphic
-          data={form.toState()}
-          total={totalTokenAmount}
-          config={tokenConfig}
-        />
-      </div>
+      {distribution ? (
+        <>
+          <div style={{ paddingTop: "20px", width: "17.5em" }}>
+            <p>{daoName} Token Distribution</p>
+            <LineGraphic
+              data={form.toState()}
+              total={totalTokenAmount}
+              config={tokenConfig}
+              style={styles.lineGraphic}
+            />
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
 
 export default function Stepper(props: Props) {
+  const [distribution, setDistribution] = React.useState(false);
   const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
+
   const { form, title, Component, callbacks, step, index } = props;
 
   const advancedState = {
     advanceMode,
     setAdvanceMode,
     form
+  };
+
+  const distributionState = {
+    distribution,
+    setDistribution
   };
 
   return (
@@ -155,14 +177,16 @@ export default function Stepper(props: Props) {
           </span>
         </a>
         {step > 0 && index === 0 && callbacks.daoName() ? (
-          <p style={{ marginTop: "26px" }}>{callbacks.daoName()}</p>
+          <p style={{ marginTop: "26px", paddingRight: "320px" }}>
+            {callbacks.daoName()}
+          </p>
         ) : (
           ""
         )}
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
         {step > 2 && index === 2
-          ? membersPreview(form, callbacks.daoName())
+          ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)
           : ""}
         <div>
           <ModalButton
@@ -206,6 +230,7 @@ export default function Stepper(props: Props) {
             form={form}
             {...props.callbacks}
             advancedScheme={advancedState}
+            distributionState={distributionState}
           />
         </MDBRow>
       </MDBCollapse>
@@ -217,21 +242,21 @@ const styles = {
   stepContent: {
     width: "fit-content",
     padding: "6px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
   stepTwoContent: {
     width: "inherit",
     padding: "6px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
   stepFourContent: {
     width: "auto",
     padding: "16px",
-    margin: "0px 5% 0px 14%",
+    margin: "0px 5% 0px 9%",
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
@@ -294,5 +319,15 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
+  },
+  schemePreview: {
+    marginTop: 28
+  },
+  membersPreview: {
+    marginTop: 28,
+    paddingRight: "60px"
+  },
+  lineGraphic: {
+    padding: "unset"
   }
 };

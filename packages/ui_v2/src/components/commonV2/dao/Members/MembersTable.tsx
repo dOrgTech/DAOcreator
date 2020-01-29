@@ -13,7 +13,8 @@ export const MembersTable = ({
   onEdit,
   onDelete,
   selectEdit,
-  tokenDistribution
+  tokenDistribution,
+  getDAOTokenSymbol
 }: {
   membersForm: any;
   editing: number;
@@ -22,61 +23,70 @@ export const MembersTable = ({
   onDelete: any;
   selectEdit: any;
   tokenDistribution: boolean;
+  getDAOTokenSymbol: () => string;
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <tr key={index} className="test" style={styles.borderCell}>
-        <td style={styles.borderCell}>
+      <tr key={index} style={styles.borderCell}>
+        <td style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </td>
         <td style={styles.borderCell}>
-          <MDBTooltip domElement>
-            <div //There is probably a better MDBReact component for this
-              onClick={() => {
-                navigator.clipboard.writeText(memberForm.values.address);
-              }}
-              style={
-                (styles.noPadding,
-                { cursor: "pointer", display: "inline-block" })
+          <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
+            <MDBTooltip domElement>
+              <div //There is probably a better MDBReact component for this
+                onClick={() => {
+                  navigator.clipboard.writeText(memberForm.values.address);
+                }}
+                style={
+                  (styles.noPadding,
+                  { cursor: "pointer", display: "inline-block", color: "blue" })
+                }
+              >
+                {truncateString(memberForm.values.address, 6, 4)}
+              </div>
+              <div>Copy</div>
+            </MDBTooltip>
+            <MDBBtn
+              onClick={() =>
+                window.open(
+                  `https://etherscan.io/address/${memberForm.values.address}`
+                )
               }
-            >
-              {truncateString(memberForm.values.address, 6, 4)}
-            </div>
-            <div>Copy</div>
-          </MDBTooltip>
-          <MDBBtn
-            onClick={() =>
-              window.open(
-                `https://etherscan.io/address/${memberForm.values.address}`
-              )
-            }
-            floating
-            size="lg"
-            color="transparent"
-            style={styles.link}
-          >
-            <MDBIcon icon="link" />
-          </MDBBtn>
+              floating
+              size="lg"
+              color="transparent"
+              style={styles.link}
+            ></MDBBtn>
+          </div>
         </td>
         <td style={styles.borderCell}>
           {editing !== index ? (
-            memberForm.values.reputation
+            <div style={{ marginTop: "5px" }}>
+              {memberForm.values.reputation}
+            </div>
           ) : (
-            <FormField
-              field={editedMemberForm.$.reputation}
-              editable={true}
-            ></FormField>
+            <div style={{ marginLeft: "-20px" }}>
+              <FormField
+                field={editedMemberForm.$.reputation}
+                editable={true}
+                colSize={12}
+              />
+            </div>
           )}
         </td>
         {tokenDistribution ? (
           <td style={styles.borderCell}>
             {editing !== index ? (
-              memberForm.values.tokens
+              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             ) : (
-              <FormField
-                field={editedMemberForm.$.tokens}
-                editable={true}
-              ></FormField>
+              <div style={{ marginLeft: "-20px" }}>
+                <FormField
+                  field={editedMemberForm.$.tokens}
+                  editable={true}
+                  colSize={12}
+                />
+              </div>
             )}
           </td>
         ) : (
@@ -87,6 +97,7 @@ export const MembersTable = ({
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
             }}
+            style={{ paddingTop: "5px" }}
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
@@ -96,6 +107,7 @@ export const MembersTable = ({
             onClick={() => {
               onDelete(index);
             }}
+            style={{ paddingTop: "5px" }}
           >
             <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
@@ -114,7 +126,7 @@ export const MembersTable = ({
                 <th></th>
                 <th style={styles.titles}>REPUTATION</th>
                 {tokenDistribution ? (
-                  <th style={styles.titles}>TOKENS</th>
+                  <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
                 ) : (
                   <th></th>
                 )}
@@ -140,11 +152,13 @@ const styles = {
   borderCell: {
     borderBottom: "1px solid lightgray"
   },
-  borderTitleLeft: {
-    borderLeft: "1px solid lightgray"
+  addressCell: {
+    borderBottom: "1px solid lightgray",
+    marginLeft: "-5px"
   },
-  borderTitleRight: {
-    borderRight: "1px solid lightgray"
+  avatarCell: {
+    borderBottom: "1px solid lightgray",
+    width: "20px"
   },
   noPadding: {
     padding: 0

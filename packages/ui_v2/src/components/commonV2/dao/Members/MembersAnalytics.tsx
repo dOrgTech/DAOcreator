@@ -16,10 +16,14 @@ interface ILineConfig {
 }
 
 interface IProps {
-  data: IData[]; // TODO Potentially update data type to flattened form type
+  data: IData[]; // TODO Potentially update data type to flattened form type,
+  getDAOTokenSymbol: () => string;
 }
 
-export const MembersAnalytics: FC<IProps> = ({ data }: IProps) => {
+export const MembersAnalytics: FC<IProps> = ({
+  data,
+  getDAOTokenSymbol
+}: IProps) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -85,7 +89,7 @@ export const MembersAnalytics: FC<IProps> = ({ data }: IProps) => {
     );
     const tokenBox = (
       <Box
-        name={"Token Distribution"}
+        name={`${getDAOTokenSymbol()} Token Distribution`}
         total={totalTokenAmount}
         config={tokenConfig}
       />
@@ -94,11 +98,11 @@ export const MembersAnalytics: FC<IProps> = ({ data }: IProps) => {
     if (totalReputationAmount === 0 && totalTokenAmount === 0) return null;
 
     return (
-      <MDBBox>
+      <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
         {reputationBox}
         {totalReputationAmount !== 0 && totalTokenAmount !== 0 && <br />}
         {tokenBox}
-      </MDBBox>
+      </div>
     );
   };
 

@@ -10,21 +10,23 @@ const MembersEditor = ({
   form,
   getDAOTokenSymbol,
   address,
-  step
+  step,
+  distributionState
 }: {
   form: any;
   getDAOTokenSymbol: any;
   address: string;
   step: number;
+  distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editing, setEditing] = useState(-1);
   const [addressAdded, setAddressAdded] = useState(true);
-  const [distribution, setDistribution] = useState(false);
 
-  // Configurable(?)
+  const { distribution, setDistribution } = distributionState;
+
   memberForm.$.reputation.value = "100";
   distribution
     ? (memberForm.$.tokens.value = "100")
@@ -96,15 +98,14 @@ const MembersEditor = ({
     forceUpdate();
   };
 
-  const MemberFormError = () => (
-    <MDBBox>
-      {membersForm.showFormError && (
-        <MDBTypography tag="p" colorText="red">
-          {membersForm.error}
-        </MDBTypography>
-      )}
-    </MDBBox>
-  );
+  const MemberFormError = () =>
+    membersForm.showFormError ? (
+      <div style={{ marginRight: "-10px", color: "red" }}>
+        <p>{membersForm.error}</p>
+      </div>
+    ) : (
+      <></>
+    );
 
   return (
     <MDBBox>
@@ -118,15 +119,19 @@ const MembersEditor = ({
           }}
           disabled={false}
           checked={distribution}
+          style={styles.toggle}
         />
-        <MembersAnalytics data={membersForm.toState()} />
+        <div style={styles.divider} />
+        <MembersAnalytics
+          data={membersForm.toState()}
+          getDAOTokenSymbol={getDAOTokenSymbol}
+        />
+        <div style={styles.thinDivider} />
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
-        <MDBRow>
-          <MemberFormError />
-        </MDBRow>
-        <br />
+        <MemberFormError />
+        <div style={styles.thinDivider} />
         <MDBRow style={styles.tableWidth}>
           <MembersTable
             membersForm={membersForm}
@@ -136,6 +141,7 @@ const MembersEditor = ({
             onDelete={onDelete}
             selectEdit={selectEdit}
             tokenDistribution={distribution}
+            getDAOTokenSymbol={getDAOTokenSymbol}
           />
         </MDBRow>
       </MDBContainer>
@@ -149,6 +155,21 @@ const styles = {
   },
   noPadding: {
     padding: "1px"
+  },
+  toggle: {
+    paddingLeft: 15.35
+  },
+  divider: {
+    flexGrow: 1,
+    marginLeft: "-10px",
+    border: "1px solid rgb(211, 211, 211)",
+    width: "103.3%"
+  },
+  thinDivider: {
+    flexGrow: 1,
+    marginLeft: "-10px",
+    border: "0.5px solid rgb(211, 211, 211)",
+    width: "103.3%"
   }
 };
 
