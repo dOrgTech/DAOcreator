@@ -97,6 +97,7 @@ const membersPreview = (
   form.toState().map((member: any) => {
     totalReputationAmount += member.reputation;
     totalTokenAmount += member.tokens;
+    return null;
   });
   const numberOfMembers = form.$.length;
   return (

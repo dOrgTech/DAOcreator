@@ -11,7 +11,7 @@ export function UtilityButton(props: Props) {
     if (title === "Import CSV") {
       openModal(title);
     } else {
-      const { advanceMode, _, form } = advanced;
+      const { advanceMode, form } = advanced; // Removed _, from advanced destructure (?)
       if (!advanceMode) {
         form.$ = [];
       }

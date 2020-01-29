@@ -19,9 +19,14 @@ interface Props {
 function SchemesStep(props: Props) {
   const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
 
+  const [loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
+    if (!loading) return;
+    setLoading(false);
+
     form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
-  }, []);
+  }, [loading, form.$]);
 
   return (
     <SchemeEditor

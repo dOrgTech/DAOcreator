@@ -60,7 +60,7 @@ export default function DAOcreator() {
   const [defaultAddress, setDefaultAddress] = React.useState<
     string | undefined
   >();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
   );
@@ -69,59 +69,65 @@ export default function DAOcreator() {
   );
   const [importFile, setImportFile] = React.useState<string>("");
 
-  const handleMetamask = async () => {
-    try {
-      const address = await getProvider();
-      setDefaultAddress(address);
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-  };
+  // On initial load
+  React.useEffect(() => {
+    if (!loading) return;
 
-  const previewLocalStorage = () => {
-    const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
-    if (!daoCreatorState) {
+    const handleMetamask = async () => {
+      try {
+        const address = await getProvider();
+        setDefaultAddress(address);
+      } catch (e) {
+        console.log(e);
+      }
       setLoading(false);
-      return;
-    }
-
-    const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
-    const daoParams = fromJSON(form);
-    const daoState = fromDAOMigrationParams(daoParams);
-    recoveredForm.fromState(daoState);
-    setRecoverPreviewOpen(true);
-  };
-
-  const saveLocalStorage = () => {
-    const daoState = daoForm.toState();
-    // Check to see if the current form state hasn't been edited,
-    // and if so early out so we don't save an empty state
-    const nullForm = new DAOForm();
-    if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
-      return;
-    }
-
-    const daoParams = toDAOMigrationParams(daoState);
-    const json = toJSON(daoParams);
-    const daoCreatorState: DAO_CREATOR_INTERFACE = {
-      step,
-      form: json
     };
 
-    localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
-  };
+    const previewLocalStorage = () => {
+      const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
-  React.useEffect(() => {
-    setLoading(true);
+      if (!daoCreatorState) {
+        setLoading(false);
+        return;
+      }
+
+      const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+      const daoParams = fromJSON(form);
+      const daoState = fromDAOMigrationParams(daoParams);
+      recoveredForm.fromState(daoState);
+      setRecoverPreviewOpen(true);
+    };
+
     handleMetamask();
     previewLocalStorage();
+  }, [loading]);
+
+  // Save state every step
+  React.useEffect(() => {
+    const saveLocalStorage = () => {
+      const daoState = daoForm.toState();
+      // Check to see if the current form state hasn't been edited,
+      // and if so early out so we don't save an empty state
+      const nullForm = new DAOForm();
+      if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
+        return;
+      }
+
+      const daoParams = toDAOMigrationParams(daoState);
+      const json = toJSON(daoParams);
+      const daoCreatorState: DAO_CREATOR_INTERFACE = {
+        step,
+        form: json
+      };
+
+      localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
+    };
+
     window.addEventListener("beforeunload", saveLocalStorage);
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, []);
+  }, [step]);
 
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
