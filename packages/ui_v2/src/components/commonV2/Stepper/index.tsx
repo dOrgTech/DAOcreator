@@ -50,7 +50,7 @@ const simpleConfigText = (form: any | undefined) => {
     simpleOptions.length / 2
   );
   return (
-    <div style={styles.stepPreview}>
+    <div style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
@@ -100,7 +100,7 @@ const membersPreview = (
   });
   const numberOfMembers = form.$.length;
   return (
-    <div style={styles.stepPreview}>
+    <div style={styles.membersPreview}>
       <p>
         {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
       </p>
@@ -176,13 +176,17 @@ export default function Stepper(props: Props) {
           </span>
         </a>
         {step > 0 && index === 0 && callbacks.daoName() ? (
-          <p style={{ marginTop: "26px" }}>{callbacks.daoName()}</p>
+          <p style={{ marginTop: "26px", paddingRight: "320px" }}>
+            {callbacks.daoName()}
+          </p>
         ) : (
           ""
         )}
 
         {step > 1 && index === 1 ? simpleConfigText(form) : ""}
-        {step > 2 && index === 2 ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution) : ""}
+        {step > 2 && index === 2
+          ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)
+          : ""}
         <div>
           <ModalButton
             step={step}
@@ -315,8 +319,12 @@ const styles = {
   maxWidth: {
     width: "-webkit-fill-available"
   },
-  stepPreview: {
+  schemePreview: {
     marginTop: 28
+  },
+  membersPreview: {
+    marginTop: 28,
+    paddingRight: "60px"
   },
   lineGraphic: {
     padding: "unset"
