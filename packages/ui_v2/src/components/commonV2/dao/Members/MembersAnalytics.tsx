@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { MDBBox, MDBRow, MDBCol } from "mdbreact";
+import { MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "../../LineGraphic";
 
