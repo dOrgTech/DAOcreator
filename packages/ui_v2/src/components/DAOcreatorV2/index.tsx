@@ -72,7 +72,6 @@ export default function DAOcreator() {
   // On initial load
   React.useEffect(() => {
     if (!loading) return;
-    setLoading(false);
 
     const handleMetamask = async () => {
       try {
@@ -81,6 +80,7 @@ export default function DAOcreator() {
       } catch (e) {
         console.log(e);
       }
+      setLoading(false);
     };
 
     const previewLocalStorage = () => {
