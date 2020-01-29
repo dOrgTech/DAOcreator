@@ -26,10 +26,12 @@ export interface Props {
   editable?: boolean;
   colSize?: any;
   tabIndex?: number | null;
+  checkError?: (error: boolean) => void;
+  namingError?: any;
 }
 
 function FormField(props: Props) {
-  const { field, editable, colSize, tabIndex } = props;
+  const { field, editable, colSize, tabIndex, checkError, namingError } = props;
   const size = colSize ? colSize : 6;
   let FieldView;
 
@@ -62,6 +64,8 @@ function FormField(props: Props) {
         editable={editable}
         colSize={size}
         tabIndex={tabIndex ? tabIndex : undefined}
+        checkError={checkError ? checkError : undefined}
+        namingError={namingError ? namingError : undefined}
       />
     </>
   );
@@ -72,6 +76,8 @@ interface FieldProps<T> {
   editable?: boolean;
   colSize?: any;
   tabIndex?: number | undefined;
+  namingError?: any | undefined;
+  checkError?: (error: any) => void | undefined;
 }
 
 const FieldError = (field: any) => (
@@ -79,48 +85,81 @@ const FieldError = (field: any) => (
 );
 
 const StringFieldView = observer(
-  ({ field, editable, tabIndex }: FieldProps<StringField>) => (
-    <>
-      <MDBCol size="6" style={styles.largeMargin}>
-        <label style={styles.labelStyle}>
-          {field.displayName === "Token Symbol"
-            ? "DAO Symbol"
-            : field.displayName}
-        </label>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{field.description}</span>
-        </MDBTooltip>
-        <input
-          type="text"
-          style={styles.inputStyle}
-          value={field.value}
-          disabled={editable === undefined ? false : !editable}
-          onChange={(event: any) => field.onChange(event.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-          tabIndex={tabIndex}
-        />
-        {FieldError(field)}
-      </MDBCol>
-    </>
-  )
+  ({
+    field,
+    editable,
+    tabIndex,
+    checkError,
+    namingError
+  }: FieldProps<StringField>) => {
+    const onChange = async (event: any) => {
+      field.onChange(event.target.value);
+      setTimeout(() => {
+        if (field.displayName === "Token Symbol") {
+          checkError!({ ...namingError, daoSymbol: field.hasError });
+        }
+        if (field.displayName === "DAO Name") {
+          checkError!({ ...namingError, daoName: field.hasError });
+        }
+      }, 250);
+    };
+    return (
+      <>
+        <MDBCol size="6" style={styles.largeMargin}>
+          <label style={styles.labelStyle}>
+            {field.displayName === "Token Symbol"
+              ? "DAO Symbol"
+              : field.displayName}
+          </label>
+          <MDBTooltip placement="bottom" clickable>
+            <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+              {" "}
+              <MDBIcon icon="info-circle" />
+            </MDBBtn>
+            <span>{field.description}</span>
+          </MDBTooltip>
+          <input
+            type="text"
+            style={styles.inputStyle}
+            value={field.value}
+            disabled={editable === undefined ? false : !editable}
+            onChange={onChange}
+            onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
+          />
+          {FieldError(field)}
+        </MDBCol>
+      </>
+    );
+  }
 );
 
 const TokenFieldView = observer(
-  ({ field, editable }: FieldProps<TokenField>) => (
+  ({ field, editable, colSize }: FieldProps<TokenField>) => (
     <>
-      <MDBCol size="6" style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{field.description}</span>
-        </MDBTooltip>
+      <MDBCol
+        size={colSize ? colSize : "6"}
+        style={colSize ? {} : styles.largeMargin}
+      >
+        {colSize ? (
+          <></>
+        ) : (
+          <>
+            <label style={styles.labelStyle}>{field.displayName}</label>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                {" "}
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>{field.description}</span>
+            </MDBTooltip>
+          </>
+        )}
         <input
           type="text"
           style={styles.inputStyle}
@@ -360,14 +399,25 @@ const AddressFieldView = observer(
   ({ field, editable, colSize }: FieldProps<AddressField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{field.description}</span>
-        </MDBTooltip>
+        {field.description === "The member's public address." ? (
+          <></>
+        ) : (
+          <>
+            <label style={styles.labelStyle}>{field.displayName}</label>
+            <MDBTooltip placement="bottom" clickable>
+              <MDBBtn
+                floating
+                size="lg"
+                color="transparent"
+                style={styles.info}
+              >
+                {" "}
+                <MDBIcon icon="info-circle" />
+              </MDBBtn>
+              <span>{field.description}</span>
+            </MDBTooltip>
+          </>
+        )}
         <input
           style={styles.inputStyle}
           placeholder="0x..."

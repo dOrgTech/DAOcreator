@@ -273,48 +273,41 @@ export default function DAOcreator() {
             </MDBCol>
           </MDBRow>
           <br />
-          <hr />
-          <div className="row">
-            <div className="col-md-12">
-              {loading ? (
-                <>
-                  <div
-                    style={styles.spinner}
-                    className="spinner-border text-primary"
-                    role="status"
-                  >
-                    <span className="sr-only">Loading...</span>
-                  </div>
+          <div style={styles.divider} />
+          <div className="row justify-content-center">
+            {loading ? (
+              <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
+                <MDBRow className="justify-content-center">
+                  <div className="spinner-border text-primary" />
+                </MDBRow>
+                <MDBRow className="justify-content-space-between">
                   <p style={styles.fontStyle}> Please allow metamask </p>
-                </>
-              ) : !defaultAddress ? (
-                <div className="row justify-content-center">
-                  <h4 style={styles.fontStyle}>
-                    You must allow metamask to continue
-                  </h4>
-                </div>
-              ) : (
-                <ul
-                  className="stepper stepper-vertical"
-                  style={styles.noPadding}
-                >
-                  {steps.map((actualStep: Step, index: number) => {
-                    let { form, title, Component, callbacks } = actualStep;
-                    return (
-                      <Stepper
-                        key={`step${index}`}
-                        form={form}
-                        title={title}
-                        step={step}
-                        index={index}
-                        Component={Component}
-                        callbacks={callbacks}
-                      />
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
+                </MDBRow>
+              </div>
+            ) : !defaultAddress ? (
+              <div className="row justify-content-center">
+                <h4 style={styles.fontStyle}>
+                  You must allow metamask to continue
+                </h4>
+              </div>
+            ) : (
+              <ul className="stepper stepper-vertical" style={styles.noPadding}>
+                {steps.map((actualStep: Step, index: number) => {
+                  let { form, title, Component, callbacks } = actualStep;
+                  return (
+                    <Stepper
+                      key={`step${index}`}
+                      form={form}
+                      title={title}
+                      step={step}
+                      index={index}
+                      Component={Component}
+                      callbacks={callbacks}
+                    />
+                  );
+                })}
+              </ul>
+            )}
           </div>
         </div>
       </MDBContainer>
@@ -380,7 +373,7 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    borderBottom: "1px solid #6c757d",
-    margin: "5px"
+    margin: "5px",
+    border: "1px solid lightgrey"
   }
 };
