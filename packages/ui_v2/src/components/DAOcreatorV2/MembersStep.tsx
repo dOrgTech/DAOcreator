@@ -38,7 +38,7 @@ function MembersStep(props: Props) {
               style={styles.setDescriptionButton}
               onClick={toggleCollapse}
             >
-              Set members
+              Set Members
             </button>
           </MDBCol>
         </MDBRow>
