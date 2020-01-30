@@ -162,12 +162,6 @@ export default function Stepper(props: Props) {
   const handleKeyPress = (event: any) => {
     if (event.key !== "Enter") return;
     switch (step) {
-      case 0:
-        nextStep();
-        break;
-      case 1:
-        nextStep();
-        break;
       case 2:
         break;
       case 3:
