@@ -19,6 +19,7 @@ interface Props {
   step: number;
   index: number;
   daoName?: string;
+  nextStep: () => any;
 }
 
 const ModalButton = (props: {
@@ -137,7 +138,7 @@ export default function Stepper(props: Props) {
   const [distribution, setDistribution] = React.useState(false);
   const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
 
-  const { form, title, Component, callbacks, step, index } = props;
+  const { form, title, Component, callbacks, step, index, nextStep } = props;
 
   const advancedState = {
     advanceMode,
@@ -148,6 +149,32 @@ export default function Stepper(props: Props) {
   const distributionState = {
     distribution,
     setDistribution
+  };
+
+  React.useEffect(() => {
+    // Prevents the creation of 4 event listeners
+    if (index === step) window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [step]);
+
+  const handleKeyPress = (event: any) => {
+    if (event.key !== "Enter") return;
+    switch (step) {
+      case 0:
+        nextStep();
+        break;
+      case 1:
+        nextStep();
+        break;
+      case 2:
+        break;
+      case 3:
+        return;
+      default:
+        nextStep();
+    }
   };
 
   return (
