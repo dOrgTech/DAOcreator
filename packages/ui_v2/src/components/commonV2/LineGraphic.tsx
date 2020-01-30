@@ -46,6 +46,12 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
         const percentage = `${(value / total) * 100}`.toString().substr(0, 4);
         const name = element[nameKey] as string;
 
+        let className = "";
+        if (index === 0 && index === cleanData.length - 1)
+          className = "rounded-pill";
+        else if (index === 0) className = "rounded-left";
+        else if (index === cleanData.length - 1) className = "rounded-right";
+
         return (
           <MDBTooltip
             className="grey darken-3"
@@ -60,7 +66,8 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
               }}
             >
               <MDBProgress
-                className="rounded-pill"
+                className={className}
+                wrapperStyle={{ borderRadius: "0" }}
                 material
                 value={100}
                 height={height}
