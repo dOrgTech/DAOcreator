@@ -70,12 +70,13 @@ export default function DAOcreator() {
   const [importFile, setImportFile] = React.useState<string>("");
 
   let currentForm: any = daoForm.$.config;
-  const nextStep = async () => {
+
+  const nextStep = React.useCallback(async () => {
     const res = await currentForm.validate();
     if (!res.hasError) {
       setStep(step + 1);
     }
-  };
+  }, [currentForm, step]);
 
   // On initial load
   React.useEffect(() => {
@@ -142,9 +143,8 @@ export default function DAOcreator() {
       if (event.key !== "Enter") return;
       switch (step) {
         case 2:
-          break;
         case 3:
-          return;
+          break;
         default:
           nextStep();
       }
