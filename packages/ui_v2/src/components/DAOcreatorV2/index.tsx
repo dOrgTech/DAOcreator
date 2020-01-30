@@ -69,6 +69,14 @@ export default function DAOcreator() {
   );
   const [importFile, setImportFile] = React.useState<string>("");
 
+  let currentForm: any = daoForm.$.config;
+  const nextStep = async () => {
+    const res = await currentForm.validate();
+    if (!res.hasError) {
+      setStep(step + 1);
+    }
+  };
+
   // On initial load
   React.useEffect(() => {
     if (!loading) return;
@@ -129,6 +137,25 @@ export default function DAOcreator() {
     };
   }, [step]);
 
+  React.useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      if (event.key !== "Enter") return;
+      switch (step) {
+        case 2:
+          break;
+        case 3:
+          return;
+        default:
+          nextStep();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [step, nextStep]);
+
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const loadLocalStorage = () => {
@@ -186,14 +213,6 @@ export default function DAOcreator() {
       </MDBBtn>
     </MDBModal>
   );
-
-  let currentForm: any = daoForm.$.config;
-  const nextStep = async () => {
-    const res = await currentForm.validate();
-    if (!res.hasError) {
-      setStep(step + 1);
-    }
-  };
 
   const steps: Step[] = [
     {
@@ -313,7 +332,6 @@ export default function DAOcreator() {
                         index={index}
                         Component={Component}
                         callbacks={callbacks}
-                        nextStep={nextStep}
                       />
                     );
                   })}
