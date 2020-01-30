@@ -31,16 +31,26 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
   const { showPercentage, height, symbol, dataKey, nameKey } = config;
 
   const colours = ["success", "info", "warning", "danger"];
-
   if (total === 0) return null;
+
+  const cleanData = data.filter((element: IData) => {
+    const value: number = element[dataKey] as number;
+    if (value > 0) return element;
+    return null;
+  });
+
   return (
     <MDBContainer className="text-center" style={style ? style : null}>
-      {data.map((element: IData, index: number) => {
+      {cleanData.map((element: IData, index: number) => {
         const value: number = element[dataKey] as number;
-
         const percentage = `${(value / total) * 100}`.toString().substr(0, 4);
-
         const name = element[nameKey] as string;
+
+        let className = "";
+        if (index === 0 && index === cleanData.length - 1)
+          className = "rounded-pill";
+        else if (index === 0) className = "rounded-left";
+        else if (index === cleanData.length - 1) className = "rounded-right";
 
         return (
           <MDBTooltip
@@ -56,7 +66,8 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
               }}
             >
               <MDBProgress
-                className="rounded-pill"
+                className={className}
+                wrapperStyle={{ borderRadius: "0" }}
                 material
                 value={100}
                 height={height}
