@@ -8,6 +8,17 @@ import { getWeb3, getNetworkName, getDefaultOpts } from "../../dependency/web3";
 const migrate = require("./src/migrate-dao");
 const addresses = require("./src/migration.json");
 
+const callService = async (body: any) => {
+  const response = await fetch('https://daocreator-service.herokuapp.com/.netlify/functions/index/send-tx', {
+    method: 'POST',
+    body,
+    headers: {
+      'Content-Type':'application/json'
+    }
+  })
+  return await response.json()
+};
+
 export const migrateDAO = async (
   dao: DAOMigrationParams,
   callbacks: DAOMigrationCallbacks
@@ -33,35 +44,16 @@ export const migrateDAO = async (
     const sendTx = async (
       tx: any,
       msg: string
-    ): Promise<{ receipt: any; result: any }> => {
+    ) => {
       callbacks.info(msg);
 
-      let gas = 0;
-      const nonce = await web3.eth.getTransactionCount(web3.eth.defaultAccount);
-      const blockLimit = await web3.eth.getBlock("latest").gasLimit;
-
-      try {
-        gas = await tx.estimateGas();
-        if (gas * 1.1 < blockLimit - 100000) {
-          gas *= 1.1;
-        }
-      } catch (error) {
-        gas = blockLimit - 100000;
+      const body = {
+        parameters: tx.arguments,
+        methodAbi: tx._method,
+        to: tx._parent.options.address
       }
-
-      let result = tx.send({ gas, nonce });
-      let receipt = await new Promise(resolve =>
-        result.on("receipt", resolve).on("error", async (error: Error) => {
-          callbacks.error("Transaction failed: " + error.message);
-          resolve();
-        })
-      );
-
-      if (receipt === "failed") {
-        return sendTx(tx, "Retrying...");
-      }
-
-      result = await result;
+      const { receipt } = await callService(JSON.stringify(body))
+      const result = {}
       return { receipt, result };
     };
 
