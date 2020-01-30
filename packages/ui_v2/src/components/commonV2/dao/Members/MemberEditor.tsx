@@ -11,8 +11,12 @@ export const MemberEditor = ({
   onSubmit: any;
 }) => {
   return (
-    <MDBRow style={styles.rowPrincipal}>
-      {/* // It would seem like FormField should accept an onSubmit={onSubmit} prop */}
+    <MDBRow
+      style={styles.rowPrincipal}
+      onKeyDown={(e: any) => {
+        if (e.key === "Enter") onSubmit(e);
+      }}
+    >
       <FormField field={memberForm.$.address} editable={true} colSize="9" />
       <MDBCol size="3">
         <button
