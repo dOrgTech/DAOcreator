@@ -313,6 +313,7 @@ export default function DAOcreator() {
                         index={index}
                         Component={Component}
                         callbacks={callbacks}
+                        nextStep={nextStep}
                       />
                     );
                   })}
