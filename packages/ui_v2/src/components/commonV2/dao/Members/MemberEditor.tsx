@@ -12,6 +12,7 @@ export const MemberEditor = ({
 }) => {
   return (
     <MDBRow style={styles.rowPrincipal}>
+      {/* // It would seem like FormField should accept an onSubmit={onSubmit} prop */}
       <FormField field={memberForm.$.address} editable={true} colSize="9" />
       <MDBCol size="3">
         <button
