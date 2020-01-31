@@ -68,8 +68,8 @@ export const MembersTable = ({
           ) : (
             <div
               style={{ marginLeft: "-20px" }}
-              onKeyDown={(e: any) => {
-                if (e.key === "Enter") onEdit(index);
+              onKeyDown={(event: any) => {
+                if (event.key === "Enter") onEdit(index);
               }}
             >
               <FormField
@@ -87,8 +87,8 @@ export const MembersTable = ({
             ) : (
               <div
                 style={{ marginLeft: "-20px" }}
-                onKeyDown={(e: any) => {
-                  if (e.key === "Enter") onEdit(index);
+                onKeyDown={(event: any) => {
+                  if (event.key === "Enter") onEdit(index);
                 }}
               >
                 <FormField

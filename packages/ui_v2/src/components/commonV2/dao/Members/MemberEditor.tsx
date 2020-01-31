@@ -13,8 +13,8 @@ export const MemberEditor = ({
   return (
     <MDBRow
       style={styles.rowPrincipal}
-      onKeyDown={(e: any) => {
-        if (e.key === "Enter") onSubmit(e);
+      onKeyDown={(event: any) => {
+        if (event.key === "Enter") onSubmit(event);
       }}
     >
       <FormField field={memberForm.$.address} editable={true} colSize="9" />
