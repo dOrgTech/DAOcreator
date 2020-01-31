@@ -304,7 +304,7 @@ function SchemeEditor(props: Props) {
         <Toggle
           id={"rewardSuccess"}
           text={"Reward successful proposer"}
-          tooltip={"Successful proposers receive voting power"}
+          tooltip={"Successful proposers gain additional voting power"}
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
@@ -316,7 +316,7 @@ function SchemeEditor(props: Props) {
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
           tooltip={
-            "Voting power flows from those who vote on the losing side of proposals to those on the winning side"
+            "Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"
           }
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);

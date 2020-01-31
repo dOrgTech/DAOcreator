@@ -114,7 +114,7 @@ const MembersEditor = ({
           id={"distribution"}
           text={`Distribute ${getDAOTokenSymbol()} token`}
           tooltip={
-            "Instantiate initial allocation of your organization’s native token"
+            " Distribute your organization’s native token at launch (regardless of initial distribution, the organization will be able to create more tokens after launch through proposals)"
           }
           toggle={() => {
             setDistribution(!distribution);
