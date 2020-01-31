@@ -66,7 +66,12 @@ export const MembersTable = ({
               {memberForm.values.reputation}
             </div>
           ) : (
-            <div style={{ marginLeft: "-20px" }}>
+            <div
+              style={{ marginLeft: "-20px" }}
+              onKeyDown={(e: any) => {
+                if (e.key === "Enter") onEdit(index);
+              }}
+            >
               <FormField
                 field={editedMemberForm.$.reputation}
                 editable={true}
@@ -80,7 +85,12 @@ export const MembersTable = ({
             {editing !== index ? (
               <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             ) : (
-              <div style={{ marginLeft: "-20px" }}>
+              <div
+                style={{ marginLeft: "-20px" }}
+                onKeyDown={(e: any) => {
+                  if (e.key === "Enter") onEdit(index);
+                }}
+              >
                 <FormField
                   field={editedMemberForm.$.tokens}
                   editable={true}
