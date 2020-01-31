@@ -226,7 +226,7 @@ export default function DAOcreator() {
       }
     },
     {
-      title: "Configure Schemes",
+      title: "Configure",
       form: daoForm.$.schemes,
       Component: SchemesStep,
       callbacks: {
@@ -250,7 +250,7 @@ export default function DAOcreator() {
       }
     },
     {
-      title: "Install Organization",
+      title: "Launch",
       form: daoForm,
       Component: InstallStep
     }

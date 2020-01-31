@@ -4,7 +4,7 @@ import { MDBBtn, MDBRow, MDBCol, MDBTooltip, MDBIcon } from "mdbreact";
 interface ToggleProps {
   id: string;
   text: string;
-  example: string;
+  tooltip: string;
   toggle: () => void;
   disabled: boolean;
   checked: boolean;
@@ -14,7 +14,7 @@ interface ToggleProps {
 export default function Toggle({
   id,
   text,
-  example,
+  tooltip,
   toggle,
   disabled,
   checked,
@@ -31,7 +31,7 @@ export default function Toggle({
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
-          <span>{example}</span>
+          <span>{tooltip}</span>
         </MDBTooltip>
       </MDBCol>
       <MDBCol style={styles.noPadding}>

@@ -113,7 +113,9 @@ const MembersEditor = ({
         <Toggle
           id={"distribution"}
           text={`Distribute ${getDAOTokenSymbol()} token`}
-          example={"Some example"}
+          tooltip={
+            "Instantiate initial allocation of your organization’s native token"
+          }
           toggle={() => {
             setDistribution(!distribution);
           }}
