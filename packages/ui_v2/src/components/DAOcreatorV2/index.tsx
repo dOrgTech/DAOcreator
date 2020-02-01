@@ -36,6 +36,7 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
+import DeployDAO from "../commonV2/dao/Migrator/Deploy";
 import { getProvider } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
@@ -226,7 +227,7 @@ export default function DAOcreator() {
       }
     },
     {
-      title: "Configure Schemes",
+      title: "Configure",
       form: daoForm.$.schemes,
       Component: SchemesStep,
       callbacks: {
@@ -250,7 +251,7 @@ export default function DAOcreator() {
       }
     },
     {
-      title: "Install Organization",
+      title: "Launch",
       form: daoForm,
       Component: InstallStep
     }
@@ -339,6 +340,7 @@ export default function DAOcreator() {
               )}
             </div>
           </div>
+          {/* step === 3 && <DeployDAO step={step} /> */}
         </div>
       </MDBContainer>
       <PreviewDialog />
