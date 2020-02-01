@@ -325,7 +325,7 @@ const styles = {
   },
   membersPreview: {
     marginTop: 28,
-    paddingRight: "60px"
+    paddingRight: "8rem"
   },
   lineGraphic: {
     padding: "unset"
