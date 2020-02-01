@@ -223,7 +223,7 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol>
             <p className="text-left" style={styles.title}>
-              Recommend Configuration
+              Recommended Configuration
             </p>
           </MDBCol>
         </MDBRow>
@@ -231,8 +231,8 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol>
             <p className="text-left" style={styles.subtitle}>
-              Your proposal uses a proposal-vote structure and can securely
-              scale to a big organization
+              Your organization uses a reputation-weighted voting system to make
+              decisions.
             </p>
           </MDBCol>
         </MDBRow>
@@ -252,7 +252,7 @@ function SchemeEditor(props: Props) {
                 >
                   <MDBIcon icon="info-circle" />
                 </MDBBtn>
-                <span>Some example</span>
+                <span>How quickly your organization processes proposals</span>
               </MDBTooltip>
             </MDBRow>
           </MDBCol>
@@ -304,7 +304,7 @@ function SchemeEditor(props: Props) {
         <Toggle
           id={"rewardSuccess"}
           text={"Reward successful proposer"}
-          example={"Some example"}
+          tooltip={"Successful proposers gain additional voting power"}
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
@@ -315,7 +315,9 @@ function SchemeEditor(props: Props) {
         <Toggle
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
-          example={"Some example"}
+          tooltip={
+            "Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"
+          }
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
@@ -326,7 +328,9 @@ function SchemeEditor(props: Props) {
         <Toggle
           id={"autobet"}
           text={"Auto-bet against every proposal to incentivise curation"}
-          example={"Some example"}
+          tooltip={
+            "The organization bets against every proposal to incentivize the GEN curation network"
+          }
           toggle={() => setAutobet(!autobet)}
           disabled={advanceMode}
           checked={autobet}

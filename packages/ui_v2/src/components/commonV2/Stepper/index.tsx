@@ -31,7 +31,7 @@ const ModalButton = (props: {
   if (step === 1 && index === 1) {
     return (
       <UtilityButton
-        title={"Advanced Configuration"}
+        title={"Advanced"}
         openModal={cb.setModal}
         advanced={advanced}
       />
