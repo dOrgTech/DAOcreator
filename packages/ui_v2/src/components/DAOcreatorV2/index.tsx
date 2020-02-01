@@ -340,7 +340,7 @@ export default function DAOcreator() {
               )}
             </div>
           </div>
-          {/* step === 3 && <DeployDAO step={step} /> */}
+          {step === 3 && <DeployDAO step={step} dao={daoForm} />}
         </div>
       </MDBContainer>
       <PreviewDialog />
