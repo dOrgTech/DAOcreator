@@ -1,1 +1,50 @@
-{"contractName":"GlobalConstraintInterface","abi":[{"constant":false,"inputs":[{"internalType":"address","name":"_scheme","type":"address"},{"internalType":"bytes32","name":"_params","type":"bytes32"},{"internalType":"bytes32","name":"_method","type":"bytes32"}],"name":"pre","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_scheme","type":"address"},{"internalType":"bytes32","name":"_params","type":"bytes32"},{"internalType":"bytes32","name":"_method","type":"bytes32"}],"name":"post","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"when","outputs":[{"internalType":"enum GlobalConstraintInterface.CallPhase","name":"","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"}],"compiler":{"name":"solc","version":"0.5.11+commit.c082d0b4.Emscripten.clang"}}
+{
+  "contractName": "GlobalConstraintInterface",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_scheme", "type": "address" },
+        { "internalType": "bytes32", "name": "_params", "type": "bytes32" },
+        { "internalType": "bytes32", "name": "_method", "type": "bytes32" }
+      ],
+      "name": "pre",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        { "internalType": "address", "name": "_scheme", "type": "address" },
+        { "internalType": "bytes32", "name": "_params", "type": "bytes32" },
+        { "internalType": "bytes32", "name": "_method", "type": "bytes32" }
+      ],
+      "name": "post",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "when",
+      "outputs": [
+        {
+          "internalType": "enum GlobalConstraintInterface.CallPhase",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
+  }
+}

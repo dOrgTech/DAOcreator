@@ -1,1 +1,18 @@
-{"contractName":"Agreement","abi":[{"constant":true,"inputs":[],"name":"getAgreementHash","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}],"compiler":{"name":"solc","version":"0.5.11+commit.c082d0b4.Emscripten.clang"}}
+{
+  "contractName": "Agreement",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getAgreementHash",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
+  }
+}

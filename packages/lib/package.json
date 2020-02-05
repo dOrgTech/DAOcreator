@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "0.2.1-rc.17",
+  "version": "0.2.1-rc.18",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -29,6 +29,6 @@
     "typescript": "3.4.5"
   },
   "peerDependencies": {
-    "mobx": ">=3.0.0"
+    "mobx": ">=5.11.0"
   }
 }
