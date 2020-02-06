@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-ui-v1",
-  "version": "0.2.0-rc.19",
+  "version": "0.2.0-rc.20",
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {

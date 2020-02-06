@@ -23,7 +23,6 @@
     "@types/node": "^10.12.18",
     "@types/web3": "1.0.19",
     "copyfiles": "2.1.1",
-    "mobx": "5.15.1",
     "ncp": "2.0.0",
     "rimraf": "^3.0.0",
     "typescript": "3.4.5"
