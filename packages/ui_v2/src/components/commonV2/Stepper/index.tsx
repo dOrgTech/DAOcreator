@@ -260,16 +260,6 @@ const styles = {
     border: "1px solid lightgray",
     borderRadius: "6px"
   },
-  headerTop: {
-    height: "30px"
-  },
-  titleContainer: {
-    paddingBottom: "13px",
-    borderBottom: "1px solid",
-    borderColor: "inherit",
-    marginRight: 0,
-    marginLeft: 0
-  },
   active: {
     fontWeight: 400,
     color: "#4285f4"
