@@ -160,11 +160,11 @@ export default function Stepper(props: Props) {
           <span
             className="circle"
             style={
-              step > index
-                ? styles.circleActive
-                : styles.noActive || step === index
-                ? styles.circleActive
-                : styles.noActive
+              step < index
+                ? styles.subsequentStepIcon
+                : step === index
+                ? styles.currentStepIcon
+                : styles.previousStepIcon
             }
           >
             {index + 1}
@@ -275,13 +275,21 @@ const styles = {
     color: "gray",
     fontWeight: 400
   },
-  circleActive: {
+  previousStepIcon: {
     fontWeight: 400,
-    color: "white",
-    backgroundColor: "rgb(66, 133, 244) !important",
-    borderColor: "white",
-    border: "0.9px solid lightgray",
-    background: "rgb(66, 133, 244) !important"
+    // color: "#4285f4", // TODO background is being overridden
+    backgroundColor: "white !important", // TODO Is being overridden
+    border: "0.9px solid #4285f4"
+  },
+  currentStepIcon: {
+    fontWeight: 400,
+    color: "white"
+  },
+  subsequentStepIcon: {
+    fontWeight: 400,
+    color: "grey",
+    backgroundColor: "white",
+    border: "0.9px solid lightgray"
   },
   specialRow: {
     marginLeft: 0,
