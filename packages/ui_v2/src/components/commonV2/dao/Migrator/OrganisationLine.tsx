@@ -59,6 +59,17 @@ export const OrganisationLine: FC<IProps> = ({
     if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
   }, [logLines, active, done, failed]);
 
+  const StepName: FC = () => {
+    const stepName =
+      type === 0 ? "Create Organisation" : "Configure Organisation";
+
+    return step !== STEP.Waiting ? (
+      <div style={{ fontWeight: "bold" }}>{stepName}</div>
+    ) : (
+      <div>{stepName}</div>
+    );
+  };
+
   const Output: FC = () => {
     let text = undefined;
 
@@ -97,9 +108,7 @@ export const OrganisationLine: FC<IProps> = ({
         />
       </MDBCol>
       <MDBCol size="5">
-        <div>
-          {type === 0 ? "Create Organisation" : "Configure Organisation"}
-        </div>
+        <StepName />
       </MDBCol>
       <MDBCol size="5">
         <Output />
