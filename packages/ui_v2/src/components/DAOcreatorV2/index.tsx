@@ -92,6 +92,7 @@ export default function DAOcreator() {
       setLoading(false);
     };
 
+    // Implement this functionality
     const previewLocalStorage = () => {
       const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
