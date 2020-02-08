@@ -88,7 +88,7 @@ export const OrganisationLine: FC<IProps> = ({
 
   return (
     <MDBRow>
-      <MDBCol size="2">ICON</MDBCol>
+      <MDBCol size="1">ICON</MDBCol>
       <MDBCol size="5">
         <div>
           {type === 0 ? "Create Organisation" : "Configure Organisation"}
