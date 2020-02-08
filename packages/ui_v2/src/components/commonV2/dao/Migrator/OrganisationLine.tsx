@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { MDBRow, MDBCol } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
 interface IProps {
   type: number;
@@ -87,8 +87,15 @@ export const OrganisationLine: FC<IProps> = ({
   };
 
   return (
-    <MDBRow>
-      <MDBCol size="1">ICON</MDBCol>
+    <MDBRow className="my-1">
+      <MDBCol size="1">
+        {/* TODO 2x is a little big and default is small */}
+        <MDBIcon
+          className="blue-text"
+          size="lg"
+          icon={type === 0 ? "city" : "sliders-h"}
+        />
+      </MDBCol>
       <MDBCol size="5">
         <div>
           {type === 0 ? "Create Organisation" : "Configure Organisation"}
