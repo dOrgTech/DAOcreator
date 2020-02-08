@@ -114,6 +114,7 @@ export const OrganisationLine: FC<IProps> = ({
         <Output />
       </MDBCol>
       <div>
+        {/* TODO Spinner is a bit big */}
         {step === STEP.Start && <div className="spinner-border text-primary" />}
       </div>
     </MDBRow>
