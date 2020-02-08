@@ -176,18 +176,22 @@ export default function Stepper(props: Props) {
             {title}
           </span>
         </a>
-        {step > 0 && index === 0 && callbacks.daoName() ? (
-          <p style={{ marginTop: "26px", paddingRight: "320px" }}>
-            {callbacks.daoName()}
+        {step > 0 && index === 0 && callbacks.getDAOName() && (
+          <p
+            style={{
+              marginTop: "26px",
+              marginRight: "auto",
+              marginLeft: "1.5rem"
+            }}
+          >
+            {`${callbacks.getDAOName()} - ${callbacks.getDAOTokenSymbol()}`}
+            {/* {`Name: ${callbacks.getDAOName()} Symbol: ${callbacks.getDAOTokenSymbol()}`} */}
           </p>
-        ) : (
-          ""
         )}
-
-        {step > 1 && index === 1 ? simpleConfigText(form) : ""}
-        {step > 2 && index === 2
-          ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)
-          : ""}
+        {step > 1 && index === 1 && simpleConfigText(form)}
+        {step > 2 &&
+          index === 2 &&
+          membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
         <div>
           <ModalButton
             step={step}
