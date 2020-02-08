@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
@@ -6,6 +6,7 @@ import {
   toDAOMigrationParams,
   DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
+import { MDBAlert } from "mdbreact";
 
 interface Props {
   form: DAOForm;
@@ -43,16 +44,22 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
 
   const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
   return (
-    <Migrator
-      dao={dao}
-      onComplete={(result: DAOMigrationResult) => {
-        console.log(result);
-        onComplete();
-      }}
-      onStart={onStart}
-      onAbort={onAbort}
-      onStop={onStop}
-    />
+    <Fragment>
+      <MDBAlert color="danger">
+        [ALERT SYMBOL] - Do NOT attempt to speed up transactions as this will
+        BREAK deployment
+      </MDBAlert>
+      <Migrator
+        dao={dao}
+        onComplete={(result: DAOMigrationResult) => {
+          console.log(result);
+          onComplete();
+        }}
+        onStart={onStart}
+        onAbort={onAbort}
+        onStop={onStop}
+      />
+    </Fragment>
   );
 };
 
