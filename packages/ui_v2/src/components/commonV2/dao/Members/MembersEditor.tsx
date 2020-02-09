@@ -1,6 +1,6 @@
-import React, { useState, FC, Fragment, useEffect } from "react";
+import React, { useState, FC, Fragment, useEffect, useCallback } from "react";
 import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBContainer, MDBRow, MDBBtn, MDBCol } from "mdbreact";
+import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
@@ -28,14 +28,18 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
   const [distribution, setDistribution] = useState(false);
   const [userAdded, setUserAdded] = useState(false);
 
-  const newMemberForm = () => {
-    const memberForm = new MemberForm(getDAOTokenSymbol);
-    memberForm.$.reputation.value = "100";
-    distribution
-      ? (memberForm.$.tokens.value = "100")
-      : (memberForm.$.tokens.value = "0");
-    return memberForm;
-  };
+  const newMemberForm = useCallback(
+    (address = null) => {
+      const memberForm = new MemberForm(getDAOTokenSymbol);
+      if (address) memberForm.$.address.value = address;
+      memberForm.$.reputation.value = "100";
+      distribution
+        ? (memberForm.$.tokens.value = "100")
+        : (memberForm.$.tokens.value = "0");
+      return memberForm;
+    },
+    [distribution, getDAOTokenSymbol]
+  );
 
   /*
    * Hooks
@@ -43,30 +47,23 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   const forceUpdate = useForceUpdate();
 
-  // TODO check for web3 on load
   useEffect(() => {
     if (!web3Connected) {
       setUserMemberForm(new MemberForm(getDAOTokenSymbol));
       return;
     }
+
     try {
-      userMemberForm.$.address.value = web3.eth.defaultAccount;
+      setUserMemberForm(newMemberForm(web3.eth.defaultAccount));
     } catch (e) {
       console.log(e);
       return;
     }
-    userMemberForm.$.reputation.value = "100";
-    distribution
-      ? (userMemberForm.$.tokens.value = "100")
-      : (userMemberForm.$.tokens.value = "0");
-  }, [web3Connected, distribution]);
+  }, [newMemberForm, web3Connected, getDAOTokenSymbol, web3]);
 
   useEffect(() => {
-    memberForm.$.reputation.value = "100";
-    distribution
-      ? (memberForm.$.tokens.value = "100")
-      : (memberForm.$.tokens.value = "0");
-  }, [distribution]);
+    setMemberForm(newMemberForm());
+  }, [newMemberForm]);
 
   /*
    * Buttons
@@ -193,7 +190,6 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
-          {/* TODO check for account change */}
         </MDBRow>
         <MemberFormError />
         <MDBRow className="justify-content-center">
