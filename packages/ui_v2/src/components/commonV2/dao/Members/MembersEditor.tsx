@@ -1,6 +1,6 @@
 import React, { useState, FC, Fragment, useEffect } from "react";
 import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBContainer, MDBRow, MDBBtn } from "mdbreact";
+import { MDBBox, MDBContainer, MDBRow, MDBBtn, MDBCol } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
@@ -12,7 +12,6 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
    */
 
   const { getDAOTokenSymbol } = form;
-
   const tokenSymbol = getDAOTokenSymbol();
 
   const [memberForm, setMemberForm] = useState(
@@ -25,11 +24,8 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   const [editing, setEditing] = useState(-1);
   const [web3Connected, setWeb3Connected] = useState(false);
-
-  const [distribution, setDistribution] = useState(false);
-
   const [web3, setWeb3] = useState<any>(undefined);
-
+  const [distribution, setDistribution] = useState(false);
   const [userAdded, setUserAdded] = useState(false);
 
   const newMemberForm = () => {
@@ -167,14 +163,6 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   return (
     <MDBBox>
-      {/* TODO check for account change */}
-      {!web3Connected ? (
-        <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
-      ) : !userAdded ? (
-        <MDBBtn onClick={addUser}>Add self</MDBBtn>
-      ) : (
-        <Fragment></Fragment>
-      )}
       <MDBContainer style={styles.noPadding}>
         <Toggle
           id={"distribution"}
@@ -189,17 +177,40 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
           checked={distribution}
           style={styles.toggle}
         />
+
         <div style={styles.divider} />
+
         <MembersAnalytics
           data={form.toState()}
           getDAOTokenSymbol={getDAOTokenSymbol}
         />
+
         <div style={styles.thinDivider} />
+
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
+          {/* TODO check for account change */}
         </MDBRow>
         <MemberFormError />
+        <MDBRow className="justify-content-center">
+          {!web3Connected ? (
+            <button
+              style={styles.setDescriptionButton}
+              onClick={handleMetamask}
+            >
+              Connect to Web3
+            </button>
+          ) : (
+            !userAdded && (
+              <button style={styles.setDescriptionButton} onClick={addUser}>
+                Add Self
+              </button>
+            )
+          )}
+        </MDBRow>
+
         <div style={styles.thinDivider} />
+
         <MDBRow style={styles.tableWidth}>
           <MembersTable
             membersForm={form}
@@ -238,6 +249,17 @@ const styles = {
     marginLeft: "-10px",
     border: "0.5px solid rgb(211, 211, 211)",
     width: "103.3%"
+  },
+  setDescriptionButton: {
+    borderRadius: "0.37rem",
+    fontWeight: 300,
+    height: "39px",
+    padding: "8px",
+    fontFamily: "inherit",
+    fontSize: "14px",
+    width: "12rem",
+    marginTop: "-20px",
+    marginBottom: "5px"
   }
 };
 
