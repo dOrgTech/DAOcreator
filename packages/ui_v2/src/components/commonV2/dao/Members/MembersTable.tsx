@@ -1,6 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
+import {
+  MDBRow,
+  MDBContainer,
+  MDBTooltip,
+  MDBBtn,
+  MDBIcon,
+  MDBCol
+} from "mdbreact";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
@@ -126,27 +133,26 @@ export const MembersTable = ({
   return membersForm.$.length > 0 ? (
     <MDBContainer>
       <MDBRow style={styles.tableWidth}>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={styles.titles}> MEMBERS</th>
-                <th></th>
-                <th style={styles.titles}>REPUTATION</th>
-                {tokenDistribution && (
-                  <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
-                )}
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
+        <MDBCol size="4" style={styles.titles}>
+          MEMBERS
+        </MDBCol>
+        <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.titles}>
+          REPUTATION
+        </MDBCol>
 
-            <tbody>{membersForm.$.map(TableRows)}</tbody>
-          </table>
-        </div>
+        {tokenDistribution && (
+          <MDBCol size="3" style={styles.titles}>
+            {getDAOTokenSymbol()} TOKEN
+          </MDBCol>
+        )}
+        <MDBCol size="2"></MDBCol>
       </MDBRow>
+
+      {membersForm.$.map(TableRows)}
     </MDBContainer>
-  ) : null;
+  ) : (
+    <Fragment></Fragment>
+  );
 };
 
 const styles = {
