@@ -36,7 +36,7 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import { enableEthereum, handleNetworkReload } from "../web3/core";
+import { handleNetworkReload } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
