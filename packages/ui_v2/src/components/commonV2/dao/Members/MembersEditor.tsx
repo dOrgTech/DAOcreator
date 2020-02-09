@@ -16,23 +16,20 @@ const MembersEditor = ({
   const forceUpdate = useForceUpdate();
   const tokenSymbol = getDAOTokenSymbol();
 
-  const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
-  const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
-  const [editing, setEditing] = useState(-1);
-  const [web3Connected, setWeb3Connected] = useState(false);
-
+  const [memberForm, setMemberForm] = useState(
+    new MemberForm(getDAOTokenSymbol)
+  );
   const [userMemberForm, setUserMemberForm] = useState<MemberForm>(
     new MemberForm(getDAOTokenSymbol)
   );
+  const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
+
+  const [editing, setEditing] = useState(-1);
+  const [web3Connected, setWeb3Connected] = useState(false);
 
   const [distribution, setDistribution] = useState(false);
 
   const [web3, setWeb3] = useState<any>(undefined);
-
-  memberForm.$.reputation.value = "100";
-  distribution
-    ? (memberForm.$.tokens.value = "100")
-    : (memberForm.$.tokens.value = "0");
 
   const handleMetamask = async () => {
     try {
@@ -44,16 +41,26 @@ const MembersEditor = ({
     }
   };
 
+  const newMemberForm = () => {
+    const memberForm = new MemberForm(getDAOTokenSymbol);
+    memberForm.$.reputation.value = "100";
+    distribution
+      ? (memberForm.$.tokens.value = "100")
+      : (memberForm.$.tokens.value = "0");
+    return memberForm;
+  };
+
   const addUser = async () => {
     const validate = await userMemberForm.validate();
     if (validate.hasError) return;
     form.$.push(userMemberForm);
 
     const membersValidate = await form.validate();
-    if (!membersValidate.hasError) return; // new functionality
+    if (membersValidate.hasError) form.$.pop();
 
-    form.$.pop();
     forceUpdate();
+
+    setUserMemberForm(newMemberForm());
   };
 
   // TODO check for web3 on load
@@ -81,16 +88,6 @@ const MembersEditor = ({
       : (memberForm.$.tokens.value = "0");
   }, [distribution]);
 
-  const MemberFormError: FC = () => (
-    <Fragment>
-      {form.showFormError && (
-        <div style={{ marginRight: "-10px", color: "red" }}>
-          <p>{form.error}</p>
-        </div>
-      )}
-    </Fragment>
-  );
-
   const onSubmit = async (event: any) => {
     event.preventDefault();
     const validate = await memberForm.validate();
@@ -106,7 +103,8 @@ const MembersEditor = ({
       return;
     }
     forceUpdate();
-    memberForm.$.address.reset();
+
+    setMemberForm(newMemberForm());
   };
 
   const selectEdit = (index: number) => {
@@ -139,6 +137,16 @@ const MembersEditor = ({
     form.$.splice(index, 1);
     forceUpdate();
   };
+
+  const MemberFormError: FC = () => (
+    <Fragment>
+      {form.showFormError && (
+        <div style={{ marginRight: "-10px", color: "red" }}>
+          <p>{form.error}</p>
+        </div>
+      )}
+    </Fragment>
+  );
 
   return (
     <MDBBox>
