@@ -5,15 +5,11 @@ import { MDBBox, MDBContainer, MDBRow, MDBBtn } from "mdbreact";
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
-//typo
-const MembersEditor = ({
-  form,
-  getDAOTokenSymbol
-}: {
-  form: MembersForm;
-  getDAOTokenSymbol: () => string;
-}) => {
+
+const MembersEditor = ({ form }: { form: MembersForm }) => {
   const forceUpdate = useForceUpdate();
+  const { getDAOTokenSymbol } = form;
+
   const tokenSymbol = getDAOTokenSymbol();
 
   const [memberForm, setMemberForm] = useState(
@@ -70,7 +66,7 @@ const MembersEditor = ({
   // TODO check for web3 on load
   useEffect(() => {
     if (!web3Connected) {
-      setUserMemberForm(new MemberForm(form.getDAOTokenSymbol));
+      setUserMemberForm(new MemberForm(getDAOTokenSymbol));
       return;
     }
     try {
@@ -154,7 +150,7 @@ const MembersEditor = ({
 
   return (
     <MDBBox>
-      {/* TODO if user has already been added, remove button (TODO check for account change) */}
+      {/* TODO check for account change */}
       {!web3Connected ? (
         <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
       ) : !userAdded ? (
@@ -177,10 +173,10 @@ const MembersEditor = ({
           style={styles.toggle}
         />
         <div style={styles.divider} />
-        {/* <MembersAnalytics
+        <MembersAnalytics
           data={form.toState()}
           getDAOTokenSymbol={getDAOTokenSymbol}
-        /> */}
+        />
         <div style={styles.thinDivider} />
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
