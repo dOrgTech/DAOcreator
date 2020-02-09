@@ -1,6 +1,6 @@
 import React, { useState, FC, Fragment, useEffect } from "react";
 import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBContainer, MDBRow, MDBBtn, MDBCol } from "mdbreact";
+import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
@@ -59,7 +59,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     distribution
       ? (userMemberForm.$.tokens.value = "100")
       : (userMemberForm.$.tokens.value = "0");
-  }, [web3Connected, distribution]);
+  }, [web3Connected, distribution, getDAOTokenSymbol]);
 
   useEffect(() => {
     memberForm.$.reputation.value = "100";
