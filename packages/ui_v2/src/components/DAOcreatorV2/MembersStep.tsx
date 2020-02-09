@@ -6,44 +6,23 @@ import MembersEditor from "../commonV2/dao/Members/MembersEditor";
 
 interface Props {
   form: MembersForm;
-  getDAOTokenSymbol: () => string;
   toggleCollapse: () => void;
-  address: string;
-  step: number;
-  // distributionState: any;
 }
 
-const MembersStep: FC<Props> = ({
-  form,
-  getDAOTokenSymbol,
-  toggleCollapse,
-  step
-}: // distributionState
-Props) => {
-  return (
-    <MDBContainer style={styles.padding}>
-      <MDBBox>
-        <MembersEditor
-          form={form}
-          getDAOTokenSymbol={getDAOTokenSymbol}
-          // address={address}
-          // step={step}
-          // distributionState={distributionState}
-        />
-        <MDBRow style={styles.padding}>
-          <MDBCol>
-            <button
-              style={styles.setDescriptionButton}
-              onClick={toggleCollapse}
-            >
-              Set Members
-            </button>
-          </MDBCol>
-        </MDBRow>
-      </MDBBox>
-    </MDBContainer>
-  );
-};
+const MembersStep: FC<Props> = ({ form, toggleCollapse }: Props) => (
+  <MDBContainer style={styles.padding}>
+    <MDBBox>
+      <MembersEditor form={form} />
+      <MDBRow style={styles.padding}>
+        <MDBCol>
+          <button style={styles.setDescriptionButton} onClick={toggleCollapse}>
+            Set Members
+          </button>
+        </MDBCol>
+      </MDBRow>
+    </MDBBox>
+  </MDBContainer>
+);
 
 const styles = {
   setDescriptionButton: {
