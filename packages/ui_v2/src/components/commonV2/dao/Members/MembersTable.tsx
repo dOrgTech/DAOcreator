@@ -34,7 +34,7 @@ export const MembersTable = ({
         <td style={styles.borderCell}>
           <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
             <MDBTooltip domElement>
-              <div //There is probably a better MDBReact component for this
+              <div
                 onClick={() => {
                   navigator.clipboard.writeText(memberForm.values.address);
                 }}
@@ -80,7 +80,7 @@ export const MembersTable = ({
             </div>
           )}
         </td>
-        {tokenDistribution ? (
+        {tokenDistribution && (
           <td style={styles.borderCell}>
             {editing !== index ? (
               <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
@@ -99,8 +99,6 @@ export const MembersTable = ({
               </div>
             )}
           </td>
-        ) : (
-          <td></td>
         )}
         <td style={styles.borderCell}>
           <div
@@ -135,10 +133,8 @@ export const MembersTable = ({
                 <th style={styles.titles}> MEMBERS</th>
                 <th></th>
                 <th style={styles.titles}>REPUTATION</th>
-                {tokenDistribution ? (
+                {tokenDistribution && (
                   <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
-                ) : (
-                  <th></th>
                 )}
                 <th></th>
                 <th></th>
