@@ -5,7 +5,7 @@ import { MDBBox, MDBContainer, MDBRow, MDBBtn } from "mdbreact";
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
-
+//typo
 const MembersEditor = ({
   form,
   getDAOTokenSymbol
