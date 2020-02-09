@@ -49,19 +49,24 @@ const MembersEditor = ({
     }
   };
 
-  useEffect(() => {
-    if (!web3Connected) return;
-  }, [web3Connected]);
+  const addUser = () => {
+    form.$.push(new MemberForm(form.getDAOTokenSymbol, userMemberForm));
+  };
 
-  // removed step 2 check
-  // if (userAddress) {
-  //   const member = new MemberForm(form.getDAOTokenSymbol);
-  //   member.$.address.value = address;
-  //   member.$.reputation.value = "100";
-  //   member.$.tokens.value = "0";
-  //   form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
-  //   setAddressAdded(false);
-  // }
+  // TODO check for web3 on load
+  useEffect(() => {
+    if (!web3Connected)
+      setUserMemberForm(new MemberForm(form.getDAOTokenSymbol));
+
+    userMemberForm.$.address.value = address;
+    userMemberForm.$.reputation.value = "100";
+    distribution
+      ? (userMemberForm.$.tokens.value = "100")
+      : (userMemberForm.$.tokens.value = "0");
+
+    setUserMemberForm(userMemberForm);
+  }, [web3Connected, distribution]);
+
   const membersForm = form;
 
   memberForm.$.reputation.value = "100";
@@ -81,8 +86,12 @@ const MembersEditor = ({
 
   return (
     <MDBBox>
-      <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
-
+      {/* TODO if user has already been added, remove button (TODO check for account change) */}
+      {!web3Connected ? (
+        <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
+      ) : (
+        <MDBBtn onClick={addUser}>Add self</MDBBtn>
+      )}
       <MDBContainer style={styles.noPadding}>
         <Toggle
           id={"distribution"}
