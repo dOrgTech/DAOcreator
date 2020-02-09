@@ -36,7 +36,7 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import { enableEthereum } from "../web3/core";
+import { enableEthereum, handleNetworkReload } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -82,32 +82,6 @@ export default function DAOcreator() {
   React.useEffect(() => {
     if (!loading) return;
 
-    const handleMetamask = async () => {
-      try {
-        const address = await enableEthereum();
-        setDefaultAddress(address);
-
-        // TODO Handle network change (Only Mainnet and Rinkeby are supported)
-        (window as any).ethereum.autoRefreshOnNetworkChange = false;
-
-        // Should be implemented by MetaMask soon-tm
-        (window as any).ethereum.on("chainChanged", (chainId: number) => {
-          // handle the new network
-          console.log("Current chain: " + chainId);
-          return null;
-        });
-
-        (window as any).ethereum.on("networkChanged", (networkId: string) => {
-          // networkId goes from "loading" to the network id (different to chain id)
-          console.log("Current chain: " + networkId);
-          return null;
-        });
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    };
-
     const previewLocalStorage = () => {
       const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
@@ -123,8 +97,10 @@ export default function DAOcreator() {
       setRecoverPreviewOpen(true);
     };
 
-    handleMetamask();
+    handleNetworkReload();
     previewLocalStorage();
+
+    setLoading(false);
   }, [loading]);
 
   // Save state every step

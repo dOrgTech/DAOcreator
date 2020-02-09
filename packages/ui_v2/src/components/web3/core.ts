@@ -22,3 +22,25 @@ export async function enableEthereum() {
     return getAccount();
   }
 }
+
+export const handleNetworkReload = async () => {
+  try {
+    // TODO Handle network change (Only Mainnet and Rinkeby are supported)
+    (window as any).ethereum.autoRefreshOnNetworkChange = false;
+
+    // Should be implemented by MetaMask soon-tm
+    (window as any).ethereum.on("chainChanged", (chainId: number) => {
+      // handle the new network
+      console.log("Current chain: " + chainId);
+      return null;
+    });
+
+    (window as any).ethereum.on("networkChanged", (networkId: string) => {
+      // networkId goes from "loading" to the network id (different to chain id)
+      console.log("Current chain: " + networkId);
+      return null;
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

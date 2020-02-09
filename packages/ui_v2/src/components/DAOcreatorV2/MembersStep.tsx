@@ -1,8 +1,9 @@
 import * as React from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBCol, MDBBox, MDBContainer } from "mdbreact";
+import { MDBRow, MDBCol, MDBBox, MDBContainer, MDBBtn } from "mdbreact";
 
 import MembersEditor from "../commonV2/dao/Members/MembersEditor";
+import { enableEthereum } from "../web3/core";
 
 interface Props {
   form: MembersForm;
@@ -13,18 +14,27 @@ interface Props {
   distributionState: any;
 }
 
-function MembersStep(props: Props) {
-  const {
-    form,
-    getDAOTokenSymbol,
-    toggleCollapse,
-    address,
-    step,
-    distributionState
-  } = props;
+const MembersStep: React.FC<Props> = ({
+  form,
+  getDAOTokenSymbol,
+  toggleCollapse,
+  address,
+  step,
+  distributionState
+}: Props) => {
+  const handleMetamask = async () => {
+    try {
+      const address = await enableEthereum();
+      setDefaultAddress(address);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <MDBContainer style={styles.padding}>
       <MDBBox>
+        <MDBBtn onClick={() => handleMetamask()}></MDBBtn>
         <MembersEditor
           form={form}
           getDAOTokenSymbol={getDAOTokenSymbol}
@@ -45,7 +55,7 @@ function MembersStep(props: Props) {
       </MDBBox>
     </MDBContainer>
   );
-}
+};
 
 const styles = {
   setDescriptionButton: {
