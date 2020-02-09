@@ -1,6 +1,6 @@
 import React, { useState, FC, Fragment, useEffect } from "react";
-import { MemberForm, MembersForm } from "@dorgtech/daocreator-lib";
-import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
+import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
+import { MDBBox, MDBContainer, MDBRow, MDBBtn } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
@@ -18,12 +18,16 @@ const MembersEditor = ({
   // distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
-  const tokenSymbol = getDAOTokenSymbol();
+  const tokenSymbol = getDAOTokenSymbol;
 
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editing, setEditing] = useState(-1);
   const [web3Connected, setWeb3Connected] = useState(false);
+
+  const [userMemberForm, setUserMemberForm] = useState<MemberForm>(
+    new MemberForm(form.getDAOTokenSymbol)
+  );
 
   const [distribution, setDistribution] = useState(false);
 
@@ -32,9 +36,21 @@ const MembersEditor = ({
     ? (memberForm.$.tokens.value = "100")
     : (memberForm.$.tokens.value = "0");
 
+  // TODO MOVE DOWN ONE LEVEL
+  const [address, setAddress] = useState("");
+
+  const handleMetamask = async () => {
+    try {
+      const web3 = await getWeb3();
+      web3 && setAddress(web3.eth.defaultAccount);
+      console.log(web3.eth.defaultAccount);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     if (!web3Connected) return;
-    console.log("MEH");
   }, [web3Connected]);
 
   // removed step 2 check
@@ -65,6 +81,8 @@ const MembersEditor = ({
 
   return (
     <MDBBox>
+      <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
+
       <MDBContainer style={styles.noPadding}>
         <Toggle
           id={"distribution"}

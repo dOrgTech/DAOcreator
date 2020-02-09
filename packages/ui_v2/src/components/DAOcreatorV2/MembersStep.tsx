@@ -1,6 +1,6 @@
-import React, { FC, useState } from "react";
-import { MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBCol, MDBBox, MDBContainer, MDBBtn } from "mdbreact";
+import React, { FC } from "react";
+import { MembersForm } from "@dorgtech/daocreator-lib";
+import { MDBRow, MDBCol, MDBBox, MDBContainer } from "mdbreact";
 
 import MembersEditor from "../commonV2/dao/Members/MembersEditor";
 
@@ -20,23 +20,9 @@ const MembersStep: FC<Props> = ({
   step
 }: // distributionState
 Props) => {
-  // TODO MOVE DOWN ONE LEVEL
-  const [address, setAddress] = useState("");
-
-  const handleMetamask = async () => {
-    try {
-      const web3 = await getWeb3();
-      web3 && setAddress(web3.eth.defaultAccount);
-      console.log(web3.eth.defaultAccount);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
     <MDBContainer style={styles.padding}>
       <MDBBox>
-        <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
         <MembersEditor
           form={form}
           getDAOTokenSymbol={getDAOTokenSymbol}
