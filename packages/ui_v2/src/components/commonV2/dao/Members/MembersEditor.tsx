@@ -31,6 +31,8 @@ const MembersEditor = ({
 
   const [web3, setWeb3] = useState<any>(undefined);
 
+  const [userAdded, setUserAdded] = useState(false);
+
   const handleMetamask = async () => {
     try {
       const web3 = await getWeb3();
@@ -59,6 +61,8 @@ const MembersEditor = ({
     if (membersValidate.hasError) form.$.pop();
 
     forceUpdate();
+
+    setUserAdded(true);
 
     setUserMemberForm(newMemberForm());
   };
@@ -153,8 +157,10 @@ const MembersEditor = ({
       {/* TODO if user has already been added, remove button (TODO check for account change) */}
       {!web3Connected ? (
         <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
-      ) : (
+      ) : !userAdded ? (
         <MDBBtn onClick={addUser}>Add self</MDBBtn>
+      ) : (
+        <Fragment></Fragment>
       )}
       <MDBContainer style={styles.noPadding}>
         <Toggle
