@@ -9,13 +9,9 @@ import Toggle from "../Schemes/Toggle";
 const MembersEditor = ({
   form,
   getDAOTokenSymbol
-}: // step
-// distributionState
-{
+}: {
   form: MembersForm;
   getDAOTokenSymbol: () => string;
-  // step: number;
-  // distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
   const tokenSymbol = getDAOTokenSymbol();
@@ -26,7 +22,7 @@ const MembersEditor = ({
   const [web3Connected, setWeb3Connected] = useState(false);
 
   const [userMemberForm, setUserMemberForm] = useState<MemberForm>(
-    new MemberForm(form.getDAOTokenSymbol)
+    new MemberForm(getDAOTokenSymbol)
   );
 
   const [distribution, setDistribution] = useState(false);
@@ -48,8 +44,15 @@ const MembersEditor = ({
     }
   };
 
-  const addUser = () => {
-    form.$.push(new MemberForm(form.getDAOTokenSymbol, userMemberForm));
+  const addUser = async () => {
+    const validate = await userMemberForm.validate();
+    if (validate.hasError) return;
+    form.$.push(userMemberForm);
+
+    const membersValidate = await form.validate();
+    if (!membersValidate.hasError) return; // new functionality
+
+    form.$.pop();
     forceUpdate();
   };
 
@@ -69,8 +72,6 @@ const MembersEditor = ({
     distribution
       ? (userMemberForm.$.tokens.value = "100")
       : (userMemberForm.$.tokens.value = "0");
-
-    setUserMemberForm(userMemberForm);
   }, [web3Connected, distribution]);
 
   useEffect(() => {
@@ -96,7 +97,7 @@ const MembersEditor = ({
 
     if (validate.hasError) return;
 
-    form.$.push(new MemberForm(memberForm.getDAOTokenSymbol, memberForm));
+    form.$.push(memberForm);
     const membersValidate = await form.validate();
 
     if (membersValidate.hasError) {
@@ -163,7 +164,7 @@ const MembersEditor = ({
         />
         <div style={styles.divider} />
         {/* <MembersAnalytics
-          data={membersForm.toState()}
+          data={form.toState()}
           getDAOTokenSymbol={getDAOTokenSymbol}
         /> */}
         <div style={styles.thinDivider} />
