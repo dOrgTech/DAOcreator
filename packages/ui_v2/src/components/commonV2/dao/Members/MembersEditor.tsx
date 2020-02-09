@@ -7,7 +7,10 @@ import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
 
 const MembersEditor = ({ form }: { form: MembersForm }) => {
-  const forceUpdate = useForceUpdate();
+  /*
+   * State
+   */
+
   const { getDAOTokenSymbol } = form;
 
   const tokenSymbol = getDAOTokenSymbol();
@@ -29,16 +32,6 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   const [userAdded, setUserAdded] = useState(false);
 
-  const handleMetamask = async () => {
-    try {
-      const web3 = await getWeb3();
-      setWeb3(web3);
-      setWeb3Connected(true);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const newMemberForm = () => {
     const memberForm = new MemberForm(getDAOTokenSymbol);
     memberForm.$.reputation.value = "100";
@@ -48,20 +41,11 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     return memberForm;
   };
 
-  const addUser = async () => {
-    const validate = await userMemberForm.validate();
-    if (validate.hasError) return;
-    form.$.push(userMemberForm);
+  /*
+   * Hooks
+   */
 
-    const membersValidate = await form.validate();
-    if (membersValidate.hasError) form.$.pop();
-
-    forceUpdate();
-
-    setUserAdded(true);
-
-    setUserMemberForm(newMemberForm());
-  };
+  const forceUpdate = useForceUpdate();
 
   // TODO check for web3 on load
   useEffect(() => {
@@ -87,6 +71,35 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
       ? (memberForm.$.tokens.value = "100")
       : (memberForm.$.tokens.value = "0");
   }, [distribution]);
+
+  /*
+   * Buttons
+   */
+
+  const handleMetamask = async () => {
+    try {
+      const web3 = await getWeb3();
+      setWeb3(web3);
+      setWeb3Connected(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addUser = async () => {
+    const validate = await userMemberForm.validate();
+    if (validate.hasError) return;
+    form.$.push(userMemberForm);
+
+    const membersValidate = await form.validate();
+    if (membersValidate.hasError) form.$.pop();
+
+    forceUpdate();
+
+    setUserAdded(true);
+
+    setUserMemberForm(newMemberForm());
+  };
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -137,6 +150,10 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     form.$.splice(index, 1);
     forceUpdate();
   };
+
+  /*
+   * Components
+   */
 
   const MemberFormError: FC = () => (
     <Fragment>
