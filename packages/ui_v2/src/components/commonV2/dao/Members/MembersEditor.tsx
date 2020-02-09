@@ -182,7 +182,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
         <MembersAnalytics
           data={form.toState()}
-          getDAOTokenSymbol={getDAOTokenSymbol}
+          tokenSymbol={getDAOTokenSymbol()}
         />
 
         <div style={styles.thinDivider} />
