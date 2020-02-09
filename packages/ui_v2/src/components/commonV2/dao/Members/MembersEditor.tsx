@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { MemberForm } from "@dorgtech/daocreator-lib";
+import React, { useState, FC, Fragment, useEffect } from "react";
+import { MemberForm, MembersForm } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
@@ -8,38 +8,44 @@ import Toggle from "../Schemes/Toggle";
 
 const MembersEditor = ({
   form,
-  getDAOTokenSymbol,
-  address,
-  step,
-  distributionState
-}: {
-  form: any;
-  getDAOTokenSymbol: any;
-  address: string;
-  step: number;
-  distributionState: any;
+  getDAOTokenSymbol
+}: // step
+// distributionState
+{
+  form: MembersForm;
+  getDAOTokenSymbol: () => string;
+  // step: number;
+  // distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
+  const tokenSymbol = getDAOTokenSymbol();
+
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editing, setEditing] = useState(-1);
-  const [addressAdded, setAddressAdded] = useState(true);
+  const [web3Connected, setWeb3Connected] = useState(false);
 
-  const { distribution, setDistribution } = distributionState;
+  const [distribution, setDistribution] = useState(false);
 
   memberForm.$.reputation.value = "100";
   distribution
     ? (memberForm.$.tokens.value = "100")
     : (memberForm.$.tokens.value = "0");
 
-  if (step === 2 && addressAdded) {
-    const member = new MemberForm(form.getDAOTokenSymbol);
-    member.$.address.value = address;
-    member.$.reputation.value = "100";
-    member.$.tokens.value = "0";
-    form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
-    setAddressAdded(false);
-  }
+  useEffect(() => {
+    if (!web3Connected) return;
+    console.log("MEH");
+  }, [web3Connected]);
+
+  // removed step 2 check
+  // if (userAddress) {
+  //   const member = new MemberForm(form.getDAOTokenSymbol);
+  //   member.$.address.value = address;
+  //   member.$.reputation.value = "100";
+  //   member.$.tokens.value = "0";
+  //   form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
+  //   setAddressAdded(false);
+  // }
   const membersForm = form;
 
   memberForm.$.reputation.value = "100";
@@ -47,65 +53,15 @@ const MembersEditor = ({
     ? (memberForm.$.tokens.value = "100")
     : (memberForm.$.tokens.value = "0");
 
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    const validate = await memberForm.validate();
-
-    if (validate.hasError) return;
-
-    membersForm.$.push(
-      new MemberForm(memberForm.getDAOTokenSymbol, memberForm)
-    );
-    const membersValidate = await membersForm.validate();
-
-    if (membersValidate.hasError) {
-      membersForm.$.pop();
-      forceUpdate();
-      return;
-    }
-    forceUpdate();
-    memberForm.$.address.reset();
-  };
-
-  const selectEdit = (index: number) => {
-    editedMemberForm.setValues(membersForm.$[index].values);
-    setEditing(index);
-  };
-
-  const onEdit = async (index: number) => {
-    const backup = membersForm.$[index].getValues();
-    const memberValidate = await editedMemberForm.validate();
-
-    if (memberValidate.hasError) {
-      forceUpdate();
-      return;
-    }
-
-    membersForm.$[index].setValues(editedMemberForm.values);
-
-    const membersValidate = await membersForm.validate();
-
-    if (membersValidate.hasError) {
-      membersForm.$[index].setValues(backup);
-      forceUpdate();
-      return;
-    }
-    setEditing(-1);
-  };
-
-  const onDelete = async (index: number) => {
-    membersForm.$.splice(index, 1);
-    forceUpdate();
-  };
-
-  const MemberFormError = () =>
-    membersForm.showFormError ? (
-      <div style={{ marginRight: "-10px", color: "red" }}>
-        <p>{membersForm.error}</p>
-      </div>
-    ) : (
-      <></>
-    );
+  const MemberFormError: FC = () => (
+    <Fragment>
+      {membersForm.showFormError && (
+        <div style={{ marginRight: "-10px", color: "red" }}>
+          <p>{membersForm.error}</p>
+        </div>
+      )}
+    </Fragment>
+  );
 
   return (
     <MDBBox>
@@ -124,18 +80,18 @@ const MembersEditor = ({
           style={styles.toggle}
         />
         <div style={styles.divider} />
-        <MembersAnalytics
+        {/* <MembersAnalytics
           data={membersForm.toState()}
           getDAOTokenSymbol={getDAOTokenSymbol}
-        />
+        /> */}
         <div style={styles.thinDivider} />
         <MDBRow className="justify-content-start">
-          <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
+          {/* <MemberEditor memberForm={memberForm} onSubmit={onSubmit} /> */}
         </MDBRow>
         <MemberFormError />
         <div style={styles.thinDivider} />
         <MDBRow style={styles.tableWidth}>
-          <MembersTable
+          {/* <MembersTable
             membersForm={membersForm}
             editing={editing}
             editedMemberForm={editedMemberForm}
@@ -144,7 +100,7 @@ const MembersEditor = ({
             selectEdit={selectEdit}
             tokenDistribution={distribution}
             getDAOTokenSymbol={getDAOTokenSymbol}
-          />
+          /> */}
         </MDBRow>
       </MDBContainer>
     </MDBBox>

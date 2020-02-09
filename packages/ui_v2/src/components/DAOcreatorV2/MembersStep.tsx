@@ -10,16 +10,16 @@ interface Props {
   toggleCollapse: () => void;
   address: string;
   step: number;
-  distributionState: any;
+  // distributionState: any;
 }
 
 const MembersStep: FC<Props> = ({
   form,
   getDAOTokenSymbol,
   toggleCollapse,
-  step,
-  distributionState
-}: Props) => {
+  step
+}: // distributionState
+Props) => {
   // TODO MOVE DOWN ONE LEVEL
   const [address, setAddress] = useState("");
 
@@ -40,9 +40,9 @@ const MembersStep: FC<Props> = ({
         <MembersEditor
           form={form}
           getDAOTokenSymbol={getDAOTokenSymbol}
-          address={address}
-          step={step}
-          distributionState={distributionState}
+          // address={address}
+          // step={step}
+          // distributionState={distributionState}
         />
         <MDBRow style={styles.padding}>
           <MDBCol>
