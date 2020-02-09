@@ -5,14 +5,7 @@ import {
   SchemesForm,
   DAOForm
 } from "@dorgtech/daocreator-lib";
-import {
-  MDBBtn,
-  MDBRow,
-  MDBCollapse,
-  MDBIcon,
-  MDBCol,
-  MDBContainer
-} from "mdbreact";
+import { MDBBtn, MDBRow, MDBCollapse, MDBIcon, MDBCol } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
 import { simpleOptionsSwitcher } from "../../utils";
