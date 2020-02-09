@@ -34,7 +34,10 @@ export const MembersTable = ({
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <MDBRow key={index} style={styles.borderCell}>
+      <MDBRow
+        key={index}
+        style={(styles.borderCell, { borderBottom: "1px solid lightgray" })}
+      >
         <MDBCol size="2" style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </MDBCol>
@@ -132,23 +135,25 @@ export const MembersTable = ({
   };
   return membersForm.$.length > 0 ? (
     <MDBContainer>
-      <MDBRow style={styles.tableWidth}>
-        <MDBCol size="4" style={styles.titles}>
-          MEMBERS
-        </MDBCol>
-        <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.titles}>
-          REPUTATION
-        </MDBCol>
-
-        {tokenDistribution && (
-          <MDBCol size="2" style={styles.titles}>
-            {getDAOTokenSymbol()} TOKEN
+      <div style={{ padding: "0 5px" }}>
+        <MDBRow style={styles.tableWidth}>
+          <MDBCol size="4" style={styles.titles}>
+            MEMBERS
           </MDBCol>
-        )}
-        <MDBCol size="2"></MDBCol>
-      </MDBRow>
+          <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.titles}>
+            REPUTATION
+          </MDBCol>
 
-      {membersForm.$.map(TableRows)}
+          {tokenDistribution && (
+            <MDBCol size="2" style={styles.titles}>
+              {getDAOTokenSymbol()} TOKEN
+            </MDBCol>
+          )}
+          <MDBCol size="2" style={styles.titles}></MDBCol>
+        </MDBRow>
+
+        {membersForm.$.map(TableRows)}
+      </div>
     </MDBContainer>
   ) : (
     <Fragment></Fragment>
@@ -159,25 +164,30 @@ const styles = {
   tableWidth: {
     width: "-webkit-fill-available",
     marginLeft: "-10.5px",
-    marginRight: "-11.5px"
+    marginRight: "-11.5px",
+    borderBottom: "2px solid lightgray",
+    padding: "5px"
+  },
+  titles: {
+    fontSize: "13px",
+    color: "gray",
+    padding: "10px 0"
   },
   borderCell: {
-    borderBottom: "1px solid lightgray"
+    padding: "5px 0",
+    paddingTop: "7px"
   },
   addressCell: {
-    borderBottom: "1px solid lightgray",
-    marginLeft: "-5px"
+    marginLeft: "-5px",
+    padding: "5px 0"
   },
   avatarCell: {
-    borderBottom: "1px solid lightgray",
-    width: "20px"
+    width: "20px",
+    padding: "5px 0",
+    paddingTop: "7px"
   },
   noPadding: {
     padding: 0
-  },
-  titles: {
-    fontSize: "12px",
-    color: "gray"
   },
   link: {
     backgroundColor: "transparent !important",
