@@ -1,51 +1,98 @@
-import React, { useState } from "react";
-import { MemberForm } from "@dorgtech/daocreator-lib";
+import React, { useState, FC, Fragment, useEffect, useCallback } from "react";
+import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
 import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
 
-const MembersEditor = ({
-  form,
-  getDAOTokenSymbol,
-  address,
-  step,
-  distributionState
-}: {
-  form: any;
-  getDAOTokenSymbol: any;
-  address: string;
-  step: number;
-  distributionState: any;
-}) => {
-  const forceUpdate = useForceUpdate();
-  const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
+const MembersEditor = ({ form }: { form: MembersForm }) => {
+  /*
+   * State
+   */
+
+  const { getDAOTokenSymbol } = form;
+  const tokenSymbol = getDAOTokenSymbol();
+
+  const [memberForm, setMemberForm] = useState(
+    new MemberForm(getDAOTokenSymbol)
+  );
+  const [userMemberForm, setUserMemberForm] = useState<MemberForm>(
+    new MemberForm(getDAOTokenSymbol)
+  );
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
+
   const [editing, setEditing] = useState(-1);
-  const [addressAdded, setAddressAdded] = useState(true);
+  const [web3Connected, setWeb3Connected] = useState(false);
+  const [web3, setWeb3] = useState<any>(undefined);
+  const [distribution, setDistribution] = useState(false);
+  const [userAdded, setUserAdded] = useState(false);
 
-  const { distribution, setDistribution } = distributionState;
+  const newMemberForm = useCallback(
+    (address = null) => {
+      const memberForm = new MemberForm(getDAOTokenSymbol);
+      if (address) memberForm.$.address.value = address;
+      memberForm.$.reputation.value = "100";
+      distribution
+        ? (memberForm.$.tokens.value = "100")
+        : (memberForm.$.tokens.value = "0");
+      return memberForm;
+    },
+    [distribution, getDAOTokenSymbol]
+  );
 
-  memberForm.$.reputation.value = "100";
-  distribution
-    ? (memberForm.$.tokens.value = "100")
-    : (memberForm.$.tokens.value = "0");
+  /*
+   * Hooks
+   */
 
-  if (step === 2 && addressAdded) {
-    const member = new MemberForm(form.getDAOTokenSymbol);
-    member.$.address.value = address;
-    member.$.reputation.value = "100";
-    member.$.tokens.value = "0";
-    form.$.push(new MemberForm(form.getDAOTokenSymbol, member));
-    setAddressAdded(false);
-  }
-  const membersForm = form;
+  const forceUpdate = useForceUpdate();
 
-  memberForm.$.reputation.value = "100";
-  distribution
-    ? (memberForm.$.tokens.value = "100")
-    : (memberForm.$.tokens.value = "0");
+  useEffect(() => {
+    if (!web3Connected) {
+      setUserMemberForm(new MemberForm(getDAOTokenSymbol));
+      return;
+    }
+
+    try {
+      setUserMemberForm(newMemberForm(web3.eth.defaultAccount));
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+  }, [newMemberForm, web3Connected, getDAOTokenSymbol, web3]);
+
+  useEffect(() => {
+    setMemberForm(newMemberForm());
+  }, [newMemberForm]);
+
+  /*
+   * Buttons
+   */
+
+  const handleMetamask = async () => {
+    try {
+      const web3 = await getWeb3();
+      setWeb3(web3);
+      setWeb3Connected(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addUser = async () => {
+    const validate = await userMemberForm.validate();
+    if (validate.hasError) return;
+    form.$.push(userMemberForm);
+
+    const membersValidate = await form.validate();
+    if (membersValidate.hasError) form.$.pop();
+
+    forceUpdate();
+
+    setUserAdded(true);
+
+    setUserMemberForm(newMemberForm());
+  };
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -53,27 +100,26 @@ const MembersEditor = ({
 
     if (validate.hasError) return;
 
-    membersForm.$.push(
-      new MemberForm(memberForm.getDAOTokenSymbol, memberForm)
-    );
-    const membersValidate = await membersForm.validate();
+    form.$.push(memberForm);
+    const membersValidate = await form.validate();
 
     if (membersValidate.hasError) {
-      membersForm.$.pop();
+      form.$.pop();
       forceUpdate();
       return;
     }
     forceUpdate();
-    memberForm.$.address.reset();
+
+    setMemberForm(newMemberForm());
   };
 
   const selectEdit = (index: number) => {
-    editedMemberForm.setValues(membersForm.$[index].values);
+    editedMemberForm.setValues(form.$[index].values);
     setEditing(index);
   };
 
   const onEdit = async (index: number) => {
-    const backup = membersForm.$[index].getValues();
+    const backup = form.$[index].values;
     const memberValidate = await editedMemberForm.validate();
 
     if (memberValidate.hasError) {
@@ -81,12 +127,12 @@ const MembersEditor = ({
       return;
     }
 
-    membersForm.$[index].setValues(editedMemberForm.values);
+    form.$[index].setValues(editedMemberForm.values);
 
-    const membersValidate = await membersForm.validate();
+    const membersValidate = await form.validate();
 
     if (membersValidate.hasError) {
-      membersForm.$[index].setValues(backup);
+      form.$[index].setValues(backup);
       forceUpdate();
       return;
     }
@@ -94,25 +140,30 @@ const MembersEditor = ({
   };
 
   const onDelete = async (index: number) => {
-    membersForm.$.splice(index, 1);
+    form.$.splice(index, 1);
     forceUpdate();
   };
 
-  const MemberFormError = () =>
-    membersForm.showFormError ? (
-      <div style={{ marginRight: "-10px", color: "red" }}>
-        <p>{membersForm.error}</p>
-      </div>
-    ) : (
-      <></>
-    );
+  /*
+   * Components
+   */
+
+  const MemberFormError: FC = () => (
+    <Fragment>
+      {form.showFormError && (
+        <div style={{ marginRight: "-10px", color: "red" }}>
+          <p>{form.error}</p>
+        </div>
+      )}
+    </Fragment>
+  );
 
   return (
     <MDBBox>
       <MDBContainer style={styles.noPadding}>
         <Toggle
           id={"distribution"}
-          text={`Distribute ${getDAOTokenSymbol()} token`}
+          text={`Distribute ${tokenSymbol} token`}
           tooltip={
             " Distribute your organization’s native token at launch (regardless of initial distribution, the organization will be able to create more tokens after launch through proposals)"
           }
@@ -123,20 +174,42 @@ const MembersEditor = ({
           checked={distribution}
           style={styles.toggle}
         />
+
         <div style={styles.divider} />
+
         <MembersAnalytics
-          data={membersForm.toState()}
+          data={form.toState()}
           getDAOTokenSymbol={getDAOTokenSymbol}
         />
+
         <div style={styles.thinDivider} />
+
         <MDBRow className="justify-content-start">
           <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
         <MemberFormError />
+        <MDBRow className="justify-content-center">
+          {!web3Connected ? (
+            <button
+              style={styles.setDescriptionButton}
+              onClick={handleMetamask}
+            >
+              Connect to Web3
+            </button>
+          ) : (
+            !userAdded && (
+              <button style={styles.setDescriptionButton} onClick={addUser}>
+                Add Self
+              </button>
+            )
+          )}
+        </MDBRow>
+
         <div style={styles.thinDivider} />
+
         <MDBRow style={styles.tableWidth}>
           <MembersTable
-            membersForm={membersForm}
+            membersForm={form}
             editing={editing}
             editedMemberForm={editedMemberForm}
             onEdit={onEdit}
@@ -172,6 +245,17 @@ const styles = {
     marginLeft: "-10px",
     border: "0.5px solid rgb(211, 211, 211)",
     width: "103.3%"
+  },
+  setDescriptionButton: {
+    borderRadius: "0.37rem",
+    fontWeight: 300,
+    height: "39px",
+    padding: "8px",
+    fontFamily: "inherit",
+    fontSize: "14px",
+    width: "12rem",
+    marginTop: "-20px",
+    marginBottom: "5px"
   }
 };
 
