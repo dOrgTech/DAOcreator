@@ -3,8 +3,11 @@ import { MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "../../LineGraphic";
 
+// Right now TS can't cast [key: string]: string | number but it can cast [key: string]: any despite an interface only having strings and numbers
+// https://stackoverflow.com/questions/37006008/typescript-index-signature-is-missing-in-type
 interface IData {
-  [name: string]: string | number;
+  // [name: string]: string | number;
+  [name: string]: any;
 }
 
 interface ILineConfig {
