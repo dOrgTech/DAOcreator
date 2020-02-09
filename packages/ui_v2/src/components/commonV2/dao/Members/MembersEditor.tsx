@@ -18,7 +18,7 @@ const MembersEditor = ({
   // distributionState: any;
 }) => {
   const forceUpdate = useForceUpdate();
-  const tokenSymbol = getDAOTokenSymbol;
+  const tokenSymbol = getDAOTokenSymbol();
 
   const [memberForm] = useState(new MemberForm(getDAOTokenSymbol));
   const [editedMemberForm] = useState(new MemberForm(getDAOTokenSymbol));
@@ -31,19 +31,18 @@ const MembersEditor = ({
 
   const [distribution, setDistribution] = useState(false);
 
+  const [web3, setWeb3] = useState<any>(undefined);
+
   memberForm.$.reputation.value = "100";
   distribution
     ? (memberForm.$.tokens.value = "100")
     : (memberForm.$.tokens.value = "0");
 
-  // TODO MOVE DOWN ONE LEVEL
-  const [address, setAddress] = useState("");
-
   const handleMetamask = async () => {
     try {
       const web3 = await getWeb3();
-      web3 && setAddress(web3.eth.defaultAccount);
-      console.log(web3.eth.defaultAccount);
+      setWeb3(web3);
+      setWeb3Connected(true);
     } catch (e) {
       console.log(e);
     }
@@ -51,14 +50,21 @@ const MembersEditor = ({
 
   const addUser = () => {
     form.$.push(new MemberForm(form.getDAOTokenSymbol, userMemberForm));
+    forceUpdate();
   };
 
   // TODO check for web3 on load
   useEffect(() => {
-    if (!web3Connected)
+    if (!web3Connected) {
       setUserMemberForm(new MemberForm(form.getDAOTokenSymbol));
-
-    userMemberForm.$.address.value = address;
+      return;
+    }
+    try {
+      userMemberForm.$.address.value = web3.eth.defaultAccount;
+    } catch (e) {
+      console.log(e);
+      return;
+    }
     userMemberForm.$.reputation.value = "100";
     distribution
       ? (userMemberForm.$.tokens.value = "100")
@@ -67,22 +73,71 @@ const MembersEditor = ({
     setUserMemberForm(userMemberForm);
   }, [web3Connected, distribution]);
 
-  const membersForm = form;
-
-  memberForm.$.reputation.value = "100";
-  distribution
-    ? (memberForm.$.tokens.value = "100")
-    : (memberForm.$.tokens.value = "0");
+  useEffect(() => {
+    memberForm.$.reputation.value = "100";
+    distribution
+      ? (memberForm.$.tokens.value = "100")
+      : (memberForm.$.tokens.value = "0");
+  }, [distribution]);
 
   const MemberFormError: FC = () => (
     <Fragment>
-      {membersForm.showFormError && (
+      {form.showFormError && (
         <div style={{ marginRight: "-10px", color: "red" }}>
-          <p>{membersForm.error}</p>
+          <p>{form.error}</p>
         </div>
       )}
     </Fragment>
   );
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    const validate = await memberForm.validate();
+
+    if (validate.hasError) return;
+
+    form.$.push(new MemberForm(memberForm.getDAOTokenSymbol, memberForm));
+    const membersValidate = await form.validate();
+
+    if (membersValidate.hasError) {
+      form.$.pop();
+      forceUpdate();
+      return;
+    }
+    forceUpdate();
+    memberForm.$.address.reset();
+  };
+
+  const selectEdit = (index: number) => {
+    editedMemberForm.setValues(form.$[index].values);
+    setEditing(index);
+  };
+
+  const onEdit = async (index: number) => {
+    const backup = form.$[index].values;
+    const memberValidate = await editedMemberForm.validate();
+
+    if (memberValidate.hasError) {
+      forceUpdate();
+      return;
+    }
+
+    form.$[index].setValues(editedMemberForm.values);
+
+    const membersValidate = await form.validate();
+
+    if (membersValidate.hasError) {
+      form.$[index].setValues(backup);
+      forceUpdate();
+      return;
+    }
+    setEditing(-1);
+  };
+
+  const onDelete = async (index: number) => {
+    form.$.splice(index, 1);
+    forceUpdate();
+  };
 
   return (
     <MDBBox>
@@ -95,7 +150,7 @@ const MembersEditor = ({
       <MDBContainer style={styles.noPadding}>
         <Toggle
           id={"distribution"}
-          text={`Distribute ${getDAOTokenSymbol()} token`}
+          text={`Distribute ${tokenSymbol} token`}
           tooltip={
             " Distribute your organization’s native token at launch (regardless of initial distribution, the organization will be able to create more tokens after launch through proposals)"
           }
@@ -113,13 +168,13 @@ const MembersEditor = ({
         /> */}
         <div style={styles.thinDivider} />
         <MDBRow className="justify-content-start">
-          {/* <MemberEditor memberForm={memberForm} onSubmit={onSubmit} /> */}
+          <MemberEditor memberForm={memberForm} onSubmit={onSubmit} />
         </MDBRow>
         <MemberFormError />
         <div style={styles.thinDivider} />
         <MDBRow style={styles.tableWidth}>
-          {/* <MembersTable
-            membersForm={membersForm}
+          <MembersTable
+            membersForm={form}
             editing={editing}
             editedMemberForm={editedMemberForm}
             onEdit={onEdit}
@@ -127,7 +182,7 @@ const MembersEditor = ({
             selectEdit={selectEdit}
             tokenDistribution={distribution}
             getDAOTokenSymbol={getDAOTokenSymbol}
-          /> */}
+          />
         </MDBRow>
       </MDBContainer>
     </MDBBox>
