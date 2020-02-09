@@ -57,9 +57,6 @@ const recoveredForm = new DAOForm();
 
 export default function DAOcreator() {
   const [step, setStep] = React.useState<number>(0);
-  const [defaultAddress, setDefaultAddress] = React.useState<
-    string | undefined
-  >();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
@@ -236,7 +233,6 @@ export default function DAOcreator() {
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
         setStep,
-        address: defaultAddress,
         setModal: setImportFile,
         step
       }
@@ -301,12 +297,6 @@ export default function DAOcreator() {
                   <MDBRow className="justify-content-center">
                     <p style={styles.fontStyle}> Please allow metamask </p>
                   </MDBRow>
-                </div>
-              ) : !defaultAddress ? (
-                <div className="row justify-content-center">
-                  <h4 style={styles.fontStyle}>
-                    You must allow metamask to continue
-                  </h4>
                 </div>
               ) : (
                 <ul
