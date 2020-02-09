@@ -34,11 +34,11 @@ export const MembersTable = ({
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <tr key={index} style={styles.borderCell}>
-        <td style={styles.avatarCell}>
+      <MDBRow key={index} style={styles.borderCell}>
+        <MDBCol size="2" style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size="2" style={styles.borderCell}>
           <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
             <MDBTooltip domElement>
               <div
@@ -66,8 +66,8 @@ export const MembersTable = ({
               style={styles.link}
             ></MDBBtn>
           </div>
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.borderCell}>
           {editing !== index ? (
             <div style={{ marginTop: "5px" }}>
               {memberForm.values.reputation}
@@ -86,9 +86,9 @@ export const MembersTable = ({
               />
             </div>
           )}
-        </td>
+        </MDBCol>
         {tokenDistribution && (
-          <td style={styles.borderCell}>
+          <MDBCol size="3" style={styles.borderCell}>
             {editing !== index ? (
               <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             ) : (
@@ -105,9 +105,9 @@ export const MembersTable = ({
                 />
               </div>
             )}
-          </td>
+          </MDBCol>
         )}
-        <td style={styles.borderCell}>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
@@ -116,8 +116,8 @@ export const MembersTable = ({
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
               onDelete(index);
@@ -126,8 +126,8 @@ export const MembersTable = ({
           >
             <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
-        </td>
-      </tr>
+        </MDBCol>
+      </MDBRow>
     );
   };
   return membersForm.$.length > 0 ? (
@@ -141,7 +141,7 @@ export const MembersTable = ({
         </MDBCol>
 
         {tokenDistribution && (
-          <MDBCol size="3" style={styles.titles}>
+          <MDBCol size="2" style={styles.titles}>
             {getDAOTokenSymbol()} TOKEN
           </MDBCol>
         )}
