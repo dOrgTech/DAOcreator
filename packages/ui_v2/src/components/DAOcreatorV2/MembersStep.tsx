@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC, useState } from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { MDBRow, MDBCol, MDBBox, MDBContainer, MDBBtn } from "mdbreact";
 
@@ -14,18 +14,22 @@ interface Props {
   distributionState: any;
 }
 
-const MembersStep: React.FC<Props> = ({
+const MembersStep: FC<Props> = ({
   form,
   getDAOTokenSymbol,
   toggleCollapse,
-  address,
   step,
   distributionState
 }: Props) => {
+  // TODO MOVE DOWN ONE LEVEL
+  const [address, setAddress] = useState("");
+
   const handleMetamask = async () => {
     try {
       const address = await enableEthereum();
-      setDefaultAddress(address);
+      if (!address) throw "Unable to connect to web3";
+
+      setAddress(address);
     } catch (e) {
       console.log(e);
     }
@@ -34,7 +38,7 @@ const MembersStep: React.FC<Props> = ({
   return (
     <MDBContainer style={styles.padding}>
       <MDBBox>
-        <MDBBtn onClick={() => handleMetamask()}></MDBBtn>
+        <MDBBtn onClick={handleMetamask}>Connect to web3</MDBBtn>
         <MembersEditor
           form={form}
           getDAOTokenSymbol={getDAOTokenSymbol}
