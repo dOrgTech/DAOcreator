@@ -36,7 +36,7 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import { getProvider } from "../web3/core";
+import { enableEthereum } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -84,7 +84,7 @@ export default function DAOcreator() {
 
     const handleMetamask = async () => {
       try {
-        const address = await getProvider();
+        const address = await enableEthereum();
         setDefaultAddress(address);
 
         // TODO Handle network change (Only Mainnet and Rinkeby are supported)
