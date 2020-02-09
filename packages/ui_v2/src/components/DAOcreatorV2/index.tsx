@@ -36,7 +36,7 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import { getProvider } from "../web3/core";
+import { handleNetworkReload } from "../web3/core";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -57,9 +57,6 @@ const recoveredForm = new DAOForm();
 
 export default function DAOcreator() {
   const [step, setStep] = React.useState<number>(0);
-  const [defaultAddress, setDefaultAddress] = React.useState<
-    string | undefined
-  >();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
@@ -82,16 +79,6 @@ export default function DAOcreator() {
   React.useEffect(() => {
     if (!loading) return;
 
-    const handleMetamask = async () => {
-      try {
-        const address = await getProvider();
-        setDefaultAddress(address);
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    };
-
     const previewLocalStorage = () => {
       const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
@@ -107,8 +94,10 @@ export default function DAOcreator() {
       setRecoverPreviewOpen(true);
     };
 
-    handleMetamask();
+    handleNetworkReload();
     previewLocalStorage();
+
+    setLoading(false);
   }, [loading]);
 
   // Save state every step
@@ -244,7 +233,6 @@ export default function DAOcreator() {
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
         setStep,
-        address: defaultAddress,
         setModal: setImportFile,
         step
       }
@@ -309,12 +297,6 @@ export default function DAOcreator() {
                   <MDBRow className="justify-content-center">
                     <p style={styles.fontStyle}> Please allow metamask </p>
                   </MDBRow>
-                </div>
-              ) : !defaultAddress ? (
-                <div className="row justify-content-center">
-                  <h4 style={styles.fontStyle}>
-                    You must allow metamask to continue
-                  </h4>
                 </div>
               ) : (
                 <ul
