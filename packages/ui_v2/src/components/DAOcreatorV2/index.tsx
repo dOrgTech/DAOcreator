@@ -145,6 +145,7 @@ export default function DAOcreator() {
     };
   }, [step, nextStep]);
 
+  const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const loadLocalStorage = () => {
@@ -211,7 +212,8 @@ export default function DAOcreator() {
       callbacks: {
         toggleCollapse: nextStep,
         setStep,
-        daoName: () => daoForm.$.config.$.daoName.value
+        getDAOName,
+        getDAOTokenSymbol
       }
     },
     {

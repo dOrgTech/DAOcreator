@@ -5,7 +5,7 @@ import {
   SchemesForm,
   DAOForm
 } from "@dorgtech/daocreator-lib";
-import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCollapse, MDBIcon, MDBCol } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
 import { simpleOptionsSwitcher } from "../../utils";
@@ -176,18 +176,32 @@ export default function Stepper(props: Props) {
             {title}
           </span>
         </a>
-        {step > 0 && index === 0 && callbacks.daoName() ? (
-          <p style={{ marginTop: "26px", paddingRight: "320px" }}>
-            {callbacks.daoName()}
-          </p>
-        ) : (
-          ""
+        {step > 0 && index === 0 && callbacks.getDAOName() && (
+          <MDBRow
+            style={{
+              marginTop: "26px",
+              marginRight: "auto",
+              marginLeft: "1.5rem",
+              whiteSpace: "nowrap"
+            }}
+          >
+            <MDBCol>
+              <span>
+                Name: <strong>{callbacks.getDAOName()}</strong>
+              </span>
+            </MDBCol>
+            <MDBCol>
+              <span>
+                Symbol: <strong>{callbacks.getDAOTokenSymbol()}</strong>
+              </span>
+            </MDBCol>
+          </MDBRow>
         )}
 
-        {step > 1 && index === 1 ? simpleConfigText(form) : ""}
-        {step > 2 && index === 2
-          ? membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)
-          : ""}
+        {step > 1 && index === 1 && simpleConfigText(form)}
+        {step > 2 &&
+          index === 2 &&
+          membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
         <div>
           <ModalButton
             step={step}
