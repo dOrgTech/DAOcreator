@@ -1,6 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
+import {
+  MDBRow,
+  MDBContainer,
+  MDBTooltip,
+  MDBBtn,
+  MDBIcon,
+  MDBCol
+} from "mdbreact";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
@@ -27,14 +34,17 @@ export const MembersTable = ({
 }) => {
   const TableRows = (memberForm: MemberForm, index: number) => {
     return (
-      <tr key={index} style={styles.borderCell}>
-        <td style={styles.avatarCell}>
+      <MDBRow
+        key={index}
+        style={(styles.borderCell, { borderBottom: "1px solid lightgray" })}
+      >
+        <MDBCol size="2" style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size="2" style={styles.borderCell}>
           <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
             <MDBTooltip domElement>
-              <div //There is probably a better MDBReact component for this
+              <div
                 onClick={() => {
                   navigator.clipboard.writeText(memberForm.values.address);
                 }}
@@ -59,8 +69,8 @@ export const MembersTable = ({
               style={styles.link}
             ></MDBBtn>
           </div>
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.borderCell}>
           {editing !== index ? (
             <div style={{ marginTop: "5px" }}>
               {memberForm.values.reputation}
@@ -79,9 +89,9 @@ export const MembersTable = ({
               />
             </div>
           )}
-        </td>
-        {tokenDistribution ? (
-          <td style={styles.borderCell}>
+        </MDBCol>
+        {tokenDistribution && (
+          <MDBCol size="3" style={styles.borderCell}>
             {editing !== index ? (
               <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             ) : (
@@ -98,11 +108,9 @@ export const MembersTable = ({
                 />
               </div>
             )}
-          </td>
-        ) : (
-          <td></td>
+          </MDBCol>
         )}
-        <td style={styles.borderCell}>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
               editing !== index ? selectEdit(index) : onEdit(index);
@@ -111,8 +119,8 @@ export const MembersTable = ({
           >
             <MDBIcon icon="pen" className="blue-text"></MDBIcon>
           </div>
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
               onDelete(index);
@@ -121,61 +129,65 @@ export const MembersTable = ({
           >
             <MDBIcon icon="minus" className="red-text"></MDBIcon>
           </div>
-        </td>
-      </tr>
+        </MDBCol>
+      </MDBRow>
     );
   };
   return membersForm.$.length > 0 ? (
     <MDBContainer>
-      <MDBRow style={styles.tableWidth}>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={styles.titles}> MEMBERS</th>
-                <th></th>
-                <th style={styles.titles}>REPUTATION</th>
-                {tokenDistribution ? (
-                  <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
-                ) : (
-                  <th></th>
-                )}
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
+      <div style={{ padding: "0 5px" }}>
+        <MDBRow style={styles.tableWidth}>
+          <MDBCol size="4" style={styles.titles}>
+            MEMBERS
+          </MDBCol>
+          <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.titles}>
+            REPUTATION
+          </MDBCol>
 
-            <tbody>{membersForm.$.map(TableRows)}</tbody>
-          </table>
-        </div>
-      </MDBRow>
+          {tokenDistribution && (
+            <MDBCol size="2" style={styles.titles}>
+              {getDAOTokenSymbol()} TOKEN
+            </MDBCol>
+          )}
+          <MDBCol size="2" style={styles.titles}></MDBCol>
+        </MDBRow>
+
+        {membersForm.$.map(TableRows)}
+      </div>
     </MDBContainer>
-  ) : null;
+  ) : (
+    <Fragment></Fragment>
+  );
 };
 
 const styles = {
   tableWidth: {
     width: "-webkit-fill-available",
     marginLeft: "-10.5px",
-    marginRight: "-11.5px"
+    marginRight: "-11.5px",
+    borderBottom: "2px solid lightgray",
+    padding: "5px"
+  },
+  titles: {
+    fontSize: "13px",
+    color: "gray",
+    padding: "10px 0"
   },
   borderCell: {
-    borderBottom: "1px solid lightgray"
+    padding: "5px 0",
+    paddingTop: "7px"
   },
   addressCell: {
-    borderBottom: "1px solid lightgray",
-    marginLeft: "-5px"
+    marginLeft: "-5px",
+    padding: "5px 0"
   },
   avatarCell: {
-    borderBottom: "1px solid lightgray",
-    width: "20px"
+    width: "20px",
+    padding: "5px 0",
+    paddingTop: "7px"
   },
   noPadding: {
     padding: 0
-  },
-  titles: {
-    fontSize: "12px",
-    color: "gray"
   },
   link: {
     backgroundColor: "transparent !important",

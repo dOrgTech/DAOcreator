@@ -79,6 +79,12 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     }
   };
 
+  const toggleDistribution = () => {
+    if (distribution)
+      form.$.map((memberForm: MemberForm) => (memberForm.$.tokens.value = "0"));
+    setDistribution(!distribution);
+  };
+
   const addUser = async () => {
     const validate = await userMemberForm.validate();
     if (validate.hasError) return;
@@ -167,9 +173,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
           tooltip={
             " Distribute your organization’s native token at launch (regardless of initial distribution, the organization will be able to create more tokens after launch through proposals)"
           }
-          toggle={() => {
-            setDistribution(!distribution);
-          }}
+          toggle={toggleDistribution}
           disabled={false}
           checked={distribution}
           style={styles.toggle}
@@ -179,7 +183,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
         <MembersAnalytics
           data={form.toState()}
-          getDAOTokenSymbol={getDAOTokenSymbol}
+          tokenSymbol={getDAOTokenSymbol()}
         />
 
         <div style={styles.thinDivider} />
