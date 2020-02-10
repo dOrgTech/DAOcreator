@@ -17,17 +17,26 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
    * Callbacks
    */
 
-  const onComplete = () => {
+  const onComplete = ({
+    arcVersion,
+    name,
+    Avatar,
+    DAOToken,
+    Reputation,
+    Controller
+  }: DAOMigrationResult) => {
     console.log("onComplete");
+    console.log(arcVersion);
+    console.log(name);
+    console.log(Avatar);
+    console.log(DAOToken);
+    console.log(Reputation);
+    console.log(Controller);
     onStop();
-    // Previously set daoCreator state:
-    // isMigrating = false
   };
 
   const onStart = () => {
-    console.log("onStart");
-    // Previously set daoCreator state:
-    // isMigrating = true
+    // console.log("onStart");
   };
 
   const onAbort = (error: string) => {
@@ -37,9 +46,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
   };
 
   const onStop = () => {
-    console.log("onStop");
-    // Previously set daoCreator state:
-    // isMigrating = false
+    // console.log("onStop");
   };
 
   const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
@@ -53,10 +60,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
       </MDBContainer>
       <Migrator
         dao={dao}
-        onComplete={(result: DAOMigrationResult) => {
-          console.log(result);
-          onComplete();
-        }}
+        onComplete={onComplete}
         onStart={onStart}
         onAbort={onAbort}
         onStop={onStop}
