@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { MDBRow, MDBCol } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
 interface IProps {
   type: number;
@@ -59,6 +59,17 @@ export const OrganisationLine: FC<IProps> = ({
     if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
   }, [logLines, active, done, failed]);
 
+  const StepName: FC = () => {
+    const stepName =
+      type === 0 ? "Create Organisation" : "Configure Organisation";
+
+    return step !== STEP.Waiting ? (
+      <div style={{ fontWeight: "bold" }}>{stepName}</div>
+    ) : (
+      <div>{stepName}</div>
+    );
+  };
+
   const Output: FC = () => {
     let text = undefined;
 
@@ -87,16 +98,31 @@ export const OrganisationLine: FC<IProps> = ({
   };
 
   return (
-    <MDBRow>
-      <MDBCol size="2">ICON</MDBCol>
+    <MDBRow className="my-1">
+      <MDBCol size="1">
+        {/* TODO 2x is a little big and default is small */}
+        <MDBIcon
+          className="blue-text"
+          size="lg"
+          icon={type === 0 ? "city" : "sliders-h"}
+        />
+      </MDBCol>
       <MDBCol size="5">
-        <div>
-          {type === 0 ? "Create Organisation" : "Configure Organisation"}
-        </div>
+        <StepName />
       </MDBCol>
       <MDBCol size="5">
         <Output />
       </MDBCol>
+      <div>
+        {step === STEP.Start &&
+          <div
+            className="spinner-border text-primary"
+            style={{ width: "20px", height: "20px" }}
+          />}
+        {step === STEP.Confirmed && (
+          <MDBIcon className="blue-text fas" size="lg" icon="check-circle" />
+        )}
+      </div>
     </MDBRow>
   );
 };
