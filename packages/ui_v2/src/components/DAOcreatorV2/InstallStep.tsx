@@ -6,7 +6,7 @@ import {
   toDAOMigrationParams,
   DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon } from "mdbreact";
+import { MDBAlert, MDBIcon, MDBContainer } from "mdbreact";
 
 interface Props {
   form: DAOForm;
@@ -45,14 +45,12 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
   const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
   return (
     <Fragment>
-      <MDBAlert color="danger">
-        <MDBIcon
-          className="red-text mr-2"
-          size="2x"
-          icon="exclamation-triangle"
-        />
-        Do NOT attempt to speed up transactions as this will BREAK deployment!
-      </MDBAlert>
+      <MDBContainer>
+        <MDBAlert color="danger" dismiss>
+          <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
+          Attempting to speed up transactions will BREAK deployment!
+        </MDBAlert>
+      </MDBContainer>
       <Migrator
         dao={dao}
         onComplete={(result: DAOMigrationResult) => {
