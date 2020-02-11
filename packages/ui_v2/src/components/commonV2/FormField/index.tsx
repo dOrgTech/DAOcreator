@@ -137,29 +137,15 @@ const StringFieldView = observer(
 const TokenFieldView = observer(
   ({ field, editable, colSize }: FieldProps<TokenField>) => (
     <>
-      <MDBCol
-        size={colSize ? colSize : "6"}
-        style={colSize ? {} : styles.largeMargin}
-      >
-        {colSize ? (
-          <></>
-        ) : (
-          <>
-            <label style={styles.labelStyle}>{field.displayName}</label>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                {" "}
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>{field.description}</span>
-            </MDBTooltip>
-          </>
-        )}
+      <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
+        <label style={styles.labelStyle}>{field.displayName}</label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{field.description}</span>
+        </MDBTooltip>
         <input
           type="text"
           style={styles.inputStyle}
