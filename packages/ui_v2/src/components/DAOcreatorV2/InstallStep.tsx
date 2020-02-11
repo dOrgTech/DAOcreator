@@ -14,6 +14,8 @@ interface Props {
 
 const InstallStep: FC<Props> = ({ form }: Props) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
+  // Could be used to display the dao information to the user
+  const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
 
   /*
    * Callbacks
@@ -30,6 +32,10 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
     }: DAOMigrationResult,
     alchemyURL: string
   ) => {
+    setDaoInfo([
+      ...daoInfo,
+      { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
+    ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
   };
 
