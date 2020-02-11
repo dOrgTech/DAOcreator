@@ -76,7 +76,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
                   color: "blue"
                 }}
               >
-                {" Alchemy URL "}
+                &nbsp;Alchemy URL&nbsp;
               </div>
               <div>Click to copy</div>
             </MDBTooltip>
