@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, useState } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
@@ -6,33 +6,31 @@ import {
   toDAOMigrationParams,
   DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon, MDBContainer } from "mdbreact";
+import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 
 interface Props {
   form: DAOForm;
 }
 
 const InstallStep: FC<Props> = ({ form }: Props) => {
+  const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
+
   /*
    * Callbacks
    */
 
-  const onComplete = ({
-    arcVersion,
-    name,
-    Avatar,
-    DAOToken,
-    Reputation,
-    Controller
-  }: DAOMigrationResult) => {
-    console.log("onComplete");
-    console.log(arcVersion);
-    console.log(name);
-    console.log(Avatar);
-    console.log(DAOToken);
-    console.log(Reputation);
-    console.log(Controller);
-    onStop();
+  const onComplete = (
+    {
+      arcVersion,
+      name,
+      Avatar,
+      DAOToken,
+      Reputation,
+      Controller
+    }: DAOMigrationResult,
+    alchemyURL: string
+  ) => {
+    setAlchemyAdds([...alchemyAdds, alchemyURL]);
   };
 
   const onStart = () => {
@@ -57,6 +55,28 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
           <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
           Attempting to speed up transactions will BREAK deployment!
         </MDBAlert>
+        {alchemyAdds.map((address: string) => (
+          <MDBAlert key={address} color="danger" dismiss>
+            <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
+            Save your new DAO's
+            <MDBTooltip domElement>
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(address);
+                }}
+                style={{
+                  cursor: "pointer",
+                  display: "inline-block",
+                  color: "blue"
+                }}
+              >
+                {" Alchemy URL "}
+              </div>
+              <div>Copy</div>
+            </MDBTooltip>
+            to avoid losing access to it
+          </MDBAlert>
+        ))}
       </MDBContainer>
       <Migrator
         dao={dao}
