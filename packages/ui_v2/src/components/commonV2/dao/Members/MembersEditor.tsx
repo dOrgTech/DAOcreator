@@ -119,6 +119,11 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     setMemberForm(newMemberForm());
   };
 
+  const cancelEdit = () => {
+    setEditing(-1);
+    forceUpdate();
+  };
+
   const selectEdit = (index: number) => {
     editedMemberForm.setValues(form.$[index].values);
     setEditing(index);
@@ -224,6 +229,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
             onEdit={onEdit}
             onDelete={onDelete}
             selectEdit={selectEdit}
+            cancelEdit={cancelEdit}
             tokenDistribution={distribution}
             getDAOTokenSymbol={getDAOTokenSymbol}
           />

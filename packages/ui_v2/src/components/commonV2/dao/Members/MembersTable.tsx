@@ -20,6 +20,7 @@ interface IProps {
   onEdit: any;
   onDelete: any;
   selectEdit: any;
+  cancelEdit: any;
   tokenDistribution: boolean;
   getDAOTokenSymbol: () => string;
 }
@@ -36,6 +37,7 @@ export const MembersTable: FC<IProps> = ({
   onEdit,
   onDelete,
   selectEdit,
+  cancelEdit,
   tokenDistribution,
   getDAOTokenSymbol
 }: IProps) => {
@@ -135,11 +137,15 @@ export const MembersTable: FC<IProps> = ({
         <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
-              onDelete(index);
+              lineEdit ? cancelEdit() : onDelete(index);
             }}
             style={{ paddingTop: "5px" }}
           >
-            <MDBIcon icon="minus" className="red-text"></MDBIcon>
+            {lineEdit ? (
+              <MDBIcon icon="times" className="red-text"></MDBIcon>
+            ) : (
+              <MDBIcon icon="minus" className="red-text"></MDBIcon>
+            )}
           </div>
         </MDBCol>
       </MDBRow>
