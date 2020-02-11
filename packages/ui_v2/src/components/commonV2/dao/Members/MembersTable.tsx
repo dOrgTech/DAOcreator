@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FC } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
 import {
   MDBRow,
@@ -13,16 +13,7 @@ import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
 import { truncateString } from "../../../utils";
 
-export const MembersTable = ({
-  membersForm,
-  editing,
-  editedMemberForm,
-  onEdit,
-  onDelete,
-  selectEdit,
-  tokenDistribution,
-  getDAOTokenSymbol
-}: {
+interface IProps {
   membersForm: any;
   editing: number;
   editedMemberForm: MemberForm;
@@ -31,8 +22,26 @@ export const MembersTable = ({
   selectEdit: any;
   tokenDistribution: boolean;
   getDAOTokenSymbol: () => string;
-}) => {
-  const TableRows = (memberForm: MemberForm, index: number) => {
+}
+
+interface IRowProps {
+  memberForm: MemberForm;
+  index: number;
+}
+
+export const MembersTable: FC<IProps> = ({
+  membersForm,
+  editing,
+  editedMemberForm,
+  onEdit,
+  onDelete,
+  selectEdit,
+  tokenDistribution,
+  getDAOTokenSymbol
+}: IProps) => {
+  const Row: FC<IRowProps> = ({ memberForm, index }: IRowProps) => {
+    const lineEdit = editing === index;
+
     return (
       <MDBRow
         key={index}
@@ -71,11 +80,7 @@ export const MembersTable = ({
           </div>
         </MDBCol>
         <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.borderCell}>
-          {editing !== index ? (
-            <div style={{ marginTop: "5px" }}>
-              {memberForm.values.reputation}
-            </div>
-          ) : (
+          {lineEdit ? (
             <div
               style={{ marginLeft: "-20px" }}
               onKeyDown={(event: any) => {
@@ -88,13 +93,15 @@ export const MembersTable = ({
                 colSize={12}
               />
             </div>
+          ) : (
+            <div style={{ marginTop: "5px" }}>
+              {memberForm.values.reputation}
+            </div>
           )}
         </MDBCol>
         {tokenDistribution && (
           <MDBCol size="3" style={styles.borderCell}>
-            {editing !== index ? (
-              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
-            ) : (
+            {lineEdit ? (
               <div
                 style={{ marginLeft: "-20px" }}
                 onKeyDown={(event: any) => {
@@ -107,17 +114,23 @@ export const MembersTable = ({
                   colSize={12}
                 />
               </div>
+            ) : (
+              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             )}
           </MDBCol>
         )}
         <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
-              editing !== index ? selectEdit(index) : onEdit(index);
+              lineEdit ? onEdit(index) : selectEdit(index);
             }}
             style={{ paddingTop: "5px" }}
           >
-            <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+            {lineEdit ? (
+              <MDBIcon icon="check" className="blue-text"></MDBIcon>
+            ) : (
+              <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+            )}
           </div>
         </MDBCol>
         <MDBCol size="1" style={styles.borderCell}>
@@ -133,7 +146,10 @@ export const MembersTable = ({
       </MDBRow>
     );
   };
-  return membersForm.$.length > 0 ? (
+
+  if (membersForm.$.length === 0) return <Fragment></Fragment>;
+
+  return (
     <MDBContainer>
       <div style={{ padding: "0 5px" }}>
         <MDBRow style={styles.tableWidth}>
@@ -152,11 +168,11 @@ export const MembersTable = ({
           <MDBCol size="2" style={styles.titles}></MDBCol>
         </MDBRow>
 
-        {membersForm.$.map(TableRows)}
+        {membersForm.$.map((memberForm: MemberForm, index: number) => (
+          <Row memberForm={memberForm} index={index} />
+        ))}
       </div>
     </MDBContainer>
-  ) : (
-    <Fragment></Fragment>
   );
 };
 
