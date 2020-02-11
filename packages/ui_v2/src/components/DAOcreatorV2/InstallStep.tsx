@@ -72,7 +72,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
               >
                 {" Alchemy URL "}
               </div>
-              <div>Copy</div>
+              <div>Click to copy</div>
             </MDBTooltip>
             to avoid losing access to it
           </MDBAlert>
