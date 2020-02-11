@@ -20,17 +20,14 @@ interface ILineConfig {
 
 interface IProps {
   data: IData[]; // TODO Potentially update data type to flattened form type,
-  getDAOTokenSymbol: () => string;
+  tokenSymbol: string;
 }
 
-export const MembersAnalytics: FC<IProps> = ({
-  data,
-  getDAOTokenSymbol
-}: IProps) => {
+export const MembersAnalytics: FC<IProps> = ({ data, tokenSymbol }: IProps) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol,
     dataKey: "tokens",
     nameKey: "address"
   };
@@ -92,7 +89,7 @@ export const MembersAnalytics: FC<IProps> = ({
     );
     const tokenBox = (
       <Box
-        name={`${getDAOTokenSymbol()} Token Distribution`}
+        name={`${tokenSymbol} Token Distribution`}
         total={totalTokenAmount}
         config={tokenConfig}
       />
