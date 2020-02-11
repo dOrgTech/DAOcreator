@@ -147,6 +147,11 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   const onDelete = async (index: number) => {
     form.$.splice(index, 1);
+
+    if (editing === index) setEditing(-1);
+
+    if (editing > index) setEditing(editing - 1);
+
     forceUpdate();
   };
 
