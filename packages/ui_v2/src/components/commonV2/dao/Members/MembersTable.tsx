@@ -44,7 +44,6 @@ export const MembersTable: FC<IProps> = ({
 
     return (
       <MDBRow
-        key={index}
         style={(styles.borderCell, { borderBottom: "1px solid lightgray" })}
       >
         <MDBCol size="2" style={styles.avatarCell}>
@@ -169,7 +168,7 @@ export const MembersTable: FC<IProps> = ({
         </MDBRow>
 
         {membersForm.$.map((memberForm: MemberForm, index: number) => (
-          <Row memberForm={memberForm} index={index} />
+          <Row key={index} memberForm={memberForm} index={index} />
         ))}
       </div>
     </MDBContainer>
