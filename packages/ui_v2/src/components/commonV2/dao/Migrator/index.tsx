@@ -378,6 +378,7 @@ IProps) => {
     onStart(); // props
 
     const callbacks: DAOMigrationCallbacks = getCallbacks();
+    // FOR TEST
     console.log("dao", dao);
     console.log("callBacks", callbacks);
     setResult(undefined);
