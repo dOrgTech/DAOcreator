@@ -12,12 +12,13 @@ import { simpleOptionsSwitcher } from "../../utils";
 import LineGraphic from "../LineGraphic";
 
 interface Props {
+  index: number;
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: any;
   title: string;
   callbacks: any | undefined;
   step: number;
-  index: number;
+  launching: boolean;
   daoName?: string;
 }
 
@@ -133,11 +134,17 @@ const membersPreview = (
   );
 };
 
-export default function Stepper(props: Props) {
+export default function Stepper({
+  index,
+  form,
+  title,
+  Component,
+  callbacks,
+  step,
+  launching
+}: Props) {
   const [distribution, setDistribution] = React.useState(false);
   const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
-
-  const { form, title, Component, callbacks, step, index } = props;
 
   const advancedState = {
     advanceMode,
@@ -206,7 +213,7 @@ export default function Stepper(props: Props) {
           <ModalButton
             step={step}
             index={index}
-            cb={props.callbacks}
+            cb={callbacks}
             advanced={advancedState}
           />
           <MDBBtn
@@ -215,10 +222,13 @@ export default function Stepper(props: Props) {
             size="lg"
             color="transparent"
             className="btn"
-            onClick={() => callbacks.setStep(index)}
+            onClick={() => !launching && callbacks.setStep(index)}
             style={styles.icon}
           >
-            <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+            <MDBIcon
+              icon="pen"
+              className={launching ? "grey-text" : "blue-text"}
+            />
           </MDBBtn>
         </div>
       </MDBRow>
@@ -242,7 +252,7 @@ export default function Stepper(props: Props) {
         >
           <Component
             form={form}
-            {...props.callbacks}
+            {...callbacks}
             advancedScheme={advancedState}
             distributionState={distributionState}
           />

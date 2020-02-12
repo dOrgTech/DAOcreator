@@ -10,9 +10,10 @@ import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 
 interface Props {
   form: DAOForm;
+  setLaunching: (launching: boolean) => void;
 }
 
-const InstallStep: FC<Props> = ({ form }: Props) => {
+const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
   // Could be used to display the dao information to the user
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
@@ -37,10 +38,11 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
       { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
     ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
+    onStop();
   };
 
   const onStart = () => {
-    // console.log("onStart");
+    setLaunching(true);
   };
 
   const onAbort = (error: string) => {
@@ -50,7 +52,7 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
   };
 
   const onStop = () => {
-    // console.log("onStop");
+    setLaunching(false);
   };
 
   const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
