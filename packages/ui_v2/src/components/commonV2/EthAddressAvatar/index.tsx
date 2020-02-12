@@ -1,20 +1,22 @@
-import * as React from "react";
-import Blockies from "react-blockies";
+import React, { FC } from "react";
+import makeBlockie from "ethereum-blockies-base64";
 
 export type Props = {
   address: string;
+  height?: string;
 };
 
-const EthAddressAvatar: React.SFC<Props> = ({ address }) => (
-  <div
+const EthAddressAvatar: FC<Props> = ({ address, height = "30px" }) => (
+  <img
+    src={makeBlockie(address)}
+    alt="identicon"
     onClick={() => window.open(`https://etherscan.io/address/${address}`)}
     style={{
       paddingLeft: "10px"
     }}
     tabIndex={-1}
-  >
-    <Blockies seed={address} />
-  </div>
+    height={height}
+  />
 );
 
 export default EthAddressAvatar;
