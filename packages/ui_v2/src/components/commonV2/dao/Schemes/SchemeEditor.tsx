@@ -61,15 +61,15 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
+  const { form, toggleCollapse, modal, setModal } = props;
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
-  const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
-  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
-  const [autobet, setAutobet] = useState<boolean>(false);
+  const [rewardSuccess, setRewardSuccess] = useState<boolean>(true);
+  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(true);
+  const [autobet, setAutobet] = useState<boolean>(true);
   const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
 
-  const { advanceMode, setAdvanceMode } = advancedScheme;
+  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
@@ -180,6 +180,7 @@ function SchemeEditor(props: Props) {
       setRewardAndPenVoters(Number(votersReputationLossRatio.value) > 0);
       setAutobet(Number(minimumDaoBounty.value) > 0);
     }
+
     // Apply the effects of the toggles
     if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
     if (!rewardAndPenVoters)

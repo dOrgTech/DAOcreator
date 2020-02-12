@@ -28,7 +28,7 @@ export interface Props {
   setAdvanceMode: any;
 }
 
-const schemes: Array<AnySchemeForm & IObservableObject> = [
+let schemes: Array<AnySchemeForm & IObservableObject> = [
   observable(new ContributionRewardForm()),
   observable(new SchemeRegistrarForm()),
   observable(new GenericSchemeForm())
@@ -36,42 +36,48 @@ const schemes: Array<AnySchemeForm & IObservableObject> = [
 
 function AdvanceSchemeEditor(props: Props) {
   const { form, modal, setModal, setAdvanceMode } = props;
+
   const [scheme, setScheme] = React.useState<number>(
     SchemeType.ContributionReward
   );
-  const [schemeIsAdded, checkSchemeIsAdded] = React.useState<boolean>(false);
+  const [schemeIsAdded, setSchemeIsAdded] = React.useState<boolean>(true);
+  const [pluginManagerExists, setPluginManagerExists] = React.useState<boolean>(
+    true
+  );
+
   const [error, setError] = React.useState<string>("");
 
   const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
   const params = actualScheme!.getParams();
 
-  const handleToggle = (index: number) => {
-    const added = form.$.some((scheme: AnySchemeForm) => scheme.type === index);
-    checkSchemeIsAdded(added);
+  const checkSchemeInForm = (index: number) => {
+    return form.$.some((scheme: AnySchemeForm) => scheme.type === +index);
   };
 
   const showNewScheme = (schemeIndex: number) => {
     setScheme(schemeIndex);
-    handleToggle(schemeIndex);
+    setSchemeIsAdded(checkSchemeInForm(schemeIndex));
   };
 
   const handleScheme = (schemeIndex: number) => {
-    const added = form.$.length > 0 && schemeIsAdded;
-
     const removeScheme = () => {
       const filterSchemes = (x: AnySchemeForm) => {
-        if (scheme !== x.type) return x;
+        if (schemeIndex !== x.type) return x;
       };
       const removeUndefined = (x: AnySchemeForm | undefined) => x;
       form.$ = form.$.map(filterSchemes).filter(removeUndefined);
     };
 
-    const addScheme = (scheme: AnySchemeForm & IObservableObject) => {
-      form.$.push(scheme);
+    const addScheme = (currentScheme: AnySchemeForm & IObservableObject) => {
+      form.$.push(currentScheme);
     };
 
-    added ? removeScheme() : addScheme(schemes[schemeIndex]);
-    handleToggle(schemeIndex);
+    schemeIsAdded ? removeScheme() : addScheme(schemes[schemeIndex]);
+    setSchemeIsAdded(checkSchemeInForm(schemeIndex));
+    const pluginManager = form.$.some(
+      (scheme: AnySchemeForm) => scheme.type === 1
+    );
+    setPluginManagerExists(pluginManager);
   };
 
   const saveConfig = async () => {
@@ -82,7 +88,6 @@ function AdvanceSchemeEditor(props: Props) {
       setAdvanceMode(true);
       setModal(false);
       setScheme(SchemeType.ContributionReward);
-      handleToggle(0);
     }
   };
 
@@ -90,7 +95,6 @@ function AdvanceSchemeEditor(props: Props) {
     setAdvanceMode(false);
     setModal(false);
     setScheme(SchemeType.ContributionReward);
-    handleToggle(0);
     form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
   };
 
@@ -134,6 +138,22 @@ function AdvanceSchemeEditor(props: Props) {
                   <span>{schemes[scheme].description}</span>
                 </MDBTooltip>
               </MDBCol>
+              {pluginManagerExists ? (
+                <></>
+              ) : (
+                <MDBCol>
+                  <span
+                    style={{
+                      fontWeight: 400,
+                      color: "red",
+                      alignItems: "center"
+                    }}
+                  >
+                    Warning: Without a Plugin Manager your organization will not
+                    be able to modify itself.
+                  </span>
+                </MDBCol>
+              )}
               <MDBCol size="1">
                 <div className="custom-control custom-switch">
                   <input
@@ -151,7 +171,11 @@ function AdvanceSchemeEditor(props: Props) {
               </MDBCol>
             </MDBRow>
             <GenesisProtocolEditor
-              form={actualScheme!.$.votingMachine}
+              form={
+                form.$[scheme]
+                  ? form.$[scheme].$.votingMachine
+                  : actualScheme!.$.votingMachine
+              }
               editable={schemeIsAdded}
             />
             {params!.length > 0 ? (
