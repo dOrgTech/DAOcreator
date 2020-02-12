@@ -43,11 +43,13 @@ const InstallStep: FC<Props> = ({ form }: Props) => {
 
   const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
 
-  // FOR TEST ONLY
   const printDAO = () => {
     console.log("form", form);
     console.log("form.$.schemes.$[0]", form.$.schemes.$[0]);
     console.log("form.$.schemes.$[1]", form.$.schemes.$[1]);
+    /// Problem is that when we do form.toState() it resets schemes to default values.
+    // console.log("form.$.schemes.$[0]", form.$.schemes.$[0]) ---> prints the proper value from advanceForm.
+    // console.log("form.toState()", form.toState()) ---> prints default schemesValues.
     console.log("form.toState()", form.toState());
     console.log("dao in install", dao);
   };

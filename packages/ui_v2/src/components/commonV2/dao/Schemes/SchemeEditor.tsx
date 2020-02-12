@@ -203,7 +203,6 @@ function SchemeEditor(props: Props) {
   };
 
   const setConfiguration = () => {
-    // FOR TEST Only !advanceMode
     if (!advanceMode) {
       updateVotingMachine();
     }
