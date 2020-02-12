@@ -65,7 +65,7 @@ export const MembersTable: FC<IProps> = ({
               >
                 {truncateString(memberForm.values.address, 6, 4)}
               </div>
-              <div>Copy</div>
+              <div>Click to copy</div>
             </MDBTooltip>
             <MDBBtn
               onClick={() =>
