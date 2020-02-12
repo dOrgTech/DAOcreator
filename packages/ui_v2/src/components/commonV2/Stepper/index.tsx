@@ -122,6 +122,32 @@ const membersPreview = (
   );
 };
 
+// FOR TEST ONLY
+const printForm = (form: any | undefined) => {
+  return (
+    <div style={styles.membersPreview}>
+      <button
+        onClick={() => {
+          console.log("INNNSTEPPER FORM");
+          console.log("form", form);
+          console.log(
+            "form.$.schemes.$[0].values.votingMachine.values",
+            form.$.schemes.$[0].values.votingMachine.values
+          );
+          console.log(
+            "form.$.schemes.$[1].values.votingMachine.values",
+            form.$.schemes.$[1].values.votingMachine.values
+          );
+          console.log("form.toState()", form.toState());
+          console.log("INNNSTEPPER FORM");
+        }}
+      >
+        printForm
+      </button>
+    </div>
+  );
+};
+
 export default function Stepper(props: Props) {
   const [distribution, setDistribution] = React.useState(false);
 
@@ -179,11 +205,12 @@ export default function Stepper(props: Props) {
             </MDBCol>
           </MDBRow>
         )}
-
         {step > 1 && index === 1 && simpleConfigText(form)}
         {step > 2 &&
           index === 2 &&
           membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
+        // FOR TEST ONLY
+        {step > 2 && index === 3 && printForm(form)}
         <div>
           <ModalButton step={step} index={index} cb={props.callbacks} />
           <MDBBtn

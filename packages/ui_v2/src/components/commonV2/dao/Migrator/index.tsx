@@ -378,6 +378,8 @@ IProps) => {
     onStart(); // props
 
     const callbacks: DAOMigrationCallbacks = getCallbacks();
+    console.log("dao", dao);
+    console.log("callBacks", callbacks);
     setResult(undefined);
 
     createOrganisation();

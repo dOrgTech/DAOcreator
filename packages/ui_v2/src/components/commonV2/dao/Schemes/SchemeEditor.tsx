@@ -203,7 +203,10 @@ function SchemeEditor(props: Props) {
   };
 
   const setConfiguration = () => {
-    updateVotingMachine();
+    // FOR TEST Only !advanceMode
+    if (!advanceMode) {
+      updateVotingMachine();
+    }
     toggleCollapse();
   };
 
