@@ -209,7 +209,7 @@ export default function Stepper(props: Props) {
         {step > 2 &&
           index === 2 &&
           membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
-        // FOR TEST ONLY
+        {/* FOR TEST ONLY */}
         {step > 2 && index === 3 && printForm(form)}
         <div>
           <ModalButton step={step} index={index} cb={props.callbacks} />
