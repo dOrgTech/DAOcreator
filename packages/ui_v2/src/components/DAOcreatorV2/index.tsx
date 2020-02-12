@@ -65,6 +65,7 @@ export default function DAOcreator() {
     false
   );
   const [importFile, setImportFile] = React.useState<string>("");
+  const [launching, setLaunching] = React.useState(false);
 
   let currentForm: any = daoForm.$.config;
 
@@ -183,7 +184,7 @@ export default function DAOcreator() {
         In Progress DAO Detected
       </MDBModalHeader>
       <MDBModalBody>
-        <InstallStep form={recoveredForm} />
+        <InstallStep form={recoveredForm} setLaunching={setLaunching} />
       </MDBModalBody>
       <MDBModalFooter />
 
@@ -242,7 +243,10 @@ export default function DAOcreator() {
     {
       title: "Launch",
       form: daoForm,
-      Component: InstallStep
+      Component: InstallStep,
+      callbacks: {
+        setLaunching
+      }
     }
   ];
 
@@ -310,10 +314,11 @@ export default function DAOcreator() {
                     return (
                       <Stepper
                         key={`step${index}`}
+                        index={index}
                         form={form}
                         title={title}
                         step={step}
-                        index={index}
+                        launching={launching}
                         Component={Component}
                         callbacks={callbacks}
                       />
