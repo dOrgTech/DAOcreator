@@ -22,21 +22,10 @@ interface Props {
   daoName?: string;
 }
 
-const ModalButton = (props: {
-  step: number;
-  index: number;
-  cb: any;
-  advanced?: any;
-}) => {
-  const { step, index, cb, advanced } = props;
+const ModalButton = (props: { step: number; index: number; cb: any }) => {
+  const { step, index, cb } = props;
   if (step === 1 && index === 1) {
-    return (
-      <UtilityButton
-        title={"Advanced"}
-        openModal={cb.setModal}
-        advanced={advanced}
-      />
-    );
+    return <UtilityButton title={"Advanced"} openModal={cb.setModal} />;
   } else if (step === 2 && index === 2) {
     return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
   } else {
@@ -144,13 +133,6 @@ export default function Stepper({
   launching
 }: Props) {
   const [distribution, setDistribution] = React.useState(false);
-  const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
-
-  const advancedState = {
-    advanceMode,
-    setAdvanceMode,
-    form
-  };
 
   const distributionState = {
     distribution,
@@ -204,18 +186,14 @@ export default function Stepper({
             </MDBCol>
           </MDBRow>
         )}
-
         {step > 1 && index === 1 && simpleConfigText(form)}
         {step > 2 &&
           index === 2 &&
           membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
+        {/* FOR TEST ONLY */}
+        {step > 2 && index === 3}
         <div>
-          <ModalButton
-            step={step}
-            index={index}
-            cb={callbacks}
-            advanced={advancedState}
-          />
+          <ModalButton step={step} index={index} cb={callbacks} />
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -253,7 +231,6 @@ export default function Stepper({
           <Component
             form={form}
             {...callbacks}
-            advancedScheme={advancedState}
             distributionState={distributionState}
           />
         </MDBRow>

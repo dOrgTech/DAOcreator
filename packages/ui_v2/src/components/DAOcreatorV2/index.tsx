@@ -282,7 +282,7 @@ export default function DAOcreator() {
                     <div style={styles.divider} />
                     <div // There might be a better MDBReact component for this
                       style={{ cursor: "pointer" }}
-                      onClick={() => exportDaoParams()}
+                      onClick={exportDaoParams}
                     >
                       <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>

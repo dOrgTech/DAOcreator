@@ -23,12 +23,14 @@ function SchemesStep(props: Props) {
 
   React.useEffect(() => {
     if (!loading) return;
-    setLoading(false);
 
-    form.$.push(new ContributionRewardForm(), new SchemeRegistrarForm());
+    form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
+    setLoading(false);
   }, [loading, form.$]);
 
-  return (
+  return loading ? (
+    <></>
+  ) : (
     <SchemeEditor
       form={form}
       editable={true}
