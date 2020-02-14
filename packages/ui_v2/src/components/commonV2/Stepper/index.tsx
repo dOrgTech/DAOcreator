@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC } from "react";
 import {
   DAOConfigForm,
   MembersForm,
@@ -93,6 +93,7 @@ const Stepper: FC<Props> = ({
           tokenSymbol={callbacks.getDAOTokenSymbol()}
         />
       );
+      break;
     case 3:
       break;
 
