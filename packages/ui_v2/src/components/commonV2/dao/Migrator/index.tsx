@@ -21,7 +21,7 @@ import OrganisationLine from "./OrganisationLine";
 
 interface IProps {
   dao: DAOMigrationParams;
-  onComplete: (result: DAOMigrationResult) => void;
+  onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
   onStart: () => void;
   onAbort: (error: string) => void;
   onStop: () => void;
@@ -73,6 +73,9 @@ IProps) => {
   const [result, setResult] = useState<DAOMigrationResult | undefined>(
     undefined
   );
+
+  // Alchemy url
+  const [alchemyURL, setAlchemyURL] = useState("");
 
   const [aborting, setAborting] = useState(false);
 
@@ -317,7 +320,7 @@ IProps) => {
         setResult(result);
         setStep(STEP.Completed);
 
-        onComplete(result); // props
+        //onComplete(result); // props
       },
 
       getState: () => {
@@ -350,6 +353,7 @@ IProps) => {
     setResult(undefined);
     setApproval(undefined);
     setFailed(null);
+    setAlchemyURL("");
 
     // Make sure we have a web3 provider available. If not,
     // tell the user they need to have one. TODO
@@ -378,9 +382,6 @@ IProps) => {
     onStart(); // props
 
     const callbacks: DAOMigrationCallbacks = getCallbacks();
-    // FOR TEST
-    console.log("dao", dao);
-    console.log("callBacks", callbacks);
     setResult(undefined);
 
     createOrganisation();
@@ -388,7 +389,19 @@ IProps) => {
     const result = await migrateDAO(dao, callbacks);
     // Getting around unimplemented callback
     if (!result) return;
-    onComplete(result);
+
+    const network = await getNetworkName();
+
+    let url;
+    if (network === "mainnet")
+      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    else if (network === "rinkeby")
+      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    else url = result.Avatar;
+
+    setAlchemyURL(url);
+
+    onComplete(result, url);
     setResult(result);
     window.onbeforeunload = () => {};
   };
@@ -399,18 +412,7 @@ IProps) => {
       return;
     }
 
-    const network = await getNetworkName();
-    let url;
-
-    if (network === "mainnet") {
-      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    } else if (network === "rinkeby") {
-      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    } else {
-      url = result.Avatar;
-    }
-
-    window.open(url);
+    window.open(alchemyURL);
   };
 
   return (

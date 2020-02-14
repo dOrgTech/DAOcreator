@@ -6,7 +6,11 @@ import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
 
-const MembersEditor = ({ form }: { form: MembersForm }) => {
+interface Props {
+  form: MembersForm;
+}
+
+const MembersEditor = ({ form }: Props) => {
   /*
    * State
    */
@@ -79,6 +83,12 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     }
   };
 
+  const toggleDistribution = () => {
+    if (distribution)
+      form.$.map((memberForm: MemberForm) => (memberForm.$.tokens.value = "0"));
+    setDistribution(!distribution);
+  };
+
   const addUser = async () => {
     const validate = await userMemberForm.validate();
     if (validate.hasError) return;
@@ -113,6 +123,11 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     setMemberForm(newMemberForm());
   };
 
+  const cancelEdit = () => {
+    setEditing(-1);
+    forceUpdate();
+  };
+
   const selectEdit = (index: number) => {
     editedMemberForm.setValues(form.$[index].values);
     setEditing(index);
@@ -141,6 +156,11 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
   const onDelete = async (index: number) => {
     form.$.splice(index, 1);
+
+    if (editing === index) setEditing(-1);
+
+    if (editing > index) setEditing(editing - 1);
+
     forceUpdate();
   };
 
@@ -167,9 +187,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
           tooltip={
             " Distribute your organization’s native token at launch (regardless of initial distribution, the organization will be able to create more tokens after launch through proposals)"
           }
-          toggle={() => {
-            setDistribution(!distribution);
-          }}
+          toggle={toggleDistribution}
           disabled={false}
           checked={distribution}
           style={styles.toggle}
@@ -179,7 +197,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
 
         <MembersAnalytics
           data={form.toState()}
-          getDAOTokenSymbol={getDAOTokenSymbol}
+          tokenSymbol={getDAOTokenSymbol()}
         />
 
         <div style={styles.thinDivider} />
@@ -215,6 +233,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
             onEdit={onEdit}
             onDelete={onDelete}
             selectEdit={selectEdit}
+            cancelEdit={cancelEdit}
             tokenDistribution={distribution}
             getDAOTokenSymbol={getDAOTokenSymbol}
           />
