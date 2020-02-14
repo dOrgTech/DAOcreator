@@ -33,7 +33,7 @@ const ModalButton: FC<{
   return <></>;
 };
 
-export default function Stepper({
+const Stepper: FC<Props> = ({
   index,
   form,
   title,
@@ -41,7 +41,7 @@ export default function Stepper({
   callbacks,
   step,
   launching
-}: Props) {
+}) => {
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
     <a role="button" href="#/" style={{ cursor: "unset" }}>
       <span
@@ -154,7 +154,7 @@ export default function Stepper({
       </MDBCollapse>
     </li>
   );
-}
+};
 
 const styles = {
   stepContent: {
@@ -237,3 +237,5 @@ const styles = {
     width: "-webkit-fill-available"
   }
 };
+
+export default Stepper;

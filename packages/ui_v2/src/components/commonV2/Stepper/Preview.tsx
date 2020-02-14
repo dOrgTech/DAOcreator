@@ -10,14 +10,7 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   daoName,
   daoSymbol
 }) => (
-  <MDBRow
-    style={{
-      marginTop: "26px",
-      marginRight: "auto",
-      marginLeft: "1.5rem",
-      whiteSpace: "nowrap"
-    }}
-  >
+  <MDBRow style={styles.configPreview}>
     <MDBCol>
       <span>
         Name: <strong>{daoName}</strong>
@@ -31,6 +24,7 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   </MDBRow>
 );
 
+// TODO
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions = simpleOptionsSwitcher(form, true);
   const noDuplicateSimpleOptions = simpleOptions.slice(
@@ -115,6 +109,12 @@ export const MembersPreview: FC<{
 const styles = {
   lineGraphic: {
     padding: "unset"
+  },
+  configPreview: {
+    marginTop: "26px",
+    marginRight: "auto",
+    marginLeft: "1.5rem",
+    whiteSpace: "nowrap"
   },
   schemePreview: {
     marginTop: 28
