@@ -74,11 +74,10 @@ const SimpleConfigTextform: FC<{ form: SchemesForm }> = ({ form }) => {
   );
 };
 
-const membersPreview = (
-  form: any,
-  tokenSymbol: string,
-  distribution: boolean
-) => {
+const MembersPreview: FC<{
+  form: MembersForm;
+  tokenSymbol: string;
+}> = ({ form, tokenSymbol }) => {
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -95,9 +94,9 @@ const membersPreview = (
   };
   let totalReputationAmount = 0;
   let totalTokenAmount = 0;
-  form.toState().map((member: any) => {
-    totalReputationAmount += member.reputation;
-    totalTokenAmount += member.tokens;
+  form.toState().map(({ reputation, tokens }: any) => {
+    totalReputationAmount += reputation;
+    totalTokenAmount += tokens;
     return null;
   });
   const numberOfMembers = form.$.length;
@@ -109,17 +108,17 @@ const membersPreview = (
       <div style={{ width: "17.5em" }}>
         <p>Reputation Distribution</p>
         <LineGraphic
-          data={form.toState()}
+          data={form.toState() as any} // Working with this type is weird
           total={totalReputationAmount}
           config={reputationConfig}
           style={styles.lineGraphic}
         />
       </div>
-      {distribution && (
+      {totalTokenAmount > 0 && (
         <div style={{ paddingTop: "20px", width: "17.5em" }}>
           <p>{tokenSymbol} Token Distribution</p>
           <LineGraphic
-            data={form.toState()}
+            data={form.toState() as any} // Working with this type is weird
             total={totalTokenAmount}
             config={tokenConfig}
             style={styles.lineGraphic}
@@ -190,9 +189,12 @@ export default function Stepper({
         {step > 1 && index === 1 && (
           <SimpleConfigTextform form={form as SchemesForm} />
         )}
-        {step > 2 &&
-          index === 2 &&
-          membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
+        {step > 2 && index === 2 && (
+          <MembersPreview
+            form={form as MembersForm}
+            tokenSymbol={callbacks.getDAOTokenSymbol()}
+          />
+        )}
         <div>
           <ModalButton
             step={step}
