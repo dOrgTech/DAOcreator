@@ -8,10 +8,9 @@ import Toggle from "../Schemes/Toggle";
 
 interface Props {
   form: MembersForm;
-  updateDistribution: (distribution: boolean) => void;
 }
 
-const MembersEditor = ({ form, updateDistribution }: Props) => {
+const MembersEditor = ({ form }: Props) => {
   /*
    * State
    */
@@ -88,7 +87,6 @@ const MembersEditor = ({ form, updateDistribution }: Props) => {
     if (distribution)
       form.$.map((memberForm: MemberForm) => (memberForm.$.tokens.value = "0"));
     setDistribution(!distribution);
-    updateDistribution(!distribution);
   };
 
   const addUser = async () => {

@@ -66,7 +66,6 @@ export default function DAOcreator() {
   );
   const [importFile, setImportFile] = React.useState<string>("");
   const [launching, setLaunching] = React.useState(false);
-  const [distribution, updateDistribution] = React.useState(false);
 
   let currentForm: any = daoForm.$.config;
 
@@ -238,8 +237,7 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         setStep,
         setModal: setImportFile,
-        step,
-        updateDistribution
+        step
       }
     },
     {
@@ -326,7 +324,6 @@ export default function DAOcreator() {
                           launching={launching}
                           Component={Component}
                           callbacks={callbacks}
-                          distribution={distribution}
                         />
                       );
                     }

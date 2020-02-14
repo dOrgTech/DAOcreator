@@ -20,7 +20,6 @@ interface Props {
   step: number;
   launching: boolean;
   daoName?: string;
-  distribution: boolean;
 }
 
 interface ModalButtonProps {
@@ -136,8 +135,7 @@ export default function Stepper({
   Component,
   callbacks,
   step,
-  launching,
-  distribution
+  launching
 }: Props) {
   return (
     <li className={step === index || step > index ? "completed" : ""}>

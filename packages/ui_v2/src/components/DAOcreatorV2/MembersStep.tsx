@@ -7,17 +7,12 @@ import MembersEditor from "../commonV2/dao/Members/MembersEditor";
 interface Props {
   form: MembersForm;
   toggleCollapse: () => void;
-  updateDistribution: (distribution: boolean) => void;
 }
 
-const MembersStep: FC<Props> = ({
-  form,
-  toggleCollapse,
-  updateDistribution
-}: Props) => (
+const MembersStep: FC<Props> = ({ form, toggleCollapse }: Props) => (
   <MDBContainer style={styles.padding}>
     <MDBBox>
-      <MembersEditor form={form} updateDistribution={updateDistribution} />
+      <MembersEditor form={form} />
       <MDBRow style={styles.padding}>
         <MDBCol>
           <button style={styles.setDescriptionButton} onClick={toggleCollapse}>
