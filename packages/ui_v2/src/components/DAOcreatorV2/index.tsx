@@ -66,6 +66,7 @@ export default function DAOcreator() {
   );
   const [importFile, setImportFile] = React.useState<string>("");
   const [launching, setLaunching] = React.useState(false);
+  const [distribution, updateDistribution] = React.useState(false);
 
   let currentForm: any = daoForm.$.config;
 
@@ -237,7 +238,8 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         setStep,
         setModal: setImportFile,
-        step
+        step,
+        updateDistribution
       }
     },
     {
@@ -309,21 +311,26 @@ export default function DAOcreator() {
                   className="stepper stepper-vertical"
                   style={styles.noPadding}
                 >
-                  {steps.map((actualStep: Step, index: number) => {
-                    let { form, title, Component, callbacks } = actualStep;
-                    return (
-                      <Stepper
-                        key={`step${index}`}
-                        index={index}
-                        form={form}
-                        title={title}
-                        step={step}
-                        launching={launching}
-                        Component={Component}
-                        callbacks={callbacks}
-                      />
-                    );
-                  })}
+                  {steps.map(
+                    (
+                      { form, title, Component, callbacks }: Step,
+                      index: number
+                    ) => {
+                      return (
+                        <Stepper
+                          key={`step${index}`}
+                          index={index}
+                          form={form}
+                          title={title}
+                          step={step}
+                          launching={launching}
+                          Component={Component}
+                          callbacks={callbacks}
+                          distribution={distribution}
+                        />
+                      );
+                    }
+                  )}
                 </ul>
               )}
             </div>

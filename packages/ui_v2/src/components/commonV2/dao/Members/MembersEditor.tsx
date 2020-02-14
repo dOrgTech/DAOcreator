@@ -6,7 +6,12 @@ import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
 
-const MembersEditor = ({ form }: { form: MembersForm }) => {
+interface Props {
+  form: MembersForm;
+  updateDistribution: (distribution: boolean) => void;
+}
+
+const MembersEditor = ({ form, updateDistribution }: Props) => {
   /*
    * State
    */
@@ -83,6 +88,7 @@ const MembersEditor = ({ form }: { form: MembersForm }) => {
     if (distribution)
       form.$.map((memberForm: MemberForm) => (memberForm.$.tokens.value = "0"));
     setDistribution(!distribution);
+    updateDistribution(!distribution);
   };
 
   const addUser = async () => {

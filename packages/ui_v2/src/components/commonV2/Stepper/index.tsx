@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC } from "react";
 import {
   DAOConfigForm,
   MembersForm,
@@ -14,26 +14,37 @@ import LineGraphic from "../LineGraphic";
 interface Props {
   index: number;
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
-  Component: any;
+  Component: FC;
   title: string;
   callbacks: any | undefined;
   step: number;
   launching: boolean;
   daoName?: string;
+  distribution: boolean;
 }
 
-const ModalButton = (props: { step: number; index: number; cb: any }) => {
-  const { step, index, cb } = props;
+interface ModalButtonProps {
+  step: number;
+  index: number;
+  setModal: any;
+}
+
+const ModalButton: FC<ModalButtonProps> = ({
+  step,
+  index,
+  setModal
+}: ModalButtonProps) => {
   if (step === 1 && index === 1) {
-    return <UtilityButton title={"Advanced"} openModal={cb.setModal} />;
+    return <UtilityButton title={"Advanced"} openModal={setModal} />;
   } else if (step === 2 && index === 2) {
-    return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
-  } else {
-    return <></>;
+    return <UtilityButton title={"Import CSV"} openModal={setModal} />;
   }
+  return <></>;
 };
 
-const simpleConfigText = (form: any | undefined) => {
+// const simpleConfigText: FC<SimpleConfigText> = ({ form }) => {
+const SimpleConfigTextform: FC<{ form: SchemesForm }> = ({ form }) => {
+  console.log(form);
   const simpleOptions = simpleOptionsSwitcher(form, true);
   const noDuplicateSimpleOptions = simpleOptions.slice(
     0,
@@ -64,8 +75,8 @@ const simpleConfigText = (form: any | undefined) => {
 };
 
 const membersPreview = (
-  form: any | undefined,
-  daoName: string,
+  form: any,
+  tokenSymbol: string,
   distribution: boolean
 ) => {
   const reputationConfig = {
@@ -78,7 +89,7 @@ const membersPreview = (
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol,
     dataKey: "tokens",
     nameKey: "address"
   };
@@ -93,10 +104,10 @@ const membersPreview = (
   return (
     <div style={styles.membersPreview}>
       <p>
-        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
+        {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
       <div style={{ width: "17.5em" }}>
-        <p style={{}}>Reputation Distribution</p>
+        <p>Reputation Distribution</p>
         <LineGraphic
           data={form.toState()}
           total={totalReputationAmount}
@@ -104,20 +115,16 @@ const membersPreview = (
           style={styles.lineGraphic}
         />
       </div>
-      {distribution ? (
-        <>
-          <div style={{ paddingTop: "20px", width: "17.5em" }}>
-            <p>{daoName} Token Distribution</p>
-            <LineGraphic
-              data={form.toState()}
-              total={totalTokenAmount}
-              config={tokenConfig}
-              style={styles.lineGraphic}
-            />
-          </div>
-        </>
-      ) : (
-        <></>
+      {distribution && (
+        <div style={{ paddingTop: "20px", width: "17.5em" }}>
+          <p>{tokenSymbol} Token Distribution</p>
+          <LineGraphic
+            data={form.toState()}
+            total={totalTokenAmount}
+            config={tokenConfig}
+            style={styles.lineGraphic}
+          />
+        </div>
       )}
     </div>
   );
@@ -130,15 +137,9 @@ export default function Stepper({
   Component,
   callbacks,
   step,
-  launching
+  launching,
+  distribution
 }: Props) {
-  const [distribution, setDistribution] = React.useState(false);
-
-  const distributionState = {
-    distribution,
-    setDistribution
-  };
-
   return (
     <li className={step === index || step > index ? "completed" : ""}>
       <MDBRow
@@ -186,12 +187,18 @@ export default function Stepper({
             </MDBCol>
           </MDBRow>
         )}
-        {step > 1 && index === 1 && simpleConfigText(form)}
+        {step > 1 && index === 1 && (
+          <SimpleConfigTextform form={form as SchemesForm} />
+        )}
         {step > 2 &&
           index === 2 &&
           membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
         <div>
-          <ModalButton step={step} index={index} cb={callbacks} />
+          <ModalButton
+            step={step}
+            index={index}
+            setModal={callbacks.setModal}
+          />
           <MDBBtn
             hidden={step === index || step < index}
             floating
@@ -226,11 +233,7 @@ export default function Stepper({
               : styles.stepFourContent
           }
         >
-          <Component
-            form={form}
-            {...callbacks}
-            distributionState={distributionState}
-          />
+          <Component form={form} {...callbacks} />
         </MDBRow>
       </MDBCollapse>
     </li>
