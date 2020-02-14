@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { observer } from "mobx-react";
 import {
   MDBBtn,
@@ -8,19 +8,23 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
-import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
+import {
+  SchemeType,
+  GenesisProtocolPreset,
+  SchemesForm
+} from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 import Toggle from "./Toggle";
 
 interface Props {
-  form: any;
+  form: SchemesForm;
   editable: boolean;
   enabled?: boolean;
   onToggle?: (toggled: boolean) => void;
   toggleCollapse: () => void;
   modal: boolean;
-  setModal: any;
+  setModal: (modal: boolean) => void;
   advancedScheme: any;
 }
 
@@ -60,9 +64,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
   ]
 ]);
 
-function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal } = props;
-
+const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [rewardSuccess, setRewardSuccess] = useState<boolean>(true);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(true);
@@ -159,6 +161,7 @@ function SchemeEditor(props: Props) {
         break;
     }
   };
+  // TODO
   // Not using Scheme interface because $ does not exist on it
   const getVotingMachinePreset = (scheme: any) => {
     // Get voting machine preset using the decisionSpeed and scheme type
@@ -345,7 +348,7 @@ function SchemeEditor(props: Props) {
       </button>
     </>
   );
-}
+};
 
 const styles = {
   card: {

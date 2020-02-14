@@ -23,7 +23,7 @@ interface Props {
 const ModalButton: FC<{
   step: number;
   index: number;
-  setModal: any;
+  setModal: (modal: boolean | string) => void; // TODO ?
 }> = ({ step, index, setModal }) => {
   if (step === 1 && index === 1) {
     return <UtilityButton title={"Advanced"} openModal={setModal} />;

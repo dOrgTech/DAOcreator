@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { FC, useState } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -16,15 +16,16 @@ import {
   GenericSchemeForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
-  SchemeType
+  SchemeType,
+  SchemesForm
 } from "@dorgtech/daocreator-lib";
 import GenesisProtocolEditor from "../GenesisProtocolEditor";
 import FormField from "../../FormField";
 
-export interface Props {
-  form: any;
+interface Props {
+  form: SchemesForm;
   modal: boolean;
-  setModal: any;
+  setModal: (modal: boolean) => void;
   setAdvanceMode: any;
 }
 
@@ -34,18 +35,17 @@ let schemes: Array<AnySchemeForm & IObservableObject> = [
   observable(new GenericSchemeForm())
 ];
 
-function AdvanceSchemeEditor(props: Props) {
-  const { form, modal, setModal, setAdvanceMode } = props;
+const AdvanceSchemeEditor: FC<Props> = ({
+  form,
+  modal,
+  setModal,
+  setAdvanceMode
+}) => {
+  const [scheme, setScheme] = useState<number>(SchemeType.ContributionReward);
+  const [schemeIsAdded, setSchemeIsAdded] = useState(true);
+  const [pluginManagerExists, setPluginManagerExists] = useState(true);
 
-  const [scheme, setScheme] = React.useState<number>(
-    SchemeType.ContributionReward
-  );
-  const [schemeIsAdded, setSchemeIsAdded] = React.useState<boolean>(true);
-  const [pluginManagerExists, setPluginManagerExists] = React.useState<boolean>(
-    true
-  );
-
-  const [error, setError] = React.useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
   const params = actualScheme!.getParams();
@@ -65,7 +65,7 @@ function AdvanceSchemeEditor(props: Props) {
         if (schemeIndex !== x.type) return x;
       };
       const removeUndefined = (x: AnySchemeForm | undefined) => x;
-      form.$ = form.$.map(filterSchemes).filter(removeUndefined);
+      // form.$ = form.$.map(filterSchemes).filter(removeUndefined); // TODO
     };
 
     const addScheme = (currentScheme: AnySchemeForm & IObservableObject) => {
@@ -80,10 +80,11 @@ function AdvanceSchemeEditor(props: Props) {
     setPluginManagerExists(pluginManager);
   };
 
+  // Error is set but never unset
   const saveConfig = async () => {
     const { hasError } = await form.validate();
     if (hasError) {
-      setError(form.error);
+      // setError(form.error); TODO
     } else {
       setAdvanceMode(true);
       setModal(false);
@@ -99,127 +100,113 @@ function AdvanceSchemeEditor(props: Props) {
   };
 
   return (
-    <Fragment>
-      <MDBModal isOpen={modal} style={styles.modal} size="lg">
-        <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
-          {" "}
-          <span style={styles.bold}>Advance Configuration</span>
-        </MDBModalHeader>
-        <MDBModalBody>
-          <MDBRow style={styles.rowTab}>
-            {schemes.map((s, index) => (
-              <MDBCol style={styles.tab} key={"scheme-" + index}>
-                <button
-                  style={
-                    scheme === index ? styles.buttonTabActive : styles.buttonTab
-                  }
-                  onClick={() => showNewScheme(index)}
+    <MDBModal isOpen={modal} style={styles.modal} size="lg">
+      <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
+        <span style={styles.bold}>Advance Configuration</span>
+      </MDBModalHeader>
+      <MDBModalBody>
+        <MDBRow style={styles.rowTab}>
+          {schemes.map((s, index) => (
+            <MDBCol style={styles.tab} key={"scheme-" + index}>
+              <button
+                style={
+                  scheme === index ? styles.buttonTabActive : styles.buttonTab
+                }
+                onClick={() => showNewScheme(index)}
+              >
+                {s.displayName}
+              </button>
+            </MDBCol>
+          ))}
+        </MDBRow>
+        <div style={styles.divForm}>
+          <MDBRow style={styles.borderRow}>
+            <MDBCol>
+              <span style={styles.boldSpan}>
+                Deploy {schemes[scheme].displayName}
+              </span>
+              <MDBTooltip placement="bottom" clickable>
+                <MDBBtn
+                  floating
+                  size="lg"
+                  color="transparent"
+                  style={styles.info}
                 >
-                  {s.displayName}
-                </button>
-              </MDBCol>
-            ))}
-          </MDBRow>
-          <div style={styles.divForm}>
-            <MDBRow style={styles.borderRow}>
+                  <MDBIcon icon="info-circle" />
+                </MDBBtn>
+                <span>{schemes[scheme].description}</span>
+              </MDBTooltip>
+            </MDBCol>
+            {!pluginManagerExists && (
               <MDBCol>
-                <span style={styles.boldSpan}>
-                  Deploy {schemes[scheme].displayName}
+                <span
+                  style={{
+                    fontWeight: 400,
+                    color: "red",
+                    alignItems: "center"
+                  }}
+                >
+                  Warning: Without a Plugin Manager your organization will not
+                  be able to modify itself.
                 </span>
-                <MDBTooltip placement="bottom" clickable>
-                  <MDBBtn
-                    floating
-                    size="lg"
-                    color="transparent"
-                    style={styles.info}
-                  >
-                    <MDBIcon icon="info-circle" />
-                  </MDBBtn>
-                  <span>{schemes[scheme].description}</span>
-                </MDBTooltip>
               </MDBCol>
-              {pluginManagerExists ? (
-                <></>
-              ) : (
-                <MDBCol>
-                  <span
-                    style={{
-                      fontWeight: 400,
-                      color: "red",
-                      alignItems: "center"
-                    }}
-                  >
-                    Warning: Without a Plugin Manager your organization will not
-                    be able to modify itself.
-                  </span>
-                </MDBCol>
-              )}
-              <MDBCol size="1">
-                <div className="custom-control custom-switch">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="toggle"
-                    checked={schemeIsAdded}
-                    onChange={e => handleScheme(scheme)}
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="toggle"
-                  ></label>
-                </div>
-              </MDBCol>
-            </MDBRow>
-            <GenesisProtocolEditor
-              form={
-                form.$[scheme]
-                  ? form.$[scheme].$.votingMachine
-                  : actualScheme!.$.votingMachine
-              }
-              editable={schemeIsAdded}
-            />
-            {params!.length > 0 ? (
-              <>
-                {params!.map((param: any, index: any) => (
-                  <MDBRow key={`field-${index}`}>
-                    <FormField
-                      field={param}
-                      editable={schemeIsAdded}
-                      colSize={12}
-                    />
-                  </MDBRow>
-                ))}
-              </>
-            ) : (
-              <></>
             )}
-          </div>
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBRow style={styles.buttonsRow}>
-            <MDBCol size="3">
-              <button style={styles.cancelButton} onClick={closeModal}>
-                Cancel
-              </button>
-            </MDBCol>
-            <MDBCol style={{ textAlign: "center" }}>
-              {
-                <>
-                  {error ? <p style={styles.errorMessage}>{error}</p> : <></>}
-                </>
-              }
-            </MDBCol>
-            <MDBCol style={styles.save}>
-              <button style={styles.saveButton} onClick={saveConfig}>
-                Save Configuration
-              </button>
+            <MDBCol size="1">
+              <div className="custom-control custom-switch">
+                <input
+                  type="checkbox"
+                  className="custom-control-input"
+                  id="toggle"
+                  checked={schemeIsAdded}
+                  onChange={e => handleScheme(scheme)}
+                />
+                <label
+                  className="custom-control-label"
+                  htmlFor="toggle"
+                ></label>
+              </div>
             </MDBCol>
           </MDBRow>
-        </MDBModalFooter>
-      </MDBModal>
-    </Fragment>
+          <GenesisProtocolEditor
+            form={
+              form.$[scheme]
+                ? form.$[scheme].$.votingMachine
+                : actualScheme!.$.votingMachine
+            }
+            editable={schemeIsAdded}
+          />
+          {params!.length > 0 &&
+            params.map((param: any, index: number) => (
+              <MDBRow key={`field-${index}`}>
+                <FormField
+                  field={param}
+                  editable={schemeIsAdded}
+                  colSize={12}
+                />
+              </MDBRow>
+            ))}
+        </div>
+      </MDBModalBody>
+      <MDBModalFooter>
+        <MDBRow style={styles.buttonsRow}>
+          <MDBCol size="3">
+            <button style={styles.cancelButton} onClick={closeModal}>
+              Cancel
+            </button>
+          </MDBCol>
+          <MDBCol style={{ textAlign: "center" }}>
+            {error && <p style={styles.errorMessage}>{error}</p>}
+          </MDBCol>
+          <MDBCol style={styles.save}>
+            <button style={styles.saveButton} onClick={saveConfig}>
+              Save Configuration
+            </button>
+          </MDBCol>
+        </MDBRow>
+      </MDBModalFooter>
+    </MDBModal>
   );
-}
+};
 
 const styles = {
   button: {

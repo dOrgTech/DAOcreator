@@ -11,7 +11,7 @@ interface Props {
   form: SchemesForm;
   toggleCollapse: () => void;
   modal: boolean;
-  setModal: any;
+  setModal: (modal: boolean) => void;
   advancedScheme: any;
   daoSymbol: () => string;
 }
