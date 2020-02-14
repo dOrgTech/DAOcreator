@@ -4,7 +4,32 @@ import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
 
 import LineGraphic from "../LineGraphic";
 import { simpleOptionsSwitcher } from "../../utils";
-import { MDBIcon } from "mdbreact";
+import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
+
+export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
+  daoName,
+  daoSymbol
+}) => (
+  <MDBRow
+    style={{
+      marginTop: "26px",
+      marginRight: "auto",
+      marginLeft: "1.5rem",
+      whiteSpace: "nowrap"
+    }}
+  >
+    <MDBCol>
+      <span>
+        Name: <strong>{daoName}</strong>
+      </span>
+    </MDBCol>
+    <MDBCol>
+      <span>
+        Symbol: <strong>{daoSymbol}</strong>
+      </span>
+    </MDBCol>
+  </MDBRow>
+);
 
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions = simpleOptionsSwitcher(form, true);

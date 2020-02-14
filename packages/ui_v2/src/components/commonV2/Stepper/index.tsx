@@ -1,14 +1,14 @@
-import React, { FC } from "react";
+import React, { FC, ReactElement } from "react";
 import {
   DAOConfigForm,
   MembersForm,
   SchemesForm,
   DAOForm
 } from "@dorgtech/daocreator-lib";
-import { MDBBtn, MDBRow, MDBCollapse, MDBIcon, MDBCol } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
-import { MembersPreview, SchemesPreview } from "./Preview";
+import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 
 interface Props {
   index: number;
@@ -42,62 +42,73 @@ export default function Stepper({
   step,
   launching
 }: Props) {
+  const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
+    <a role="button" href="#/" style={{ cursor: "unset" }}>
+      <span
+        className="circle"
+        style={
+          step < index
+            ? styles.subsequentStepIcon
+            : step === index
+            ? styles.currentStepIcon
+            : styles.previousStepIcon
+        }
+      >
+        {index + 1}
+      </span>
+      <span
+        className="label"
+        style={step === index ? styles.active : styles.noActiveLabel}
+      >
+        {title}
+      </span>
+    </a>
+  );
+
+  let Preview;
+
+  switch (index) {
+    case 0:
+      if (step === 0) break;
+
+      // const { getDAOName, getDAOTokenSymbol } = callbacks;
+      Preview = (
+        <ConfigPreview
+          daoName={callbacks.getDAOName()}
+          daoSymbol={callbacks.getDAOTokenSymbol()}
+        />
+      );
+      break;
+    case 1:
+      if (step <= 1) break;
+      Preview = <SchemesPreview form={form as SchemesForm} />;
+      break;
+    case 2:
+      if (step <= 2) break;
+
+      // const { getDAOTokenSymbol } = callbacks;
+      Preview = (
+        <MembersPreview
+          form={form as MembersForm}
+          tokenSymbol={callbacks.getDAOTokenSymbol()}
+        />
+      );
+    case 3:
+      break;
+
+    default:
+      console.log("Index out of bounds");
+      return null;
+  }
+
   return (
-    <li className={step === index || step > index ? "completed" : ""}>
+    <li className={step >= index ? "completed" : ""}>
       <MDBRow
         style={styles.specialRow}
         className="justify-content-space-between"
       >
-        <a role="button" href="#/" style={{ cursor: "unset" }}>
-          <span
-            className="circle"
-            style={
-              step < index
-                ? styles.subsequentStepIcon
-                : step === index
-                ? styles.currentStepIcon
-                : styles.previousStepIcon
-            }
-          >
-            {index + 1}
-          </span>
-          <span
-            className="label"
-            style={step === index ? styles.active : styles.noActiveLabel}
-          >
-            {title}
-          </span>
-        </a>
-        {step > 0 && index === 0 && callbacks.getDAOName() && (
-          <MDBRow
-            style={{
-              marginTop: "26px",
-              marginRight: "auto",
-              marginLeft: "1.5rem",
-              whiteSpace: "nowrap"
-            }}
-          >
-            <MDBCol>
-              <span>
-                Name: <strong>{callbacks.getDAOName()}</strong>
-              </span>
-            </MDBCol>
-            <MDBCol>
-              <span>
-                Symbol: <strong>{callbacks.getDAOTokenSymbol()}</strong>
-              </span>
-            </MDBCol>
-          </MDBRow>
-        )}
-        {step > 1 && index === 1 && (
-          <SchemesPreview form={form as SchemesForm} />
-        )}
-        {step > 2 && index === 2 && (
-          <MembersPreview
-            form={form as MembersForm}
-            tokenSymbol={callbacks.getDAOTokenSymbol()}
-          />
-        )}
+        <StepIcon index={index} step={step} />
+        {Preview}
         <div>
           <ModalButton
             step={step}
