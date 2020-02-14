@@ -1,8 +1,36 @@
 import React, { FC } from "react";
 
-import { MembersForm } from "@dorgtech/daocreator-lib";
+import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
 
 import LineGraphic from "../LineGraphic";
+import { simpleOptionsSwitcher } from "../../utils";
+import { MDBIcon } from "mdbreact";
+
+export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
+  const simpleOptions = simpleOptionsSwitcher(form, true);
+  const noDuplicateSimpleOptions = simpleOptions.slice(
+    0,
+    simpleOptions.length / 2
+  );
+  return (
+    <div style={styles.schemePreview}>
+      <p>
+        <strong>Recommended</strong>
+      </p>
+      {noDuplicateSimpleOptions.map((option: any, index: number) => (
+        <div key={index}>
+          <p>
+            <MDBIcon
+              icon="check"
+              className={option.checked ? "blue-text" : "grey-text"}
+            />{" "}
+            {option.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const MembersPreview: FC<{
   form: MembersForm;
@@ -63,7 +91,9 @@ const styles = {
   lineGraphic: {
     padding: "unset"
   },
-
+  schemePreview: {
+    marginTop: 28
+  },
   membersPreview: {
     marginTop: 28,
     paddingRight: "8rem"

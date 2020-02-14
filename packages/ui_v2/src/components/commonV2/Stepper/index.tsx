@@ -8,8 +8,7 @@ import {
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon, MDBCol } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
-import { simpleOptionsSwitcher } from "../../utils";
-import { MembersPreview } from "./Preview";
+import { MembersPreview, SchemesPreview } from "./Preview";
 
 interface Props {
   index: number;
@@ -32,36 +31,6 @@ const ModalButton: FC<{
     return <UtilityButton title={"Import CSV"} openModal={setModal} />;
   }
   return <></>;
-};
-
-const SimpleConfigTextform: FC<{ form: SchemesForm }> = ({ form }) => {
-  const simpleOptions = simpleOptionsSwitcher(form, true);
-  const noDuplicateSimpleOptions = simpleOptions.slice(
-    0,
-    simpleOptions.length / 2
-  );
-  return (
-    <div style={styles.schemePreview}>
-      <p>
-        <strong>Recommended</strong>
-      </p>
-      {noDuplicateSimpleOptions.map((option: any, index: number) =>
-        option.checked ? (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="check" className="blue-text" /> {option.text}
-            </p>
-          </div>
-        ) : (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="times" className="grey-text" /> {option.text}
-            </p>
-          </div>
-        )
-      )}
-    </div>
-  );
 };
 
 export default function Stepper({
@@ -121,7 +90,7 @@ export default function Stepper({
           </MDBRow>
         )}
         {step > 1 && index === 1 && (
-          <SimpleConfigTextform form={form as SchemesForm} />
+          <SchemesPreview form={form as SchemesForm} />
         )}
         {step > 2 && index === 2 && (
           <MembersPreview
@@ -255,8 +224,5 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
-  },
-  schemePreview: {
-    marginTop: 28
   }
 };
