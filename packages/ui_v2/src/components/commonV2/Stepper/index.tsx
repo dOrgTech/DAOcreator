@@ -190,8 +190,6 @@ export default function Stepper({
         {step > 2 &&
           index === 2 &&
           membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
-        {/* FOR TEST ONLY */}
-        {step > 2 && index === 3}
         <div>
           <ModalButton step={step} index={index} cb={callbacks} />
           <MDBBtn
