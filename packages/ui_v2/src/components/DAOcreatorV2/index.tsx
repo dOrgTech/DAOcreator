@@ -211,8 +211,8 @@ export default function DAOcreator() {
       form: daoForm.$.config,
       Component: NamingStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
+        toggleCollapse: nextStep,
         getDAOName,
         getDAOTokenSymbol
       }
@@ -222,8 +222,8 @@ export default function DAOcreator() {
       form: daoForm.$.schemes,
       Component: SchemesStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
+        toggleCollapse: nextStep,
         modal: advanceSchemeConfig,
         setModal: setAdvanceSchemeConfig
       }
@@ -233,9 +233,9 @@ export default function DAOcreator() {
       form: daoForm.$.members,
       Component: MembersStep,
       callbacks: {
+        setStep,
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
-        setStep,
         setModal: setImportFile,
         step
       }
