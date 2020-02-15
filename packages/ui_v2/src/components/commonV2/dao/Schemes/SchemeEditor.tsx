@@ -18,7 +18,7 @@ import {
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 import Toggle from "./Toggle";
-import { VotingMachine } from "@dorgtech/daocreator-lib/dist/dependency/arc";
+import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 
 interface Props {
   form: SchemesForm;
@@ -74,7 +74,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     []
   );
   const [presetVotingMachines, setPresetVotingMachines] = useState<
-    GenesisProtocolForm[]
+    GenesisProtocolConfig[]
   >([]);
 
   const [advanceMode, setAdvanceMode] = useState(false);
@@ -82,7 +82,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // TODO onMount
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
-    const vmPresets: GenesisProtocolForm[] = [];
+    const vmPresets: GenesisProtocolConfig[] = [];
 
     form.$.map((scheme: AnySchemeForm) => {
       // Get voting machine preset using the decisionSpeed and scheme type
@@ -91,46 +91,89 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       if (schemePresetMap === undefined)
         throw Error("Unimplemented Scheme Speed Configuration");
 
-      const vm = scheme.values.votingMachine;
-      vm.preset = schemePresetMap.get(scheme.type);
-      vms.push(vm);
-      vmPresets.push(vm);
+      const vm: GenesisProtocolForm = scheme.values.votingMachine;
+      const preset = schemePresetMap.get(scheme.type);
 
+      if (preset === undefined) throw Error("Preset not found");
+
+      vm.preset = preset;
+
+      vms.push(vm);
+      vmPresets.push(vm.values); // just added the values
+
+      // if (!votingMachines[index]) {
+      //   vms.push(vm);
+      //   return scheme;
+      // }
+
+      // // Might potentially save changes (?)
+      // votingMachines[index].preset = vm.preset;
       return scheme;
     });
 
     setVotingMachines(vms);
+    vms.map(vm => (vm.$.minimumDaoBounty.value = "6969"));
     setPresetVotingMachines(vmPresets);
-  }, [form.$]);
+    console.log(vmPresets);
+  }, [form.$, decisionSpeed]);
 
   useEffect(() => {
-    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
-      rewardSuccess
-        ? (vm.$.proposingRepReward.value =
-            presetVotingMachines[index].$.proposingRepReward.value)
-        : (vm.$.proposingRepReward.value = "0");
-      return vm;
-    });
+    if (!form.$) return;
+    form.$.map(
+      (scheme: AnySchemeForm, index: number) =>
+        (scheme.$.votingMachine = votingMachines[index])
+    );
+    console.log(
+      form
+      // form.$.map(
+      //   scheme =>
+      //     scheme.values.votingMachine.values.votersReputationLossRatio.value
+      // )
+    );
+  }, [votingMachines]);
+
+  useEffect(() => {
+    const updatedVotingMachines = votingMachines.map(
+      (vm: GenesisProtocolForm, index: number) => {
+        rewardSuccess
+          ? (vm.$.proposingRepReward.value = presetVotingMachines[
+              index
+            ].proposingRepReward.toString())
+          : (vm.$.proposingRepReward.value = "0");
+        return vm;
+      }
+    );
+
+    setVotingMachines(updatedVotingMachines);
   }, [rewardSuccess]);
 
   useEffect(() => {
-    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
-      rewardAndPenVoters
-        ? (vm.$.votersReputationLossRatio.value =
-            presetVotingMachines[index].$.votersReputationLossRatio.value)
-        : (vm.$.votersReputationLossRatio.value = 0); // Not a string
-      return vm;
-    });
+    const updatedVotingMachines = votingMachines.map(
+      (vm: GenesisProtocolForm, index: number) => {
+        rewardAndPenVoters
+          ? (vm.$.votersReputationLossRatio.value =
+              presetVotingMachines[index].votersReputationLossRatio)
+          : (vm.$.votersReputationLossRatio.value = 0); // LIB Not a string
+        return vm;
+      }
+    );
+
+    setVotingMachines(updatedVotingMachines);
   }, [rewardAndPenVoters]);
 
   useEffect(() => {
-    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
-      autobet
-        ? (vm.$.minimumDaoBounty.value =
-            presetVotingMachines[index].$.minimumDaoBounty.value)
-        : (vm.$.minimumDaoBounty.value = "0");
-      return vm;
-    });
+    const updatedVotingMachines = votingMachines.map(
+      (vm: GenesisProtocolForm, index: number) => {
+        autobet
+          ? (vm.$.minimumDaoBounty.value = presetVotingMachines[
+              index
+            ].minimumDaoBounty.toString())
+          : (vm.$.minimumDaoBounty.value = "0");
+        return vm;
+      }
+    );
+
+    setVotingMachines(updatedVotingMachines);
   }, [autobet]);
 
   // Updates voting machines on toggle
@@ -138,7 +181,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // Loops over each scheme on form
     // console.log("form.values", form.values);
     // form.$.forEach(checkDefaultChange);
-    form.$.forEach(getVotingMachinePreset);
+    // form.$.forEach(getVotingMachinePreset);
   };
 
   const getVotingMachinePreset = (scheme: AnySchemeForm) => {
@@ -170,15 +213,16 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     setAutobet(+minimumDaoBounty.value > 0);
   };
 
-  const dependeciesList = [
-    decisionSpeed,
-    rewardSuccess,
-    rewardAndPenVoters,
-    autobet,
-    advanceMode
-  ];
-  // Updates voting machines on toggle
-  useEffect(updateVotingMachine, dependeciesList);
+  // const dependeciesList = [
+  //   decisionSpeed,
+  //   rewardSuccess,
+  //   rewardAndPenVoters,
+  //   autobet,
+  //   advanceMode
+  // ];
+
+  // // Updates voting machines on toggle
+  // useEffect(updateVotingMachine, dependeciesList);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
