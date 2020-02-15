@@ -310,7 +310,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
-          disabled={false}
           checked={rewardSuccess}
         />
 
@@ -323,7 +322,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
-          disabled={false}
           checked={rewardAndPenVoters}
         />
 
@@ -334,7 +332,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
             "The organization bets against every proposal to incentivize the GEN curation network"
           }
           toggle={() => setAutobet(!autobet)}
-          disabled={false}
           checked={autobet}
         />
       </MDBContainer>

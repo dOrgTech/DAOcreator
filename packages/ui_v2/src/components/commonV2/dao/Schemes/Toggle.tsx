@@ -6,7 +6,7 @@ interface Props {
   text: string;
   tooltip: string;
   toggle: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   checked: boolean;
   style?: any;
 }
@@ -16,7 +16,7 @@ const Toggle: FC<Props> = ({
   text,
   tooltip,
   toggle,
-  disabled,
+  disabled = false,
   checked,
   style
 }: Props) => (
