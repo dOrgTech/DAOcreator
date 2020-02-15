@@ -8,6 +8,7 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
+import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 import {
   SchemeType,
   GenesisProtocolPreset,
@@ -16,9 +17,8 @@ import {
   GenesisProtocolForm
 } from "@dorgtech/daocreator-lib";
 
-import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
+import AdvancedEditor from "./AdvancedEditor";
 import Toggle from "./Toggle";
-import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 
 interface Props {
   form: SchemesForm;
@@ -79,8 +79,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   const updatingVotingMachine = useRef(false);
 
-  const [advanceMode, setAdvanceMode] = useState(false);
-
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
     const vmPresets: GenesisProtocolConfig[] = [];
@@ -117,7 +115,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   }, [form.$, decisionSpeed]);
 
   useEffect(() => {
-    console.log("here");
     form.$.map(
       (scheme: AnySchemeForm, index: number) =>
         (scheme.$.votingMachine = votingMachines[index])
@@ -207,7 +204,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
-    console.log("setting vm");
     setVotingMachines(updatedVotingMachines);
   };
 
@@ -221,11 +217,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor
+            <AdvancedEditor
               form={form}
               setModal={setModal}
               modal={modal}
-              setAdvanceMode={setAdvanceMode}
+              updateVotingMachine={updateVotingMachine}
             />
           </MDBCol>
         </MDBRow>
@@ -314,7 +310,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
-          disabled={advanceMode}
+          disabled={false}
           checked={rewardSuccess}
         />
 
@@ -327,7 +323,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
-          disabled={advanceMode}
+          disabled={false}
           checked={rewardAndPenVoters}
         />
 
@@ -338,7 +334,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
             "The organization bets against every proposal to incentivize the GEN curation network"
           }
           toggle={() => setAutobet(!autobet)}
-          disabled={advanceMode}
+          disabled={false}
           checked={autobet}
         />
       </MDBContainer>

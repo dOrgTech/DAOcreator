@@ -1,7 +1,7 @@
-import * as React from "react";
+import React, { FC } from "react";
 import { MDBBtn, MDBRow, MDBCol, MDBTooltip, MDBIcon } from "mdbreact";
 
-interface ToggleProps {
+interface Props {
   id: string;
   text: string;
   tooltip: string;
@@ -11,7 +11,7 @@ interface ToggleProps {
   style?: any;
 }
 
-export default function Toggle({
+const Toggle: FC<Props> = ({
   id,
   text,
   tooltip,
@@ -19,37 +19,34 @@ export default function Toggle({
   disabled,
   checked,
   style
-}: ToggleProps) {
-  return (
-    <MDBRow style={style ? style : styles.paddingRow}>
-      <MDBCol size="11" style={styles.noPadding}>
-        <span style={styles.marginText} className="text-left">
-          {text}
-        </span>
-        <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-            {" "}
-            <MDBIcon icon="info-circle" />
-          </MDBBtn>
-          <span>{tooltip}</span>
-        </MDBTooltip>
-      </MDBCol>
-      <MDBCol style={styles.noPadding}>
-        <div className="custom-control custom-switch">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id={id}
-            onChange={toggle}
-            disabled={disabled}
-            checked={checked}
-          />
-          <label className="custom-control-label" htmlFor={id}></label>
-        </div>
-      </MDBCol>
-    </MDBRow>
-  );
-}
+}: Props) => (
+  <MDBRow style={style ? style : styles.paddingRow}>
+    <MDBCol size="11" style={styles.noPadding}>
+      <span style={styles.marginText} className="text-left">
+        {text}
+      </span>
+      <MDBTooltip placement="bottom" clickable>
+        <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+          <MDBIcon icon="info-circle" />
+        </MDBBtn>
+        <span>{tooltip}</span>
+      </MDBTooltip>
+    </MDBCol>
+    <MDBCol style={styles.noPadding}>
+      <div className="custom-control custom-switch">
+        <input
+          type="checkbox"
+          className="custom-control-input"
+          id={id}
+          onChange={toggle}
+          disabled={disabled}
+          checked={checked}
+        />
+        <label className="custom-control-label" htmlFor={id}></label>
+      </div>
+    </MDBCol>
+  </MDBRow>
+);
 
 const styles = {
   paddingRow: {
@@ -73,3 +70,5 @@ const styles = {
     fontSize: "16px"
   }
 };
+
+export default Toggle;
