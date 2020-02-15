@@ -146,8 +146,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardSuccess]);
 
   useEffect(() => {
@@ -163,8 +163,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters]);
 
   useEffect(() => {
@@ -181,8 +181,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autobet]);
 
   const updateVotingMachine = (advancedSchemes: AnySchemeForm[]) => {
