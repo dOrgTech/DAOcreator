@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, useRef } from "react";
 import { observer } from "mobx-react";
 import {
   MDBBtn,
@@ -77,9 +77,10 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     GenesisProtocolConfig[]
   >([]);
 
+  const updatingVotingMachine = useRef(false);
+
   const [advanceMode, setAdvanceMode] = useState(false);
 
-  // TODO onMount
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
     const vmPresets: GenesisProtocolConfig[] = [];
@@ -99,7 +100,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       vm.preset = preset;
 
       vms.push(vm);
-      vmPresets.push(vm.values); // just added the values
+      vmPresets.push(vm.values);
 
       // if (!votingMachines[index]) {
       //   vms.push(vm);
@@ -111,28 +112,31 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       return scheme;
     });
 
-    setVotingMachines(vms);
-    vms.map(vm => (vm.$.minimumDaoBounty.value = "6969"));
+    setVotingMachines(vms); // TODO Changing the speed resets the vm
     setPresetVotingMachines(vmPresets);
-    console.log(vmPresets);
   }, [form.$, decisionSpeed]);
 
   useEffect(() => {
-    if (!form.$) return;
     form.$.map(
       (scheme: AnySchemeForm, index: number) =>
         (scheme.$.votingMachine = votingMachines[index])
     );
-    console.log(
-      form
-      // form.$.map(
-      //   scheme =>
-      //     scheme.values.votingMachine.values.votersReputationLossRatio.value
-      // )
-    );
+
+    return () => {
+      updatingVotingMachine.current = false;
+    };
   }, [votingMachines]);
 
+  /*
+   * Toggles
+   */
+
   useEffect(() => {
+    if (updatingVotingMachine.current) {
+      return;
+    }
+    console.log("Updating vm");
+
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         rewardSuccess
@@ -148,6 +152,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   }, [rewardSuccess]);
 
   useEffect(() => {
+    if (updatingVotingMachine.current) {
+      return;
+    }
+    console.log("Updating vm");
+
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         rewardAndPenVoters
@@ -162,6 +171,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   }, [rewardAndPenVoters]);
 
   useEffect(() => {
+    if (updatingVotingMachine.current) {
+      return;
+    }
+    console.log("Updating vm");
+
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         autobet
@@ -176,63 +190,34 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     setVotingMachines(updatedVotingMachines);
   }, [autobet]);
 
-  // Updates voting machines on toggle
-  const updateVotingMachine = () => {
-    // Loops over each scheme on form
-    // console.log("form.values", form.values);
-    // form.$.forEach(checkDefaultChange);
-    // form.$.forEach(getVotingMachinePreset);
+  const updateVotingMachine = (advancedSchemes: AnySchemeForm[]) => {
+    updatingVotingMachine.current = true;
+
+    const updatedVotingMachines = advancedSchemes.map(
+      (scheme: AnySchemeForm) => {
+        const votingMachine = scheme.$.votingMachine;
+
+        const {
+          proposingRepReward,
+          votersReputationLossRatio,
+          minimumDaoBounty
+        } = votingMachine.values;
+
+        // Update toggles to reflect advanced changes
+        setRewardSuccess(+proposingRepReward > 0);
+        setRewardAndPenVoters(votersReputationLossRatio > 0);
+        setAutobet(+minimumDaoBounty > 0);
+
+        return votingMachine;
+      }
+    );
+
+    console.log("setting vm");
+    setVotingMachines(updatedVotingMachines);
   };
-
-  const getVotingMachinePreset = (scheme: AnySchemeForm) => {
-    // Get voting machine preset using the decisionSpeed and scheme type
-    const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-
-    if (schemePresetMap === undefined)
-      throw Error("Unimplemented Scheme Speed Configuration");
-
-    // Initialize the scheme's voting machine to the Genesis Protocol Preset
-    const votingMachine = scheme.$.votingMachine;
-    votingMachine.preset = schemePresetMap.get(scheme.type);
-
-    // VERIFIED
-    if (!advanceMode) {
-      // applyToggles(votingMachine);
-      return;
-    }
-
-    const {
-      proposingRepReward,
-      votersReputationLossRatio,
-      minimumDaoBounty
-    } = votingMachine.$;
-
-    // Update toggles to reflect advanced changes
-    setRewardSuccess(+proposingRepReward.value > 0);
-    setRewardAndPenVoters(votersReputationLossRatio.value > 0);
-    setAutobet(+minimumDaoBounty.value > 0);
-  };
-
-  // const dependeciesList = [
-  //   decisionSpeed,
-  //   rewardSuccess,
-  //   rewardAndPenVoters,
-  //   autobet,
-  //   advanceMode
-  // ];
-
-  // // Updates voting machines on toggle
-  // useEffect(updateVotingMachine, dependeciesList);
 
   const handleClick = (e: any) => {
     setDecisionSpeed(parseInt(e.target.value));
-  };
-
-  const setConfiguration = () => {
-    if (!advanceMode) {
-      updateVotingMachine();
-    }
-    toggleCollapse();
   };
 
   return (
@@ -363,7 +348,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         />
       </MDBContainer>
 
-      <button onClick={setConfiguration} style={styles.configButton}>
+      <button onClick={toggleCollapse} style={styles.configButton}>
         Set Configuration
       </button>
     </>
