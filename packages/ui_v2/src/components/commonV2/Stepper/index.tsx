@@ -93,6 +93,7 @@ const Stepper: FC<Props> = ({
           tokenSymbol={callbacks.getDAOTokenSymbol()}
         />
       );
+      break;
     case 3:
       break;
 
