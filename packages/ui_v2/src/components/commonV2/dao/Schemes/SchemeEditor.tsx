@@ -12,11 +12,13 @@ import {
   SchemeType,
   GenesisProtocolPreset,
   SchemesForm,
-  AnySchemeForm
+  AnySchemeForm,
+  GenesisProtocolForm
 } from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
 import Toggle from "./Toggle";
+import { VotingMachine } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 
 interface Props {
   form: SchemesForm;
@@ -62,13 +64,20 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 ]);
 
 const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+  // Toggles
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [rewardSuccess, setRewardSuccess] = useState(true);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
   const [autobet, setAutobet] = useState(true);
-  const [toggleSpeed, setToggleSpeed] = useState(true);
 
   const [advanceMode, setAdvanceMode] = useState(false);
+
+  const applyToggles = (votingMachine: GenesisProtocolForm) => {
+    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
+    if (!rewardAndPenVoters)
+      votingMachine.$.votersReputationLossRatio.value = 0; // Not a string
+    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+  };
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
@@ -82,29 +91,28 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // Get voting machine preset using the decisionSpeed and scheme type
     const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
-    let preset;
-    if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
-    else throw Error("Unimplemented Scheme Speed Configuration");
+    if (schemePresetMap === undefined)
+      throw Error("Unimplemented Scheme Speed Configuration");
 
     // Initialize the scheme's voting machine to the Genesis Protocol Preset
     const votingMachine = scheme.$.votingMachine;
-    votingMachine.preset = preset;
-    if (advanceMode) {
-      const {
-        proposingRepReward,
-        votersReputationLossRatio,
-        minimumDaoBounty
-      } = votingMachine.$;
-      setRewardSuccess(Number(proposingRepReward.value) > 0);
-      setRewardAndPenVoters(Number(votersReputationLossRatio.value) > 0);
-      setAutobet(Number(minimumDaoBounty.value) > 0);
+    votingMachine.preset = schemePresetMap.get(scheme.type);
+
+    if (!advanceMode) {
+      applyToggles(votingMachine);
+      return;
     }
 
-    // Apply the effects of the toggles
-    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-    if (!rewardAndPenVoters)
-      votingMachine.$.votersReputationLossRatio.value = 0;
-    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
+    const {
+      proposingRepReward,
+      votersReputationLossRatio,
+      minimumDaoBounty
+    } = votingMachine.$;
+
+    // Update toggles to reflect advanced changes
+    setRewardSuccess(+proposingRepReward.value > 0);
+    setRewardAndPenVoters(votersReputationLossRatio.value > 0);
+    setAutobet(+minimumDaoBounty.value > 0);
   };
 
   const dependeciesList = [
