@@ -183,13 +183,6 @@ const styles = {
     fontWeight: 400,
     color: "#4285f4"
   },
-  noActive: {
-    color: "gray",
-    backgroundColor: "white",
-    borderColor: "white",
-    border: "0.9px solid lightgray",
-    fontWeight: 500
-  },
   noActiveLabel: {
     color: "gray",
     fontWeight: 400
@@ -227,12 +220,6 @@ const styles = {
     border: "1px solid lightgrey",
     marginRight: "30px",
     marginTop: "16px"
-  },
-  completedStep: {
-    fontWeight: 400,
-    color: "#4285f4 !important",
-    border: "0.9px solid #4285f4 !important",
-    background: "white !important"
   },
   maxWidth: {
     width: "-webkit-fill-available"

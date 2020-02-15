@@ -62,12 +62,12 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 
 const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
-  const [rewardSuccess, setRewardSuccess] = useState<boolean>(true);
-  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(true);
-  const [autobet, setAutobet] = useState<boolean>(true);
-  const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
+  const [rewardSuccess, setRewardSuccess] = useState(true);
+  const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
+  const [autobet, setAutobet] = useState(true);
+  const [toggleSpeed, setToggleSpeed] = useState(true);
 
-  const [advanceMode, setAdvanceMode] = useState<boolean>(false);
+  const [advanceMode, setAdvanceMode] = useState(false);
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {

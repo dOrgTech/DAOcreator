@@ -24,8 +24,8 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   </MDBRow>
 );
 
-// TODO
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
+  // TODO
   const simpleOptions = simpleOptionsSwitcher(form, true);
   const noDuplicateSimpleOptions = simpleOptions.slice(
     0,
@@ -42,7 +42,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
             <MDBIcon
               icon="check"
               className={option.checked ? "blue-text" : "grey-text"}
-            />{" "}
+            />
             {option.text}
           </p>
         </div>
