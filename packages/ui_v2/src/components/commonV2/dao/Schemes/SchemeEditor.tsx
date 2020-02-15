@@ -70,19 +70,73 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
   const [autobet, setAutobet] = useState(true);
 
+  const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>(
+    []
+  );
+  const [presetVotingMachines, setPresetVotingMachines] = useState<
+    GenesisProtocolForm[]
+  >([]);
+
   const [advanceMode, setAdvanceMode] = useState(false);
 
-  const applyToggles = (votingMachine: GenesisProtocolForm) => {
-    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-    if (!rewardAndPenVoters)
-      votingMachine.$.votersReputationLossRatio.value = 0; // Not a string
-    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-  };
+  // TODO onMount
+  useEffect(() => {
+    const vms: GenesisProtocolForm[] = [];
+    const vmPresets: GenesisProtocolForm[] = [];
+
+    form.$.map((scheme: AnySchemeForm) => {
+      // Get voting machine preset using the decisionSpeed and scheme type
+      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
+      if (schemePresetMap === undefined)
+        throw Error("Unimplemented Scheme Speed Configuration");
+
+      const vm = scheme.values.votingMachine;
+      vm.preset = schemePresetMap.get(scheme.type);
+      vms.push(vm);
+      vmPresets.push(vm);
+
+      return scheme;
+    });
+
+    setVotingMachines(vms);
+    setPresetVotingMachines(vmPresets);
+  }, [form.$]);
+
+  useEffect(() => {
+    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+      rewardSuccess
+        ? (vm.$.proposingRepReward.value =
+            presetVotingMachines[index].$.proposingRepReward.value)
+        : (vm.$.proposingRepReward.value = "0");
+      return vm;
+    });
+  }, [rewardSuccess]);
+
+  useEffect(() => {
+    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+      rewardAndPenVoters
+        ? (vm.$.votersReputationLossRatio.value =
+            presetVotingMachines[index].$.votersReputationLossRatio.value)
+        : (vm.$.votersReputationLossRatio.value = 0); // Not a string
+      return vm;
+    });
+  }, [rewardAndPenVoters]);
+
+  useEffect(() => {
+    votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+      autobet
+        ? (vm.$.minimumDaoBounty.value =
+            presetVotingMachines[index].$.minimumDaoBounty.value)
+        : (vm.$.minimumDaoBounty.value = "0");
+      return vm;
+    });
+  }, [autobet]);
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
     // Loops over each scheme on form
-    console.log("form.values", form.values);
+    // console.log("form.values", form.values);
     // form.$.forEach(checkDefaultChange);
     form.$.forEach(getVotingMachinePreset);
   };
@@ -98,8 +152,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     const votingMachine = scheme.$.votingMachine;
     votingMachine.preset = schemePresetMap.get(scheme.type);
 
+    // VERIFIED
     if (!advanceMode) {
-      applyToggles(votingMachine);
+      // applyToggles(votingMachine);
       return;
     }
 
