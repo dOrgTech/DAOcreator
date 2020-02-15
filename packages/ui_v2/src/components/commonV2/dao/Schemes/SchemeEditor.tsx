@@ -11,7 +11,8 @@ import {
 import {
   SchemeType,
   GenesisProtocolPreset,
-  SchemesForm
+  SchemesForm,
+  AnySchemeForm
 } from "@dorgtech/daocreator-lib";
 
 import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
@@ -71,97 +72,16 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   // Updates voting machines on toggle
   const updateVotingMachine = () => {
-    form.$.forEach(checkDefaultChange);
+    // Loops over each scheme on form
+    console.log("form.values", form.values);
+    // form.$.forEach(checkDefaultChange);
     form.$.forEach(getVotingMachinePreset);
   };
-  // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
-  // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
-  const checkDefaultChange = (scheme: any) => {
-    const {
-      queuedVotePeriodLimit,
-      preBoostedVotePeriodLimit,
-      boostedVotePeriodLimit
-    } = scheme.values.votingMachine.values;
-    switch (decisionSpeed) {
-      case 0:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "30:0:0:0" ||
-              preBoostedVotePeriodLimit !== "1:0:0:0" ||
-              boostedVotePeriodLimit !== "4:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
-      case 1:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
-      case 2:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "30:0:0:0" ||
-              preBoostedVotePeriodLimit !== "1:0:0:0" ||
-              boostedVotePeriodLimit !== "4:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
-    }
-  };
-  // TODO
-  // Not using Scheme interface because $ does not exist on it
-  const getVotingMachinePreset = (scheme: any) => {
+
+  const getVotingMachinePreset = (scheme: AnySchemeForm) => {
     // Get voting machine preset using the decisionSpeed and scheme type
     const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
     let preset;
     if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
     else throw Error("Unimplemented Scheme Speed Configuration");
@@ -183,7 +103,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // Apply the effects of the toggles
     if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
     if (!rewardAndPenVoters)
-      votingMachine.$.votersReputationLossRatio.value = "0";
+      votingMachine.$.votersReputationLossRatio.value = 0;
     if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
   };
 
@@ -269,7 +189,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
               >
                 Fast
               </button>
@@ -282,7 +201,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
               >
                 Medium
               </button>
@@ -295,7 +213,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
                     : styles.buttonColorActive
                 }
                 onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
               >
                 Slow
               </button>
