@@ -117,6 +117,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   }, [form.$, decisionSpeed]);
 
   useEffect(() => {
+    console.log("here");
     form.$.map(
       (scheme: AnySchemeForm, index: number) =>
         (scheme.$.votingMachine = votingMachines[index])
@@ -125,17 +126,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     return () => {
       updatingVotingMachine.current = false;
     };
-  }, [votingMachines]);
+  }, [votingMachines, form.$]);
 
   /*
    * Toggles
    */
 
   useEffect(() => {
-    if (updatingVotingMachine.current) {
-      return;
-    }
-    console.log("Updating vm");
+    if (updatingVotingMachine.current) return;
 
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
@@ -148,14 +146,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
   }, [rewardSuccess]);
 
   useEffect(() => {
-    if (updatingVotingMachine.current) {
-      return;
-    }
-    console.log("Updating vm");
+    if (updatingVotingMachine.current) return;
 
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
@@ -167,14 +163,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
   }, [rewardAndPenVoters]);
 
   useEffect(() => {
-    if (updatingVotingMachine.current) {
-      return;
-    }
-    console.log("Updating vm");
+    if (updatingVotingMachine.current) return;
 
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
@@ -187,6 +181,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       }
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     setVotingMachines(updatedVotingMachines);
   }, [autobet]);
 
