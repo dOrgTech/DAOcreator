@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   SchemesForm,
   ContributionRewardForm,
@@ -12,34 +12,26 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
-  advancedScheme: any;
-  daoSymbol: () => string;
 }
 
-function SchemesStep(props: Props) {
-  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
+const SchemesStep: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!loading) return;
 
     form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
     setLoading(false);
   }, [loading, form.$]);
 
-  return loading ? (
-    <></>
-  ) : (
+  return (
     <SchemeEditor
       form={form}
-      editable={true}
       toggleCollapse={toggleCollapse}
       modal={modal}
       setModal={setModal}
-      advancedScheme={advancedScheme}
     />
   );
-}
+};
 
 export default SchemesStep;

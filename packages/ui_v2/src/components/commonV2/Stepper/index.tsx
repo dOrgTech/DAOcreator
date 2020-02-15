@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC } from "react";
 import {
   DAOConfigForm,
   MembersForm,
@@ -116,7 +116,7 @@ const Stepper: FC<Props> = ({
             setModal={callbacks.setModal}
           />
           <MDBBtn
-            hidden={step === index || step < index}
+            hidden={step <= index}
             floating
             size="lg"
             color="transparent"

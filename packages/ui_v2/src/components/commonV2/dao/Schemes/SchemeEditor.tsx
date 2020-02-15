@@ -19,13 +19,9 @@ import Toggle from "./Toggle";
 
 interface Props {
   form: SchemesForm;
-  editable: boolean;
-  enabled?: boolean;
-  onToggle?: (toggled: boolean) => void;
   toggleCollapse: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
-  advancedScheme: any;
 }
 
 enum DAOSpeed {
