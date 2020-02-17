@@ -233,7 +233,7 @@ const AdvancedEditor: FC<Props> = ({
             </MDBCol>
           </MDBRow>
           <VotingMachineEditor
-            fields={advForm.$[scheme.type].values.votingMachine.values}
+            votingMachine={advForm.$[scheme.type].$.votingMachine}
             editable={isActive[scheme.type]}
           />
           {/* TODO ? */}
@@ -261,8 +261,10 @@ const AdvancedEditor: FC<Props> = ({
             </button>
           </MDBCol>
           <MDBCol style={{ textAlign: "center" }}>
-            {errors.map(error => (
-              <p style={styles.errorMessage}>{error}</p>
+            {errors.map((error: string, index: number) => (
+              <p key={`"error"-${index}`} style={styles.errorMessage}>
+                {error}
+              </p>
             ))}
           </MDBCol>
           <MDBCol style={styles.save}>
