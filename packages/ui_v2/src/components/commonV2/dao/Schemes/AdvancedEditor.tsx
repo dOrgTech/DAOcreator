@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -16,7 +16,9 @@ import {
   ContributionRewardForm,
   SchemeRegistrarForm,
   SchemeType,
-  SchemesForm
+  SchemesForm,
+  GenesisProtocolForm,
+  Scheme
 } from "@dorgtech/daocreator-lib";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
@@ -28,7 +30,7 @@ interface Props {
   updateVotingMachine: (advancedSchemes: AnySchemeForm[]) => void;
 }
 
-let schemes: Array<AnySchemeForm> = [
+const schemes: AnySchemeForm[] = [
   new ContributionRewardForm(),
   new SchemeRegistrarForm(),
   new GenericSchemeForm()
@@ -40,11 +42,87 @@ const AdvancedEditor: FC<Props> = ({
   setModal,
   updateVotingMachine
 }) => {
-  const [scheme, setScheme] = useState<number>(SchemeType.ContributionReward);
+  // Whether modal is open
+  const [open, setOpen] = useState(false);
+
+  // Seperate form
+  const [advForm, setAdvForm] = useState<SchemesForm>(new SchemesForm());
+
+  // Active toggles. Disable allows for removal from ui without scheme reset
+  const [isActive, setIsActive] = useState<boolean[]>([]);
+
+  //
+  // const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>(
+  //   []
+  // );
+
+  useEffect(() => {
+    if (!open) return;
+
+    updateAdvancedForm();
+  }, [open]);
+
+  // on Advanced mode open
+  const updateAdvancedForm = () => {
+    // TODO Extract values from form and add them to advForm
+    // And update activeToggles
+    setAdvForm(form);
+  };
+
+  // Resets entire form
+  const resetAdvancedForm = () => {
+    const resetForm: AnySchemeForm[] = [
+      new ContributionRewardForm(),
+      new SchemeRegistrarForm()
+    ];
+    form.$ = resetForm;
+
+    updateAdvancedForm();
+  };
+
+  const toggleActiveScheme = (index: number) => {
+    setIsActive(
+      isActive.map((toggle: boolean, i: number) =>
+        i === index ? !toggle : toggle
+      )
+    );
+  };
+
+  const updateForm = () => {
+    //
+    advForm.values.filter((scheme: Scheme) => scheme.type !== schemeType);
+  };
+
+  // ---------------------
+
+  // const handleScheme = (schemeIndex: number) => {
+  //   const removeScheme = () => {
+  //     const filterSchemes = (x: AnySchemeForm) => {
+  //       if (schemeIndex !== x.type) return x;
+  //     };
+  //     const removeUndefined = (x: AnySchemeForm | undefined) => x;
+  //     form.$ = form.$.map(filterSchemes).filter(removeUndefined); // TODO
+  //   };
+
+  //   const addScheme = (currentScheme: AnySchemeForm) => {
+  //     form.$.push(currentScheme);
+  //   };
+
+  //   schemeIsAdded ? removeScheme() : addScheme(schemes[schemeIndex]);
+  //   setSchemeIsAdded(checkSchemeInForm(schemeIndex));
+  //   const pluginManager = form.$.some(
+  //     (scheme: AnySchemeForm) => scheme.type === 1
+  //   );
+  //   setPluginManagerExists(pluginManager);
+  // };
+
+  // Initial Scheme
+  const [scheme, setScheme] = useState(SchemeType.ContributionReward);
+
   const [schemeIsAdded, setSchemeIsAdded] = useState(true);
   const [pluginManagerExists, setPluginManagerExists] = useState(true);
 
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
 
   const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
   const params = actualScheme!.getParams();
@@ -58,27 +136,7 @@ const AdvancedEditor: FC<Props> = ({
     setSchemeIsAdded(checkSchemeInForm(schemeIndex));
   };
 
-  const handleScheme = (schemeIndex: number) => {
-    const removeScheme = () => {
-      const filterSchemes = (x: AnySchemeForm) => {
-        if (schemeIndex !== x.type) return x;
-      };
-      const removeUndefined = (x: AnySchemeForm | undefined) => x;
-      // form.$ = form.$.map(filterSchemes).filter(removeUndefined); // TODO
-    };
-
-    const addScheme = (currentScheme: AnySchemeForm) => {
-      form.$.push(currentScheme);
-    };
-
-    schemeIsAdded ? removeScheme() : addScheme(schemes[schemeIndex]);
-    setSchemeIsAdded(checkSchemeInForm(schemeIndex));
-    const pluginManager = form.$.some(
-      (scheme: AnySchemeForm) => scheme.type === 1
-    );
-    setPluginManagerExists(pluginManager);
-  };
-
+  // Resets advanced config and validates form
   // Error is set but never unset
   const saveConfig = async () => {
     const { hasError } = await form.validate();
@@ -91,6 +149,7 @@ const AdvancedEditor: FC<Props> = ({
     }
   };
 
+  // Reset advanced config and wipe schemes
   const closeModal = () => {
     // setAdvanceMode(false);
     setModal(false);
@@ -157,7 +216,7 @@ const AdvancedEditor: FC<Props> = ({
                   className="custom-control-input"
                   id="toggle"
                   checked={schemeIsAdded}
-                  onChange={() => handleScheme(scheme)}
+                  onChange={() => toggleActiveScheme(index)} // Todo
                 />
                 <label
                   className="custom-control-label"
