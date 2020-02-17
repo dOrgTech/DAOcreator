@@ -18,23 +18,17 @@ import {
   SchemeType,
   SchemesForm,
   GenesisProtocolForm,
-  Scheme,
   AnyField
 } from "@dorgtech/daocreator-lib";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
-import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 
 interface Props {
   form: SchemesForm;
-  defaultVMs: [
-    GenesisProtocolConfig,
-    GenesisProtocolConfig,
-    GenesisProtocolConfig
-  ];
+  defaultVMs: [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm];
   updateVotingMachines: (advancedSchemes: GenesisProtocolForm[]) => void;
   resetForm: () => void;
-  modal: boolean; // TODO Could be removed and stay true
+  modal: boolean;
   setModal: (modal: boolean) => void;
 }
 
@@ -59,7 +53,7 @@ const AdvancedEditor: FC<Props> = ({
   const [advForm, setAdvForm] = useState<SchemesForm>(new SchemesForm());
 
   // Active Scheme
-  const [scheme, setScheme] = useState<Scheme>(advForm.values[0]);
+  const [scheme, setScheme] = useState<AnySchemeForm>();
 
   // Active toggles. Disable allows for removal from ui without scheme reset
   const [isActive, setIsActive] = useState([true, true, false]);
@@ -69,8 +63,6 @@ const AdvancedEditor: FC<Props> = ({
 
   useEffect(() => {
     if (!modal) return;
-    console.log(modal);
-    // setScheme(advForm[0]);
     updateAdvancedForm();
   }, [modal]);
 
@@ -87,12 +79,11 @@ const AdvancedEditor: FC<Props> = ({
 
   // on Advanced mode open
   const updateAdvancedForm = () => {
-    // TODO Extract values from form and add them to advForm
-    // And update activeToggles
+    // TODO Update activeToggles
 
     const newAdvForm = new SchemesForm();
 
-    defaultVMs.map((votingMachine: GenesisProtocolConfig, index: number) => {
+    defaultVMs.map((votingMachine: GenesisProtocolForm, index: number) => {
       const formScheme = form.$.filter(
         (scheme: AnySchemeForm) => scheme.type === index
       );
@@ -101,13 +92,12 @@ const AdvancedEditor: FC<Props> = ({
         return votingMachine;
       }
       newAdvForm.$.push(schemeTemplates[index]);
-      newAdvForm.$[index].$.votingMachine.setValues(defaultVMs[index]);
+      newAdvForm.$[index].$.votingMachine = votingMachine;
       return votingMachine;
     });
 
     setAdvForm(newAdvForm);
-    setScheme(newAdvForm.values[0]);
-    console.log("newAdvForm", newAdvForm);
+    setScheme(newAdvForm.$[0]);
   };
 
   const toggleActiveScheme = (index: number) => {
@@ -118,28 +108,34 @@ const AdvancedEditor: FC<Props> = ({
     );
   };
 
-  const updateForm = () => {
-    let schemes: AnySchemeForm[] = [];
-    isActive.map((toggle: boolean, index: number) => {
-      toggle && schemes.push(advForm.values[index]);
-      return toggle;
-    });
-
-    // Potentially unnecessary
-    const newAdvForm = new SchemesForm();
-    // TODO advanced form should keep a length of 3 where inactive = disabled defaults
-    newAdvForm.setValues(schemes);
-
-    updateVotingMachines(
-      schemes.map((scheme: AnySchemeForm) => scheme.values.votingMachine)
-    );
-  };
-
   // Resets entire form
   const resetAdvancedForm = () => {
     resetForm();
 
-    updateAdvancedForm();
+    // updateAdvancedForm();
+  };
+
+  const updateForm = async () => {
+    let schemes: AnySchemeForm[] = [];
+    isActive.map((toggle: boolean, index: number) => {
+      toggle && schemes.push(advForm.$[index]);
+      return toggle;
+    });
+
+    const newAdvForm = new SchemesForm();
+    newAdvForm.$ = schemes;
+
+    const { hasError } = await newAdvForm.validate();
+    if (hasError) {
+      advForm.error && setErrors([...errors, advForm.error]);
+      return false;
+    }
+
+    updateVotingMachines(
+      schemes.map((scheme: AnySchemeForm) => scheme.$.votingMachine)
+    );
+
+    return true;
   };
 
   const closeModal = async (reset = false) => {
@@ -149,23 +145,15 @@ const AdvancedEditor: FC<Props> = ({
       return;
     }
 
-    const { hasError } = await advForm.validate();
-    if (hasError) {
-      advForm.error && setErrors([...errors, advForm.error]);
-      return;
-    }
-
-    updateForm();
-    setModal(false);
+    (await updateForm()) && setModal(false);
   };
 
-  console.log(scheme);
   if (!scheme) return <></>;
 
   return (
     <MDBModal isOpen={modal} style={styles.modal} size="lg">
       <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
-        <span style={styles.bold}>Advance Configuration</span>
+        <span style={styles.bold}>Advanced Configuration</span>
       </MDBModalHeader>
       <MDBModalBody>
         <MDBRow style={styles.rowTab}>
@@ -177,7 +165,7 @@ const AdvancedEditor: FC<Props> = ({
                     ? styles.buttonTabActive
                     : styles.buttonTab
                 }
-                onClick={() => setScheme(advForm.values[index])}
+                onClick={() => setScheme(advForm.$[index])}
               >
                 {schemeTemplate.displayName}
               </button>

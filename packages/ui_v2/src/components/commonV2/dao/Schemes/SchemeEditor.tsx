@@ -8,7 +8,6 @@ import {
   MDBTooltip,
   MDBIcon
 } from "mdbreact";
-import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 import {
   SchemeType,
   GenesisProtocolPreset,
@@ -83,7 +82,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     []
   );
   const [presetVotingMachines, setPresetVotingMachines] = useState<
-    [GenesisProtocolConfig, GenesisProtocolConfig, GenesisProtocolConfig]
+    [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm]
   >([
     schemeTemplates[0].values.votingMachine.values,
     schemeTemplates[1].values.votingMachine.values,
@@ -96,10 +95,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
-    const vmPresets: GenesisProtocolConfig[] = [];
+    const vmPresets: GenesisProtocolForm[] = [];
 
-    // TODO get preset for all 3 schemes
-    //
     schemeTemplates.map((scheme: AnySchemeForm) => {
       // Gets voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -110,13 +107,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
 
-      const vm: GenesisProtocolForm = scheme.values.votingMachine;
+      const vm: GenesisProtocolForm = scheme.$.votingMachine;
       vm.preset = preset;
-      vmPresets.push(vm.values);
+      vmPresets.push(vm);
 
-      form.$.some(
-        (formScheme: AnySchemeForm) => formScheme.type === scheme.type
-      ) && vms.push(vm);
+      // form.$.some(
+      //   (formScheme: AnySchemeForm) => formScheme.type === scheme.type
+      // ) &&
+      vms.push(vm);
 
       // if (!votingMachines[index]) {
       //   vms.push(vm);
@@ -131,9 +129,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     setVotingMachines(vms); // TODO Changing the speed resets the vm
     setPresetVotingMachines(
       vmPresets as [
-        GenesisProtocolConfig,
-        GenesisProtocolConfig,
-        GenesisProtocolConfig
+        GenesisProtocolForm,
+        GenesisProtocolForm,
+        GenesisProtocolForm
       ]
     );
   }, [form.$, decisionSpeed]);
@@ -143,7 +141,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       (scheme: AnySchemeForm, index: number) =>
         (scheme.$.votingMachine = votingMachines[index])
     );
-
     return () => {
       updatingVotingMachine.current = false;
     };
@@ -159,14 +156,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         rewardSuccess
-          ? (vm.$.proposingRepReward.value = presetVotingMachines[
-              index
-            ].proposingRepReward.toString())
+          ? (vm.$.proposingRepReward =
+              presetVotingMachines[index].$.proposingRepReward)
           : (vm.$.proposingRepReward.value = "0");
         return vm;
       }
     );
-
     setVotingMachines(updatedVotingMachines);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardSuccess]);
@@ -177,13 +172,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         rewardAndPenVoters
-          ? (vm.$.votersReputationLossRatio.value =
-              presetVotingMachines[index].votersReputationLossRatio)
+          ? (vm.$.votersReputationLossRatio =
+              presetVotingMachines[index].$.votersReputationLossRatio)
           : (vm.$.votersReputationLossRatio.value = 0); // LIB Not a string
         return vm;
       }
     );
-
     setVotingMachines(updatedVotingMachines);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters]);
@@ -194,9 +188,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
         autobet
-          ? (vm.$.minimumDaoBounty.value = presetVotingMachines[
-              index
-            ].minimumDaoBounty.toString())
+          ? (vm.$.minimumDaoBounty =
+              presetVotingMachines[index].$.minimumDaoBounty)
           : (vm.$.minimumDaoBounty.value = "0");
         return vm;
       }
@@ -211,22 +204,23 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   ) => {
     updatingVotingMachine.current = true;
 
-    advancedVotingMachines.map((votingMachine: GenesisProtocolForm) => {
-      const {
-        proposingRepReward,
-        votersReputationLossRatio,
-        minimumDaoBounty
-      } = votingMachine.values;
+    advancedVotingMachines.map(
+      (votingMachine: GenesisProtocolForm, index: number) => {
+        const {
+          proposingRepReward,
+          votersReputationLossRatio,
+          minimumDaoBounty
+        } = votingMachine.values;
 
-      // TODO new ui is required
-      // Currently only updates toggles to reflect vm of last scheme
-      // Update toggles to reflect advanced changes
-      setRewardSuccess(+proposingRepReward > 0);
-      setRewardAndPenVoters(votersReputationLossRatio > 0);
-      setAutobet(+minimumDaoBounty > 0);
+        // TODO new ui is required
+        // Currently only updates toggles to reflect advanced changes of first scheme
+        setRewardSuccess(+proposingRepReward > 0);
+        setRewardAndPenVoters(votersReputationLossRatio > 0);
+        setAutobet(+minimumDaoBounty > 0);
 
-      return votingMachine;
-    });
+        return votingMachine;
+      }
+    );
 
     setVotingMachines(advancedVotingMachines);
   };
