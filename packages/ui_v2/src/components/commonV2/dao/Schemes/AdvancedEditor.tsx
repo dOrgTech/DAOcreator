@@ -91,7 +91,20 @@ const AdvancedEditor: FC<Props> = ({
     // And update activeToggles
 
     const newAdvForm = new SchemesForm();
-    newAdvForm.$ = form.values;
+
+    defaultVMs.map((votingMachine: GenesisProtocolConfig, index: number) => {
+      const formScheme = form.$.filter(
+        (scheme: AnySchemeForm) => scheme.type === index
+      );
+      if (formScheme.length === 1) {
+        newAdvForm.$.push(formScheme[0] as AnySchemeForm);
+        return votingMachine;
+      }
+      newAdvForm.$.push(schemeTemplates[index]);
+      newAdvForm.$[index].$.votingMachine.setValues(defaultVMs[index]);
+      return votingMachine;
+    });
+
     setAdvForm(newAdvForm);
     setScheme(newAdvForm.values[0]);
     console.log("newAdvForm", newAdvForm);
