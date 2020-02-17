@@ -16,7 +16,8 @@ import {
   GenesisProtocolForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
-  GenericSchemeForm
+  GenericSchemeForm,
+  GenesisProtocolFormOpts
 } from "@dorgtech/daocreator-lib";
 
 import AdvancedEditor from "./AdvancedEditor";
@@ -78,15 +79,16 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
   const [autobet, setAutobet] = useState(true);
 
-  const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>(
-    []
-  );
+  // Only contains active votingMachines!
+  const [votingMachines, setVotingMachines] = useState<
+    GenesisProtocolFormOpts[]
+  >([]);
   const [presetVotingMachines, setPresetVotingMachines] = useState<
     [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm]
   >([
-    schemeTemplates[0].values.votingMachine.values,
-    schemeTemplates[1].values.votingMachine.values,
-    schemeTemplates[2].values.votingMachine.values
+    schemeTemplates[0].$.votingMachine,
+    schemeTemplates[1].$.votingMachine,
+    schemeTemplates[2].$.votingMachine
   ]);
 
   const updatingVotingMachine = useRef(false);
@@ -111,6 +113,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       vm.preset = preset;
       vmPresets.push(vm);
 
+      console.log("vm with preset", vm.values);
+
       // form.$.some(
       //   (formScheme: AnySchemeForm) => formScheme.type === scheme.type
       // ) &&
@@ -134,13 +138,22 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         GenesisProtocolForm
       ]
     );
-  }, [form.$, decisionSpeed]);
+  }, [decisionSpeed]);
 
+  // TODO Use GenesisProtocolFormOpts instead of GenesisProtocolForm,
+  // it takes GenesisProtocolForm as first param and preset (scheme identifier) as second param
   useEffect(() => {
-    form.$.map(
-      (scheme: AnySchemeForm, index: number) =>
-        (scheme.$.votingMachine = votingMachines[index])
+    // TODO SCHEMES MATTER
+    votingMachines.map(
+      ({ form, preset }: GenesisProtocolFormOpts, index: number) => {
+        // votingMachine.$.
+      }
     );
+
+    // form.$.map(
+    //   (scheme: AnySchemeForm, index: number) =>
+    //     (scheme.$.votingMachine = votingMachines[index])
+    // );
     return () => {
       updatingVotingMachine.current = false;
     };
@@ -206,6 +219,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
     advancedVotingMachines.map(
       (votingMachine: GenesisProtocolForm, index: number) => {
+        console.log("vm from adv", votingMachine.values);
         if (index !== 0) return votingMachine;
 
         const {
