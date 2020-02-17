@@ -206,6 +206,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
     advancedVotingMachines.map(
       (votingMachine: GenesisProtocolForm, index: number) => {
+        if (index !== 0) return votingMachine;
+
         const {
           proposingRepReward,
           votersReputationLossRatio,
