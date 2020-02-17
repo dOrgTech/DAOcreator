@@ -195,6 +195,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           minimumDaoBounty
         } = votingMachine.values;
 
+        // TODO new ui is required
+        // Currently only updates toggles to reflect vm of last scheme
         // Update toggles to reflect advanced changes
         setRewardSuccess(+proposingRepReward > 0);
         setRewardAndPenVoters(votersReputationLossRatio > 0);
