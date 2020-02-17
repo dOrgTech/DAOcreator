@@ -83,6 +83,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     const vms: GenesisProtocolForm[] = [];
     const vmPresets: GenesisProtocolConfig[] = [];
 
+    // TODO get preset for all 3 schemes
+    //
     form.$.map((scheme: AnySchemeForm) => {
       // Get voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -223,6 +225,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
               form={form}
               setModal={setModal}
               modal={modal}
+              defaultVMs={presetVotingMachines}
               updateVotingMachine={updateVotingMachine}
             />
           </MDBCol>
