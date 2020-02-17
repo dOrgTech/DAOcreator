@@ -16,7 +16,8 @@ import {
   AnySchemeForm,
   GenesisProtocolForm,
   ContributionRewardForm,
-  SchemeRegistrarForm
+  SchemeRegistrarForm,
+  GenericSchemeForm
 } from "@dorgtech/daocreator-lib";
 
 import AdvancedEditor from "./AdvancedEditor";
@@ -25,8 +26,8 @@ import Toggle from "./Toggle";
 interface Props {
   form: SchemesForm;
   toggleCollapse: () => void;
-  // modal: boolean;
-  // setModal: (modal: boolean) => void;
+  modal: boolean;
+  setModal: (modal: boolean) => void;
 }
 
 enum DAOSpeed {
@@ -34,6 +35,12 @@ enum DAOSpeed {
   Medium,
   Fast
 }
+
+const schemeTemplates: AnySchemeForm[] = [
+  new ContributionRewardForm(),
+  new SchemeRegistrarForm(),
+  new GenericSchemeForm()
+];
 
 class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
 class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
@@ -65,7 +72,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
   ]
 ]);
 
-const SchemeEditor: FC<Props> = ({ form, toggleCollapse }) => {
+const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Toggles
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [rewardSuccess, setRewardSuccess] = useState(true);
@@ -76,12 +83,16 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse }) => {
     []
   );
   const [presetVotingMachines, setPresetVotingMachines] = useState<
-    GenesisProtocolConfig[]
-  >([]);
+    [GenesisProtocolConfig, GenesisProtocolConfig, GenesisProtocolConfig]
+  >([
+    schemeTemplates[0].values.votingMachine.values,
+    schemeTemplates[1].values.votingMachine.values,
+    schemeTemplates[2].values.votingMachine.values
+  ]);
 
   const updatingVotingMachine = useRef(false);
 
-  const [modal, setModal] = useState(false);
+  // const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
@@ -89,22 +100,23 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse }) => {
 
     // TODO get preset for all 3 schemes
     //
-    form.$.map((scheme: AnySchemeForm) => {
-      // Get voting machine preset using the decisionSpeed and scheme type
+    schemeTemplates.map((scheme: AnySchemeForm) => {
+      // Gets voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
       if (schemePresetMap === undefined)
         throw Error("Unimplemented Scheme Speed Configuration");
 
-      const vm: GenesisProtocolForm = scheme.values.votingMachine;
       const preset = schemePresetMap.get(scheme.type);
-
       if (preset === undefined) throw Error("Preset not found");
 
+      const vm: GenesisProtocolForm = scheme.values.votingMachine;
       vm.preset = preset;
-
-      vms.push(vm);
       vmPresets.push(vm.values);
+
+      form.$.some(
+        (formScheme: AnySchemeForm) => formScheme.type === scheme.type
+      ) && vms.push(vm);
 
       // if (!votingMachines[index]) {
       //   vms.push(vm);
@@ -117,7 +129,13 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse }) => {
     });
 
     setVotingMachines(vms); // TODO Changing the speed resets the vm
-    setPresetVotingMachines(vmPresets);
+    setPresetVotingMachines(
+      vmPresets as [
+        GenesisProtocolConfig,
+        GenesisProtocolConfig,
+        GenesisProtocolConfig
+      ]
+    );
   }, [form.$, decisionSpeed]);
 
   useEffect(() => {

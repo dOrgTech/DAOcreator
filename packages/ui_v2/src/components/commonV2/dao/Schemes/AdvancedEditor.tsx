@@ -32,7 +32,7 @@ interface Props {
     GenesisProtocolConfig,
     GenesisProtocolConfig
   ];
-  updateVotingMachine: (advancedSchemes: AnySchemeForm[]) => void;
+  updateVotingMachines: (advancedSchemes: GenesisProtocolForm[]) => void;
   resetForm: () => void;
   modal: boolean; // TODO Could be removed and stay true
   setModal: (modal: boolean) => void;
@@ -47,7 +47,7 @@ const schemeTemplates: AnySchemeForm[] = [
 const AdvancedEditor: FC<Props> = ({
   form,
   defaultVMs,
-  updateVotingMachine,
+  updateVotingMachines,
   resetForm,
   modal,
   setModal
@@ -55,9 +55,6 @@ const AdvancedEditor: FC<Props> = ({
   /*
    * State
    */
-
-  // Whether modal is open
-  const [open, setOpen] = useState(false);
 
   const [advForm, setAdvForm] = useState<SchemesForm>(new SchemesForm());
 
@@ -67,28 +64,37 @@ const AdvancedEditor: FC<Props> = ({
   // Active toggles. Disable allows for removal from ui without scheme reset
   const [isActive, setIsActive] = useState([true, true, false]);
 
-  const [warnings, setWarning] = useState<string[]>([]);
+  const [warning, setWarning] = useState<string>();
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!open) return;
-
+    if (!modal) return;
+    console.log(modal);
+    // setScheme(advForm[0]);
     updateAdvancedForm();
-  }, [open]);
+  }, [modal]);
 
   // Check that scheme of type 1 is active
   useEffect(() => {
-    setWarning([
-      ...warnings,
+    if (isActive[SchemeType.SchemeRegistrar]) {
+      setWarning("");
+      return;
+    }
+    setWarning(
       "Warning: Without a Plugin Manager your organization will not be able to modify itself."
-    ]);
+    );
   }, [isActive[SchemeType.SchemeRegistrar]]);
 
   // on Advanced mode open
   const updateAdvancedForm = () => {
     // TODO Extract values from form and add them to advForm
     // And update activeToggles
-    setAdvForm(form);
+
+    const newAdvForm = new SchemesForm();
+    newAdvForm.$ = form.values;
+    setAdvForm(newAdvForm);
+    setScheme(newAdvForm.values[0]);
+    console.log("newAdvForm", newAdvForm);
   };
 
   const toggleActiveScheme = (index: number) => {
@@ -106,13 +112,14 @@ const AdvancedEditor: FC<Props> = ({
       return toggle;
     });
 
-    // TODO advanced form should keep a length of 3 where inactive = disabled defaults
-
     // Potentially unnecessary
     const newAdvForm = new SchemesForm();
     // TODO advanced form should keep a length of 3 where inactive = disabled defaults
     newAdvForm.setValues(schemes);
-    setAdvForm(newAdvForm);
+
+    updateVotingMachines(
+      schemes.map((scheme: AnySchemeForm) => scheme.values.votingMachine)
+    );
   };
 
   // Resets entire form
@@ -138,6 +145,9 @@ const AdvancedEditor: FC<Props> = ({
     updateForm();
     setModal(false);
   };
+
+  console.log(scheme);
+  if (!scheme) return <></>;
 
   return (
     <MDBModal isOpen={modal} style={styles.modal} size="lg">
@@ -179,7 +189,7 @@ const AdvancedEditor: FC<Props> = ({
                 <span>{schemeTemplates[scheme.type].description}</span>
               </MDBTooltip>
             </MDBCol>
-            {warnings && (
+            {warning && (
               <MDBCol>
                 <span
                   style={{
@@ -189,9 +199,7 @@ const AdvancedEditor: FC<Props> = ({
                   }}
                 >
                   {/* TODO check */}
-                  {errors.map(warning => (
-                    <p style={styles.errorMessage}>{warning}</p>
-                  ))}
+                  <p style={styles.errorMessage}>{warning}</p>
                 </span>
               </MDBCol>
             )}
