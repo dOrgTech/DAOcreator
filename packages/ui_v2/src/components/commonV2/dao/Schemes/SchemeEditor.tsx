@@ -14,7 +14,9 @@ import {
   GenesisProtocolPreset,
   SchemesForm,
   AnySchemeForm,
-  GenesisProtocolForm
+  GenesisProtocolForm,
+  ContributionRewardForm,
+  SchemeRegistrarForm
 } from "@dorgtech/daocreator-lib";
 
 import AdvancedEditor from "./AdvancedEditor";
@@ -23,8 +25,8 @@ import Toggle from "./Toggle";
 interface Props {
   form: SchemesForm;
   toggleCollapse: () => void;
-  modal: boolean;
-  setModal: (modal: boolean) => void;
+  // modal: boolean;
+  // setModal: (modal: boolean) => void;
 }
 
 enum DAOSpeed {
@@ -63,7 +65,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
   ]
 ]);
 
-const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+const SchemeEditor: FC<Props> = ({ form, toggleCollapse }) => {
   // Toggles
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [rewardSuccess, setRewardSuccess] = useState(true);
@@ -78,6 +80,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   >([]);
 
   const updatingVotingMachine = useRef(false);
+
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
@@ -184,31 +188,38 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autobet]);
 
-  const updateVotingMachine = (advancedSchemes: AnySchemeForm[]) => {
+  const updateVotingMachines = (
+    advancedVotingMachines: GenesisProtocolForm[]
+  ) => {
     updatingVotingMachine.current = true;
 
-    const updatedVotingMachines = advancedSchemes.map(
-      (scheme: AnySchemeForm) => {
-        const votingMachine = scheme.$.votingMachine;
+    advancedVotingMachines.map((votingMachine: GenesisProtocolForm) => {
+      const {
+        proposingRepReward,
+        votersReputationLossRatio,
+        minimumDaoBounty
+      } = votingMachine.values;
 
-        const {
-          proposingRepReward,
-          votersReputationLossRatio,
-          minimumDaoBounty
-        } = votingMachine.values;
+      // TODO new ui is required
+      // Currently only updates toggles to reflect vm of last scheme
+      // Update toggles to reflect advanced changes
+      setRewardSuccess(+proposingRepReward > 0);
+      setRewardAndPenVoters(votersReputationLossRatio > 0);
+      setAutobet(+minimumDaoBounty > 0);
 
-        // TODO new ui is required
-        // Currently only updates toggles to reflect vm of last scheme
-        // Update toggles to reflect advanced changes
-        setRewardSuccess(+proposingRepReward > 0);
-        setRewardAndPenVoters(votersReputationLossRatio > 0);
-        setAutobet(+minimumDaoBounty > 0);
+      return votingMachine;
+    });
 
-        return votingMachine;
-      }
-    );
+    setVotingMachines(advancedVotingMachines);
+  };
 
-    setVotingMachines(updatedVotingMachines);
+  const resetForm = () => {
+    const newForm: AnySchemeForm[] = [
+      new ContributionRewardForm(),
+      new SchemeRegistrarForm()
+    ];
+
+    form.$ = newForm;
   };
 
   const handleClick = (e: any) => {
@@ -223,10 +234,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           <MDBCol md="4" className="offset-md-4">
             <AdvancedEditor
               form={form}
+              defaultVMs={presetVotingMachines}
+              updateVotingMachines={updateVotingMachines}
+              resetForm={resetForm}
               setModal={setModal}
               modal={modal}
-              defaultVMs={presetVotingMachines}
-              updateVotingMachine={updateVotingMachine}
             />
           </MDBCol>
         </MDBRow>
