@@ -18,7 +18,7 @@ import {
   SchemeType,
   SchemesForm
 } from "@dorgtech/daocreator-lib";
-import GenesisProtocolEditor from "../GenesisProtocolEditor";
+import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
 
 interface Props {
@@ -166,11 +166,11 @@ const AdvancedEditor: FC<Props> = ({
               </div>
             </MDBCol>
           </MDBRow>
-          <GenesisProtocolEditor
-            form={
+          <VotingMachineEditor
+            fields={
               form.$[scheme]
-                ? form.$[scheme].$.votingMachine
-                : actualScheme!.$.votingMachine
+                ? form.$[scheme].values.votingMachine.values
+                : actualScheme!.values.votingMachine.values
             }
             editable={schemeIsAdded}
           />
