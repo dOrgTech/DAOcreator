@@ -1,16 +1,16 @@
 import React, { FC } from "react";
-import { Field } from "@dorgtech/daocreator-lib";
+import { AnyField } from "@dorgtech/daocreator-lib";
 import FormField from "../FormField";
 import { MDBRow } from "mdbreact";
 
 interface Props {
-  fields: Field<string, any>[];
+  fields: AnyField[];
   editable: boolean;
 }
 
 const VotingMachineEditor: FC<Props> = ({ fields, editable }) => (
   <>
-    {fields.map((field: Field<string, any>, index: number) => {
+    {fields.map((field: AnyField, index: number) => {
       if (index <= 3) {
         return (
           <FormField
