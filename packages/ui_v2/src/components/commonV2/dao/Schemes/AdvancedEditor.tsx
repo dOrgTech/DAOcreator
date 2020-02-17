@@ -27,14 +27,15 @@ import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/
 
 interface Props {
   form: SchemesForm;
-  modal: boolean; // TODO Could be removed and stay true
-  setModal: (modal: boolean) => void;
   defaultVMs: [
     GenesisProtocolConfig,
     GenesisProtocolConfig,
     GenesisProtocolConfig
   ];
   updateVotingMachine: (advancedSchemes: AnySchemeForm[]) => void;
+  resetForm: () => void;
+  modal: boolean; // TODO Could be removed and stay true
+  setModal: (modal: boolean) => void;
 }
 
 const schemeTemplates: AnySchemeForm[] = [
@@ -45,10 +46,11 @@ const schemeTemplates: AnySchemeForm[] = [
 
 const AdvancedEditor: FC<Props> = ({
   form,
-  modal,
-  setModal,
   defaultVMs,
-  updateVotingMachine
+  updateVotingMachine,
+  resetForm,
+  modal,
+  setModal
 }) => {
   /*
    * State
@@ -99,28 +101,23 @@ const AdvancedEditor: FC<Props> = ({
 
   const updateForm = () => {
     let schemes: AnySchemeForm[] = [];
-
-    const newToggles = isActive.map((toggle: boolean, index: number) => {
+    isActive.map((toggle: boolean, index: number) => {
       toggle && schemes.push(advForm.values[index]);
       return toggle;
     });
 
-    setIsActive(newToggles);
+    // TODO advanced form should keep a length of 3 where inactive = disabled defaults
 
     // Potentially unnecessary
-    const newAdvForm = advForm;
+    const newAdvForm = new SchemesForm();
     // TODO advanced form should keep a length of 3 where inactive = disabled defaults
     newAdvForm.setValues(schemes);
-    setAdvForm(advForm);
+    setAdvForm(newAdvForm);
   };
 
   // Resets entire form
   const resetAdvancedForm = () => {
-    const resetForm: AnySchemeForm[] = [
-      new ContributionRewardForm(),
-      new SchemeRegistrarForm()
-    ];
-    form.$ = resetForm;
+    resetForm();
 
     updateAdvancedForm();
   };
