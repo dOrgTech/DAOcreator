@@ -22,11 +22,17 @@ import {
 } from "@dorgtech/daocreator-lib";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
+import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/arc";
 
 interface Props {
   form: SchemesForm;
   modal: boolean;
   setModal: (modal: boolean) => void;
+  defaultVMs: [
+    GenesisProtocolConfig,
+    GenesisProtocolConfig,
+    GenesisProtocolConfig
+  ];
   updateVotingMachine: (advancedSchemes: AnySchemeForm[]) => void;
 }
 
@@ -40,6 +46,7 @@ const AdvancedEditor: FC<Props> = ({
   form,
   modal,
   setModal,
+  defaultVMs,
   updateVotingMachine
 }) => {
   // Whether modal is open
@@ -49,18 +56,23 @@ const AdvancedEditor: FC<Props> = ({
   const [advForm, setAdvForm] = useState<SchemesForm>(new SchemesForm());
 
   // Active toggles. Disable allows for removal from ui without scheme reset
-  const [isActive, setIsActive] = useState<boolean[]>([]);
+  const [isActive, setIsActive] = useState([true, true, false]);
 
-  //
-  // const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>(
-  //   []
-  // );
+  const [warnings, setWarning] = useState<string[]>([]);
 
   useEffect(() => {
     if (!open) return;
 
     updateAdvancedForm();
   }, [open]);
+
+  // Check that scheme of type 1 is active
+  useEffect(() => {
+    setWarning([
+      ...warnings,
+      "Warning: Without a Plugin Manager your organization will not be able to modify itself."
+    ]);
+  }, [isActive[SchemeType.SchemeRegistrar]]);
 
   // on Advanced mode open
   const updateAdvancedForm = () => {
@@ -89,8 +101,20 @@ const AdvancedEditor: FC<Props> = ({
   };
 
   const updateForm = () => {
-    //
-    advForm.values.filter((scheme: Scheme) => scheme.type !== schemeType);
+    let schemes: AnySchemeForm[] = [];
+
+    const newToggles = isActive.map((toggle: boolean, index: number) => {
+      toggle && schemes.push(advForm.values[index]);
+      return toggle;
+    });
+
+    setIsActive(newToggles);
+
+    // Potentially unnecessary
+    const newAdvForm = advForm;
+    // TODO advanced form should keep a length of 3 where inactive = disabled defaults
+    newAdvForm.setValues(schemes);
+    setAdvForm(advForm);
   };
 
   // ---------------------
@@ -216,7 +240,7 @@ const AdvancedEditor: FC<Props> = ({
                   className="custom-control-input"
                   id="toggle"
                   checked={schemeIsAdded}
-                  onChange={() => toggleActiveScheme(index)} // Todo
+                  // onChange={() => toggleActiveScheme(index)} // Todo
                 />
                 <label
                   className="custom-control-label"
