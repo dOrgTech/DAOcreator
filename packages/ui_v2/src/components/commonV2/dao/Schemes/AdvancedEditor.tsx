@@ -18,7 +18,8 @@ import {
   SchemeType,
   SchemesForm,
   GenesisProtocolForm,
-  Scheme
+  Scheme,
+  AnyField
 } from "@dorgtech/daocreator-lib";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
@@ -26,7 +27,7 @@ import { GenesisProtocolConfig } from "@dorgtech/daocreator-lib/dist/dependency/
 
 interface Props {
   form: SchemesForm;
-  modal: boolean;
+  modal: boolean; // TODO Could be removed and stay true
   setModal: (modal: boolean) => void;
   defaultVMs: [
     GenesisProtocolConfig,
@@ -36,7 +37,7 @@ interface Props {
   updateVotingMachine: (advancedSchemes: AnySchemeForm[]) => void;
 }
 
-const schemes: AnySchemeForm[] = [
+const schemeTemplates: AnySchemeForm[] = [
   new ContributionRewardForm(),
   new SchemeRegistrarForm(),
   new GenericSchemeForm()
@@ -49,16 +50,23 @@ const AdvancedEditor: FC<Props> = ({
   defaultVMs,
   updateVotingMachine
 }) => {
+  /*
+   * State
+   */
+
   // Whether modal is open
   const [open, setOpen] = useState(false);
 
-  // Seperate form
   const [advForm, setAdvForm] = useState<SchemesForm>(new SchemesForm());
+
+  // Active Scheme
+  const [scheme, setScheme] = useState<Scheme>(advForm.values[0]);
 
   // Active toggles. Disable allows for removal from ui without scheme reset
   const [isActive, setIsActive] = useState([true, true, false]);
 
   const [warnings, setWarning] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (!open) return;
@@ -79,17 +87,6 @@ const AdvancedEditor: FC<Props> = ({
     // TODO Extract values from form and add them to advForm
     // And update activeToggles
     setAdvForm(form);
-  };
-
-  // Resets entire form
-  const resetAdvancedForm = () => {
-    const resetForm: AnySchemeForm[] = [
-      new ContributionRewardForm(),
-      new SchemeRegistrarForm()
-    ];
-    form.$ = resetForm;
-
-    updateAdvancedForm();
   };
 
   const toggleActiveScheme = (index: number) => {
@@ -117,68 +114,32 @@ const AdvancedEditor: FC<Props> = ({
     setAdvForm(advForm);
   };
 
-  // ---------------------
+  // Resets entire form
+  const resetAdvancedForm = () => {
+    const resetForm: AnySchemeForm[] = [
+      new ContributionRewardForm(),
+      new SchemeRegistrarForm()
+    ];
+    form.$ = resetForm;
 
-  // const handleScheme = (schemeIndex: number) => {
-  //   const removeScheme = () => {
-  //     const filterSchemes = (x: AnySchemeForm) => {
-  //       if (schemeIndex !== x.type) return x;
-  //     };
-  //     const removeUndefined = (x: AnySchemeForm | undefined) => x;
-  //     form.$ = form.$.map(filterSchemes).filter(removeUndefined); // TODO
-  //   };
-
-  //   const addScheme = (currentScheme: AnySchemeForm) => {
-  //     form.$.push(currentScheme);
-  //   };
-
-  //   schemeIsAdded ? removeScheme() : addScheme(schemes[schemeIndex]);
-  //   setSchemeIsAdded(checkSchemeInForm(schemeIndex));
-  //   const pluginManager = form.$.some(
-  //     (scheme: AnySchemeForm) => scheme.type === 1
-  //   );
-  //   setPluginManagerExists(pluginManager);
-  // };
-
-  // Initial Scheme
-  const [scheme, setScheme] = useState(SchemeType.ContributionReward);
-
-  const [schemeIsAdded, setSchemeIsAdded] = useState(true);
-  const [pluginManagerExists, setPluginManagerExists] = useState(true);
-
-  const [error, setError] = useState("");
-
-  const actualScheme = schemes.find((x: AnySchemeForm) => x.type === scheme);
-  const params = actualScheme!.getParams();
-
-  const checkSchemeInForm = (index: number) => {
-    return form.$.some((scheme: AnySchemeForm) => scheme.type === +index);
+    updateAdvancedForm();
   };
 
-  const showNewScheme = (schemeIndex: number) => {
-    setScheme(schemeIndex);
-    setSchemeIsAdded(checkSchemeInForm(schemeIndex));
-  };
-
-  // Resets advanced config and validates form
-  // Error is set but never unset
-  const saveConfig = async () => {
-    const { hasError } = await form.validate();
-    if (hasError) {
-      // setError(form.error); TODO
-    } else {
-      // setAdvanceMode(true);
+  const closeModal = async (reset = false) => {
+    if (reset) {
+      resetAdvancedForm();
       setModal(false);
-      setScheme(SchemeType.ContributionReward);
+      return;
     }
-  };
 
-  // Reset advanced config and wipe schemes
-  const closeModal = () => {
-    // setAdvanceMode(false);
+    const { hasError } = await advForm.validate();
+    if (hasError) {
+      advForm.error && setErrors([...errors, advForm.error]);
+      return;
+    }
+
+    updateForm();
     setModal(false);
-    setScheme(SchemeType.ContributionReward);
-    form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
   };
 
   return (
@@ -188,15 +149,17 @@ const AdvancedEditor: FC<Props> = ({
       </MDBModalHeader>
       <MDBModalBody>
         <MDBRow style={styles.rowTab}>
-          {schemes.map((s, index) => (
+          {schemeTemplates.map((schemeTemplate, index) => (
             <MDBCol style={styles.tab} key={"scheme-" + index}>
               <button
                 style={
-                  scheme === index ? styles.buttonTabActive : styles.buttonTab
+                  scheme.type === index
+                    ? styles.buttonTabActive
+                    : styles.buttonTab
                 }
-                onClick={() => showNewScheme(index)}
+                onClick={() => setScheme(advForm.values[index])}
               >
-                {s.displayName}
+                {schemeTemplate.displayName}
               </button>
             </MDBCol>
           ))}
@@ -205,7 +168,7 @@ const AdvancedEditor: FC<Props> = ({
           <MDBRow style={styles.borderRow}>
             <MDBCol>
               <span style={styles.boldSpan}>
-                Deploy {schemes[scheme].displayName}
+                Deploy {schemeTemplates[scheme.type].displayName}
               </span>
               <MDBTooltip placement="bottom" clickable>
                 <MDBBtn
@@ -216,10 +179,10 @@ const AdvancedEditor: FC<Props> = ({
                 >
                   <MDBIcon icon="info-circle" />
                 </MDBBtn>
-                <span>{schemes[scheme].description}</span>
+                <span>{schemeTemplates[scheme.type].description}</span>
               </MDBTooltip>
             </MDBCol>
-            {!pluginManagerExists && (
+            {warnings && (
               <MDBCol>
                 <span
                   style={{
@@ -228,8 +191,10 @@ const AdvancedEditor: FC<Props> = ({
                     alignItems: "center"
                   }}
                 >
-                  Warning: Without a Plugin Manager your organization will not
-                  be able to modify itself.
+                  {/* TODO check */}
+                  {errors.map(warning => (
+                    <p style={styles.errorMessage}>{warning}</p>
+                  ))}
                 </span>
               </MDBCol>
             )}
@@ -239,8 +204,8 @@ const AdvancedEditor: FC<Props> = ({
                   type="checkbox"
                   className="custom-control-input"
                   id="toggle"
-                  checked={schemeIsAdded}
-                  // onChange={() => toggleActiveScheme(index)} // Todo
+                  checked={isActive[scheme.type]}
+                  onChange={() => toggleActiveScheme(scheme.type)}
                 />
                 <label
                   className="custom-control-label"
@@ -250,19 +215,17 @@ const AdvancedEditor: FC<Props> = ({
             </MDBCol>
           </MDBRow>
           <VotingMachineEditor
-            fields={
-              form.$[scheme]
-                ? form.$[scheme].values.votingMachine.values
-                : actualScheme!.values.votingMachine.values
-            }
-            editable={schemeIsAdded}
+            fields={advForm.$[scheme.type].values.votingMachine.values}
+            editable={isActive[scheme.type]}
           />
-          {params!.length > 0 &&
-            params.map((param: any, index: number) => (
+          {/* TODO ? */}
+          {schemeTemplates[scheme.type]
+            .getParams()
+            .map((field: AnyField, index: number) => (
               <MDBRow key={`field-${index}`}>
                 <FormField
-                  field={param}
-                  editable={schemeIsAdded}
+                  field={field}
+                  editable={isActive[scheme.type]}
                   colSize={12}
                 />
               </MDBRow>
@@ -272,15 +235,20 @@ const AdvancedEditor: FC<Props> = ({
       <MDBModalFooter>
         <MDBRow style={styles.buttonsRow}>
           <MDBCol size="3">
-            <button style={styles.cancelButton} onClick={closeModal}>
+            <button
+              style={styles.cancelButton}
+              onClick={() => closeModal(true)}
+            >
               Cancel
             </button>
           </MDBCol>
           <MDBCol style={{ textAlign: "center" }}>
-            {error && <p style={styles.errorMessage}>{error}</p>}
+            {errors.map(error => (
+              <p style={styles.errorMessage}>{error}</p>
+            ))}
           </MDBCol>
           <MDBCol style={styles.save}>
-            <button style={styles.saveButton} onClick={saveConfig}>
+            <button style={styles.saveButton} onClick={() => closeModal()}>
               Save Configuration
             </button>
           </MDBCol>
