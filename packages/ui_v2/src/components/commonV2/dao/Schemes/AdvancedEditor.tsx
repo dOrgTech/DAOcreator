@@ -156,8 +156,13 @@ const AdvancedEditor: FC<Props> = ({
   if (!scheme) return <></>;
 
   return (
-    <MDBModal isOpen={modal} style={styles.modal} size="lg">
-      <MDBModalHeader toggle={closeModal} style={styles.titlePadding}>
+    <MDBModal
+      isOpen={modal}
+      style={styles.modal}
+      toggle={() => setModal(false)}
+      size="lg"
+    >
+      <MDBModalHeader style={styles.titlePadding}>
         <span style={styles.bold}>Advanced Configuration</span>
       </MDBModalHeader>
       <MDBModalBody>
@@ -249,7 +254,7 @@ const AdvancedEditor: FC<Props> = ({
               style={styles.cancelButton}
               onClick={() => closeModal(true)}
             >
-              Cancel
+              Reset
             </button>
           </MDBCol>
           <MDBCol style={{ textAlign: "center" }}>
