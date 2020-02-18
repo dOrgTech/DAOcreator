@@ -229,8 +229,7 @@ const AdvancedEditor: FC<Props> = ({
             votingMachine={advForm.$[scheme.type].$.votingMachine}
             editable={isActive[scheme.type]}
           />
-          {/* TODO ? */}
-          {schemeTemplates[scheme.type]
+          {advForm.$[scheme.type]
             .getParams()
             .map((field: AnyField, index: number) => (
               <MDBRow key={`field-${index}`}>
