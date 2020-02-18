@@ -16,8 +16,7 @@ import {
   GenesisProtocolForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
-  GenericSchemeForm,
-  GenesisProtocolFormOpts
+  GenericSchemeForm
 } from "@dorgtech/daocreator-lib";
 
 import AdvancedEditor from "./AdvancedEditor";
@@ -80,9 +79,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [autobet, setAutobet] = useState(true);
 
   // Only contains active votingMachines!
-  const [votingMachines, setVotingMachines] = useState<
-    GenesisProtocolFormOpts[]
-  >([]);
+  const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>([
+    schemeTemplates[0].$.votingMachine,
+    schemeTemplates[1].$.votingMachine
+  ]);
+  const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
+    SchemeType.ContributionReward,
+    SchemeType.SchemeRegistrar
+  ]);
   const [presetVotingMachines, setPresetVotingMachines] = useState<
     [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm]
   >([
@@ -92,8 +96,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   ]);
 
   const updatingVotingMachine = useRef(false);
-
-  // const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const vms: GenesisProtocolForm[] = [];
@@ -140,24 +142,36 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     );
   }, [decisionSpeed]);
 
-  // TODO Use GenesisProtocolFormOpts instead of GenesisProtocolForm,
-  // it takes GenesisProtocolForm as first param and preset (scheme identifier) as second param
+  // UPDATE FORM
   useEffect(() => {
-    // TODO SCHEMES MATTER
-    votingMachines.map(
-      ({ form, preset }: GenesisProtocolFormOpts, index: number) => {
-        // votingMachine.$.
+    console.log(activeSchemeTypes);
+    const newForm = new SchemesForm();
+    activeSchemeTypes.map((type: SchemeType, index: number) => {
+      switch (type) {
+        case SchemeType.ContributionReward:
+          newForm.$.push(new ContributionRewardForm());
+          newForm.$[index].$.votingMachine = votingMachines[index];
+          break;
+        case SchemeType.SchemeRegistrar:
+          newForm.$.push(new SchemeRegistrarForm());
+          newForm.$[index].$.votingMachine = votingMachines[index];
+          break;
+        case SchemeType.GenericScheme:
+          newForm.$.push(new GenericSchemeForm());
+          newForm.$[index].$.votingMachine = votingMachines[index];
+          break;
+        default:
+          throw new Error("Unimplemented scheme type");
       }
-    );
+      return type;
+    });
 
-    // form.$.map(
-    //   (scheme: AnySchemeForm, index: number) =>
-    //     (scheme.$.votingMachine = votingMachines[index])
-    // );
+    form.$ = newForm.$;
+
     return () => {
       updatingVotingMachine.current = false;
     };
-  }, [votingMachines, form.$]);
+  }, [votingMachines, activeSchemeTypes]);
 
   /*
    * Toggles
@@ -177,7 +191,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     );
     setVotingMachines(updatedVotingMachines);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardSuccess]);
+  }, [rewardSuccess, presetVotingMachines]);
 
   useEffect(() => {
     if (updatingVotingMachine.current) return;
@@ -193,10 +207,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     );
     setVotingMachines(updatedVotingMachines);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardAndPenVoters]);
+  }, [rewardAndPenVoters, presetVotingMachines]);
 
   useEffect(() => {
+    console.log("attempt autobet");
     if (updatingVotingMachine.current) return;
+    console.log("autobet");
 
     const updatedVotingMachines = votingMachines.map(
       (vm: GenesisProtocolForm, index: number) => {
@@ -207,38 +223,41 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         return vm;
       }
     );
-
     setVotingMachines(updatedVotingMachines);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autobet]);
+  }, [autobet, presetVotingMachines]);
 
-  const updateVotingMachines = (
-    advancedVotingMachines: GenesisProtocolForm[]
-  ) => {
+  const updateVotingMachines = (advancedVMSchemes: AnySchemeForm[]) => {
     updatingVotingMachine.current = true;
 
-    advancedVotingMachines.map(
-      (votingMachine: GenesisProtocolForm, index: number) => {
-        console.log("vm from adv", votingMachine.values);
-        if (index !== 0) return votingMachine;
+    let advancedVms: GenesisProtocolForm[] = [];
+    let activeAdvSchemeTypes: SchemeType[] = [];
 
-        const {
-          proposingRepReward,
-          votersReputationLossRatio,
-          minimumDaoBounty
-        } = votingMachine.values;
+    advancedVMSchemes.map((scheme: AnySchemeForm, index: number) => {
+      const vm = scheme.$.votingMachine;
+      advancedVms.push(vm);
+      activeAdvSchemeTypes.push(scheme.type);
+      console.log("vm from adv", vm.values);
 
-        // TODO new ui is required
-        // Currently only updates toggles to reflect advanced changes of first scheme
-        setRewardSuccess(+proposingRepReward > 0);
-        setRewardAndPenVoters(votersReputationLossRatio > 0);
-        setAutobet(+minimumDaoBounty > 0);
+      if (index !== 0) return vm;
 
-        return votingMachine;
-      }
-    );
+      const {
+        proposingRepReward,
+        votersReputationLossRatio,
+        minimumDaoBounty
+      } = vm.values;
 
-    setVotingMachines(advancedVotingMachines);
+      // TODO new ui is required
+      // Currently only updates toggles to reflect advanced changes of first scheme
+      setRewardSuccess(+proposingRepReward > 0);
+      setRewardAndPenVoters(votersReputationLossRatio > 0);
+      setAutobet(+minimumDaoBounty > 0);
+
+      return vm;
+    });
+
+    setVotingMachines(advancedVms);
+    setActiveSchemeTypes(activeAdvSchemeTypes);
   };
 
   const resetForm = () => {
