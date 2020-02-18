@@ -39,7 +39,6 @@ export const OrganisationLine: FC<IProps> = ({
 
     if (failed) {
       if (step === STEP.Failed) return;
-      console.log("settin failed");
       setStep(STEP.Failed);
       return;
     }
@@ -114,11 +113,12 @@ export const OrganisationLine: FC<IProps> = ({
         <Output />
       </MDBCol>
       <div>
-        {step === STEP.Start &&
+        {step === STEP.Start && (
           <div
             className="spinner-border text-primary"
             style={{ width: "20px", height: "20px" }}
-          />}
+          />
+        )}
         {step === STEP.Confirmed && (
           <MDBIcon className="blue-text fas" size="lg" icon="check-circle" />
         )}
