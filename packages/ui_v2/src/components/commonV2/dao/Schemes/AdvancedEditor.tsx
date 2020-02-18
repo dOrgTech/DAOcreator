@@ -22,10 +22,11 @@ import {
 } from "@dorgtech/daocreator-lib";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
+import { VotingMachinePresets } from "./SchemeEditor";
 
 interface Props {
   form: SchemesForm;
-  defaultVMs: [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm];
+  defaultVMs: VotingMachinePresets;
   updateVotingMachines: (advancedSchemes: AnySchemeForm[]) => void;
   resetForm: () => void;
   modal: boolean;
@@ -61,7 +62,11 @@ const AdvancedEditor: FC<Props> = ({
   const [warning, setWarning] = useState<string>();
   const [errors, setErrors] = useState<string[]>([]);
 
-  // on Advanced mode open
+  /*
+   * Hooks
+   */
+
+  // Update adv form on open
   const updateAdvancedForm = useCallback(() => {
     const newAdvForm = new SchemesForm();
 
@@ -87,7 +92,7 @@ const AdvancedEditor: FC<Props> = ({
     updateAdvancedForm();
   }, [modal, updateAdvancedForm]);
 
-  // Check that scheme of type 1 is active
+  // Check that scheme of type SchemeRegistrar is active
   useEffect(() => {
     if (isActive[SchemeType.SchemeRegistrar]) {
       setWarning("");
@@ -109,8 +114,6 @@ const AdvancedEditor: FC<Props> = ({
   // Resets entire form
   const resetAdvancedForm = () => {
     resetForm();
-
-    // updateAdvancedForm();
   };
 
   const updateForm = async () => {
@@ -126,6 +129,12 @@ const AdvancedEditor: FC<Props> = ({
     const { hasError } = await newAdvForm.validate();
     if (hasError) {
       advForm.error && setErrors([...errors, advForm.error]);
+      setTimeout(() => {
+        setErrors(es => {
+          es.shift();
+          return [...es]; // Requires spread operator or it will not rerender
+        });
+      }, 5000);
       return false;
     }
 
