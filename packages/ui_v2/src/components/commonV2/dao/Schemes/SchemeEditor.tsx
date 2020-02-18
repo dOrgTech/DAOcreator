@@ -154,20 +154,24 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         case SchemeType.ContributionReward:
           newForm.$.push(new ContributionRewardForm());
           newForm.$[index].$.votingMachine = votingMachines[index];
+          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         case SchemeType.SchemeRegistrar:
           newForm.$.push(new SchemeRegistrarForm());
           newForm.$[index].$.votingMachine = votingMachines[index];
+          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         case SchemeType.GenericScheme:
           newForm.$.push(new GenericSchemeForm());
           newForm.$[index].$.votingMachine = votingMachines[index];
+          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         default:
           throw new Error("Unimplemented scheme type");
       }
       return type;
     });
+    console.log("updateform", newForm.values);
 
     form.$ = newForm.$;
 
