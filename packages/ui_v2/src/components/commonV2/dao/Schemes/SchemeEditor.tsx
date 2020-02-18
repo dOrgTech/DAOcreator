@@ -126,9 +126,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
 
-      // vms.push(new GenesisProtocolForm({ preset }));
-      // vmPresets.push(new GenesisProtocolForm({ preset }));
-
       const vm: GenesisProtocolForm = scheme.$.votingMachine;
       vm.preset = preset;
 
@@ -148,6 +145,25 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     );
   }, [decisionSpeed]);
 
+  const discardPreset = (scheme: AnySchemeForm) => {
+    const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
+    if (schemePresetMap === undefined)
+      throw Error("Unimplemented Scheme Speed Configuration");
+
+    const preset = schemePresetMap.get(scheme.type);
+    if (preset === undefined) throw Error(`Preset: ${scheme.type} not found`);
+
+    const presetVM = new GenesisProtocolForm({ preset });
+
+    if (
+      Object.entries(presetVM.values).toString() ===
+      Object.entries(scheme.$.votingMachine.values).toString()
+    )
+      return false;
+    return true;
+  };
+
   // Updates form when vm changes
   useEffect(() => {
     const newForm = new SchemesForm();
@@ -166,10 +182,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
           throw new Error("Unimplemented scheme type");
       }
       newForm.$[index].$.votingMachine = votingMachines[index];
-      newForm.$[index].$.votingMachine.preset = undefined;
+      if (discardPreset(newForm.$[index]))
+        newForm.$[index].$.votingMachine.preset = undefined;
+
       return type;
     });
-    console.log("updateform", newForm.values);
 
     form.$ = newForm.$;
 
@@ -207,14 +224,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters, presetVotingMachines]);
   useEffect(() => {
-    console.log(
-      "presetVotingMachines",
-      presetVotingMachines.map(i => i.values)
-    );
-    console.log(
-      "votingMachines",
-      votingMachines.map(i => i.values)
-    );
     if (updatingVotingMachine.current) return;
     setVotingMachines(
       votingMachines.map((vm: GenesisProtocolForm, index: number) => {
