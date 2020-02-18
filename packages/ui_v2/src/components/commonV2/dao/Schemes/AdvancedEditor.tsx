@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useCallback } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -26,7 +26,7 @@ import FormField from "../../FormField";
 interface Props {
   form: SchemesForm;
   defaultVMs: [GenesisProtocolForm, GenesisProtocolForm, GenesisProtocolForm];
-  updateVotingMachines: (advancedSchemes: GenesisProtocolForm[]) => void;
+  updateVotingMachines: (advancedSchemes: AnySchemeForm[]) => void;
   resetForm: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
@@ -61,26 +61,8 @@ const AdvancedEditor: FC<Props> = ({
   const [warning, setWarning] = useState<string>();
   const [errors, setErrors] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (!modal) return;
-    updateAdvancedForm();
-  }, [modal]);
-
-  // Check that scheme of type 1 is active
-  useEffect(() => {
-    if (isActive[SchemeType.SchemeRegistrar]) {
-      setWarning("");
-      return;
-    }
-    setWarning(
-      "Warning: Without a Plugin Manager your organization will not be able to modify itself."
-    );
-  }, [isActive[SchemeType.SchemeRegistrar]]);
-
   // on Advanced mode open
-  const updateAdvancedForm = () => {
-    // TODO Update activeToggles
-
+  const updateAdvancedForm = useCallback(() => {
     const newAdvForm = new SchemesForm();
 
     defaultVMs.map((votingMachine: GenesisProtocolForm, index: number) => {
@@ -98,7 +80,23 @@ const AdvancedEditor: FC<Props> = ({
 
     setAdvForm(newAdvForm);
     setScheme(newAdvForm.$[0]);
-  };
+  }, [defaultVMs, form.$]);
+
+  useEffect(() => {
+    if (!modal) return;
+    updateAdvancedForm();
+  }, [modal, updateAdvancedForm]);
+
+  // Check that scheme of type 1 is active
+  useEffect(() => {
+    if (isActive[SchemeType.SchemeRegistrar]) {
+      setWarning("");
+      return;
+    }
+    setWarning(
+      "Warning: Without a Plugin Manager your organization will not be able to modify itself."
+    );
+  }, [isActive]);
 
   const toggleActiveScheme = (index: number) => {
     setIsActive(
@@ -131,9 +129,7 @@ const AdvancedEditor: FC<Props> = ({
       return false;
     }
 
-    updateVotingMachines(
-      schemes.map((scheme: AnySchemeForm) => scheme.$.votingMachine)
-    );
+    updateVotingMachines(schemes);
 
     return true;
   };
