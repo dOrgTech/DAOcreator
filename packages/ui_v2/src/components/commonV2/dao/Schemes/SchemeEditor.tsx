@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FC, useRef } from "react";
-import { observer } from "mobx-react";
 import {
   MDBBtn,
   MDBContainer,
@@ -127,6 +126,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
 
+      // vms.push(new GenesisProtocolForm({ preset }));
+      // vmPresets.push(new GenesisProtocolForm({ preset }));
+
       const vm: GenesisProtocolForm = scheme.$.votingMachine;
       vm.preset = preset;
 
@@ -153,22 +155,18 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       switch (type) {
         case SchemeType.ContributionReward:
           newForm.$.push(new ContributionRewardForm());
-          newForm.$[index].$.votingMachine = votingMachines[index];
-          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         case SchemeType.SchemeRegistrar:
           newForm.$.push(new SchemeRegistrarForm());
-          newForm.$[index].$.votingMachine = votingMachines[index];
-          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         case SchemeType.GenericScheme:
           newForm.$.push(new GenericSchemeForm());
-          newForm.$[index].$.votingMachine = votingMachines[index];
-          newForm.$[index].$.votingMachine.preset = undefined;
           break;
         default:
           throw new Error("Unimplemented scheme type");
       }
+      newForm.$[index].$.votingMachine = votingMachines[index];
+      newForm.$[index].$.votingMachine.preset = undefined;
       return type;
     });
     console.log("updateform", newForm.values);
@@ -209,6 +207,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters, presetVotingMachines]);
   useEffect(() => {
+    console.log(
+      "presetVotingMachines",
+      presetVotingMachines.map(i => i.values)
+    );
+    console.log(
+      "votingMachines",
+      votingMachines.map(i => i.values)
+    );
     if (updatingVotingMachine.current) return;
     setVotingMachines(
       votingMachines.map((vm: GenesisProtocolForm, index: number) => {
@@ -479,4 +485,4 @@ const styles = {
   }
 };
 
-export default observer(SchemeEditor);
+export default SchemeEditor;
