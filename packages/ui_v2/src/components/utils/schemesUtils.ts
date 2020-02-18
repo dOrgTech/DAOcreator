@@ -1,10 +1,17 @@
+import { AnySchemeForm, SchemesForm } from "@dorgtech/daocreator-lib";
+
 export const simpleOptionsSwitcher = (
-  schemes: any | undefined | Array<any>,
+  schemes: SchemesForm,
   advanceMode?: boolean,
   setRewardSuccess: any = (setter: any) => setter,
   setRewardAndPenVoters: any = (setter: any) => setter,
   setAutobet: any = (setter: any) => setter
 ) => {
+  console.log(
+    "vms",
+    schemes.$.map((scheme: AnySchemeForm) => scheme.$.votingMachine.values)
+  );
+
   // TODO: Need to pass logic here now.
   const simpleOptions: any = [];
   const simpleOptionsSwitcherToggle = (scheme: any) => {
