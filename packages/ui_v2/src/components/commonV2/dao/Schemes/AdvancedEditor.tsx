@@ -138,6 +138,7 @@ const AdvancedEditor: FC<Props> = ({
       return false;
     }
 
+    // TODO scheme params are not saved
     updateVotingMachines(schemes);
 
     return true;
