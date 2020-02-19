@@ -132,34 +132,55 @@ export const futureDate: Validator<Date | undefined> = value => {
   return null;
 };
 
-export const greaterThan = (bound: number) => (value: string) => {
+export const greaterThan = (bound: number) => (value: string | number) => {
   const error = `Number must be greater than ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) > bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value > bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) > bound) {
+      return null;
+    }
   }
 
   return error;
 };
 
-export const greaterThanOrEqual = (bound: number) => (value: string) => {
+export const greaterThanOrEqual = (bound: number) => (value: string | number) => {
   const error = `Number must be greater than or equal to ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) >= bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value >= bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) >= bound) {
+      return null;
+    }
   }
 
   return error;
 };
 
-export const lessThanOrEqual = (bound: number) => (value: string) => {
+export const lessThanOrEqual = (bound: number) => (value: string | number) => {
   const error = `Number must be less than or equal to ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) <= bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value >= bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) <= bound) {
+      return null;
+    }
   }
 
   return error;
