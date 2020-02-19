@@ -177,12 +177,23 @@ IProps) => {
             ]);
             break;
 
-          case info === "Setting DAO schemes...":
-          case info === "Deploying Controller":
+          case info === "Setting Generic Scheme parameters...":
             setMinimalLogLines([
               ...minimalLogLines,
-              "Signing Config Org Txs..."
+              "Setting Generic params..."
             ]);
+            break;
+
+          case info === "Setting DAO schemes...":
+            setMinimalLogLines([...minimalLogLines, "Setting DAO schemes..."]);
+            break;
+
+          case info === "Deploying Controller":
+            setMinimalLogLines([...minimalLogLines, "Deploying Controller..."]);
+            break;
+
+          case info === "Setting GenesisProtocol parameters...":
+            setMinimalLogLines([...minimalLogLines, "Setting Machine..."]);
             break;
 
           case info === "DAO Migration has Finished Successfully!":
@@ -248,7 +259,7 @@ IProps) => {
           default:
             console.log("Unhandled txResult log:");
             console.log(msg);
-            setMinimalLogLines([...minimalLogLines, msg]);
+            // setMinimalLogLines([...minimalLogLines, msg]);
             break;
         }
         break;
@@ -270,6 +281,7 @@ IProps) => {
 
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
+          case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
             setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;

@@ -122,6 +122,9 @@ export const OrganisationLine: FC<IProps> = ({
         {step === STEP.Confirmed && (
           <MDBIcon className="blue-text fas" size="lg" icon="check-circle" />
         )}
+        {step === STEP.Failed && (
+          <MDBIcon className="red-text fas" size="lg" icon="times-circle" />
+        )}
       </div>
     </MDBRow>
   );
