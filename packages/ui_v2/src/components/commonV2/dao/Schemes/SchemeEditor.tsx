@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FC, useRef } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import {
   MDBBtn,
   MDBContainer,
@@ -170,20 +171,18 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     activeSchemeTypes.map((type: SchemeType, index: number) => {
       switch (type) {
         case SchemeType.ContributionReward:
-          newForm.$.push(new ContributionRewardForm());
+          newForm.$.push(schemeTemplates[SchemeType.ContributionReward]);
           break;
         case SchemeType.SchemeRegistrar:
-          newForm.$.push(new SchemeRegistrarForm());
+          newForm.$.push(schemeTemplates[SchemeType.SchemeRegistrar]);
           break;
         case SchemeType.GenericScheme:
-          newForm.$.push(new GenericSchemeForm());
+          newForm.$.push(schemeTemplates[SchemeType.GenericScheme]);
           break;
         default:
           throw new Error("Unimplemented scheme type");
       }
       newForm.$[index].$.votingMachine = votingMachines[index];
-      if (discardPreset(newForm.$[index]))
-        newForm.$[index].$.votingMachine.preset = undefined;
 
       return type;
     });
@@ -248,6 +247,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     let activeAdvSchemeTypes: SchemeType[] = [];
 
     advancedVMSchemes.map((scheme: AnySchemeForm, index: number) => {
+      schemeTemplates[index] = scheme;
+      if (discardPreset(scheme)) scheme.$.votingMachine.preset = undefined;
+
       const vm = scheme.$.votingMachine;
       advancedVms.push(vm);
       activeAdvSchemeTypes.push(scheme.type);
@@ -268,17 +270,23 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       return vm;
     });
 
-    setVotingMachines(advancedVms);
-    setActiveSchemeTypes(activeAdvSchemeTypes);
+    unstable_batchedUpdates(() => {
+      setActiveSchemeTypes(activeAdvSchemeTypes);
+      setVotingMachines(advancedVms);
+    });
   };
 
   const resetForm = () => {
-    const newForm: AnySchemeForm[] = [
+    const newSchemeTemplates: AnySchemeForm[] = [
       new ContributionRewardForm(),
-      new SchemeRegistrarForm()
+      new SchemeRegistrarForm(),
+      new GenericSchemeForm()
     ];
+    schemeTemplates.map((schemeTemplate, index) => newSchemeTemplates[index]);
 
-    form.$ = newForm;
+    updateVotingMachines([newSchemeTemplates[0], newSchemeTemplates[1]]);
+
+    setDecisionSpeed(DAOSpeed.Medium);
   };
 
   const handleClick = (e: any) => {
