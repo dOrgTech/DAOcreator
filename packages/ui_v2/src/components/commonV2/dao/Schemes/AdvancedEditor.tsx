@@ -78,11 +78,7 @@ const AdvancedEditor: FC<Props> = ({
         newAdvForm.$.push(formScheme[0] as AnySchemeForm);
         return votingMachine;
       }
-      console.log(
-        schemeTemplates.map(
-          (scheme: AnySchemeForm) => scheme.$.votingMachine.values
-        )
-      );
+
       newAdvForm.$.push(schemeTemplates[index]);
       newAdvForm.$[index].$.votingMachine = votingMachine;
       return votingMachine;

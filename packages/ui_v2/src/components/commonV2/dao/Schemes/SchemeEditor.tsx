@@ -191,10 +191,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       return type;
     });
 
-    console.log(
-      newForm.$.map((scheme: AnySchemeForm) => scheme.$.votingMachine.values)
-    );
-
     form.$ = newForm.$;
 
     return () => {
