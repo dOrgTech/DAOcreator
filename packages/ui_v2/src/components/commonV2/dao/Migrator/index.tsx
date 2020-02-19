@@ -177,10 +177,24 @@ IProps) => {
             ]);
             break;
 
+          case info === "Setting Scheme Registrar parameters...":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Setting Scheme Registrar params..."
+            ]);
+            break;
+
           case info === "Setting Generic Scheme parameters...":
             setMinimalLogLines([
               ...minimalLogLines,
               "Setting Generic params..."
+            ]);
+            break;
+
+          case info === "Setting Contribution Reward parameters...":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Setting Contribution Reward params..."
             ]);
             break;
 
@@ -279,6 +293,10 @@ IProps) => {
             ]);
             break;
 
+          case abortedMsg.startsWith("Network request failed"): // Time out(?)
+            setMinimalLogLines([...minimalLogLines, "Network request failed"]);
+            break;
+
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
           case abortedMsg.startsWith("Transaction has been reverted"):
@@ -357,6 +375,8 @@ IProps) => {
 
   const startInstallation = async () => {
     console.log("Starting Installation");
+
+    console.log(dao);
 
     // Reset state
     setNoWeb3Open(false);

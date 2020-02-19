@@ -106,10 +106,10 @@ export const OrganisationLine: FC<IProps> = ({
           icon={type === 0 ? "city" : "sliders-h"}
         />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="4">
         <StepName />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="6">
         <Output />
       </MDBCol>
       <div>
