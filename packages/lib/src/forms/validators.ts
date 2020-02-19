@@ -25,8 +25,7 @@ export const validAddress: Validator<string> = value => {
 };
 
 export const validTokenSymbol: Validator<string> = value => {
-  const error =
-    "Token names must be all capitol letters and less than 4 characters.";
+  const error = "Must be all caps and 4 characters or less";
   value = value.trim();
 
   if (value.length > 4 || !/^[A-Z]+$/.test(value)) {
