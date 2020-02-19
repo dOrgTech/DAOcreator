@@ -114,6 +114,7 @@ const AdvancedEditor: FC<Props> = ({
   // Resets entire form
   const resetAdvancedForm = () => {
     resetForm();
+    setIsActive([true, true, false]);
   };
 
   const updateForm = async () => {
@@ -138,7 +139,6 @@ const AdvancedEditor: FC<Props> = ({
       return false;
     }
 
-    // TODO scheme params are not saved
     updateVotingMachines(schemes);
 
     return true;
