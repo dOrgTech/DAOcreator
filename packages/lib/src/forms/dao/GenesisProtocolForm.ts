@@ -110,7 +110,7 @@ export class GenesisProtocolForm extends Form<
       queuedVoteRequiredPercentage: new PercentageField(
         form ? form.$.queuedVoteRequiredPercentage.value : 0
       )
-        .validators(validPercentage)
+        .validators(validPercentage, greaterThanOrEqual(50), lessThanOrEqual(100))
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
           "The quorum required to decide a vote on a non-boosted proposal."
@@ -123,7 +123,7 @@ export class GenesisProtocolForm extends Form<
         "GEN",
         form ? form.$.minimumDaoBounty.value : "0"
       )
-        .validators(requiredText, validNumber, greaterThanOrEqual(0))
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Minimum DAO Bounty")
         .setDescription(
           "The minimum amount of GEN a DAO will stake when automatically downstaking each proposal."
