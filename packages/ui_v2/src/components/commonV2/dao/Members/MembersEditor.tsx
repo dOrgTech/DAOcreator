@@ -6,7 +6,11 @@ import { MemberEditor, MembersAnalytics, MembersTable } from "./";
 import { useForceUpdate } from "../../../utils/hooks";
 import Toggle from "../Schemes/Toggle";
 
-const MembersEditor = ({ form }: { form: MembersForm }) => {
+interface Props {
+  form: MembersForm;
+}
+
+const MembersEditor = ({ form }: Props) => {
   /*
    * State
    */

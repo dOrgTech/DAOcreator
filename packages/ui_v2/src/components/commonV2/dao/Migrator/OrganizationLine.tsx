@@ -18,7 +18,7 @@ enum STEP {
   Failed
 }
 
-export const OrganisationLine: FC<IProps> = ({
+export const OrganizationLine: FC<IProps> = ({
   type,
   active,
   done,
@@ -39,7 +39,6 @@ export const OrganisationLine: FC<IProps> = ({
 
     if (failed) {
       if (step === STEP.Failed) return;
-      console.log("settin failed");
       setStep(STEP.Failed);
       return;
     }
@@ -61,7 +60,7 @@ export const OrganisationLine: FC<IProps> = ({
 
   const StepName: FC = () => {
     const stepName =
-      type === 0 ? "Create Organisation" : "Configure Organisation";
+      type === 0 ? "Create Organization" : "Configure Organization";
 
     return step !== STEP.Waiting ? (
       <div style={{ fontWeight: "bold" }}>{stepName}</div>
@@ -107,24 +106,28 @@ export const OrganisationLine: FC<IProps> = ({
           icon={type === 0 ? "city" : "sliders-h"}
         />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="4">
         <StepName />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="6">
         <Output />
       </MDBCol>
       <div>
-        {step === STEP.Start &&
+        {step === STEP.Start && (
           <div
             className="spinner-border text-primary"
             style={{ width: "20px", height: "20px" }}
-          />}
+          />
+        )}
         {step === STEP.Confirmed && (
           <MDBIcon className="blue-text fas" size="lg" icon="check-circle" />
+        )}
+        {step === STEP.Failed && (
+          <MDBIcon className="red-text fas" size="lg" icon="times-circle" />
         )}
       </div>
     </MDBRow>
   );
 };
 
-export default OrganisationLine;
+export default OrganizationLine;

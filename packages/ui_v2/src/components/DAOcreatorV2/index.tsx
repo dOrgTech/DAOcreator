@@ -211,8 +211,8 @@ export default function DAOcreator() {
       form: daoForm.$.config,
       Component: NamingStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
+        toggleCollapse: nextStep,
         getDAOName,
         getDAOTokenSymbol
       }
@@ -222,8 +222,8 @@ export default function DAOcreator() {
       form: daoForm.$.schemes,
       Component: SchemesStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
+        toggleCollapse: nextStep,
         modal: advanceSchemeConfig,
         setModal: setAdvanceSchemeConfig
       }
@@ -233,9 +233,9 @@ export default function DAOcreator() {
       form: daoForm.$.members,
       Component: MembersStep,
       callbacks: {
+        setStep,
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
-        setStep,
         setModal: setImportFile,
         step
       }
@@ -282,7 +282,7 @@ export default function DAOcreator() {
                     <div style={styles.divider} />
                     <div // There might be a better MDBReact component for this
                       style={{ cursor: "pointer" }}
-                      onClick={() => exportDaoParams()}
+                      onClick={exportDaoParams}
                     >
                       <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>
@@ -309,21 +309,25 @@ export default function DAOcreator() {
                   className="stepper stepper-vertical"
                   style={styles.noPadding}
                 >
-                  {steps.map((actualStep: Step, index: number) => {
-                    let { form, title, Component, callbacks } = actualStep;
-                    return (
-                      <Stepper
-                        key={`step${index}`}
-                        index={index}
-                        form={form}
-                        title={title}
-                        step={step}
-                        launching={launching}
-                        Component={Component}
-                        callbacks={callbacks}
-                      />
-                    );
-                  })}
+                  {steps.map(
+                    (
+                      { form, title, Component, callbacks }: Step,
+                      index: number
+                    ) => {
+                      return (
+                        <Stepper
+                          key={`step${index}`}
+                          index={index}
+                          form={form}
+                          title={title}
+                          step={step}
+                          launching={launching}
+                          Component={Component}
+                          callbacks={callbacks}
+                        />
+                      );
+                    }
+                  )}
                 </ul>
               )}
             </div>
