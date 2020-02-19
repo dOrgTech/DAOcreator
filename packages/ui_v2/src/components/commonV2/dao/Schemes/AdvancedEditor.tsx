@@ -206,7 +206,7 @@ const AdvancedEditor: FC<Props> = ({
                 <span>{schemeTemplates[scheme.type].description}</span>
               </MDBTooltip>
             </MDBCol>
-            {warning && (
+            {warning && scheme.type === SchemeType.SchemeRegistrar && (
               <MDBCol>
                 <span
                   style={{
