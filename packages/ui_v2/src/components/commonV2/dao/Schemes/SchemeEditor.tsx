@@ -182,6 +182,10 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         default:
           throw new Error("Unimplemented scheme type");
       }
+
+      if (discardPreset(newForm.$[index]))
+        newForm.$[index].$.votingMachine.preset = undefined;
+
       newForm.$[index].$.votingMachine = votingMachines[index];
 
       return type;
