@@ -18,7 +18,7 @@ enum STEP {
   Failed
 }
 
-export const OrganisationLine: FC<IProps> = ({
+export const OrganizationLine: FC<IProps> = ({
   type,
   active,
   done,
@@ -60,7 +60,7 @@ export const OrganisationLine: FC<IProps> = ({
 
   const StepName: FC = () => {
     const stepName =
-      type === 0 ? "Create Organisation" : "Configure Organisation";
+      type === 0 ? "Create Organization" : "Configure Organization";
 
     return step !== STEP.Waiting ? (
       <div style={{ fontWeight: "bold" }}>{stepName}</div>
@@ -106,10 +106,10 @@ export const OrganisationLine: FC<IProps> = ({
           icon={type === 0 ? "city" : "sliders-h"}
         />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="4">
         <StepName />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="6">
         <Output />
       </MDBCol>
       <div>
@@ -130,4 +130,4 @@ export const OrganisationLine: FC<IProps> = ({
   );
 };
 
-export default OrganisationLine;
+export default OrganizationLine;
