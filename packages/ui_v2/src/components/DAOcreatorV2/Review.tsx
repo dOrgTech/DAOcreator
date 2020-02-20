@@ -1,6 +1,5 @@
 import React from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
-import { simpleOptionsSwitcher } from "../utils";
 import LineGraphic from "../commonV2/LineGraphic";
 
 const FirstStep = (form: any) => {
@@ -30,11 +29,6 @@ const FirstStep = (form: any) => {
 };
 
 const SecondStep = (form: any) => {
-  const simpleOptions = simpleOptionsSwitcher(form.$.schemes, true);
-  const noDuplicateSimpleOptions = simpleOptions.slice(
-    0,
-    simpleOptions.length / 2
-  );
   return (
     <div style={{ marginTop: 28 }}>
       <h3>Schemes</h3>
