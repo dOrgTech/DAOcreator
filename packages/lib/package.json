@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "0.2.1-rc.18",
+  "version": "0.2.1-rc.19",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
