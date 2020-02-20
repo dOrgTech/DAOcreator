@@ -1,7 +1,7 @@
 import React from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
-import { simpleOptionsSwitcher } from "../utils";
 import LineGraphic from "../commonV2/LineGraphic";
+import { getSimpleOptions, SimpleOption } from "../utils";
 
 const FirstStep = (form: any) => {
   return (
@@ -29,33 +29,29 @@ const FirstStep = (form: any) => {
   );
 };
 
-const SecondStep = (form: any) => {
-  const simpleOptions = simpleOptionsSwitcher(form.$.schemes, true);
-  const noDuplicateSimpleOptions = simpleOptions.slice(
-    0,
-    simpleOptions.length / 2
-  );
-  return (
-    <div style={{ marginTop: 28 }}>
-      <h3>Schemes</h3>
-      {noDuplicateSimpleOptions.map((option: any, index: number) =>
-        option.checked ? (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="check" className="blue-text" /> {option.text}
-            </p>
-          </div>
-        ) : (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="times" className="grey-text" /> {option.text}
-            </p>
-          </div>
-        )
-      )}
-    </div>
-  );
-};
+const SecondStep = (form: any) => (
+  <div style={{ marginTop: 28 }}>
+    <h3>Schemes</h3>
+    {getSimpleOptions(form.$.schemes).map(
+      ({ text, checked }: SimpleOption, index: number) => (
+        <div key={index}>
+          <p>
+            <MDBIcon
+              icon={checked ? "check" : "times"}
+              className={checked ? "blue-text" : "red-text"}
+              style={
+                checked
+                  ? { marginRight: "10px" }
+                  : { marginLeft: "3px", marginRight: "12px" } // x icon is smaller
+              }
+            />
+            {text}
+          </p>
+        </div>
+      )
+    )}
+  </div>
+);
 
 const ThirdStep = (form: any) => {
   const reputationConfig = {
@@ -130,8 +126,8 @@ export function Review(props: any) {
   const { recoveredForm, step } = props;
   return (
     <>
-      {steps.slice(0, step).map(ActualStep => {
-        return <ActualStep {...recoveredForm} />;
+      {steps.slice(0, step).map((ActualStep, index: number) => {
+        return <ActualStep key={index} {...recoveredForm} />;
       })}
     </>
   );

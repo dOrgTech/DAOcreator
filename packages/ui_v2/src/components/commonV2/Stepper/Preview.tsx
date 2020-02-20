@@ -4,6 +4,7 @@ import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
 
 import LineGraphic from "../LineGraphic";
 import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
+import { SimpleOption, getSimpleOptions } from "../../utils";
 
 export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   daoName,
@@ -23,31 +24,8 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   </MDBRow>
 );
 
-interface SimpleOption {
-  text: string;
-  checked: boolean;
-}
-
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
-  if (form.$.length === 0) return null;
-
-  const {
-    proposingRepReward,
-    votersReputationLossRatio,
-    minimumDaoBounty
-  } = form.$[0].$.votingMachine.values;
-
-  const simpleOptions: [SimpleOption, SimpleOption, SimpleOption] = [
-    { text: "Reward successful proposer", checked: +proposingRepReward > 0 },
-    {
-      text: "Reward correct voters and penalize incorrect voters",
-      checked: +votersReputationLossRatio > 0
-    },
-    {
-      text: "Auto-bet against every proposal to incentive curation",
-      checked: +minimumDaoBounty > 0
-    }
-  ];
+  const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
     <div style={styles.schemePreview}>
