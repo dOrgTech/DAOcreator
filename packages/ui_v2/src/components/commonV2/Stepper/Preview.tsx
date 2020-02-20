@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
 
 import LineGraphic from "../LineGraphic";
-import { simpleOptionsSwitcher } from "../../utils";
 import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
 
 export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
@@ -24,26 +23,46 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   </MDBRow>
 );
 
+interface SimpleOption {
+  text: string;
+  checked: boolean;
+}
+
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
-  // TODO
-  const simpleOptions = simpleOptionsSwitcher(form, true);
-  const noDuplicateSimpleOptions = simpleOptions.slice(
-    0,
-    simpleOptions.length / 2
-  );
+  if (form.$.length === 0) return null;
+
+  const {
+    proposingRepReward,
+    votersReputationLossRatio,
+    minimumDaoBounty
+  } = form.$[0].$.votingMachine.values;
+
+  const simpleOptions: [SimpleOption, SimpleOption, SimpleOption] = [
+    { text: "Reward successful proposer", checked: +proposingRepReward > 0 },
+    {
+      text: "Reward correct voters and penalize incorrect voters",
+      checked: +votersReputationLossRatio > 0
+    },
+    {
+      text: "Auto-bet against every proposal to incentive curation",
+      checked: +minimumDaoBounty > 0
+    }
+  ];
+
   return (
     <div style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
-      {noDuplicateSimpleOptions.map((option: any, index: number) => (
+      {simpleOptions.map(({ text, checked }: SimpleOption, index: number) => (
         <div key={index}>
           <p>
             <MDBIcon
               icon="check"
-              className={option.checked ? "blue-text" : "grey-text"}
+              className={checked ? "blue-text" : "grey-text"}
+              style={{ marginRight: "10px" }}
             />
-            {option.text}
+            {text}
           </p>
         </div>
       ))}
@@ -107,9 +126,6 @@ export const MembersPreview: FC<{
 };
 
 const styles = {
-  lineGraphic: {
-    padding: "unset"
-  },
   configPreview: {
     marginTop: "26px",
     marginRight: "auto",
@@ -122,5 +138,8 @@ const styles = {
   membersPreview: {
     marginTop: 28,
     paddingRight: "8rem"
+  },
+  lineGraphic: {
+    padding: "unset"
   }
 };
