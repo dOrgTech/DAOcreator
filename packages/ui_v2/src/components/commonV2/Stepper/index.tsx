@@ -1,140 +1,39 @@
-import * as React from "react";
+import React, { FC } from "react";
 import {
   DAOConfigForm,
   MembersForm,
   SchemesForm,
   DAOForm
 } from "@dorgtech/daocreator-lib";
-import { MDBBtn, MDBRow, MDBCollapse, MDBIcon, MDBCol } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
-import { simpleOptionsSwitcher } from "../../utils";
-import LineGraphic from "../LineGraphic";
+import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 
 interface Props {
   index: number;
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
-  Component: any;
+  Component: FC;
   title: string;
-  callbacks: any | undefined;
+  callbacks: any;
   step: number;
   launching: boolean;
-  daoName?: string;
 }
 
-const ModalButton = (props: {
+const ModalButton: FC<{
   step: number;
   index: number;
-  cb: any;
-  advanced?: any;
-}) => {
-  const { step, index, cb, advanced } = props;
+  setModal: (modal: boolean | string) => void; // TODO ?
+}> = ({ step, index, setModal }) => {
   if (step === 1 && index === 1) {
-    return (
-      <UtilityButton
-        title={"Advanced"}
-        openModal={cb.setModal}
-        advanced={advanced}
-      />
-    );
+    return <UtilityButton title={"Advanced"} openModal={setModal} />;
   } else if (step === 2 && index === 2) {
-    return <UtilityButton title={"Import CSV"} openModal={cb.setModal} />;
-  } else {
-    return <></>;
+    return <UtilityButton title={"Import CSV"} openModal={setModal} />;
   }
+  return <></>;
 };
 
-const simpleConfigText = (form: any | undefined) => {
-  const simpleOptions = simpleOptionsSwitcher(form, true);
-  const noDuplicateSimpleOptions = simpleOptions.slice(
-    0,
-    simpleOptions.length / 2
-  );
-  return (
-    <div style={styles.schemePreview}>
-      <p>
-        <strong>Recommended</strong>
-      </p>
-      {noDuplicateSimpleOptions.map((option: any, index: number) =>
-        option.checked ? (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="check" className="blue-text" /> {option.text}
-            </p>
-          </div>
-        ) : (
-          <div key={index}>
-            <p>
-              <MDBIcon icon="times" className="grey-text" /> {option.text}
-            </p>
-          </div>
-        )
-      )}
-    </div>
-  );
-};
-
-const membersPreview = (
-  form: any | undefined,
-  daoName: string,
-  distribution: boolean
-) => {
-  const reputationConfig = {
-    showPercentage: false,
-    height: "0.5rem",
-    symbol: "REP",
-    dataKey: "reputation",
-    nameKey: "address"
-  };
-  const tokenConfig = {
-    showPercentage: false,
-    height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
-    dataKey: "tokens",
-    nameKey: "address"
-  };
-  let totalReputationAmount = 0;
-  let totalTokenAmount = 0;
-  form.toState().map((member: any) => {
-    totalReputationAmount += member.reputation;
-    totalTokenAmount += member.tokens;
-    return null;
-  });
-  const numberOfMembers = form.$.length;
-  return (
-    <div style={styles.membersPreview}>
-      <p>
-        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
-      </p>
-      <div style={{ width: "17.5em" }}>
-        <p style={{}}>Reputation Distribution</p>
-        <LineGraphic
-          data={form.toState()}
-          total={totalReputationAmount}
-          config={reputationConfig}
-          style={styles.lineGraphic}
-        />
-      </div>
-      {distribution ? (
-        <>
-          <div style={{ paddingTop: "20px", width: "17.5em" }}>
-            <p>{daoName} Token Distribution</p>
-            <LineGraphic
-              data={form.toState()}
-              total={totalTokenAmount}
-              config={tokenConfig}
-              style={styles.lineGraphic}
-            />
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
-};
-
-export default function Stepper({
+const Stepper: FC<Props> = ({
   index,
   form,
   title,
@@ -142,82 +41,83 @@ export default function Stepper({
   callbacks,
   step,
   launching
-}: Props) {
-  const [distribution, setDistribution] = React.useState(false);
-  const [advanceMode, setAdvanceMode] = React.useState<boolean>(false);
+}) => {
+  const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
+    <a role="button" href="#/" style={{ cursor: "unset" }}>
+      <span
+        className="circle"
+        style={
+          step < index
+            ? styles.subsequentStepIcon
+            : step === index
+            ? styles.currentStepIcon
+            : styles.previousStepIcon
+        }
+      >
+        {index + 1}
+      </span>
+      <span
+        className="label"
+        style={step === index ? styles.active : styles.noActiveLabel}
+      >
+        {title}
+      </span>
+    </a>
+  );
 
-  const advancedState = {
-    advanceMode,
-    setAdvanceMode,
-    form
-  };
+  let Preview;
 
-  const distributionState = {
-    distribution,
-    setDistribution
-  };
+  switch (index) {
+    case 0:
+      if (step === 0) break;
+
+      // const { getDAOName, getDAOTokenSymbol } = callbacks;
+      Preview = (
+        <ConfigPreview
+          daoName={callbacks.getDAOName()}
+          daoSymbol={callbacks.getDAOTokenSymbol()}
+        />
+      );
+      break;
+    case 1:
+      if (step <= 1) break;
+      Preview = <SchemesPreview form={form as SchemesForm} />;
+      break;
+    case 2:
+      if (step <= 2) break;
+
+      // const { getDAOTokenSymbol } = callbacks;
+      Preview = (
+        <MembersPreview
+          form={form as MembersForm}
+          tokenSymbol={callbacks.getDAOTokenSymbol()}
+        />
+      );
+      break;
+    case 3:
+      break;
+
+    default:
+      console.log("Index out of bounds");
+      return null;
+  }
 
   return (
-    <li className={step === index || step > index ? "completed" : ""}>
+    <li className={step >= index ? "completed" : ""}>
       <MDBRow
         style={styles.specialRow}
         className="justify-content-space-between"
       >
-        <a role="button" href="#/" style={{ cursor: "unset" }}>
-          <span
-            className="circle"
-            style={
-              step < index
-                ? styles.subsequentStepIcon
-                : step === index
-                ? styles.currentStepIcon
-                : styles.previousStepIcon
-            }
-          >
-            {index + 1}
-          </span>
-          <span
-            className="label"
-            style={step === index ? styles.active : styles.noActiveLabel}
-          >
-            {title}
-          </span>
-        </a>
-        {step > 0 && index === 0 && callbacks.getDAOName() && (
-          <MDBRow
-            style={{
-              marginTop: "26px",
-              marginRight: "auto",
-              marginLeft: "1.5rem",
-              whiteSpace: "nowrap"
-            }}
-          >
-            <MDBCol>
-              <span>
-                Name: <strong>{callbacks.getDAOName()}</strong>
-              </span>
-            </MDBCol>
-            <MDBCol>
-              <span>
-                Symbol: <strong>{callbacks.getDAOTokenSymbol()}</strong>
-              </span>
-            </MDBCol>
-          </MDBRow>
-        )}
-
-        {step > 1 && index === 1 && simpleConfigText(form)}
-        {step > 2 &&
-          index === 2 &&
-          membersPreview(form, callbacks.getDAOTokenSymbol(), distribution)}
+        <StepIcon index={index} step={step} />
+        {Preview}
         <div>
           <ModalButton
             step={step}
             index={index}
-            cb={callbacks}
-            advanced={advancedState}
+            setModal={callbacks.setModal}
           />
           <MDBBtn
-            hidden={step === index || step < index}
+            hidden={step <= index}
             floating
             size="lg"
             color="transparent"
@@ -250,17 +150,12 @@ export default function Stepper({
               : styles.stepFourContent
           }
         >
-          <Component
-            form={form}
-            {...callbacks}
-            advancedScheme={advancedState}
-            distributionState={distributionState}
-          />
+          <Component form={form} {...callbacks} />
         </MDBRow>
       </MDBCollapse>
     </li>
   );
-}
+};
 
 const styles = {
   stepContent: {
@@ -287,13 +182,6 @@ const styles = {
   active: {
     fontWeight: 400,
     color: "#4285f4"
-  },
-  noActive: {
-    color: "gray",
-    backgroundColor: "white",
-    borderColor: "white",
-    border: "0.9px solid lightgray",
-    fontWeight: 500
   },
   noActiveLabel: {
     color: "gray",
@@ -333,23 +221,9 @@ const styles = {
     marginRight: "30px",
     marginTop: "16px"
   },
-  completedStep: {
-    fontWeight: 400,
-    color: "#4285f4 !important",
-    border: "0.9px solid #4285f4 !important",
-    background: "white !important"
-  },
   maxWidth: {
     width: "-webkit-fill-available"
-  },
-  schemePreview: {
-    marginTop: 28
-  },
-  membersPreview: {
-    marginTop: 28,
-    paddingRight: "8rem"
-  },
-  lineGraphic: {
-    padding: "unset"
   }
 };
+
+export default Stepper;
