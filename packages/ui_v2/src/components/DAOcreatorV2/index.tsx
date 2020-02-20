@@ -25,7 +25,9 @@ import {
   fromJSON,
   DAOForm,
   toDAOMigrationParams,
-  toJSON
+  toJSON,
+  ContributionRewardForm,
+  SchemeRegistrarForm
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -37,6 +39,7 @@ import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
 import { handleNetworkReload } from "../web3/core";
+import { Review } from "./Review";
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -53,7 +56,7 @@ interface Step {
 }
 
 const daoForm = new DAOForm();
-const recoveredForm = new DAOForm();
+const recoveredForm: DAOForm = new DAOForm();
 
 export default function DAOcreator() {
   const [step, setStep] = React.useState<number>(0);
@@ -78,17 +81,19 @@ export default function DAOcreator() {
 
   // On initial load
   React.useEffect(() => {
+    const daoCreatorState: string | null = localStorage.getItem(
+      DAO_CREATOR_STATE
+    );
+    const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
+    setStep(JSON.parse(daoCreatorState!).step);
     if (!loading) return;
 
     const previewLocalStorage = () => {
-      const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
       if (!daoCreatorState) {
         setLoading(false);
         return;
       }
 
-      const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
       const daoParams = fromJSON(form);
       const daoState = fromDAOMigrationParams(daoParams);
       recoveredForm.fromState(daoState);
@@ -108,6 +113,11 @@ export default function DAOcreator() {
       // Check to see if the current form state hasn't been edited,
       // and if so early out so we don't save an empty state
       const nullForm = new DAOForm();
+      nullForm.$.config.$.tokenName.value = "0";
+      nullForm.$.schemes.$ = [
+        new ContributionRewardForm(),
+        new SchemeRegistrarForm()
+      ];
       if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
         return;
       }
@@ -178,32 +188,38 @@ export default function DAOcreator() {
     FileSaver.saveAs(blob, "migration-params.json");
   };
 
-  const PreviewDialog = () => (
-    <MDBModal open={recoverPreviewOpen} fullWidth={true} maxWidth="md">
-      <MDBModalHeader id="simple-dialog-title">
-        In Progress DAO Detected
-      </MDBModalHeader>
-      <MDBModalBody>
-        <InstallStep form={recoveredForm} setLaunching={setLaunching} />
-      </MDBModalBody>
-      <MDBModalFooter />
+  const PreviewDialog = () => {
+    const props = {
+      recoveredForm,
+      step
+    };
+    return (
+      <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
+        <MDBModalHeader id="simple-dialog-title">
+          In Progress DAO Detected
+        </MDBModalHeader>
+        <MDBModalBody>
+          <Review {...props} />
+        </MDBModalBody>
+        <MDBModalFooter />
 
-      <MDBBtn
-        onClick={loadLocalStorage}
-        color={"primary"}
-        variant={"contained"}
-      >
-        Resume
-      </MDBBtn>
-      <MDBBtn
-        onClick={resetLocalStorage}
-        color={"primary"}
-        variant={"contained"}
-      >
-        Start Over
-      </MDBBtn>
-    </MDBModal>
-  );
+        <MDBBtn
+          onClick={loadLocalStorage}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Resume
+        </MDBBtn>
+        <MDBBtn
+          onClick={resetLocalStorage}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Start Over
+        </MDBBtn>
+      </MDBModal>
+    );
+  };
 
   const steps: Step[] = [
     {
