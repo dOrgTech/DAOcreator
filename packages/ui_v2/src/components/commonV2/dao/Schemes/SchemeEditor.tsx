@@ -98,27 +98,29 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     new GenericSchemeForm()
   ]);
 
+  const [presetVotingMachines, setPresetVotingMachines] = useState<
+    VotingMachinePresets
+  >([
+    new GenesisProtocolForm({
+      preset: (schemeSpeeds.get(decisionSpeed) as SchemePresets).get(0) // TODO check
+    }),
+    new GenesisProtocolForm({
+      preset: (schemeSpeeds.get(decisionSpeed) as SchemePresets).get(1)
+    }),
+    new GenesisProtocolForm({
+      preset: (schemeSpeeds.get(decisionSpeed) as SchemePresets).get(2)
+    })
+  ]);
+
   // Voting Machines
   // const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>([
   //   schemeTemplates[0].$.votingMachine,
   //   schemeTemplates[1].$.votingMachine
   // ]);
+
   const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
     SchemeType.ContributionReward,
     SchemeType.SchemeRegistrar
-  ]);
-  const [presetVotingMachines, setPresetVotingMachines] = useState<
-    VotingMachinePresets
-  >([
-    new GenesisProtocolForm({
-      preset: schemeSpeeds.get(decisionSpeed)?.get(0)
-    }),
-    new GenesisProtocolForm({
-      preset: schemeSpeeds.get(decisionSpeed)?.get(1)
-    }),
-    new GenesisProtocolForm({
-      preset: schemeSpeeds.get(decisionSpeed)?.get(2)
-    })
   ]);
 
   // Ref to stop force switching toggles from updating vm
@@ -128,10 +130,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    * Hooks
    */
 
-  // Sets vm and vm presets when the speed is changed
-  useEffect(() => {
-    setDisabledDecisionSpeed(false);
-
+  const updatePresets = () => {
     const newPresetVotingMachines: VotingMachinePresets = [];
 
     const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm) => {
@@ -154,6 +153,13 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
     setFullSchemes(newFullSchemes as FullSchemes);
     setPresetVotingMachines(newPresetVotingMachines);
+  };
+
+  // Sets vm and vm presets when the speed is changed
+  useEffect(() => {
+    setDisabledDecisionSpeed(false);
+
+    updatePresets();
 
     // const vms: GenesisProtocolForm[] = [];
     // const vmPresets: GenesisProtocolForm[] = [];
@@ -272,51 +278,92 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    * Methods
    */
 
-  const updateVotingMachines = (advancedVMSchemes: AnySchemeForm[]) => {
+  // const updateVotingMachines = (advancedVMSchemes: AnySchemeForm[]) => {
+  //   updatingVotingMachine.current = true;
+
+  //   let advancedVms: GenesisProtocolForm[] = [];
+  //   let activeAdvSchemeTypes: SchemeType[] = [];
+
+  //   advancedVMSchemes.map((scheme: AnySchemeForm, index: number) => {
+  //     schemeTemplates[index] = scheme;
+  //     if (discardPreset(scheme)) scheme.$.votingMachine.preset = undefined;
+
+  //     const vm = scheme.$.votingMachine;
+  //     advancedVms.push(vm);
+  //     activeAdvSchemeTypes.push(scheme.type);
+
+  //     // Currently only updates toggles to reflect advanced changes of first scheme
+  //     if (index !== 0) return vm;
+
+  //     const {
+  //       proposingRepReward,
+  //       votersReputationLossRatio,
+  //       minimumDaoBounty
+  //     } = vm.values;
+
+  //     setRewardSuccess(+proposingRepReward > 0);
+  //     setRewardAndPenVoters(votersReputationLossRatio > 0);
+  //     setAutobet(+minimumDaoBounty > 0);
+
+  //     return vm;
+  //   });
+
+  //   unstable_batchedUpdates(() => {
+  //     setActiveSchemeTypes(activeAdvSchemeTypes);
+  //     setVotingMachines(advancedVms);
+  //   });
+  // };
+
+  const updateSchemes = (
+    advancedSchemes: AnySchemeForm[],
+    activeSchemes: boolean[]
+  ) => {
     updatingVotingMachine.current = true;
 
-    let advancedVms: GenesisProtocolForm[] = [];
-    let activeAdvSchemeTypes: SchemeType[] = [];
+    let newActiveSchemeTypes: SchemeType[] = [];
+    activeSchemes.map((active: boolean, schemeType: number) => {
+      if (active) newActiveSchemeTypes.push(schemeType);
+    });
 
-    advancedVMSchemes.map((scheme: AnySchemeForm, index: number) => {
-      schemeTemplates[index] = scheme;
-      if (discardPreset(scheme)) scheme.$.votingMachine.preset = undefined;
+    //TODO check to make sure presets are discarded
 
-      const vm = scheme.$.votingMachine;
-      advancedVms.push(vm);
-      activeAdvSchemeTypes.push(scheme.type);
+    // Does not update inactive schemes because they are not validated
+    let newFullSchemes = fullSchemes;
+    advancedSchemes.map((scheme, index: number) => {
+      newFullSchemes[scheme.type] = scheme as any;
 
       // Currently only updates toggles to reflect advanced changes of first scheme
-      if (index !== 0) return vm;
-
+      if (index !== 0) return scheme;
+      // Update toggles
       const {
         proposingRepReward,
         votersReputationLossRatio,
         minimumDaoBounty
-      } = vm.values;
+      } = scheme.$.votingMachine.values;
 
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
       setAutobet(+minimumDaoBounty > 0);
 
-      return vm;
+      return scheme;
     });
 
     unstable_batchedUpdates(() => {
-      setActiveSchemeTypes(activeAdvSchemeTypes);
-      setVotingMachines(advancedVms);
+      setActiveSchemeTypes(newActiveSchemeTypes);
+      setFullSchemes(newFullSchemes);
     });
   };
 
   const resetForm = () => {
-    const newSchemeTemplates: AnySchemeForm[] = [
-      new ContributionRewardForm(),
-      new SchemeRegistrarForm(),
-      new GenericSchemeForm()
-    ];
-    schemeTemplates.map((schemeTemplate, index) => newSchemeTemplates[index]);
+    // const newSchemeTemplates: AnySchemeForm[] = [
+    //   new ContributionRewardForm(),
+    //   new SchemeRegistrarForm(),
+    //   new GenericSchemeForm()
+    // ];
+    updatePresets();
+    // TODO update toggles ?
 
-    updateVotingMachines([newSchemeTemplates[0], newSchemeTemplates[1]]);
+    // updateVotingMachines([newSchemeTemplates[0], newSchemeTemplates[1]]);
 
     setDecisionSpeed(DAOSpeed.Medium);
   };
@@ -341,7 +388,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
             <AdvancedEditor
               form={form}
               defaultVMs={presetVotingMachines}
-              updateVotingMachines={updateVotingMachines}
+              updateSchemes={updateSchemes}
               resetForm={resetForm}
               setModal={setModal}
               modal={modal}
