@@ -35,11 +35,7 @@ export type FullSchemes = [
   GenericSchemeForm
 ];
 
-export type VotingMachinePresets = [
-  GenesisProtocolForm,
-  GenesisProtocolForm,
-  GenesisProtocolForm
-];
+export type VotingMachinePresets = GenesisProtocolForm[];
 
 enum DAOSpeed {
   Slow,
@@ -47,11 +43,11 @@ enum DAOSpeed {
   Fast
 }
 
-const schemeTemplates: AnySchemeForm[] = [
-  new ContributionRewardForm(),
-  new SchemeRegistrarForm(),
-  new GenericSchemeForm()
-];
+// const schemeTemplates: AnySchemeForm[] = [
+//   new ContributionRewardForm(),
+//   new SchemeRegistrarForm(),
+//   new GenericSchemeForm()
+// ];
 
 class SchemePresets extends Map<SchemeType, GenesisProtocolPreset> {}
 class SchemeSpeeds extends Map<DAOSpeed, SchemePresets> {}
@@ -102,20 +98,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     new GenericSchemeForm()
   ]);
 
-  useEffect(() => {
-    const newForm = new SchemesForm();
-    activeSchemeTypes.map(activeSchemeType => {
-      newForm.$.push(fullSchemes[activeSchemeType]);
-      return activeSchemeType;
-    });
-    form.$ = newForm.$;
-  }, [fullSchemes]);
-
   // Voting Machines
-  const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>([
-    schemeTemplates[0].$.votingMachine,
-    schemeTemplates[1].$.votingMachine
-  ]);
+  // const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>([
+  //   schemeTemplates[0].$.votingMachine,
+  //   schemeTemplates[1].$.votingMachine
+  // ]);
   const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
     SchemeType.ContributionReward,
     SchemeType.SchemeRegistrar
@@ -123,9 +110,15 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [presetVotingMachines, setPresetVotingMachines] = useState<
     VotingMachinePresets
   >([
-    schemeTemplates[0].$.votingMachine,
-    schemeTemplates[1].$.votingMachine,
-    schemeTemplates[2].$.votingMachine
+    new GenesisProtocolForm({
+      preset: schemeSpeeds.get(decisionSpeed)?.get(0)
+    }),
+    new GenesisProtocolForm({
+      preset: schemeSpeeds.get(decisionSpeed)?.get(1)
+    }),
+    new GenesisProtocolForm({
+      preset: schemeSpeeds.get(decisionSpeed)?.get(2)
+    })
   ]);
 
   // Ref to stop force switching toggles from updating vm
@@ -139,6 +132,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   useEffect(() => {
     setDisabledDecisionSpeed(false);
 
+    const newPresetVotingMachines: VotingMachinePresets = [];
+
     const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm) => {
       // Gets voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
@@ -149,14 +144,16 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
 
-      // TODO change scheme to take on options changed by speed preset as long as they do not conflict with the toggles
-
       scheme.$.votingMachine.preset = preset;
+      newPresetVotingMachines.push(new GenesisProtocolForm({ preset }));
+
+      // TODO change scheme to take on options changed by speed preset as long as they do not conflict with the toggles
 
       return scheme;
     });
 
     setFullSchemes(newFullSchemes as FullSchemes);
+    setPresetVotingMachines(newPresetVotingMachines);
 
     // const vms: GenesisProtocolForm[] = [];
     // const vmPresets: GenesisProtocolForm[] = [];
@@ -183,7 +180,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     // setVotingMachines(vms);
     // setPresetVotingMachines(
     //   vmPresets as [
-    //     GenesisProtocolForm,
+    // GenesisProtocolForm,
     //     GenesisProtocolForm,
     //     GenesisProtocolForm
     //   ]
@@ -212,36 +209,20 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Updates form when vm changes
   useEffect(() => {
     const newForm = new SchemesForm();
-    activeSchemeTypes.map((type: SchemeType, index: number) => {
-      switch (type) {
-        case SchemeType.ContributionReward:
-          newForm.$.push(schemeTemplates[SchemeType.ContributionReward]);
-          break;
-        case SchemeType.SchemeRegistrar:
-          newForm.$.push(schemeTemplates[SchemeType.SchemeRegistrar]);
-          break;
-        case SchemeType.GenericScheme:
-          newForm.$.push(schemeTemplates[SchemeType.GenericScheme]);
-          break;
-        default:
-          throw new Error("Unimplemented scheme type");
-      }
+    activeSchemeTypes.map(activeSchemeType => {
+      newForm.$.push(fullSchemes[activeSchemeType]);
 
-      if (discardPreset(newForm.$[index]))
-        newForm.$[index].$.votingMachine.preset = undefined;
+      if (discardPreset(fullSchemes[activeSchemeType]))
+        newForm.$[activeSchemeType].$.votingMachine.preset = undefined;
 
-      newForm.$[index].$.votingMachine = votingMachines[index];
-
-      return type;
+      return activeSchemeType;
     });
-
     form.$ = newForm.$;
 
     return () => {
       updatingVotingMachine.current = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [votingMachines, activeSchemeTypes]);
+  }, [fullSchemes]);
 
   // Updates vms when toggles change
   useEffect(() => {
@@ -257,7 +238,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     );
     setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardSuccess, presetVotingMachines]);
+  }, [rewardSuccess, presetVotingMachines]); // TODO these need to be called when preset is changed
   useEffect(() => {
     if (updatingVotingMachine.current) return;
     const newFullSchemes = fullSchemes.map(
