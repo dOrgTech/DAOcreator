@@ -10,6 +10,7 @@ import {
   validAddress,
   validNumber,
   validPercentage,
+  validQueuedVotePercentage,
   greaterThan,
   lessThanOrEqual,
   greaterThanOrEqual,
@@ -108,9 +109,10 @@ export class GenesisProtocolForm extends Form<
         ),
 
       queuedVoteRequiredPercentage: new PercentageField(
-        form ? form.$.queuedVoteRequiredPercentage.value : 0
+        form ? form.$.queuedVoteRequiredPercentage.value : 50,
+        'queuedVote'
       )
-        .validators(validPercentage, greaterThanOrEqual(50), lessThanOrEqual(100))
+        .validators(validQueuedVotePercentage)
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
           "The quorum required to decide a vote on a non-boosted proposal."

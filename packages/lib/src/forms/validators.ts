@@ -80,6 +80,16 @@ export const validPercentage: Validator<number> = value => {
   return null;
 };
 
+export const validQueuedVotePercentage: Validator<number> = value => {
+  const error = "Percentages must be between 50 and 100.";
+
+  if (value > 100 || value < 50) {
+    return error;
+  }
+
+  return null;
+};
+
 export const validDuration: Validator<string> = value => {
   const error = "Duration format is incorrect. Please use DD:hh:mm:ss";
   value = value.trim();

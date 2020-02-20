@@ -1,8 +1,9 @@
-import { Field, FieldType, validPercentage } from "../../forms";
+import { Field, FieldType, validPercentage, validQueuedVotePercentage } from "../../forms";
 
 export class PercentageField extends Field<number, PercentageField> {
-  constructor(init: number) {
+  constructor(init: number, name?: string) {
     super(init, FieldType.Percentage);
-    this.validators(validPercentage);
+    const validation = name === 'queuedVote' ? validQueuedVotePercentage : validPercentage
+    this.validators(validation);
   }
 }
