@@ -29,6 +29,12 @@ interface Props {
   setModal: (modal: boolean) => void;
 }
 
+export type FullSchemes = [
+  ContributionRewardForm,
+  SchemeRegistrarForm,
+  GenericSchemeForm
+];
+
 export type VotingMachinePresets = [
   GenesisProtocolForm,
   GenesisProtocolForm,
@@ -87,6 +93,21 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   const [rewardSuccess, setRewardSuccess] = useState(true);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
   const [autobet, setAutobet] = useState(true);
+
+  const [fullSchemes, setFullSchemes] = useState<FullSchemes>([
+    new ContributionRewardForm(),
+    new SchemeRegistrarForm(),
+    new GenericSchemeForm()
+  ]);
+
+  useEffect(() => {
+    const newForm = new SchemesForm();
+    activeSchemeTypes.map(activeSchemeType => {
+      newForm.$.push(fullSchemes[activeSchemeType]);
+      return activeSchemeType;
+    });
+    form = newForm;
+  }, [fullSchemes]);
 
   // Voting Machines
   const [votingMachines, setVotingMachines] = useState<GenesisProtocolForm[]>([
@@ -202,41 +223,44 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Updates vms when toggles change
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    setVotingMachines(
-      votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+    const newFullSchemes = fullSchemes.map(
+      (scheme: AnySchemeForm, index: number) => {
         rewardSuccess
-          ? (vm.$.proposingRepReward =
+          ? (scheme.$.votingMachine.$.proposingRepReward =
               presetVotingMachines[index].$.proposingRepReward)
-          : (vm.$.proposingRepReward.value = "0");
-        return vm;
-      })
+          : (scheme.$.votingMachine.$.proposingRepReward.value = "0");
+        return scheme;
+      }
     );
+    setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardSuccess, presetVotingMachines]);
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    setVotingMachines(
-      votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+    const newFullSchemes = fullSchemes.map(
+      (scheme: AnySchemeForm, index: number) => {
         rewardAndPenVoters
-          ? (vm.$.votersReputationLossRatio =
+          ? (scheme.$.votingMachine.$.votersReputationLossRatio =
               presetVotingMachines[index].$.votersReputationLossRatio)
-          : (vm.$.votersReputationLossRatio.value = 0); // LIB Not a string
-        return vm;
-      })
+          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0); // LIB Not a string
+        return scheme;
+      }
     );
+    setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters, presetVotingMachines]);
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    setVotingMachines(
-      votingMachines.map((vm: GenesisProtocolForm, index: number) => {
+    const newFullSchemes = fullSchemes.map(
+      (scheme: AnySchemeForm, index: number) => {
         autobet
-          ? (vm.$.minimumDaoBounty =
+          ? (scheme.$.votingMachine.$.minimumDaoBounty =
               presetVotingMachines[index].$.minimumDaoBounty)
-          : (vm.$.minimumDaoBounty.value = "0");
-        return vm;
-      })
+          : (scheme.$.votingMachine.$.minimumDaoBounty.value = "0");
+        return scheme;
+      }
     );
+    setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autobet, presetVotingMachines]);
 
