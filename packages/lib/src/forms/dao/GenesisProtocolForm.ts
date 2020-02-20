@@ -13,7 +13,8 @@ import {
   greaterThan,
   lessThanOrEqual,
   greaterThanOrEqual,
-  futureDate
+  futureDate,
+  minMaxInclusive
 } from "../../forms";
 import { GenesisProtocol } from "../../state";
 import { GenesisProtocolPreset } from "../../dependency/arc";
@@ -110,7 +111,7 @@ export class GenesisProtocolForm extends Form<
       queuedVoteRequiredPercentage: new PercentageField(
         form ? form.$.queuedVoteRequiredPercentage.value : 0
       )
-        .validators(validPercentage, greaterThanOrEqual(50), lessThanOrEqual(100))
+        .validators(validPercentage, minMaxInclusive(50, 100))
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
           "The quorum required to decide a vote on a non-boosted proposal."
