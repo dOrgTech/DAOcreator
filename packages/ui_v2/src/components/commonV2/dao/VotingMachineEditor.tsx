@@ -32,12 +32,12 @@ const VotingMachineEditor: FC<Props> = ({ votingMachine, editable }) => {
               <FormField
                 field={field}
                 editable={editable}
-                tabIndex={index + 7}
+                tabIndex={index + 8}
               />
               <FormField
                 field={prevField}
                 editable={editable}
-                tabIndex={index + 8}
+                tabIndex={index + 9}
               />
             </MDBRow>
           );

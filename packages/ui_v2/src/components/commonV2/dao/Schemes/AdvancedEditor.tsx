@@ -244,7 +244,7 @@ const AdvancedEditor: FC<Props> = ({
                   field={field}
                   editable={isActive[scheme.type]}
                   colSize={12}
-                  tabIndex={19}
+                  tabIndex={21}
                 />
               </MDBRow>
             ))}

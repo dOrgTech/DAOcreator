@@ -219,7 +219,7 @@ const DurationFieldView = observer(
             min={0}
             max={100}
             onBlur={field.enableAutoValidationAndValidate}
-            tabIndex={props.name === "days" ? tabIndex : tabIndex + 1}
+            tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
           <div
             style={
