@@ -84,24 +84,26 @@ export default function DAOcreator() {
     const daoCreatorState: string | null = localStorage.getItem(
       DAO_CREATOR_STATE
     );
-    const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
-    setStep(JSON.parse(daoCreatorState!).step);
-    if (!loading) return;
+    if (daoCreatorState) {
+      const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
+      setStep(JSON.parse(daoCreatorState!).step);
+      if (!loading) return;
 
-    const previewLocalStorage = () => {
-      if (!daoCreatorState) {
-        setLoading(false);
-        return;
-      }
+      const previewLocalStorage = () => {
+        if (!daoCreatorState) {
+          setLoading(false);
+          return;
+        }
 
-      const daoParams = fromJSON(form);
-      const daoState = fromDAOMigrationParams(daoParams);
-      recoveredForm.fromState(daoState);
-      setRecoverPreviewOpen(true);
-    };
+        const daoParams = fromJSON(form);
+        const daoState = fromDAOMigrationParams(daoParams);
+        recoveredForm.fromState(daoState);
+        setRecoverPreviewOpen(true);
+      };
 
-    handleNetworkReload();
-    previewLocalStorage();
+      handleNetworkReload();
+      previewLocalStorage();
+    }
 
     setLoading(false);
   }, [loading]);
