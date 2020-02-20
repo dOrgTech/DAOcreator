@@ -58,9 +58,13 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
         <div key={index}>
           <p>
             <MDBIcon
-              icon="check"
-              className={checked ? "blue-text" : "grey-text"}
-              style={{ marginRight: "10px" }}
+              icon={checked ? "check" : "times"}
+              className={checked ? "blue-text" : "red-text"}
+              style={
+                checked
+                  ? { marginRight: "10px" }
+                  : { marginLeft: "3px", marginRight: "12px" } // x icon is smaller
+              }
             />
             {text}
           </p>
