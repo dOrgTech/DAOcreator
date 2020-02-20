@@ -18,7 +18,12 @@ export const MemberEditor = ({
         if (event.key === "Enter") onSubmit(event);
       }}
     >
-      <FormField field={memberForm.$.address} editable={true} colSize="9" />
+      <FormField
+        tabIndex={1}
+        field={memberForm.$.address}
+        editable={true}
+        colSize="9"
+      />
       <MDBCol size="3">
         <button
           type="submit"

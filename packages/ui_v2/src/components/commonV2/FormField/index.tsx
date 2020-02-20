@@ -25,7 +25,7 @@ export interface Props {
   field: AnyField;
   editable?: boolean;
   colSize?: any;
-  tabIndex?: number | null;
+  tabIndex: number;
   checkError?: (error: boolean) => void;
   namingError?: any;
 }
@@ -63,7 +63,7 @@ function FormField(props: Props) {
         field={field as any}
         editable={editable}
         colSize={size}
-        tabIndex={tabIndex ? tabIndex : undefined}
+        tabIndex={tabIndex}
         checkError={checkError ? checkError : undefined}
         namingError={namingError ? namingError : undefined}
       />
@@ -75,7 +75,7 @@ interface FieldProps<T> {
   field: T;
   editable?: boolean;
   colSize?: any;
-  tabIndex?: number | undefined;
+  tabIndex: number;
   namingError?: any | undefined;
   checkError?: (error: any) => void | undefined;
 }
@@ -135,7 +135,7 @@ const StringFieldView = observer(
 );
 
 const TokenFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<TokenField>) => (
+  ({ field, editable, colSize, tabIndex }: FieldProps<TokenField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
@@ -153,6 +153,7 @@ const TokenFieldView = observer(
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
         />
         {FieldError(field)}
       </MDBCol>
@@ -161,7 +162,7 @@ const TokenFieldView = observer(
 );
 
 const DurationFieldView = observer(
-  ({ field, editable }: FieldProps<DurationField>) => {
+  ({ field, editable, tabIndex }: FieldProps<DurationField>) => {
     const duration: any = {
       days: field.days,
       hours: field.hours,
@@ -218,6 +219,7 @@ const DurationFieldView = observer(
             min={0}
             max={100}
             onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={props.name === "days" ? tabIndex : tabIndex + 1}
           />
           <div
             style={
@@ -285,7 +287,7 @@ const datePickerTheme = createMuiTheme({
 });
 
 const DateTimeFieldView = observer(
-  ({ field, editable }: FieldProps<DateTimeField>) => {
+  ({ field, editable, tabIndex }: FieldProps<DateTimeField>) => {
     const [open, onOpen] = React.useState(false);
     const disabled = editable === undefined ? false : !editable;
 
@@ -327,6 +329,7 @@ const DateTimeFieldView = observer(
                     readOnly={true}
                     value={field.value ? field.value.toLocaleString() : ""}
                     disabled={disabled}
+                    tabIndex={tabIndex}
                   />
                   <MDBBtn
                     floating
@@ -364,7 +367,7 @@ const DateTimeFieldView = observer(
 );
 
 const PercentageFieldView = observer(
-  ({ field, editable }: FieldProps<PercentageField>) => {
+  ({ field, editable, tabIndex }: FieldProps<PercentageField>) => {
     const onInputChange = (event: any) => {
       const value = event.target.value;
       field.onChange(value === "" ? 0 : Number(value));
@@ -389,6 +392,7 @@ const PercentageFieldView = observer(
             disabled={editable === undefined ? false : !editable}
             onChange={onInputChange}
             onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
           />
           {FieldError(field)}
         </MDBCol>
@@ -398,7 +402,7 @@ const PercentageFieldView = observer(
 );
 
 const AddressFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<AddressField>) => (
+  ({ field, editable, colSize, tabIndex }: FieldProps<AddressField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
         {field.description === "The member's public address." ? (
@@ -427,6 +431,7 @@ const AddressFieldView = observer(
           disabled={editable === undefined ? false : !editable}
           onChange={e => field.onChange(e.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
         />
         {FieldError(field)}
       </MDBCol>
