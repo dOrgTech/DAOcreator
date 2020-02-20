@@ -17,11 +17,11 @@ import {
   AnyLogLine,
   LogType
 } from "./LogLineTypes";
-import OrganisationLine from "./OrganisationLine";
+import OrganizationLine from "./OrganizationLine";
 
 interface IProps {
   dao: DAOMigrationParams;
-  onComplete: (result: DAOMigrationResult) => void;
+  onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
   onStart: () => void;
   onAbort: (error: string) => void;
   onStop: () => void;
@@ -74,6 +74,9 @@ IProps) => {
     undefined
   );
 
+  // Alchemy url
+  const [alchemyURL, setAlchemyURL] = useState("");
+
   const [aborting, setAborting] = useState(false);
 
   const [failed, setFailed] = useState<FAILED | null>(null);
@@ -90,15 +93,15 @@ IProps) => {
    * Step Transitions
    */
 
-  const createOrganisation = () => {
+  const createOrganization = () => {
     setStep(STEP.Creating);
   };
 
-  const configureOrganisation = () => {
+  const configureOrganization = () => {
     setStep(STEP.Configuring);
   };
 
-  const completeOrganisation = () => {
+  const completeOrganization = () => {
     //result: DAOMigrationResult // We're not getting this yet
     setStep(STEP.Completed);
     // onComplete(result);
@@ -137,7 +140,7 @@ IProps) => {
             setApproval({
               msg: "Continue previous deployment?",
               response: (res: boolean): void => {
-                res && configureOrganisation();
+                res && configureOrganization();
                 setApproval(undefined);
                 approvalLine.onResponse(res);
               }
@@ -174,16 +177,41 @@ IProps) => {
             ]);
             break;
 
-          case info === "Setting DAO schemes...":
-          case info === "Deploying Controller":
+          case info === "Setting Scheme Registrar parameters...":
             setMinimalLogLines([
               ...minimalLogLines,
-              "Signing Config Org Txs..."
+              "Setting Scheme Registrar params..."
             ]);
             break;
 
+          case info === "Setting Generic Scheme parameters...":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Setting Generic params..."
+            ]);
+            break;
+
+          case info === "Setting Contribution Reward parameters...":
+            setMinimalLogLines([
+              ...minimalLogLines,
+              "Setting Contribution Reward params..."
+            ]);
+            break;
+
+          case info === "Setting DAO schemes...":
+            setMinimalLogLines([...minimalLogLines, "Setting DAO schemes..."]);
+            break;
+
+          case info === "Deploying Controller":
+            setMinimalLogLines([...minimalLogLines, "Deploying Controller..."]);
+            break;
+
+          case info === "Setting GenesisProtocol parameters...":
+            setMinimalLogLines([...minimalLogLines, "Setting Machine..."]);
+            break;
+
           case info === "DAO Migration has Finished Successfully!":
-            completeOrganisation(); // Hack to complete until callback is implemented
+            completeOrganization(); // Hack to complete until callback is implemented
             break;
 
           default:
@@ -230,7 +258,7 @@ IProps) => {
         const { msg } = txLine;
         switch (true) {
           case msg === "Created new organization.":
-            configureOrganisation();
+            configureOrganization();
             break;
 
           case msg.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
@@ -245,7 +273,7 @@ IProps) => {
           default:
             console.log("Unhandled txResult log:");
             console.log(msg);
-            setMinimalLogLines([...minimalLogLines, msg]);
+            // setMinimalLogLines([...minimalLogLines, msg]);
             break;
         }
         break;
@@ -265,8 +293,13 @@ IProps) => {
             ]);
             break;
 
+          case abortedMsg.startsWith("Network request failed"): // Time out(?)
+            setMinimalLogLines([...minimalLogLines, "Network request failed"]);
+            break;
+
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
+          case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
             setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;
@@ -317,7 +350,7 @@ IProps) => {
         setResult(result);
         setStep(STEP.Completed);
 
-        onComplete(result); // props
+        //onComplete(result); // props
       },
 
       getState: () => {
@@ -343,6 +376,8 @@ IProps) => {
   const startInstallation = async () => {
     console.log("Starting Installation");
 
+    console.log(dao);
+
     // Reset state
     setNoWeb3Open(false);
     setMinimalLogLines([]);
@@ -350,6 +385,7 @@ IProps) => {
     setResult(undefined);
     setApproval(undefined);
     setFailed(null);
+    setAlchemyURL("");
 
     // Make sure we have a web3 provider available. If not,
     // tell the user they need to have one. TODO
@@ -380,12 +416,24 @@ IProps) => {
     const callbacks: DAOMigrationCallbacks = getCallbacks();
     setResult(undefined);
 
-    createOrganisation();
+    createOrganization();
 
     const result = await migrateDAO(dao, callbacks);
     // Getting around unimplemented callback
     if (!result) return;
-    onComplete(result);
+
+    const network = await getNetworkName();
+
+    let url;
+    if (network === "mainnet")
+      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    else if (network === "rinkeby")
+      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    else url = result.Avatar;
+
+    setAlchemyURL(url);
+
+    onComplete(result, url);
     setResult(result);
     window.onbeforeunload = () => {};
   };
@@ -396,18 +444,7 @@ IProps) => {
       return;
     }
 
-    const network = await getNetworkName();
-    let url;
-
-    if (network === "mainnet") {
-      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    } else if (network === "rinkeby") {
-      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    } else {
-      url = result.Avatar;
-    }
-
-    window.open(url);
+    window.open(alchemyURL);
   };
 
   return (
@@ -426,8 +463,8 @@ IProps) => {
         </Fragment>
       )}
 
-      {/* Create Organisation */}
-      <OrganisationLine
+      {/* Create Organization */}
+      <OrganizationLine
         type={0}
         active={step === STEP.Creating}
         done={step === STEP.Configuring || step === STEP.Completed}
@@ -435,8 +472,8 @@ IProps) => {
         logLines={minimalLogLines}
       />
 
-      {/* Configure Organisation */}
-      <OrganisationLine
+      {/* Configure Organization */}
+      <OrganizationLine
         type={1}
         active={step === STEP.Configuring}
         done={step === STEP.Completed}
@@ -444,14 +481,14 @@ IProps) => {
         logLines={minimalLogLines}
       />
 
-      {/* Install Organisation Button */}
+      {/* Install Organization Button */}
       <MDBRow center>
         {step !== STEP.Completed ? (
           <MDBBtn
             disabled={step !== STEP.Waiting && failed === null}
             onClick={() => startInstallation()}
           >
-            {failed === null ? "Install Organisation" : "Restart Installation"}
+            {failed === null ? "Install Organization" : "Restart Installation"}
           </MDBBtn>
         ) : (
           <Fragment>

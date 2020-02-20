@@ -20,9 +20,9 @@ export class SchemeRegistrarForm extends SchemeForm<
         : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Critical })
     });
 
-    this.setDisplayName("Scheme Registrar");
+    this.setDisplayName("Plugin Manager");
     this.setDescription(
-      "Manages post-creation adding/modifying and removing of schemes. Schemes add functionality to the DAO."
+      "Manages post-creation adding/modifying/removing of plugins. Plugins add functionality to the DAO."
     );
   }
 
