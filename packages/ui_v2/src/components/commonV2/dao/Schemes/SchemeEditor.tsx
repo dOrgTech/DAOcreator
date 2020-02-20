@@ -89,6 +89,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   */
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
+  const [disabledDecisionSpeed, setDisabledDecisionSpeed] = useState(false);
+
   // Toggles
   const [rewardSuccess, setRewardSuccess] = useState(true);
   const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
@@ -106,7 +108,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       newForm.$.push(fullSchemes[activeSchemeType]);
       return activeSchemeType;
     });
-    form = newForm;
+    form.$ = newForm.$;
   }, [fullSchemes]);
 
   // Voting Machines
@@ -135,10 +137,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   // Sets vm and vm presets when the speed is changed
   useEffect(() => {
-    const vms: GenesisProtocolForm[] = [];
-    const vmPresets: GenesisProtocolForm[] = [];
+    setDisabledDecisionSpeed(false);
 
-    schemeTemplates.map((scheme: AnySchemeForm) => {
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm) => {
       // Gets voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
@@ -148,23 +149,45 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
 
-      const vm: GenesisProtocolForm = scheme.$.votingMachine;
-      vm.preset = preset;
+      // TODO change scheme to take on options changed by speed preset as long as they do not conflict with the toggles
 
-      vms.push(vm);
-      vmPresets.push(vm);
+      scheme.$.votingMachine.preset = preset;
 
       return scheme;
     });
 
-    setVotingMachines(vms);
-    setPresetVotingMachines(
-      vmPresets as [
-        GenesisProtocolForm,
-        GenesisProtocolForm,
-        GenesisProtocolForm
-      ]
-    );
+    setFullSchemes(newFullSchemes as FullSchemes);
+
+    // const vms: GenesisProtocolForm[] = [];
+    // const vmPresets: GenesisProtocolForm[] = [];
+
+    // schemeTemplates.map((scheme: AnySchemeForm) => {
+    //   // Gets voting machine preset using the decisionSpeed and scheme type
+    //   const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
+    //   if (schemePresetMap === undefined)
+    //     throw Error("Unimplemented Scheme Speed Configuration");
+
+    //   const preset = schemePresetMap.get(scheme.type);
+    //   if (preset === undefined) throw Error("Preset not found");
+
+    //   const vm: GenesisProtocolForm = scheme.$.votingMachine;
+    //   vm.preset = preset;
+
+    //   vms.push(vm);
+    //   vmPresets.push(vm);
+
+    //   return scheme;
+    // });
+
+    // setVotingMachines(vms);
+    // setPresetVotingMachines(
+    //   vmPresets as [
+    //     GenesisProtocolForm,
+    //     GenesisProtocolForm,
+    //     GenesisProtocolForm
+    //   ]
+    // );
   }, [decisionSpeed]);
 
   const discardPreset = (scheme: AnySchemeForm) => {
@@ -321,6 +344,13 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     setDecisionSpeed(parseInt(e.target.value));
   };
 
+  const buttonStyle = (speed: DAOSpeed | null) =>
+    disabledDecisionSpeed
+      ? styles.buttonColorInactive
+      : decisionSpeed === speed
+      ? styles.buttonColorActive
+      : styles.buttonColor;
+
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
@@ -378,11 +408,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
               <button
                 name="decisonSpeed"
                 value={DAOSpeed.Fast}
-                style={
-                  !(decisionSpeed === DAOSpeed.Fast)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
+                style={buttonStyle(
+                  disabledDecisionSpeed ? null : DAOSpeed.Fast
+                )}
                 onClick={handleClick}
               >
                 Fast
@@ -390,11 +418,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
               <button
                 name="decisonSpeed"
                 value={DAOSpeed.Medium}
-                style={
-                  !(decisionSpeed === DAOSpeed.Medium)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
+                style={buttonStyle(
+                  disabledDecisionSpeed ? null : DAOSpeed.Medium
+                )}
                 onClick={handleClick}
               >
                 Medium
@@ -402,11 +428,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
               <button
                 name="decisonSpeed"
                 value={DAOSpeed.Slow}
-                style={
-                  !(decisionSpeed === DAOSpeed.Slow)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
+                style={buttonStyle(
+                  disabledDecisionSpeed ? null : DAOSpeed.Slow
+                )}
                 onClick={handleClick}
               >
                 Slow
@@ -481,6 +505,16 @@ const styles = {
     height: "38px",
     fontSize: "14px",
     backgroundColor: "#1976d2",
+    margin: "auto"
+  },
+  buttonColorInactive: {
+    color: "black",
+    borderRadius: "0.25rem",
+    fontWeight: 300,
+    width: "28%",
+    height: "38px",
+    fontSize: "14px",
+    backgroundColor: "gray",
     margin: "auto"
   },
   info: {
