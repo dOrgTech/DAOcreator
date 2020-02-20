@@ -5,7 +5,10 @@
   "scripts": {
     "start:v1": "cd packages/ui_v1 && yarn start",
     "start:v2": "cd packages/ui_v2 && yarn start",
-    "build": "lerna exec -- yarn build"
+    "build": "lerna exec -- yarn build",
+    "release:lib": "lerna exec --scope @dorgtech/daocreator-lib -- yarn release",
+    "release:v1": "lerna exec --scope @dorgtech/daocreator-ui-v1 -- yarn release",
+    "release:v2": "lerna exec --scope @dorgtech/daocreator-ui-v2 -- yarn release"
   },
   "devDependencies": {
     "lerna": "^3.18.4"

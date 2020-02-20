@@ -137,29 +137,15 @@ const StringFieldView = observer(
 const TokenFieldView = observer(
   ({ field, editable, colSize }: FieldProps<TokenField>) => (
     <>
-      <MDBCol
-        size={colSize ? colSize : "6"}
-        style={colSize ? {} : styles.largeMargin}
-      >
-        {colSize ? (
-          <></>
-        ) : (
-          <>
-            <label style={styles.labelStyle}>{field.displayName}</label>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                {" "}
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>{field.description}</span>
-            </MDBTooltip>
-          </>
-        )}
+      <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
+        <label style={styles.labelStyle}>{field.displayName}</label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{field.description}</span>
+        </MDBTooltip>
         <input
           type="text"
           style={styles.inputStyle}
@@ -176,14 +162,14 @@ const TokenFieldView = observer(
 
 const DurationFieldView = observer(
   ({ field, editable }: FieldProps<DurationField>) => {
+    const duration: any = {
+      days: field.days,
+      hours: field.hours,
+      minutes: field.minutes
+    };
+
     const onChange = (event: any) => {
       const { name, value } = event.target;
-      const duration: any = {
-        days: field.days,
-        hours: field.hours,
-        minutes: field.minutes
-      };
-
       if (name === "days") {
         duration["days"] = +value;
       } else {
@@ -194,6 +180,17 @@ const DurationFieldView = observer(
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
+    };
+
+    const fieldValue = (props: { name: "days" | "hoursAndMinutes" }) => {
+      if (props.name === "days") {
+        return field[props.name];
+      } else {
+        let { hours, minutes } = duration;
+        hours = +hours < 9 ? 0 + `${hours}` : hours;
+        minutes = +minutes < 9 ? 0 + `${minutes}` : minutes;
+        return `${hours}:${minutes}`;
+      }
     };
 
     const DurationPart = observer(
@@ -214,7 +211,7 @@ const DurationFieldView = observer(
                     textAlign: "center"
                   }
             }
-            value={field[props.name]}
+            value={fieldValue(props)}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
             type={props.name === "days" ? "number" : "time"}
@@ -368,6 +365,11 @@ const DateTimeFieldView = observer(
 
 const PercentageFieldView = observer(
   ({ field, editable }: FieldProps<PercentageField>) => {
+    const onInputChange = (event: any) => {
+      const value = event.target.value;
+      field.onChange(value === "" ? 0 : Number(value));
+    };
+
     return (
       <>
         <MDBCol size="6" style={styles.largeMargin}>
@@ -385,7 +387,7 @@ const PercentageFieldView = observer(
             style={styles.inputStyle}
             value={field.value}
             disabled={editable === undefined ? false : !editable}
-            onChange={(event: any) => field.onChange(event.target.value)}
+            onChange={onInputChange}
             onBlur={field.enableAutoValidationAndValidate}
           />
           {FieldError(field)}

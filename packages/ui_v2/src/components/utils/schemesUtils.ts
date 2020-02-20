@@ -66,7 +66,6 @@ export const simpleOptionsSwitcher = (
   schemes.$.map(simpleOptionsSwitcherToggle);
   return simpleOptions;
 };
-
 // WIP decisionSpeedSwitcher
 // This is one example of a condition to disable speeds
 const schemePeriodLimits = {

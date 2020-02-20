@@ -3,8 +3,11 @@ import { MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "../../LineGraphic";
 
+// Right now TS can't cast [key: string]: string | number but it can cast [key: string]: any despite an interface only having strings and numbers
+// https://stackoverflow.com/questions/37006008/typescript-index-signature-is-missing-in-type
 interface IData {
-  [name: string]: string | number;
+  // [name: string]: string | number;
+  [name: string]: any;
 }
 
 interface ILineConfig {
@@ -17,17 +20,14 @@ interface ILineConfig {
 
 interface IProps {
   data: IData[]; // TODO Potentially update data type to flattened form type,
-  getDAOTokenSymbol: () => string;
+  tokenSymbol: string;
 }
 
-export const MembersAnalytics: FC<IProps> = ({
-  data,
-  getDAOTokenSymbol
-}: IProps) => {
+export const MembersAnalytics: FC<IProps> = ({ data, tokenSymbol }: IProps) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol,
     dataKey: "tokens",
     nameKey: "address"
   };
@@ -89,7 +89,7 @@ export const MembersAnalytics: FC<IProps> = ({
     );
     const tokenBox = (
       <Box
-        name={`${getDAOTokenSymbol()} Token Distribution`}
+        name={`${tokenSymbol} Token Distribution`}
         total={totalTokenAmount}
         config={tokenConfig}
       />

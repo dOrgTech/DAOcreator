@@ -2,13 +2,14 @@ import React from "react";
 import { MDBRow, MDBCol } from "mdbreact";
 
 import FormField from "../../FormField";
+import { MemberForm } from "@dorgtech/daocreator-lib";
 
 export const MemberEditor = ({
   memberForm,
   onSubmit
 }: {
-  memberForm: any;
-  onSubmit: any;
+  memberForm: MemberForm;
+  onSubmit: (event: any) => void;
 }) => {
   return (
     <MDBRow
@@ -41,9 +42,6 @@ const styles = {
     fontSize: "14px",
     width: "inherit",
     marginTop: "28px"
-  },
-  buttonRow: {
-    alignSelf: "flex-end"
   },
   rowPrincipal: {
     margin: 0,

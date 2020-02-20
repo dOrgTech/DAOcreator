@@ -392,14 +392,18 @@ class Migrator extends React.Component<Props, State> {
         return <></>;
       }
 
-      const json = JSON.stringify(result, null, 2);
-
       return (
-        <>
+        <Grid container direction={"column"} alignItems={"center"}>
           <Typography variant={"h6"} className={classes.successText}>
             Deployment Successful!
           </Typography>
-          <Link
+          <Typography variant={"subtitle2"} color={"error"}>
+            Save This URL!
+          </Typography>
+          <Button
+            color={"primary"}
+            variant={"contained"}
+            className={classes.goToDaoButton}
             onClick={async () => {
               const network = await getNetworkName();
               let url;
@@ -417,27 +421,9 @@ class Migrator extends React.Component<Props, State> {
               window.open(url);
             }}
           >
-            View DAO in Alchemy (Save This Link!)
-          </Link>
-          <div className={classes.resultWrapper}>
-            <Paper className={classes.result}>
-              <Button
-                onClick={() => navigator.clipboard.writeText(json)}
-                variant={"outlined"}
-                size={"small"}
-                style={{ float: "right" }}
-              >
-                Copy
-              </Button>
-              {json}
-            </Paper>
-            <Typography variant={"subtitle2"}>
-              Have feedback? Click the icon in the bottom right and let us know
-              what you think!
-            </Typography>
-          </div>
-          <Divider className={classes.resultsDivider} />
-        </>
+            Go To DAO
+          </Button>
+        </Grid>
       );
     };
 
@@ -486,7 +472,7 @@ class Migrator extends React.Component<Props, State> {
           this will break the deployment process. A fix is being worked on.
         </Typography>
         <Divider className={classes.resultsDivider} />
-        {result ? <MigrationResults /> : <></>}
+        <MigrationResults />
         <ExpansionPanel expanded={started && !logClosed}>
           <ExpansionPanelSummary
             expandIcon={
@@ -602,19 +588,6 @@ const styles = (theme: Theme) =>
     dialog: {
       maxWidth: "690px"
     },
-    result: {
-      width: "100%",
-      background: "#e4e4e4",
-      overflowX: "hidden",
-      padding: "10px",
-      whiteSpace: "pre"
-    },
-    resultWrapper: {
-      width: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center"
-    },
     successText: {
       width: "100%",
       textAlign: "center"
@@ -622,6 +595,9 @@ const styles = (theme: Theme) =>
     resultsDivider: {
       marginTop: "20px",
       marginBottom: "20px"
+    },
+    goToDaoButton: {
+      width: "120px"
     }
   });
 

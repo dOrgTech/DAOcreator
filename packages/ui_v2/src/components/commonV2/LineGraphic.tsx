@@ -6,7 +6,7 @@ import {
   MDBBox,
   MDBRow
 } from "mdbreact";
-import Blockies from "react-blockies";
+import EthAddressAvatar from "./EthAddressAvatar";
 
 interface IData {
   [name: string]: string | number;
@@ -78,13 +78,13 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
             </div>
             <MDBBox className="align-middle justify-content-center">
               <MDBRow className="m-2">
-                <Blockies seed={name} />
-                <div>
+                <EthAddressAvatar address={name} height={"20px"} />
+                <div style={{ marginLeft: "5px" }}>
                   {`${name.substr(0, 6)}...${name.substring(name.length - 4)}`}
                 </div>
               </MDBRow>
               <MDBRow className="m-2">
-                <div>
+                <div style={{ marginLeft: "5px" }}>
                   {`${value} ${symbol}`} ({`${percentage}%`})
                 </div>
               </MDBRow>
