@@ -647,10 +647,15 @@ const Stepper: FC<Props> = ({
         </MDBRow>
       </MDBCollapse>
       {step === 3 && index === 3 ? (
-        <MDBRow center style={{ paddingTop: "3%" }}>
+        <MDBRow
+          center
+          style={{
+            paddingTop: "3%",
+            paddingLeft: installStep !== STEP.Completed ? "36%" : "30%"
+          }}
+        >
           {installStep !== STEP.Completed ? (
             <MDBBtn
-              style={{ paddingLeft: "36%" }}
               disabled={installStep !== STEP.Waiting && failed === null}
               onClick={() => startInstallation()}
             >
@@ -660,10 +665,8 @@ const Stepper: FC<Props> = ({
             </MDBBtn>
           ) : (
             <Fragment>
-              <div style={{ paddingLeft: "36%" }}>
-                <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
-                <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
-              </div>
+              <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
+              <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
             </Fragment>
           )}
         </MDBRow>

@@ -1,11 +1,6 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
-import {
-  DAOForm,
-  DAOMigrationResult,
-  toDAOMigrationParams,
-  DAOMigrationParams
-} from "@dorgtech/daocreator-lib";
+import { DAOForm } from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 
 interface Props {

@@ -1,4 +1,4 @@
-import React, { FC, useState, Fragment, useEffect } from "react";
+import React, { FC, Fragment, useEffect } from "react";
 import {
   DAOMigrationParams,
   DAOMigrationResult
@@ -29,29 +29,11 @@ enum FAILED {
   Config
 }
 
-const Migrator: FC<IProps> = ({
-  dao,
-  onComplete,
-  onStart,
-  onAbort,
-  migrationStates
-}: // onStop
-IProps) => {
+const Migrator: FC<IProps> = ({ migrationStates }: IProps) => {
   const {
     installStep,
-    setInstallStep,
-    setNoWeb3Open,
-    setEthSpent,
-    fullLogLines,
-    setFullLogLines,
     minimalLogLines,
-    setMinimalLogLines,
     approval,
-    setApproval,
-    result,
-    setResult,
-    alchemyURL,
-    setAlchemyURL,
     aborting,
     setAborting,
     failed,
@@ -63,7 +45,7 @@ IProps) => {
     setAborting(false);
     if (installStep === STEP.Creating) setFailed(FAILED.Create);
     else if (installStep === STEP.Configuring) setFailed(FAILED.Config);
-  }, [aborting, installStep]);
+  }, [aborting, installStep, setAborting, setFailed]);
 
   return (
     <MDBContainer>
