@@ -1,6 +1,8 @@
 import React from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 import LineGraphic from "../commonV2/LineGraphic";
+import { SchemesPreview } from "../commonV2/Stepper/Preview";
+import { getSimpleOptions } from "../utils";
 
 const FirstStep = (form: any) => {
   return (
@@ -29,10 +31,12 @@ const FirstStep = (form: any) => {
 };
 
 const SecondStep = (form: any) => {
+  if (form.$.schemes.length === 0) return null;
+
   return (
     <div style={{ marginTop: 28 }}>
       <h3>Schemes</h3>
-      {noDuplicateSimpleOptions.map((option: any, index: number) =>
+      {getSimpleOptions(form.$.schemes).map((option: any, index: number) =>
         option.checked ? (
           <div key={index}>
             <p>
@@ -127,6 +131,9 @@ export function Review(props: any) {
       {steps.slice(0, step).map(ActualStep => {
         return <ActualStep {...recoveredForm} />;
       })}
+      {/* {steps.slice(0, step).map((ActualStep, index: number) => {
+        return <ActualStep key={index} {...recoveredForm} />;
+      })} */}
     </>
   );
 }

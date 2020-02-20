@@ -1,3 +1,34 @@
+import { SchemesForm } from "@dorgtech/daocreator-lib";
+
+export interface SimpleOption {
+  text: string;
+  checked: boolean;
+}
+
+export const getSimpleOptions = (form: SchemesForm) => {
+  // if (form.$.length === 0) return [];
+
+  const {
+    proposingRepReward,
+    votersReputationLossRatio,
+    minimumDaoBounty
+  } = form.$[0].$.votingMachine.values;
+
+  const simpleOptions: [SimpleOption, SimpleOption, SimpleOption] = [
+    { text: "Reward successful proposer", checked: +proposingRepReward > 0 },
+    {
+      text: "Reward correct voters and penalize incorrect voters",
+      checked: +votersReputationLossRatio > 0
+    },
+    {
+      text: "Auto-bet against every proposal to incentive curation",
+      checked: +minimumDaoBounty > 0
+    }
+  ];
+
+  return simpleOptions;
+};
+
 // WIP decisionSpeedSwitcher
 // This is one example of a condition to disable speeds
 const schemePeriodLimits = {
