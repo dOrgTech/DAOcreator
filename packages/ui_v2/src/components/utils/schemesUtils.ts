@@ -6,7 +6,7 @@ export interface SimpleOption {
 }
 
 export const getSimpleOptions = (form: SchemesForm) => {
-  // if (form.$.length === 0) return [];
+  if (form.$.length === 0) return [];
 
   const {
     proposingRepReward,
@@ -14,7 +14,7 @@ export const getSimpleOptions = (form: SchemesForm) => {
     minimumDaoBounty
   } = form.$[0].$.votingMachine.values;
 
-  const simpleOptions: [SimpleOption, SimpleOption, SimpleOption] = [
+  const simpleOptions: SimpleOption[] = [
     { text: "Reward successful proposer", checked: +proposingRepReward > 0 },
     {
       text: "Reward correct voters and penalize incorrect voters",

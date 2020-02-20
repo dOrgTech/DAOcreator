@@ -25,11 +25,7 @@ export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
 );
 
 export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
-  const simpleOptions: [
-    SimpleOption,
-    SimpleOption,
-    SimpleOption
-  ] = getSimpleOptions(form);
+  const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
     <div style={styles.schemePreview}>
