@@ -6,7 +6,7 @@ import {
   toDAOMigrationParams,
   DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip, MDBBtn } from "mdbreact";
 
 interface Props {
   form: DAOForm;
@@ -15,7 +15,6 @@ interface Props {
 
 const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
-  // Could be used to display the dao information to the user
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
 
   /*
@@ -55,7 +54,16 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
     setLaunching(false);
   };
 
-  const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
+  /*
+   * Methods
+   */
+
+  const copyDAO = (dao: DAOMigrationResult) => {
+    console.log(dao);
+    console.log(JSON.stringify(dao));
+    navigator.clipboard.writeText(JSON.stringify(dao));
+  };
+
   return (
     <Fragment>
       <MDBContainer>
@@ -87,12 +95,17 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
         ))}
       </MDBContainer>
       <Migrator
-        dao={dao}
+        dao={toDAOMigrationParams(form.toState())}
         onComplete={onComplete}
         onStart={onStart}
         onAbort={onAbort}
         onStop={onStop}
       />
+      {daoInfo.map((dao: DAOMigrationResult, index: number) => (
+        <MDBBtn key={index} onClick={() => copyDAO(dao)}>
+          Copy DAO Addresses
+        </MDBBtn>
+      ))}
     </Fragment>
   );
 };
