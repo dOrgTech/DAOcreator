@@ -158,6 +158,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Sets vm presets when the speed is changed
   useEffect(() => {
     updatePresets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [decisionSpeed]);
 
   // Updates form when vm changes
@@ -195,6 +196,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     return () => {
       updatingVotingMachine.current = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullSchemes]);
 
   // Updates vms when toggles change
