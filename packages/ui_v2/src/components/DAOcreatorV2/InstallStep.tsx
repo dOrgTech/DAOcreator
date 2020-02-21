@@ -3,8 +3,7 @@ import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
   DAOMigrationResult,
-  toDAOMigrationParams,
-  DAOMigrationParams
+  toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip, MDBBtn } from "mdbreact";
 
@@ -16,6 +15,17 @@ interface Props {
 const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
+  const [daoLogs, setDaoLogs] = useState<string[][]>([[]]);
+
+  /*
+   * Methods
+   */
+
+  const addLog = (log: string) => {
+    const newDaoLogs = daoLogs;
+    daoLogs[daoLogs.length - 1].push(log);
+    setDaoLogs(newDaoLogs);
+  };
 
   /*
    * Callbacks
@@ -37,11 +47,14 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
       { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
     ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
-    onStop();
+
+    addLog("Completing Launch...");
+    setLaunching(false);
   };
 
   const onStart = () => {
     setLaunching(true);
+    setDaoLogs([...daoLogs, ["Starting Launch..."]]);
   };
 
   const onAbort = (error: string) => {
@@ -52,6 +65,11 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
 
   const onStop = () => {
     setLaunching(false);
+    addLog("Stopping Launch...");
+  };
+
+  const onLog = (log: string) => {
+    addLog(log);
   };
 
   /*
@@ -62,6 +80,12 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
     console.log(dao);
     console.log(JSON.stringify(dao));
     navigator.clipboard.writeText(JSON.stringify(dao));
+  };
+
+  const copyDAOLogs = (logs: string[]) => {
+    console.log(logs);
+    console.log(JSON.stringify(logs));
+    navigator.clipboard.writeText(JSON.stringify(logs));
   };
 
   return (
@@ -100,10 +124,16 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
         onStart={onStart}
         onAbort={onAbort}
         onStop={onStop}
+        onLog={onLog}
       />
       {daoInfo.map((dao: DAOMigrationResult, index: number) => (
         <MDBBtn key={index} onClick={() => copyDAO(dao)}>
           Copy DAO Addresses
+        </MDBBtn>
+      ))}
+      {daoLogs.map((logs: string[], index: number) => (
+        <MDBBtn key={index} onClick={() => copyDAOLogs(logs)}>
+          Copy DAO Logs
         </MDBBtn>
       ))}
     </Fragment>
