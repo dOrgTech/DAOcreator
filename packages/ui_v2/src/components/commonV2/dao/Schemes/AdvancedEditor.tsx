@@ -27,7 +27,10 @@ import { VotingMachinePresets } from "./SchemeEditor";
 interface Props {
   form: SchemesForm;
   defaultVMs: VotingMachinePresets;
-  updateVotingMachines: (advancedSchemes: AnySchemeForm[]) => void;
+  updateSchemes: (
+    advancedSchemes: AnySchemeForm[],
+    isActive: boolean[]
+  ) => void;
   resetForm: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
@@ -42,7 +45,7 @@ const schemeTemplates: AnySchemeForm[] = [
 const AdvancedEditor: FC<Props> = ({
   form,
   defaultVMs,
-  updateVotingMachines,
+  updateSchemes,
   resetForm,
   modal,
   setModal
@@ -140,7 +143,7 @@ const AdvancedEditor: FC<Props> = ({
       return false;
     }
 
-    updateVotingMachines(schemes);
+    updateSchemes(schemes, isActive);
 
     return true;
   };
