@@ -61,6 +61,8 @@ const MembersEditor = ({ form }: Props) => {
   const forceUpdate = useForceUpdate();
 
   useEffect(() => {
+    if (userAdded) return;
+
     if (!web3Connected) {
       setUserMemberForm(new MemberForm(getDAOTokenSymbol));
       return;
@@ -72,6 +74,8 @@ const MembersEditor = ({ form }: Props) => {
       console.log(e);
       return;
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMemberForm, web3Connected, getDAOTokenSymbol, web3]);
 
   useEffect(() => {
