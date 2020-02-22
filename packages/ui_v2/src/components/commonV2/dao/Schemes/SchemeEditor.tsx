@@ -132,7 +132,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    */
 
   useEffect(() => {
-    console.log(updatingFromForm.current);
     if (!updatingFromForm.current) return;
     const containsType = (type: SchemeType) => {
       return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
@@ -276,8 +275,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    */
 
   const disableSpeed = () => {
-    // updatingVotingMachine.current = true;
-
     setDisabledDecisionSpeed(true);
   };
 
