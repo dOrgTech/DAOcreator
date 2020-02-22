@@ -15,16 +15,21 @@ interface Props {
 const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
-  const [daoLogs, setDaoLogs] = useState<string[][]>([[]]);
+  const [daoLogs, setDaoLogs] = useState<string[][]>([]);
 
   /*
    * Methods
    */
 
   const addLog = (log: string) => {
-    const newDaoLogs = daoLogs;
-    daoLogs[daoLogs.length - 1].push(log);
-    setDaoLogs(newDaoLogs);
+    setDaoLogs(daoLogs => {
+      daoLogs[daoLogs.length - 1].push(log);
+      return daoLogs;
+    });
+  };
+
+  const addNewLogs = () => {
+    setDaoLogs(daoLogs => [...daoLogs, []]);
   };
 
   /*
@@ -48,13 +53,14 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
     ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
 
-    addLog("Completing Launch...");
-    setLaunching(false);
+    // addLog("Completing Launch...");
+    onStop();
   };
 
   const onStart = () => {
     setLaunching(true);
-    setDaoLogs([...daoLogs, ["Starting Launch..."]]);
+
+    addNewLogs();
   };
 
   const onAbort = (error: string) => {
@@ -65,7 +71,7 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
 
   const onStop = () => {
     setLaunching(false);
-    addLog("Stopping Launch...");
+    // addLog("Stopping Launch...");
   };
 
   const onLog = (log: string) => {

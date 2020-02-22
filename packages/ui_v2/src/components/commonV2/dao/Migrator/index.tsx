@@ -66,11 +66,6 @@ IProps) => {
   // Heavily redacted log lines
   const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
 
-  const addMinLogLine = (log: string) => {
-    setMinimalLogLines([...minimalLogLines, log]);
-    onLog(log);
-  };
-
   // User approval component
   const [approval, setApproval] = useState<
     undefined | { msg: string; response: (res: boolean) => void }
@@ -87,6 +82,15 @@ IProps) => {
   const [aborting, setAborting] = useState(false);
 
   const [failed, setFailed] = useState<FAILED | null>(null);
+
+  const addMinLogLine = (log: string) => {
+    setMinimalLogLines([...minimalLogLines, log]);
+  };
+
+  const addFullLogLine = (log: AnyLogLine) => {
+    setFullLogLines([...fullLogLines, log]);
+    onLog(log.toString());
+  };
 
   useEffect(() => {
     if (!aborting) return;
@@ -137,7 +141,7 @@ IProps) => {
 
   const addLogLine = (logLine: AnyLogLine) => {
     const { type } = logLine;
-    setFullLogLines([...fullLogLines, logLine]);
+    addFullLogLine(logLine);
 
     const {
       UserApproval,
