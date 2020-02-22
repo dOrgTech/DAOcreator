@@ -82,13 +82,13 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
   const copyDAO = (dao: DAOMigrationResult) => {
     console.log(dao);
     console.log(JSON.stringify(dao));
-    navigator.clipboard.writeText(JSON.stringify(dao));
+    navigator.clipboard.writeText(JSON.stringify(dao, null, 2));
   };
 
   const copyDAOLogs = (logs: string[]) => {
     console.log(logs);
     console.log(JSON.stringify(logs));
-    navigator.clipboard.writeText(JSON.stringify(logs));
+    navigator.clipboard.writeText(JSON.stringify(logs, null, 2));
   };
 
   return (
