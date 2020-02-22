@@ -19,7 +19,7 @@ const Toggle: FC<Props> = ({
   disabled = false,
   checked,
   style
-}: Props) => (
+}) => (
   <MDBRow style={style ? style : styles.paddingRow}>
     <MDBCol size="11" style={styles.noPadding}>
       <span style={styles.marginText} className="text-left">

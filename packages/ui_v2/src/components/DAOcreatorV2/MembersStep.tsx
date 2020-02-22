@@ -9,7 +9,7 @@ interface Props {
   toggleCollapse: () => void;
 }
 
-const MembersStep: FC<Props> = ({ form, toggleCollapse }: Props) => (
+const MembersStep: FC<Props> = ({ form, toggleCollapse }) => (
   <MDBContainer style={styles.padding}>
     <MDBBox>
       <MembersEditor form={form} />

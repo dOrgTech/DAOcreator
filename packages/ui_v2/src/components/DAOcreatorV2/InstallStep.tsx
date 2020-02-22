@@ -12,7 +12,7 @@ interface Props {
   setLaunching: (launching: boolean) => void;
 }
 
-const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
+const InstallStep: FC<Props> = ({ form, setLaunching }) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
   const [daoLogs, setDaoLogs] = useState<string[][]>([]);
@@ -52,8 +52,6 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
       { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
     ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
-
-    // addLog("Completing Launch...");
     onStop();
   };
 
@@ -71,7 +69,6 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
 
   const onStop = () => {
     setLaunching(false);
-    // addLog("Stopping Launch...");
   };
 
   const onLog = (log: string) => {

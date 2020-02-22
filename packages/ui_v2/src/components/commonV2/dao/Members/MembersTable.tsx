@@ -13,7 +13,7 @@ import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
 import { truncateString } from "../../../utils";
 
-interface IProps {
+interface Props {
   membersForm: any;
   editing: number;
   editedMemberForm: MemberForm;
@@ -25,12 +25,12 @@ interface IProps {
   getDAOTokenSymbol: () => string;
 }
 
-interface IRowProps {
+interface RowProps {
   memberForm: MemberForm;
   index: number;
 }
 
-export const MembersTable: FC<IProps> = ({
+export const MembersTable: FC<Props> = ({
   membersForm,
   editing,
   editedMemberForm,
@@ -40,8 +40,8 @@ export const MembersTable: FC<IProps> = ({
   cancelEdit,
   tokenDistribution,
   getDAOTokenSymbol
-}: IProps) => {
-  const Row: FC<IRowProps> = ({ memberForm, index }: IRowProps) => {
+}) => {
+  const Row: FC<RowProps> = ({ memberForm, index }) => {
     const lineEdit = editing === index;
 
     return (

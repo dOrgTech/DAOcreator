@@ -19,7 +19,7 @@ import {
 } from "./LogLineTypes";
 import OrganizationLine from "./OrganizationLine";
 
-interface IProps {
+interface Props {
   dao: DAOMigrationParams;
   onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
   onStart: () => void;
@@ -42,14 +42,13 @@ enum FAILED {
   Config
 }
 
-const Migrator: FC<IProps> = ({
+const Migrator: FC<Props> = ({
   dao,
   onComplete,
   onStart,
   onAbort,
   onLog
-}: // onStop
-IProps) => {
+}) => {
   /*
    * State
    */
@@ -122,16 +121,15 @@ IProps) => {
     const network = await getNetworkName();
 
     let url;
-    if (network === "mainnet")
+    if (network === "mainnet") {
       url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    else if (network === "rinkeby")
+    } else if (network === "rinkeby") {
       url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    else url = result.Avatar;
+    } else {
+      url = result.Avatar;
+    }
 
     setAlchemyURL(url);
-
-    // const logs = getMinimalLogLines();
-
     onComplete(result, url);
   };
 

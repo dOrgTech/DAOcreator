@@ -5,12 +5,12 @@ import LineGraphic from "../../LineGraphic";
 
 // Right now TS can't cast [key: string]: string | number but it can cast [key: string]: any despite an interface only having strings and numbers
 // https://stackoverflow.com/questions/37006008/typescript-index-signature-is-missing-in-type
-interface IData {
+interface Data {
   // [name: string]: string | number;
   [name: string]: any;
 }
 
-interface ILineConfig {
+interface LineConfig {
   showPercentage: boolean;
   height: string;
   symbol?: string;
@@ -18,12 +18,12 @@ interface ILineConfig {
   nameKey: string;
 }
 
-interface IProps {
-  data: IData[]; // TODO Potentially update data type to flattened form type,
+interface Props {
+  data: Data[]; // TODO Potentially update data type to flattened form type,
   tokenSymbol: string;
 }
 
-export const MembersAnalytics: FC<IProps> = ({ data, tokenSymbol }: IProps) => {
+export const MembersAnalytics: FC<Props> = ({ data, tokenSymbol }) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -45,7 +45,7 @@ export const MembersAnalytics: FC<IProps> = ({ data, tokenSymbol }: IProps) => {
 
   useEffect(() => {
     let count = 0;
-    data.map((element: IData) => {
+    data.map((element: Data) => {
       count += element[tokenConfig.dataKey] as number;
       return element;
     });
@@ -54,20 +54,20 @@ export const MembersAnalytics: FC<IProps> = ({ data, tokenSymbol }: IProps) => {
 
   useEffect(() => {
     let count = 0;
-    data.map((element: IData) => {
+    data.map((element: Data) => {
       count += element[reputationConfig.dataKey] as number;
       return element;
     });
     setTotalReputationAmount(count);
   }, [data, reputationConfig.dataKey]);
 
-  interface IBoxProps {
+  interface BoxProps {
     name: string;
     total: number;
-    config: ILineConfig;
+    config: LineConfig;
   }
 
-  const Box: FC<IBoxProps> = ({ name, total, config }: IBoxProps) =>
+  const Box: FC<BoxProps> = ({ name, total, config }) =>
     total === 0 ? null : (
       <MDBRow>
         <MDBCol size="4">
