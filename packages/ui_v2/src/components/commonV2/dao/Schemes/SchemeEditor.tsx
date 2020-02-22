@@ -128,16 +128,24 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Ref to stop force switching toggles from updating vm
   const updatingVotingMachine = useRef(false);
   const updatingFromForm = useRef(true);
+  const updatingFromFormCount = useRef(0);
 
   /*
    * Hooks
    */
 
   useEffect(() => {
+    let newUpdatingFromForm = true;
+
     if (!updatingFromForm.current) return;
     if (form.$.length === 0) return; // TODO do on MembersEditor too
 
-    // TODO form.$ gets set to default and then again with localstorage =? DETECT THEN RUN UPDATESCHEMES
+    // form.$ is updated multiple times. To avoid confused state when loading from modal, this is the quick patch I came up with.
+    if (updatingFromFormCount.current < 2) {
+      updatingFromFormCount.current++;
+      return;
+    }
+    newUpdatingFromForm = false;
 
     const containsType = (type: SchemeType) => {
       return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
@@ -158,7 +166,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     });
 
     return () => {
-      updatingFromForm.current = false;
+      updatingFromForm.current = newUpdatingFromForm;
     };
   }, [form.$]);
 
@@ -215,11 +223,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     };
 
     const newForm = new SchemesForm();
-    activeSchemeTypes.map((activeSchemeType: SchemeType) => {
+    activeSchemeTypes.map((activeSchemeType: SchemeType, index) => {
       newForm.$.push(fullSchemes[activeSchemeType]);
 
       if (discardPreset(fullSchemes[activeSchemeType]))
-        newForm.$[activeSchemeType].$.votingMachine.preset = undefined;
+        newForm.$[index].$.votingMachine.preset = undefined;
 
       return activeSchemeType;
     });
@@ -328,8 +336,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     advancedSchemes: AnySchemeForm[],
     activeSchemes: boolean[]
   ) => {
-    console.log("updateSchemes");
-    console.log("advancedSchemes", advancedSchemes[0].$.votingMachine.values);
     updatingVotingMachine.current = true;
 
     let newActiveSchemeTypes: SchemeType[] = [];
@@ -361,7 +367,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         minimumDaoBounty,
         daoBountyConst
       } = scheme.$.votingMachine.values;
-      console.log("seting toggles");
+
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
       setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
