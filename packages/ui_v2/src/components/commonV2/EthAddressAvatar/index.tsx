@@ -8,7 +8,9 @@ export type Props = {
 
 const EthAddressAvatar: FC<Props> = ({ address, height = "30px" }) => (
   <img
-    src={makeBlockie(address)}
+    src={makeBlockie(
+      address ? address : "0x0000000000000000000000000000000000000000"
+    )}
     alt="identicon"
     onClick={() => window.open(`https://etherscan.io/address/${address}`)}
     style={{
