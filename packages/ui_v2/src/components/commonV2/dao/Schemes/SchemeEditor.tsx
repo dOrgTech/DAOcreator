@@ -435,7 +435,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         </MDBRow>
 
         <MDBRow style={styles.box}>
-          <div style={{ margin: "auto" }}>
+          <MDBContainer>
             {warnings.map((warning, index) => (
               <div key={index} style={{ margin: "0 1rem" }}>
                 <MDBAlert color="warning" dismiss>
@@ -447,7 +447,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
                 </MDBAlert>
               </div>
             ))}
-          </div>
+          </MDBContainer>
           <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">
