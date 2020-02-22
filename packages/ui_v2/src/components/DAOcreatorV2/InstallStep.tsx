@@ -132,16 +132,25 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
         onStop={onStop}
         onLog={onLog}
       />
-      {daoInfo.map((dao: DAOMigrationResult, index: number) => (
-        <MDBBtn key={index} onClick={() => copyDAO(dao)}>
-          Copy DAO Addresses
-        </MDBBtn>
-      ))}
-      {daoLogs.map((logs: string[], index: number) => (
-        <MDBBtn key={index} onClick={() => copyDAOLogs(logs)}>
-          Copy DAO Logs
-        </MDBBtn>
-      ))}
+      <div
+        style={{
+          marginTop: "-1.5rem",
+          marginLeft: "auto",
+          height: 0,
+          fontSize: "75%"
+        }}
+      >
+        {daoInfo.map((dao: DAOMigrationResult, index: number) => (
+          <button key={index} onClick={() => copyDAO(dao)}>
+            Copy Addresses
+          </button>
+        ))}
+        {daoLogs.map((logs: string[], index: number) => (
+          <button key={index} onClick={() => copyDAOLogs(logs)}>
+            Copy Logs
+          </button>
+        ))}
+      </div>
     </Fragment>
   );
 };
