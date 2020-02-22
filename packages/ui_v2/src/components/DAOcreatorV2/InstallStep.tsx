@@ -5,7 +5,7 @@ import {
   DAOMigrationResult,
   toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip, MDBBtn } from "mdbreact";
+import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 
 interface Props {
   form: DAOForm;
@@ -140,19 +140,31 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
           fontSize: "75%"
         }}
       >
-        {daoInfo.map((dao: DAOMigrationResult, index: number) => (
-          <button key={index} onClick={() => copyDAO(dao)}>
+        {daoInfo.length > 0 && (
+          <button
+            style={styles.copyButton}
+            onClick={() => copyDAO(daoInfo[daoInfo.length - 1])}
+          >
             Copy Addresses
           </button>
-        ))}
-        {daoLogs.map((logs: string[], index: number) => (
-          <button key={index} onClick={() => copyDAOLogs(logs)}>
+        )}
+        {daoLogs.length > 0 && (
+          <button
+            style={styles.copyButton}
+            onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
+          >
             Copy Logs
           </button>
-        ))}
+        )}
       </div>
     </Fragment>
   );
+};
+
+const styles = {
+  copyButton: {
+    margin: "0.2rem"
+  }
 };
 
 export default InstallStep;
