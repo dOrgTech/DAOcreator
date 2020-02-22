@@ -212,12 +212,12 @@ const MembersEditor = ({ form }: Props) => {
               style={styles.setDescriptionButton}
               onClick={handleMetamask}
             >
-              Connect to Web3
+              Add Your Wallet
             </button>
           ) : (
             !userAdded && (
               <button style={styles.setDescriptionButton} onClick={addUser}>
-                Add Self
+                Add Self {/* TODO add blockie here?*/}
               </button>
             )
           )}
