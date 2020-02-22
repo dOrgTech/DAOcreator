@@ -97,6 +97,7 @@ const AdvancedEditor: FC<Props> = ({
     setIsActive(
       isActive.map((_, index) => form.$.some(scheme => scheme.type === index))
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal, updateAdvancedForm]);
 
   // Check that scheme of type SchemeRegistrar is active

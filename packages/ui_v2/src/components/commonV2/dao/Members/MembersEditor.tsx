@@ -55,8 +55,8 @@ const MembersEditor: FC<Props> = ({ form, loadedFromModal }) => {
   // Update userAdded when loading existing user
   useEffect(() => {
     if (!loadedFromModal) return;
-
     if (form.$.length > 0) setUserAdded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadedFromModal]);
 
   useEffect(() => {
