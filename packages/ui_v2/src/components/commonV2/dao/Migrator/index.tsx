@@ -494,7 +494,13 @@ const Migrator: FC<Props> = ({
         ) : (
           <Fragment>
             <MDBBtn style={styles.postDeployBtn} onClick={() => openAlchemy()}>
-              Open Alchemy
+              Open Alchemy&nbsp;
+              {!result && (
+                <div
+                  className="spinner-border text-primary"
+                  style={{ width: "16px", height: "16px" }}
+                />
+              )}
             </MDBBtn>
             <MDBBtn
               style={styles.postDeployBtn}
@@ -503,7 +509,13 @@ const Migrator: FC<Props> = ({
               Redeploy
             </MDBBtn>
             <MDBBtn style={styles.postDeployBtn} onClick={saveAddresses}>
-              Save Addresses
+              Save Addresses&nbsp;
+              {!result && (
+                <div
+                  className="spinner-border text-primary"
+                  style={{ width: "16px", height: "16px" }}
+                />
+              )}
             </MDBBtn>
           </Fragment>
         )}
