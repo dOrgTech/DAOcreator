@@ -6,6 +6,7 @@ import {
   toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import FileSaver from "file-saver";
 
 interface Props {
   form: DAOForm;
@@ -79,11 +80,28 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
    * Methods
    */
 
+  interface addresses {
+    Avatar: string;
+    DAOToken: string;
+    Reputation: string;
+    Controller: string;
+  }
+
+  const exportAddresses = (addresses: addresses) => {
+    const blob = new Blob([JSON.stringify(addresses, null, 2)], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(blob, "migration-addresses.json");
+  };
+
   const saveAddresses = () => {
-    const addresses = daoInfo[daoInfo.length - 1];
-    if (!addresses) return;
-    console.log(JSON.stringify(addresses, null, 2));
-    navigator.clipboard.writeText(JSON.stringify(addresses, null, 2));
+    if (!daoInfo[daoInfo.length - 1]) return;
+
+    const { Avatar, DAOToken, Reputation, Controller } = daoInfo[
+      daoInfo.length - 1
+    ];
+
+    exportAddresses({ Avatar, DAOToken, Reputation, Controller });
   };
 
   const copyDAOLogs = (logs: string[]) => {
