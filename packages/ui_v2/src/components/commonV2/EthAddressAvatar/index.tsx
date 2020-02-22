@@ -12,7 +12,8 @@ const EthAddressAvatar: FC<Props> = ({ address, height = "30px" }) => (
     alt="identicon"
     onClick={() => window.open(`https://etherscan.io/address/${address}`)}
     style={{
-      paddingLeft: "10px"
+      paddingLeft: "10px",
+      cursor: "pointer"
     }}
     tabIndex={-1}
     height={height}
