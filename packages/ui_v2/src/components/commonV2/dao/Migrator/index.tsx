@@ -21,6 +21,7 @@ import OrganizationLine from "./OrganizationLine";
 
 interface Props {
   dao: DAOMigrationParams;
+  saveAddresses: () => void;
   onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
   onStart: () => void;
   onAbort: (error: string) => void;
@@ -44,6 +45,7 @@ enum FAILED {
 
 const Migrator: FC<Props> = ({
   dao,
+  saveAddresses,
   onComplete,
   onStart,
   onAbort,
@@ -491,13 +493,30 @@ const Migrator: FC<Props> = ({
           </MDBBtn>
         ) : (
           <Fragment>
-            <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
-            <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
+            <MDBBtn style={styles.postDeployBtn} onClick={() => openAlchemy()}>
+              Open Alchemy
+            </MDBBtn>
+            <MDBBtn
+              style={styles.postDeployBtn}
+              onClick={() => startInstallation()}
+            >
+              Redeploy
+            </MDBBtn>
+            <MDBBtn style={styles.postDeployBtn} onClick={saveAddresses}>
+              Save Addresses
+            </MDBBtn>
           </Fragment>
         )}
       </MDBRow>
     </MDBContainer>
   );
+};
+
+const styles = {
+  postDeployBtn: {
+    fontSize: "13.5px",
+    padding: "0.65rem"
+  }
 };
 
 export default Migrator;

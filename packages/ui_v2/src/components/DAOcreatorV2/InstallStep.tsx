@@ -79,15 +79,15 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
    * Methods
    */
 
-  const copyDAO = (dao: DAOMigrationResult) => {
-    console.log(dao);
-    console.log(JSON.stringify(dao));
-    navigator.clipboard.writeText(JSON.stringify(dao, null, 2));
+  const saveAddresses = () => {
+    const addresses = daoInfo[daoInfo.length - 1];
+    if (!addresses) return;
+    console.log(JSON.stringify(addresses, null, 2));
+    navigator.clipboard.writeText(JSON.stringify(addresses, null, 2));
   };
 
   const copyDAOLogs = (logs: string[]) => {
-    console.log(logs);
-    console.log(JSON.stringify(logs));
+    console.log(JSON.stringify(JSON.stringify(logs, null, 2)));
     navigator.clipboard.writeText(JSON.stringify(logs, null, 2));
   };
 
@@ -123,6 +123,7 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
       </MDBContainer>
       <Migrator
         dao={toDAOMigrationParams(form.toState())}
+        saveAddresses={saveAddresses}
         onComplete={onComplete}
         onStart={onStart}
         onAbort={onAbort}
@@ -137,14 +138,6 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
           fontSize: "75%"
         }}
       >
-        {daoInfo.length > 0 && (
-          <button
-            style={styles.copyButton}
-            onClick={() => copyDAO(daoInfo[daoInfo.length - 1])}
-          >
-            Copy Addresses
-          </button>
-        )}
         {daoLogs.length > 0 && (
           <button
             style={styles.copyButton}
