@@ -1,4 +1,11 @@
-import React, { useState, FC, Fragment, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  FC,
+  Fragment,
+  useEffect,
+  useCallback,
+  useRef
+} from "react";
 import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
@@ -45,6 +52,8 @@ const MembersEditor = ({ form }: Props) => {
     [distribution, getDAOTokenSymbol]
   );
 
+  const updatingform = useRef(true);
+
   /*
    * Hooks
    */
@@ -68,6 +77,18 @@ const MembersEditor = ({ form }: Props) => {
   useEffect(() => {
     setMemberForm(newMemberForm());
   }, [newMemberForm]);
+
+  // Update userAdded when loading existing user
+  useEffect(() => {
+    if (updatingform.current === false) return;
+    if (form.$.length > 0) {
+      setUserAdded(true);
+      setWeb3Connected(true);
+    }
+    return () => {
+      updatingform.current = true;
+    };
+  }, [form.$]);
 
   /*
    * Buttons
