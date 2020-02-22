@@ -6,7 +6,8 @@ import {
   MDBRow,
   MDBCol,
   MDBTooltip,
-  MDBIcon
+  MDBIcon,
+  MDBAlert
 } from "mdbreact";
 import {
   SchemeType,
@@ -99,6 +100,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   /*
   / State
   */
+  const [warnings, setWarnings] = useState<string[]>([]);
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [disabledDecisionSpeed, setDisabledDecisionSpeed] = useState(false);
@@ -250,12 +252,15 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    */
 
   const disableSpeed = () => {
-    // updatingVotingMachine.current = true;
+    setWarnings([
+      "Your configuration will be overwritten by selecting a new speed"
+    ]);
 
     setDisabledDecisionSpeed(true);
   };
 
   const enableSpeed = (speed?: DAOSpeed) => {
+    setWarnings([]);
     setDisabledDecisionSpeed(false);
 
     if (speed !== undefined) setDecisionSpeed(speed);
@@ -388,6 +393,19 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         </MDBRow>
 
         <MDBRow style={styles.box}>
+          <div style={{ margin: "auto" }}>
+            {warnings.map((warning, index) => (
+              <div key={index} style={{ margin: "0 1rem" }}>
+                <MDBAlert color="warning" dismiss>
+                  <MDBIcon
+                    className="red-text mr-2"
+                    icon="exclamation-triangle"
+                  />
+                  <span style={{ marginRight: "0.5rem" }}>{warning}</span>
+                </MDBAlert>
+              </div>
+            ))}
+          </div>
           <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">
