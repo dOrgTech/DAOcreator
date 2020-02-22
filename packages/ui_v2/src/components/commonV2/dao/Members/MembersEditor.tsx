@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  FC,
-  Fragment,
-  useEffect,
-  useCallback,
-  useRef
-} from "react";
+import React, { useState, FC, Fragment, useEffect, useCallback } from "react";
 import { MemberForm, MembersForm, getWeb3 } from "@dorgtech/daocreator-lib";
 import { MDBBox, MDBContainer, MDBRow } from "mdbreact";
 
@@ -15,9 +8,10 @@ import Toggle from "../Schemes/Toggle";
 
 interface Props {
   form: MembersForm;
+  loadedFromModal: boolean;
 }
 
-const MembersEditor = ({ form }: Props) => {
+const MembersEditor: FC<Props> = ({ form, loadedFromModal }) => {
   /*
    * State
    */
@@ -52,13 +46,18 @@ const MembersEditor = ({ form }: Props) => {
     [distribution, getDAOTokenSymbol]
   );
 
-  const updatingform = useRef(true);
-
   /*
    * Hooks
    */
 
   const forceUpdate = useForceUpdate();
+
+  // Update userAdded when loading existing user
+  useEffect(() => {
+    if (!loadedFromModal) return;
+
+    if (form.$.length > 0) setUserAdded(true);
+  }, [loadedFromModal]);
 
   useEffect(() => {
     if (userAdded) return;
@@ -81,21 +80,6 @@ const MembersEditor = ({ form }: Props) => {
   useEffect(() => {
     setMemberForm(newMemberForm());
   }, [newMemberForm]);
-
-  // TODO Loading from localStorage makes this hard
-  // Update userAdded when loading existing user
-  useEffect(() => {
-    if (updatingform.current === false) return;
-    let loading = true;
-
-    if (form.$.length === 0) return;
-    setUserAdded(true);
-    loading = false;
-
-    return () => {
-      updatingform.current = loading;
-    };
-  }, [form.$]);
 
   /*
    * Buttons

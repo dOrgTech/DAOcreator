@@ -29,6 +29,7 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
+  loadedFromModal: boolean;
 }
 
 export type FullSchemes = [
@@ -96,7 +97,13 @@ const initialVotingMachines = () => {
   return vms;
 };
 
-const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+const SchemeEditor: FC<Props> = ({
+  form,
+  toggleCollapse,
+  modal,
+  setModal,
+  loadedFromModal
+}) => {
   /*
   / State
   */
@@ -127,25 +134,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   // Ref to stop force switching toggles from updating vm
   const updatingVotingMachine = useRef(false);
-  const updatingFromForm = useRef(true);
-  const updatingFromFormCount = useRef(0);
 
   /*
    * Hooks
    */
 
   useEffect(() => {
-    let newUpdatingFromForm = true;
-
-    if (!updatingFromForm.current) return;
+    if (!loadedFromModal) return;
     if (form.$.length === 0) return; // TODO do on MembersEditor too
-
-    // form.$ is updated multiple times. To avoid confused state when loading from modal, this is the quick patch I came up with.
-    if (updatingFromFormCount.current < 2) {
-      updatingFromFormCount.current++;
-      return;
-    }
-    newUpdatingFromForm = false;
 
     const containsType = (type: SchemeType) => {
       return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
@@ -164,11 +160,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       disableSpeed();
       return true;
     });
-
-    return () => {
-      updatingFromForm.current = newUpdatingFromForm;
-    };
-  }, [form.$]);
+  }, [loadedFromModal]);
 
   const updatePresets = () => {
     const newPresetVotingMachines: VotingMachinePresets = [];
