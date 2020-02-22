@@ -11,7 +11,8 @@ export const getSimpleOptions = (form: SchemesForm) => {
   const {
     proposingRepReward,
     votersReputationLossRatio,
-    minimumDaoBounty
+    minimumDaoBounty,
+    daoBountyConst
   } = form.$[0].$.votingMachine.values;
 
   const simpleOptions: SimpleOption[] = [
@@ -21,8 +22,8 @@ export const getSimpleOptions = (form: SchemesForm) => {
       checked: +votersReputationLossRatio > 0
     },
     {
-      text: "Auto-bet against every proposal to incentive curation",
-      checked: +minimumDaoBounty > 0
+      text: "Auto-bet against every proposal to incentivise curation",
+      checked: +minimumDaoBounty > 1 && +daoBountyConst > 1 // TODO Update after daostack lets us use 0
     }
   ];
 

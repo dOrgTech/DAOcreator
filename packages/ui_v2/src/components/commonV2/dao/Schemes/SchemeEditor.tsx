@@ -127,10 +127,30 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   // Ref to stop force switching toggles from updating vm
   const updatingVotingMachine = useRef(false);
+  const updatingFromForm = useRef(true);
 
   /*
    * Hooks
    */
+
+  useEffect(() => {
+    if (!updatingFromForm.current) return;
+    const containsType = (type: SchemeType) => {
+      return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
+    };
+
+    const activeSchemes = [
+      containsType(SchemeType.ContributionReward),
+      containsType(SchemeType.SchemeRegistrar),
+      containsType(SchemeType.GenericScheme)
+    ];
+
+    updateSchemes(form.$, activeSchemes);
+
+    return () => {
+      updatingFromForm.current = false;
+    };
+  }, [form.$]);
 
   const updatePresets = () => {
     const newPresetVotingMachines: VotingMachinePresets = [];
@@ -225,7 +245,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         rewardAndPenVoters
           ? (scheme.$.votingMachine.$.votersReputationLossRatio.value =
               presetVotingMachines[index].$.votersReputationLossRatio.value)
-          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0); // LIB Not a string
+          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0);
         return scheme;
       }
     );
@@ -236,10 +256,15 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     if (updatingVotingMachine.current) return;
     const newFullSchemes = fullSchemes.map(
       (scheme: AnySchemeForm, index: number) => {
-        autobet
-          ? (scheme.$.votingMachine.$.minimumDaoBounty.value =
-              presetVotingMachines[index].$.minimumDaoBounty.value)
-          : (scheme.$.votingMachine.$.minimumDaoBounty.value = "0");
+        if (autobet) {
+          scheme.$.votingMachine.$.minimumDaoBounty.value =
+            presetVotingMachines[index].$.minimumDaoBounty.value;
+          scheme.$.votingMachine.$.daoBountyConst.value =
+            presetVotingMachines[index].$.daoBountyConst.value;
+        } else {
+          scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+          scheme.$.votingMachine.$.daoBountyConst.value = "1";
+        }
         return scheme;
       }
     );
@@ -255,7 +280,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     setWarnings([
       "Your configuration will be overwritten by selecting a new speed"
     ]);
-
     setDisabledDecisionSpeed(true);
   };
 
@@ -323,12 +347,13 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const {
         proposingRepReward,
         votersReputationLossRatio,
-        minimumDaoBounty
+        minimumDaoBounty,
+        daoBountyConst
       } = scheme.$.votingMachine.values;
 
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
-      setAutobet(+minimumDaoBounty > 0);
+      setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
 
       return scheme;
     });
