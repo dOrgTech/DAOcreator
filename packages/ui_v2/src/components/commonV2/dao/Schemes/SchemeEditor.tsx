@@ -125,10 +125,31 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   // Ref to stop force switching toggles from updating vm
   const updatingVotingMachine = useRef(false);
+  const updatingFromForm = useRef(true);
 
   /*
    * Hooks
    */
+
+  useEffect(() => {
+    console.log(updatingFromForm.current);
+    if (!updatingFromForm.current) return;
+    const containsType = (type: SchemeType) => {
+      return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
+    };
+
+    const activeSchemes = [
+      containsType(SchemeType.ContributionReward),
+      containsType(SchemeType.SchemeRegistrar),
+      containsType(SchemeType.GenericScheme)
+    ];
+
+    updateSchemes(form.$, activeSchemes);
+
+    return () => {
+      updatingFromForm.current = false;
+    };
+  }, [form.$]);
 
   const updatePresets = () => {
     const newPresetVotingMachines: VotingMachinePresets = [];
