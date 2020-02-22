@@ -82,15 +82,18 @@ const MembersEditor = ({ form }: Props) => {
     setMemberForm(newMemberForm());
   }, [newMemberForm]);
 
+  // TODO Loading from localStorage makes this hard
   // Update userAdded when loading existing user
   useEffect(() => {
     if (updatingform.current === false) return;
-    if (form.$.length > 0) {
-      setUserAdded(true);
-      setWeb3Connected(true);
-    }
+    let loading = true;
+
+    if (form.$.length === 0) return;
+    setUserAdded(true);
+    loading = false;
+
     return () => {
-      updatingform.current = true;
+      updatingform.current = loading;
     };
   }, [form.$]);
 
@@ -232,7 +235,7 @@ const MembersEditor = ({ form }: Props) => {
         </MDBRow>
         <MemberFormError />
         <MDBRow className="justify-content-center">
-          {!web3Connected ? (
+          {!userAdded && !web3Connected ? (
             <button
               style={styles.setDescriptionButton}
               onClick={handleMetamask}
