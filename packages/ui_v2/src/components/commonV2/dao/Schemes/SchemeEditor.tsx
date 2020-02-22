@@ -135,6 +135,10 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
 
   useEffect(() => {
     if (!updatingFromForm.current) return;
+    if (form.$.length === 0) return; // TODO do on MembersEditor too
+
+    // TODO form.$ gets set to default and then again with localstorage =? DETECT THEN RUN UPDATESCHEMES
+
     const containsType = (type: SchemeType) => {
       return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
     };
@@ -146,6 +150,12 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     ];
 
     updateSchemes(form.$, activeSchemes);
+
+    form.$.some((scheme, index) => {
+      if (!checkSpeed(scheme, index)) return false;
+      disableSpeed();
+      return true;
+    });
 
     return () => {
       updatingFromForm.current = false;
@@ -224,7 +234,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Updates vms when toggles change
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-
     const newFullSchemes = fullSchemes.map(
       (scheme: AnySchemeForm, index: number) => {
         rewardSuccess
@@ -319,6 +328,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     advancedSchemes: AnySchemeForm[],
     activeSchemes: boolean[]
   ) => {
+    console.log("updateSchemes");
+    console.log("advancedSchemes", advancedSchemes[0].$.votingMachine.values);
     updatingVotingMachine.current = true;
 
     let newActiveSchemeTypes: SchemeType[] = [];
@@ -350,7 +361,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         minimumDaoBounty,
         daoBountyConst
       } = scheme.$.votingMachine.values;
-
+      console.log("seting toggles");
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
       setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
