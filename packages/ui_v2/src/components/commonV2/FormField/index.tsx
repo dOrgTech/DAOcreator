@@ -117,7 +117,7 @@ const StringFieldView = observer(
       setTimeout(() => {
         if (!namingError) return;
         if (field.displayName === "Token Symbol") {
-          checkError!({ ...namingError, daoSymbol: field.hasError });
+          checkError!({ ...namingError, tokenSymbol: field.hasError });
         }
         if (field.displayName === "DAO Name") {
           checkError!({ ...namingError, daoName: field.hasError });

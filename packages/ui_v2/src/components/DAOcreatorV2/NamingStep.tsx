@@ -1,31 +1,41 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;
+  loadedFromModal: boolean;
   toggleCollapse: () => void;
 }
 
 export type NamingError = {
   daoName: boolean;
-  daoSymbol: boolean;
+  tokenSymbol: boolean;
 };
 
-const NamingStep: FC<Props> = ({ form, toggleCollapse }) => {
+// Please refactor this
+const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
   const [errors, setErrors] = useState<NamingError>({
     daoName: true,
-    daoSymbol: true
+    tokenSymbol: true
   });
 
-  const check = (errors: NamingError) => {
-    setErrors(errors);
-  };
+  useEffect(() => {
+    if (!loadedFromModal) return;
 
-  // TODO ????
-  form.$.tokenName.$ = "0";
-  form.$.tokenName.value = "0";
+    setErrors({
+      ...errors,
+      daoName: form.$.daoName.hasError,
+      tokenSymbol: form.$.tokenSymbol.hasError
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
+
+  useEffect(() => {
+    form.$.tokenName.value = form.$.daoName + " token";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.$.daoName]);
 
   return (
     <div style={styles.paddingTotal}>
@@ -34,18 +44,18 @@ const NamingStep: FC<Props> = ({ form, toggleCollapse }) => {
         form={form}
         editable={true}
         namingError={errors}
-        checkError={check}
+        checkError={setErrors}
       />
       <br />
       <MDBRow style={styles.paddingBottom}>
         <MDBCol>
           <button
             style={
-              errors.daoName || errors.daoSymbol
+              errors.daoName || errors.tokenSymbol
                 ? styles.buttonDeactivatedStyle
                 : styles.buttonActivatedStyle
             }
-            disabled={errors.daoName || errors.daoSymbol}
+            disabled={errors.daoName || errors.tokenSymbol}
             onClick={toggleCollapse}
           >
             Set Description
