@@ -455,7 +455,8 @@ const styles = {
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    fontWeight: 300
+    fontWeight: 300,
+    paddingRight: "55px"
   },
   noPadding: {
     padding: 0
