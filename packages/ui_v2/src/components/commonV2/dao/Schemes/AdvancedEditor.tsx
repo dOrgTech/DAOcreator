@@ -205,7 +205,7 @@ const AdvancedEditor: FC<Props> = ({
           <MDBRow style={styles.borderRow}>
             <MDBCol>
               <span style={styles.boldSpan}>
-                Deploy {schemeTemplates[scheme.type].displayName}
+                Enable {schemeTemplates[scheme.type].displayName}
               </span>
               <MDBTooltip placement="bottom" clickable>
                 <MDBBtn
