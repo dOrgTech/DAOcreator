@@ -94,6 +94,10 @@ const AdvancedEditor: FC<Props> = ({
   useEffect(() => {
     if (!modal) return;
     updateAdvancedForm();
+    setIsActive(
+      isActive.map((_, index) => form.$.some(scheme => scheme.type === index))
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal, updateAdvancedForm]);
 
   // Check that scheme of type SchemeRegistrar is active
@@ -133,13 +137,23 @@ const AdvancedEditor: FC<Props> = ({
 
     const { hasError } = await newAdvForm.validate();
     if (hasError) {
-      advForm.error && setErrors([...errors, advForm.error]);
+      advForm.error &&
+        setErrors(es => {
+          const error = advForm.error as string;
+          if (es.findIndex(value => value === error) > -1) {
+            return es;
+          } else {
+            return [...es, error];
+          }
+        });
+
       setTimeout(() => {
         setErrors(es => {
           es.shift();
           return [...es]; // Requires spread operator or it will not rerender
         });
       }, 5000);
+
       return false;
     }
 

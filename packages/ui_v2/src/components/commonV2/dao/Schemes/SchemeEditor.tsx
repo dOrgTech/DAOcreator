@@ -6,7 +6,8 @@ import {
   MDBRow,
   MDBCol,
   MDBTooltip,
-  MDBIcon
+  MDBIcon,
+  MDBAlert
 } from "mdbreact";
 import {
   SchemeType,
@@ -28,6 +29,7 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
+  loadedFromModal: boolean;
 }
 
 export type FullSchemes = [
@@ -95,10 +97,17 @@ const initialVotingMachines = () => {
   return vms;
 };
 
-const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+const SchemeEditor: FC<Props> = ({
+  form,
+  toggleCollapse,
+  modal,
+  setModal,
+  loadedFromModal
+}) => {
   /*
   / State
   */
+  const [warnings, setWarnings] = useState<string[]>([]);
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
   const [disabledDecisionSpeed, setDisabledDecisionSpeed] = useState(false);
@@ -129,6 +138,30 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   /*
    * Hooks
    */
+
+  useEffect(() => {
+    if (!loadedFromModal) return;
+    if (form.$.length === 0) return; // TODO do on MembersEditor too
+
+    const containsType = (type: SchemeType) => {
+      return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
+    };
+
+    const activeSchemes = [
+      containsType(SchemeType.ContributionReward),
+      containsType(SchemeType.SchemeRegistrar),
+      containsType(SchemeType.GenericScheme)
+    ];
+
+    updateSchemes(form.$, activeSchemes);
+
+    form.$.some((scheme, index) => {
+      if (!checkSpeed(scheme, index)) return false;
+      disableSpeed();
+      return true;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
 
   const updatePresets = () => {
     const newPresetVotingMachines: VotingMachinePresets = [];
@@ -183,11 +216,11 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     };
 
     const newForm = new SchemesForm();
-    activeSchemeTypes.map((activeSchemeType: SchemeType) => {
+    activeSchemeTypes.map((activeSchemeType: SchemeType, index) => {
       newForm.$.push(fullSchemes[activeSchemeType]);
 
       if (discardPreset(fullSchemes[activeSchemeType]))
-        newForm.$[activeSchemeType].$.votingMachine.preset = undefined;
+        newForm.$[index].$.votingMachine.preset = undefined;
 
       return activeSchemeType;
     });
@@ -202,7 +235,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
   // Updates vms when toggles change
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-
     const newFullSchemes = fullSchemes.map(
       (scheme: AnySchemeForm, index: number) => {
         rewardSuccess
@@ -223,7 +255,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         rewardAndPenVoters
           ? (scheme.$.votingMachine.$.votersReputationLossRatio.value =
               presetVotingMachines[index].$.votersReputationLossRatio.value)
-          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0); // LIB Not a string
+          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0);
         return scheme;
       }
     );
@@ -234,10 +266,15 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
     if (updatingVotingMachine.current) return;
     const newFullSchemes = fullSchemes.map(
       (scheme: AnySchemeForm, index: number) => {
-        autobet
-          ? (scheme.$.votingMachine.$.minimumDaoBounty.value =
-              presetVotingMachines[index].$.minimumDaoBounty.value)
-          : (scheme.$.votingMachine.$.minimumDaoBounty.value = "0");
+        if (autobet) {
+          scheme.$.votingMachine.$.minimumDaoBounty.value =
+            presetVotingMachines[index].$.minimumDaoBounty.value;
+          scheme.$.votingMachine.$.daoBountyConst.value =
+            presetVotingMachines[index].$.daoBountyConst.value;
+        } else {
+          scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+          scheme.$.votingMachine.$.daoBountyConst.value = "1";
+        }
         return scheme;
       }
     );
@@ -250,12 +287,14 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
    */
 
   const disableSpeed = () => {
-    // updatingVotingMachine.current = true;
-
+    setWarnings([
+      "Your configuration will be overwritten by selecting a new speed"
+    ]);
     setDisabledDecisionSpeed(true);
   };
 
   const enableSpeed = (speed?: DAOSpeed) => {
+    setWarnings([]);
     setDisabledDecisionSpeed(false);
 
     if (speed !== undefined) setDecisionSpeed(speed);
@@ -318,12 +357,13 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       const {
         proposingRepReward,
         votersReputationLossRatio,
-        minimumDaoBounty
+        minimumDaoBounty,
+        daoBountyConst
       } = scheme.$.votingMachine.values;
 
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
-      setAutobet(+minimumDaoBounty > 0);
+      setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
 
       return scheme;
     });
@@ -388,6 +428,19 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
         </MDBRow>
 
         <MDBRow style={styles.box}>
+          <MDBContainer>
+            {warnings.map((warning, index) => (
+              <div key={index} style={{ margin: "0 1rem" }}>
+                <MDBAlert color="warning" dismiss>
+                  <MDBIcon
+                    className="red-text mr-2"
+                    icon="exclamation-triangle"
+                  />
+                  <span style={{ marginRight: "0.5rem" }}>{warning}</span>
+                </MDBAlert>
+              </div>
+            ))}
+          </MDBContainer>
           <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">

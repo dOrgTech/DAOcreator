@@ -9,7 +9,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import grey from "@material-ui/core/colors/grey";
 import blue from "@material-ui/core/colors/blue";
 import DateFnsUtils from "@date-io/date-fns";
-// import EthAddressAvatar from "../EthAddressAvatar";
+import EthAddressAvatar from "../EthAddressAvatar";
 import {
   AnyField,
   FieldType,
@@ -424,15 +424,20 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <input
-          style={styles.inputStyle}
-          placeholder="0x..."
-          value={field.value}
-          disabled={editable === undefined ? false : !editable}
-          onChange={e => field.onChange(e.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-          tabIndex={tabIndex}
-        />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <input
+            style={styles.inputStyle}
+            placeholder="0x..."
+            value={field.value}
+            disabled={editable === undefined ? false : !editable}
+            onChange={e => field.onChange(e.target.value)}
+            onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
+          />
+          <div style={{ padding: "2%", marginLeft: "-50px", width: 0 }}>
+            <EthAddressAvatar address={field.value} paddingLeft={"0"} />
+          </div>
+        </div>
         {FieldError(field)}
       </MDBCol>
     </>
@@ -450,7 +455,8 @@ const styles = {
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    fontWeight: 300
+    fontWeight: 300,
+    paddingRight: "55px"
   },
   noPadding: {
     padding: 0
