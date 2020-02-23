@@ -424,17 +424,20 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <input
-          style={styles.inputStyle}
-          placeholder="0x..."
-          value={field.value}
-          disabled={editable === undefined ? false : !editable}
-          onChange={e => field.onChange(e.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-          tabIndex={tabIndex}
-        />
-        <EthAddressAvatar address={field.value} />
-        {/* TODO MOVE THIS INTO INPUT */}
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <input
+            style={styles.inputStyle}
+            placeholder="0x..."
+            value={field.value}
+            disabled={editable === undefined ? false : !editable}
+            onChange={e => field.onChange(e.target.value)}
+            onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
+          />
+          <div style={{ padding: "2%", marginLeft: "-50px", width: 0 }}>
+            <EthAddressAvatar address={field.value} paddingLeft={"0"} />
+          </div>
+        </div>
         {FieldError(field)}
       </MDBCol>
     </>
