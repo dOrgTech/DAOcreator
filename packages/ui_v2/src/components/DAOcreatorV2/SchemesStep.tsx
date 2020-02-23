@@ -12,9 +12,16 @@ interface Props {
   toggleCollapse: () => void;
   modal: boolean;
   setModal: (modal: boolean) => void;
+  loadedFromModal: boolean;
 }
 
-const SchemesStep: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
+const SchemesStep: FC<Props> = ({
+  form,
+  toggleCollapse,
+  modal,
+  setModal,
+  loadedFromModal
+}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,6 +37,7 @@ const SchemesStep: FC<Props> = ({ form, toggleCollapse, modal, setModal }) => {
       toggleCollapse={toggleCollapse}
       modal={modal}
       setModal={setModal}
+      loadedFromModal={loadedFromModal}
     />
   );
 };

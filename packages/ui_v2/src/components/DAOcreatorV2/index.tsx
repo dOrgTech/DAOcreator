@@ -72,6 +72,8 @@ export default function DAOcreator() {
   const [importFile, setImportFile] = React.useState<string>("");
   const [launching, setLaunching] = React.useState(false);
 
+  const [loadedFromModal, setLoadedFromModal] = React.useState(false);
+
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -176,6 +178,7 @@ export default function DAOcreator() {
     daoForm.fromState(daoState);
     setStep(step);
     setRecoverPreviewOpen(false);
+    setLoadedFromModal(true);
   };
 
   const resetLocalStorage = () => {
@@ -234,7 +237,8 @@ export default function DAOcreator() {
         setStep,
         toggleCollapse: nextStep,
         getDAOName,
-        getDAOTokenSymbol
+        getDAOTokenSymbol,
+        loadedFromModal
       }
     },
     {
@@ -245,7 +249,8 @@ export default function DAOcreator() {
         setStep,
         toggleCollapse: nextStep,
         modal: advanceSchemeConfig,
-        setModal: setAdvanceSchemeConfig
+        setModal: setAdvanceSchemeConfig,
+        loadedFromModal
       }
     },
     {
@@ -257,7 +262,8 @@ export default function DAOcreator() {
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
         setModal: setImportFile,
-        step
+        step,
+        loadedFromModal
       }
     },
     {

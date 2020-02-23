@@ -19,12 +19,14 @@ import {
 } from "./LogLineTypes";
 import OrganizationLine from "./OrganizationLine";
 
-interface IProps {
+interface Props {
   dao: DAOMigrationParams;
+  saveAddresses: () => void;
   onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
   onStart: () => void;
   onAbort: (error: string) => void;
   onStop: () => void;
+  onLog: (log: string) => void;
 }
 
 // Migrator Steps
@@ -41,13 +43,14 @@ enum FAILED {
   Config
 }
 
-const Migrator: FC<IProps> = ({
+const Migrator: FC<Props> = ({
   dao,
+  saveAddresses,
   onComplete,
   onStart,
-  onAbort
-}: // onStop
-IProps) => {
+  onAbort,
+  onLog
+}) => {
   /*
    * State
    */
@@ -81,6 +84,15 @@ IProps) => {
 
   const [failed, setFailed] = useState<FAILED | null>(null);
 
+  const addMinLogLine = (log: string) => {
+    setMinimalLogLines([...minimalLogLines, log]);
+  };
+
+  const addFullLogLine = (log: AnyLogLine) => {
+    setFullLogLines([...fullLogLines, log]);
+    onLog(log.toString());
+  };
+
   useEffect(() => {
     if (!aborting) return;
 
@@ -107,12 +119,29 @@ IProps) => {
     // onComplete(result);
   };
 
+  const handleComplete = async (result: DAOMigrationResult) => {
+    const network = await getNetworkName();
+
+    let url;
+    if (network === "mainnet") {
+      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    } else if (network === "rinkeby") {
+      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    } else {
+      url = result.Avatar;
+    }
+
+    setAlchemyURL(url);
+    onComplete(result, url);
+  };
+
   /*
    * Callbacks
    */
+
   const addLogLine = (logLine: AnyLogLine) => {
     const { type } = logLine;
-    setFullLogLines([...fullLogLines, logLine]);
+    addFullLogLine(logLine);
 
     const {
       UserApproval,
@@ -136,7 +165,7 @@ IProps) => {
 
           case "We found a deployment that was in progress, pickup where you left off?":
           case "We found a deployment that's was in progress, pickup where you left off?":
-            setMinimalLogLines([...minimalLogLines, "Selecting deployment..."]);
+            addMinLogLine("Selecting deployment...");
             setApproval({
               msg: "Continue previous deployment?",
               response: (res: boolean): void => {
@@ -150,7 +179,7 @@ IProps) => {
           default:
             console.log("Unhandled approval log:");
             console.log(question);
-            setMinimalLogLines([...minimalLogLines, question]);
+            addMinLogLine(question);
             setApproval({
               msg: question,
               response: (res: boolean): void => {
@@ -171,43 +200,31 @@ IProps) => {
             break;
 
           case info === "Creating a new organization...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Signing Create Org Tx..."
-            ]);
+            addMinLogLine("Signing Create Org Tx...");
             break;
 
           case info === "Setting Scheme Registrar parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Scheme Registrar params..."
-            ]);
+            addMinLogLine("Setting Scheme Registrar params...");
             break;
 
           case info === "Setting Generic Scheme parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Generic params..."
-            ]);
+            addMinLogLine("Setting Generic params...");
             break;
 
           case info === "Setting Contribution Reward parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Contribution Reward params..."
-            ]);
+            addMinLogLine("Setting Contribution Reward params...");
             break;
 
           case info === "Setting DAO schemes...":
-            setMinimalLogLines([...minimalLogLines, "Setting DAO schemes..."]);
+            addMinLogLine("Setting DAO schemes...");
             break;
 
           case info === "Deploying Controller":
-            setMinimalLogLines([...minimalLogLines, "Deploying Controller..."]);
+            addMinLogLine("Deploying Controller...");
             break;
 
           case info === "Setting GenesisProtocol parameters...":
-            setMinimalLogLines([...minimalLogLines, "Setting Machine..."]);
+            addMinLogLine("Setting Machine...");
             break;
 
           case info === "DAO Migration has Finished Successfully!":
@@ -217,7 +234,7 @@ IProps) => {
           default:
             console.log("Unhandled info log:");
             console.log(info);
-            setMinimalLogLines([...minimalLogLines, info]);
+            addMinLogLine(info);
             break;
         }
         break;
@@ -228,27 +245,27 @@ IProps) => {
         switch (true) {
           case error ===
             "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
-            // setMinimalLogLines([
+            // addMinLogLine([
             //   ...minimalLogLines,
             //   "Failed to Sign Transaction"
             // ]);
             break;
 
           case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
-            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
+            addMinLogLine("Failed to get address");
             break;
 
           case error.startsWith(
             "Transaction failed: Transaction has been reverted"
           ):
           case error.startsWith("Transaction failed: Error"):
-            // setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
+            // addMinLogLine("Transaction failed");
             break;
 
           default:
             console.log("Unhandled error log:");
             console.log(error);
-            setMinimalLogLines([...minimalLogLines, error]);
+            addMinLogLine(error);
             break;
         }
         break;
@@ -262,18 +279,18 @@ IProps) => {
             break;
 
           case msg.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
-            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
+            addMinLogLine("Failed to get address");
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
           case msg === "DAO schemes set.":
-            setMinimalLogLines([...minimalLogLines, msg]);
+            addMinLogLine(msg);
             break;
 
           default:
             console.log("Unhandled txResult log:");
             console.log(msg);
-            // setMinimalLogLines([...minimalLogLines, msg]);
+            // addMinLogLine(msg]);
             break;
         }
         break;
@@ -287,27 +304,24 @@ IProps) => {
         switch (true) {
           case abortedMsg ===
             "MetaMask Tx Signature: User denied transaction signature.":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Failed to Sign Transaction"
-            ]);
+            addMinLogLine("Failed to Sign Transaction");
             break;
 
           case abortedMsg.startsWith("Network request failed"): // Time out(?)
-            setMinimalLogLines([...minimalLogLines, "Network request failed"]);
+            addMinLogLine("Network request failed");
             break;
 
           case abortedMsg ===
             "Returned values aren't valid, did it run Out of Gas?":
           case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
-            setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
+            addMinLogLine("Transaction failed");
             break;
 
           default:
             console.log("Unhandled abortedMsg log:");
             console.log(abortedMsg);
-            setMinimalLogLines([...minimalLogLines, abortedMsg]);
+            addMinLogLine(abortedMsg);
             break;
         }
         break;
@@ -380,6 +394,7 @@ IProps) => {
 
     // Reset state
     setNoWeb3Open(false);
+    setFullLogLines([]);
     setMinimalLogLines([]);
     setEthSpent(0);
     setResult(undefined);
@@ -407,10 +422,6 @@ IProps) => {
       return "Your migration is still in progress. Do you really want to leave?";
     };
 
-    // Clear the log
-    setFullLogLines([]);
-    setMinimalLogLines([]);
-
     onStart(); // props
 
     const callbacks: DAOMigrationCallbacks = getCallbacks();
@@ -422,18 +433,8 @@ IProps) => {
     // Getting around unimplemented callback
     if (!result) return;
 
-    const network = await getNetworkName();
+    handleComplete(result);
 
-    let url;
-    if (network === "mainnet")
-      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    else if (network === "rinkeby")
-      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    else url = result.Avatar;
-
-    setAlchemyURL(url);
-
-    onComplete(result, url);
     setResult(result);
     window.onbeforeunload = () => {};
   };
@@ -492,13 +493,42 @@ IProps) => {
           </MDBBtn>
         ) : (
           <Fragment>
-            <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
-            <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
+            <MDBBtn style={styles.postDeployBtn} onClick={() => openAlchemy()}>
+              Open Alchemy&nbsp;
+              {!result && (
+                <div
+                  className="spinner-border text-primary"
+                  style={{ width: "16px", height: "16px" }}
+                />
+              )}
+            </MDBBtn>
+            <MDBBtn
+              style={styles.postDeployBtn}
+              onClick={() => startInstallation()}
+            >
+              Redeploy
+            </MDBBtn>
+            <MDBBtn style={styles.postDeployBtn} onClick={saveAddresses}>
+              Save Addresses&nbsp;
+              {!result && (
+                <div
+                  className="spinner-border text-primary"
+                  style={{ width: "16px", height: "16px" }}
+                />
+              )}
+            </MDBBtn>
           </Fragment>
         )}
       </MDBRow>
     </MDBContainer>
   );
+};
+
+const styles = {
+  postDeployBtn: {
+    fontSize: "13.5px",
+    padding: "0.65rem"
+  }
 };
 
 export default Migrator;

@@ -224,6 +224,16 @@ export class GenesisProtocolForm extends Form<
     } else {
       this.preset = GenesisProtocolPreset.Normal;
     }
+
+    this.validators((value) => {
+      const error = `${value.boostedVotePeriodLimit.displayName} must be greater than or equal to ${value.quietEndingPeriod.displayName}`;
+
+      if (value.boostedVotePeriodLimit.toSeconds() >= value.quietEndingPeriod.toSeconds()) {
+        return null;
+      } else {
+        return error;
+      }
+    });
   }
 
   public toState(): GenesisProtocol {

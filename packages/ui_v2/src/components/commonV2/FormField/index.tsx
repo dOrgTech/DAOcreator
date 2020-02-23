@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC } from "react";
 import { observer } from "mobx-react";
 import { MDBRow, MDBCol, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 import {
@@ -9,7 +9,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import grey from "@material-ui/core/colors/grey";
 import blue from "@material-ui/core/colors/blue";
 import DateFnsUtils from "@date-io/date-fns";
-// import EthAddressAvatar from "../EthAddressAvatar";
+import EthAddressAvatar from "../EthAddressAvatar";
 import {
   AnyField,
   FieldType,
@@ -20,19 +20,41 @@ import {
   PercentageField,
   AddressField
 } from "@dorgtech/daocreator-lib";
+import { NamingError } from "../../DAOcreatorV2/NamingStep";
 
 export interface Props {
   field: AnyField;
   editable?: boolean;
-  colSize?: any;
+  colSize?: ColSize;
   tabIndex: number;
-  checkError?: (error: boolean) => void;
-  namingError?: any;
+  namingError?: NamingError | undefined;
+  checkError?: ((namingError: NamingError) => void) | undefined;
 }
 
-function FormField(props: Props) {
-  const { field, editable, colSize, tabIndex, checkError, namingError } = props;
-  const size = colSize ? colSize : 6;
+export type ColSize =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "11"
+  | "12"
+  | "auto";
+
+const FormField: FC<Props> = ({
+  field,
+  editable,
+  colSize,
+  tabIndex,
+  namingError,
+  checkError
+}) => {
+  const size = colSize ? colSize : "6";
   let FieldView;
 
   switch (field.type) {
@@ -58,30 +80,28 @@ function FormField(props: Props) {
       throw Error(`Field type "${FieldType[field.type]}" unimplemented.`);
   }
   return (
-    <>
-      <FieldView
-        field={field as any}
-        editable={editable}
-        colSize={size}
-        tabIndex={tabIndex}
-        checkError={checkError ? checkError : undefined}
-        namingError={namingError ? namingError : undefined}
-      />
-    </>
+    <FieldView
+      field={field as any}
+      editable={editable}
+      colSize={size}
+      tabIndex={tabIndex}
+      namingError={namingError}
+      checkError={checkError}
+    />
   );
-}
+};
 
 interface FieldProps<T> {
   field: T;
   editable?: boolean;
-  colSize?: any;
+  colSize?: ColSize;
   tabIndex: number;
-  namingError?: any | undefined;
-  checkError?: (error: any) => void | undefined;
+  namingError?: NamingError | undefined;
+  checkError?: (errors: NamingError) => void;
 }
 
 const FieldError = (field: any) => (
-  <>{field.hasError ? <p style={{ color: "red" }}>{field.error}</p> : <></>}</>
+  <>{field.hasError && <p style={{ color: "red" }}>{field.error}</p>}</>
 );
 
 const StringFieldView = observer(
@@ -95,8 +115,9 @@ const StringFieldView = observer(
     const onChange = async (event: any) => {
       field.onChange(event.target.value);
       setTimeout(() => {
+        if (!namingError) return;
         if (field.displayName === "Token Symbol") {
-          checkError!({ ...namingError, daoSymbol: field.hasError });
+          checkError!({ ...namingError, tokenSymbol: field.hasError });
         }
         if (field.displayName === "DAO Name") {
           checkError!({ ...namingError, daoName: field.hasError });
@@ -424,15 +445,20 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <input
-          style={styles.inputStyle}
-          placeholder="0x..."
-          value={field.value}
-          disabled={editable === undefined ? false : !editable}
-          onChange={e => field.onChange(e.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-          tabIndex={tabIndex}
-        />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <input
+            style={{ ...styles.inputStyle, paddingRight: "55px" }}
+            placeholder="0x..."
+            value={field.value}
+            disabled={editable === undefined ? false : !editable}
+            onChange={e => field.onChange(e.target.value)}
+            onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
+          />
+          <div style={{ padding: "2%", marginLeft: "-50px", width: 0 }}>
+            <EthAddressAvatar address={field.value} paddingLeft={"0"} />
+          </div>
+        </div>
         {FieldError(field)}
       </MDBCol>
     </>
