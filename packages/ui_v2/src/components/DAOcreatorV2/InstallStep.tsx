@@ -170,6 +170,7 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
                   className="blue-text"
                   size="lg"
                   icon="copy"
+                  style={{ cursor: "pointer" }}
                   onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
                 />
               </div>
