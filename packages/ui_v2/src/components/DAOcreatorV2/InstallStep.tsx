@@ -5,7 +5,13 @@ import {
   DAOMigrationResult,
   toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import {
+  MDBAlert,
+  MDBBtn,
+  MDBIcon,
+  MDBContainer,
+  MDBTooltip
+} from "mdbreact";
 import FileSaver from "file-saver";
 
 interface Props {
@@ -157,22 +163,23 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
         }}
       >
         {daoLogs.length > 0 && (
-          <button
-            style={styles.copyButton}
-            onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
-          >
-            Copy Logs
-          </button>
+          <MDBContainer>
+            <MDBTooltip placement="top" domElement>
+              <div>
+                <MDBIcon
+                  className="blue-text"
+                  size="lg"
+                  icon="copy"
+                  onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
+                />
+              </div>
+              <div>Click to copy logs</div>
+            </MDBTooltip>
+          </MDBContainer>
         )}
       </div>
     </Fragment>
   );
-};
-
-const styles = {
-  copyButton: {
-    margin: "0.2rem"
-  }
 };
 
 export default InstallStep;
