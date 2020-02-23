@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC, useState } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
@@ -8,48 +8,53 @@ interface Props {
   toggleCollapse: () => void;
 }
 
-function NamingStep(props: Props) {
-  const { form, toggleCollapse } = props;
-  const namingError = {
+export type NamingError = {
+  daoName: boolean;
+  daoSymbol: boolean;
+};
+
+const NamingStep: FC<Props> = ({ form, toggleCollapse }) => {
+  const [errors, setErrors] = useState<NamingError>({
     daoName: true,
     daoSymbol: true
+  });
+
+  const check = (errors: NamingError) => {
+    setErrors(errors);
   };
-  const [hasError, setHasError] = React.useState<any>(namingError);
+
+  // TODO ????
   form.$.tokenName.$ = "0";
   form.$.tokenName.value = "0";
 
   return (
-    <>
-      <div style={styles.paddingTotal}>
-        <br />
-        <DAOConfigEditor
-          form={form}
-          editable={true}
-          namingError={hasError}
-          checkError={setHasError}
-        />
-        <br />
-        <MDBRow style={styles.paddingBottom}>
-          <MDBCol>
-            <button
-              name="decisonSpeed"
-              value="slow"
-              style={
-                hasError.daoName || hasError.daoSymbol
-                  ? styles.buttonDeactivatedStyle
-                  : styles.buttonActivatedStyle
-              }
-              disabled={hasError.daoName || hasError.daoSymbol}
-              onClick={toggleCollapse}
-            >
-              Set Description
-            </button>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    </>
+    <div style={styles.paddingTotal}>
+      <br />
+      <DAOConfigEditor
+        form={form}
+        editable={true}
+        namingError={errors}
+        checkError={check}
+      />
+      <br />
+      <MDBRow style={styles.paddingBottom}>
+        <MDBCol>
+          <button
+            style={
+              errors.daoName || errors.daoSymbol
+                ? styles.buttonDeactivatedStyle
+                : styles.buttonActivatedStyle
+            }
+            disabled={errors.daoName || errors.daoSymbol}
+            onClick={toggleCollapse}
+          >
+            Set Description
+          </button>
+        </MDBCol>
+      </MDBRow>
+    </div>
   );
-}
+};
 
 const styles = {
   buttonActivatedStyle: {

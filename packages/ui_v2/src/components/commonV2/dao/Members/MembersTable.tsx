@@ -91,7 +91,7 @@ export const MembersTable: FC<IProps> = ({
               <FormField
                 field={editedMemberForm.$.reputation}
                 editable={true}
-                colSize={12}
+                colSize={"12"}
                 tabIndex={1}
               />
             </div>
@@ -113,7 +113,7 @@ export const MembersTable: FC<IProps> = ({
                 <FormField
                   field={editedMemberForm.$.tokens}
                   editable={true}
-                  colSize={12}
+                  colSize={"12"}
                   tabIndex={2}
                 />
               </div>
