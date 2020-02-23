@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
-interface IProps {
+interface Props {
   type: number;
   active: boolean;
   done: boolean;
@@ -12,19 +12,17 @@ interface IProps {
 enum STEP {
   Waiting,
   Start,
-  // Sign,
-  // View, // View on Etherscan should display after tx is signed but we are not currently handling this TODO (?)
   Confirmed,
   Failed
 }
 
-export const OrganizationLine: FC<IProps> = ({
+export const OrganizationLine: FC<Props> = ({
   type,
   active,
   done,
   failed,
   logLines
-}: IProps) => {
+}) => {
   const [step, setStep] = useState<STEP>(STEP.Waiting);
   const [lastLog, setLastLog] = useState<string>(
     type === 0 ? "Start Installation" : "Waiting"

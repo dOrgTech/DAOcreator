@@ -3,20 +3,41 @@ import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
   DAOMigrationResult,
-  toDAOMigrationParams,
-  DAOMigrationParams
+  toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import {
+  MDBAlert,
+  MDBBtn,
+  MDBIcon,
+  MDBContainer,
+  MDBTooltip
+} from "mdbreact";
+import FileSaver from "file-saver";
 
 interface Props {
   form: DAOForm;
   setLaunching: (launching: boolean) => void;
 }
 
-const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
+const InstallStep: FC<Props> = ({ form, setLaunching }) => {
   const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
-  // Could be used to display the dao information to the user
   const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
+  const [daoLogs, setDaoLogs] = useState<string[][]>([]);
+
+  /*
+   * Methods
+   */
+
+  const addLog = (log: string) => {
+    setDaoLogs(daoLogs => {
+      daoLogs[daoLogs.length - 1].push(log);
+      return daoLogs;
+    });
+  };
+
+  const addNewLogs = () => {
+    setDaoLogs(daoLogs => [...daoLogs, []]);
+  };
 
   /*
    * Callbacks
@@ -43,6 +64,8 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
 
   const onStart = () => {
     setLaunching(true);
+
+    addNewLogs();
   };
 
   const onAbort = (error: string) => {
@@ -55,7 +78,43 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
     setLaunching(false);
   };
 
-  const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
+  const onLog = (log: string) => {
+    addLog(log);
+  };
+
+  /*
+   * Methods
+   */
+
+  interface addresses {
+    Avatar: string;
+    DAOToken: string;
+    Reputation: string;
+    Controller: string;
+  }
+
+  const exportAddresses = (addresses: addresses) => {
+    const blob = new Blob([JSON.stringify(addresses, null, 2)], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(blob, "migration-addresses.json");
+  };
+
+  const saveAddresses = () => {
+    if (!daoInfo[daoInfo.length - 1]) return;
+
+    const { Avatar, DAOToken, Reputation, Controller } = daoInfo[
+      daoInfo.length - 1
+    ];
+
+    exportAddresses({ Avatar, DAOToken, Reputation, Controller });
+  };
+
+  const copyDAOLogs = (logs: string[]) => {
+    console.log(JSON.stringify(JSON.stringify(logs, null, 2)));
+    navigator.clipboard.writeText(JSON.stringify(logs, null, 2));
+  };
+
   return (
     <Fragment>
       <MDBContainer>
@@ -87,12 +146,39 @@ const InstallStep: FC<Props> = ({ form, setLaunching }: Props) => {
         ))}
       </MDBContainer>
       <Migrator
-        dao={dao}
+        dao={toDAOMigrationParams(form.toState())}
+        saveAddresses={saveAddresses}
         onComplete={onComplete}
         onStart={onStart}
         onAbort={onAbort}
         onStop={onStop}
+        onLog={onLog}
       />
+      <div
+        style={{
+          marginTop: "-1.5rem",
+          marginLeft: "auto",
+          height: 0,
+          fontSize: "75%"
+        }}
+      >
+        {daoLogs.length > 0 && (
+          <MDBContainer>
+            <MDBTooltip placement="top" domElement>
+              <div>
+                <MDBIcon
+                  className="blue-text"
+                  size="lg"
+                  icon="copy"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
+                />
+              </div>
+              <div>Click to copy logs</div>
+            </MDBTooltip>
+          </MDBContainer>
+        )}
+      </div>
     </Fragment>
   );
 };

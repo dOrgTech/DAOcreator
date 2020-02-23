@@ -14,7 +14,7 @@ const MembersStep: FC<Props> = ({
   form,
   toggleCollapse,
   loadedFromModal
-}: Props) => (
+}) => (
   <MDBContainer style={styles.padding}>
     <MDBBox>
       <MembersEditor form={form} loadedFromModal={loadedFromModal} />
