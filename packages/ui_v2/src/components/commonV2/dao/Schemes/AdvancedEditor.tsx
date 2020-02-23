@@ -260,7 +260,7 @@ const AdvancedEditor: FC<Props> = ({
                 <FormField
                   field={field}
                   editable={isActive[scheme.type]}
-                  colSize={12}
+                  colSize={"12"}
                   tabIndex={21}
                 />
               </MDBRow>

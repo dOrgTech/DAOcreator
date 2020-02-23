@@ -235,7 +235,8 @@ export default function DAOcreator() {
         setStep,
         toggleCollapse: nextStep,
         getDAOName,
-        getDAOTokenSymbol
+        getDAOTokenSymbol,
+        loadedFromModal
       }
     },
     {
