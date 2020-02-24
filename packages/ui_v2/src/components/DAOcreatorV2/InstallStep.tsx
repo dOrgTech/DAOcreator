@@ -5,13 +5,7 @@ import {
   DAOMigrationResult,
   toDAOMigrationParams
 } from "@dorgtech/daocreator-lib";
-import {
-  MDBAlert,
-  MDBBtn,
-  MDBIcon,
-  MDBContainer,
-  MDBTooltip
-} from "mdbreact";
+import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 import FileSaver from "file-saver";
 
 interface Props {
@@ -100,6 +94,7 @@ const InstallStep: FC<Props> = ({ form, setLaunching }) => {
     FileSaver.saveAs(blob, "migration-addresses.json");
   };
 
+  // Functionality removed
   const saveAddresses = () => {
     if (!daoInfo[daoInfo.length - 1]) return;
 
