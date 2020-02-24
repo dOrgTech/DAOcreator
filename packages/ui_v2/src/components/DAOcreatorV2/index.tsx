@@ -95,7 +95,7 @@ export default function DAOcreator() {
 
       setStep(step + 1);
     }
-  }, [currentForm, step, furthestStep]);
+  }, [currentForm, step]);
 
   // On initial load
   React.useEffect(() => {
@@ -121,7 +121,7 @@ export default function DAOcreator() {
         const { daoName, tokenSymbol } = daoState.config;
         // Modal does not render preview for steps that weren't fully validated
         if (
-          daoName == "" &&
+          daoName === "" &&
           tokenSymbol === "" &&
           JSON.parse(daoCreatorState!).furthestStep < STEP.Members
         ) {
