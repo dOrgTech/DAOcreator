@@ -117,11 +117,17 @@ export default function DAOcreator() {
         const daoParams = fromJSON(form);
         const daoState = fromDAOMigrationParams(daoParams);
         recoveredForm.fromState(daoState);
-        const checkForBlankValues =
-          daoState.config.daoName === "" && daoState.config.tokenSymbol === "";
-        if (!checkForBlankValues) {
-          setRecoverPreviewOpen(true);
+
+        const { daoName, tokenSymbol } = daoState.config;
+        // Modal does not render preview for steps that weren't fully validated
+        if (
+          daoName == "" &&
+          tokenSymbol === "" &&
+          JSON.parse(daoCreatorState!).furthestStep < STEP.Members
+        ) {
+          return;
         }
+        setRecoverPreviewOpen(true);
       };
 
       handleNetworkReload();
