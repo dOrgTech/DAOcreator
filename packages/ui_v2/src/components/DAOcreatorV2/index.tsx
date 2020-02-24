@@ -38,6 +38,8 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
+import DAOstackLogo from "../commonV2/DAOstackLogo";
+
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
 
@@ -356,6 +358,7 @@ export default function DAOcreator() {
               )}
             </div>
           </div>
+          <DAOstackLogo />
         </div>
       </MDBContainer>
       <PreviewDialog />
