@@ -508,7 +508,7 @@ const Migrator: FC<Props> = ({
             >
               Redeploy
             </MDBBtn>
-            <MDBBtn style={styles.postDeployBtn} onClick={saveAddresses}>
+            {/* <MDBBtn style={styles.postDeployBtn} onClick={saveAddresses}>
               Save Addresses&nbsp;
               {!result && (
                 <div
@@ -516,7 +516,7 @@ const Migrator: FC<Props> = ({
                   style={{ width: "16px", height: "16px" }}
                 />
               )}
-            </MDBBtn>
+            </MDBBtn> */}
           </Fragment>
         )}
       </MDBRow>
