@@ -8,9 +8,10 @@ import Toggle from "../Schemes/Toggle";
 
 interface Props {
   form: MembersForm;
+  loadedFromModal: boolean;
 }
 
-const MembersEditor = ({ form }: Props) => {
+const MembersEditor: FC<Props> = ({ form, loadedFromModal }) => {
   /*
    * State
    */
@@ -51,7 +52,16 @@ const MembersEditor = ({ form }: Props) => {
 
   const forceUpdate = useForceUpdate();
 
+  // Update userAdded when loading existing user
   useEffect(() => {
+    if (!loadedFromModal) return;
+    if (form.$.length > 0) setUserAdded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
+
+  useEffect(() => {
+    if (userAdded) return;
+
     if (!web3Connected) {
       setUserMemberForm(new MemberForm(getDAOTokenSymbol));
       return;
@@ -63,6 +73,8 @@ const MembersEditor = ({ form }: Props) => {
       console.log(e);
       return;
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMemberForm, web3Connected, getDAOTokenSymbol, web3]);
 
   useEffect(() => {
@@ -207,17 +219,17 @@ const MembersEditor = ({ form }: Props) => {
         </MDBRow>
         <MemberFormError />
         <MDBRow className="justify-content-center">
-          {!web3Connected ? (
+          {!userAdded && !web3Connected ? (
             <button
               style={styles.setDescriptionButton}
               onClick={handleMetamask}
             >
-              Connect to Web3
+              Add Your Wallet
             </button>
           ) : (
             !userAdded && (
               <button style={styles.setDescriptionButton} onClick={addUser}>
-                Add Self
+                Add Self {/* TODO add blockie here?*/}
               </button>
             )
           )}

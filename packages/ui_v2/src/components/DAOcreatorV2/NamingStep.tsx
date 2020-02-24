@@ -1,55 +1,70 @@
-import React from "react";
+import React, { FC, useState, useEffect } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
 
 interface Props {
   form: DAOConfigForm;
+  loadedFromModal: boolean;
   toggleCollapse: () => void;
 }
 
-function NamingStep(props: Props) {
-  const { form, toggleCollapse } = props;
-  const namingError = {
+export type NamingError = {
+  daoName: boolean;
+  tokenSymbol: boolean;
+};
+
+// Please refactor this
+const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
+  const [errors, setErrors] = useState<NamingError>({
     daoName: true,
-    daoSymbol: true
-  };
-  const [hasError, setHasError] = React.useState<any>(namingError);
-  form.$.tokenName.$ = "0";
-  form.$.tokenName.value = "0";
+    tokenSymbol: true
+  });
+
+  useEffect(() => {
+    if (!loadedFromModal) return;
+
+    setErrors({
+      ...errors,
+      daoName: form.$.daoName.hasError,
+      tokenSymbol: form.$.tokenSymbol.hasError
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
+
+  useEffect(() => {
+    form.$.tokenName.value = form.$.daoName.value + " token";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.$.daoName.$]);
 
   return (
-    <>
-      <div style={styles.paddingTotal}>
-        <br />
-        <DAOConfigEditor
-          form={form}
-          editable={true}
-          namingError={hasError}
-          checkError={setHasError}
-        />
-        <br />
-        <MDBRow style={styles.paddingBottom}>
-          <MDBCol>
-            <button
-              name="decisonSpeed"
-              value="slow"
-              style={
-                hasError.daoName || hasError.daoSymbol
-                  ? styles.buttonDeactivatedStyle
-                  : styles.buttonActivatedStyle
-              }
-              disabled={hasError.daoName || hasError.daoSymbol}
-              onClick={toggleCollapse}
-            >
-              Set Description
-            </button>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    </>
+    <div style={styles.paddingTotal}>
+      <br />
+      <DAOConfigEditor
+        form={form}
+        editable={true}
+        namingError={errors}
+        checkError={setErrors}
+      />
+      <br />
+      <MDBRow style={styles.paddingBottom}>
+        <MDBCol>
+          <button
+            style={
+              errors.daoName || errors.tokenSymbol
+                ? styles.buttonDeactivatedStyle
+                : styles.buttonActivatedStyle
+            }
+            disabled={errors.daoName || errors.tokenSymbol}
+            onClick={toggleCollapse}
+          >
+            Set Description
+          </button>
+        </MDBCol>
+      </MDBRow>
+    </div>
   );
-}
+};
 
 const styles = {
   buttonActivatedStyle: {

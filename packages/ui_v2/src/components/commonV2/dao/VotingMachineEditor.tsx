@@ -23,13 +23,22 @@ const VotingMachineEditor: FC<Props> = ({ votingMachine, editable }) => {
               field={field}
               editable={editable}
               key={`genproto-field-${index}`}
+              tabIndex={index}
             />
           );
         } else if (index % 2 !== 0) {
           return (
             <MDBRow key={`genproto-field-${index}`}>
-              <FormField field={field} editable={editable} />
-              <FormField field={prevField} editable={editable} />
+              <FormField
+                field={field}
+                editable={editable}
+                tabIndex={index + 8}
+              />
+              <FormField
+                field={prevField}
+                editable={editable}
+                tabIndex={index + 9}
+              />
             </MDBRow>
           );
         }

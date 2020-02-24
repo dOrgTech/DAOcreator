@@ -1,17 +1,8 @@
 import React, { FC, Fragment, useEffect } from "react";
-import {
-  DAOMigrationParams,
-  DAOMigrationResult
-} from "@dorgtech/daocreator-lib";
 import { MDBContainer, MDBRow, MDBBtn, MDBBtnGroup } from "mdbreact";
 import OrganizationLine from "./OrganizationLine";
 
 interface IProps {
-  dao: DAOMigrationParams;
-  onComplete: (result: DAOMigrationResult, alchemyURL: string) => void;
-  onStart: () => void;
-  onAbort: (error: string) => void;
-  onStop: () => void;
   migrationStates: any;
 }
 
@@ -84,6 +75,13 @@ const Migrator: FC<IProps> = ({ migrationStates }: IProps) => {
       />
     </MDBContainer>
   );
+};
+
+const styles = {
+  postDeployBtn: {
+    fontSize: "13.5px",
+    padding: "0.65rem"
+  }
 };
 
 export default Migrator;

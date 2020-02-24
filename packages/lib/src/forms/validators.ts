@@ -188,6 +188,28 @@ export const lessThanOrEqual = (bound: number) => (value: string | number) => {
   return error;
 };
 
+export const minMaxInclusive = (min: number, max: number) => (value: string | number) => {
+  const error = `Number must be between ${min} and ${max}.`;
+
+  if (typeof value === "number") {
+    if (value >= min && value <= max) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null) {
+      const number = Number(value);
+
+      if (number >= min && number <= max) {
+        return null;
+      }
+    }
+  }
+
+  return error;
+};
+
 export const nonZeroAddress: Validator<string> = value => {
   const error = "Address must not be zero.";
   value = value.trim();
