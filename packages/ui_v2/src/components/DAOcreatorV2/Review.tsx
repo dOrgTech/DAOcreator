@@ -5,7 +5,7 @@ import { getSimpleOptions, SimpleOption } from "../utils";
 import { DAOForm } from "@dorgtech/daocreator-lib";
 import { StepNum } from ".";
 
-const FirstStep = (form: any) => {
+const FirstStep: FC<DAOForm> = form => {
   const { daoName, tokenSymbol } = form.$.config.$;
   return (
     <div>
@@ -26,7 +26,7 @@ const FirstStep = (form: any) => {
   );
 };
 
-const SecondStep = (form: any) => (
+const SecondStep: FC<DAOForm> = form => (
   <div style={styles.second.container}>
     <h3>Schemes</h3>
     {getSimpleOptions(form.$.schemes).map(
@@ -36,9 +36,7 @@ const SecondStep = (form: any) => (
             <MDBIcon
               icon={checked ? "check" : "times"}
               className={checked ? "blue-text" : "red-text"}
-              style={
-                checked ? styles.second.checked : styles.second.unchecked // x icon is smaller
-              }
+              style={checked ? styles.second.checked : styles.second.unchecked}
             />
             {text}
           </p>
@@ -48,7 +46,10 @@ const SecondStep = (form: any) => (
   </div>
 );
 
-const ThirdStep = (form: any) => {
+const ThirdStep: FC<DAOForm> = form => {
+  const { config, members } = form.$;
+  const { daoName, tokenSymbol } = config.$;
+
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -59,18 +60,16 @@ const ThirdStep = (form: any) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol.value,
     dataKey: "tokens",
     nameKey: "address"
   };
   let totalReputationAmount = 0;
   let totalTokenAmount = 0;
-  const { config, members } = form.$;
-  const { daoName } = config.$;
-  members.toState().map((member: any) => {
+  members.toState().map(member => {
     totalReputationAmount += member.reputation;
-    totalTokenAmount += member.tokens;
-    return null;
+    if (member.tokens) totalTokenAmount += member.tokens;
+    return member;
   });
   const numberOfMembers = members.$.length;
   const membersTokenCount = (count: any, member: any) =>
@@ -80,31 +79,27 @@ const ThirdStep = (form: any) => {
     <div style={styles.third.container}>
       <h3>Members</h3>
       <p>
-        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
+        {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
       <div style={styles.third.reputationDistribution}>
         <p>Reputation Distribution</p>
         <LineGraphic
-          data={members.toState()}
+          data={members.toState() as any}
           total={totalReputationAmount}
           config={reputationConfig}
           style={styles.third.lineGraphic}
         />
       </div>
-      {hasTokens ? (
-        <>
-          <div style={styles.third.hasTokens}>
-            <p>{daoName.value} Token Distribution</p>
-            <LineGraphic
-              data={members.toState()}
-              total={totalTokenAmount}
-              config={tokenConfig}
-              style={styles.third.lineGraphic}
-            />
-          </div>
-        </>
-      ) : (
-        <></>
+      {hasTokens && (
+        <div style={styles.third.hasTokens}>
+          <p>{daoName.value} Token Distribution</p>
+          <LineGraphic
+            data={members.toState() as any}
+            total={totalTokenAmount}
+            config={tokenConfig}
+            style={styles.third.lineGraphic}
+          />
+        </div>
       )}
     </div>
   );
@@ -114,14 +109,14 @@ const steps = [FirstStep, SecondStep, ThirdStep];
 
 interface Props {
   furthestStep: StepNum;
-  recoveredForm: DAOForm;
+  recoveredForm: any;
 }
 
 export const Review: FC<Props> = ({ furthestStep, recoveredForm }) => (
   <>
-    {steps.slice(0, furthestStep).map((ActualStep, index: number) => {
-      return <ActualStep key={index} {...recoveredForm} />;
-    })}
+    {steps.slice(0, furthestStep).map((ActualStep, index: number) => (
+      <ActualStep key={index} {...recoveredForm} />
+    ))}
   </>
 );
 
@@ -141,6 +136,7 @@ const styles = {
       marginRight: "10px"
     },
     unchecked: {
+      // x icon is smaller
       marginLeft: "3px",
       marginRight: "12px"
     }
