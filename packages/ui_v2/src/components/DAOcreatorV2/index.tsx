@@ -100,7 +100,11 @@ export default function DAOcreator() {
         const daoParams = fromJSON(form);
         const daoState = fromDAOMigrationParams(daoParams);
         recoveredForm.fromState(daoState);
-        setRecoverPreviewOpen(true);
+        const checkForBlankValues =
+          daoState.config.daoName === "" && daoState.config.tokenSymbol === "";
+        if (!checkForBlankValues) {
+          setRecoverPreviewOpen(true);
+        }
       };
 
       handleNetworkReload();
