@@ -46,7 +46,8 @@ import { Review } from "./Review";
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
 interface DAO_CREATOR_INTERFACE {
-  step: number;
+  step: StepNum;
+  furthestStep: StepNum;
   form: string;
 }
 
@@ -57,11 +58,22 @@ interface Step {
   callbacks?: Object;
 }
 
+enum STEP {
+  Config,
+  Schemes,
+  Members,
+  Launch
+}
+
+export type StepNum = STEP.Config | STEP.Schemes | STEP.Members | STEP.Launch;
+
 const daoForm = new DAOForm();
 const recoveredForm: DAOForm = new DAOForm();
 
 export default function DAOcreator() {
-  const [step, setStep] = React.useState<number>(0);
+  const [step, setStep] = React.useState<StepNum>(STEP.Config);
+  const [furthestStep, setFurthestStep] = React.useState<StepNum>(STEP.Config);
+
   const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
@@ -79,6 +91,10 @@ export default function DAOcreator() {
   const nextStep = React.useCallback(async () => {
     const res = await currentForm.validate();
     if (!res.hasError) {
+      setFurthestStep(furthestStep =>
+        step + 1 > furthestStep ? step + 1 : furthestStep
+      );
+
       setStep(step + 1);
     }
   }, [currentForm, step]);
@@ -91,6 +107,7 @@ export default function DAOcreator() {
     if (daoCreatorState) {
       const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
       setStep(JSON.parse(daoCreatorState!).step);
+      setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
       if (!loading) return;
 
       const previewLocalStorage = () => {
@@ -102,6 +119,16 @@ export default function DAOcreator() {
         const daoParams = fromJSON(form);
         const daoState = fromDAOMigrationParams(daoParams);
         recoveredForm.fromState(daoState);
+
+        const { daoName, tokenSymbol } = daoState.config;
+        // Modal does not render preview for steps that weren't fully validated
+        if (
+          daoName === "" &&
+          tokenSymbol === "" &&
+          JSON.parse(daoCreatorState!).furthestStep < STEP.Members
+        ) {
+          return;
+        }
         setRecoverPreviewOpen(true);
       };
 
@@ -132,6 +159,7 @@ export default function DAOcreator() {
       const json = toJSON(daoParams);
       const daoCreatorState: DAO_CREATOR_INTERFACE = {
         step,
+        furthestStep,
         form: json
       };
 
@@ -142,7 +170,7 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step]);
+  }, [step, furthestStep]);
 
   React.useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -165,25 +193,29 @@ export default function DAOcreator() {
   const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
-  const loadLocalStorage = () => {
+  const loadLocalStorage = async () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
     if (!daoCreatorState) {
       return;
     }
 
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+    const { step, furthestStep, form } = (await JSON.parse(
+      daoCreatorState
+    )) as DAO_CREATOR_INTERFACE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     daoForm.fromState(daoState);
     setStep(step);
+    setFurthestStep(furthestStep);
     setRecoverPreviewOpen(false);
     setLoadedFromModal(true);
   };
 
   const resetLocalStorage = () => {
     localStorage.removeItem(DAO_CREATOR_STATE);
-    setStep(0);
+    setStep(STEP.Config);
+    setFurthestStep(STEP.Config);
     setRecoverPreviewOpen(false);
   };
 
@@ -198,7 +230,7 @@ export default function DAOcreator() {
   const PreviewDialog = () => {
     const props = {
       recoveredForm,
-      step
+      furthestStep
     };
     return (
       <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
