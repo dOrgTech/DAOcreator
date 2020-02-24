@@ -33,9 +33,9 @@ const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
   }, [loadedFromModal]);
 
   useEffect(() => {
-    form.$.tokenName.value = form.$.daoName + " token";
+    form.$.tokenName.value = form.$.daoName.value + " token";
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.$.daoName]);
+  }, [form.$.daoName.$]);
 
   return (
     <div style={styles.paddingTotal}>

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { FC } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 import LineGraphic from "../commonV2/LineGraphic";
 import { getSimpleOptions, SimpleOption } from "../utils";
+import { DAOForm } from "@dorgtech/daocreator-lib";
+import { StepNum } from ".";
 
 const FirstStep = (form: any) => {
   return (
@@ -122,13 +124,15 @@ const ThirdStep = (form: any) => {
 
 const steps = [FirstStep, SecondStep, ThirdStep];
 
-export function Review(props: any) {
-  const { recoveredForm, step } = props;
-  return (
-    <>
-      {steps.slice(0, step).map((ActualStep, index: number) => {
-        return <ActualStep key={index} {...recoveredForm} />;
-      })}
-    </>
-  );
+interface Props {
+  furthestStep: StepNum;
+  recoveredForm: DAOForm;
 }
+
+export const Review: FC<Props> = ({ furthestStep, recoveredForm }) => (
+  <>
+    {steps.slice(0, furthestStep).map((ActualStep, index: number) => {
+      return <ActualStep key={index} {...recoveredForm} />;
+    })}
+  </>
+);
