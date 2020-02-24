@@ -139,6 +139,8 @@ export default function DAOcreator() {
 
   // Save state every step
   React.useEffect(() => {
+    if (loading) return; // TODO Really wish this worked
+
     const saveLocalStorage = () => {
       const daoState = daoForm.toState();
       // Check to see if the current form state hasn't been edited,
