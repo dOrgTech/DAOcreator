@@ -6,24 +6,19 @@ import { DAOForm } from "@dorgtech/daocreator-lib";
 import { StepNum } from ".";
 
 const FirstStep = (form: any) => {
+  const { daoName, tokenSymbol } = form.$.config.$;
   return (
     <div>
       <h3>Config</h3>
-      <MDBRow
-        style={{
-          marginRight: "auto",
-          marginLeft: "1.5rem",
-          whiteSpace: "nowrap"
-        }}
-      >
+      <MDBRow style={styles.first.row}>
         <MDBCol>
           <span>
-            Name: <strong>{form.$.config.$.daoName.value}</strong>
+            Name: <strong>{daoName.value}</strong>
           </span>
         </MDBCol>
         <MDBCol>
           <span>
-            Symbol: <strong>{form.$.config.$.tokenSymbol.value}</strong>
+            Symbol: <strong>{tokenSymbol.value}</strong>
           </span>
         </MDBCol>
       </MDBRow>
@@ -32,7 +27,7 @@ const FirstStep = (form: any) => {
 };
 
 const SecondStep = (form: any) => (
-  <div style={{ marginTop: 28 }}>
+  <div style={styles.second.container}>
     <h3>Schemes</h3>
     {getSimpleOptions(form.$.schemes).map(
       ({ text, checked }: SimpleOption, index: number) => (
@@ -42,9 +37,7 @@ const SecondStep = (form: any) => (
               icon={checked ? "check" : "times"}
               className={checked ? "blue-text" : "red-text"}
               style={
-                checked
-                  ? { marginRight: "10px" }
-                  : { marginLeft: "3px", marginRight: "12px" } // x icon is smaller
+                checked ? styles.second.checked : styles.second.unchecked // x icon is smaller
               }
             />
             {text}
@@ -72,46 +65,41 @@ const ThirdStep = (form: any) => {
   };
   let totalReputationAmount = 0;
   let totalTokenAmount = 0;
-  form.$.members.toState().map((member: any) => {
+  const { config, members } = form.$;
+  const { daoName } = config.$;
+  members.toState().map((member: any) => {
     totalReputationAmount += member.reputation;
     totalTokenAmount += member.tokens;
     return null;
   });
-  const numberOfMembers = form.$.members.$.length;
-  const hasTokens =
-    form.$.members.$.reduce(
-      (count: any, member: any) => +member.$.tokens.value + count,
-      0
-    ) > 0;
+  const numberOfMembers = members.$.length;
+  const membersTokenCount = (count: any, member: any) =>
+    +member.$.tokens.value + count;
+  const hasTokens = members.$.reduce(membersTokenCount, 0) > 0;
   return (
-    <div
-      style={{
-        marginTop: 28,
-        paddingRight: "8rem"
-      }}
-    >
+    <div style={styles.third.container}>
       <h3>Members</h3>
       <p>
         {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
       </p>
-      <div style={{ width: "17.5em" }}>
+      <div style={styles.third.reputationDistribution}>
         <p>Reputation Distribution</p>
         <LineGraphic
-          data={form.$.members.toState()}
+          data={members.toState()}
           total={totalReputationAmount}
           config={reputationConfig}
-          style={{ padding: "unset" }}
+          style={styles.third.lineGraphic}
         />
       </div>
       {hasTokens ? (
         <>
-          <div style={{ paddingTop: "20px", width: "17.5em" }}>
-            <p>{form.$.config.$.daoName.value} Token Distribution</p>
+          <div style={styles.third.hasTokens}>
+            <p>{daoName.value} Token Distribution</p>
             <LineGraphic
-              data={form.$.members.toState()}
+              data={members.toState()}
               total={totalTokenAmount}
               config={tokenConfig}
-              style={{ padding: "unset" }}
+              style={styles.third.lineGraphic}
             />
           </div>
         </>
@@ -136,3 +124,41 @@ export const Review: FC<Props> = ({ furthestStep, recoveredForm }) => (
     })}
   </>
 );
+
+const styles = {
+  first: {
+    row: {
+      marginRight: "auto",
+      marginLeft: "1.5rem",
+      whiteSpace: "nowrap"
+    }
+  },
+  second: {
+    container: {
+      marginTop: 28
+    },
+    checked: {
+      marginRight: "10px"
+    },
+    unchecked: {
+      marginLeft: "3px",
+      marginRight: "12px"
+    }
+  },
+  third: {
+    container: {
+      marginTop: 28,
+      paddingRight: "8rem"
+    },
+    reputationDistribution: {
+      width: "17.5em"
+    },
+    lineGraphic: {
+      padding: "unset"
+    },
+    hasTokens: {
+      paddingTop: "20px",
+      width: "17.5em"
+    }
+  }
+};
