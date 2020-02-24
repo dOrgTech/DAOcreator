@@ -144,7 +144,6 @@ export default function DAOcreator() {
       // Check to see if the current form state hasn't been edited,
       // and if so early out so we don't save an empty state
       const nullForm = new DAOForm();
-      nullForm.$.config.$.tokenName.value = "0";
       nullForm.$.schemes.$ = [
         new ContributionRewardForm(),
         new SchemeRegistrarForm()
