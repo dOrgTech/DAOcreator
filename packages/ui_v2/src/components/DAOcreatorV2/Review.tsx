@@ -5,25 +5,20 @@ import { getSimpleOptions, SimpleOption } from "../utils";
 import { DAOForm } from "@dorgtech/daocreator-lib";
 import { StepNum } from ".";
 
-const FirstStep = (form: any) => {
+const FirstStep: FC<DAOForm> = form => {
+  const { daoName, tokenSymbol } = form.$.config.$;
   return (
     <div>
       <h3>Config</h3>
-      <MDBRow
-        style={{
-          marginRight: "auto",
-          marginLeft: "1.5rem",
-          whiteSpace: "nowrap"
-        }}
-      >
+      <MDBRow style={styles.first.row}>
         <MDBCol>
           <span>
-            Name: <strong>{form.$.config.$.daoName.value}</strong>
+            Name: <strong>{daoName.value}</strong>
           </span>
         </MDBCol>
         <MDBCol>
           <span>
-            Symbol: <strong>{form.$.config.$.tokenSymbol.value}</strong>
+            Symbol: <strong>{tokenSymbol.value}</strong>
           </span>
         </MDBCol>
       </MDBRow>
@@ -31,8 +26,8 @@ const FirstStep = (form: any) => {
   );
 };
 
-const SecondStep = (form: any) => (
-  <div style={{ marginTop: 28 }}>
+const SecondStep: FC<DAOForm> = form => (
+  <div style={styles.second.container}>
     <h3>Schemes</h3>
     {getSimpleOptions(form.$.schemes).map(
       ({ text, checked }: SimpleOption, index: number) => (
@@ -41,11 +36,7 @@ const SecondStep = (form: any) => (
             <MDBIcon
               icon={checked ? "check" : "times"}
               className={checked ? "blue-text" : "red-text"}
-              style={
-                checked
-                  ? { marginRight: "10px" }
-                  : { marginLeft: "3px", marginRight: "12px" } // x icon is smaller
-              }
+              style={checked ? styles.second.checked : styles.second.unchecked}
             />
             {text}
           </p>
@@ -55,7 +46,10 @@ const SecondStep = (form: any) => (
   </div>
 );
 
-const ThirdStep = (form: any) => {
+const ThirdStep: FC<DAOForm> = form => {
+  const { config, members } = form.$;
+  const { daoName, tokenSymbol } = config.$;
+
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -66,57 +60,46 @@ const ThirdStep = (form: any) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol.value,
     dataKey: "tokens",
     nameKey: "address"
   };
   let totalReputationAmount = 0;
   let totalTokenAmount = 0;
-  form.$.members.toState().map((member: any) => {
+  members.toState().map(member => {
     totalReputationAmount += member.reputation;
-    totalTokenAmount += member.tokens;
-    return null;
+    if (member.tokens) totalTokenAmount += member.tokens;
+    return member;
   });
-  const numberOfMembers = form.$.members.$.length;
-  const hasTokens =
-    form.$.members.$.reduce(
-      (count: any, member: any) => +member.$.tokens.value + count,
-      0
-    ) > 0;
+  const numberOfMembers = members.$.length;
+  const membersTokenCount = (count: any, member: any) =>
+    +member.$.tokens.value + count;
+  const hasTokens = members.$.reduce(membersTokenCount, 0) > 0;
   return (
-    <div
-      style={{
-        marginTop: 28,
-        paddingRight: "8rem"
-      }}
-    >
+    <div style={styles.third.container}>
       <h3>Members</h3>
       <p>
-        {numberOfMembers} Member{numberOfMembers > 1 ? "s" : ""}
+        {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
-      <div style={{ width: "17.5em" }}>
+      <div style={styles.third.reputationDistribution}>
         <p>Reputation Distribution</p>
         <LineGraphic
-          data={form.$.members.toState()}
+          data={members.toState() as any}
           total={totalReputationAmount}
           config={reputationConfig}
-          style={{ padding: "unset" }}
+          style={styles.third.lineGraphic}
         />
       </div>
-      {hasTokens ? (
-        <>
-          <div style={{ paddingTop: "20px", width: "17.5em" }}>
-            <p>{form.$.config.$.daoName.value} Token Distribution</p>
-            <LineGraphic
-              data={form.$.members.toState()}
-              total={totalTokenAmount}
-              config={tokenConfig}
-              style={{ padding: "unset" }}
-            />
-          </div>
-        </>
-      ) : (
-        <></>
+      {hasTokens && (
+        <div style={styles.third.hasTokens}>
+          <p>{daoName.value} Token Distribution</p>
+          <LineGraphic
+            data={members.toState() as any}
+            total={totalTokenAmount}
+            config={tokenConfig}
+            style={styles.third.lineGraphic}
+          />
+        </div>
       )}
     </div>
   );
@@ -126,13 +109,52 @@ const steps = [FirstStep, SecondStep, ThirdStep];
 
 interface Props {
   furthestStep: StepNum;
-  recoveredForm: DAOForm;
+  recoveredForm: any;
 }
 
 export const Review: FC<Props> = ({ furthestStep, recoveredForm }) => (
   <>
-    {steps.slice(0, furthestStep).map((ActualStep, index: number) => {
-      return <ActualStep key={index} {...recoveredForm} />;
-    })}
+    {steps.slice(0, furthestStep).map((ActualStep, index: number) => (
+      <ActualStep key={index} {...recoveredForm} />
+    ))}
   </>
 );
+
+const styles = {
+  first: {
+    row: {
+      marginRight: "auto",
+      marginLeft: "1.5rem",
+      whiteSpace: "nowrap"
+    }
+  },
+  second: {
+    container: {
+      marginTop: 28
+    },
+    checked: {
+      marginRight: "10px"
+    },
+    unchecked: {
+      // x icon is smaller
+      marginLeft: "3px",
+      marginRight: "12px"
+    }
+  },
+  third: {
+    container: {
+      marginTop: 28,
+      paddingRight: "8rem"
+    },
+    reputationDistribution: {
+      width: "17.5em"
+    },
+    lineGraphic: {
+      padding: "unset"
+    },
+    hasTokens: {
+      paddingTop: "20px",
+      width: "17.5em"
+    }
+  }
+};
