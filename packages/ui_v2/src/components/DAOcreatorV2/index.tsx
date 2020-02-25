@@ -174,7 +174,7 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step, furthestStep]);
+  }, [step, furthestStep, loaded]);
 
   useEffect(() => {
     const handleKeyPress = (event: any) => {
