@@ -2,7 +2,6 @@ import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import { DAOForm } from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
-import FileSaver from "file-saver";
 
 interface Props {
   form: DAOForm;
@@ -11,7 +10,7 @@ interface Props {
 }
 
 const InstallStep: FC<Props> = ({ migrationStates }: Props) => {
-  const { alchemyAdds, onComplete, onStart, onAbort, onStop } = migrationStates;
+  const { alchemyAdds } = migrationStates;
   return (
     <>
       <Fragment>
