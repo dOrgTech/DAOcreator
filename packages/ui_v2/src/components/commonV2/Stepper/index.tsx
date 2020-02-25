@@ -1,10 +1,5 @@
 import React, { FC, Fragment, useState } from "react";
-import {
-  DAOConfigForm,
-  MembersForm,
-  SchemesForm,
-  DAOForm
-} from "@dorgtech/daocreator-lib";
+import { DAOConfigForm, MembersForm, SchemesForm, DAOForm } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 import {
   LogUserApproval,
@@ -64,15 +59,7 @@ const ModalButton: FC<{
   return <></>;
 };
 
-const Stepper: FC<Props> = ({
-  index,
-  form,
-  title,
-  Component,
-  callbacks,
-  step,
-  launching
-}) => {
+const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching }) => {
   /*
    * State
    */
@@ -90,14 +77,10 @@ const Stepper: FC<Props> = ({
   const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
 
   // User approval component
-  const [approval, setApproval] = useState<
-    undefined | { msg: string; response: (res: boolean) => void }
-  >(undefined);
+  const [approval, setApproval] = useState<undefined | { msg: string; response: (res: boolean) => void }>(undefined);
 
   // Migration result (sans schemes), outdated if resuming
-  const [result, setResult] = useState<DAOMigrationResult | undefined>(
-    undefined
-  );
+  const [result, setResult] = useState<DAOMigrationResult | undefined>(undefined);
 
   // Alchemy url
   const [alchemyURL, setAlchemyURL] = useState("");
@@ -115,20 +98,10 @@ const Stepper: FC<Props> = ({
    */
 
   const onComplete = (
-    {
-      arcVersion,
-      name,
-      Avatar,
-      DAOToken,
-      Reputation,
-      Controller
-    }: DAOMigrationResult,
+    { arcVersion, name, Avatar, DAOToken, Reputation, Controller }: DAOMigrationResult,
     alchemyURL: string
   ) => {
-    setDaoInfo([
-      ...daoInfo,
-      { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
-    ]);
+    setDaoInfo([...daoInfo, { arcVersion, name, Avatar, DAOToken, Reputation, Controller }]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
     onStop();
   };
@@ -198,13 +171,7 @@ const Stepper: FC<Props> = ({
     const { type } = logLine;
     setFullLogLines([...fullLogLines, logLine]);
 
-    const {
-      UserApproval,
-      Info,
-      Error,
-      TransactionResult,
-      MigrationAborted
-    } = LogType;
+    const { UserApproval, Info, Error, TransactionResult, MigrationAborted } = LogType;
 
     console.log(logLine);
 
@@ -255,31 +222,19 @@ const Stepper: FC<Props> = ({
             break;
 
           case info === "Creating a new organization...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Signing Create Org Tx..."
-            ]);
+            setMinimalLogLines([...minimalLogLines, "Signing Create Org Tx..."]);
             break;
 
           case info === "Setting Scheme Registrar parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Scheme Registrar params..."
-            ]);
+            setMinimalLogLines([...minimalLogLines, "Setting Scheme Registrar params..."]);
             break;
 
           case info === "Setting Generic Scheme parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Generic params..."
-            ]);
+            setMinimalLogLines([...minimalLogLines, "Setting Generic params..."]);
             break;
 
           case info === "Setting Contribution Reward parameters...":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Setting Contribution Reward params..."
-            ]);
+            setMinimalLogLines([...minimalLogLines, "Setting Contribution Reward params..."]);
             break;
 
           case info === "Setting DAO schemes...":
@@ -310,8 +265,7 @@ const Stepper: FC<Props> = ({
         const errorLine = logLine as LogError;
         const { error } = errorLine;
         switch (true) {
-          case error ===
-            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
+          case error === "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
             // setMinimalLogLines([
             //   ...minimalLogLines,
             //   "Failed to Sign Transaction"
@@ -322,9 +276,7 @@ const Stepper: FC<Props> = ({
             setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
             break;
 
-          case error.startsWith(
-            "Transaction failed: Transaction has been reverted"
-          ):
+          case error.startsWith("Transaction failed: Transaction has been reverted"):
           case error.startsWith("Transaction failed: Error"):
             // setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;
@@ -369,20 +321,15 @@ const Stepper: FC<Props> = ({
         setAborting(true);
 
         switch (true) {
-          case abortedMsg ===
-            "MetaMask Tx Signature: User denied transaction signature.":
-            setMinimalLogLines([
-              ...minimalLogLines,
-              "Failed to Sign Transaction"
-            ]);
+          case abortedMsg === "MetaMask Tx Signature: User denied transaction signature.":
+            setMinimalLogLines([...minimalLogLines, "Failed to Sign Transaction"]);
             break;
 
           case abortedMsg.startsWith("Network request failed"): // Time out(?)
             setMinimalLogLines([...minimalLogLines, "Network request failed"]);
             break;
 
-          case abortedMsg ===
-            "Returned values aren't valid, did it run Out of Gas?":
+          case abortedMsg === "Returned values aren't valid, did it run Out of Gas?":
           case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
             setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
@@ -404,9 +351,7 @@ const Stepper: FC<Props> = ({
   const getCallbacks = () => {
     const callbacks: DAOMigrationCallbacks = {
       userApproval: (msg: string): Promise<boolean> =>
-        new Promise<boolean>(resolve =>
-          addLogLine(new LogUserApproval(msg, (resp: boolean) => resolve(resp)))
-        ),
+        new Promise<boolean>(resolve => addLogLine(new LogUserApproval(msg, (resp: boolean) => resolve(resp)))),
 
       info: (msg: string) => addLogLine(new LogInfo(msg)),
 
@@ -509,10 +454,8 @@ const Stepper: FC<Props> = ({
     const network = await getNetworkName();
 
     let url;
-    if (network === "mainnet")
-      url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    else if (network === "rinkeby")
-      url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    if (network === "mainnet") url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    else if (network === "rinkeby") url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
     else url = result.Avatar;
 
     setAlchemyURL(url);
@@ -535,20 +478,11 @@ const Stepper: FC<Props> = ({
     <a role="button" href="#/" style={{ cursor: "unset" }}>
       <span
         className="circle"
-        style={
-          step < index
-            ? styles.subsequentStepIcon
-            : step === index
-            ? styles.currentStepIcon
-            : styles.previousStepIcon
-        }
+        style={step < index ? styles.subsequentStepIcon : step === index ? styles.currentStepIcon : styles.previousStepIcon}
       >
         {index + 1}
       </span>
-      <span
-        className="label"
-        style={step === index ? styles.active : styles.noActiveLabel}
-      >
+      <span className="label" style={step === index ? styles.active : styles.noActiveLabel}>
         {title}
       </span>
     </a>
@@ -561,12 +495,7 @@ const Stepper: FC<Props> = ({
       if (step === 0) break;
 
       // const { getDAOName, getDAOTokenSymbol } = callbacks;
-      Preview = (
-        <ConfigPreview
-          daoName={callbacks.getDAOName()}
-          daoSymbol={callbacks.getDAOTokenSymbol()}
-        />
-      );
+      Preview = <ConfigPreview daoName={callbacks.getDAOName()} daoSymbol={callbacks.getDAOTokenSymbol()} />;
       break;
     case 1:
       if (step <= 1) break;
@@ -576,12 +505,7 @@ const Stepper: FC<Props> = ({
       if (step <= 2) break;
 
       // const { getDAOTokenSymbol } = callbacks;
-      Preview = (
-        <MembersPreview
-          form={form as MembersForm}
-          tokenSymbol={callbacks.getDAOTokenSymbol()}
-        />
-      );
+      Preview = <MembersPreview form={form as MembersForm} tokenSymbol={callbacks.getDAOTokenSymbol()} />;
       break;
     case 3:
       break;
@@ -593,18 +517,11 @@ const Stepper: FC<Props> = ({
 
   return (
     <li className={step >= index ? "completed" : ""}>
-      <MDBRow
-        style={styles.specialRow}
-        className="justify-content-space-between"
-      >
+      <MDBRow style={styles.specialRow} className="justify-content-space-between">
         <StepIcon index={index} step={step} />
         {Preview}
         <div>
-          <ModalButton
-            step={step}
-            index={index}
-            setModal={callbacks.setModal}
-          />
+          <ModalButton step={step} index={index} setModal={callbacks.setModal} />
           <MDBBtn
             hidden={step <= index}
             floating
@@ -614,23 +531,14 @@ const Stepper: FC<Props> = ({
             onClick={() => !launching && callbacks.setStep(index)}
             style={styles.icon}
           >
-            <MDBIcon
-              icon="pen"
-              className={launching ? "grey-text" : "blue-text"}
-            />
+            <MDBIcon icon="pen" className={launching ? "grey-text" : "blue-text"} />
           </MDBBtn>
         </div>
       </MDBRow>
 
-      <MDBCollapse
-        id={index.toString()}
-        isOpen={step.toString()}
-        style={styles.maxWidth}
-      >
+      <MDBCollapse id={index.toString()} isOpen={step.toString()} style={styles.maxWidth}>
         <MDBRow
-          className={
-            index === (2 || 4) ? "justify-content-end" : "justify-content-start"
-          }
+          className={index === (2 || 4) ? "justify-content-end" : "justify-content-start"}
           style={
             index === (1 || 3)
               ? styles.stepContent
@@ -639,11 +547,7 @@ const Stepper: FC<Props> = ({
               : styles.stepFourContent
           }
         >
-          <Component
-            form={form}
-            {...callbacks}
-            migrationStates={migrationStates}
-          />
+          <Component form={form} {...callbacks} migrationStates={migrationStates} />
         </MDBRow>
       </MDBCollapse>
       {step === 3 && index === 3 ? (
@@ -651,22 +555,21 @@ const Stepper: FC<Props> = ({
           center
           style={{
             paddingTop: "3%",
-            paddingLeft: installStep !== STEP.Completed ? "36%" : "30%"
+            paddingLeft: "38.5%"
           }}
         >
           {installStep !== STEP.Completed ? (
-            <MDBBtn
-              disabled={installStep !== STEP.Waiting && failed === null}
-              onClick={() => startInstallation()}
-            >
-              {failed === null
-                ? "Install Organization"
-                : "Restart Installation"}
+            <MDBBtn disabled={installStep !== STEP.Waiting && failed === null} onClick={startInstallation}>
+              {failed === null ? "Install Organization" : "Restart Installation"}
             </MDBBtn>
           ) : (
             <Fragment>
-              <MDBBtn onClick={() => openAlchemy()}>Open Alchemy</MDBBtn>
-              <MDBBtn onClick={() => startInstallation()}>Redeploy</MDBBtn>
+              <MDBBtn style={styles.postDeployBtn} onClick={openAlchemy}>
+                Open Alchemy
+              </MDBBtn>
+              <MDBBtn style={styles.postDeployBtn} onClick={startInstallation}>
+                Redeploy
+              </MDBBtn>
             </Fragment>
           )}
         </MDBRow>
@@ -743,6 +646,10 @@ const styles = {
   },
   maxWidth: {
     width: "-webkit-fill-available"
+  },
+  postDeployBtn: {
+    fontSize: "13.5px",
+    padding: "0.65rem"
   }
 };
 

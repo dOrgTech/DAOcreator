@@ -77,11 +77,4 @@ const Migrator: FC<IProps> = ({ migrationStates }: IProps) => {
   );
 };
 
-const styles = {
-  postDeployBtn: {
-    fontSize: "13.5px",
-    padding: "0.65rem"
-  }
-};
-
 export default Migrator;

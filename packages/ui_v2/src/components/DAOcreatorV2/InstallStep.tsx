@@ -15,12 +15,12 @@ const InstallStep: FC<Props> = ({ migrationStates }: Props) => {
     <>
       <Fragment>
         <MDBContainer>
-          <MDBAlert color="danger" dismiss>
+          <MDBAlert color="warning" dismiss>
             <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
             Attempting to speed up transactions will BREAK deployment!
           </MDBAlert>
           {alchemyAdds.map((address: string) => (
-            <MDBAlert key={address} color="danger" dismiss>
+            <MDBAlert key={address} color="warning" dismiss>
               <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
               Save your new DAO's
               <MDBTooltip domElement>
