@@ -41,6 +41,7 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
+import './styles.css';
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -314,13 +315,14 @@ export default function DAOcreator() {
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
-            <MDBCol size="6" style={styles.titleContainer}>
+            <MDBCol size="6" id="title" style={styles.titleContainer}>
               <h3 style={styles.fontStyle}>Create Organization</h3>
             </MDBCol>
             <MDBCol size="3">
               <div>
                 <MDBPopover placement="bottom" popover clickable>
                   <MDBBtn
+                    id="menu"
                     floating
                     size="lg"
                     color="transparent"
@@ -411,7 +413,8 @@ const styles = {
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
     borderRadius: 4,
-    margin: "auto"
+    margin: "auto",
+    overflow: "hidden"
   },
   paddingContainer: {
     padding: "1%",

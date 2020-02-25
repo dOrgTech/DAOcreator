@@ -11,6 +11,8 @@ import {
   MDBContainer,
   MDBRow
 } from "mdbreact";
+import './styles.css';
+
 
 interface ImportError {
   file: string;
@@ -211,6 +213,7 @@ export function ImporterModal(props: Props) {
               Close
             </button>
             <button
+              id='importButton'
               style={styles.importButton}
               onClick={() => onImport(isMembersImport)}
             >

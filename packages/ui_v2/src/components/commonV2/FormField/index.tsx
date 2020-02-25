@@ -134,7 +134,7 @@ const StringFieldView = observer(
               : field.displayName}
           </label>
           <MDBTooltip placement="bottom" clickable>
-            <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            <MDBBtn floating size="lg" color="transparent" style={styles.info} id="img">
               {" "}
               <img src="./icons/info-revert.svg" alt="Info"/>
             </MDBBtn>
@@ -254,11 +254,7 @@ const DurationFieldView = observer(
             }
           >
             <span
-              style={
-                props.name === "days"
-                  ? { marginLeft: "-50px" }
-                  : { marginLeft: "-38px" }
-              }
+              className = {props.name === "days" ? props.name : 'hours'}
             >
               {" "}
               {props.name === "days" ? "days" : "h"}
@@ -270,7 +266,7 @@ const DurationFieldView = observer(
 
     return (
       <>
-        <MDBRow style={styles.optionRow}>
+        <MDBRow id="row" style={styles.optionRow}>
           <MDBCol
             size="9"
             className="justify-content-center"
@@ -279,6 +275,7 @@ const DurationFieldView = observer(
             <label htmlFor={field.displayName}>{field.displayName}</label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
+                id='icon'
                 floating
                 size="lg"
                 color="transparent"
@@ -317,7 +314,7 @@ const DateTimeFieldView = observer(
     const disabled = editable === undefined ? false : !editable;
 
     return (
-      <MDBCol size="6" style={styles.largeMargin}>
+      <MDBCol id="colsix" size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>{field.displayName}</label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>

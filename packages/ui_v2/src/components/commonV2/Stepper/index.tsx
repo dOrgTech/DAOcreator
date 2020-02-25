@@ -27,9 +27,9 @@ const ModalButton: FC<{
   setModal: (modal: boolean | string) => void; // TODO ?
 }> = ({ step, index, setModal }) => {
   if (step === 1 && index === 1) {
-    return <UtilityButton title={"Advanced"} openModal={setModal} />;
+    return <UtilityButton id='modal' title={"Advanced"} openModal={setModal} />;
   } else if (step === 2 && index === 2) {
-    return <UtilityButton title={"Import CSV"} openModal={setModal} />;
+    return <UtilityButton id='importCSV' title={"Import CSV"} openModal={setModal} />;
   }
   return <></>;
 };
@@ -44,7 +44,7 @@ const Stepper: FC<Props> = ({
   launching
 }) => {
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
-    <a role="button" href="#/" style={{ cursor: "unset", padding: "30px" }}>
+    <a id="step" role="button" href="#/" style={{ cursor: "unset", padding: "30px" }}>
       <span
         className="circle"
         style={
@@ -58,6 +58,7 @@ const Stepper: FC<Props> = ({
         {index + 1}
       </span>
       <span
+        id='label'
         className="label"
         style={step === index ? styles.active : styles.noActiveLabel}
       >
@@ -126,6 +127,7 @@ const Stepper: FC<Props> = ({
             className="btn"
             onClick={() => !launching && callbacks.setStep(index)}
             style={styles.icon}
+            id="pencil"
           >
             <img src="icons/pencil.svg" alt="menu icon" />
           </MDBBtn>
@@ -138,6 +140,7 @@ const Stepper: FC<Props> = ({
         style={styles.maxWidth}
       >
         <MDBRow
+          id='row'
           className={
             index === (2 || 4) ? "justify-content-end" : "justify-content-start"
           }
@@ -239,8 +242,8 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
-    height: 40,
-    width: 40, //The Width must be the same as the height
+    height: 35,
+    width: 35, //The Width must be the same as the height
     borderRadius: 400,
     border: "1px solid rgb(238, 240, 255)",
     marginRight: "30px",

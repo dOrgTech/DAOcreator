@@ -1,0 +1,16 @@
+@media only screen and (max-width: 500px) { 
+  #addMemberButton {
+      width: 100px !important;
+      height: 40px !important;
+      padding: 4px;
+      margin-right: 9px !important;
+      margin-top: 7px !important;
+      font-size: 13px !important;
+  }
+
+  #addMember{
+      flex: 0 0 50%;
+      max-width: 100%;
+      margin: auto;
+  }
+}

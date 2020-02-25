@@ -31,3 +31,54 @@ ul.stepper li.active a .label, ul.stepper li.completed a .label {
   font-weight: 600;
   color: #1665D8;
 }
+
+@media only screen and (max-width: 500px) { 
+
+  #step {
+      padding:12px !important;
+  }
+
+  .stepper-vertical li:not(:last-child):after { 
+      top: 2.8rem !important;
+      left: 27px !important;
+  }
+  #label {
+      margin: 3px !important;
+  }
+
+  #row {
+      padding: 14px 14px !important;
+      margin: 0px 2% 0px 14.5% !important;
+  }
+
+  #pencil {
+      margin-right: 4px !important;
+      padding: inherit !important;
+  }
+
+  #modal {
+      width: 100px !important;
+      height: 40px !important;
+      padding: 4px;
+      margin-right: 9px !important;
+      margin-top: 7px !important;
+      font-size: 13px !important;
+  }
+
+  #importCSV {
+    width: 100px !important;
+    height: 40px !important;
+    padding: 4px;
+    margin-right: 9px !important;
+    margin-top: 7px !important;
+    font-size: 13px !important;
+  }
+
+  #importButton {
+    margin-right: 0px;
+  }
+
+  #schemePreview {
+    margin-left: 35px;
+  }
+}

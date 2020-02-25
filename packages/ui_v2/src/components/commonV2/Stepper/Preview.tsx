@@ -5,6 +5,7 @@ import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
 import LineGraphic from "../LineGraphic";
 import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
 import { SimpleOption, getSimpleOptions } from "../../utils";
+import './styles.css'
 
 export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
   daoName,
@@ -28,7 +29,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
-    <div style={styles.schemePreview}>
+    <div id="schemePreview" style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
