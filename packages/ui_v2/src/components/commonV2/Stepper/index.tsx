@@ -72,29 +72,15 @@ const Stepper: FC<Props> = ({
   switch (index) {
     case 0:
       if (step === 0) break;
-
-      // const { getDAOName, getDAOTokenSymbol } = callbacks;
-      Preview = (
-        <ConfigPreview
-          daoName={callbacks.getDAOName()}
-          daoSymbol={callbacks.getDAOTokenSymbol()}
-        />
-      );
+      Preview = () => (<ConfigPreview form={form as DAOConfigForm} />);
       break;
     case 1:
       if (step <= 1) break;
-      Preview = <SchemesPreview form={form as SchemesForm} />;
+      Preview = () => (<SchemesPreview form={form as SchemesForm} />);
       break;
     case 2:
       if (step <= 2) break;
-
-      // const { getDAOTokenSymbol } = callbacks;
-      Preview = (
-        <MembersPreview
-          form={form as MembersForm}
-          tokenSymbol={callbacks.getDAOTokenSymbol()}
-        />
-      );
+      Preview = () => (<MembersPreview form={form as MembersForm} />);
       break;
     case 3:
       break;
@@ -112,7 +98,7 @@ const Stepper: FC<Props> = ({
         className="justify-content-space-between"
       >
         <StepIcon index={index} step={step} />
-        {Preview}
+       { Preview && <Preview /> } 
         <div>
           <ModalButton
             step={step}

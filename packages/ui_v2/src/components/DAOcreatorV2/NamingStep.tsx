@@ -1,12 +1,12 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
+import { observer } from "mobx-react";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
 import "./styles.css";
 
 interface Props {
   form: DAOConfigForm;
-  loadedFromModal: boolean;
   toggleCollapse: () => void;
 }
 
@@ -16,22 +16,7 @@ export type NamingError = {
 };
 
 // Please refactor this
-const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
-  const [errors, setErrors] = useState<NamingError>({
-    daoName: true,
-    tokenSymbol: true
-  });
-
-  useEffect(() => {
-    if (!loadedFromModal) return;
-
-    setErrors({
-      ...errors,
-      daoName: form.$.daoName.hasError,
-      tokenSymbol: form.$.tokenSymbol.hasError
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedFromModal]);
+const NamingStep: FC<Props> = observer(({ form, toggleCollapse }) => { 
 
   useEffect(() => {
     form.$.tokenName.value = form.$.daoName.value + " token";
@@ -41,14 +26,21 @@ const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
   return (
     <div style={styles.paddingTotal}>
       <br />
-      <DAOConfigEditor form={form} editable={true} namingError={errors} checkError={setErrors} />
+      <DAOConfigEditor
+        form={form}
+        editable={true}
+      />
       <br />
       <MDBRow style={styles.paddingBottom}>
         <MDBCol>
           <button
             id="setDescription"
-            style={errors.daoName || errors.tokenSymbol ? styles.buttonDeactivatedStyle : styles.buttonActivatedStyle}
-            disabled={errors.daoName || errors.tokenSymbol}
+            style={
+              form.hasError
+                ? styles.buttonDeactivatedStyle
+                : styles.buttonActivatedStyle
+            }
+            disabled={form.hasError}
             onClick={toggleCollapse}
           >
             Set Description
@@ -57,7 +49,7 @@ const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
       </MDBRow>
     </div>
   );
-};
+});
 
 const styles = {
   buttonActivatedStyle: {
