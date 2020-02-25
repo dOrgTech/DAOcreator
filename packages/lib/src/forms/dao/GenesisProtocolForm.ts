@@ -6,6 +6,7 @@ import {
   DurationField,
   AddressField,
   PercentageField,
+  NumberField,
   requiredText,
   validAddress,
   validNumber,
@@ -33,8 +34,8 @@ export class GenesisProtocolForm extends Form<
     quietEndingPeriod: DurationField;
     queuedVoteRequiredPercentage: PercentageField;
     minimumDaoBounty: TokenField;
-    daoBountyConst: StringField;
-    thresholdConst: StringField;
+    daoBountyConst: NumberField;
+    thresholdConst: NumberField;
     votersReputationLossRatio: PercentageField;
     proposingRepReward: TokenField;
     activationTime: DateTimeField;
