@@ -391,12 +391,26 @@ const SchemeEditor: FC<Props> = ({
 
   const resetForm = () => {
     // Leaving toggles untouched
-    setDecisionSpeed(DAOSpeed.Medium);
+    if (decisionSpeed !== DAOSpeed.Medium) {
+      setDecisionSpeed(DAOSpeed.Medium);
+
+      return;
+    }
+    enableSpeed(DAOSpeed.Medium);
+    // decisionSpeed effects because they won't trigger if speed doesn't change
     updatePresets();
+    setLoadedSpeed(DAOSpeed.Medium);
   };
 
   const handleClick = (e: any) => {
-    enableSpeed(parseInt(e.target.value));
+    const newSpeed = parseInt(e.target.value);
+
+    // decisionSpeed effects because they won't trigger if speed doesn't change
+    if (newSpeed === decisionSpeed) {
+      updatePresets();
+      setLoadedSpeed(DAOSpeed.Medium);
+    }
+    enableSpeed(newSpeed);
   };
 
   const buttonStyle = (speed: DAOSpeed) =>
