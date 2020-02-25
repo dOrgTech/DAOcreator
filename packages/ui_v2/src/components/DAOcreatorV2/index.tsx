@@ -216,9 +216,11 @@ export default function DAOcreator() {
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     daoForm.fromState(daoState);
-    setStep(step);
-    setFurthestStep(furthestStep);
-    setDecisionSpeed(decisionSpeed);
+    setStep(step === undefined ? STEP.Config : step);
+    setFurthestStep(furthestStep === undefined ? STEP.Config : furthestStep);
+    setDecisionSpeed(
+      decisionSpeed === undefined ? DAOSpeed.Medium : decisionSpeed
+    );
     setRecoverPreviewOpen(false);
     setLoadedFromModal(true);
     setLoaded(true);
