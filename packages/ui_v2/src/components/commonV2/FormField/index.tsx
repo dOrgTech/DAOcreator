@@ -140,7 +140,7 @@ const StringFieldView = observer(
             <span>{field.description}</span>
           </MDBTooltip>
           <input
-            type="text"
+            type={(field.displayName === "Threshold Const" ||  field.displayName === "DAO Bounty Const") ? "number" : "text"}
             style={styles.inputStyle}
             value={field.value}
             disabled={editable === undefined ? false : !editable}
@@ -168,7 +168,7 @@ const TokenFieldView = observer(
           <span>{field.description}</span>
         </MDBTooltip>
         <input
-          type="text"
+          type="number"
           style={styles.inputStyle}
           value={field.value}
           disabled={editable === undefined ? false : !editable}
