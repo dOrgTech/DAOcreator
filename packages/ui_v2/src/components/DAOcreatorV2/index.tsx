@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -71,24 +71,24 @@ const daoForm = new DAOForm();
 const recoveredForm: DAOForm = new DAOForm();
 
 export default function DAOcreator() {
-  const [step, setStep] = React.useState<StepNum>(STEP.Config);
-  const [furthestStep, setFurthestStep] = React.useState<StepNum>(STEP.Config);
+  /*
+   * TODO Improve State
+   */
+  const [step, setStep] = useState<StepNum>(STEP.Config);
+  const [furthestStep, setFurthestStep] = useState<StepNum>(STEP.Config);
 
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
-    false
-  );
-  const [advanceSchemeConfig, setAdvanceSchemeConfig] = React.useState<boolean>(
-    false
-  );
-  const [importFile, setImportFile] = React.useState<string>("");
-  const [launching, setLaunching] = React.useState(false);
+  const [loading, setLoading] = useState(true);
+  const [recoverPreviewOpen, setRecoverPreviewOpen] = useState(false);
+  const [advanceSchemeConfig, setAdvanceSchemeConfig] = useState(false);
+  const [importFile, setImportFile] = useState("");
+  const [launching, setLaunching] = useState(false);
 
-  const [loadedFromModal, setLoadedFromModal] = React.useState(false);
+  const [loadedFromModal, setLoadedFromModal] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   let currentForm: any = daoForm.$.config;
 
-  const nextStep = React.useCallback(async () => {
+  const nextStep = useCallback(async () => {
     const res = await currentForm.validate();
     if (!res.hasError) {
       setFurthestStep(furthestStep =>
@@ -100,53 +100,59 @@ export default function DAOcreator() {
   }, [currentForm, step]);
 
   // On initial load
-  React.useEffect(() => {
+  useEffect(() => {
     const daoCreatorState: string | null = localStorage.getItem(
       DAO_CREATOR_STATE
     );
-    if (daoCreatorState) {
-      const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
-      setStep(JSON.parse(daoCreatorState!).step);
-      setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
-      if (!loading) return;
-
-      const previewLocalStorage = () => {
-        if (!daoCreatorState) {
-          setLoading(false);
-          return;
-        }
-
-        const daoParams = fromJSON(form);
-        const daoState = fromDAOMigrationParams(daoParams);
-        recoveredForm.fromState(daoState);
-
-        const { daoName, tokenSymbol } = daoState.config;
-        // Modal does not render preview for steps that weren't fully validated
-        if (
-          daoName === "" &&
-          tokenSymbol === "" &&
-          JSON.parse(daoCreatorState!).furthestStep < STEP.Members
-        ) {
-          return;
-        }
-        setRecoverPreviewOpen(true);
-      };
-
-      handleNetworkReload();
-      previewLocalStorage();
+    if (!daoCreatorState) {
+      setLoaded(true);
+      setLoading(false);
+      return;
     }
+    const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
+    setStep(JSON.parse(daoCreatorState!).step);
+    setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
+    if (!loading) return;
+
+    const previewLocalStorage = () => {
+      if (!daoCreatorState) {
+        setLoading(false);
+        setLoaded(true);
+        return;
+      }
+
+      const daoParams = fromJSON(form);
+      const daoState = fromDAOMigrationParams(daoParams);
+      recoveredForm.fromState(daoState);
+
+      const { daoName, tokenSymbol } = daoState.config;
+      // Modal does not render preview for steps that weren't fully validated
+      if (
+        daoName === "" &&
+        tokenSymbol === "" &&
+        JSON.parse(daoCreatorState!).furthestStep < STEP.Members
+      ) {
+        setLoaded(true);
+        return;
+      }
+      setRecoverPreviewOpen(true);
+    };
+
+    handleNetworkReload();
+    previewLocalStorage();
 
     setLoading(false);
   }, [loading]);
 
   // Save state every step
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!loaded) return;
+
     const saveLocalStorage = () => {
       const daoState = daoForm.toState();
       // Check to see if the current form state hasn't been edited,
       // and if so early out so we don't save an empty state
       const nullForm = new DAOForm();
-      nullForm.$.config.$.tokenName.value = "0";
       nullForm.$.schemes.$ = [
         new ContributionRewardForm(),
         new SchemeRegistrarForm()
@@ -170,9 +176,9 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step, furthestStep]);
+  }, [step, furthestStep, loaded]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyPress = (event: any) => {
       if (event.key !== "Enter") return;
       switch (step) {
@@ -210,6 +216,7 @@ export default function DAOcreator() {
     setFurthestStep(furthestStep);
     setRecoverPreviewOpen(false);
     setLoadedFromModal(true);
+    setLoaded(true);
   };
 
   const resetLocalStorage = () => {
@@ -217,6 +224,7 @@ export default function DAOcreator() {
     setStep(STEP.Config);
     setFurthestStep(STEP.Config);
     setRecoverPreviewOpen(false);
+    setLoaded(true);
   };
 
   const exportDaoParams = () => {
@@ -233,7 +241,12 @@ export default function DAOcreator() {
       furthestStep
     };
     return (
-      <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
+      <MDBModal
+        toggle={resetLocalStorage}
+        isOpen={recoverPreviewOpen}
+        fullWidth={true}
+        maxWidth="md"
+      >
         <MDBModalHeader id="simple-dialog-title">
           In Progress DAO Detected
         </MDBModalHeader>
