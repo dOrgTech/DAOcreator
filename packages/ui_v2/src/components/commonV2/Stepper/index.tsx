@@ -9,6 +9,7 @@ import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
+import { StepNum } from "../../DAOcreatorV2";
 
 interface Props {
   index: number;
@@ -16,7 +17,7 @@ interface Props {
   Component: FC;
   title: string;
   callbacks: any;
-  step: number;
+  step: StepNum;
   launching: boolean;
 }
 
@@ -42,7 +43,7 @@ const Stepper: FC<Props> = ({
   step,
   launching
 }) => {
-  const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
+  const StepIcon: FC<{ index: number; step: StepNum }> = ({ index, step }) => (
     <a role="button" href="#/" style={{ cursor: "unset" }}>
       <span
         className="circle"
