@@ -393,13 +393,13 @@ const SchemeEditor: FC<Props> = ({
     // Leaving toggles untouched
     if (decisionSpeed !== DAOSpeed.Medium) {
       setDecisionSpeed(DAOSpeed.Medium);
-
+      enableSpeed(DAOSpeed.Medium);
       return;
     }
-    enableSpeed(DAOSpeed.Medium);
     // decisionSpeed effects because they won't trigger if speed doesn't change
     updatePresets();
     setLoadedSpeed(DAOSpeed.Medium);
+    enableSpeed(DAOSpeed.Medium);
   };
 
   const handleClick = (e: any) => {
