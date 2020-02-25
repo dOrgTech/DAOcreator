@@ -1,0 +1,19 @@
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #9EA0A5;
+  opacity: 1; /* Firefox */
+}
+
+.col-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-right: 12px !important;
+  padding-left: 12px !important;
+}
+
+input:hover {
+  border-color: #1665D8 !important;
+}
+
+input:active {
+  border-color: #1665D8 !important;
+} 

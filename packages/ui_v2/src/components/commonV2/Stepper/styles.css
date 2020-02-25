@@ -1,0 +1,33 @@
+.stepper-vertical li:not(:last-child):after {
+  position: absolute;
+  top: 3.9rem;
+  left: 46px;
+  width: 1px;
+  height: calc(100% - 0px);
+  content: "";
+  background-color: #EDEDEF;
+}
+
+ul.stepper li a .circle {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: 0.5rem;
+  line-height: 1.7rem;
+  color: #fff;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.38);
+  border-radius: 50%;
+  padding-top: 2px;
+}
+
+
+ul.stepper li.completed a .circle {
+  border: #1665D8;
+  background-color: #1665D8 !important;
+}
+
+ul.stepper li.active a .label, ul.stepper li.completed a .label {
+  font-weight: 600;
+  color: #1665D8;
+}

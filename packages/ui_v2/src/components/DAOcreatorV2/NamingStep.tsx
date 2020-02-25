@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
+import "./styles.css";
 
 interface Props {
   form: DAOConfigForm;
@@ -40,21 +41,13 @@ const NamingStep: FC<Props> = ({ form, loadedFromModal, toggleCollapse }) => {
   return (
     <div style={styles.paddingTotal}>
       <br />
-      <DAOConfigEditor
-        form={form}
-        editable={true}
-        namingError={errors}
-        checkError={setErrors}
-      />
+      <DAOConfigEditor form={form} editable={true} namingError={errors} checkError={setErrors} />
       <br />
       <MDBRow style={styles.paddingBottom}>
         <MDBCol>
           <button
-            style={
-              errors.daoName || errors.tokenSymbol
-                ? styles.buttonDeactivatedStyle
-                : styles.buttonActivatedStyle
-            }
+            id="setDescription"
+            style={errors.daoName || errors.tokenSymbol ? styles.buttonDeactivatedStyle : styles.buttonActivatedStyle}
             disabled={errors.daoName || errors.tokenSymbol}
             onClick={toggleCollapse}
           >
@@ -90,10 +83,10 @@ const styles = {
     fontSize: "smaller"
   },
   paddingBottom: {
-    paddingBottom: "2%"
+    paddingBottom: "0%"
   },
   paddingTotal: {
-    padding: "6px"
+    padding: "0px"
   }
 };
 
