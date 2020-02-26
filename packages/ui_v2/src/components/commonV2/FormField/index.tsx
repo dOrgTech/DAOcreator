@@ -21,6 +21,7 @@ import {
   AddressField,
   NumberField
 } from "@dorgtech/daocreator-lib";
+import './styles.css';
 
 export interface Props<TField = AnyField> {
   field: TField;
@@ -103,7 +104,7 @@ const StringFieldView = observer(
           {displayName ? displayName : field.displayName}
         </label>
         <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info} id="img">
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
@@ -192,31 +193,14 @@ const DurationFieldView = observer(
 
     const onChange = (event: any) => {
       const { name, value } = event.target;
-      if (name === "days") {
-        duration["days"] = +value;
-      } else {
-        let [hours, minutes] = value.split(":");
-        duration.hours = isNaN(hours) ? 0 : +hours;
-        duration.minutes = isNaN(minutes) ? 0 : +minutes;
-      }
+      duration[name] = +value;
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
     };
 
-    const fieldValue = (props: { name: "days" | "hoursAndMinutes" }) => {
-      if (props.name === "days") {
-        return field[props.name];
-      } else {
-        let { hours, minutes } = duration;
-        hours = +hours < 9 ? 0 + `${hours}` : hours;
-        minutes = +minutes < 9 ? 0 + `${minutes}` : minutes;
-        return `${hours}:${minutes}`;
-      }
-    };
-
     const DurationPart = observer(
-      (props: { name: "days" | "hoursAndMinutes" }) => (
+      (props: { name: "days" | "hours" | "minutes" }) => (
         <>
           <input
             name={props.name}
@@ -233,31 +217,26 @@ const DurationFieldView = observer(
                     textAlign: "center"
                   }
             }
-            value={fieldValue(props)}
+            value={field[props.name]}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
-            type={props.name === "days" ? "number" : "time"}
+            type={"number"}
             min={0}
-            max={100}
             onBlur={field.enableAutoValidationAndValidate}
             tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
           <div
             style={
-              props.name === "days"
+              props.name === "days" || props.name === "hours"
                 ? { paddingTop: "3px", marginRight: "-3px" }
                 : { paddingTop: "3px" }
             }
           >
             <span
-              style={
-                props.name === "days"
-                  ? { marginLeft: "-50px" }
-                  : { marginLeft: "-38px" }
-              }
+              className = {props.name === "days" ? props.name : 'hours'}
             >
               {" "}
-              {props.name === "days" ? "days" : "h"}
+              {props.name === "days" ? props.name : props.name === "hours" ? "h" : "m"}
             </span>
           </div>
         </>
@@ -266,9 +245,9 @@ const DurationFieldView = observer(
 
     return (
       <>
-        <MDBRow style={styles.optionRow}>
+        <MDBRow id="row" style={styles.optionRow}>
           <MDBCol
-            size="9"
+            size="7"
             className="justify-content-center"
             style={styles.margin}
           >
@@ -277,6 +256,7 @@ const DurationFieldView = observer(
             </label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
+                id='icon'
                 floating
                 size="lg"
                 color="transparent"
@@ -288,10 +268,11 @@ const DurationFieldView = observer(
               <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={{marginLeft: '43px'}}>
             <MDBRow>
               <DurationPart name={"days"} />
-              <DurationPart name={"hoursAndMinutes"} />
+              <DurationPart name={"hours"} />
+              <DurationPart name={"minutes"} />
 
               {FieldError(field)}
             </MDBRow>
@@ -315,7 +296,7 @@ const DateTimeFieldView = observer(
     const disabled = editable === undefined ? false : !editable;
 
     return (
-      <MDBCol size="6" style={styles.largeMargin}>
+    <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>
           {displayName ? displayName : field.displayName}
         </label>
@@ -347,7 +328,7 @@ const DateTimeFieldView = observer(
               error={field.hasError}
               size={"small"}
               TextFieldComponent={() => (
-                <>
+                <div>
                   <input
                     style={styles.inputStyle}
                     placeholder="Pick a date and time..."
@@ -380,7 +361,7 @@ const DateTimeFieldView = observer(
                   ) : (
                     <></>
                   )}
-                </>
+                </div>
               )}
             />
           </MuiPickersUtilsProvider>
@@ -453,9 +434,9 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={colSize === "9" ? { display: "flex", flexDirection: "row", marginTop: '27px' } : { display: "flex", flexDirection: "row" }}>
           <input
-            style={{ ...styles.inputStyle, paddingRight: "55px" }}
+            style={{...styles.inputStyle, paddingRight: "55px"}}
             placeholder="0x..."
             value={field.value}
             disabled={editable === undefined ? false : !editable}
@@ -478,13 +459,18 @@ export default FormField;
 const styles = {
   inputStyle: {
     border: "1px solid",
-    color: "black",
-    borderColor: "lightgray",
+    color: "#3E3F42",
+    borderColor: "#E2E5ED",
     borderRadius: "4px",
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    fontWeight: 300
+    paddingLeft: '16px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    fontSize: '14px',
+    fontWeight: 400,
+    outline: 'none',
   },
   noPadding: {
     padding: 0
@@ -519,12 +505,12 @@ const styles = {
     marginTop: "6px"
   },
   largeMargin: {
-    marginTop: "25px"
+    marginTop: "0px"
   },
   labelStyle: {
-    color: "gray",
-    fontSize: "smaller",
-    fontWeight: 400
+    color: "#9EA0A5",
+    fontWeight: 400,
+    fontSize:'12px'
   },
   reactDatepickerWrapper: {
     paddingTop: "5px",

@@ -48,11 +48,11 @@ export const MembersTable: FC<Props> = ({
       <MDBRow
         style={(styles.borderCell, { borderBottom: "1px solid lightgray" })}
       >
-        <MDBCol size="2" style={styles.avatarCell}>
+        <MDBCol id="addressAvatar" size="2" style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
         </MDBCol>
         <MDBCol size="2" style={styles.borderCell}>
-          <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
+          <div id="addressHex" style={{ marginTop: "5px", marginLeft: "-20px" }}>
             <MDBTooltip domElement>
               <div
                 onClick={() => {
@@ -80,7 +80,7 @@ export const MembersTable: FC<Props> = ({
             ></MDBBtn>
           </div>
         </MDBCol>
-        <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.borderCell}>
+        <MDBCol size={tokenDistribution ? "3" : "6"} id="reputationValue"  style={styles.borderCell}>
           {lineEdit ? (
             <div
               style={{ marginLeft: "-20px" }}
@@ -102,7 +102,7 @@ export const MembersTable: FC<Props> = ({
           )}
         </MDBCol>
         {tokenDistribution && (
-          <MDBCol size="3" style={styles.borderCell}>
+          <MDBCol size="3" id="tokenValueCol" style={styles.borderCell}>
             {lineEdit ? (
               <div
                 style={{ marginLeft: "-20px" }}
@@ -118,7 +118,7 @@ export const MembersTable: FC<Props> = ({
                 />
               </div>
             ) : (
-              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
+              <div id="tokenValue"style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             )}
           </MDBCol>
         )}
@@ -128,11 +128,12 @@ export const MembersTable: FC<Props> = ({
               lineEdit ? onEdit(index) : selectEdit(index);
             }}
             style={{ paddingTop: "5px" }}
+            id="editCol"
           >
             {lineEdit ? (
               <MDBIcon icon="check" className="blue-text"></MDBIcon>
             ) : (
-              <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+              <img src="icons/pencil.svg" alt="menu icon" />
             )}
           </div>
         </MDBCol>
@@ -142,6 +143,7 @@ export const MembersTable: FC<Props> = ({
               lineEdit ? cancelEdit() : onDelete(index);
             }}
             style={{ paddingTop: "5px" }}
+            id="editCol"
           >
             {lineEdit ? (
               <MDBIcon icon="times" className="red-text"></MDBIcon>
@@ -163,12 +165,12 @@ export const MembersTable: FC<Props> = ({
           <MDBCol size="4" style={styles.titles}>
             MEMBERS
           </MDBCol>
-          <MDBCol size={tokenDistribution ? "3" : "6"} style={styles.titles}>
+          <MDBCol size={tokenDistribution ? "3" : "6"} id="reputationTitle">
             REPUTATION
           </MDBCol>
 
           {tokenDistribution && (
-            <MDBCol size="2" style={styles.titles}>
+            <MDBCol size="2" id="tokenName">
               {getDAOTokenSymbol()} TOKEN
             </MDBCol>
           )}
@@ -188,7 +190,8 @@ const styles = {
     width: "-webkit-fill-available",
     marginLeft: "-10.5px",
     marginRight: "-11.5px",
-    borderBottom: "2px solid lightgray",
+    borderBottom: "0.5px solid lightgray",
+    borderTop: "0.5px lightgray",
     padding: "5px"
   },
   titles: {
@@ -198,7 +201,9 @@ const styles = {
   },
   borderCell: {
     padding: "5px 0",
-    paddingTop: "7px"
+    paddingTop: "7px",
+    paddingRight: '1px',
+    paddingLeft: '1px'
   },
   addressCell: {
     marginLeft: "-5px",

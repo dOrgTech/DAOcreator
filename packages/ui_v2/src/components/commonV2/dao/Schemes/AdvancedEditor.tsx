@@ -23,6 +23,7 @@ import {
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
 import { VotingMachinePresets } from "./SchemeEditor";
+import './styles.css';
 
 interface Props {
   form: SchemesForm;
@@ -234,7 +235,7 @@ const AdvancedEditor: FC<Props> = ({
               </MDBCol>
             )}
             <MDBCol size="1">
-              <div className="custom-control custom-switch">
+              <div id="toggleScheme" className="custom-control custom-switch">
                 <input
                   type="checkbox"
                   className="custom-control-input"
@@ -285,7 +286,7 @@ const AdvancedEditor: FC<Props> = ({
             ))}
           </MDBCol>
           <MDBCol style={styles.save}>
-            <button style={styles.saveButton} onClick={() => closeModal()}>
+            <button id='save' style={styles.saveButton} onClick={() => closeModal()}>
               Save Configuration
             </button>
           </MDBCol>

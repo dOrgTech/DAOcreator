@@ -150,7 +150,9 @@ export const greaterThan = (bound: number) => (value: string | number) => {
   return error;
 };
 
-export const greaterThanOrEqual = (bound: number) => (value: string | number) => {
+export const greaterThanOrEqual = (bound: number) => (
+  value: string | number
+) => {
   const error = `Number must be greater than or equal to ${bound}.`;
 
   if (typeof value === "number") {

@@ -393,11 +393,7 @@ class Migrator extends React.Component<Props, State> {
       }
 
       return (
-        <Grid
-          container
-          direction={"column"}
-          alignItems={"center"}
-        >
+        <Grid container direction={"column"} alignItems={"center"}>
           <Typography variant={"h6"} className={classes.successText}>
             Deployment Successful!
           </Typography>
