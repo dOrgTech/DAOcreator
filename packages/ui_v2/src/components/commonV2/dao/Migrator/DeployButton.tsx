@@ -18,14 +18,15 @@ import {
   DAOMigrationParams,
   DAOForm
 } from "@dorgtech/daocreator-lib";
-import { MDBBtn } from "mdbreact";
-import { STEP } from "../../../commonV2/Stepper"
+import { MDBBtn, MDBIcon, MDBTooltip } from "mdbreact";
+
+import { STEP } from "../../../commonV2/Stepper";
 
 interface IProps {
   migrationStates: any;
 }
 
-export const DeployButton: FC<IProps> = ({migrationStates}) => {
+export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   const {
     installStep,
     setInstallStep,
@@ -49,9 +50,11 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
     setDaoInfo,
     step,
     form,
-    setLaunching
+    setLaunching,
+    setDaoLogs,
+    daoLogs
   } = migrationStates;
-  
+
   /*
    * Callbacks
    */
@@ -66,12 +69,26 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
 
   const onStart = () => {
     setLaunching(true);
+    addNewLogs();
+  };
+
+  const addMinLogLine = (log: string) => {
+    setMinimalLogLines([...minimalLogLines, log]);
+  };
+
+  const addFullLogLine = (log: AnyLogLine) => {
+    setFullLogLines([...fullLogLines, log]);
+    onLog(log.toString());
   };
 
   const onAbort = (error: string) => {
     console.log("onAbort");
     console.log(error);
     onStop();
+  };
+
+  const onLog = (log: string) => {
+    addLog(log);
   };
 
   const onStop = () => {
@@ -99,13 +116,26 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
     setInstallStep(STEP.Completed);
     // onComplete(result);
   };
+  /*
+   * Methods
+   */
 
+  const addLog = (log: string) => {
+    setDaoLogs((daoLogs: any) => {
+      daoLogs[daoLogs.length - 1].push(log);
+      return daoLogs;
+    });
+  };
+
+  const addNewLogs = () => {
+    setDaoLogs((daoLogs: any) => [...daoLogs, []]);
+  };
   /*
    * Callbacks
    */
   const addLogLine = (logLine: AnyLogLine) => {
     const { type } = logLine;
-    setFullLogLines([...fullLogLines, logLine]);
+    addFullLogLine(logLine);
 
     const { UserApproval, Info, Error, TransactionResult, MigrationAborted } = LogType;
 
@@ -123,7 +153,7 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
 
           case "We found a deployment that was in progress, pickup where you left off?":
           case "We found a deployment that's was in progress, pickup where you left off?":
-            setMinimalLogLines([...minimalLogLines, "Selecting deployment..."]);
+            addMinLogLine("Selecting deployment...");
             setApproval({
               msg: "Continue previous deployment?",
               response: (res: boolean): void => {
@@ -137,7 +167,7 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
           default:
             console.log("Unhandled approval log:");
             console.log(question);
-            setMinimalLogLines([...minimalLogLines, question]);
+            addMinLogLine(question);
             setApproval({
               msg: question,
               response: (res: boolean): void => {
@@ -158,31 +188,31 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
             break;
 
           case info === "Creating a new organization...":
-            setMinimalLogLines([...minimalLogLines, "Signing Create Org Tx..."]);
+            addMinLogLine("Signing Create Org Tx...");
             break;
 
           case info === "Setting Scheme Registrar parameters...":
-            setMinimalLogLines([...minimalLogLines, "Setting Scheme Registrar params..."]);
+            addMinLogLine("Setting Scheme Registrar params...");
             break;
 
           case info === "Setting Generic Scheme parameters...":
-            setMinimalLogLines([...minimalLogLines, "Setting Generic params..."]);
+            addMinLogLine("Setting Generic params...");
             break;
 
           case info === "Setting Contribution Reward parameters...":
-            setMinimalLogLines([...minimalLogLines, "Setting Contribution Reward params..."]);
+            addMinLogLine("Setting Contribution Reward params...");
             break;
 
           case info === "Setting DAO schemes...":
-            setMinimalLogLines([...minimalLogLines, "Setting DAO schemes..."]);
+            addMinLogLine("Setting DAO schemes...");
             break;
 
           case info === "Deploying Controller":
-            setMinimalLogLines([...minimalLogLines, "Deploying Controller..."]);
+            addMinLogLine("Deploying Controller...");
             break;
 
           case info === "Setting GenesisProtocol parameters...":
-            setMinimalLogLines([...minimalLogLines, "Setting Machine..."]);
+            addMinLogLine("Setting Machine...");
             break;
 
           case info === "DAO Migration has Finished Successfully!":
@@ -192,7 +222,7 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
           default:
             console.log("Unhandled info log:");
             console.log(info);
-            setMinimalLogLines([...minimalLogLines, info]);
+            addMinLogLine(info);
             break;
         }
         break;
@@ -209,7 +239,7 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
             break;
 
           case error.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
-            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
+            addMinLogLine("Failed to get address");
             break;
 
           case error.startsWith("Transaction failed: Transaction has been reverted"):
@@ -220,7 +250,7 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
           default:
             console.log("Unhandled error log:");
             console.log(error);
-            setMinimalLogLines([...minimalLogLines, error]);
+            addMinLogLine(error);
             break;
         }
         break;
@@ -234,18 +264,18 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
             break;
 
           case msg.startsWith('Provided address "null" is invalid'): // Happened in dev a lot
-            setMinimalLogLines([...minimalLogLines, "Failed to get address"]);
+            addMinLogLine("Failed to get address");
             // Reset to last step (set button to tx rebroadcast attempt)
             break;
 
           case msg === "DAO schemes set.":
-            setMinimalLogLines([...minimalLogLines, msg]);
+            addMinLogLine(msg);
             break;
 
           default:
             console.log("Unhandled txResult log:");
             console.log(msg);
-            // setMinimalLogLines([...minimalLogLines, msg]);
+            // addMinLogLine(msg]);
             break;
         }
         break;
@@ -258,27 +288,26 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
 
         switch (true) {
           case abortedMsg === "MetaMask Tx Signature: User denied transaction signature.":
-            setMinimalLogLines([...minimalLogLines, "Failed to Sign Transaction"]);
+            addMinLogLine("Failed to Sign Transaction");
             break;
 
           case abortedMsg.startsWith("Network request failed"): // Time out(?)
-            setMinimalLogLines([...minimalLogLines, "Network request failed"]);
+            addMinLogLine("Network request failed");
             break;
 
           case abortedMsg === "Returned values aren't valid, did it run Out of Gas?":
           case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
-            setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
+            addMinLogLine("Transaction failed");
             break;
 
           default:
             console.log("Unhandled abortedMsg log:");
             console.log(abortedMsg);
-            setMinimalLogLines([...minimalLogLines, abortedMsg]);
+            addMinLogLine(abortedMsg);
             break;
         }
         break;
-
       default:
         console.log("Unimplemented log type");
     }
@@ -410,6 +439,11 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
     window.open(alchemyURL);
   };
 
+  const copyDAOLogs = (logs: string[]) => {
+    console.log(JSON.stringify(JSON.stringify(logs, null, 2)));
+    navigator.clipboard.writeText(JSON.stringify(logs, null, 2));
+  };
+
   return installStep !== STEP.Completed ? (
     <MDBBtn disabled={installStep !== STEP.Waiting && failed === null} onClick={startInstallation}>
       {failed === null ? "Install Organization" : "Restart Installation"}
@@ -422,9 +456,30 @@ export const DeployButton: FC<IProps> = ({migrationStates}) => {
       <MDBBtn style={styles.postDeployBtn} onClick={startInstallation}>
         Redeploy
       </MDBBtn>
+      {daoLogs.length > 0 && (
+        <div
+          style={{
+            marginLeft: "170px",
+            marginTop: "12px"
+          }}
+        >
+          <MDBTooltip placement="top" domElement>
+            <div>
+              <MDBIcon
+                className="blue-text"
+                size="lg"
+                icon="copy"
+                style={{ cursor: "pointer" }}
+                onClick={() => copyDAOLogs(daoLogs[daoLogs.length - 1])}
+              />
+            </div>
+            <div>Click to copy logs</div>
+          </MDBTooltip>
+        </div>
+      )}
     </Fragment>
   );
-}
+};
 
 const styles = {
   postDeployBtn: {

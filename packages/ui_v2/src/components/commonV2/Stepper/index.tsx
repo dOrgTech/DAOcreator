@@ -47,6 +47,7 @@ const ModalButton: FC<{
 
 const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching }) => {
   const [installStep, setInstallStep] = useState(STEP.Waiting);
+  const [daoLogs, setDaoLogs] = useState<string[][]>([]);
 
   // Unimplemented noWeb3Open, ethSpent
   const [, setNoWeb3Open] = useState(false);
@@ -98,6 +99,8 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
     setAlchemyAdds,
     daoInfo,
     setDaoInfo,
+    daoLogs,
+    setDaoLogs,
     setLaunching: callbacks!.setLaunching 
   };
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
