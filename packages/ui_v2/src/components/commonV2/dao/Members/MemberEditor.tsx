@@ -3,14 +3,9 @@ import { MDBRow, MDBCol } from "mdbreact";
 
 import FormField from "../../FormField";
 import { MemberForm } from "@dorgtech/daocreator-lib";
+import './styles.css';
 
-export const MemberEditor = ({
-  memberForm,
-  onSubmit
-}: {
-  memberForm: MemberForm;
-  onSubmit: (event: any) => void;
-}) => {
+export const MemberEditor = ({ memberForm, onSubmit }: { memberForm: MemberForm; onSubmit: (event: any) => void }) => {
   return (
     <MDBRow
       style={styles.rowPrincipal}
@@ -18,18 +13,9 @@ export const MemberEditor = ({
         if (event.key === "Enter") onSubmit(event);
       }}
     >
-      <FormField
-        tabIndex={1}
-        field={memberForm.$.address}
-        editable={true}
-        colSize="9"
-      />
-      <MDBCol size="3">
-        <button
-          type="submit"
-          style={styles.setDescriptionButton}
-          onClick={onSubmit}
-        >
+      <FormField tabIndex={1} field={memberForm.$.address} editable={true} colSize="9" />
+      <MDBCol id="addMember" size="3">
+        <button id="addMemberButton" type="submit" style={styles.setDescriptionButton} onClick={onSubmit}>
           Add Member
         </button>
       </MDBCol>

@@ -32,7 +32,7 @@ const Toggle: FC<Props> = ({
         <span>{tooltip}</span>
       </MDBTooltip>
     </MDBCol>
-    <MDBCol style={styles.noPadding}>
+    <MDBCol id='toggle' style={styles.noPadding}>
       <div className="custom-control custom-switch">
         <input
           type="checkbox"

@@ -38,7 +38,7 @@ const styles = {
     color: "white",
     width: "145px",
     padding: "7px",
-    marginBottom: "11px",
+    marginTop: "20px",
     fontSize: "smaller"
   },
   padding: {

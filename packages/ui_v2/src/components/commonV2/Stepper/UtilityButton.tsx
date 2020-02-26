@@ -1,11 +1,13 @@
 import React from "react";
+import './styles.css';
 
 interface Props {
   title: string;
   openModal: (i: boolean | string) => void;
+  id?: string | undefined
 }
 export function UtilityButton(props: Props) {
-  const { title, openModal } = props;
+  const { title, openModal, id } = props;
   const handledCallback = () => {
     if (title === "Import CSV") {
       openModal(title);
@@ -14,7 +16,7 @@ export function UtilityButton(props: Props) {
     }
   };
   return (
-    <button style={styles.button} onClick={handledCallback}>
+    <button style={styles.button} onClick={handledCallback} id={id || "utility"}>
       {title}
     </button>
   );

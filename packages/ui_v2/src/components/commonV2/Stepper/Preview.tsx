@@ -1,24 +1,22 @@
 import React, { FC } from "react";
 
-import { MembersForm, SchemesForm } from "@dorgtech/daocreator-lib";
+import { MembersForm, SchemesForm, DAOConfigForm } from "@dorgtech/daocreator-lib";
 
 import LineGraphic from "../LineGraphic";
 import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
 import { SimpleOption, getSimpleOptions } from "../../utils";
+import './styles.css'
 
-export const ConfigPreview: FC<{ daoName: string; daoSymbol: string }> = ({
-  daoName,
-  daoSymbol
-}) => (
+export const ConfigPreview: FC<{ form: DAOConfigForm }> = ({ form }) => (
   <MDBRow style={styles.configPreview}>
     <MDBCol>
       <span>
-        Name: <strong>{daoName}</strong>
+        Name: <strong>{form.$.daoName.value}</strong>
       </span>
     </MDBCol>
     <MDBCol>
       <span>
-        Symbol: <strong>{daoSymbol}</strong>
+        Symbol: <strong>{form.$.tokenSymbol.value}</strong>
       </span>
     </MDBCol>
   </MDBRow>
@@ -28,7 +26,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
-    <div style={styles.schemePreview}>
+    <div id="preview" style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
@@ -52,10 +50,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   );
 };
 
-export const MembersPreview: FC<{
-  form: MembersForm;
-  tokenSymbol: string;
-}> = ({ form, tokenSymbol }) => {
+export const MembersPreview: FC<{ form: MembersForm }> = ({ form }) => {
   const reputationConfig = {
     showPercentage: false,
     height: "0.5rem",
@@ -66,7 +61,7 @@ export const MembersPreview: FC<{
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: tokenSymbol,
+    symbol: form.getDAOTokenSymbol(),
     dataKey: "tokens",
     nameKey: "address"
   };
@@ -79,8 +74,8 @@ export const MembersPreview: FC<{
   });
   const numberOfMembers = form.$.length;
   return (
-    <div style={styles.membersPreview}>
-      <p>
+    <div id="preview" style={styles.membersPreview}>
+      <p id="membersCount">
         {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
       <div style={{ width: "17.5em" }}>
@@ -94,7 +89,7 @@ export const MembersPreview: FC<{
       </div>
       {totalTokenAmount > 0 && (
         <div style={{ paddingTop: "20px", width: "17.5em" }}>
-          <p>{tokenSymbol} Token Distribution</p>
+          <p>{form.getDAOTokenSymbol()} Token Distribution</p>
           <LineGraphic
             data={form.toState() as any} // Working with this type is weird
             total={totalTokenAmount}
@@ -109,16 +104,16 @@ export const MembersPreview: FC<{
 
 const styles = {
   configPreview: {
-    marginTop: "26px",
+    marginTop: 33,
     marginRight: "auto",
     marginLeft: "1.5rem",
     whiteSpace: "nowrap"
   },
   schemePreview: {
-    marginTop: 28
+    marginTop: 33,
   },
   membersPreview: {
-    marginTop: 28,
+    marginTop: 33,
     paddingRight: "8rem"
   },
   lineGraphic: {

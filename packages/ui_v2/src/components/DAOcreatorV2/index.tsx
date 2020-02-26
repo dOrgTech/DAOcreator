@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import * as React from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
@@ -12,7 +12,6 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBIcon,
   MDBPopover,
   MDBPopoverBody
 } from "mdbreact";
@@ -43,6 +42,7 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
+import './styles.css';
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -73,25 +73,25 @@ const daoForm = new DAOForm();
 const recoveredForm: DAOForm = new DAOForm();
 
 export default function DAOcreator() {
-  /*
-   * TODO Improve State
-   */
-  const [step, setStep] = useState<StepNum>(STEP.Config);
-  const [furthestStep, setFurthestStep] = useState<StepNum>(STEP.Config);
+  const [step, setStep] = React.useState<StepNum>(STEP.Config);
+  const [furthestStep, setFurthestStep] = React.useState<StepNum>(STEP.Config);
 
-  const [loading, setLoading] = useState(true);
-  const [recoverPreviewOpen, setRecoverPreviewOpen] = useState(false);
-  const [advanceSchemeConfig, setAdvanceSchemeConfig] = useState(false);
-  const [importFile, setImportFile] = useState("");
-  const [launching, setLaunching] = useState(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
+    false
+  );
+  const [advanceSchemeConfig, setAdvanceSchemeConfig] = React.useState<boolean>(
+    false
+  );
+  const [importFile, setImportFile] = React.useState<string>("");
+  const [launching, setLaunching] = React.useState(false);
 
-  const [loadedFromModal, setLoadedFromModal] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [decisionSpeed, setDecisionSpeed] = useState(DAOSpeed.Medium);
-
+  const [loadedFromModal, setLoadedFromModal] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
+  const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
   let currentForm: any = daoForm.$.config;
 
-  const nextStep = useCallback(async () => {
+  const nextStep = React.useCallback(async () => {
     const res = await currentForm.validate();
     if (!res.hasError) {
       setFurthestStep(furthestStep =>
@@ -103,59 +103,53 @@ export default function DAOcreator() {
   }, [currentForm, step]);
 
   // On initial load
-  useEffect(() => {
+  React.useEffect(() => {
     const daoCreatorState: string | null = localStorage.getItem(
       DAO_CREATOR_STATE
     );
-    if (!daoCreatorState) {
-      setLoaded(true);
-      setLoading(false);
-      return;
+    if (daoCreatorState) {
+      const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
+      setStep(JSON.parse(daoCreatorState!).step);
+      setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
+      if (!loading) return;
+
+      const previewLocalStorage = () => {
+        if (!daoCreatorState) {
+          setLoading(false);
+          return;
+        }
+
+        const daoParams = fromJSON(form);
+        const daoState = fromDAOMigrationParams(daoParams);
+        recoveredForm.fromState(daoState);
+
+        const { daoName, tokenSymbol } = daoState.config;
+        // Modal does not render preview for steps that weren't fully validated
+        if (
+          daoName === "" &&
+          tokenSymbol === "" &&
+          JSON.parse(daoCreatorState!).furthestStep < STEP.Members
+        ) {
+          return;
+        }
+        setRecoverPreviewOpen(true);
+      };
+
+      handleNetworkReload();
+      previewLocalStorage();
     }
-    const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
-    setStep(JSON.parse(daoCreatorState!).step);
-    setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
-    if (!loading) return;
-
-    const previewLocalStorage = () => {
-      if (!daoCreatorState) {
-        setLoading(false);
-        setLoaded(true);
-        return;
-      }
-
-      const daoParams = fromJSON(form);
-      const daoState = fromDAOMigrationParams(daoParams);
-      recoveredForm.fromState(daoState);
-
-      const { daoName, tokenSymbol } = daoState.config;
-      // Modal does not render preview for steps that weren't fully validated
-      if (
-        daoName === "" &&
-        tokenSymbol === "" &&
-        JSON.parse(daoCreatorState!).furthestStep < STEP.Members
-      ) {
-        setLoaded(true);
-        return;
-      }
-      setRecoverPreviewOpen(true);
-    };
-
-    handleNetworkReload();
-    previewLocalStorage();
 
     setLoading(false);
   }, [loading]);
 
   // Save state every step
-  useEffect(() => {
-    if (!loaded) return;
-
+  React.useEffect(() => {
     const saveLocalStorage = () => {
       const daoState = daoForm.toState();
       // Check to see if the current form state hasn't been edited,
       // and if so early out so we don't save an empty state
       const nullForm = new DAOForm();
+      nullForm.$.config.$.tokenName.value = "0";
       nullForm.$.schemes.$ = [
         new ContributionRewardForm(),
         new SchemeRegistrarForm()
@@ -182,7 +176,7 @@ export default function DAOcreator() {
     };
   }, [step, furthestStep, loaded, decisionSpeed]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleKeyPress = (event: any) => {
       if (event.key !== "Enter") return;
       switch (step) {
@@ -223,7 +217,6 @@ export default function DAOcreator() {
     );
     setRecoverPreviewOpen(false);
     setLoadedFromModal(true);
-    setLoaded(true);
   };
 
   const resetLocalStorage = () => {
@@ -231,7 +224,6 @@ export default function DAOcreator() {
     setStep(STEP.Config);
     setFurthestStep(STEP.Config);
     setRecoverPreviewOpen(false);
-    setLoaded(true);
   };
 
   const exportDaoParams = () => {
@@ -248,12 +240,7 @@ export default function DAOcreator() {
       furthestStep
     };
     return (
-      <MDBModal
-        toggle={resetLocalStorage}
-        isOpen={recoverPreviewOpen}
-        fullWidth={true}
-        maxWidth="md"
-      >
+      <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
         <MDBModalHeader id="simple-dialog-title">
           In Progress DAO Detected
         </MDBModalHeader>
@@ -337,20 +324,22 @@ export default function DAOcreator() {
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
-            <MDBCol size="6" style={styles.titleContainer}>
+            <MDBCol size="6" id="title" style={styles.titleContainer}>
               <h3 style={styles.fontStyle}>Create Organization</h3>
             </MDBCol>
             <MDBCol size="3">
               <div>
                 <MDBPopover placement="bottom" popover clickable>
                   <MDBBtn
+                    id="menu"
                     floating
                     size="lg"
                     color="transparent"
                     className="btn"
                     style={styles.icon}
                   >
-                    <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
+                    {/* <MDBIcon icon="ellipsis-v" style={styles.iconColor} className="indigo-text"/>{" "} */}
+                    <img src="icons/more.svg" alt="menu icon" />
                   </MDBBtn>
                   <div style={styles.divided}>
                     <div // There might be a better MDBReact component for this
@@ -366,7 +355,7 @@ export default function DAOcreator() {
                     >
                       <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>
-                  </div>
+                  </div> 
                 </MDBPopover>
               </div>
             </MDBCol>
@@ -433,14 +422,17 @@ const styles = {
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
     borderRadius: 4,
-    margin: "auto"
+    margin: "auto",
+    overflow: "hidden"
   },
   paddingContainer: {
     padding: "1%",
     height: "50px"
   },
   fontStyle: {
-    fontize: "1.45rem",
+    fontSize: '18px',
+    letterSpacing:'0.6px',
+    color: '#3E3F42',
     fontWeight: 400,
     fontFamily: "inherit"
   },
@@ -464,12 +456,11 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
-    marginLeft: "93px",
-    marginTop: "18.5px",
-    height: 35,
-    width: 35, //The Width must be the same as the height
-    borderRadius: 400,
-    border: "1px solid lightgrey"
+    height: '35px',
+    width: '35px',
+    borderRadius: '400px',
+    border: '1px solid #EEF0FF',
+    margin: '14px 0px 0px 95px'
   },
   divided: {
     display: "flex",
@@ -477,7 +468,16 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    margin: "5px",
-    border: "1px solid lightgrey"
+    border: '0.5px solid #EAEDF3',
+    height: '1px',
+    padding: 0,
+    margin: 0,
+    width: '-webkit-fill-available',
+    borderLeft: 'aqua'
+  },
+  iconColor: {
+  //  color: '#536DFE !important',
+   color: 'indigo accent-2 text'
+
   }
 };

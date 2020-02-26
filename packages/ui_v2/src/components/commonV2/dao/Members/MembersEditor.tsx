@@ -268,12 +268,13 @@ const styles = {
     padding: "1px"
   },
   toggle: {
-    paddingLeft: 15.35
+    paddingLeft: 15.35,
+    marginTop: '-14px'
   },
   divider: {
     flexGrow: 1,
     marginLeft: "-10px",
-    border: "1px solid rgb(211, 211, 211)",
+    border: "0.5px solid rgb(211, 211, 211)",
     width: "103.3%"
   },
   thinDivider: {
