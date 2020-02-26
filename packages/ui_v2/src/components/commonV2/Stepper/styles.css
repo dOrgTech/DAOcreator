@@ -32,6 +32,10 @@ ul.stepper li.completed a .label {
   color: #1665d8;
 }
 
+.editStep {
+  margin-top: 10.5px;
+}
+
 @media only screen and (max-width: 500px) {
   #step {
     padding: 12px !important;

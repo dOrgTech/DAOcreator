@@ -153,7 +153,7 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
       >
         <StepIcon index={index} step={step} />
        { Preview && <Preview /> } 
-        <div>
+        <div className="editStep">
           <ModalButton step={step} index={index} setModal={callbacks.setModal} />
           <MDBBtn
             hidden={step <= index}

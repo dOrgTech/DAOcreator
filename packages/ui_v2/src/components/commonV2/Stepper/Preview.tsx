@@ -104,16 +104,16 @@ export const MembersPreview: FC<{ form: MembersForm }> = ({ form }) => {
 
 const styles = {
   configPreview: {
-    marginTop: "26px",
+    marginTop: 33,
     marginRight: "auto",
     marginLeft: "1.5rem",
     whiteSpace: "nowrap"
   },
   schemePreview: {
-    marginTop: 28
+    marginTop: 33,
   },
   membersPreview: {
-    marginTop: 28,
+    marginTop: 33,
     paddingRight: "8rem"
   },
   lineGraphic: {
