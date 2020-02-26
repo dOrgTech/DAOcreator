@@ -31,6 +31,8 @@ interface Props {
   modal: boolean;
   setModal: (modal: boolean) => void;
   loadedFromModal: boolean;
+  loadedSpeed: DAOSpeed;
+  setLoadedSpeed: (speed: DAOSpeed) => void;
 }
 
 export type FullSchemes = [
@@ -41,7 +43,7 @@ export type FullSchemes = [
 
 export type VotingMachinePresets = GenesisProtocolForm[];
 
-enum DAOSpeed {
+export enum DAOSpeed {
   Slow,
   Medium,
   Fast
@@ -103,7 +105,9 @@ const SchemeEditor: FC<Props> = ({
   toggleCollapse,
   modal,
   setModal,
-  loadedFromModal
+  loadedFromModal,
+  loadedSpeed,
+  setLoadedSpeed
 }) => {
   /*
   / State
@@ -135,6 +139,7 @@ const SchemeEditor: FC<Props> = ({
 
   // Ref to stop force switching toggles from updating vm
   const updatingVotingMachine = useRef(false);
+  const loadingSpeed = useRef(false);
 
   /*
    * Hooks
@@ -142,12 +147,22 @@ const SchemeEditor: FC<Props> = ({
 
   useEffect(() => {
     if (!loadedFromModal) return;
-    if (form.$.length === 0) return; // TODO do on MembersEditor too
+    if (form.$.length === 0) return;
+
+    setDecisionSpeed(loadedSpeed);
+    updatePresets(loadedSpeed);
+
+    loadingSpeed.current = true;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
+
+  useEffect(() => {
+    if (!loadingSpeed.current) return;
 
     const containsType = (type: SchemeType) => {
       return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
     };
-
     const activeSchemes = [
       containsType(SchemeType.ContributionReward),
       containsType(SchemeType.SchemeRegistrar),
@@ -155,21 +170,17 @@ const SchemeEditor: FC<Props> = ({
     ];
 
     updateSchemes(form.$, activeSchemes);
+    loadingSpeed.current = false;
 
-    form.$.some((scheme, index) => {
-      if (!checkSpeed(scheme, index)) return false;
-      disableSpeed();
-      return true;
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedFromModal]);
+  }, [presetVotingMachines]);
 
-  const updatePresets = () => {
+  const updatePresets = (speed = decisionSpeed) => {
     const newPresetVotingMachines: VotingMachinePresets = [];
 
     const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm) => {
       // Gets voting machine preset using the decisionSpeed and scheme type
-      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+      const schemePresetMap = schemeSpeeds.get(speed);
 
       if (schemePresetMap === undefined)
         throw Error("Unimplemented Scheme Speed Configuration");
@@ -192,6 +203,7 @@ const SchemeEditor: FC<Props> = ({
   // Sets vm presets when the speed is changed
   useEffect(() => {
     updatePresets();
+    setLoadedSpeed(decisionSpeed);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [decisionSpeed]);
 
@@ -380,12 +392,26 @@ const SchemeEditor: FC<Props> = ({
 
   const resetForm = () => {
     // Leaving toggles untouched
-    setDecisionSpeed(DAOSpeed.Medium);
+    if (decisionSpeed !== DAOSpeed.Medium) {
+      setDecisionSpeed(DAOSpeed.Medium);
+      enableSpeed(DAOSpeed.Medium);
+      return;
+    }
+    // decisionSpeed effects because they won't trigger if speed doesn't change
     updatePresets();
+    setLoadedSpeed(DAOSpeed.Medium);
+    enableSpeed(DAOSpeed.Medium);
   };
 
   const handleClick = (e: any) => {
-    enableSpeed(parseInt(e.target.value));
+    const newSpeed = parseInt(e.target.value);
+
+    // decisionSpeed effects because they won't trigger if speed doesn't change
+    if (newSpeed === decisionSpeed) {
+      updatePresets();
+      setLoadedSpeed(DAOSpeed.Medium);
+    }
+    enableSpeed(newSpeed);
   };
 
   const buttonStyle = (speed: DAOSpeed) =>

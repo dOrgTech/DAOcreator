@@ -1,7 +1,12 @@
 import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
-import { DAOForm } from "@dorgtech/daocreator-lib";
+import {
+  DAOForm,
+  DAOMigrationResult,
+  toDAOMigrationParams
+} from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import FileSaver from "file-saver";
 
 interface Props {
   form: DAOForm;

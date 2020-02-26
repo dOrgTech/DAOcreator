@@ -5,7 +5,7 @@ import {
   SchemeRegistrarForm
 } from "@dorgtech/daocreator-lib";
 
-import SchemeEditor from "../commonV2/dao/Schemes/SchemeEditor";
+import SchemeEditor, { DAOSpeed } from "../commonV2/dao/Schemes/SchemeEditor";
 
 interface Props {
   form: SchemesForm;
@@ -13,6 +13,8 @@ interface Props {
   modal: boolean;
   setModal: (modal: boolean) => void;
   loadedFromModal: boolean;
+  decisionSpeed: DAOSpeed;
+  setDecisionSpeed: (speed: DAOSpeed) => void;
 }
 
 const SchemesStep: FC<Props> = ({
@@ -20,7 +22,9 @@ const SchemesStep: FC<Props> = ({
   toggleCollapse,
   modal,
   setModal,
-  loadedFromModal
+  loadedFromModal,
+  decisionSpeed,
+  setDecisionSpeed
 }) => {
   const [loading, setLoading] = useState(true);
 
@@ -38,6 +42,8 @@ const SchemesStep: FC<Props> = ({
       modal={modal}
       setModal={setModal}
       loadedFromModal={loadedFromModal}
+      loadedSpeed={decisionSpeed}
+      setLoadedSpeed={setDecisionSpeed}
     />
   );
 };

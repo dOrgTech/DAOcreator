@@ -41,6 +41,7 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
+import { DAOSpeed } from "../commonV2/dao/Schemes";
 import './styles.css';
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
@@ -49,6 +50,7 @@ interface DAO_CREATOR_INTERFACE {
   step: StepNum;
   furthestStep: StepNum;
   form: string;
+  decisionSpeed: DAOSpeed;
 }
 
 interface Step {
@@ -85,7 +87,8 @@ export default function DAOcreator() {
   const [launching, setLaunching] = React.useState(false);
 
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
-
+  const [loaded, setLoaded] = React.useState(false);
+  const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -160,7 +163,8 @@ export default function DAOcreator() {
       const daoCreatorState: DAO_CREATOR_INTERFACE = {
         step,
         furthestStep,
-        form: json
+        form: json,
+        decisionSpeed
       };
 
       localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
@@ -170,7 +174,7 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step, furthestStep]);
+  }, [step, furthestStep, loaded, decisionSpeed]);
 
   React.useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -200,14 +204,17 @@ export default function DAOcreator() {
       return;
     }
 
-    const { step, furthestStep, form } = (await JSON.parse(
+    const { step, furthestStep, form, decisionSpeed } = (await JSON.parse(
       daoCreatorState
     )) as DAO_CREATOR_INTERFACE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     daoForm.fromState(daoState);
-    setStep(step);
-    setFurthestStep(furthestStep);
+    setStep(step === undefined ? STEP.Config : step);
+    setFurthestStep(furthestStep === undefined ? STEP.Config : furthestStep);
+    setDecisionSpeed(
+      decisionSpeed === undefined ? DAOSpeed.Medium : decisionSpeed
+    );
     setRecoverPreviewOpen(false);
     setLoadedFromModal(true);
   };
@@ -282,7 +289,9 @@ export default function DAOcreator() {
         toggleCollapse: nextStep,
         modal: advanceSchemeConfig,
         setModal: setAdvanceSchemeConfig,
-        loadedFromModal
+        loadedFromModal,
+        decisionSpeed,
+        setDecisionSpeed
       }
     },
     {

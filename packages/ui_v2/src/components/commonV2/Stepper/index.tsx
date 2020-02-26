@@ -6,6 +6,9 @@ import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } 
 import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
+
+import { StepNum } from "../../DAOcreatorV2";
+
 import { DeployButton } from '../dao/Migrator/DeployButton'
 import './styles.css';
 
@@ -23,13 +26,14 @@ export enum FAILED {
   Config
 }
 
+
 interface Props {
   index: number;
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
   Component: FC;
   title: string;
   callbacks: any;
-  step: number;
+  step: StepNum;
   launching: boolean;
 }
 
