@@ -9,7 +9,7 @@ import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 import { DeployButton } from '../dao/Migrator/DeployButton'
 
 // Migrator Steps
-enum STEP {
+export enum STEP {
   Waiting,
   Creating,
   Configuring,
@@ -17,7 +17,7 @@ enum STEP {
 }
 
 // Migrator Steps
-enum FAILED {
+export enum FAILED {
   Create,
   Config
 }
@@ -141,7 +141,7 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
     <li className={step >= index ? "completed" : ""}>
       <MDBRow style={styles.specialRow} className="justify-content-space-between">
         <StepIcon index={index} step={step} />
-        {Preview}
+        { Preview && <Preview /> } 
         <div>
           <ModalButton step={step} index={index} setModal={callbacks.setModal} />
           <MDBBtn

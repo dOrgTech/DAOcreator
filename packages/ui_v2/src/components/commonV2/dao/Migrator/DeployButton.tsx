@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment } from "react";
 import {
   LogUserApproval,
   LogInfo,
@@ -19,16 +19,13 @@ import {
   DAOForm
 } from "@dorgtech/daocreator-lib";
 import { MDBBtn } from "mdbreact";
+import { STEP } from "../../../commonV2/Stepper"
 
-// Migrator Steps
-enum STEP {
-  Waiting,
-  Creating,
-  Configuring,
-  Completed
+interface IProps {
+  migrationStates: any;
 }
 
-export function DeployButton(props: any) {
+export const DeployButton: FC<IProps> = ({migrationStates}) => {
   const {
     installStep,
     setInstallStep,
@@ -53,11 +50,11 @@ export function DeployButton(props: any) {
     step,
     form,
     setLaunching
-  } = props.migrationStates;
+  } = migrationStates;
+  
   /*
    * Callbacks
    */
-
   const onComplete = (
     { arcVersion, name, Avatar, DAOToken, Reputation, Controller }: DAOMigrationResult,
     alchemyURL: string
@@ -89,7 +86,6 @@ export function DeployButton(props: any) {
   /*
    * Step Transitions
    */
-
   const createOrganization = () => {
     setInstallStep(STEP.Creating);
   };

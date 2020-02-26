@@ -10,12 +10,12 @@ export const ConfigPreview: FC<{ form: DAOConfigForm }> = ({ form }) => (
   <MDBRow style={styles.configPreview}>
     <MDBCol>
       <span>
-        Name: <strong>{form.$.daoName}</strong>
+        Name: <strong>{form.$.daoName.value}</strong>
       </span>
     </MDBCol>
     <MDBCol>
       <span>
-        Symbol: <strong>{form.$.tokenSymbol}</strong>
+        Symbol: <strong>{form.$.tokenSymbol.value}</strong>
       </span>
     </MDBCol>
   </MDBRow>
