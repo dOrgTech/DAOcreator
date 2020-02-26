@@ -5,7 +5,7 @@
   width: 1px;
   height: calc(100% - 0px);
   content: "";
-  background-color: #EDEDEF;
+  background-color: #ededef;
 }
 
 ul.stepper li a .circle {
@@ -21,48 +21,47 @@ ul.stepper li a .circle {
   padding-top: 2px;
 }
 
-
 ul.stepper li.completed a .circle {
-  border: #1665D8;
-  background-color: #1665D8 !important;
+  border: #1665d8;
+  background-color: #1665d8 !important;
 }
 
-ul.stepper li.active a .label, ul.stepper li.completed a .label {
+ul.stepper li.active a .label,
+ul.stepper li.completed a .label {
   font-weight: 600;
-  color: #1665D8;
+  color: #1665d8;
 }
 
-@media only screen and (max-width: 500px) { 
-
+@media only screen and (max-width: 500px) {
   #step {
-      padding:12px !important;
+    padding: 12px !important;
   }
 
-  .stepper-vertical li:not(:last-child):after { 
-      top: 2.8rem !important;
-      left: 27px !important;
+  .stepper-vertical li:not(:last-child):after {
+    top: 2.8rem !important;
+    left: 27px !important;
   }
   #label {
-      margin: 3px !important;
+    margin: 3px !important;
   }
 
   #row {
-      padding: 14px 14px !important;
-      margin: 0px 2% 0px 14.5% !important;
+    padding: 14px 14px !important;
+    margin: 0px 2% 0px 14.5% !important;
   }
 
   #pencil {
-      margin-right: 4px !important;
-      padding: inherit !important;
+    margin-right: 4px !important;
+    padding: inherit !important;
   }
 
   #modal {
-      width: 100px !important;
-      height: 40px !important;
-      padding: 4px;
-      margin-right: 9px !important;
-      margin-top: 7px !important;
-      font-size: 13px !important;
+    width: 100px !important;
+    height: 40px !important;
+    padding: 4px;
+    margin-right: 9px !important;
+    margin-top: 7px !important;
+    font-size: 13px !important;
   }
 
   #importCSV {
@@ -78,7 +77,13 @@ ul.stepper li.active a .label, ul.stepper li.completed a .label {
     margin-right: 0px;
   }
 
-  #schemePreview {
-    margin-left: 35px;
+  #preview {
+    margin-left: 60px;
+    max-width: 50%;
+    margin-top: 0px !important;
+  }
+
+  #membersCount {
+    width: 100px;
   }
 }

@@ -26,7 +26,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
-    <div id="schemePreview" style={styles.schemePreview}>
+    <div id="preview" style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
@@ -74,8 +74,8 @@ export const MembersPreview: FC<{ form: MembersForm }> = ({ form }) => {
   });
   const numberOfMembers = form.$.length;
   return (
-    <div style={styles.membersPreview}>
-      <p>
+    <div id="preview" style={styles.membersPreview}>
+      <p id="membersCount">
         {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
       <div style={{ width: "17.5em" }}>
