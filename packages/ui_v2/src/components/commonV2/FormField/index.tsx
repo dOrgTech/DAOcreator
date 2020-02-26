@@ -193,31 +193,14 @@ const DurationFieldView = observer(
 
     const onChange = (event: any) => {
       const { name, value } = event.target;
-      if (name === "days") {
-        duration["days"] = +value;
-      } else {
-        let [hours, minutes] = value.split(":");
-        duration.hours = isNaN(hours) ? 0 : +hours;
-        duration.minutes = isNaN(minutes) ? 0 : +minutes;
-      }
+      duration[name] = +value;
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
     };
 
-    const fieldValue = (props: { name: "days" | "hoursAndMinutes" }) => {
-      if (props.name === "days") {
-        return field[props.name];
-      } else {
-        let { hours, minutes } = duration;
-        hours = +hours < 9 ? 0 + `${hours}` : hours;
-        minutes = +minutes < 9 ? 0 + `${minutes}` : minutes;
-        return `${hours}:${minutes}`;
-      }
-    };
-
     const DurationPart = observer(
-      (props: { name: "days" | "hoursAndMinutes" }) => (
+      (props: { name: "days" | "hours" | "minutes" }) => (
         <>
           <input
             name={props.name}
@@ -234,18 +217,17 @@ const DurationFieldView = observer(
                     textAlign: "center"
                   }
             }
-            value={fieldValue(props)}
+            value={field[props.name]}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
-            type={props.name === "days" ? "number" : "time"}
+            type={"number"}
             min={0}
-            max={100}
             onBlur={field.enableAutoValidationAndValidate}
             tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
           <div
             style={
-              props.name === "days"
+              props.name === "days" || props.name === "hours"
                 ? { paddingTop: "3px", marginRight: "-3px" }
                 : { paddingTop: "3px" }
             }
@@ -254,7 +236,7 @@ const DurationFieldView = observer(
               className = {props.name === "days" ? props.name : 'hours'}
             >
               {" "}
-              {props.name === "days" ? "days" : "h"}
+              {props.name === "days" ? props.name : props.name === "hours" ? "h" : "m"}
             </span>
           </div>
         </>
@@ -265,7 +247,7 @@ const DurationFieldView = observer(
       <>
         <MDBRow id="row" style={styles.optionRow}>
           <MDBCol
-            size="9"
+            size="7"
             className="justify-content-center"
             style={styles.margin}
           >
@@ -286,10 +268,11 @@ const DurationFieldView = observer(
               <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
+          <MDBCol style={{marginLeft: '43px'}}>
             <MDBRow>
               <DurationPart name={"days"} />
-              <DurationPart name={"hoursAndMinutes"} />
+              <DurationPart name={"hours"} />
+              <DurationPart name={"minutes"} />
 
               {FieldError(field)}
             </MDBRow>
