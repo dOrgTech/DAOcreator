@@ -23,6 +23,7 @@ import {
 
 import AdvancedEditor from "./AdvancedEditor";
 import Toggle from "./Toggle";
+import './styles.css';
 
 interface Props {
   form: SchemesForm;
@@ -459,7 +460,7 @@ const SchemeEditor: FC<Props> = ({
               </MDBTooltip>
             </MDBRow>
           </MDBCol>
-          <MDBCol>
+          <MDBCol id="col">
             <MDBRow style={styles.alignEnd}>
               <button
                 name="decisonSpeed"

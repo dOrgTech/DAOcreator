@@ -7,6 +7,7 @@ import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 import { DeployButton } from '../dao/Migrator/DeployButton'
+import './styles.css';
 
 // Migrator Steps
 export enum STEP {
@@ -38,9 +39,9 @@ const ModalButton: FC<{
   setModal: (modal: boolean | string) => void; // TODO ?
 }> = ({ step, index, setModal }) => {
   if (step === 1 && index === 1) {
-    return <UtilityButton title={"Advanced"} openModal={setModal} />;
+    return <UtilityButton id='modal' title={"Advanced"} openModal={setModal} />;
   } else if (step === 2 && index === 2) {
-    return <UtilityButton title={"Import CSV"} openModal={setModal} />;
+    return <UtilityButton id='importCSV' title={"Import CSV"} openModal={setModal} />;
   }
   return <></>;
 };
@@ -104,14 +105,18 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
     setLaunching: callbacks!.setLaunching 
   };
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
-    <a role="button" href="#/" style={{ cursor: "unset" }}>
+    <a id="step" role="button" href="#/" style={{ cursor: "unset", padding: "30px" }}>
       <span
         className="circle"
         style={step < index ? styles.subsequentStepIcon : step === index ? styles.currentStepIcon : styles.previousStepIcon}
       >
         {index + 1}
       </span>
-      <span className="label" style={step === index ? styles.active : styles.noActiveLabel}>
+      <span
+        id='label'
+        className="label"
+        style={step === index ? styles.active : styles.noActiveLabel}
+      >
         {title}
       </span>
     </a>
@@ -142,9 +147,12 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
 
   return (
     <li className={step >= index ? "completed" : ""}>
-      <MDBRow style={styles.specialRow} className="justify-content-space-between">
+      <MDBRow
+        style={styles.specialRow}
+        className="justify-content-space-between"
+      >
         <StepIcon index={index} step={step} />
-        { Preview && <Preview /> } 
+       { Preview && <Preview /> } 
         <div>
           <ModalButton step={step} index={index} setModal={callbacks.setModal} />
           <MDBBtn
@@ -155,21 +163,27 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
             className="btn"
             onClick={() => !launching && callbacks.setStep(index)}
             style={styles.icon}
+            id="pencil"
           >
-            <MDBIcon icon="pen" className={launching ? "grey-text" : "blue-text"} />
+            <img src="icons/pencil.svg" alt="menu icon" />
           </MDBBtn>
         </div>
       </MDBRow>
 
       <MDBCollapse id={index.toString()} isOpen={step.toString()} style={styles.maxWidth}>
         <MDBRow
-          className={index === (2 || 4) ? "justify-content-end" : "justify-content-start"}
+          id='row'
+          className={
+            index === (2 || 4) ? "justify-content-end" : "justify-content-start"
+          }
           style={
-            index === (1 || 3)
+            index === 0
               ? styles.stepContent
-              : styles.stepTwoContent && index === 2
+              : index === 1
               ? styles.stepTwoContent
-              : styles.stepFourContent
+              : index === 2 ?
+              styles.stepThreeContent :
+              styles.stepFourContent
           }
         >
           <Component form={form} {...callbacks} migrationStates={migrationStates} />
@@ -192,41 +206,65 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
   );
 };
 
+
 const styles = {
   stepContent: {
-    width: "fit-content",
-    padding: "6px",
-    margin: "0px 5% 0px 9%",
-    border: "1px solid lightgray",
-    borderRadius: "6px"
+    width: 'auto',
+    margin: '0px 5% 0px 12.5%',
+    border: '1px solid lightgray',
+    borderRadius: '6px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    paddingTop: '24px',
+    paddingBottom: '24px'
   },
   stepTwoContent: {
     width: "inherit",
     padding: "6px",
-    margin: "0px 5% 0px 9%",
+    margin: "0px 5% 0px 12.5%",
     border: "1px solid lightgray",
-    borderRadius: "6px"
+    borderRadius: "6px",
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    paddingTop: '24px',
+    paddingBottom: '24px'
+  },
+  stepThreeContent: {
+    width: "auto",
+    margin: "0px 5% 0px 12.5%",
+    border: "1px solid lightgray",
+    borderRadius: "6px",
+    paddingTop: '24px',
+    paddingBottom: '24px',
+    paddingRight: '3px',
+    paddingLeft: '3px'
   },
   stepFourContent: {
     width: "auto",
     padding: "16px",
-    margin: "0px 5% 0px 9%",
+    margin: "0px 5% 0px 12.5%",
     border: "1px solid lightgray",
-    borderRadius: "6px"
+    borderRadius: "6px",
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    paddingTop: '24px',
+    paddingBottom: '24px'
   },
   active: {
     fontWeight: 400,
-    color: "#4285f4"
+    color: '#1665D8', 
+    marginLeft: '20px'
   },
   noActiveLabel: {
     color: "gray",
-    fontWeight: 400
+    fontWeight: 400,
+    marginLeft: '20px'
   },
   previousStepIcon: {
     fontWeight: 400,
     // color: "#4285f4", // TODO background is being overridden
     backgroundColor: "white !important", // TODO Is being overridden
-    border: "0.9px solid #4285f4"
+    border: "0.9px solid #1665D8 !important"
   },
   currentStepIcon: {
     fontWeight: 400,
@@ -249,10 +287,10 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
-    height: 40,
-    width: 40, //The Width must be the same as the height
+    height: 35,
+    width: 35, //The Width must be the same as the height
     borderRadius: 400,
-    border: "1px solid lightgrey",
+    border: "1px solid rgb(238, 240, 255)",
     marginRight: "30px",
     marginTop: "16px"
   },

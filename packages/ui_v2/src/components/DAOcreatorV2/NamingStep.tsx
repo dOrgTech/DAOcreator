@@ -3,6 +3,7 @@ import { DAOConfigForm } from "@dorgtech/daocreator-lib";
 import { observer } from "mobx-react";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
+import "./styles.css";
 
 interface Props {
   form: DAOConfigForm;
@@ -33,6 +34,7 @@ const NamingStep: FC<Props> = observer(({ form, toggleCollapse }) => {
       <MDBRow style={styles.paddingBottom}>
         <MDBCol>
           <button
+            id="setDescription"
             style={
               form.hasError
                 ? styles.buttonDeactivatedStyle
@@ -73,10 +75,10 @@ const styles = {
     fontSize: "smaller"
   },
   paddingBottom: {
-    paddingBottom: "2%"
+    paddingBottom: "0%"
   },
   paddingTotal: {
-    padding: "6px"
+    padding: "0px"
   }
 };
 

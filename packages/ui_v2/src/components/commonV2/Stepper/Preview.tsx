@@ -5,6 +5,7 @@ import { MembersForm, SchemesForm, DAOConfigForm } from "@dorgtech/daocreator-li
 import LineGraphic from "../LineGraphic";
 import { MDBIcon, MDBRow, MDBCol } from "mdbreact";
 import { SimpleOption, getSimpleOptions } from "../../utils";
+import './styles.css'
 
 export const ConfigPreview: FC<{ form: DAOConfigForm }> = ({ form }) => (
   <MDBRow style={styles.configPreview}>
@@ -25,7 +26,7 @@ export const SchemesPreview: FC<{ form: SchemesForm }> = ({ form }) => {
   const simpleOptions: SimpleOption[] = getSimpleOptions(form);
 
   return (
-    <div style={styles.schemePreview}>
+    <div id="preview" style={styles.schemePreview}>
       <p>
         <strong>Recommended</strong>
       </p>
@@ -73,8 +74,8 @@ export const MembersPreview: FC<{ form: MembersForm }> = ({ form }) => {
   });
   const numberOfMembers = form.$.length;
   return (
-    <div style={styles.membersPreview}>
-      <p>
+    <div id="preview" style={styles.membersPreview}>
+      <p id="membersCount">
         {numberOfMembers} Member{numberOfMembers > 1 && "s"}
       </p>
       <div style={{ width: "17.5em" }}>

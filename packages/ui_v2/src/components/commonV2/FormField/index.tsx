@@ -21,6 +21,7 @@ import {
   AddressField,
   NumberField
 } from "@dorgtech/daocreator-lib";
+import './styles.css';
 
 export interface Props<TField = AnyField> {
   field: TField;
@@ -103,7 +104,7 @@ const StringFieldView = observer(
           {displayName ? displayName : field.displayName}
         </label>
         <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info} id="img">
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
@@ -250,11 +251,7 @@ const DurationFieldView = observer(
             }
           >
             <span
-              style={
-                props.name === "days"
-                  ? { marginLeft: "-50px" }
-                  : { marginLeft: "-38px" }
-              }
+              className = {props.name === "days" ? props.name : 'hours'}
             >
               {" "}
               {props.name === "days" ? "days" : "h"}
@@ -266,7 +263,7 @@ const DurationFieldView = observer(
 
     return (
       <>
-        <MDBRow style={styles.optionRow}>
+        <MDBRow id="row" style={styles.optionRow}>
           <MDBCol
             size="9"
             className="justify-content-center"
@@ -277,6 +274,7 @@ const DurationFieldView = observer(
             </label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
+                id='icon'
                 floating
                 size="lg"
                 color="transparent"
@@ -315,7 +313,7 @@ const DateTimeFieldView = observer(
     const disabled = editable === undefined ? false : !editable;
 
     return (
-      <MDBCol size="6" style={styles.largeMargin}>
+    <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>
           {displayName ? displayName : field.displayName}
         </label>
@@ -347,7 +345,7 @@ const DateTimeFieldView = observer(
               error={field.hasError}
               size={"small"}
               TextFieldComponent={() => (
-                <>
+                <div>
                   <input
                     style={styles.inputStyle}
                     placeholder="Pick a date and time..."
@@ -380,7 +378,7 @@ const DateTimeFieldView = observer(
                   ) : (
                     <></>
                   )}
-                </>
+                </div>
               )}
             />
           </MuiPickersUtilsProvider>
@@ -453,9 +451,9 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={colSize === "9" ? { display: "flex", flexDirection: "row", marginTop: '27px' } : { display: "flex", flexDirection: "row" }}>
           <input
-            style={{ ...styles.inputStyle, paddingRight: "55px" }}
+            style={{...styles.inputStyle, paddingRight: "55px"}}
             placeholder="0x..."
             value={field.value}
             disabled={editable === undefined ? false : !editable}
@@ -478,13 +476,18 @@ export default FormField;
 const styles = {
   inputStyle: {
     border: "1px solid",
-    color: "black",
-    borderColor: "lightgray",
+    color: "#3E3F42",
+    borderColor: "#E2E5ED",
     borderRadius: "4px",
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    fontWeight: 300
+    paddingLeft: '16px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    fontSize: '14px',
+    fontWeight: 400,
+    outline: 'none',
   },
   noPadding: {
     padding: 0
@@ -519,12 +522,12 @@ const styles = {
     marginTop: "6px"
   },
   largeMargin: {
-    marginTop: "25px"
+    marginTop: "0px"
   },
   labelStyle: {
-    color: "gray",
-    fontSize: "smaller",
-    fontWeight: 400
+    color: "#9EA0A5",
+    fontWeight: 400,
+    fontSize:'12px'
   },
   reactDatepickerWrapper: {
     paddingTop: "5px",
