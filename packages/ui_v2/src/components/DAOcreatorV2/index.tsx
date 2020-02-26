@@ -87,7 +87,6 @@ export default function DAOcreator() {
   const [launching, setLaunching] = React.useState(false);
 
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
-  const [loaded, setLoaded] = React.useState(false);
   const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
   let currentForm: any = daoForm.$.config;
 
@@ -174,7 +173,7 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step, furthestStep, loaded, decisionSpeed]);
+  }, [step, furthestStep, decisionSpeed]);
 
   React.useEffect(() => {
     const handleKeyPress = (event: any) => {
