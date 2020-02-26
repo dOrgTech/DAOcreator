@@ -3,7 +3,7 @@ import {
   AnyLogLine
 } from "../dao/Migrator/LogLineTypes";
 import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } from "@dorgtech/daocreator-lib";
-import { MDBBtn, MDBRow, MDBCollapse, MDBIcon } from "mdbreact";
+import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 import { DeployButton } from '../dao/Migrator/DeployButton'
