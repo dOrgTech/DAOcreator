@@ -1,15 +1,27 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
-  DAOConfigForm,
-  MembersForm,
-  SchemesForm,
-  DAOForm
-} from "@dorgtech/daocreator-lib";
+  AnyLogLine
+} from "../dao/Migrator/LogLineTypes";
+import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } from "@dorgtech/daocreator-lib";
 import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
-
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
+import { DeployButton } from '../dao/Migrator/DeployButton'
 import './styles.css';
+
+// Migrator Steps
+export enum STEP {
+  Waiting,
+  Creating,
+  Configuring,
+  Completed
+}
+
+// Migrator Steps
+export enum FAILED {
+  Create,
+  Config
+}
 
 interface Props {
   index: number;
@@ -34,26 +46,69 @@ const ModalButton: FC<{
   return <></>;
 };
 
-const Stepper: FC<Props> = ({
-  index,
-  form,
-  title,
-  Component,
-  callbacks,
-  step,
-  launching
-}) => {
+const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching }) => {
+  const [installStep, setInstallStep] = useState(STEP.Waiting);
+  const [daoLogs, setDaoLogs] = useState<string[][]>([]);
+
+  // Unimplemented noWeb3Open, ethSpent
+  const [, setNoWeb3Open] = useState(false);
+  const [, setEthSpent] = useState(0);
+
+  // Array of log lines as given by callbacks
+  const [fullLogLines, setFullLogLines] = useState<AnyLogLine[]>([]);
+
+  // Heavily redacted log lines
+  const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
+
+  // User approval component
+  const [approval, setApproval] = useState<undefined | { msg: string; response: (res: boolean) => void }>(undefined);
+
+  // Migration result (sans schemes), outdated if resuming
+  const [result, setResult] = useState<DAOMigrationResult | undefined>(undefined);
+
+  // Alchemy url
+  const [alchemyURL, setAlchemyURL] = useState("");
+
+  const [aborting, setAborting] = useState(false);
+
+  const [failed, setFailed] = useState<FAILED | null>(null);
+
+  const [alchemyAdds, setAlchemyAdds] = useState<string[]>([]);
+  // Could be used to display the dao information to the user
+  const [daoInfo, setDaoInfo] = useState<DAOMigrationResult[]>([]);
+
+  let migrationStates = {
+    installStep,
+    setInstallStep,
+    setNoWeb3Open,
+    setEthSpent,
+    fullLogLines,
+    setFullLogLines,
+    minimalLogLines,
+    setMinimalLogLines,
+    approval,
+    setApproval,
+    result,
+    setResult,
+    alchemyURL,
+    setAlchemyURL,
+    aborting,
+    setAborting,
+    failed,
+    setFailed,
+    alchemyAdds,
+    setAlchemyAdds,
+    daoInfo,
+    setDaoInfo,
+    daoLogs,
+    setDaoLogs,
+    setLaunching: callbacks!.setLaunching 
+  };
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
     <a id="step" role="button" href="#/" style={{ cursor: "unset", padding: "30px" }}>
       <span
         className="circle"
-        style={
-          step < index
-            ? styles.subsequentStepIcon
-            : step === index
-            ? styles.currentStepIcon
-            : styles.previousStepIcon
-        }
+        style={step < index ? styles.subsequentStepIcon : step === index ? styles.currentStepIcon : styles.previousStepIcon}
       >
         {index + 1}
       </span>
@@ -72,15 +127,15 @@ const Stepper: FC<Props> = ({
   switch (index) {
     case 0:
       if (step === 0) break;
-      Preview = () => (<ConfigPreview form={form as DAOConfigForm} />);
+      Preview = () => <ConfigPreview form={form as DAOConfigForm} />;
       break;
     case 1:
       if (step <= 1) break;
-      Preview = () => (<SchemesPreview form={form as SchemesForm} />);
+      Preview = () => <SchemesPreview form={form as SchemesForm} />;
       break;
     case 2:
       if (step <= 2) break;
-      Preview = () => (<MembersPreview form={form as MembersForm} />);
+      Preview = () => <MembersPreview form={form as MembersForm} />;
       break;
     case 3:
       break;
@@ -92,7 +147,6 @@ const Stepper: FC<Props> = ({
 
   return (
     <li className={step >= index ? "completed" : ""}>
-
       <MDBRow
         style={styles.specialRow}
         className="justify-content-space-between"
@@ -100,11 +154,7 @@ const Stepper: FC<Props> = ({
         <StepIcon index={index} step={step} />
        { Preview && <Preview /> } 
         <div>
-          <ModalButton
-            step={step}
-            index={index}
-            setModal={callbacks.setModal}
-          />
+          <ModalButton step={step} index={index} setModal={callbacks.setModal} />
           <MDBBtn
             hidden={step <= index}
             floating
@@ -120,11 +170,7 @@ const Stepper: FC<Props> = ({
         </div>
       </MDBRow>
 
-      <MDBCollapse
-        id={index.toString()}
-        isOpen={step.toString()}
-        style={styles.maxWidth}
-      >
+      <MDBCollapse id={index.toString()} isOpen={step.toString()} style={styles.maxWidth}>
         <MDBRow
           id='row'
           className={
@@ -140,9 +186,22 @@ const Stepper: FC<Props> = ({
               styles.stepFourContent
           }
         >
-          <Component form={form} {...callbacks} />
+          <Component form={form} {...callbacks} migrationStates={migrationStates} />
         </MDBRow>
       </MDBCollapse>
+      {step === 3 && index === 3 ? (
+        <MDBRow
+          center
+          style={{
+            paddingTop: "3%",
+            paddingLeft: "38.5%"
+          }}
+        >
+          <DeployButton migrationStates={{...migrationStates, step, form }} />
+        </MDBRow>
+      ) : (
+        <></>
+      )}
     </li>
   );
 };
