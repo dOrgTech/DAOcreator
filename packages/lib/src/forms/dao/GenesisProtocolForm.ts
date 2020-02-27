@@ -134,7 +134,7 @@ export class GenesisProtocolForm extends Form<
           "The DAO will automatically downstake every proposal, in order to properly set up the staking system, and this parameter sets the minimum size for that downstake. A higher minimum means the DAO is more heavily subsidizing staking."
         ),
 
-      daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "1")
+      daoBountyConst: new NumberField(form ? form.$.daoBountyConst.value : "1")
         .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
@@ -144,7 +144,7 @@ export class GenesisProtocolForm extends Form<
           "A size coefficient of 1 will mean the DAO automatically downstakes new proposal with a downstake as large as the average downstake on boosted proposals (unless that would be smaller than the minimum DAOstake parameter!)."
         ),
 
-      thresholdConst: new StringField(
+      thresholdConst: new NumberField(
         form ? form.$.thresholdConst.value : "1200"
       )
         .validators(
