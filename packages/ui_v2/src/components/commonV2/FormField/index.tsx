@@ -185,15 +185,16 @@ const TokenFieldView = observer(
 
 const DurationFieldView = observer(
   ({ field, displayName, editable, tabIndex }: Props<DurationField>) => {
-    const duration: any = {
-      days: field.days,
-      hours: field.hours,
-      minutes: field.minutes
-    };
-
     const onChange = (event: any) => {
+      const duration: any = {
+        days: field.days,
+        hours: field.hours,
+        minutes: field.minutes
+      };
       const { name, value } = event.target;
-      duration[name] = +value;
+      if (value >= 0 && value <= 99) {
+        duration[name] = +value;
+      }
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
@@ -222,6 +223,7 @@ const DurationFieldView = observer(
             onChange={onChange}
             type={"number"}
             min={0}
+            max={99}
             onBlur={field.enableAutoValidationAndValidate}
             tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
