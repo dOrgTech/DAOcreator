@@ -192,9 +192,7 @@ const DurationFieldView = observer(
         minutes: field.minutes
       };
       const { name, value } = event.target;
-      if (value >= 0 && value <= 99) {
-        duration[name] = +value;
-      }
+      duration[name] = +value;
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
@@ -223,7 +221,6 @@ const DurationFieldView = observer(
             onChange={onChange}
             type={"number"}
             min={0}
-            max={99}
             onBlur={field.enableAutoValidationAndValidate}
             tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
