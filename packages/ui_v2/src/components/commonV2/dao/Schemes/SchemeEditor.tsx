@@ -540,7 +540,7 @@ const SchemeEditor: FC<Props> = ({
 
         <Toggle
           id={"autobet"}
-          text={"Auto-bet against every proposal to incentivise curation"}
+          text={"Auto-incentivize proposal curation"}
           tooltip={
             "The organization bets against every proposal to incentivize the GEN curation network"
           }

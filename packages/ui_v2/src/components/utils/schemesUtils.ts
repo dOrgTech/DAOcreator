@@ -22,7 +22,7 @@ export const getSimpleOptions = (form: SchemesForm) => {
       checked: +votersReputationLossRatio > 0
     },
     {
-      text: "Auto-bet against every proposal to incentivise curation",
+      text: "Auto-incentivize proposal curation",
       checked: +minimumDaoBounty > 1 && +daoBountyConst > 1 // TODO Update after daostack lets us use 0
     }
   ];
