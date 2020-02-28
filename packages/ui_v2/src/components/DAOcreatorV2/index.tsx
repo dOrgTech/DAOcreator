@@ -421,8 +421,7 @@ const styles = {
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
     borderRadius: 4,
-    margin: "auto",
-    overflow: "hidden"
+    margin: "auto"
   },
   paddingContainer: {
     padding: "1%",
