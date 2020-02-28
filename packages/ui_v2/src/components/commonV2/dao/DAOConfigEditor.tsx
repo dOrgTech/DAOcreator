@@ -17,12 +17,13 @@ const DAOConfigEditor: FC<Props> = ({
   <MDBRow>
     <FormField
       field={form.$.daoName}
+      displayName="Name"
       editable={editable}
       tabIndex={1}
     />
     <FormField
       field={form.$.tokenSymbol}
-      displayName="DAO Symbol"
+      displayName="Symbol"
       editable={editable}
       tabIndex={2}
     />
