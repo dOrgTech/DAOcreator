@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
+import './styles.css'
 
 interface Props {
   type: number;
@@ -96,7 +97,7 @@ export const OrganizationLine: FC<Props> = ({
 
   return (
     <MDBRow className="my-1">
-      <MDBCol size="1">
+      <MDBCol size="1" id="iconCol">
         {/* TODO 2x is a little big and default is small */}
         <MDBIcon
           className="blue-text"
@@ -107,7 +108,7 @@ export const OrganizationLine: FC<Props> = ({
       <MDBCol size="4">
         <StepName />
       </MDBCol>
-      <MDBCol size="6">
+      <MDBCol size="6" id="outputCol">
         <Output />
       </MDBCol>
       <div>

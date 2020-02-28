@@ -195,6 +195,7 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
       </MDBCollapse>
       {step === 3 && index === 3 ? (
         <MDBRow
+          id="importButton"
           center
           style={{
             paddingTop: "3%",

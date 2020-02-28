@@ -90,4 +90,8 @@ ul.stepper li.completed a .label {
   #membersCount {
     width: 100px;
   }
+
+  #importButton {
+    padding-top: 0% !important;
+  }
 }
