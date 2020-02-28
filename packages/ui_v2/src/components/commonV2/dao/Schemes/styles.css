@@ -10,12 +10,21 @@
   #toggle {
     margin: auto;
   }
-
-  #save {
-    width: 184px !important;
-  }
-
+  
   #toggleScheme {
     padding-left: 1.25rem !important;
+  }
+  
+  #resetButton {
+    margin-left: 70px;
+  }
+  
+  #saveConfigurationButton {
+    width: 184px !important;
+    margin-right: 30px;
+  }
+
+  #tabButton {
+    overflow: hidden;
   }
 }
