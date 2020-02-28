@@ -195,6 +195,7 @@ const AdvancedEditor: FC<Props> = ({
                     ? styles.buttonTabActive
                     : styles.buttonTab
                 }
+                id="tabButton"
                 onClick={() => setScheme(advForm.$[index])}
               >
                 {schemeTemplate.displayName}
@@ -272,6 +273,7 @@ const AdvancedEditor: FC<Props> = ({
         <MDBRow style={styles.buttonsRow}>
           <MDBCol size="3">
             <button
+              id="resetButton"
               style={styles.cancelButton}
               onClick={() => closeModal(true)}
             >
@@ -286,7 +288,7 @@ const AdvancedEditor: FC<Props> = ({
             ))}
           </MDBCol>
           <MDBCol style={styles.save}>
-            <button id='save' style={styles.saveButton} onClick={() => closeModal()}>
+            <button id='saveConfigurationButton' style={styles.saveButton} onClick={() => closeModal()}>
               Save Configuration
             </button>
           </MDBCol>

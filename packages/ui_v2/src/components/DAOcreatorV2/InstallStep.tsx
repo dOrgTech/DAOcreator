@@ -4,6 +4,7 @@ import {
   DAOForm,
 } from "@dorgtech/daocreator-lib";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import './styles.css'
 
 interface Props {
   form: DAOForm;

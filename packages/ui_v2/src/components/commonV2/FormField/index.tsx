@@ -245,11 +245,11 @@ const DurationFieldView = observer(
 
     return (
       <>
-        <MDBRow id="row" style={styles.optionRow}>
+        <MDBRow id="durationCol" style={styles.optionRow}>
           <MDBCol
             size="7"
             className="justify-content-center"
-            style={styles.margin}
+            id="durationLabel"
           >
             <label htmlFor={field.displayName}>
               {displayName ? displayName : field.displayName}
@@ -268,8 +268,8 @@ const DurationFieldView = observer(
               <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol style={{marginLeft: '43px'}}>
-            <MDBRow>
+          <MDBCol id="durationInputsCol">
+            <MDBRow id="durationInputsRow">
               <DurationPart name={"days"} />
               <DurationPart name={"hours"} />
               <DurationPart name={"minutes"} />

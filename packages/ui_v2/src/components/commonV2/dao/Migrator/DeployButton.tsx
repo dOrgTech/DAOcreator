@@ -21,6 +21,7 @@ import {
 import { MDBBtn, MDBIcon, MDBTooltip } from "mdbreact";
 
 import { STEP } from "../../../commonV2/Stepper";
+import './styles.css';
 
 interface IProps {
   migrationStates: any;
@@ -445,7 +446,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   };
 
   return installStep !== STEP.Completed ? (
-    <MDBBtn disabled={installStep !== STEP.Waiting && failed === null} onClick={startInstallation}>
+    <MDBBtn id="installButton" disabled={installStep !== STEP.Waiting && failed === null} onClick={startInstallation}>
       {failed === null ? "Install Organization" : "Restart Installation"}
     </MDBBtn>
   ) : (
