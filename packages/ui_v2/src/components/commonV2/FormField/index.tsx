@@ -112,7 +112,7 @@ const StringFieldView = observer(
         </MDBTooltip>
         <input
           type={"text"}
-          style={styles.inputStyle}
+          style={styles.stringInputStyle}
           value={field.value}
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
@@ -471,6 +471,21 @@ const styles = {
     fontSize: '14px',
     fontWeight: 400,
     outline: 'none',
+  },
+  stringInputStyle: {
+    border: "1px solid",
+    color: "#3E3F42",
+    borderColor: "#E2E5ED",
+    borderRadius: "4px",
+    width: "250px",
+    padding: "2%",
+    fontFamily: "inherit",
+    paddingLeft: '16px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    fontSize: '14px',
+    fontWeight: 400,
+    outline: 'none'
   },
   noPadding: {
     padding: 0
