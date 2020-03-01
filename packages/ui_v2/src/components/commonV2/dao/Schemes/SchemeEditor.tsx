@@ -1,14 +1,6 @@
 import React, { useState, useEffect, FC, useRef } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBTooltip,
-  MDBIcon,
-  MDBAlert
-} from "mdbreact";
+import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBTooltip, MDBIcon, MDBAlert } from "mdbreact";
 import {
   SchemeType,
   GenesisProtocolPreset,
@@ -23,7 +15,7 @@ import {
 
 import AdvancedEditor from "./AdvancedEditor";
 import Toggle from "./Toggle";
-import './styles.css';
+import "./styles.css";
 
 interface Props {
   form: SchemesForm;
@@ -35,11 +27,7 @@ interface Props {
   setLoadedSpeed: (speed: DAOSpeed) => void;
 }
 
-export type FullSchemes = [
-  ContributionRewardForm,
-  SchemeRegistrarForm,
-  GenericSchemeForm
-];
+export type FullSchemes = [ContributionRewardForm, SchemeRegistrarForm, GenericSchemeForm];
 
 export type VotingMachinePresets = GenesisProtocolForm[];
 
@@ -85,8 +73,7 @@ const initialVotingMachines = () => {
   for (i; i < 3; i++) {
     const schemePresetMap = schemeSpeeds.get(DAOSpeed.Medium);
 
-    if (schemePresetMap === undefined)
-      throw Error("Unimplemented Scheme Speed Configuration");
+    if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
 
     const preset = schemePresetMap.get(i);
     if (preset === undefined) throw Error("Preset not found");
@@ -100,15 +87,7 @@ const initialVotingMachines = () => {
   return vms;
 };
 
-const SchemeEditor: FC<Props> = ({
-  form,
-  toggleCollapse,
-  modal,
-  setModal,
-  loadedFromModal,
-  loadedSpeed,
-  setLoadedSpeed
-}) => {
+const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loadedFromModal, loadedSpeed, setLoadedSpeed }) => {
   /*
   / State
   */
@@ -128,9 +107,7 @@ const SchemeEditor: FC<Props> = ({
     new GenericSchemeForm()
   ]);
 
-  const [presetVotingMachines, setPresetVotingMachines] = useState<
-    VotingMachinePresets
-  >(initialVotingMachines);
+  const [presetVotingMachines, setPresetVotingMachines] = useState<VotingMachinePresets>(initialVotingMachines);
 
   const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
     SchemeType.ContributionReward,
@@ -182,8 +159,7 @@ const SchemeEditor: FC<Props> = ({
       // Gets voting machine preset using the decisionSpeed and scheme type
       const schemePresetMap = schemeSpeeds.get(speed);
 
-      if (schemePresetMap === undefined)
-        throw Error("Unimplemented Scheme Speed Configuration");
+      if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
 
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error("Preset not found");
@@ -212,19 +188,14 @@ const SchemeEditor: FC<Props> = ({
     const discardPreset = (scheme: AnySchemeForm) => {
       const schemePresetMap = schemeSpeeds.get(decisionSpeed);
 
-      if (schemePresetMap === undefined)
-        throw Error("Unimplemented Scheme Speed Configuration");
+      if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
 
       const preset = schemePresetMap.get(scheme.type);
       if (preset === undefined) throw Error(`Preset: ${scheme.type} not found`);
 
       const presetVM = new GenesisProtocolForm({ preset });
 
-      if (
-        Object.entries(presetVM.values).toString() ===
-        Object.entries(scheme.$.votingMachine.values).toString()
-      )
-        return false;
+      if (Object.entries(presetVM.values).toString() === Object.entries(scheme.$.votingMachine.values).toString()) return false;
       return true;
     };
 
@@ -232,8 +203,7 @@ const SchemeEditor: FC<Props> = ({
     activeSchemeTypes.map((activeSchemeType: SchemeType, index) => {
       newForm.$.push(fullSchemes[activeSchemeType]);
 
-      if (discardPreset(fullSchemes[activeSchemeType]))
-        newForm.$[index].$.votingMachine.preset = undefined;
+      if (discardPreset(fullSchemes[activeSchemeType])) newForm.$[index].$.votingMachine.preset = undefined;
 
       return activeSchemeType;
     });
@@ -248,49 +218,40 @@ const SchemeEditor: FC<Props> = ({
   // Updates vms when toggles change
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    const newFullSchemes = fullSchemes.map(
-      (scheme: AnySchemeForm, index: number) => {
-        rewardSuccess
-          ? (scheme.$.votingMachine.$.proposingRepReward.value =
-              presetVotingMachines[index].$.proposingRepReward.value)
-          : (scheme.$.votingMachine.$.proposingRepReward.value = "0");
-        return scheme;
-      }
-    );
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      rewardSuccess
+        ? (scheme.$.votingMachine.$.proposingRepReward.value = presetVotingMachines[index].$.proposingRepReward.value)
+        : (scheme.$.votingMachine.$.proposingRepReward.value = "0");
+      return scheme;
+    });
 
     setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardSuccess, presetVotingMachines]);
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    const newFullSchemes = fullSchemes.map(
-      (scheme: AnySchemeForm, index: number) => {
-        rewardAndPenVoters
-          ? (scheme.$.votingMachine.$.votersReputationLossRatio.value =
-              presetVotingMachines[index].$.votersReputationLossRatio.value)
-          : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0);
-        return scheme;
-      }
-    );
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      rewardAndPenVoters
+        ? (scheme.$.votingMachine.$.votersReputationLossRatio.value =
+            presetVotingMachines[index].$.votersReputationLossRatio.value)
+        : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0);
+      return scheme;
+    });
     setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewardAndPenVoters, presetVotingMachines]);
   useEffect(() => {
     if (updatingVotingMachine.current) return;
-    const newFullSchemes = fullSchemes.map(
-      (scheme: AnySchemeForm, index: number) => {
-        if (autobet) {
-          scheme.$.votingMachine.$.minimumDaoBounty.value =
-            presetVotingMachines[index].$.minimumDaoBounty.value;
-          scheme.$.votingMachine.$.daoBountyConst.value =
-            presetVotingMachines[index].$.daoBountyConst.value;
-        } else {
-          scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
-          scheme.$.votingMachine.$.daoBountyConst.value = "1";
-        }
-        return scheme;
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      if (autobet) {
+        scheme.$.votingMachine.$.minimumDaoBounty.value = presetVotingMachines[index].$.minimumDaoBounty.value;
+        scheme.$.votingMachine.$.daoBountyConst.value = presetVotingMachines[index].$.daoBountyConst.value;
+      } else {
+        scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+        scheme.$.votingMachine.$.daoBountyConst.value = "1";
       }
-    );
+      return scheme;
+    });
     setFullSchemes(newFullSchemes as FullSchemes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autobet, presetVotingMachines]);
@@ -300,9 +261,7 @@ const SchemeEditor: FC<Props> = ({
    */
 
   const disableSpeed = () => {
-    setWarnings([
-      "Your configuration will be overwritten by selecting a new speed"
-    ]);
+    setWarnings(["Your configuration will be overwritten by selecting a new speed"]);
     setDisabledDecisionSpeed(true);
   };
 
@@ -315,19 +274,9 @@ const SchemeEditor: FC<Props> = ({
 
   const checkSpeed = (scheme: AnySchemeForm, schemeType: SchemeType) => {
     const getSpeedValues = (votingMachine: GenesisProtocolForm) => {
-      const {
-        queuedVotePeriodLimit,
-        preBoostedVotePeriodLimit,
-        boostedVotePeriodLimit,
-        quietEndingPeriod
-      } = votingMachine.$;
+      const { queuedVotePeriodLimit, preBoostedVotePeriodLimit, boostedVotePeriodLimit, quietEndingPeriod } = votingMachine.$;
 
-      return [
-        queuedVotePeriodLimit,
-        preBoostedVotePeriodLimit,
-        boostedVotePeriodLimit,
-        quietEndingPeriod
-      ];
+      return [queuedVotePeriodLimit, preBoostedVotePeriodLimit, boostedVotePeriodLimit, quietEndingPeriod];
     };
 
     const schemeValues = getSpeedValues(scheme.$.votingMachine);
@@ -338,10 +287,7 @@ const SchemeEditor: FC<Props> = ({
     });
   };
 
-  const updateSchemes = (
-    advancedSchemes: AnySchemeForm[],
-    activeSchemes: boolean[]
-  ) => {
+  const updateSchemes = (advancedSchemes: AnySchemeForm[], activeSchemes: boolean[]) => {
     updatingVotingMachine.current = true;
 
     let newActiveSchemeTypes: SchemeType[] = [];
@@ -367,12 +313,7 @@ const SchemeEditor: FC<Props> = ({
       // Currently only updates toggles to reflect advanced changes of first scheme
       if (index !== 0) return scheme;
       // Update toggles
-      const {
-        proposingRepReward,
-        votersReputationLossRatio,
-        minimumDaoBounty,
-        daoBountyConst
-      } = scheme.$.votingMachine.values;
+      const { proposingRepReward, votersReputationLossRatio, minimumDaoBounty, daoBountyConst } = scheme.$.votingMachine.values;
 
       setRewardSuccess(+proposingRepReward > 0);
       setRewardAndPenVoters(votersReputationLossRatio > 0);
@@ -448,8 +389,7 @@ const SchemeEditor: FC<Props> = ({
         <MDBRow>
           <MDBCol>
             <p className="text-left" style={styles.subtitle}>
-              Your organization uses a reputation-weighted voting system to make
-              decisions.
+              Your organization uses a reputation-weighted voting system to make decisions.
             </p>
           </MDBCol>
         </MDBRow>
@@ -459,10 +399,7 @@ const SchemeEditor: FC<Props> = ({
             {warnings.map((warning, index) => (
               <div key={index} style={{ margin: "0 1rem" }}>
                 <MDBAlert color="warning" dismiss>
-                  <MDBIcon
-                    className="red-text mr-2"
-                    icon="exclamation-triangle"
-                  />
+                  <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
                   <span style={{ marginRight: "0.5rem" }}>{warning}</span>
                 </MDBAlert>
               </div>
@@ -474,12 +411,7 @@ const SchemeEditor: FC<Props> = ({
                 Decision making
               </span>
               <MDBTooltip placement="bottom" clickable>
-                <MDBBtn
-                  floating
-                  size="lg"
-                  color="transparent"
-                  style={styles.info}
-                >
+                <MDBBtn floating size="lg" color="transparent" style={styles.info}>
                   <MDBIcon icon="info-circle" />
                 </MDBBtn>
                 <span>How quickly your organization processes proposals</span>
@@ -488,30 +420,24 @@ const SchemeEditor: FC<Props> = ({
           </MDBCol>
           <MDBCol id="col">
             <MDBRow style={styles.alignEnd}>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Fast}
-                style={buttonStyle(DAOSpeed.Fast)}
-                onClick={handleClick}
-              >
-                Fast
-              </button>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Medium}
-                style={buttonStyle(DAOSpeed.Medium)}
-                onClick={handleClick}
-              >
-                Medium
-              </button>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Slow}
-                style={buttonStyle(DAOSpeed.Slow)}
-                onClick={handleClick}
-              >
-                Slow
-              </button>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Fast} style={buttonStyle(DAOSpeed.Fast)} onClick={handleClick}>
+                  Fast
+                </button>
+                <span> Funding & Voting Power: 1-7 days, Plugins: 1-7 days </span>
+              </MDBTooltip>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Medium} style={buttonStyle(DAOSpeed.Medium)} onClick={handleClick}>
+                  Medium
+                </button>
+                <span>Funding & Voting Power: 1-7 days, Plugins: 4-30 days</span>
+              </MDBTooltip>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Slow} style={buttonStyle(DAOSpeed.Slow)} onClick={handleClick}>
+                  Slow
+                </button>
+                <span>Funding & Voting Power: 4-30 days, Plugins: 8 - 60 days</span>
+              </MDBTooltip>
             </MDBRow>
           </MDBCol>
         </MDBRow>
@@ -529,9 +455,7 @@ const SchemeEditor: FC<Props> = ({
         <Toggle
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
-          tooltip={
-            "Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"
-          }
+          tooltip={"Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"}
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
@@ -541,9 +465,7 @@ const SchemeEditor: FC<Props> = ({
         <Toggle
           id={"autobet"}
           text={"Auto-incentivize proposal curation"}
-          tooltip={
-            "The organization bets against every proposal to incentivize the GEN curation network"
-          }
+          tooltip={"The organization bets against every proposal to incentivize the GEN curation network"}
           toggle={() => setAutobet(!autobet)}
           checked={autobet}
         />
