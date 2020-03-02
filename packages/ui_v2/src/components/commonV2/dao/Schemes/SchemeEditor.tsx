@@ -424,19 +424,28 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                 <button name="decisonSpeed" value={DAOSpeed.Fast} style={buttonStyle(DAOSpeed.Fast)} onClick={handleClick}>
                   Fast
                 </button>
-                <span> Funding & Voting Power: 1-7 days, Plugins: 1-7 days </span>
+                <span>
+                  <li><b>Distribute Assets: 1-7 days</b></li>
+                  <li><b>Modify DAO: 1-7 days</b></li>
+                </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
                 <button name="decisonSpeed" value={DAOSpeed.Medium} style={buttonStyle(DAOSpeed.Medium)} onClick={handleClick}>
                   Medium
                 </button>
-                <span>Funding & Voting Power: 1-7 days, Plugins: 4-30 days</span>
+                <span>
+                  <li><b>Distribute Assets: 1-7 days</b></li>
+                  <li><b>Modify DAO: 4-30 days</b></li>
+                </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
                 <button name="decisonSpeed" value={DAOSpeed.Slow} style={buttonStyle(DAOSpeed.Slow)} onClick={handleClick}>
                   Slow
                 </button>
-                <span>Funding & Voting Power: 4-30 days, Plugins: 8 - 60 days</span>
+                <span>
+                    <li><b>Distribute Assets: 4-30 days</b></li>
+                    <li><b>Modify DAO: 8 - 60 days</b></li>
+                </span>
               </MDBTooltip>
             </MDBRow>
           </MDBCol>
