@@ -1,5 +1,5 @@
 import React from "react";
-const logo = require("../../assets/logos/dao-logo-gray.svg");
+const logo = require("../assets/logos/dao-logo-gray.svg");
 
 const DAOstackLogo = () => {
   return (
