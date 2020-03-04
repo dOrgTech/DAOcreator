@@ -3,7 +3,6 @@ import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 import LineGraphic from "../commonV2/LineGraphic";
 import { getSimpleOptions, SimpleOption } from "../utils";
 import { DAOForm } from "@dorgtech/daocreator-lib";
-import { StepNum } from ".";
 
 const FirstStep: FC<DAOForm> = form => {
   const { daoName, tokenSymbol } = form.$.config.$;
@@ -108,13 +107,12 @@ const ThirdStep: FC<DAOForm> = form => {
 const steps = [FirstStep, SecondStep, ThirdStep];
 
 interface Props {
-  furthestStep: StepNum;
   recoveredForm: any;
 }
 
-export const Review: FC<Props> = ({ furthestStep, recoveredForm }) => (
+export const Review: FC<Props> = ({ recoveredForm }) => (
   <>
-    {steps.slice(0, furthestStep).map((ActualStep, index: number) => (
+    {steps.map((ActualStep, index: number) => (
       <ActualStep key={index} {...recoveredForm} />
     ))}
   </>

@@ -7,7 +7,7 @@ import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 
-import { StepNum } from "../../DAOcreatorV2";
+import { STEP as DAOcreatorStep } from "../../DAOcreatorV2";
 
 import { DeployButton } from '../dao/Migrator/DeployButton'
 import './styles.css';
@@ -33,7 +33,7 @@ interface Props {
   Component: FC;
   title: string;
   callbacks: any;
-  step: StepNum;
+  step: DAOcreatorStep;
   launching: boolean;
 }
 

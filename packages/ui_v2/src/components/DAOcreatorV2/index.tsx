@@ -49,8 +49,7 @@ import './styles.css';
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
 interface DAO_CREATOR_INTERFACE {
-  step: StepNum;
-  furthestStep: StepNum;
+  step: STEP;
   form: string;
   decisionSpeed: DAOSpeed;
 }
@@ -62,14 +61,12 @@ interface Step {
   callbacks?: Object;
 }
 
-enum STEP {
+export enum STEP {
   Config,
   Schemes,
   Members,
   Launch
 }
-
-export type StepNum = STEP.Config | STEP.Schemes | STEP.Members | STEP.Launch;
 
 const daoForm = new DAOForm();
 const recoveredForm: DAOForm = new DAOForm();
@@ -79,8 +76,7 @@ interface Props {
 }
 
 const DAOcreator: React.FC<Props> = (props: Props) => {
-  const [step, setStep] = React.useState<StepNum>(STEP.Config);
-  const [furthestStep, setFurthestStep] = React.useState<StepNum>(STEP.Config);
+  const [step, setStep] = React.useState<STEP>(STEP.Config);
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
@@ -99,10 +95,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   const nextStep = React.useCallback(async () => {
     const res = await currentForm.validate();
     if (!res.hasError) {
-      setFurthestStep(furthestStep =>
-        step + 1 > furthestStep ? step + 1 : furthestStep
-      );
-
       setStep(step + 1);
     }
   }, [currentForm, step]);
@@ -112,7 +104,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     if (props.setWeb3Provider) {
       setWeb3Provider(props.setWeb3Provider);
     }
-  }, [])
+  }, [props.setWeb3Provider]);
 
   // On initial load, load initial state
   React.useEffect(() => {
@@ -121,10 +113,11 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     );
 
     if (daoCreatorState) {
-      const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
-      setStep(JSON.parse(daoCreatorState!).step);
-      setFurthestStep(JSON.parse(daoCreatorState!).furthestStep);
-      if (!loading) return;
+      if (!loading) {
+        return;
+      }
+
+      const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
 
       const previewLocalStorage = () => {
         if (!daoCreatorState) {
@@ -175,7 +168,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       const json = toJSON(daoParams);
       const daoCreatorState: DAO_CREATOR_INTERFACE = {
         step,
-        furthestStep,
         form: json,
         decisionSpeed
       };
@@ -187,7 +179,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step, furthestStep, decisionSpeed]);
+  }, [step, decisionSpeed]);
 
   React.useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -210,21 +202,20 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
-  const loadLocalStorage = async () => {
+  const loadLocalStorage = () => {
     const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
 
     if (!daoCreatorState) {
       return;
     }
 
-    const { step, furthestStep, form, decisionSpeed } = (await JSON.parse(
+    const { step, form, decisionSpeed } = JSON.parse(
       daoCreatorState
-    )) as DAO_CREATOR_INTERFACE;
+    ) as DAO_CREATOR_INTERFACE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     daoForm.fromState(daoState);
-    setStep(step === undefined ? STEP.Config : step);
-    setFurthestStep(furthestStep === undefined ? STEP.Config : furthestStep);
+    setStep(step === undefined ? STEP.Config : Math.min(STEP.Launch, step));
     setDecisionSpeed(
       decisionSpeed === undefined ? DAOSpeed.Medium : decisionSpeed
     );
@@ -235,7 +226,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   const resetLocalStorage = () => {
     localStorage.removeItem(DAO_CREATOR_STATE);
     setStep(STEP.Config);
-    setFurthestStep(STEP.Config);
     setRecoverPreviewOpen(false);
   };
 
@@ -249,8 +239,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 
   const PreviewDialog = () => {
     const props = {
-      recoveredForm,
-      furthestStep
+      recoveredForm
     };
     return (
       <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
@@ -330,7 +319,10 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     }
   ];
 
-  currentForm = steps[+step].form;
+  console.log(steps)
+  console.log(step)
+
+  currentForm = steps[step].form;
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
