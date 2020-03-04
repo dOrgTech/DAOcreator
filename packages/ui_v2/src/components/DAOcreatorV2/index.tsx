@@ -26,7 +26,9 @@ import {
   toDAOMigrationParams,
   toJSON,
   ContributionRewardForm,
-  SchemeRegistrarForm
+  SchemeRegistrarForm,
+  ProviderOrGetter,
+  setWeb3Provider
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -72,7 +74,11 @@ export type StepNum = STEP.Config | STEP.Schemes | STEP.Members | STEP.Launch;
 const daoForm = new DAOForm();
 const recoveredForm: DAOForm = new DAOForm();
 
-export default function DAOcreator() {
+interface Props {
+  setWeb3Provider?: ProviderOrGetter;
+}
+
+const DAOcreator: React.FC<Props> = (props: Props) => {
   const [step, setStep] = React.useState<StepNum>(STEP.Config);
   const [furthestStep, setFurthestStep] = React.useState<StepNum>(STEP.Config);
 
@@ -101,11 +107,19 @@ export default function DAOcreator() {
     }
   }, [currentForm, step]);
 
-  // On initial load
+  // On initial load, set web3 provider getter if present
+  React.useEffect(() => {
+    if (props.setWeb3Provider) {
+      setWeb3Provider(props.setWeb3Provider);
+    }
+  }, [])
+
+  // On initial load, load initial state
   React.useEffect(() => {
     const daoCreatorState: string | null = localStorage.getItem(
       DAO_CREATOR_STATE
     );
+
     if (daoCreatorState) {
       const { form } = JSON.parse(daoCreatorState!) as DAO_CREATOR_INTERFACE;
       setStep(JSON.parse(daoCreatorState!).step);
@@ -479,3 +493,5 @@ const styles = {
 
   }
 };
+
+export default DAOcreator;
