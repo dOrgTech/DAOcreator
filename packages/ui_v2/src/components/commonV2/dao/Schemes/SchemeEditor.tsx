@@ -247,7 +247,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
         scheme.$.votingMachine.$.minimumDaoBounty.value = presetVotingMachines[index].$.minimumDaoBounty.value;
         scheme.$.votingMachine.$.daoBountyConst.value = presetVotingMachines[index].$.daoBountyConst.value;
       } else {
-        scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+        scheme.$.votingMachine.$.minimumDaoBounty.value = "0.000001";
         scheme.$.votingMachine.$.daoBountyConst.value = "1";
       }
       return scheme;
@@ -315,9 +315,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
       // Update toggles
       const { proposingRepReward, votersReputationLossRatio, minimumDaoBounty, daoBountyConst } = scheme.$.votingMachine.values;
 
-      setRewardSuccess(+proposingRepReward > 0);
-      setRewardAndPenVoters(votersReputationLossRatio > 0);
-      setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
+      setRewardSuccess(Number(proposingRepReward) > 0);
+      setRewardAndPenVoters(Number(votersReputationLossRatio) > 0);
+      setAutobet(Number(minimumDaoBounty) > 0.000001 && Number(daoBountyConst) >= 1); // TODO Update after daostack lets us use 0
 
       return scheme;
     });
