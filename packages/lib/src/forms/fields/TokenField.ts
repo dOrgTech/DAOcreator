@@ -1,5 +1,4 @@
 import { Field, FieldType } from "../../forms";
-import { greaterThanOrEqual } from "../../forms/validators";
 
 export class TokenField extends Field<string, TokenField> {
   private _symbol: string | (() => string);
