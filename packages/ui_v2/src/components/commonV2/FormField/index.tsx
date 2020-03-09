@@ -197,7 +197,15 @@ const DurationFieldView = observer(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
     };
-
+    const setMaxDuration = (name: string) => {
+      if(name === "hours") {
+        return 24
+      }
+      if(name === "minutes"){
+        return 60
+      }
+      return undefined;
+    }
     const DurationPart = observer(
       (props: { name: "days" | "hours" | "minutes" }) => (
         <>
@@ -221,6 +229,7 @@ const DurationFieldView = observer(
             onChange={onChange}
             type={"number"}
             min={0}
+            max={setMaxDuration(props.name)}
             onBlur={field.enableAutoValidationAndValidate}
             tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
