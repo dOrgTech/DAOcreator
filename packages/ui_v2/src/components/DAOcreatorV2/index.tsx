@@ -319,9 +319,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     }
   ];
 
-  console.log(steps)
-  console.log(step)
-
   currentForm = steps[step].form;
   return (
     <>
