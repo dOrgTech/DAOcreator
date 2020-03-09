@@ -123,7 +123,7 @@ export class GenesisProtocolForm extends Form<
 
       minimumDaoBounty: new TokenField(
         "GEN",
-        form ? form.$.minimumDaoBounty.value : "0"
+        form ? form.$.minimumDaoBounty.value : "0.000001"
       )
         .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Minimum DAO Bounty")
@@ -135,7 +135,7 @@ export class GenesisProtocolForm extends Form<
         ),
 
       daoBountyConst: new NumberField(form ? form.$.daoBountyConst.value : "1")
-        .validators(requiredText, validNumber, greaterThan(0))
+        .validators(requiredText, validNumber, greaterThanOrEqual(1))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
           "This is multiplied by the average downstake on boosted proposals to calculate how large the DAO’s automatic downstake should be."

@@ -49,11 +49,17 @@ export const validBigNumber: Validator<string> = value => {
 };
 
 export const validNumber: Validator<string> = value => {
-  const error = "Please enter a valid number.";
   value = value.trim();
 
-  if (isNaN(Number(value))) {
-    return error;
+  const number = Number(value);
+
+  if (isNaN(number)) {
+    return "Please enter a valid number.";
+  }
+
+  // Serializes to exponential value
+  if (number.toString().indexOf('e') > -1) {
+    return "Please remove decimal places.";
   }
 
   return null;
