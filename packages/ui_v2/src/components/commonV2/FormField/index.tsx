@@ -197,15 +197,17 @@ const DurationFieldView = observer(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
     };
+
     const setMaxDuration = (name: string) => {
-      if(name === "hours") {
-        return 24
+      if (name === "hours") {
+        return 24;
+      } else if (name === "minutes"){
+        return 60;
+      } else {
+        return undefined;
       }
-      if(name === "minutes"){
-        return 60
-      }
-      return undefined;
-    }
+    };
+
     const DurationPart = observer(
       (props: { name: "days" | "hours" | "minutes" }) => (
         <>
