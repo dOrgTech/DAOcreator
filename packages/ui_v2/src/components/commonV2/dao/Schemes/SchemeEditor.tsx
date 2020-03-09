@@ -425,8 +425,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Fast
                 </button>
                 <span>
-                  <li><b>Distribute Assets: 1-7 days</b></li>
-                  <li><b>Modify DAO: 1-7 days</b></li>
+                  <li><b>Distribute Assets: 2-7 days</b></li>
+                  <li><b>Modify DAO: 5-30 days</b></li>
                 </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
@@ -434,8 +434,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Medium
                 </button>
                 <span>
-                  <li><b>Distribute Assets: 1-7 days</b></li>
-                  <li><b>Modify DAO: 4-30 days</b></li>
+                  <li><b>Distribute Assets: 5-30 days</b></li>
+                  <li><b>Modify DAO: 10-60 days</b></li>
                 </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
@@ -443,8 +443,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Slow
                 </button>
                 <span>
-                    <li><b>Distribute Assets: 4-30 days</b></li>
-                    <li><b>Modify DAO: 8 - 60 days</b></li>
+                    <li><b>Distribute Assets: 10-60 days</b></li>
+                    <li><b>Modify DAO: 10-60 days</b></li>
                 </span>
               </MDBTooltip>
             </MDBRow>
