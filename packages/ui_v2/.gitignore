@@ -29,3 +29,5 @@ secret.json
 
 dist
 package
+
+*.css.d.ts
