@@ -1,6 +1,7 @@
 import { FieldState } from "formstate";
 import {
   StringField,
+  NumberField,
   TokenField,
   DateTimeField,
   DurationField,
@@ -10,6 +11,7 @@ import {
 
 export enum FieldType {
   String,
+  Number,
   Token,
   DateTime,
   Duration,
@@ -19,6 +21,7 @@ export enum FieldType {
 
 export type AnyField =
   | StringField
+  | NumberField
   | TokenField
   | DateTimeField
   | DurationField

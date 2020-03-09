@@ -20,7 +20,9 @@ export class DAOConfigForm extends Form<
       daoName: new StringField(form ? form.$.daoName.value : "")
         .validators(requiredText, validName)
         .setDisplayName("DAO Name")
-        .setDescription("The name of the DAO."),
+        .setDescription(
+          "Your organization’s name (cannot be changed after launch)."
+        ),
 
       tokenName: new StringField(form ? form.$.tokenName.value : "")
         .validators(requiredText, validName)
@@ -30,7 +32,9 @@ export class DAOConfigForm extends Form<
       tokenSymbol: new StringField(form ? form.$.tokenSymbol.value : "")
         .validators(requiredText, validTokenSymbol)
         .setDisplayName("Token Symbol")
-        .setDescription("The token's 4 letter symbol for exchanges.")
+        .setDescription(
+          "Abbreviation to identify your organization’s token (cannot be changed after launch)."
+        )
     });
   }
 

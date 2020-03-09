@@ -1,58 +1,53 @@
-import React, { FC } from "react";
+import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
-  DAOMigrationResult,
-  toDAOMigrationParams,
-  DAOMigrationParams
 } from "@dorgtech/daocreator-lib";
+import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
+import './styles.css'
 
 interface Props {
   form: DAOForm;
+  setLaunching: (launching: boolean) => void;
+  migrationStates: any;
 }
 
-const InstallStep: FC<Props> = ({ form }: Props) => {
-  /*
-   * Callbacks
-   */
-
-  const onComplete = () => {
-    console.log("onComplete");
-    onStop();
-    // Previously set daoCreator state:
-    // isMigrating = false
-  };
-
-  const onStart = () => {
-    console.log("onStart");
-    // Previously set daoCreator state:
-    // isMigrating = true
-  };
-
-  const onAbort = (error: string) => {
-    console.log("onAbort");
-    console.log(error);
-    onStop();
-  };
-
-  const onStop = () => {
-    console.log("onStop");
-    // Previously set daoCreator state:
-    // isMigrating = false
-  };
-
-  const dao: DAOMigrationParams = toDAOMigrationParams(form.toState());
+const InstallStep: FC<Props> = ({ migrationStates }: Props) => {
+  const { alchemyAdds } = migrationStates;
   return (
-    <Migrator
-      dao={dao}
-      onComplete={(result: DAOMigrationResult) => {
-        console.log(result);
-        onComplete();
-      }}
-      onStart={onStart}
-      onAbort={onAbort}
-      onStop={onStop}
-    />
+    <>
+      <Fragment>
+        <MDBContainer>
+          <MDBAlert color="warning" dismiss>
+            <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
+            Attempting to speed up transactions will BREAK deployment!
+          </MDBAlert>
+          {alchemyAdds.map((address: string) => (
+            <MDBAlert key={address} color="warning" dismiss>
+              <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
+              Save your new DAO's
+              <MDBTooltip domElement>
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(address);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "inline-block",
+                    color: "blue"
+                  }}
+                >
+                  &nbsp;Alchemy URL&nbsp;
+                </div>
+                <div>Click to copy</div>
+              </MDBTooltip>
+              to avoid losing access to it
+            </MDBAlert>
+          ))}
+        </MDBContainer>
+      </Fragment>
+      <Migrator migrationStates={migrationStates} />
+    </>
   );
 };
 

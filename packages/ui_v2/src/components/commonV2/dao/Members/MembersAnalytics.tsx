@@ -3,11 +3,14 @@ import { MDBRow, MDBCol } from "mdbreact";
 
 import LineGraphic from "../../LineGraphic";
 
-interface IData {
-  [name: string]: string | number;
+// Right now TS can't cast [key: string]: string | number but it can cast [key: string]: any despite an interface only having strings and numbers
+// https://stackoverflow.com/questions/37006008/typescript-index-signature-is-missing-in-type
+interface Data {
+  // [name: string]: string | number;
+  [name: string]: any;
 }
 
-interface ILineConfig {
+interface LineConfig {
   showPercentage: boolean;
   height: string;
   symbol?: string;
@@ -15,19 +18,16 @@ interface ILineConfig {
   nameKey: string;
 }
 
-interface IProps {
-  data: IData[]; // TODO Potentially update data type to flattened form type,
-  getDAOTokenSymbol: () => string;
+interface Props {
+  data: Data[]; // TODO Potentially update data type to flattened form type,
+  tokenSymbol: string;
 }
 
-export const MembersAnalytics: FC<IProps> = ({
-  data,
-  getDAOTokenSymbol
-}: IProps) => {
+export const MembersAnalytics: FC<Props> = ({ data, tokenSymbol }) => {
   const tokenConfig = {
     showPercentage: false,
     height: "0.5rem",
-    symbol: "token", // TODO get token symbol (?)
+    symbol: tokenSymbol,
     dataKey: "tokens",
     nameKey: "address"
   };
@@ -45,7 +45,7 @@ export const MembersAnalytics: FC<IProps> = ({
 
   useEffect(() => {
     let count = 0;
-    data.map((element: IData) => {
+    data.map((element: Data) => {
       count += element[tokenConfig.dataKey] as number;
       return element;
     });
@@ -54,20 +54,20 @@ export const MembersAnalytics: FC<IProps> = ({
 
   useEffect(() => {
     let count = 0;
-    data.map((element: IData) => {
+    data.map((element: Data) => {
       count += element[reputationConfig.dataKey] as number;
       return element;
     });
     setTotalReputationAmount(count);
   }, [data, reputationConfig.dataKey]);
 
-  interface IBoxProps {
+  interface BoxProps {
     name: string;
     total: number;
-    config: ILineConfig;
+    config: LineConfig;
   }
 
-  const Box: FC<IBoxProps> = ({ name, total, config }: IBoxProps) =>
+  const Box: FC<BoxProps> = ({ name, total, config }) =>
     total === 0 ? null : (
       <MDBRow>
         <MDBCol size="4">
@@ -89,7 +89,7 @@ export const MembersAnalytics: FC<IProps> = ({
     );
     const tokenBox = (
       <Box
-        name={`${getDAOTokenSymbol()} Token Distribution`}
+        name={`${tokenSymbol} Token Distribution`}
         total={totalTokenAmount}
         config={tokenConfig}
       />

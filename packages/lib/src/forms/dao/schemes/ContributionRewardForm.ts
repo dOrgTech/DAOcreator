@@ -20,7 +20,7 @@ export class ContributionRewardForm extends SchemeForm<
         : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Normal })
     });
 
-    this.setDisplayName("Contribution Reward");
+    this.setDisplayName("Funding and Voting Power");
     this.setDescription(
       "Contributors can propose rewards for themselves and others. These rewards can be tokens, reputation, or a combination."
     );

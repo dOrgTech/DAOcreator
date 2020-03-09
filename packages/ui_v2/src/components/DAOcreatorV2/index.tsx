@@ -12,7 +12,6 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBIcon,
   MDBPopover,
   MDBPopoverBody
 } from "mdbreact";
@@ -25,7 +24,11 @@ import {
   fromJSON,
   DAOForm,
   toDAOMigrationParams,
-  toJSON
+  toJSON,
+  ContributionRewardForm,
+  SchemeRegistrarForm,
+  ProviderOrGetter,
+  setWeb3Provider
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -36,13 +39,19 @@ import InstallStep from "./InstallStep";
 import FileSaver from "file-saver";
 import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
-import { getProvider } from "../web3/core";
+import DAOstackLogo from "../commonV2/DAOstackLogo";
+
+import { handleNetworkReload } from "../web3/core";
+import { Review } from "./Review";
+import { DAOSpeed } from "../commonV2/dao/Schemes";
+import './styles.css';
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
 interface DAO_CREATOR_INTERFACE {
-  step: number;
+  step: STEP;
   form: string;
+  decisionSpeed: DAOSpeed;
 }
 
 interface Step {
@@ -52,14 +61,23 @@ interface Step {
   callbacks?: Object;
 }
 
-const daoForm = new DAOForm();
-const recoveredForm = new DAOForm();
+export enum STEP {
+  Config,
+  Schemes,
+  Members,
+  Launch
+}
 
-export default function DAOcreator() {
-  const [step, setStep] = React.useState<number>(0);
-  const [defaultAddress, setDefaultAddress] = React.useState<
-    string | undefined
-  >();
+const daoForm = new DAOForm();
+const recoveredForm: DAOForm = new DAOForm();
+
+interface Props {
+  setWeb3Provider?: ProviderOrGetter;
+}
+
+const DAOcreator: React.FC<Props> = (props: Props) => {
+  const [step, setStep] = React.useState<STEP>(STEP.Config);
+
   const [loading, setLoading] = React.useState<boolean>(true);
   const [recoverPreviewOpen, setRecoverPreviewOpen] = React.useState<boolean>(
     false
@@ -68,7 +86,10 @@ export default function DAOcreator() {
     false
   );
   const [importFile, setImportFile] = React.useState<string>("");
+  const [launching, setLaunching] = React.useState(false);
 
+  const [loadedFromModal, setLoadedFromModal] = React.useState(false);
+  const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -78,37 +99,53 @@ export default function DAOcreator() {
     }
   }, [currentForm, step]);
 
-  // On initial load
+  // On initial load, set web3 provider getter if present
   React.useEffect(() => {
-    if (!loading) return;
+    if (props.setWeb3Provider) {
+      setWeb3Provider(props.setWeb3Provider);
+    }
+  }, [props.setWeb3Provider]);
 
-    const handleMetamask = async () => {
-      try {
-        const address = await getProvider();
-        setDefaultAddress(address);
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    };
+  // On initial load, load initial state
+  React.useEffect(() => {
+    const daoCreatorState: string | null = localStorage.getItem(
+      DAO_CREATOR_STATE
+    );
 
-    const previewLocalStorage = () => {
-      const daoCreatorState = localStorage.getItem(DAO_CREATOR_STATE);
-
-      if (!daoCreatorState) {
-        setLoading(false);
+    if (daoCreatorState) {
+      if (!loading) {
         return;
       }
 
       const { form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
-      const daoParams = fromJSON(form);
-      const daoState = fromDAOMigrationParams(daoParams);
-      recoveredForm.fromState(daoState);
-      setRecoverPreviewOpen(true);
-    };
 
-    handleMetamask();
-    previewLocalStorage();
+      const previewLocalStorage = () => {
+        if (!daoCreatorState) {
+          setLoading(false);
+          return;
+        }
+
+        const daoParams = fromJSON(form);
+        const daoState = fromDAOMigrationParams(daoParams);
+        recoveredForm.fromState(daoState);
+
+        const { daoName, tokenSymbol } = daoState.config;
+        // Modal does not render preview for steps that weren't fully validated
+        if (
+          daoName === "" &&
+          tokenSymbol === "" &&
+          JSON.parse(daoCreatorState!).furthestStep < STEP.Members
+        ) {
+          return;
+        }
+        setRecoverPreviewOpen(true);
+      };
+
+      handleNetworkReload();
+      previewLocalStorage();
+    }
+
+    setLoading(false);
   }, [loading]);
 
   // Save state every step
@@ -118,6 +155,11 @@ export default function DAOcreator() {
       // Check to see if the current form state hasn't been edited,
       // and if so early out so we don't save an empty state
       const nullForm = new DAOForm();
+      nullForm.$.config.$.tokenName.value = " token";
+      nullForm.$.schemes.$ = [
+        new ContributionRewardForm(),
+        new SchemeRegistrarForm()
+      ];
       if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
         return;
       }
@@ -126,7 +168,8 @@ export default function DAOcreator() {
       const json = toJSON(daoParams);
       const daoCreatorState: DAO_CREATOR_INTERFACE = {
         step,
-        form: json
+        form: json,
+        decisionSpeed
       };
 
       localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
@@ -136,7 +179,7 @@ export default function DAOcreator() {
     return () => {
       window.removeEventListener("beforeunload", saveLocalStorage);
     };
-  }, [step]);
+  }, [step, decisionSpeed]);
 
   React.useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -156,6 +199,7 @@ export default function DAOcreator() {
     };
   }, [step, nextStep]);
 
+  const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
 
   const loadLocalStorage = () => {
@@ -165,17 +209,23 @@ export default function DAOcreator() {
       return;
     }
 
-    const { step, form } = JSON.parse(daoCreatorState) as DAO_CREATOR_INTERFACE;
+    const { step, form, decisionSpeed } = JSON.parse(
+      daoCreatorState
+    ) as DAO_CREATOR_INTERFACE;
     const daoParams = fromJSON(form);
     const daoState = fromDAOMigrationParams(daoParams);
     daoForm.fromState(daoState);
-    setStep(step);
+    setStep(step === undefined ? STEP.Config : Math.min(STEP.Launch, step));
+    setDecisionSpeed(
+      decisionSpeed === undefined ? DAOSpeed.Medium : decisionSpeed
+    );
     setRecoverPreviewOpen(false);
+    setLoadedFromModal(true);
   };
 
   const resetLocalStorage = () => {
     localStorage.removeItem(DAO_CREATOR_STATE);
-    setStep(0);
+    setStep(STEP.Config);
     setRecoverPreviewOpen(false);
   };
 
@@ -187,32 +237,37 @@ export default function DAOcreator() {
     FileSaver.saveAs(blob, "migration-params.json");
   };
 
-  const PreviewDialog = () => (
-    <MDBModal open={recoverPreviewOpen} fullWidth={true} maxWidth="md">
-      <MDBModalHeader id="simple-dialog-title">
-        In Progress DAO Detected
-      </MDBModalHeader>
-      <MDBModalBody>
-        <InstallStep form={recoveredForm} />
-      </MDBModalBody>
-      <MDBModalFooter />
+  const PreviewDialog = () => {
+    const props = {
+      recoveredForm
+    };
+    return (
+      <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
+        <MDBModalHeader id="simple-dialog-title">
+          In Progress DAO Detected
+        </MDBModalHeader>
+        <MDBModalBody>
+          <Review {...props} />
+        </MDBModalBody>
+        <MDBModalFooter />
 
-      <MDBBtn
-        onClick={loadLocalStorage}
-        color={"primary"}
-        variant={"contained"}
-      >
-        Resume
-      </MDBBtn>
-      <MDBBtn
-        onClick={resetLocalStorage}
-        color={"primary"}
-        variant={"contained"}
-      >
-        Start Over
-      </MDBBtn>
-    </MDBModal>
-  );
+        <MDBBtn
+          onClick={loadLocalStorage}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Resume
+        </MDBBtn>
+        <MDBBtn
+          onClick={resetLocalStorage}
+          color={"primary"}
+          variant={"contained"}
+        >
+          Start Over
+        </MDBBtn>
+      </MDBModal>
+    );
+  };
 
   const steps: Step[] = [
     {
@@ -220,9 +275,11 @@ export default function DAOcreator() {
       form: daoForm.$.config,
       Component: NamingStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
-        daoName: () => daoForm.$.config.$.daoName.value
+        toggleCollapse: nextStep,
+        getDAOName,
+        getDAOTokenSymbol,
+        loadedFromModal
       }
     },
     {
@@ -230,10 +287,13 @@ export default function DAOcreator() {
       form: daoForm.$.schemes,
       Component: SchemesStep,
       callbacks: {
-        toggleCollapse: nextStep,
         setStep,
+        toggleCollapse: nextStep,
         modal: advanceSchemeConfig,
-        setModal: setAdvanceSchemeConfig
+        setModal: setAdvanceSchemeConfig,
+        loadedFromModal,
+        decisionSpeed,
+        setDecisionSpeed
       }
     },
     {
@@ -241,42 +301,47 @@ export default function DAOcreator() {
       form: daoForm.$.members,
       Component: MembersStep,
       callbacks: {
+        setStep,
         getDAOTokenSymbol,
         toggleCollapse: nextStep,
-        setStep,
-        address: defaultAddress,
         setModal: setImportFile,
-        step
+        step,
+        loadedFromModal
       }
     },
     {
       title: "Launch",
       form: daoForm,
-      Component: InstallStep
+      Component: InstallStep,
+      callbacks: {
+        setLaunching
+      }
     }
   ];
 
-  currentForm = steps[+step].form;
+  currentForm = steps[step].form;
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
-            <MDBCol size="6" style={styles.titleContainer}>
+            <MDBCol size="6" id="title" style={styles.titleContainer}>
               <h3 style={styles.fontStyle}>Create Organization</h3>
             </MDBCol>
             <MDBCol size="3">
               <div>
                 <MDBPopover placement="bottom" popover clickable>
                   <MDBBtn
+                    id="menu"
                     floating
                     size="lg"
                     color="transparent"
                     className="btn"
                     style={styles.icon}
                   >
-                    <MDBIcon icon="ellipsis-v" className="blue-text" />{" "}
+                    {/* <MDBIcon icon="ellipsis-v" style={styles.iconColor} className="indigo-text"/>{" "} */}
+                    <img src="icons/more.svg" alt="menu icon" />
                   </MDBBtn>
                   <div style={styles.divided}>
                     <div // There might be a better MDBReact component for this
@@ -288,11 +353,11 @@ export default function DAOcreator() {
                     <div style={styles.divider} />
                     <div // There might be a better MDBReact component for this
                       style={{ cursor: "pointer" }}
-                      onClick={() => exportDaoParams()}
+                      onClick={exportDaoParams}
                     >
                       <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>
-                  </div>
+                  </div> 
                 </MDBPopover>
               </div>
             </MDBCol>
@@ -310,35 +375,35 @@ export default function DAOcreator() {
                     <p style={styles.fontStyle}> Please allow metamask </p>
                   </MDBRow>
                 </div>
-              ) : !defaultAddress ? (
-                <div className="row justify-content-center">
-                  <h4 style={styles.fontStyle}>
-                    You must allow metamask to continue
-                  </h4>
-                </div>
               ) : (
                 <ul
                   className="stepper stepper-vertical"
                   style={styles.noPadding}
                 >
-                  {steps.map((actualStep: Step, index: number) => {
-                    let { form, title, Component, callbacks } = actualStep;
-                    return (
-                      <Stepper
-                        key={`step${index}`}
-                        form={form}
-                        title={title}
-                        step={step}
-                        index={index}
-                        Component={Component}
-                        callbacks={callbacks}
-                      />
-                    );
-                  })}
+                  {steps.map(
+                    (
+                      { form, title, Component, callbacks }: Step,
+                      index: number
+                    ) => {
+                      return (
+                        <Stepper
+                          key={`step${index}`}
+                          index={index}
+                          form={form}
+                          title={title}
+                          step={step}
+                          launching={launching}
+                          Component={Component}
+                          callbacks={callbacks}
+                        />
+                      );
+                    }
+                  )}
                 </ul>
               )}
             </div>
           </div>
+          <DAOstackLogo />
         </div>
       </MDBContainer>
       <PreviewDialog />
@@ -366,7 +431,9 @@ const styles = {
     height: "50px"
   },
   fontStyle: {
-    fontize: "1.45rem",
+    fontSize: '18px',
+    letterSpacing:'0.6px',
+    color: '#3E3F42',
     fontWeight: 400,
     fontFamily: "inherit"
   },
@@ -390,12 +457,11 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
-    marginLeft: "93px",
-    marginTop: "18.5px",
-    height: 35,
-    width: 35, //The Width must be the same as the height
-    borderRadius: 400,
-    border: "1px solid lightgrey"
+    height: '35px',
+    width: '35px',
+    borderRadius: '400px',
+    border: '1px solid #EEF0FF',
+    margin: '14px 0px 0px 95px'
   },
   divided: {
     display: "flex",
@@ -403,7 +469,18 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    margin: "5px",
-    border: "1px solid lightgrey"
+    border: '0.5px solid #EAEDF3',
+    height: '1px',
+    padding: 0,
+    margin: 0,
+    width: '-webkit-fill-available',
+    borderLeft: 'aqua'
+  },
+  iconColor: {
+  //  color: '#536DFE !important',
+   color: 'indigo accent-2 text'
+
   }
 };
+
+export default DAOcreator;

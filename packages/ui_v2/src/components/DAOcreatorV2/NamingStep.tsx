@@ -1,55 +1,55 @@
-import React from "react";
+import React, { FC, useEffect } from "react";
 import { DAOConfigForm } from "@dorgtech/daocreator-lib";
+import { observer } from "mobx-react";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";
+import "./styles.css";
 
 interface Props {
   form: DAOConfigForm;
   toggleCollapse: () => void;
 }
 
-function NamingStep(props: Props) {
-  const { form, toggleCollapse } = props;
-  const namingError = {
-    daoName: true,
-    daoSymbol: true
-  };
-  const [hasError, setHasError] = React.useState<any>(namingError);
-  form.$.tokenName.$ = "0";
-  form.$.tokenName.value = "0";
+export type NamingError = {
+  daoName: boolean;
+  tokenSymbol: boolean;
+};
+
+// Please refactor this
+const NamingStep: FC<Props> = observer(({ form, toggleCollapse }) => { 
+
+  useEffect(() => {
+    form.$.tokenName.value = form.$.daoName.value + " token";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.$.daoName.$]);
 
   return (
-    <>
-      <div style={styles.paddingTotal}>
-        <br />
-        <DAOConfigEditor
-          form={form}
-          editable={true}
-          namingError={hasError}
-          checkError={setHasError}
-        />
-        <br />
-        <MDBRow style={styles.paddingBottom}>
-          <MDBCol>
-            <button
-              name="decisonSpeed"
-              value="slow"
-              style={
-                hasError.daoName || hasError.daoSymbol
-                  ? styles.buttonDeactivatedStyle
-                  : styles.buttonActivatedStyle
-              }
-              disabled={hasError.daoName || hasError.daoSymbol}
-              onClick={toggleCollapse}
-            >
-              Set Description
-            </button>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    </>
+    <div style={styles.paddingTotal}>
+      <br />
+      <DAOConfigEditor
+        form={form}
+        editable={true}
+      />
+      <br />
+      <MDBRow style={styles.paddingBottom}>
+        <MDBCol>
+          <button
+            id="setDescription"
+            style={
+              form.hasError
+                ? styles.buttonDeactivatedStyle
+                : styles.buttonActivatedStyle
+            }
+            disabled={form.hasError}
+            onClick={toggleCollapse}
+          >
+            Set Description
+          </button>
+        </MDBCol>
+      </MDBRow>
+    </div>
   );
-}
+});
 
 const styles = {
   buttonActivatedStyle: {
@@ -75,10 +75,10 @@ const styles = {
     fontSize: "smaller"
   },
   paddingBottom: {
-    paddingBottom: "2%"
+    paddingBottom: "0%"
   },
   paddingTotal: {
-    padding: "6px"
+    padding: "0px"
   }
 };
 

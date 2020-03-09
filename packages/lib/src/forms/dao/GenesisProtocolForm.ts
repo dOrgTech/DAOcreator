@@ -6,6 +6,7 @@ import {
   DurationField,
   AddressField,
   PercentageField,
+  NumberField,
   requiredText,
   validAddress,
   validNumber,
@@ -13,7 +14,8 @@ import {
   greaterThan,
   lessThanOrEqual,
   greaterThanOrEqual,
-  futureDate
+  futureDate,
+  minMaxInclusive
 } from "../../forms";
 import { GenesisProtocol } from "../../state";
 import { GenesisProtocolPreset } from "../../dependency/arc";
@@ -32,8 +34,8 @@ export class GenesisProtocolForm extends Form<
     quietEndingPeriod: DurationField;
     queuedVoteRequiredPercentage: PercentageField;
     minimumDaoBounty: TokenField;
-    daoBountyConst: StringField;
-    thresholdConst: StringField;
+    daoBountyConst: NumberField;
+    thresholdConst: NumberField;
     votersReputationLossRatio: PercentageField;
     proposingRepReward: TokenField;
     activationTime: DateTimeField;
@@ -110,7 +112,7 @@ export class GenesisProtocolForm extends Form<
       queuedVoteRequiredPercentage: new PercentageField(
         form ? form.$.queuedVoteRequiredPercentage.value : 0
       )
-        .validators(validPercentage)
+        .validators(validPercentage, minMaxInclusive(50, 100))
         .setDisplayName("Queued Vote Required Percentage")
         .setDescription(
           "The quorum required to decide a vote on a non-boosted proposal."
@@ -123,7 +125,7 @@ export class GenesisProtocolForm extends Form<
         "GEN",
         form ? form.$.minimumDaoBounty.value : "0"
       )
-        .validators(requiredText, validNumber, greaterThanOrEqual(0))
+        .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("Minimum DAO Bounty")
         .setDescription(
           "The minimum amount of GEN a DAO will stake when automatically downstaking each proposal."
@@ -132,7 +134,7 @@ export class GenesisProtocolForm extends Form<
           "The DAO will automatically downstake every proposal, in order to properly set up the staking system, and this parameter sets the minimum size for that downstake. A higher minimum means the DAO is more heavily subsidizing staking."
         ),
 
-      daoBountyConst: new StringField(form ? form.$.daoBountyConst.value : "1")
+      daoBountyConst: new NumberField(form ? form.$.daoBountyConst.value : "1")
         .validators(requiredText, validNumber, greaterThan(0))
         .setDisplayName("DAO Bounty Const")
         .setDescription(
@@ -142,7 +144,7 @@ export class GenesisProtocolForm extends Form<
           "A size coefficient of 1 will mean the DAO automatically downstakes new proposal with a downstake as large as the average downstake on boosted proposals (unless that would be smaller than the minimum DAOstake parameter!)."
         ),
 
-      thresholdConst: new StringField(
+      thresholdConst: new NumberField(
         form ? form.$.thresholdConst.value : "1200"
       )
         .validators(
@@ -223,6 +225,16 @@ export class GenesisProtocolForm extends Form<
     } else {
       this.preset = GenesisProtocolPreset.Normal;
     }
+
+    this.validators((value) => {
+      const error = `${value.boostedVotePeriodLimit.displayName} must be greater than or equal to ${value.quietEndingPeriod.displayName}`;
+
+      if (value.boostedVotePeriodLimit.toSeconds() >= value.quietEndingPeriod.toSeconds()) {
+        return null;
+      } else {
+        return error;
+      }
+    });
   }
 
   public toState(): GenesisProtocol {

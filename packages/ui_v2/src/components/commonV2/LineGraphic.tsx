@@ -6,13 +6,13 @@ import {
   MDBBox,
   MDBRow
 } from "mdbreact";
-import Blockies from "react-blockies";
+import EthAddressAvatar from "./EthAddressAvatar";
 
-interface IData {
+interface Data {
   [name: string]: string | number;
 }
 
-interface ILineConfig {
+interface LineConfig {
   showPercentage: boolean;
   height: string;
   symbol?: string;
@@ -20,20 +20,20 @@ interface ILineConfig {
   nameKey: string;
 }
 
-interface IProps {
-  data: IData[];
+interface Props {
+  data: Data[];
   total: number;
-  config: ILineConfig;
+  config: LineConfig;
   style?: any;
 }
 
-const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
+const LineGraphic: FC<Props> = ({ data, total, config, style }) => {
   const { showPercentage, height, symbol, dataKey, nameKey } = config;
 
   const colours = ["success", "info", "warning", "danger"];
   if (total === 0) return null;
 
-  const cleanData = data.filter((element: IData) => {
+  const cleanData = data.filter((element: Data) => {
     const value: number = element[dataKey] as number;
     if (value > 0) return element;
     return null;
@@ -41,7 +41,7 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
 
   return (
     <MDBContainer className="text-center" style={style ? style : null}>
-      {cleanData.map((element: IData, index: number) => {
+      {cleanData.map((element: Data, index: number) => {
         const value: number = element[dataKey] as number;
         const percentage = `${(value / total) * 100}`.toString().substr(0, 4);
         const name = element[nameKey] as string;
@@ -78,13 +78,13 @@ const LineGraphic: FC<IProps> = ({ data, total, config, style }: IProps) => {
             </div>
             <MDBBox className="align-middle justify-content-center">
               <MDBRow className="m-2">
-                <Blockies seed={name} />
-                <div>
+                <EthAddressAvatar address={name} height={"20px"} />
+                <div style={{ marginLeft: "5px" }}>
                   {`${name.substr(0, 6)}...${name.substring(name.length - 4)}`}
                 </div>
               </MDBRow>
               <MDBRow className="m-2">
-                <div>
+                <div style={{ marginLeft: "5px" }}>
                   {`${value} ${symbol}`} ({`${percentage}%`})
                 </div>
               </MDBRow>

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC } from "react";
 import { observer } from "mobx-react";
 import { MDBRow, MDBCol, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
 import {
@@ -9,7 +9,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import grey from "@material-ui/core/colors/grey";
 import blue from "@material-ui/core/colors/blue";
 import DateFnsUtils from "@date-io/date-fns";
-// import EthAddressAvatar from "../EthAddressAvatar";
+import EthAddressAvatar from "../EthAddressAvatar";
 import {
   AnyField,
   FieldType,
@@ -18,26 +18,50 @@ import {
   DurationField,
   DateTimeField,
   PercentageField,
-  AddressField
+  AddressField,
+  NumberField
 } from "@dorgtech/daocreator-lib";
+import './styles.css';
 
-export interface Props {
-  field: AnyField;
+export interface Props<TField = AnyField> {
+  field: TField;
+  displayName?: string;
   editable?: boolean;
-  colSize?: any;
-  tabIndex?: number | null;
-  checkError?: (error: boolean) => void;
-  namingError?: any;
+  colSize?: ColSize;
+  tabIndex: number;
 }
 
-function FormField(props: Props) {
-  const { field, editable, colSize, tabIndex, checkError, namingError } = props;
-  const size = colSize ? colSize : 6;
+export type ColSize =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "11"
+  | "12"
+  | "auto";
+
+const FormField: FC<Props> = ({
+  field,
+  displayName,
+  editable,
+  colSize,
+  tabIndex,
+}) => {
+  const size = colSize ? colSize : "6";
   let FieldView;
 
   switch (field.type) {
     case FieldType.String:
       FieldView = StringFieldView;
+      break;
+    case FieldType.Number:
+      FieldView = NumberFieldView;
       break;
     case FieldType.Token:
       FieldView = TokenFieldView;
@@ -58,115 +82,100 @@ function FormField(props: Props) {
       throw Error(`Field type "${FieldType[field.type]}" unimplemented.`);
   }
   return (
-    <>
-      <FieldView
-        field={field as any}
-        editable={editable}
-        colSize={size}
-        tabIndex={tabIndex ? tabIndex : undefined}
-        checkError={checkError ? checkError : undefined}
-        namingError={namingError ? namingError : undefined}
-      />
-    </>
+    <FieldView
+      field={field as any}
+      displayName={displayName}
+      editable={editable}
+      colSize={size}
+      tabIndex={tabIndex}
+    />
   );
-}
-
-interface FieldProps<T> {
-  field: T;
-  editable?: boolean;
-  colSize?: any;
-  tabIndex?: number | undefined;
-  namingError?: any | undefined;
-  checkError?: (error: any) => void | undefined;
-}
+};
 
 const FieldError = (field: any) => (
-  <>{field.hasError ? <p style={{ color: "red" }}>{field.error}</p> : <></>}</>
+  <>{field.hasError && <p style={{ color: "red" }}>{field.error}</p>}</>
 );
 
 const StringFieldView = observer(
-  ({
-    field,
-    editable,
-    tabIndex,
-    checkError,
-    namingError
-  }: FieldProps<StringField>) => {
-    const onChange = async (event: any) => {
-      field.onChange(event.target.value);
-      setTimeout(() => {
-        if (field.displayName === "Token Symbol") {
-          checkError!({ ...namingError, daoSymbol: field.hasError });
-        }
-        if (field.displayName === "DAO Name") {
-          checkError!({ ...namingError, daoName: field.hasError });
-        }
-      }, 250);
-    };
+  ({ field, displayName, editable, tabIndex }: Props<StringField>) => {
     return (
-      <>
-        <MDBCol size="6" style={styles.largeMargin}>
-          <label style={styles.labelStyle}>
-            {field.displayName === "Token Symbol"
-              ? "DAO Symbol"
-              : field.displayName}
-          </label>
-          <MDBTooltip placement="bottom" clickable>
-            <MDBBtn floating size="lg" color="transparent" style={styles.info}>
-              {" "}
-              <MDBIcon icon="info-circle" />
-            </MDBBtn>
-            <span>{field.description}</span>
-          </MDBTooltip>
-          <input
-            type="text"
-            style={styles.inputStyle}
-            value={field.value}
-            disabled={editable === undefined ? false : !editable}
-            onChange={onChange}
-            onBlur={field.enableAutoValidationAndValidate}
-            tabIndex={tabIndex}
-          />
-          {FieldError(field)}
-        </MDBCol>
-      </>
+      <MDBCol size="6" style={styles.largeMargin}>
+        <label style={styles.labelStyle}>
+          {displayName ? displayName : field.displayName}
+        </label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info} id="img">
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{field.description}</span>
+        </MDBTooltip>
+        <input
+          type={"text"}
+          style={styles.stringInputStyle}
+          value={field.value}
+          disabled={editable === undefined ? false : !editable}
+          onChange={(event: any) => field.onChange(event.target.value)}
+          onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
+        />
+        {FieldError(field)}
+      </MDBCol>
     );
   }
 );
 
-const TokenFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<TokenField>) => (
-    <>
-      <MDBCol
-        size={colSize ? colSize : "6"}
-        style={colSize ? {} : styles.largeMargin}
-      >
-        {colSize ? (
-          <></>
-        ) : (
-          <>
-            <label style={styles.labelStyle}>{field.displayName}</label>
-            <MDBTooltip placement="bottom" clickable>
-              <MDBBtn
-                floating
-                size="lg"
-                color="transparent"
-                style={styles.info}
-              >
-                {" "}
-                <MDBIcon icon="info-circle" />
-              </MDBBtn>
-              <span>{field.description}</span>
-            </MDBTooltip>
-          </>
-        )}
+const NumberFieldView = observer(
+  ({ field, displayName, editable, tabIndex }: Props<NumberField>) => {
+    return (
+      <MDBCol size="6" style={styles.largeMargin}>
+        <label style={styles.labelStyle}>
+          {displayName ? displayName : field.displayName}
+        </label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{field.description}</span>
+        </MDBTooltip>
         <input
-          type="text"
+          type={"number"}
           style={styles.inputStyle}
           value={field.value}
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
+        />
+        {FieldError(field)}
+      </MDBCol>
+    );
+  }
+);
+
+const TokenFieldView = observer(
+  ({ field, displayName, editable, colSize, tabIndex }: Props<TokenField>) => (
+    <>
+      <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
+        <label style={styles.labelStyle}>
+          {displayName ? displayName : field.displayName}
+        </label>
+        <MDBTooltip placement="bottom" clickable>
+          <MDBBtn floating size="lg" color="transparent" style={styles.info}>
+            {" "}
+            <MDBIcon icon="info-circle" />
+          </MDBBtn>
+          <span>{field.description}</span>
+        </MDBTooltip>
+        <input
+          type="number"
+          style={styles.inputStyle}
+          value={field.value}
+          disabled={editable === undefined ? false : !editable}
+          onChange={(event: any) => field.onChange(event.target.value)}
+          onBlur={field.enableAutoValidationAndValidate}
+          tabIndex={tabIndex}
         />
         {FieldError(field)}
       </MDBCol>
@@ -175,29 +184,22 @@ const TokenFieldView = observer(
 );
 
 const DurationFieldView = observer(
-  ({ field, editable }: FieldProps<DurationField>) => {
+  ({ field, displayName, editable, tabIndex }: Props<DurationField>) => {
     const onChange = (event: any) => {
-      const { name, value } = event.target;
       const duration: any = {
         days: field.days,
         hours: field.hours,
         minutes: field.minutes
       };
-
-      if (name === "days") {
-        duration["days"] = +value;
-      } else {
-        let [hours, minutes] = value.split(":");
-        duration.hours = isNaN(hours) ? 0 : +hours;
-        duration.minutes = isNaN(minutes) ? 0 : +minutes;
-      }
+      const { name, value } = event.target;
+      duration[name] = +value;
       field.onChange(
         `${duration.days}:${duration.hours}:${duration.minutes}:00`
       );
     };
 
     const DurationPart = observer(
-      (props: { name: "days" | "hoursAndMinutes" }) => (
+      (props: { name: "days" | "hours" | "minutes" }) => (
         <>
           <input
             name={props.name}
@@ -217,27 +219,23 @@ const DurationFieldView = observer(
             value={field[props.name]}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
-            type={props.name === "days" ? "number" : "time"}
+            type={"number"}
             min={0}
-            max={100}
             onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={props.name === "days" ? tabIndex + 1 : tabIndex + 2}
           />
           <div
             style={
-              props.name === "days"
+              props.name === "days" || props.name === "hours"
                 ? { paddingTop: "3px", marginRight: "-3px" }
                 : { paddingTop: "3px" }
             }
           >
             <span
-              style={
-                props.name === "days"
-                  ? { marginLeft: "-50px" }
-                  : { marginLeft: "-38px" }
-              }
+              className = {props.name === "days" ? props.name : 'hours'}
             >
               {" "}
-              {props.name === "days" ? "days" : "h"}
+              {props.name === "days" ? props.name : props.name === "hours" ? "h" : "m"}
             </span>
           </div>
         </>
@@ -246,15 +244,18 @@ const DurationFieldView = observer(
 
     return (
       <>
-        <MDBRow style={styles.optionRow}>
+        <MDBRow id="durationCol" style={styles.optionRow}>
           <MDBCol
-            size="9"
+            size="7"
             className="justify-content-center"
-            style={styles.margin}
+            id="durationLabel"
           >
-            <label htmlFor={field.displayName}>{field.displayName}</label>
+            <label htmlFor={field.displayName}>
+              {displayName ? displayName : field.displayName}
+            </label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
+                id='icon'
                 floating
                 size="lg"
                 color="transparent"
@@ -266,10 +267,11 @@ const DurationFieldView = observer(
               <span>{field.description}</span>
             </MDBTooltip>
           </MDBCol>
-          <MDBCol>
-            <MDBRow>
+          <MDBCol id="durationInputsCol">
+            <MDBRow id="durationInputsRow">
               <DurationPart name={"days"} />
-              <DurationPart name={"hoursAndMinutes"} />
+              <DurationPart name={"hours"} />
+              <DurationPart name={"minutes"} />
 
               {FieldError(field)}
             </MDBRow>
@@ -288,13 +290,15 @@ const datePickerTheme = createMuiTheme({
 });
 
 const DateTimeFieldView = observer(
-  ({ field, editable }: FieldProps<DateTimeField>) => {
+  ({ field, displayName, editable, tabIndex }: Props<DateTimeField>) => {
     const [open, onOpen] = React.useState(false);
     const disabled = editable === undefined ? false : !editable;
 
     return (
-      <MDBCol size="6" style={styles.largeMargin}>
-        <label style={styles.labelStyle}>{field.displayName}</label>
+    <MDBCol size="6" style={styles.largeMargin}>
+        <label style={styles.labelStyle}>
+          {displayName ? displayName : field.displayName}
+        </label>
         <MDBTooltip placement="bottom" clickable>
           <MDBBtn floating size="lg" color="transparent" style={styles.info}>
             {" "}
@@ -323,13 +327,14 @@ const DateTimeFieldView = observer(
               error={field.hasError}
               size={"small"}
               TextFieldComponent={() => (
-                <>
+                <div>
                   <input
                     style={styles.inputStyle}
                     placeholder="Pick a date and time..."
                     readOnly={true}
                     value={field.value ? field.value.toLocaleString() : ""}
                     disabled={disabled}
+                    tabIndex={tabIndex}
                   />
                   <MDBBtn
                     floating
@@ -355,7 +360,7 @@ const DateTimeFieldView = observer(
                   ) : (
                     <></>
                   )}
-                </>
+                </div>
               )}
             />
           </MuiPickersUtilsProvider>
@@ -367,11 +372,18 @@ const DateTimeFieldView = observer(
 );
 
 const PercentageFieldView = observer(
-  ({ field, editable }: FieldProps<PercentageField>) => {
+  ({ field, displayName, editable, tabIndex }: Props<PercentageField>) => {
+    const onInputChange = (event: any) => {
+      const value = event.target.value;
+      field.onChange(value === "" ? 0 : Number(value));
+    };
+
     return (
       <>
         <MDBCol size="6" style={styles.largeMargin}>
-          <label style={styles.labelStyle}>{field.displayName}</label>
+          <label style={styles.labelStyle}>
+            {displayName ? displayName : field.displayName}
+          </label>
           <MDBTooltip placement="bottom" clickable>
             <MDBBtn floating size="lg" color="transparent" style={styles.info}>
               {" "}
@@ -385,8 +397,9 @@ const PercentageFieldView = observer(
             style={styles.inputStyle}
             value={field.value}
             disabled={editable === undefined ? false : !editable}
-            onChange={(event: any) => field.onChange(event.target.value)}
+            onChange={onInputChange}
             onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
           />
           {FieldError(field)}
         </MDBCol>
@@ -396,14 +409,16 @@ const PercentageFieldView = observer(
 );
 
 const AddressFieldView = observer(
-  ({ field, editable, colSize }: FieldProps<AddressField>) => (
+  ({ field, displayName, editable, colSize, tabIndex }: Props<AddressField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
         {field.description === "The member's public address." ? (
           <></>
         ) : (
           <>
-            <label style={styles.labelStyle}>{field.displayName}</label>
+            <label style={styles.labelStyle}>
+              {displayName ? displayName : field.displayName}
+            </label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
                 floating
@@ -418,14 +433,20 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <input
-          style={styles.inputStyle}
-          placeholder="0x..."
-          value={field.value}
-          disabled={editable === undefined ? false : !editable}
-          onChange={e => field.onChange(e.target.value)}
-          onBlur={field.enableAutoValidationAndValidate}
-        />
+        <div style={colSize === "9" ? { display: "flex", flexDirection: "row", marginTop: '27px' } : { display: "flex", flexDirection: "row" }}>
+          <input
+            style={{...styles.inputStyle, paddingRight: "55px"}}
+            placeholder="0x..."
+            value={field.value}
+            disabled={editable === undefined ? false : !editable}
+            onChange={e => field.onChange(e.target.value)}
+            onBlur={field.enableAutoValidationAndValidate}
+            tabIndex={tabIndex}
+          />
+          <div style={{ padding: "2%", marginLeft: "-50px", width: 0 }}>
+            <EthAddressAvatar address={field.value} paddingLeft={"0"} />
+          </div>
+        </div>
         {FieldError(field)}
       </MDBCol>
     </>
@@ -437,13 +458,33 @@ export default FormField;
 const styles = {
   inputStyle: {
     border: "1px solid",
-    color: "black",
-    borderColor: "lightgray",
+    color: "#3E3F42",
+    borderColor: "#E2E5ED",
     borderRadius: "4px",
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    fontWeight: 300
+    paddingLeft: '16px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    fontSize: '14px',
+    fontWeight: 400,
+    outline: 'none',
+  },
+  stringInputStyle: {
+    border: "1px solid",
+    color: "#3E3F42",
+    borderColor: "#E2E5ED",
+    borderRadius: "4px",
+    width: "250px",
+    padding: "2%",
+    fontFamily: "inherit",
+    paddingLeft: '16px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    fontSize: '14px',
+    fontWeight: 400,
+    outline: 'none'
   },
   noPadding: {
     padding: 0
@@ -478,12 +519,12 @@ const styles = {
     marginTop: "6px"
   },
   largeMargin: {
-    marginTop: "25px"
+    marginTop: "0px"
   },
   labelStyle: {
-    color: "gray",
-    fontSize: "smaller",
-    fontWeight: 400
+    color: "#9EA0A5",
+    fontWeight: 400,
+    fontSize:'12px'
   },
   reactDatepickerWrapper: {
     paddingTop: "5px",

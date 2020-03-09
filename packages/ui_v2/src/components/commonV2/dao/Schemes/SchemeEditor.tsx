@@ -1,30 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { observer } from "mobx-react";
+import React, { useState, useEffect, FC, useRef } from "react";
+import { unstable_batchedUpdates } from "react-dom";
+import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBTooltip, MDBIcon, MDBAlert } from "mdbreact";
 import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBTooltip,
-  MDBIcon
-} from "mdbreact";
-import { SchemeType, GenesisProtocolPreset } from "@dorgtech/daocreator-lib";
+  SchemeType,
+  GenesisProtocolPreset,
+  SchemesForm,
+  AnySchemeForm,
+  GenesisProtocolForm,
+  ContributionRewardForm,
+  SchemeRegistrarForm,
+  GenericSchemeForm,
+  DurationField
+} from "@dorgtech/daocreator-lib";
 
-import AdvanceSchemeEditor from "./AdvanceSchemeEditor";
+import AdvancedEditor from "./AdvancedEditor";
 import Toggle from "./Toggle";
+import "./styles.css";
 
 interface Props {
-  form: any;
-  editable: boolean;
-  enabled?: boolean;
-  onToggle?: (toggled: boolean) => void;
+  form: SchemesForm;
   toggleCollapse: () => void;
   modal: boolean;
-  setModal: any;
-  advancedScheme: any;
+  setModal: (modal: boolean) => void;
+  loadedFromModal: boolean;
+  loadedSpeed: DAOSpeed;
+  setLoadedSpeed: (speed: DAOSpeed) => void;
 }
 
-enum DAOSpeed {
+export type FullSchemes = [ContributionRewardForm, SchemeRegistrarForm, GenericSchemeForm];
+
+export type VotingMachinePresets = GenesisProtocolForm[];
+
+export enum DAOSpeed {
   Slow,
   Medium,
   Fast
@@ -60,151 +67,300 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
   ]
 ]);
 
-function SchemeEditor(props: Props) {
-  const { form, toggleCollapse, modal, setModal, advancedScheme } = props;
+const initialVotingMachines = () => {
+  let vms = [];
+  let i = 0;
+  for (i; i < 3; i++) {
+    const schemePresetMap = schemeSpeeds.get(DAOSpeed.Medium);
+
+    if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
+
+    const preset = schemePresetMap.get(i);
+    if (preset === undefined) throw Error("Preset not found");
+
+    vms.push(
+      new GenesisProtocolForm({
+        preset
+      })
+    );
+  }
+  return vms;
+};
+
+const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loadedFromModal, loadedSpeed, setLoadedSpeed }) => {
+  /*
+  / State
+  */
+  const [warnings, setWarnings] = useState<string[]>([]);
 
   const [decisionSpeed, setDecisionSpeed] = useState<DAOSpeed>(DAOSpeed.Medium);
-  const [rewardSuccess, setRewardSuccess] = useState<boolean>(false);
-  const [rewardAndPenVoters, setRewardAndPenVoters] = useState<boolean>(false);
-  const [autobet, setAutobet] = useState<boolean>(false);
-  const [toggleSpeed, setToggleSpeed] = useState<boolean>(true);
+  const [disabledDecisionSpeed, setDisabledDecisionSpeed] = useState(false);
 
-  const { advanceMode, setAdvanceMode } = advancedScheme;
+  // Toggles
+  const [rewardSuccess, setRewardSuccess] = useState(true);
+  const [rewardAndPenVoters, setRewardAndPenVoters] = useState(true);
+  const [autobet, setAutobet] = useState(true);
 
-  // Updates voting machines on toggle
-  const updateVotingMachine = () => {
-    form.$.forEach(checkDefaultChange);
-    form.$.forEach(getVotingMachinePreset);
+  const [fullSchemes, setFullSchemes] = useState<FullSchemes>([
+    new ContributionRewardForm(),
+    new SchemeRegistrarForm(),
+    new GenericSchemeForm()
+  ]);
+
+  const [presetVotingMachines, setPresetVotingMachines] = useState<VotingMachinePresets>(initialVotingMachines);
+
+  const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
+    SchemeType.ContributionReward,
+    SchemeType.SchemeRegistrar
+  ]);
+
+  // Ref to stop force switching toggles from updating vm
+  const updatingVotingMachine = useRef(false);
+  const loadingSpeed = useRef(false);
+
+  /*
+   * Hooks
+   */
+
+  useEffect(() => {
+    if (!loadedFromModal) return;
+    if (form.$.length === 0) return;
+
+    setDecisionSpeed(loadedSpeed);
+    updatePresets(loadedSpeed);
+
+    loadingSpeed.current = true;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedFromModal]);
+
+  useEffect(() => {
+    if (!loadingSpeed.current) return;
+
+    const containsType = (type: SchemeType) => {
+      return form.$.some((scheme: AnySchemeForm) => scheme.type === type);
+    };
+    const activeSchemes = [
+      containsType(SchemeType.ContributionReward),
+      containsType(SchemeType.SchemeRegistrar),
+      containsType(SchemeType.GenericScheme)
+    ];
+
+    updateSchemes(form.$, activeSchemes);
+    loadingSpeed.current = false;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presetVotingMachines]);
+
+  const updatePresets = (speed = decisionSpeed) => {
+    const newPresetVotingMachines: VotingMachinePresets = [];
+
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm) => {
+      // Gets voting machine preset using the decisionSpeed and scheme type
+      const schemePresetMap = schemeSpeeds.get(speed);
+
+      if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
+
+      const preset = schemePresetMap.get(scheme.type);
+      if (preset === undefined) throw Error("Preset not found");
+
+      scheme.$.votingMachine.preset = preset;
+      newPresetVotingMachines.push(new GenesisProtocolForm({ preset }));
+
+      return scheme;
+    });
+
+    unstable_batchedUpdates(() => {
+      setFullSchemes(newFullSchemes as FullSchemes);
+      setPresetVotingMachines(newPresetVotingMachines);
+    });
   };
-  // TODO: This below will be refactored, the logic below is to grey out speed decision buttons,
-  // If any of the three *periodLimit parameters are changed from the default setting, then these options should be greyed out
-  const checkDefaultChange = (scheme: any) => {
-    const {
-      queuedVotePeriodLimit,
-      preBoostedVotePeriodLimit,
-      boostedVotePeriodLimit
-    } = scheme.values.votingMachine.values;
-    switch (decisionSpeed) {
-      case 0:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "30:0:0:0" ||
-              preBoostedVotePeriodLimit !== "1:0:0:0" ||
-              boostedVotePeriodLimit !== "4:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
-      case 1:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
-      case 2:
-        switch (scheme.displayName) {
-          case "ContributionReward":
-            if (
-              queuedVotePeriodLimit !== "30:0:0:0" ||
-              preBoostedVotePeriodLimit !== "1:0:0:0" ||
-              boostedVotePeriodLimit !== "4:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-          case "Scheme Registrar":
-            if (
-              queuedVotePeriodLimit !== "60:0:0:0" ||
-              preBoostedVotePeriodLimit !== "2:0:0:0" ||
-              boostedVotePeriodLimit !== "8:0:0:0"
-            ) {
-              // disable buttons
-              setToggleSpeed(false);
-            }
-            break;
-        }
-        break;
+
+  // Sets vm presets when the speed is changed
+  useEffect(() => {
+    updatePresets();
+    setLoadedSpeed(decisionSpeed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decisionSpeed]);
+
+  // Updates form when vm changes
+  useEffect(() => {
+    const discardPreset = (scheme: AnySchemeForm) => {
+      const schemePresetMap = schemeSpeeds.get(decisionSpeed);
+
+      if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
+
+      const preset = schemePresetMap.get(scheme.type);
+      if (preset === undefined) throw Error(`Preset: ${scheme.type} not found`);
+
+      const presetVM = new GenesisProtocolForm({ preset });
+
+      if (Object.entries(presetVM.values).toString() === Object.entries(scheme.$.votingMachine.values).toString()) return false;
+      return true;
+    };
+
+    const newForm = new SchemesForm();
+    activeSchemeTypes.map((activeSchemeType: SchemeType, index) => {
+      newForm.$.push(fullSchemes[activeSchemeType]);
+
+      if (discardPreset(fullSchemes[activeSchemeType])) newForm.$[index].$.votingMachine.preset = undefined;
+
+      return activeSchemeType;
+    });
+    form.$ = newForm.$;
+
+    return () => {
+      updatingVotingMachine.current = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fullSchemes]);
+
+  // Updates vms when toggles change
+  useEffect(() => {
+    if (updatingVotingMachine.current) return;
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      rewardSuccess
+        ? (scheme.$.votingMachine.$.proposingRepReward.value = presetVotingMachines[index].$.proposingRepReward.value)
+        : (scheme.$.votingMachine.$.proposingRepReward.value = "0");
+      return scheme;
+    });
+
+    setFullSchemes(newFullSchemes as FullSchemes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardSuccess, presetVotingMachines]);
+  useEffect(() => {
+    if (updatingVotingMachine.current) return;
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      rewardAndPenVoters
+        ? (scheme.$.votingMachine.$.votersReputationLossRatio.value =
+            presetVotingMachines[index].$.votersReputationLossRatio.value)
+        : (scheme.$.votingMachine.$.votersReputationLossRatio.value = 0);
+      return scheme;
+    });
+    setFullSchemes(newFullSchemes as FullSchemes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardAndPenVoters, presetVotingMachines]);
+  useEffect(() => {
+    if (updatingVotingMachine.current) return;
+    const newFullSchemes = fullSchemes.map((scheme: AnySchemeForm, index: number) => {
+      if (autobet) {
+        scheme.$.votingMachine.$.minimumDaoBounty.value = presetVotingMachines[index].$.minimumDaoBounty.value;
+        scheme.$.votingMachine.$.daoBountyConst.value = presetVotingMachines[index].$.daoBountyConst.value;
+      } else {
+        scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+        scheme.$.votingMachine.$.daoBountyConst.value = "1";
+      }
+      return scheme;
+    });
+    setFullSchemes(newFullSchemes as FullSchemes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autobet, presetVotingMachines]);
+
+  /*
+   * Methods
+   */
+
+  const disableSpeed = () => {
+    setWarnings(["Your configuration will be overwritten by selecting a new speed"]);
+    setDisabledDecisionSpeed(true);
+  };
+
+  const enableSpeed = (speed?: DAOSpeed) => {
+    setWarnings([]);
+    setDisabledDecisionSpeed(false);
+
+    if (speed !== undefined) setDecisionSpeed(speed);
+  };
+
+  const checkSpeed = (scheme: AnySchemeForm, schemeType: SchemeType) => {
+    const getSpeedValues = (votingMachine: GenesisProtocolForm) => {
+      const { queuedVotePeriodLimit, preBoostedVotePeriodLimit, boostedVotePeriodLimit, quietEndingPeriod } = votingMachine.$;
+
+      return [queuedVotePeriodLimit, preBoostedVotePeriodLimit, boostedVotePeriodLimit, quietEndingPeriod];
+    };
+
+    const schemeValues = getSpeedValues(scheme.$.votingMachine);
+    const presetValues = getSpeedValues(presetVotingMachines[schemeType]);
+
+    return schemeValues.some((value: DurationField, index) => {
+      return value.toSeconds() !== presetValues[index].toSeconds();
+    });
+  };
+
+  const updateSchemes = (advancedSchemes: AnySchemeForm[], activeSchemes: boolean[]) => {
+    updatingVotingMachine.current = true;
+
+    let newActiveSchemeTypes: SchemeType[] = [];
+    activeSchemes.map((active: boolean, schemeType: number) => {
+      if (active) newActiveSchemeTypes.push(schemeType);
+      return active;
+    });
+
+    const newSchemesForm = new SchemesForm();
+    fullSchemes.map(scheme => newSchemesForm.$.push(scheme));
+
+    let toGrey = false;
+
+    // Does not update inactive schemes because they are not validated
+    advancedSchemes.map((scheme, index: number) => {
+      newSchemesForm.$[scheme.type] = scheme as any;
+
+      if (checkSpeed(scheme, index)) {
+        disableSpeed();
+        toGrey = true;
+      }
+
+      // Currently only updates toggles to reflect advanced changes of first scheme
+      if (index !== 0) return scheme;
+      // Update toggles
+      const { proposingRepReward, votersReputationLossRatio, minimumDaoBounty, daoBountyConst } = scheme.$.votingMachine.values;
+
+      setRewardSuccess(+proposingRepReward > 0);
+      setRewardAndPenVoters(votersReputationLossRatio > 0);
+      setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
+
+      return scheme;
+    });
+
+    // Changes button styling without changing form
+    if (!toGrey) enableSpeed();
+
+    unstable_batchedUpdates(() => {
+      setActiveSchemeTypes(newActiveSchemeTypes);
+      setFullSchemes(newSchemesForm.$ as FullSchemes);
+    });
+  };
+
+  const resetForm = () => {
+    // Leaving toggles untouched
+    if (decisionSpeed !== DAOSpeed.Medium) {
+      setDecisionSpeed(DAOSpeed.Medium);
+      enableSpeed(DAOSpeed.Medium);
+      return;
     }
+    // decisionSpeed effects because they won't trigger if speed doesn't change
+    updatePresets();
+    setLoadedSpeed(DAOSpeed.Medium);
+    enableSpeed(DAOSpeed.Medium);
   };
-  // Not using Scheme interface because $ does not exist on it
-  const getVotingMachinePreset = (scheme: any) => {
-    // Get voting machine preset using the decisionSpeed and scheme type
-    const schemePresetMap = schemeSpeeds.get(decisionSpeed);
-    let preset;
-    if (schemePresetMap) preset = schemePresetMap.get(scheme.type);
-    else throw Error("Unimplemented Scheme Speed Configuration");
-
-    // Initialize the scheme's voting machine to the Genesis Protocol Preset
-    const votingMachine = scheme.$.votingMachine;
-    votingMachine.preset = preset;
-    if (advanceMode) {
-      const {
-        proposingRepReward,
-        votersReputationLossRatio,
-        minimumDaoBounty
-      } = votingMachine.$;
-      setRewardSuccess(Number(proposingRepReward.value) > 0);
-      setRewardAndPenVoters(Number(votersReputationLossRatio.value) > 0);
-      setAutobet(Number(minimumDaoBounty.value) > 0);
-    }
-    // Apply the effects of the toggles
-    if (!rewardSuccess) votingMachine.$.proposingRepReward.value = "0";
-    if (!rewardAndPenVoters)
-      votingMachine.$.votersReputationLossRatio.value = "0";
-    if (!autobet) votingMachine.$.minimumDaoBounty.value = "0";
-  };
-
-  const dependeciesList = [
-    decisionSpeed,
-    rewardSuccess,
-    rewardAndPenVoters,
-    autobet,
-    advanceMode
-  ];
-  // Updates voting machines on toggle
-  useEffect(updateVotingMachine, dependeciesList);
 
   const handleClick = (e: any) => {
-    setDecisionSpeed(parseInt(e.target.value));
+    const newSpeed = parseInt(e.target.value);
+
+    // decisionSpeed effects because they won't trigger if speed doesn't change
+    if (newSpeed === decisionSpeed) {
+      updatePresets();
+      setLoadedSpeed(DAOSpeed.Medium);
+    }
+    enableSpeed(newSpeed);
   };
 
-  const setConfiguration = () => {
-    updateVotingMachine();
-    toggleCollapse();
-  };
+  const buttonStyle = (speed: DAOSpeed) =>
+    disabledDecisionSpeed
+      ? styles.buttonColorInactive
+      : decisionSpeed === speed
+      ? styles.buttonColorActive
+      : styles.buttonColor;
 
   return (
     <>
@@ -212,11 +368,13 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol md="4"></MDBCol>
           <MDBCol md="4" className="offset-md-4">
-            <AdvanceSchemeEditor
+            <AdvancedEditor
               form={form}
+              defaultVMs={presetVotingMachines}
+              updateSchemes={updateSchemes}
+              resetForm={resetForm}
               setModal={setModal}
               modal={modal}
-              setAdvanceMode={setAdvanceMode}
             />
           </MDBCol>
         </MDBRow>
@@ -231,72 +389,64 @@ function SchemeEditor(props: Props) {
         <MDBRow>
           <MDBCol>
             <p className="text-left" style={styles.subtitle}>
-              Your organization uses a reputation-weighted voting system to make
-              decisions.
+              Your organization uses a reputation-weighted voting system to make decisions.
             </p>
           </MDBCol>
         </MDBRow>
 
         <MDBRow style={styles.box}>
+          <MDBContainer>
+            {warnings.map((warning, index) => (
+              <div key={index} style={{ margin: "0 1rem" }}>
+                <MDBAlert color="warning" dismiss>
+                  <MDBIcon className="red-text mr-2" icon="exclamation-triangle" />
+                  <span style={{ marginRight: "0.5rem" }}>{warning}</span>
+                </MDBAlert>
+              </div>
+            ))}
+          </MDBContainer>
           <MDBCol size="6">
             <MDBRow>
               <span style={styles.marginText} className="text-left">
                 Decision making
               </span>
               <MDBTooltip placement="bottom" clickable>
-                <MDBBtn
-                  floating
-                  size="lg"
-                  color="transparent"
-                  style={styles.info}
-                >
+                <MDBBtn floating size="lg" color="transparent" style={styles.info}>
                   <MDBIcon icon="info-circle" />
                 </MDBBtn>
                 <span>How quickly your organization processes proposals</span>
               </MDBTooltip>
             </MDBRow>
           </MDBCol>
-          <MDBCol>
+          <MDBCol id="col">
             <MDBRow style={styles.alignEnd}>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Fast}
-                style={
-                  !(decisionSpeed === DAOSpeed.Fast)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
-                onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
-              >
-                Fast
-              </button>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Medium}
-                style={
-                  !(decisionSpeed === DAOSpeed.Medium)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
-                onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
-              >
-                Medium
-              </button>
-              <button
-                name="decisonSpeed"
-                value={DAOSpeed.Slow}
-                style={
-                  !(decisionSpeed === DAOSpeed.Slow)
-                    ? styles.buttonColor
-                    : styles.buttonColorActive
-                }
-                onClick={handleClick}
-                disabled={advanceMode && !toggleSpeed}
-              >
-                Slow
-              </button>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Fast} style={buttonStyle(DAOSpeed.Fast)} onClick={handleClick}>
+                  Fast
+                </button>
+                <span>
+                  <li><b>Distribute Assets: 1-7 days</b></li>
+                  <li><b>Modify DAO: 1-7 days</b></li>
+                </span>
+              </MDBTooltip>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Medium} style={buttonStyle(DAOSpeed.Medium)} onClick={handleClick}>
+                  Medium
+                </button>
+                <span>
+                  <li><b>Distribute Assets: 1-7 days</b></li>
+                  <li><b>Modify DAO: 4-30 days</b></li>
+                </span>
+              </MDBTooltip>
+              <MDBTooltip domElement tag="span" placement="top">
+                <button name="decisonSpeed" value={DAOSpeed.Slow} style={buttonStyle(DAOSpeed.Slow)} onClick={handleClick}>
+                  Slow
+                </button>
+                <span>
+                    <li><b>Distribute Assets: 4-30 days</b></li>
+                    <li><b>Modify DAO: 8 - 60 days</b></li>
+                </span>
+              </MDBTooltip>
             </MDBRow>
           </MDBCol>
         </MDBRow>
@@ -308,54 +458,36 @@ function SchemeEditor(props: Props) {
           toggle={() => {
             setRewardSuccess(!rewardSuccess);
           }}
-          disabled={advanceMode}
           checked={rewardSuccess}
         />
 
         <Toggle
           id={"rewardAndPenVoters"}
           text={"Reward correct voters and penalize incorrect voters"}
-          tooltip={
-            "Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"
-          }
+          tooltip={"Voters on the winning side of proposals gain voting power, voters on the losing side lose voting power"}
           toggle={() => {
             setRewardAndPenVoters(!rewardAndPenVoters);
           }}
-          disabled={advanceMode}
           checked={rewardAndPenVoters}
         />
 
         <Toggle
           id={"autobet"}
-          text={"Auto-bet against every proposal to incentivise curation"}
-          tooltip={
-            "The organization bets against every proposal to incentivize the GEN curation network"
-          }
+          text={"Auto-incentivize proposal curation"}
+          tooltip={"The organization bets against every proposal to incentivize the GEN curation network"}
           toggle={() => setAutobet(!autobet)}
-          disabled={advanceMode}
           checked={autobet}
         />
       </MDBContainer>
 
-      <button onClick={setConfiguration} style={styles.configButton}>
+      <button onClick={toggleCollapse} style={styles.configButton}>
         Set Configuration
       </button>
     </>
   );
-}
+};
 
 const styles = {
-  card: {
-    minWidth: 250,
-    maxWidth: 420
-  },
-  schemeIcon: {
-    width: "100%",
-    height: "100%"
-  },
-  schemeDescription: {
-    marginBottom: 15
-  },
   column: {
     alignItems: "center"
   },
@@ -381,6 +513,16 @@ const styles = {
     height: "38px",
     fontSize: "14px",
     backgroundColor: "#1976d2",
+    margin: "auto"
+  },
+  buttonColorInactive: {
+    color: "black",
+    borderRadius: "0.25rem",
+    fontWeight: 300,
+    width: "28%",
+    height: "38px",
+    fontSize: "14px",
+    backgroundColor: "gray",
     margin: "auto"
   },
   info: {
@@ -413,15 +555,6 @@ const styles = {
     fontSize: "smaller",
     marginBottom: "20px"
   },
-  modalButton: {
-    width: "174px",
-    height: "42px",
-    padding: "4px",
-    fontSize: "small",
-    border: "1px solid lightgray",
-    boxShadow: "none",
-    borderRadius: "4px"
-  },
   title: {
     fontWeight: 600,
     fontSize: "17px"
@@ -439,4 +572,4 @@ const styles = {
   }
 };
 
-export default observer(SchemeEditor);
+export default SchemeEditor;

@@ -12,7 +12,8 @@ import {
   DialogContentText,
   DialogContent,
   DialogActions,
-  Button
+  Button,
+  Typography
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Settings";
 import GenesisProtocolEditor from "./GenesisProtocolEditor";
@@ -135,6 +136,10 @@ export default class GenesisProtocolPresetEditor extends React.Component<
             <GenesisProtocolEditor form={form} editable={true} />
           </DialogContent>
           <DialogActions>
+            {form.showFormError ?
+              <Typography color={"error"}>{form.error}</Typography> :
+              <></>
+            }
             <Button onClick={onClose}>Save</Button>
           </DialogActions>
         </Dialog>

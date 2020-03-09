@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
-import { MDBRow, MDBCol } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
+import './styles.css'
 
-interface IProps {
+interface Props {
   type: number;
   active: boolean;
   done: boolean;
@@ -12,19 +13,17 @@ interface IProps {
 enum STEP {
   Waiting,
   Start,
-  // Sign,
-  // View, // View on Etherscan should display after tx is signed but we are not currently handling this TODO (?)
   Confirmed,
   Failed
 }
 
-export const OrganisationLine: FC<IProps> = ({
+export const OrganizationLine: FC<Props> = ({
   type,
   active,
   done,
   failed,
   logLines
-}: IProps) => {
+}) => {
   const [step, setStep] = useState<STEP>(STEP.Waiting);
   const [lastLog, setLastLog] = useState<string>(
     type === 0 ? "Start Installation" : "Waiting"
@@ -39,7 +38,6 @@ export const OrganisationLine: FC<IProps> = ({
 
     if (failed) {
       if (step === STEP.Failed) return;
-      console.log("settin failed");
       setStep(STEP.Failed);
       return;
     }
@@ -58,6 +56,17 @@ export const OrganisationLine: FC<IProps> = ({
     if (done || (!active && !failed)) return;
     if (logLines.length > 0) setLastLog(logLines[logLines.length - 1]);
   }, [logLines, active, done, failed]);
+
+  const StepName: FC = () => {
+    const stepName =
+      type === 0 ? "Create Organization" : "Configure Organization";
+
+    return step !== STEP.Waiting ? (
+      <div style={{ fontWeight: "bold" }}>{stepName}</div>
+    ) : (
+      <div>{stepName}</div>
+    );
+  };
 
   const Output: FC = () => {
     let text = undefined;
@@ -87,18 +96,37 @@ export const OrganisationLine: FC<IProps> = ({
   };
 
   return (
-    <MDBRow>
-      <MDBCol size="2">ICON</MDBCol>
-      <MDBCol size="5">
-        <div>
-          {type === 0 ? "Create Organisation" : "Configure Organisation"}
-        </div>
+    <MDBRow className="my-1">
+      <MDBCol size="1" id="iconCol">
+        {/* TODO 2x is a little big and default is small */}
+        <MDBIcon
+          className="blue-text"
+          size="lg"
+          icon={type === 0 ? "city" : "sliders-h"}
+        />
       </MDBCol>
-      <MDBCol size="5">
+      <MDBCol size="4">
+        <StepName />
+      </MDBCol>
+      <MDBCol size="6" id="outputCol">
         <Output />
       </MDBCol>
+      <div>
+        {step === STEP.Start && (
+          <div
+            className="spinner-border text-primary"
+            style={{ width: "20px", height: "20px" }}
+          />
+        )}
+        {step === STEP.Confirmed && (
+          <MDBIcon className="blue-text fas" size="lg" icon="check-circle" />
+        )}
+        {step === STEP.Failed && (
+          <MDBIcon className="red-text fas" size="lg" icon="times-circle" />
+        )}
+      </div>
     </MDBRow>
   );
 };
 
-export default OrganisationLine;
+export default OrganizationLine;

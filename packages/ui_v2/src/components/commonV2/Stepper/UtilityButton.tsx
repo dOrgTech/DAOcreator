@@ -1,25 +1,22 @@
 import React from "react";
+import './styles.css';
 
 interface Props {
   title: string;
   openModal: (i: boolean | string) => void;
-  advanced?: any;
+  id?: string | undefined
 }
 export function UtilityButton(props: Props) {
-  const { title, openModal, advanced } = props;
+  const { title, openModal, id } = props;
   const handledCallback = () => {
     if (title === "Import CSV") {
       openModal(title);
     } else {
-      const { advanceMode, form } = advanced; // Removed _, from advanced destructure (?)
-      if (!advanceMode) {
-        form.$ = [];
-      }
       openModal(true);
     }
   };
   return (
-    <button style={styles.button} onClick={handledCallback}>
+    <button style={styles.button} onClick={handledCallback} id={id || "utility"}>
       {title}
     </button>
   );

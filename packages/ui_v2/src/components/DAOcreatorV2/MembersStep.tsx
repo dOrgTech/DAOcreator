@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC } from "react";
 import { MembersForm } from "@dorgtech/daocreator-lib";
 import { MDBRow, MDBCol, MDBBox, MDBContainer } from "mdbreact";
 
@@ -6,46 +6,28 @@ import MembersEditor from "../commonV2/dao/Members/MembersEditor";
 
 interface Props {
   form: MembersForm;
-  getDAOTokenSymbol: () => string;
+  loadedFromModal: boolean;
   toggleCollapse: () => void;
-  address: string;
-  step: number;
-  distributionState: any;
 }
 
-function MembersStep(props: Props) {
-  const {
-    form,
-    getDAOTokenSymbol,
-    toggleCollapse,
-    address,
-    step,
-    distributionState
-  } = props;
-  return (
-    <MDBContainer style={styles.padding}>
-      <MDBBox>
-        <MembersEditor
-          form={form}
-          getDAOTokenSymbol={getDAOTokenSymbol}
-          address={address}
-          step={step}
-          distributionState={distributionState}
-        />
-        <MDBRow style={styles.padding}>
-          <MDBCol>
-            <button
-              style={styles.setDescriptionButton}
-              onClick={toggleCollapse}
-            >
-              Set Members
-            </button>
-          </MDBCol>
-        </MDBRow>
-      </MDBBox>
-    </MDBContainer>
-  );
-}
+const MembersStep: FC<Props> = ({
+  form,
+  toggleCollapse,
+  loadedFromModal
+}) => (
+  <MDBContainer style={styles.padding}>
+    <MDBBox>
+      <MembersEditor form={form} loadedFromModal={loadedFromModal} />
+      <MDBRow style={styles.padding}>
+        <MDBCol>
+          <button style={styles.setDescriptionButton} onClick={toggleCollapse}>
+            Set Members
+          </button>
+        </MDBCol>
+      </MDBRow>
+    </MDBBox>
+  </MDBContainer>
+);
 
 const styles = {
   setDescriptionButton: {
@@ -56,7 +38,7 @@ const styles = {
     color: "white",
     width: "145px",
     padding: "7px",
-    marginBottom: "11px",
+    marginTop: "20px",
     fontSize: "smaller"
   },
   padding: {

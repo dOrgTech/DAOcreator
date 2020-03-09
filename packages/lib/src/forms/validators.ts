@@ -25,8 +25,7 @@ export const validAddress: Validator<string> = value => {
 };
 
 export const validTokenSymbol: Validator<string> = value => {
-  const error =
-    "Token names must be all capitol letters and less than 4 characters.";
+  const error = "Must be all caps and 4 characters or less";
   value = value.trim();
 
   if (value.length > 4 || !/^[A-Z]+$/.test(value)) {
@@ -133,34 +132,79 @@ export const futureDate: Validator<Date | undefined> = value => {
   return null;
 };
 
-export const greaterThan = (bound: number) => (value: string) => {
+export const greaterThan = (bound: number) => (value: string | number) => {
   const error = `Number must be greater than ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) > bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value > bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) > bound) {
+      return null;
+    }
   }
 
   return error;
 };
 
-export const greaterThanOrEqual = (bound: number) => (value: string) => {
+export const greaterThanOrEqual = (bound: number) => (
+  value: string | number
+) => {
   const error = `Number must be greater than or equal to ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) >= bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value >= bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) >= bound) {
+      return null;
+    }
   }
 
   return error;
 };
 
-export const lessThanOrEqual = (bound: number) => (value: string) => {
+export const lessThanOrEqual = (bound: number) => (value: string | number) => {
   const error = `Number must be less than or equal to ${bound}.`;
-  value = value.trim();
 
-  if (validNumber(value) === null && Number(value) <= bound) {
-    return null;
+  if (typeof value === "number") {
+    if (value >= bound) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null && Number(value) <= bound) {
+      return null;
+    }
+  }
+
+  return error;
+};
+
+export const minMaxInclusive = (min: number, max: number) => (value: string | number) => {
+  const error = `Number must be between ${min} and ${max}.`;
+
+  if (typeof value === "number") {
+    if (value >= min && value <= max) {
+      return null;
+    }
+  } else {
+    value = value.trim();
+
+    if (validNumber(value) === null) {
+      const number = Number(value);
+
+      if (number >= min && number <= max) {
+        return null;
+      }
+    }
   }
 
   return error;

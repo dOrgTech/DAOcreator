@@ -1,40 +1,60 @@
-import React from "react";
+import React, { Fragment, FC } from "react";
 import { MemberForm } from "@dorgtech/daocreator-lib";
-import { MDBRow, MDBContainer, MDBTooltip, MDBBtn, MDBIcon } from "mdbreact";
+import {
+  MDBRow,
+  MDBContainer,
+  MDBTooltip,
+  MDBBtn,
+  MDBIcon,
+  MDBCol
+} from "mdbreact";
 
 import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
 import { truncateString } from "../../../utils";
 
-export const MembersTable = ({
-  membersForm,
-  editing,
-  editedMemberForm,
-  onEdit,
-  onDelete,
-  selectEdit,
-  tokenDistribution,
-  getDAOTokenSymbol
-}: {
+interface Props {
   membersForm: any;
   editing: number;
   editedMemberForm: MemberForm;
   onEdit: any;
   onDelete: any;
   selectEdit: any;
+  cancelEdit: any;
   tokenDistribution: boolean;
   getDAOTokenSymbol: () => string;
+}
+
+interface RowProps {
+  memberForm: MemberForm;
+  index: number;
+}
+
+export const MembersTable: FC<Props> = ({
+  membersForm,
+  editing,
+  editedMemberForm,
+  onEdit,
+  onDelete,
+  selectEdit,
+  cancelEdit,
+  tokenDistribution,
+  getDAOTokenSymbol
 }) => {
-  const TableRows = (memberForm: MemberForm, index: number) => {
+  const Row: FC<RowProps> = ({ memberForm, index }) => {
+    const lineEdit = editing === index;
+
     return (
-      <tr key={index} style={styles.borderCell}>
-        <td style={styles.avatarCell}>
+      <MDBRow
+        style={(styles.borderCell, { borderBottom: "1px solid lightgray" })}
+      >
+        <MDBCol id="addressAvatar" size="2" style={styles.avatarCell}>
           <EthAddressAvatar address={memberForm.values.address} />
-        </td>
-        <td style={styles.borderCell}>
-          <div style={{ marginTop: "5px", marginLeft: "-20px" }}>
+        </MDBCol>
+        <MDBCol size="2" style={styles.borderCell}>
+          <div id="addressHex" style={{ marginTop: "5px", marginLeft: "-20px" }}>
             <MDBTooltip domElement>
-              <div //There is probably a better MDBReact component for this
+              <div
                 onClick={() => {
                   navigator.clipboard.writeText(memberForm.values.address);
                 }}
@@ -45,7 +65,7 @@ export const MembersTable = ({
               >
                 {truncateString(memberForm.values.address, 6, 4)}
               </div>
-              <div>Copy</div>
+              <div>Click to copy</div>
             </MDBTooltip>
             <MDBBtn
               onClick={() =>
@@ -59,13 +79,9 @@ export const MembersTable = ({
               style={styles.link}
             ></MDBBtn>
           </div>
-        </td>
-        <td style={styles.borderCell}>
-          {editing !== index ? (
-            <div style={{ marginTop: "5px" }}>
-              {memberForm.values.reputation}
-            </div>
-          ) : (
+        </MDBCol>
+        <MDBCol size={tokenDistribution ? "3" : "6"} id="reputationValue"  style={styles.borderCell}>
+          {lineEdit ? (
             <div
               style={{ marginLeft: "-20px" }}
               onKeyDown={(event: any) => {
@@ -75,16 +91,19 @@ export const MembersTable = ({
               <FormField
                 field={editedMemberForm.$.reputation}
                 editable={true}
-                colSize={12}
+                colSize={"12"}
+                tabIndex={1}
               />
             </div>
+          ) : (
+            <div style={{ marginTop: "5px" }}>
+              {memberForm.values.reputation}
+            </div>
           )}
-        </td>
-        {tokenDistribution ? (
-          <td style={styles.borderCell}>
-            {editing !== index ? (
-              <div style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
-            ) : (
+        </MDBCol>
+        {tokenDistribution && (
+          <MDBCol size="3" id="tokenValueCol" style={styles.borderCell}>
+            {lineEdit ? (
               <div
                 style={{ marginLeft: "-20px" }}
                 onKeyDown={(event: any) => {
@@ -94,88 +113,109 @@ export const MembersTable = ({
                 <FormField
                   field={editedMemberForm.$.tokens}
                   editable={true}
-                  colSize={12}
+                  colSize={"12"}
+                  tabIndex={2}
                 />
               </div>
+            ) : (
+              <div id="tokenValue"style={{ marginTop: "5px" }}>{memberForm.values.tokens}</div>
             )}
-          </td>
-        ) : (
-          <td></td>
+          </MDBCol>
         )}
-        <td style={styles.borderCell}>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
-              editing !== index ? selectEdit(index) : onEdit(index);
+              lineEdit ? onEdit(index) : selectEdit(index);
             }}
             style={{ paddingTop: "5px" }}
+            id="editCol"
           >
-            <MDBIcon icon="pen" className="blue-text"></MDBIcon>
+            {lineEdit ? (
+              <MDBIcon icon="check" className="blue-text"></MDBIcon>
+            ) : (
+              <img src="icons/pencil.svg" alt="menu icon" />
+            )}
           </div>
-        </td>
-        <td style={styles.borderCell}>
+        </MDBCol>
+        <MDBCol size="1" style={styles.borderCell}>
           <div
             onClick={() => {
-              onDelete(index);
+              lineEdit ? cancelEdit() : onDelete(index);
             }}
             style={{ paddingTop: "5px" }}
+            id="editCol"
           >
-            <MDBIcon icon="minus" className="red-text"></MDBIcon>
+            {lineEdit ? (
+              <MDBIcon icon="times" className="red-text"></MDBIcon>
+            ) : (
+              <MDBIcon icon="minus" className="red-text"></MDBIcon>
+            )}
           </div>
-        </td>
-      </tr>
+        </MDBCol>
+      </MDBRow>
     );
   };
-  return membersForm.$.length > 0 ? (
-    <MDBContainer>
-      <MDBRow style={styles.tableWidth}>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={styles.titles}> MEMBERS</th>
-                <th></th>
-                <th style={styles.titles}>REPUTATION</th>
-                {tokenDistribution ? (
-                  <th style={styles.titles}>{getDAOTokenSymbol()} TOKEN</th>
-                ) : (
-                  <th></th>
-                )}
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
 
-            <tbody>{membersForm.$.map(TableRows)}</tbody>
-          </table>
-        </div>
-      </MDBRow>
+  if (membersForm.$.length === 0) return <Fragment></Fragment>;
+
+  return (
+    <MDBContainer>
+      <div style={{ padding: "0 5px" }}>
+        <MDBRow style={styles.tableWidth}>
+          <MDBCol size="4" style={styles.titles}>
+            MEMBERS
+          </MDBCol>
+          <MDBCol size={tokenDistribution ? "3" : "6"} id="reputationTitle">
+            REPUTATION
+          </MDBCol>
+
+          {tokenDistribution && (
+            <MDBCol size="2" id="tokenName">
+              {getDAOTokenSymbol()} TOKEN
+            </MDBCol>
+          )}
+          <MDBCol size="2" style={styles.titles}></MDBCol>
+        </MDBRow>
+
+        {membersForm.$.map((memberForm: MemberForm, index: number) => (
+          <Row key={index} memberForm={memberForm} index={index} />
+        ))}
+      </div>
     </MDBContainer>
-  ) : null;
+  );
 };
 
 const styles = {
   tableWidth: {
     width: "-webkit-fill-available",
     marginLeft: "-10.5px",
-    marginRight: "-11.5px"
+    marginRight: "-11.5px",
+    borderBottom: "0.5px solid lightgray",
+    borderTop: "0.5px lightgray",
+    padding: "5px"
+  },
+  titles: {
+    fontSize: "13px",
+    color: "gray",
+    padding: "10px 0"
   },
   borderCell: {
-    borderBottom: "1px solid lightgray"
+    padding: "5px 0",
+    paddingTop: "7px",
+    paddingRight: '1px',
+    paddingLeft: '1px'
   },
   addressCell: {
-    borderBottom: "1px solid lightgray",
-    marginLeft: "-5px"
+    marginLeft: "-5px",
+    padding: "5px 0"
   },
   avatarCell: {
-    borderBottom: "1px solid lightgray",
-    width: "20px"
+    width: "20px",
+    padding: "5px 0",
+    paddingTop: "7px"
   },
   noPadding: {
     padding: 0
-  },
-  titles: {
-    fontSize: "12px",
-    color: "gray"
   },
   link: {
     backgroundColor: "transparent !important",
