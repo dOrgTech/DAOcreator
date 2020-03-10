@@ -41,7 +41,7 @@ const InstallStep: FC<Props> = ({ migrationStates }: Props) => {
                 </div>
                 <div>Click to copy</div>
               </MDBTooltip>
-              to avoid losing access to it
+              to avoid losing it
             </MDBAlert>
           ))}
         </MDBContainer>

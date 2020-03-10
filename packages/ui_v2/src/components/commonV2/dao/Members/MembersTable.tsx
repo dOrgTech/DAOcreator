@@ -129,7 +129,7 @@ export const MembersTable: FC<Props> = ({
             onClick={() => {
               lineEdit ? onEdit(index) : selectEdit(index);
             }}
-            style={{ paddingTop: "5px" }}
+            style={styles.editCol}
             id="editCol"
           >
             {lineEdit ? (
@@ -144,7 +144,7 @@ export const MembersTable: FC<Props> = ({
             onClick={() => {
               lineEdit ? cancelEdit() : onDelete(index);
             }}
-            style={{ paddingTop: "5px" }}
+            style={styles.editCol}
             id="editCol"
           >
             {lineEdit ? (
@@ -229,5 +229,9 @@ const styles = {
     padding: 0,
     margin: "2px",
     marginLeft: "14px"
+  },
+  editCol: {
+    paddingTop: "5px",
+    cursor: "pointer",
   }
 };

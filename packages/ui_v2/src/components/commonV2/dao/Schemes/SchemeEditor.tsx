@@ -247,7 +247,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
         scheme.$.votingMachine.$.minimumDaoBounty.value = presetVotingMachines[index].$.minimumDaoBounty.value;
         scheme.$.votingMachine.$.daoBountyConst.value = presetVotingMachines[index].$.daoBountyConst.value;
       } else {
-        scheme.$.votingMachine.$.minimumDaoBounty.value = "1";
+        scheme.$.votingMachine.$.minimumDaoBounty.value = "0.000001";
         scheme.$.votingMachine.$.daoBountyConst.value = "1";
       }
       return scheme;
@@ -315,9 +315,9 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
       // Update toggles
       const { proposingRepReward, votersReputationLossRatio, minimumDaoBounty, daoBountyConst } = scheme.$.votingMachine.values;
 
-      setRewardSuccess(+proposingRepReward > 0);
-      setRewardAndPenVoters(votersReputationLossRatio > 0);
-      setAutobet(+minimumDaoBounty > 1 && +daoBountyConst > 1); // TODO Update after daostack lets us use 0
+      setRewardSuccess(Number(proposingRepReward) > 0);
+      setRewardAndPenVoters(Number(votersReputationLossRatio) > 0);
+      setAutobet(Number(minimumDaoBounty) > 0.000001 && Number(daoBountyConst) >= 1); // TODO Update after daostack lets us use 0
 
       return scheme;
     });
@@ -425,8 +425,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Fast
                 </button>
                 <span>
-                  <li><b>Distribute Assets: 1-7 days</b></li>
-                  <li><b>Modify DAO: 1-7 days</b></li>
+                  <li><b>Distribute Assets: 2-7 days</b></li>
+                  <li><b>Modify DAO: 5-30 days</b></li>
                 </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
@@ -434,8 +434,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Medium
                 </button>
                 <span>
-                  <li><b>Distribute Assets: 1-7 days</b></li>
-                  <li><b>Modify DAO: 4-30 days</b></li>
+                  <li><b>Distribute Assets: 5-30 days</b></li>
+                  <li><b>Modify DAO: 10-60 days</b></li>
                 </span>
               </MDBTooltip>
               <MDBTooltip domElement tag="span" placement="top">
@@ -443,8 +443,8 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
                   Slow
                 </button>
                 <span>
-                    <li><b>Distribute Assets: 4-30 days</b></li>
-                    <li><b>Modify DAO: 8 - 60 days</b></li>
+                    <li><b>Distribute Assets: 10-60 days</b></li>
+                    <li><b>Modify DAO: 10-60 days</b></li>
                 </span>
               </MDBTooltip>
             </MDBRow>
