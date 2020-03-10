@@ -142,7 +142,7 @@ const NumberFieldView = observer(
         <input
           type={"number"}
           style={styles.inputStyle}
-          value={field.value}
+          value={Number(field.value).toString()}
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
@@ -169,9 +169,9 @@ const TokenFieldView = observer(
           <span>{field.description}</span>
         </MDBTooltip>
         <input
-          type="number"
+          type={"number"}
           style={styles.inputStyle}
-          value={field.value}
+          value={Number(field.value).toString()}
           disabled={editable === undefined ? false : !editable}
           onChange={(event: any) => field.onChange(event.target.value)}
           onBlur={field.enableAutoValidationAndValidate}
@@ -226,7 +226,7 @@ const DurationFieldView = observer(
                     textAlign: "center"
                   }
             }
-            value={field[props.name]}
+            value={Number(field[props.name]).toString()}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
             type={"number"}
@@ -403,10 +403,10 @@ const PercentageFieldView = observer(
             <span>{field.description}</span>
           </MDBTooltip>
           <input
-            type="number"
+            type={"number"}
             max="100"
             style={styles.inputStyle}
-            value={field.value}
+            value={Number(field.value).toString()}
             disabled={editable === undefined ? false : !editable}
             onChange={onInputChange}
             onBlur={field.enableAutoValidationAndValidate}
