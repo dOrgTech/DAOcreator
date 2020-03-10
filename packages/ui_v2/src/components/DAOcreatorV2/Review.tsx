@@ -72,7 +72,7 @@ const ThirdStep: FC<DAOForm> = form => {
   });
   const numberOfMembers = members.$.length;
   const membersTokenCount = (count: any, member: any) =>
-    +member.$.tokens.value + count;
+    +Number(member.$.tokens.value) + count;
   const hasTokens = members.$.reduce(membersTokenCount, 0) > 0;
   return (
     <div style={styles.third.container}>

@@ -16,14 +16,14 @@ export const getSimpleOptions = (form: SchemesForm) => {
   } = form.$[0].$.votingMachine.values;
 
   const simpleOptions: SimpleOption[] = [
-    { text: "Reward successful proposer", checked: +proposingRepReward > 0 },
+    { text: "Reward successful proposer", checked: Number(proposingRepReward) > 0 },
     {
       text: "Reward correct voters and penalize incorrect voters",
-      checked: +votersReputationLossRatio > 0
+      checked: Number(votersReputationLossRatio) > 0
     },
     {
       text: "Auto-incentivize proposal curation",
-      checked: +minimumDaoBounty > 1 && +daoBountyConst > 1 // TODO Update after daostack lets us use 0
+      checked: Number(minimumDaoBounty) > 0.000001 && Number(daoBountyConst) >= 1 // TODO Update after daostack lets us use 0
     }
   ];
 
