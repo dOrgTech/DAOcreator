@@ -10,7 +10,7 @@
     "build:app": "CI=false react-scripts --max_old_space_size=4096 build",
     "build:assets": "copyfiles -u 2 ./src/**/*.css dist && copyfiles -u 3 ./src/**/*.svg dist/assets && copyfiles ./public/**/*.svg -u 1 dist/assets",
     "build:package": "rm -rf ./dist && tsc --build ./tsconfig.release.json && yarn build:assets",
-    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src",
+    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src/components ./package/src",
     "release": "yarn build:package && yarn package:release && yarn publish ./package --access public"
   },
   "dependencies": {

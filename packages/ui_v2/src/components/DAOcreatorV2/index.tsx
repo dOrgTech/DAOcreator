@@ -46,6 +46,8 @@ import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
 import './styles.css';
 
+const moreLogo = require("../assets/icons/more.svg");
+
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
 interface DAO_CREATOR_INTERFACE {
@@ -319,9 +321,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     }
   ];
 
-  console.log(steps)
-  console.log(step)
-
   currentForm = steps[step].form;
   return (
     <>
@@ -343,8 +342,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                     className="btn"
                     style={styles.icon}
                   >
-                    {/* <MDBIcon icon="ellipsis-v" style={styles.iconColor} className="indigo-text"/>{" "} */}
-                    <img src="icons/more.svg" alt="menu icon" />
+                    <img src={moreLogo} alt="menu icon" />
                   </MDBBtn>
                   <div style={styles.divided}>
                     <div // There might be a better MDBReact component for this
