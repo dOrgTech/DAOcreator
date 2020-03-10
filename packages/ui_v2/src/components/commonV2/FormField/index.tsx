@@ -226,7 +226,7 @@ const DurationFieldView = observer(
                     textAlign: "center"
                   }
             }
-            value={field[props.name]}
+            value={Number(field[props.name]).toString()}
             disabled={editable === undefined ? false : !editable}
             onChange={onChange}
             type={"number"}
