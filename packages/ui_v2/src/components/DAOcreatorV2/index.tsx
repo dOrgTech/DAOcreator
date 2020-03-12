@@ -1,6 +1,6 @@
 import * as React from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap-css-only/css/bootstrap.min.css";
+import "../assets/styles/bootstrap.css";
 import "mdbreact/dist/css/mdb.css";
 
 import {
@@ -324,7 +324,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   currentForm = steps[step].form;
   return (
     <>
-      <MDBContainer style={styles.paddingContainer}>
+      <MDBContainer className="root" style={styles.paddingContainer}>
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
@@ -448,8 +448,7 @@ const styles = {
   titleContainer: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: "20px"
+    alignItems: "center"
   },
   spinner: {
     display: "inline-block"

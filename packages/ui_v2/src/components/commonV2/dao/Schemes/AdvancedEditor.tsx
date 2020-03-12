@@ -23,7 +23,7 @@ import {
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
 import { VotingMachinePresets } from "./SchemeEditor";
-import './styles.css';
+import "./styles.css";
 
 interface Props {
   form: SchemesForm;
@@ -192,8 +192,18 @@ const AdvancedEditor: FC<Props> = ({
               <button
                 style={
                   scheme.type === index
-                    ? styles.buttonTabActive
-                    : styles.buttonTab
+                    ? {
+                        ...styles.buttonTabActive,
+                        fontFamily: "inherit",
+                        fontSize: "inherit",
+                        lineHeight: "inherit"
+                      }
+                    : {
+                        ...styles.buttonTab,
+                        fontFamily: "inherit",
+                        fontSize: "inherit",
+                        lineHeight: "inherit"
+                      }
                 }
                 id="tabButton"
                 onClick={() => setScheme(advForm.$[index])}
@@ -288,7 +298,11 @@ const AdvancedEditor: FC<Props> = ({
             ))}
           </MDBCol>
           <MDBCol style={styles.save}>
-            <button id='saveConfigurationButton' style={styles.saveButton} onClick={() => closeModal()}>
+            <button
+              id="saveConfigurationButton"
+              style={styles.saveButton}
+              onClick={() => closeModal()}
+            >
               Save Configuration
             </button>
           </MDBCol>
