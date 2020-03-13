@@ -1,6 +1,6 @@
 import * as React from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap-css-only/css/bootstrap.min.css";
+import "../assets/styles/bootstrap.css";
 import "mdbreact/dist/css/mdb.css";
 
 import {
@@ -44,7 +44,9 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
-import './styles.css';
+import "./styles.css";
+
+const moreLogo = require("../assets/icons/more.svg");
 
 const DAO_CREATOR_STATE = "DAO_CREATOR_SETUP";
 
@@ -322,7 +324,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   currentForm = steps[step].form;
   return (
     <>
-      <MDBContainer style={styles.paddingContainer}>
+      <MDBContainer className="root" style={styles.paddingContainer}>
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
@@ -340,8 +342,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                     className="btn"
                     style={styles.icon}
                   >
-                    {/* <MDBIcon icon="ellipsis-v" style={styles.iconColor} className="indigo-text"/>{" "} */}
-                    <img src="icons/more.svg" alt="menu icon" />
+                    <img src={moreLogo} alt="menu icon" />
                   </MDBBtn>
                   <div style={styles.divided}>
                     <div // There might be a better MDBReact component for this
@@ -357,7 +358,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                     >
                       <MDBPopoverBody>Export Configuration</MDBPopoverBody>
                     </div>
-                  </div> 
+                  </div>
                 </MDBPopover>
               </div>
             </MDBCol>
@@ -415,7 +416,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       />
     </>
   );
-}
+};
 
 const styles = {
   root: {
@@ -424,16 +425,17 @@ const styles = {
     border: "1px solid #EAEDF3",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
     borderRadius: 4,
-    margin: "auto"
+    margin: "auto",
+    backgroundColor: "white"
   },
   paddingContainer: {
     padding: "1%",
     height: "50px"
   },
   fontStyle: {
-    fontSize: '18px',
-    letterSpacing:'0.6px',
-    color: '#3E3F42',
+    fontSize: "18px",
+    letterSpacing: "0.6px",
+    color: "#3E3F42",
     fontWeight: 400,
     fontFamily: "inherit"
   },
@@ -446,8 +448,7 @@ const styles = {
   titleContainer: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: "20px"
+    alignItems: "center"
   },
   spinner: {
     display: "inline-block"
@@ -457,11 +458,11 @@ const styles = {
     boxShadow: "none",
     color: "blue !important",
     padding: 5,
-    height: '35px',
-    width: '35px',
-    borderRadius: '400px',
-    border: '1px solid #EEF0FF',
-    margin: '14px 0px 0px 95px'
+    height: "35px",
+    width: "35px",
+    borderRadius: "400px",
+    border: "1px solid #EEF0FF",
+    margin: "14px 0px 0px 95px"
   },
   divided: {
     display: "flex",
@@ -469,17 +470,16 @@ const styles = {
   },
   divider: {
     flexGrow: 1,
-    border: '0.5px solid #EAEDF3',
-    height: '1px',
+    border: "0.5px solid #EAEDF3",
+    height: "1px",
     padding: 0,
     margin: 0,
-    width: '-webkit-fill-available',
-    borderLeft: 'aqua'
+    width: "-webkit-fill-available",
+    borderLeft: "aqua"
   },
   iconColor: {
-  //  color: '#536DFE !important',
-   color: 'indigo accent-2 text'
-
+    //  color: '#536DFE !important',
+    color: "indigo accent-2 text"
   }
 };
 

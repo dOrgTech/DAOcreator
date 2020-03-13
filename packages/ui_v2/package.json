@@ -8,8 +8,9 @@
     "eject": "react-scripts eject",
     "test": "react-scripts test",
     "build:app": "CI=false react-scripts --max_old_space_size=4096 build",
-    "build:package": "rm -rf ./dist && tsc --build ./tsconfig.release.json",
-    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src ./package/src",
+    "build:assets": "copyfiles -u 2 ./src/**/*.css ./src/**/*.svg dist",
+    "build:package": "rm -rf ./dist && tsc --build ./tsconfig.release.json && yarn build:assets",
+    "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src/components ./package/src",
     "release": "yarn build:package && yarn package:release && yarn publish ./package --access public"
   },
   "dependencies": {
@@ -34,11 +35,10 @@
     "@types/node": "^10.12.18",
     "@types/react": "^16.8.15",
     "@types/react-dom": "^16.8.4",
+    "copyfiles": "^2.2.0",
     "husky": "^1.1.2",
     "prettier": "^1.15.2",
     "pretty-quick": "^1.8.0",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
     "typescript": "3.4.5"
   },

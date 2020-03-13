@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["es2016", "es2017", "dom", "esnext.asynciterable"],
     "module": "esnext",
     "moduleResolution": "node",

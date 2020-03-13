@@ -21,7 +21,7 @@ import {
   AddressField,
   NumberField
 } from "@dorgtech/daocreator-lib";
-import './styles.css';
+import "./styles.css";
 
 export interface Props<TField = AnyField> {
   field: TField;
@@ -51,7 +51,7 @@ const FormField: FC<Props> = ({
   displayName,
   editable,
   colSize,
-  tabIndex,
+  tabIndex
 }) => {
   const size = colSize ? colSize : "6";
   let FieldView;
@@ -104,7 +104,13 @@ const StringFieldView = observer(
           {displayName ? displayName : field.displayName}
         </label>
         <MDBTooltip placement="bottom" clickable>
-          <MDBBtn floating size="lg" color="transparent" style={styles.info} id="img">
+          <MDBBtn
+            floating
+            size="lg"
+            color="transparent"
+            style={styles.info}
+            id="img"
+          >
             {" "}
             <MDBIcon icon="info-circle" />
           </MDBBtn>
@@ -201,7 +207,7 @@ const DurationFieldView = observer(
     const setMaxDuration = (name: string) => {
       if (name === "hours") {
         return 24;
-      } else if (name === "minutes"){
+      } else if (name === "minutes") {
         return 60;
       } else {
         return undefined;
@@ -238,15 +244,17 @@ const DurationFieldView = observer(
           <div
             style={
               props.name === "days" || props.name === "hours"
-                ? { paddingTop: "3px", marginRight: "-3px" }
-                : { paddingTop: "3px" }
+                ? { paddingTop: "5px", marginRight: "-3px" }
+                : { paddingTop: "5px" }
             }
           >
-            <span
-              className = {props.name === "days" ? props.name : 'hours'}
-            >
+            <span className={props.name === "days" ? props.name : "hours"}>
               {" "}
-              {props.name === "days" ? props.name : props.name === "hours" ? "h" : "m"}
+              {props.name === "days"
+                ? props.name
+                : props.name === "hours"
+                ? "h"
+                : "m"}
             </span>
           </div>
         </>
@@ -266,7 +274,7 @@ const DurationFieldView = observer(
             </label>
             <MDBTooltip placement="bottom" clickable>
               <MDBBtn
-                id='icon'
+                id="icon"
                 floating
                 size="lg"
                 color="transparent"
@@ -306,7 +314,7 @@ const DateTimeFieldView = observer(
     const disabled = editable === undefined ? false : !editable;
 
     return (
-    <MDBCol size="6" style={styles.largeMargin}>
+      <MDBCol size="6" style={styles.largeMargin}>
         <label style={styles.labelStyle}>
           {displayName ? displayName : field.displayName}
         </label>
@@ -420,7 +428,13 @@ const PercentageFieldView = observer(
 );
 
 const AddressFieldView = observer(
-  ({ field, displayName, editable, colSize, tabIndex }: Props<AddressField>) => (
+  ({
+    field,
+    displayName,
+    editable,
+    colSize,
+    tabIndex
+  }: Props<AddressField>) => (
     <>
       <MDBCol size={colSize ? colSize : "6"} style={styles.largeMargin}>
         {field.description === "The member's public address." ? (
@@ -444,9 +458,15 @@ const AddressFieldView = observer(
             </MDBTooltip>
           </>
         )}
-        <div style={colSize === "9" ? { display: "flex", flexDirection: "row", marginTop: '27px' } : { display: "flex", flexDirection: "row" }}>
+        <div
+          style={
+            colSize === "9"
+              ? { display: "flex", flexDirection: "row", marginTop: "27px" }
+              : { display: "flex", flexDirection: "row" }
+          }
+        >
           <input
-            style={{...styles.inputStyle, paddingRight: "55px"}}
+            style={{ ...styles.inputStyle, paddingRight: "55px" }}
             placeholder="0x..."
             value={field.value}
             disabled={editable === undefined ? false : !editable}
@@ -475,12 +495,12 @@ const styles = {
     width: "100%",
     padding: "2%",
     fontFamily: "inherit",
-    paddingLeft: '16px',
-    paddingTop: '8px',
-    paddingBottom: '8px',
-    fontSize: '14px',
+    paddingLeft: "16px",
+    paddingTop: "8px",
+    paddingBottom: "8px",
+    fontSize: "14px",
     fontWeight: 400,
-    outline: 'none',
+    outline: "none"
   },
   stringInputStyle: {
     border: "1px solid",
@@ -490,12 +510,12 @@ const styles = {
     width: "250px",
     padding: "2%",
     fontFamily: "inherit",
-    paddingLeft: '16px',
-    paddingTop: '8px',
-    paddingBottom: '8px',
-    fontSize: '14px',
+    paddingLeft: "16px",
+    paddingTop: "8px",
+    paddingBottom: "8px",
+    fontSize: "14px",
     fontWeight: 400,
-    outline: 'none'
+    outline: "none"
   },
   noPadding: {
     padding: 0
@@ -535,7 +555,7 @@ const styles = {
   labelStyle: {
     color: "#9EA0A5",
     fontWeight: 400,
-    fontSize:'12px'
+    fontSize: "12px"
   },
   reactDatepickerWrapper: {
     paddingTop: "5px",
