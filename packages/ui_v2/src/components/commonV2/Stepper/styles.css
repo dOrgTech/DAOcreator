@@ -1,4 +1,4 @@
-.stepper-vertical li:not(:last-child):after {
+.daocreator-root .stepper-vertical li:not(:last-child):after {
   position: absolute;
   top: 3.9rem;
   left: 46px;
@@ -8,10 +8,9 @@
   background-color: #ededef;
 }
 
-ul.stepper li a .circle {
+.daocreator-root ul.stepper li a .circle {
   display: inline-block;
   width: 32px;
-  height: 32px;
   margin-right: 0.5rem;
   line-height: 1.7rem;
   color: #fff;
@@ -21,12 +20,12 @@ ul.stepper li a .circle {
   padding-top: 2px;
 }
 
-ul.stepper li.completed a .circle {
+.daocreator-root ul.stepper li.completed a .circle {
   border: #1665d8;
   background-color: #1665d8 !important;
 }
 
-ul.stepper li.active a .label,
+.daocreator-root ul.stepper li.active a .label,
 ul.stepper li.completed a .label {
   font-weight: 600;
   color: #1665d8;

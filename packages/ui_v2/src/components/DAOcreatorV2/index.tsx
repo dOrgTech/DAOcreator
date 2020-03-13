@@ -1,7 +1,4 @@
 import * as React from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "../assets/styles/bootstrap.css";
-import "mdbreact/dist/css/mdb.css";
 
 import {
   MDBBtn,
@@ -44,6 +41,9 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../assets/styles/bootstrap.css";
+import "../assets/styles/mdbreact.css";
 import "./styles.css";
 
 const moreLogo = require("../assets/icons/more.svg");
@@ -324,7 +324,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   currentForm = steps[step].form;
   return (
     <>
-      <MDBContainer className="root" style={styles.paddingContainer}>
+      <MDBContainer style={styles.paddingContainer}>
         <div style={styles.root}>
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />

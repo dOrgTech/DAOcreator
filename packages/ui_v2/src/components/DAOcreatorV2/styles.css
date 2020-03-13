@@ -8,12 +8,6 @@
   color: #78797b !important;
 }
 
-.exportButton,
-::after,
-::before {
-  box-sizing: border-box;
-}
-
 @media only screen and (max-width: 500px) {
   #menu {
     margin: 14px 0px 0px 30px !important;

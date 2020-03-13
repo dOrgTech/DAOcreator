@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-ui",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "main": "./dist/index.js",
   "scripts": {
     "start": "react-scripts start",
@@ -8,7 +8,7 @@
     "eject": "react-scripts eject",
     "test": "react-scripts test",
     "build:app": "CI=false react-scripts --max_old_space_size=4096 build",
-    "build:assets": "copyfiles -u 2 ./src/**/*.css ./src/**/*.svg dist",
+    "build:assets": "copyfiles -u 2 ./src/**/*.css ./src/**/*.svg ./src/components/assets/font/**/*.* dist",
     "build:package": "rm -rf ./dist && tsc --build ./tsconfig.release.json && yarn build:assets",
     "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src/components ./package/src",
     "release": "yarn build:package && yarn package:release && yarn publish ./package --access public"
