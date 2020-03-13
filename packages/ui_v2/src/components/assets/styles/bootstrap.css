@@ -50,7 +50,6 @@ input,
   -webkit-tap-highlight-color: transparent;
 }
 .root h1,
-h2,
 h3,
 h4,
 h5,
@@ -61,9 +60,6 @@ h6 {
 }
 .root h1 {
   font-size: 2.5rem;
-}
-.root h2 {
-  font-size: 2rem;
 }
 .root h3 {
   font-size: 1.75rem;
@@ -150,7 +146,7 @@ dd {
 blockquote {
   margin: 0 0 1rem;
 }
-b,
+.root b,
 strong {
   font-weight: bolder;
 }
@@ -228,7 +224,7 @@ caption {
 th {
   text-align: inherit;
 }
-label {
+.root label {
   display: inline-block;
   margin-bottom: 0.5rem;
 }
