@@ -2,15 +2,21 @@
   pointer-events: none !important;
   width: 134px;
   height: 34px;
-  border: 1px solid #EAEDF3;
+  border: 1px solid #eaedf3;
   border-radius: 3px;
   font-size: 14px;
-  color: #78797B !important;
-} 
+  color: #78797b !important;
+}
+
+.exportButton,
+::after,
+::before {
+  box-sizing: border-box;
+}
 
 @media only screen and (max-width: 500px) {
   #menu {
-     margin:  14px 0px 0px 30px !important;
+    margin: 14px 0px 0px 30px !important;
   }
   #title {
     flex: 0 0 50% !important;

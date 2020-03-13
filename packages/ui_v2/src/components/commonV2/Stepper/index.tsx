@@ -12,6 +12,8 @@ import { STEP as DAOcreatorStep } from "../../DAOcreatorV2";
 import { DeployButton } from '../dao/Migrator/DeployButton'
 import './styles.css';
 
+const pencilLogo = require("../../assets/icons/pencil.svg");
+
 // Migrator Steps
 export enum STEP {
   Waiting,
@@ -169,7 +171,7 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
             style={styles.icon}
             id="pencil"
           >
-            <img src="icons/pencil.svg" alt="menu icon" />
+            <img src={pencilLogo} alt="menu icon" />
           </MDBBtn>
         </div>
       </MDBRow>

@@ -13,6 +13,8 @@ import EthAddressAvatar from "../../EthAddressAvatar";
 import FormField from "../../FormField";
 import { truncateString } from "../../../utils";
 
+const pencilIcon = require("../../../assets/icons/pencil.svg");
+
 interface Props {
   membersForm: any;
   editing: number;
@@ -133,7 +135,7 @@ export const MembersTable: FC<Props> = ({
             {lineEdit ? (
               <MDBIcon icon="check" className="blue-text"></MDBIcon>
             ) : (
-              <img src="icons/pencil.svg" alt="menu icon" />
+              <img src={pencilIcon} alt="menu icon" />
             )}
           </div>
         </MDBCol>

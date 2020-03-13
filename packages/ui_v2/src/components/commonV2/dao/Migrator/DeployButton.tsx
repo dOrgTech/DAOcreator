@@ -213,7 +213,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
             break;
 
           case info === "Setting GenesisProtocol parameters...":
-            addMinLogLine("Setting Machine...");
+            addMinLogLine("Setting Voting Params...");
             break;
 
           case info === "DAO Migration has Finished Successfully!":
@@ -422,7 +422,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
     let url;
     if (network === "mainnet") url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
     else if (network === "rinkeby") url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    else url = result.Avatar;
+    else url = `/dao/${result.Avatar}`;
 
     setAlchemyURL(url);
 
