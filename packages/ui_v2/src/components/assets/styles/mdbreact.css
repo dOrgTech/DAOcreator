@@ -7292,13 +7292,13 @@ body.scrollable {
 .modal-dialog.cascading-modal .modal-header .title .far {
   margin-right: 9px;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-header .social-buttons {
+.modal-dialog.cascading-modal .modal-header .social-buttons {
   margin-top: 1.5rem;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-header .social-buttons a {
+.modal-dialog.cascading-modal .modal-header .social-buttons a {
   font-size: 1rem;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-c-tabs {
+.modal-dialog.cascading-modal .modal-c-tabs {
   /*
       .md-tabs {
        border-radius: $md-card-border-radius;
@@ -7315,73 +7315,73 @@ body.scrollable {
       .daocreator-root
       */
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-c-tabs .md-tabs {
+.modal-dialog.cascading-modal .modal-c-tabs .md-tabs {
   display: flex;
   margin: -1.5rem 1rem 0 1rem;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-c-tabs .md-tabs li {
+.modal-dialog.cascading-modal .modal-c-tabs .md-tabs li {
   flex: 1;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-c-tabs .md-tabs li a {
+.modal-dialog.cascading-modal .modal-c-tabs .md-tabs li a {
   text-align: center;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-c-tabs .tab-content {
+.modal-dialog.cascading-modal .modal-c-tabs .tab-content {
   padding: 1.7rem 0 0 0;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-body,
+.modal-dialog.cascading-modal .modal-body,
 .modal-dialog.cascading-modal .modal-footer {
   padding-right: 2rem;
   padding-left: 2rem;
   color: #616161;
 }
-.daocreator-root .modal-dialog.cascading-modal .modal-body .additional-option,
+.modal-dialog.cascading-modal .modal-body .additional-option,
 .modal-dialog.cascading-modal .modal-footer .additional-option {
   margin-top: 1rem;
   text-align: center;
 }
-.daocreator-root .modal-dialog.cascading-modal.modal-avatar {
+.modal-dialog.cascading-modal.modal-avatar {
   margin-top: 6rem;
 }
-.daocreator-root .modal-dialog.cascading-modal.modal-avatar .modal-header {
+.modal-dialog.cascading-modal.modal-avatar .modal-header {
   margin: -6rem 0 -1rem;
   box-shadow: none;
 }
-.daocreator-root .modal-dialog.cascading-modal.modal-avatar .modal-header img {
+.modal-dialog.cascading-modal.modal-avatar .modal-header img {
   width: 130px;
   margin-right: auto;
   margin-left: auto;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.daocreator-root .modal-dialog.modal-notify .heading {
+.modal-dialog.modal-notify .heading {
   padding: 0.3rem;
   margin: 0;
   font-size: 1.15rem;
   color: #fff;
 }
-.daocreator-root .modal-dialog.modal-notify .modal-header {
+.modal-dialog.modal-notify .modal-header {
   border: 0;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
-.daocreator-root .modal-dialog.modal-notify .close {
+.modal-dialog.modal-notify .close {
   opacity: 1;
 }
-.daocreator-root .modal-dialog.modal-notify .modal-body {
+.modal-dialog.modal-notify .modal-body {
   padding: 1.5rem;
   color: #616161;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-primary .modal-header {
+.modal-dialog.modal-notify.modal-primary .modal-header {
   background-color: #4285f4;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-primary .fas,
+.modal-dialog.modal-notify.modal-primary .fas,
 .modal-dialog.modal-notify.modal-primary .fab,
 .modal-dialog.modal-notify.modal-primary .far {
   color: #4285f4;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-primary .badge {
+.modal-dialog.modal-notify.modal-primary .badge {
   background-color: #4285f4;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-primary .btn .fas,
+.modal-dialog.modal-notify.modal-primary .btn .fas,
 .modal-dialog.modal-notify.modal-primary .btn .fab,
 .modal-dialog.modal-notify.modal-primary .btn .far {
   color: #fff;
@@ -7394,18 +7394,18 @@ body.scrollable {
 .modal-dialog.modal-notify.modal-primary .btn.btn-outline-primary .far {
   color: #4285f4;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-danger .modal-header {
+.modal-dialog.modal-notify.modal-danger .modal-header {
   background-color: #ff3547;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-danger .fas,
+.modal-dialog.modal-notify.modal-danger .fas,
 .modal-dialog.modal-notify.modal-danger .fab,
 .modal-dialog.modal-notify.modal-danger .far {
   color: #ff3547;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-danger .badge {
+.modal-dialog.modal-notify.modal-danger .badge {
   background-color: #ff3547;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-danger .btn .fas,
+.modal-dialog.modal-notify.modal-danger .btn .fas,
 .modal-dialog.modal-notify.modal-danger .btn .fab,
 .modal-dialog.modal-notify.modal-danger .btn .far {
   color: #fff;
@@ -7418,18 +7418,18 @@ body.scrollable {
 .modal-dialog.modal-notify.modal-danger .btn.btn-outline-danger .far {
   color: #ff3547;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-warning .modal-header {
+.modal-dialog.modal-notify.modal-warning .modal-header {
   background-color: #fb3;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-warning .fas,
+.modal-dialog.modal-notify.modal-warning .fas,
 .modal-dialog.modal-notify.modal-warning .fab,
 .modal-dialog.modal-notify.modal-warning .far {
   color: #fb3;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-warning .badge {
+.modal-dialog.modal-notify.modal-warning .badge {
   background-color: #fb3;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-warning .btn .fas,
+.modal-dialog.modal-notify.modal-warning .btn .fas,
 .modal-dialog.modal-notify.modal-warning .btn .fab,
 .modal-dialog.modal-notify.modal-warning .btn .far {
   color: #fff;
@@ -7442,18 +7442,18 @@ body.scrollable {
 .modal-dialog.modal-notify.modal-warning .btn.btn-outline-warning .far {
   color: #fb3;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-success .modal-header {
+.modal-dialog.modal-notify.modal-success .modal-header {
   background-color: #00c851;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-success .fas,
+.modal-dialog.modal-notify.modal-success .fas,
 .modal-dialog.modal-notify.modal-success .fab,
 .modal-dialog.modal-notify.modal-success .far {
   color: #00c851;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-success .badge {
+.modal-dialog.modal-notify.modal-success .badge {
   background-color: #00c851;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-success .btn .fas,
+.modal-dialog.modal-notify.modal-success .btn .fas,
 .modal-dialog.modal-notify.modal-success .btn .fab,
 .modal-dialog.modal-notify.modal-success .btn .far {
   color: #fff;
@@ -7466,18 +7466,18 @@ body.scrollable {
 .modal-dialog.modal-notify.modal-success .btn.btn-outline-success .far {
   color: #00c851;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-info .modal-header {
+.modal-dialog.modal-notify.modal-info .modal-header {
   background-color: #33b5e5;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-info .fas,
+.modal-dialog.modal-notify.modal-info .fas,
 .modal-dialog.modal-notify.modal-info .fab,
 .modal-dialog.modal-notify.modal-info .far {
   color: #33b5e5;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-info .badge {
+.modal-dialog.modal-notify.modal-info .badge {
   background-color: #33b5e5;
 }
-.daocreator-root .modal-dialog.modal-notify.modal-info .btn .fas,
+.modal-dialog.modal-notify.modal-info .btn .fas,
 .modal-dialog.modal-notify.modal-info .btn .fab,
 .modal-dialog.modal-notify.modal-info .btn .far {
   color: #fff;
@@ -7490,7 +7490,7 @@ body.scrollable {
 .modal-dialog.modal-notify.modal-info .btn.btn-outline-info .far {
   color: #33b5e5;
 }
-.daocreator-root .modal {
+.modal {
   padding-right: 0 !important;
 }
 
@@ -7498,42 +7498,42 @@ body.scrollable {
   .modal .modal-dialog.modal-top {
     top: 0;
   }
-  .daocreator-root .modal .modal-dialog.modal-left {
+  .modal .modal-dialog.modal-left {
     left: 0;
   }
-  .daocreator-root .modal .modal-dialog.modal-right {
+  .modal .modal-dialog.modal-right {
     right: 0;
   }
-  .daocreator-root .modal .modal-dialog.modal-bottom {
+  .modal .modal-dialog.modal-bottom {
     bottom: 0;
   }
-  .daocreator-root .modal .modal-dialog.modal-top-left {
+  .modal .modal-dialog.modal-top-left {
     top: 10px;
     left: 10px;
   }
-  .daocreator-root .modal .modal-dialog.modal-top-right {
+  .modal .modal-dialog.modal-top-right {
     top: 10px;
     right: 10px;
   }
-  .daocreator-root .modal .modal-dialog.modal-bottom-left {
+  .modal .modal-dialog.modal-bottom-left {
     bottom: 10px;
     left: 10px;
   }
-  .daocreator-root .modal .modal-dialog.modal-bottom-right {
+  .modal .modal-dialog.modal-bottom-right {
     right: 10px;
     bottom: 10px;
   }
 }
-.daocreator-root .modal.fade.top:not(.show) .modal-dialog {
+.modal.fade.top:not(.show) .modal-dialog {
   transform: translate3d(0, -25%, 0);
 }
-.daocreator-root .modal.fade.left:not(.show) .modal-dialog {
+.modal.fade.left:not(.show) .modal-dialog {
   transform: translate3d(-25%, 0, 0);
 }
-.daocreator-root .modal.fade.right:not(.show) .modal-dialog {
+.modal.fade.right:not(.show) .modal-dialog {
   transform: translate3d(25%, 0, 0);
 }
-.daocreator-root .modal.fade.bottom:not(.show) .modal-dialog {
+.modal.fade.bottom:not(.show) .modal-dialog {
   transform: translate3d(0, 25%, 0);
 }
 
@@ -7541,34 +7541,34 @@ body.scrollable {
   .modal.modal-scrolling {
     position: relative;
   }
-  .daocreator-root .modal.modal-scrolling .modal-dialog {
+  .modal.modal-scrolling .modal-dialog {
     position: fixed;
     z-index: 1050;
   }
-  .daocreator-root .modal.modal-content-clickable {
+  .modal.modal-content-clickable {
     top: auto;
     bottom: auto;
   }
-  .daocreator-root .modal.modal-content-clickable .modal-dialog {
+  .modal.modal-content-clickable .modal-dialog {
     position: fixed;
   }
-  .daocreator-root .modal .modal-fluid {
+  .modal .modal-fluid {
     width: 100%;
     max-width: 100%;
   }
-  .daocreator-root .modal .modal-fluid .modal-content {
+  .modal .modal-fluid .modal-content {
     width: 100%;
   }
-  .daocreator-root .modal .modal-frame {
+  .modal .modal-frame {
     position: absolute;
     width: 100%;
     max-width: 100% !important;
     margin: 0 !important;
   }
-  .daocreator-root .modal .modal-frame.modal-bottom {
+  .modal .modal-frame.modal-bottom {
     bottom: 0;
   }
-  .daocreator-root .modal .modal-full-height {
+  .modal .modal-full-height {
     position: absolute;
     top: 0;
     right: 0;
@@ -7578,24 +7578,24 @@ body.scrollable {
     min-height: 100%;
     margin: 0;
   }
-  .daocreator-root .modal .modal-full-height.modal-top,
+  .modal .modal-full-height.modal-top,
   .modal .modal-full-height.modal-bottom {
     display: block;
     width: 100%;
     max-width: 100%;
     height: auto;
   }
-  .daocreator-root .modal .modal-full-height.modal-top {
+  .modal .modal-full-height.modal-top {
     bottom: auto;
   }
-  .daocreator-root .modal .modal-full-height.modal-bottom {
+  .modal .modal-full-height.modal-bottom {
     top: auto;
     min-height: 0;
   }
-  .daocreator-root .modal .modal-full-height .modal-content {
+  .modal .modal-full-height .modal-content {
     width: 100%;
   }
-  .daocreator-root .modal .modal-full-height.modal-lg {
+  .modal .modal-full-height.modal-lg {
     width: 90%;
     max-width: 90%;
   }
@@ -7624,33 +7624,33 @@ body.scrollable {
     margin: 0;
   }
 }
-.daocreator-root .carousel .carousel-control-prev-icon,
+.carousel .carousel-control-prev-icon,
 .carousel .carousel-control-next-icon {
   width: 20px;
   height: 20px;
 }
 
-.daocreator-root .carousel .carousel-indicators li {
+.carousel .carousel-indicators li {
   width: 0.625rem;
   height: 0.625rem;
   cursor: pointer;
   border-radius: 50%;
 }
-.daocreator-root .carousel-fade .carousel-item {
+.carousel-fade .carousel-item {
   opacity: 0;
   transition-duration: 0.6s;
   transition-property: opacity;
 }
-.daocreator-root .carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item.active,
 .carousel-fade .carousel-item-next.carousel-item-left,
 .carousel-fade .carousel-item-prev.carousel-item-right {
   opacity: 1;
 }
-.daocreator-root .carousel-fade .carousel-item-left.active,
+.carousel-fade .carousel-item-left.active,
 .carousel-fade .carousel-item-right.active {
   opacity: 0;
 }
-.daocreator-root .carousel-fade .carousel-item-next,
+.carousel-fade .carousel-item-next,
 .carousel-fade .carousel-item-prev,
 .carousel-fade .carousel-item.active,
 .carousel-fade .carousel-item-left.active,
@@ -7668,12 +7668,12 @@ body.scrollable {
   }
 }
 
-.daocreator-root .md-form {
+.md-form {
   position: relative;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
-.daocreator-root .md-form input:not([type]),
+.md-form input:not([type]),
 .md-form input[type="text"]:not(.browser-default),
 .md-form input[type="password"]:not(.browser-default),
 .md-form input[type="email"]:not(.browser-default),
@@ -7696,7 +7696,7 @@ body.scrollable {
   box-shadow: none;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.daocreator-root .md-form input:not([type]):focus:not([readonly]),
+.md-form input:not([type]):focus:not([readonly]),
 .md-form input[type="text"]:not(.browser-default):focus:not([readonly]),
 .md-form input[type="password"]:not(.browser-default):focus:not([readonly]),
 .md-form input[type="email"]:not(.browser-default):focus:not([readonly]),
@@ -7714,7 +7714,7 @@ body.scrollable {
   border-bottom: 1px solid #4285f4;
   box-shadow: 0 1px 0 0 #4285f4;
 }
-.daocreator-root .md-form input:not([type]):focus:not([readonly]) + label,
+.md-form input:not([type]):focus:not([readonly]) + label,
 .md-form input[type="text"]:not(.browser-default):focus:not([readonly]) + label,
 .md-form
   input[type="password"]:not(.browser-default):focus:not([readonly])
@@ -7742,7 +7742,7 @@ body.scrollable {
 .md-form textarea.md-textarea:focus:not([readonly]) + label {
   color: #4285f4;
 }
-.daocreator-root .md-form input:not([type]) + label::after,
+.md-form input:not([type]) + label::after,
 .md-form input[type="text"]:not(.browser-default) + label::after,
 .md-form input[type="password"]:not(.browser-default) + label::after,
 .md-form input[type="email"]:not(.browser-default) + label::after,
@@ -7763,7 +7763,7 @@ body.scrollable {
   opacity: 0;
   transition: 0.2s opacity ease-out, 0.2s color ease-out;
 }
-.daocreator-root .md-form input:not([type]).valid,
+.md-form input:not([type]).valid,
 .md-form input:not([type]):focus.valid,
 .md-form input[type="text"]:not(.browser-default).valid,
 .md-form input[type="text"]:not(.browser-default):focus.valid,
@@ -7794,7 +7794,7 @@ body.scrollable {
   border-bottom: 1px solid #00c851;
   box-shadow: 0 1px 0 0 #00c851;
 }
-.daocreator-root .md-form input:not([type]).valid + label:after,
+.md-form input:not([type]).valid + label:after,
 .md-form input:not([type]):focus.valid + label:after,
 .md-form input[type="text"]:not(.browser-default).valid + label:after,
 .md-form input[type="text"]:not(.browser-default):focus.valid + label:after,
@@ -7828,7 +7828,7 @@ body.scrollable {
   content: attr(data-success);
   opacity: 1;
 }
-.daocreator-root .md-form input:not([type]).invalid,
+.md-form input:not([type]).invalid,
 .md-form input:not([type]):focus.invalid,
 .md-form input[type="text"]:not(.browser-default).invalid,
 .md-form input[type="text"]:not(.browser-default):focus.invalid,
@@ -7859,7 +7859,7 @@ body.scrollable {
   border-bottom: 1px solid #f44336;
   box-shadow: 0 1px 0 0 #f44336;
 }
-.daocreator-root .md-form input:not([type]).invalid + label:after,
+.md-form input:not([type]).invalid + label:after,
 .md-form input:not([type]):focus.invalid + label:after,
 .md-form input[type="text"]:not(.browser-default).invalid + label:after,
 .md-form input[type="text"]:not(.browser-default):focus.invalid + label:after,
@@ -7899,7 +7899,7 @@ body.scrollable {
   content: attr(data-error);
   opacity: 1;
 }
-.daocreator-root .md-form input:not([type]).form-control.valid + label:after,
+.md-form input:not([type]).form-control.valid + label:after,
 .md-form input:not([type]).form-control:focus.valid + label:after,
 .md-form
   input[type="text"]:not(.browser-default).form-control.valid
@@ -7973,7 +7973,7 @@ body.scrollable {
 .md-form textarea.md-textarea.form-control:focus.valid + label:after {
   top: 4.1rem;
 }
-.daocreator-root .md-form input:not([type]).form-control.invalid + label:after,
+.md-form input:not([type]).form-control.invalid + label:after,
 .md-form input:not([type]).form-control:focus.invalid + label:after,
 .md-form
   input[type="text"]:not(.browser-default).form-control.invalid
@@ -8047,7 +8047,7 @@ body.scrollable {
 .md-form textarea.md-textarea.form-control:focus.invalid + label:after {
   top: 4rem;
 }
-.daocreator-root .md-form input:not([type]).form-control-lg.valid + label:after,
+.md-form input:not([type]).form-control-lg.valid + label:after,
 .md-form input:not([type]).form-control-lg:focus.valid + label:after,
 .md-form
   input[type="text"]:not(.browser-default).form-control-lg.valid
@@ -8198,7 +8198,7 @@ body.scrollable {
 .md-form textarea.md-textarea.form-control-lg:focus.invalid + label:after {
   top: 4.6rem;
 }
-.daocreator-root .md-form input:not([type]).form-control-sm.valid + label:after,
+.md-form input:not([type]).form-control-sm.valid + label:after,
 .md-form input:not([type]).form-control-sm:focus.valid + label:after,
 .md-form
   input[type="text"]:not(.browser-default).form-control-sm.valid
@@ -8349,7 +8349,7 @@ body.scrollable {
 .md-form textarea.md-textarea.form-control-sm:focus.invalid + label:after {
   top: 3.6rem;
 }
-.daocreator-root .md-form > input[type="date"]:not(.browser-default) + label {
+.md-form > input[type="date"]:not(.browser-default) + label {
   transform: translateY(-27px) scale(0.8);
   transform-origin: 0 0;
 }
@@ -8362,82 +8362,82 @@ body.scrollable {
   transform: translateY(-25px);
   transform-origin: 0 0;
 }
-.daocreator-root .md-form .was-validated input[type="text"]:valid + label {
+.md-form .was-validated input[type="text"]:valid + label {
   color: #00c851 !important;
 }
-.daocreator-root .md-form .was-validated input[type="text"]:invalid + label {
+.md-form .was-validated input[type="text"]:invalid + label {
   color: #f44336 !important;
 }
-.daocreator-root .md-form .was-validated .form-control:valid:focus {
+.md-form .was-validated .form-control:valid:focus {
   box-shadow: 0 1px 0 0 #00c851 !important;
 }
-.daocreator-root .md-form .was-validated .form-control:valid {
+.md-form .was-validated .form-control:valid {
   border-color: #00c851 !important;
 }
-.daocreator-root .md-form .was-validated .form-control:invalid:focus {
+.md-form .was-validated .form-control:invalid:focus {
   box-shadow: 0 1px 0 0 #f44336 !important;
 }
-.daocreator-root .md-form .was-validated .form-control:invalid {
+.md-form .was-validated .form-control:invalid {
   border-color: #f44336 !important;
 }
-.daocreator-root .md-form .form-control {
+.md-form .form-control {
   height: auto;
   padding: 0.6rem 0 0.4rem 0;
   margin: 0 0 0.5rem 0;
   background-color: transparent;
   border-radius: 0;
 }
-.daocreator-root .md-form .form-control:focus {
+.md-form .form-control:focus {
   box-shadow: none;
 }
-.daocreator-root .md-form .form-control:disabled,
+.md-form .form-control:disabled,
 .md-form .form-control[readonly] {
   background-color: transparent;
   border-bottom: 1px solid #bdbdbd;
 }
-.daocreator-root .md-form .form-control.is-valid {
+.md-form .form-control.is-valid {
   border-color: #00c851;
 }
-.daocreator-root .md-form .form-control.is-valid:focus {
+.md-form .form-control.is-valid:focus {
   border-color: #00c851 !important;
   box-shadow: 0 1px 0 0 #00c851 !important;
 }
-.daocreator-root .md-form .form-control.is-invalid {
+.md-form .form-control.is-invalid {
   border-color: #f44336;
 }
-.daocreator-root .md-form .form-control.is-invalid:focus {
+.md-form .form-control.is-invalid:focus {
   border-color: #f44336 !important;
   box-shadow: 0 1px 0 0 #f44336 !important;
 }
-.daocreator-root .md-form .form-control.is-valid,
+.md-form .form-control.is-valid,
 .md-form .form-control.is-invalid {
   background-position: center right !important;
 }
-.daocreator-root .md-form .validate {
+.md-form .validate {
   margin-bottom: 2.5rem;
 }
-.daocreator-root .md-form label {
+.md-form label {
   font-size: 1rem;
 }
-.daocreator-root .md-form label.active {
+.md-form label.active {
   font-size: 1rem;
 }
-.daocreator-root .md-form .prefix {
+.md-form .prefix {
   top: 0.25rem;
   font-size: 1.75rem;
 }
-.daocreator-root .md-form .prefix ~ input,
+.md-form .prefix ~ input,
 .md-form .prefix ~ textarea {
   width: calc(100% - 2.5rem);
   margin-left: 2.5rem;
 }
-.daocreator-root .md-form .prefix ~ label {
+.md-form .prefix ~ label {
   margin-left: 2.5rem;
 }
-.daocreator-root .md-form .prefix ~ .form-text {
+.md-form .prefix ~ .form-text {
   margin-left: 2.6rem;
 }
-.daocreator-root .md-form label {
+.md-form label {
   position: absolute;
   top: 0;
   left: 0;
@@ -8448,78 +8448,78 @@ body.scrollable {
   transform: translateY(12px);
   transform-origin: 0% 100%;
 }
-.daocreator-root .md-form label.active {
+.md-form label.active {
   transform: translateY(-14px) scale(0.8);
 }
-.daocreator-root .md-form .prefix {
+.md-form .prefix {
   position: absolute;
   transition: color 0.2s;
 }
-.daocreator-root .md-form .prefix.active {
+.md-form .prefix.active {
   color: #4285f4;
 }
-.daocreator-root .md-form.form-lg .validate {
+.md-form.form-lg .validate {
   margin-bottom: 2.8rem;
 }
-.daocreator-root .md-form.form-lg label {
+.md-form.form-lg label {
   font-size: 1.25rem;
 }
-.daocreator-root .md-form.form-lg label.active {
+.md-form.form-lg label.active {
   font-size: 1.15rem;
 }
-.daocreator-root .md-form.form-lg .prefix {
+.md-form.form-lg .prefix {
   top: 0.4rem;
   font-size: 2rem;
 }
-.daocreator-root .md-form.form-lg .prefix ~ input,
+.md-form.form-lg .prefix ~ input,
 .md-form.form-lg .prefix ~ textarea {
   width: calc(100% - 3rem);
   margin-left: 3rem;
 }
-.daocreator-root .md-form.form-lg .prefix ~ label {
+.md-form.form-lg .prefix ~ label {
   margin-left: 3rem;
 }
-.daocreator-root .md-form.form-lg .prefix ~ .form-text {
+.md-form.form-lg .prefix ~ .form-text {
   margin-left: 3.1rem;
 }
-.daocreator-root .md-form.form-sm .validate {
+.md-form.form-sm .validate {
   margin-bottom: 2.3rem;
 }
-.daocreator-root .md-form.form-sm label {
+.md-form.form-sm label {
   font-size: 0.875rem;
 }
-.daocreator-root .md-form.form-sm label.active {
+.md-form.form-sm label.active {
   font-size: 0.95rem;
 }
-.daocreator-root .md-form.form-sm .prefix {
+.md-form.form-sm .prefix {
   top: 0.35rem;
   font-size: 1.5rem;
 }
-.daocreator-root .md-form.form-sm .prefix ~ input,
+.md-form.form-sm .prefix ~ input,
 .md-form.form-sm .prefix ~ textarea {
   width: calc(100% - 2rem);
   margin-left: 2rem;
 }
-.daocreator-root .md-form.form-sm .prefix ~ label {
+.md-form.form-sm .prefix ~ label {
   margin-left: 2rem;
 }
-.daocreator-root .md-form.form-sm .prefix ~ .form-text {
+.md-form.form-sm .prefix ~ .form-text {
   margin-left: 2rem;
 }
-.daocreator-root .md-form textarea.md-textarea {
+.md-form textarea.md-textarea {
   padding: 1.5rem 0;
   overflow-y: hidden;
 }
-.daocreator-root .md-form textarea.md-textarea-auto {
+.md-form textarea.md-textarea-auto {
   padding: 0;
   padding-top: 1.5rem;
 }
-.daocreator-root .md-form.md-outline {
+.md-form.md-outline {
   position: relative;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
-.daocreator-root .md-form.md-outline input[type="text"],
+.md-form.md-outline input[type="text"],
 .md-form.md-outline input[type="password"],
 .md-form.md-outline input[type="email"],
 .md-form.md-outline input[type="url"],
@@ -8539,7 +8539,7 @@ body.scrollable {
   box-shadow: none;
   transition: all 0.3s;
 }
-.daocreator-root .md-form.md-outline input[type="text"]:focus:not([readonly]),
+.md-form.md-outline input[type="text"]:focus:not([readonly]),
 .md-form.md-outline input[type="password"]:focus:not([readonly]),
 .md-form.md-outline input[type="email"]:focus:not([readonly]),
 .md-form.md-outline input[type="url"]:focus:not([readonly]),
@@ -8571,7 +8571,7 @@ body.scrollable {
 .md-form.md-outline textarea.md-textarea:focus:not([readonly]) + label {
   color: #4285f4;
 }
-.daocreator-root .md-form.md-outline input[type="text"].valid,
+.md-form.md-outline input[type="text"].valid,
 .md-form.md-outline input[type="text"]:focus.valid,
 .md-form.md-outline input[type="password"].valid,
 .md-form.md-outline input[type="password"]:focus.valid,
@@ -8643,7 +8643,7 @@ body.scrollable {
   content: attr(data-success);
   opacity: 1;
 }
-.daocreator-root .md-form.md-outline input[type="text"].invalid,
+.md-form.md-outline input[type="text"].invalid,
 .md-form.md-outline input[type="text"]:focus.invalid,
 .md-form.md-outline input[type="password"].invalid,
 .md-form.md-outline input[type="password"]:focus.invalid,
@@ -8843,16 +8843,16 @@ body.scrollable {
     background: transparent;
   }
 }
-.daocreator-root .md-form.md-outline input:-webkit-autofill {
+.md-form.md-outline input:-webkit-autofill {
   -webkit-animation-name: autofill;
   animation-name: autofill;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
-.daocreator-root .md-form.md-outline .form-control {
+.md-form.md-outline .form-control {
   padding: 0.375rem 0.75rem;
 }
-.daocreator-root .md-form.md-outline label {
+.md-form.md-outline label {
   position: absolute;
   top: 0;
   left: 0;
@@ -8864,7 +8864,7 @@ body.scrollable {
   transform: translateY(9px);
   transform-origin: 0% 100%;
 }
-.daocreator-root .md-form.md-outline label.active {
+.md-form.md-outline label.active {
   left: 8px;
   padding-right: 5px;
   padding-left: 5px;
@@ -8872,82 +8872,82 @@ body.scrollable {
   background: #fff;
   transform: translateY(-13px) scale(0.8);
 }
-.daocreator-root .md-form.md-outline.form-lg .form-control.form-control-lg {
+.md-form.md-outline.form-lg .form-control.form-control-lg {
   padding: 0.5rem 0.725rem;
 }
-.daocreator-root .md-form.md-outline.form-lg label {
+.md-form.md-outline.form-lg label {
   font-size: 1.25rem;
   transform: translateY(10px);
 }
-.daocreator-root .md-form.md-outline.form-lg label.active {
+.md-form.md-outline.form-lg label.active {
   font-size: 1.1rem;
   transform: translateY(-14px) scale(0.8);
 }
-.daocreator-root .md-form.md-outline.form-lg .prefix {
+.md-form.md-outline.form-lg .prefix {
   top: 0.65rem;
   font-size: 25px;
 }
-.daocreator-root .md-form.md-outline.form-lg .prefix ~ input,
+.md-form.md-outline.form-lg .prefix ~ input,
 .md-form.md-outline.form-lg .prefix ~ textarea {
   width: calc(100% - 2.2rem);
   margin-left: 2.2rem;
 }
-.daocreator-root .md-form.md-outline.form-lg .prefix ~ label {
+.md-form.md-outline.form-lg .prefix ~ label {
   margin-left: 2.2rem;
 }
-.daocreator-root .md-form.md-outline.form-lg .prefix ~ .form-text {
+.md-form.md-outline.form-lg .prefix ~ .form-text {
   margin-left: 2.3rem;
 }
-.daocreator-root .md-form.md-outline.form-sm .form-control.form-control-sm {
+.md-form.md-outline.form-sm .form-control.form-control-sm {
   padding: 0.25rem 0.625rem;
 }
-.daocreator-root .md-form.md-outline.form-sm label {
+.md-form.md-outline.form-sm label {
   font-size: 0.8rem;
   transform: translateY(8px);
 }
-.daocreator-root .md-form.md-outline.form-sm label.active {
+.md-form.md-outline.form-sm label.active {
   font-size: 0.85rem;
   transform: translateY(-12px) scale(0.8);
 }
-.daocreator-root .md-form.md-outline.form-sm .prefix {
+.md-form.md-outline.form-sm .prefix {
   top: 0.5rem;
   font-size: 15px;
 }
-.daocreator-root .md-form.md-outline.form-sm .prefix ~ input,
+.md-form.md-outline.form-sm .prefix ~ input,
 .md-form.md-outline.form-sm .prefix ~ textarea {
   width: calc(100% - 1.6rem);
   margin-left: 1.6rem;
 }
-.daocreator-root .md-form.md-outline.form-sm .prefix ~ label {
+.md-form.md-outline.form-sm .prefix ~ label {
   margin-left: 1.6rem;
 }
-.daocreator-root .md-form.md-outline.form-sm .prefix ~ .form-text {
+.md-form.md-outline.form-sm .prefix ~ .form-text {
   margin-left: 1.7rem;
 }
-.daocreator-root .md-form.md-outline .prefix {
+.md-form.md-outline .prefix {
   position: absolute;
   top: 0.6rem;
   font-size: 20px;
   transition: color 0.2s;
 }
-.daocreator-root .md-form.md-outline .prefix:focus {
+.md-form.md-outline .prefix:focus {
   color: #4285f4;
 }
-.daocreator-root .md-form.md-outline .prefix ~ input,
+.md-form.md-outline .prefix ~ input,
 .md-form.md-outline .prefix ~ textarea {
   width: calc(100% - 2rem);
   margin-left: 2rem;
 }
-.daocreator-root .md-form.md-outline .prefix ~ label {
+.md-form.md-outline .prefix ~ label {
   margin-left: 2rem;
 }
-.daocreator-root .md-form.md-outline .prefix ~ .form-text {
+.md-form.md-outline .prefix ~ .form-text {
   margin-left: 2.1rem;
 }
-.daocreator-root .md-form.md-outline .character-counter {
+.md-form.md-outline .character-counter {
   margin-top: -0.5rem;
 }
-.daocreator-root .md-form.md-bg input[type="text"],
+.md-form.md-bg input[type="text"],
 .md-form.md-bg input[type="password"],
 .md-form.md-bg input[type="email"],
 .md-form.md-bg input[type="url"],
@@ -9846,7 +9846,7 @@ div.dataTables_wrapper
 .daocreator-root table.dataTable thead {
   cursor: pointer;
 }
-table.dataTable thead > tr > th.sorting_asc,
+.daocreator-root table.dataTable thead > tr > th.sorting_asc,
 table.dataTable thead > tr > th.sorting_desc,
 table.dataTable thead > tr > th.sorting,
 table.dataTable thead > tr > td.sorting_asc,
@@ -9854,11 +9854,11 @@ table.dataTable thead > tr > td.sorting_desc,
 table.dataTable thead > tr > td.sorting {
   padding-right: 30px;
 }
-table.dataTable thead > tr > th:active,
+.daocreator-root table.dataTable thead > tr > th:active,
 table.dataTable thead > tr > td:active {
   outline: none;
 }
-table.dataTable thead .sorting,
+.daocreator-root table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
@@ -9866,7 +9866,7 @@ table.dataTable thead .sorting_desc_disabled {
   position: relative;
   cursor: pointer;
 }
-table.dataTable thead .sorting:before,
+.daocreator-root table.dataTable thead .sorting:before,
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_asc:after,
@@ -9881,7 +9881,7 @@ table.dataTable thead .sorting_desc_disabled:after {
   display: block;
   opacity: 0.3;
 }
-table.dataTable thead .sorting:before,
+.daocreator-root table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_asc_disabled:before,
@@ -9892,7 +9892,7 @@ table.dataTable thead .sorting_desc_disabled:before {
   font-weight: 900;
   content: "\f0de";
 }
-table.dataTable thead .sorting:after,
+.daocreator-root table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
@@ -9903,11 +9903,11 @@ table.dataTable thead .sorting_desc_disabled:after {
   font-weight: 900;
   content: "\f0dd";
 }
-table.dataTable thead .sorting_asc:before,
+.daocreator-root table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:after {
   opacity: 1;
 }
-table.dataTable thead .sorting_asc_disabled:before,
+.daocreator-root table.dataTable thead .sorting_asc_disabled:before,
 table.dataTable thead .sorting_desc_disabled:after {
   opacity: 0;
 }
@@ -10010,7 +10010,7 @@ table.dataTable.order-column.hover tbody > tr > .selected:hover {
 table.dataTable tbody th.select-checkbox {
   position: relative;
 }
-table.dataTable tbody td.select-checkbox:before,
+.daocreator-root table.dataTable tbody td.select-checkbox:before,
 table.dataTable tbody td.select-checkbox:after,
 table.dataTable tbody th.select-checkbox:before,
 table.dataTable tbody th.select-checkbox:after {
