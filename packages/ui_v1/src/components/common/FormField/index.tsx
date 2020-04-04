@@ -25,6 +25,7 @@ import {
   AnyField,
   FieldType,
   StringField,
+  NumberField,
   TokenField,
   DurationField,
   DateTimeField,
@@ -50,6 +51,9 @@ class FormField extends React.Component<Props> {
           switch (field.type) {
             case FieldType.String:
               FieldView = StringFieldView;
+              break;
+            case FieldType.Number:
+              FieldView = NumberFieldView;
               break;
             case FieldType.Token:
               FieldView = TokenFieldView;
@@ -161,6 +165,28 @@ const FieldError = ({ field }: any) => (
 
 const StringFieldView = observer(
   ({ field, popupState, editable }: FieldProps<StringField>) => (
+    <>
+      <TextField
+        fullWidth
+        variant={"filled"}
+        margin={"dense"}
+        label={field.displayName}
+        error={field.hasError}
+        value={field.value}
+        disabled={editable === undefined ? false : !editable}
+        onChange={e => field.onChange(e.target.value)}
+        onBlur={field.enableAutoValidationAndValidate}
+        InputProps={{
+          startAdornment: FieldInformation(popupState)
+        }}
+      />
+      <FieldError field={field} />
+    </>
+  )
+);
+
+const NumberFieldView = observer(
+  ({ field, popupState, editable }: FieldProps<NumberField>) => (
     <>
       <TextField
         fullWidth
