@@ -2392,58 +2392,6 @@ a.text-light:focus {
   box-shadow: 0 8px 20px 1px rgba(0, 0, 0, 0.3);
 }
 
-@font-face {
-  font-family: Roboto;
-  font-weight: 200;
-  src: local(Roboto Thin), url("../font/roboto/Roboto-Thin.eot");
-  src: url("../font/roboto/Roboto-Thin.eot?#iefix") format("embedded-opentype"),
-    url("../font/roboto/Roboto-Thin.woff2") format("woff2"),
-    url("../font/roboto/Roboto-Thin.woff") format("woff"),
-    url("../font/roboto/Roboto-Thin.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Roboto;
-  font-weight: 300;
-  src: local(Roboto Light), url("../font/roboto/Roboto-Light.eot");
-  src: url("../font/roboto/Roboto-Light.eot?#iefix") format("embedded-opentype"),
-    url("../font/roboto/Roboto-Light.woff2") format("woff2"),
-    url("../font/roboto/Roboto-Light.woff") format("woff"),
-    url("../font/roboto/Roboto-Light.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Roboto;
-  font-weight: 400;
-  src: local(Roboto Regular), url("../font/roboto/Roboto-Regular.eot");
-  src: url("../font/roboto/Roboto-Regular.eot?#iefix")
-      format("embedded-opentype"),
-    url("../font/roboto/Roboto-Regular.woff2") format("woff2"),
-    url("../font/roboto/Roboto-Regular.woff") format("woff"),
-    url("../font/roboto/Roboto-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Roboto;
-  font-weight: 500;
-  src: url("../font/roboto/Roboto-Medium.eot");
-  src: url("../font/roboto/Roboto-Medium.eot?#iefix")
-      format("embedded-opentype"),
-    url("../font/roboto/Roboto-Medium.woff2") format("woff2"),
-    url("../font/roboto/Roboto-Medium.woff") format("woff"),
-    url("../font/roboto/Roboto-Medium.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Roboto;
-  font-weight: 700;
-  src: url("../font/roboto/Roboto-Bold.eot");
-  src: url("../font/roboto/Roboto-Bold.eot?#iefix") format("embedded-opentype"),
-    url("../font/roboto/Roboto-Bold.woff2") format("woff2"),
-    url("../font/roboto/Roboto-Bold.woff") format("woff"),
-    url("../font/roboto/Roboto-Bold.ttf") format("truetype");
-}
-
 .waves-block {
   display: block;
 }
