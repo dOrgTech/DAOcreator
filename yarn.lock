@@ -1124,6 +1124,18 @@
     "@devexpress/dx-core" "2.4.1"
     prop-types "^15.7.2"
 
+"@dorgtech/daocreator-lib@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@dorgtech/daocreator-lib/-/daocreator-lib-1.0.0.tgz#02055a08472861d326a12fde14072bd96f285236"
+  integrity sha512-nNMYutW95MPCI+c/7koutTV40ovhgXeTaQ0Zwg3wh104nUislOeuDWBvCjJx4CuCaYYd7En+BykDCFZQtm3aLQ==
+  dependencies:
+    bn.js "^5.0.0"
+    csv "^5.1.2"
+    csv-stringify "^5.3.3"
+    formstate "^1.3.0"
+    jsonschema "^1.2.5"
+    web3 "1.2.4"
+
 "@emotion/hash@^0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.7.4.tgz#f14932887422c9056b15a8d222a9074a7dfa2831"

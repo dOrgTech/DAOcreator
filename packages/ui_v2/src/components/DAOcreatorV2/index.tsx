@@ -1,7 +1,4 @@
 import * as React from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "../assets/styles/bootstrap.css";
-import "mdbreact/dist/css/mdb.css";
 
 import {
   MDBBtn,
@@ -44,6 +41,9 @@ import DAOstackLogo from "../commonV2/DAOstackLogo";
 import { handleNetworkReload } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../assets/styles/bootstrap.css";
+import "../assets/styles/mdbreact.css";
 import "./styles.css";
 
 const moreLogo = require("../assets/icons/more.svg");
@@ -325,8 +325,8 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   currentForm = steps[step].form;
   return (
     <>
-      <MDBContainer className="root" style={styles.paddingContainer}>
-        <div style={styles.root}>
+      <MDBContainer style={styles.paddingContainer}>
+        <div id="creator-root">
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
             <MDBCol size="6" id="title" style={styles.titleContainer}>
@@ -420,15 +420,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 };
 
 const styles = {
-  root: {
-    fontFamily: "Roboto",
-    maxWidth: 734,
-    border: "1px solid #EAEDF3",
-    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
-    borderRadius: 4,
-    margin: "auto",
-    backgroundColor: "white"
-  },
   paddingContainer: {
     padding: "1%",
     height: "50px"
