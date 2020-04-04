@@ -3,7 +3,7 @@ const logo = require("../assets/logos/dao-logo-gray.svg");
 
 const DAOstackLogo = () => {
   return (
-    <div className="text-center">
+    <div style={{ marginLeft: "31%" }}>
       <img style={styles.logo} src={logo} alt="dao-logo.svg" />
       <b style={styles.text}>Powered by DAOstack</b>
     </div>
