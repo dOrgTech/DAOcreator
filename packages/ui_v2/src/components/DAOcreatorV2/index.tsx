@@ -75,6 +75,7 @@ const recoveredForm: DAOForm = new DAOForm();
 
 interface Props {
   setWeb3Provider?: ProviderOrGetter;
+  noDAOstackLogo?: Boolean;
 }
 
 const DAOcreator: React.FC<Props> = (props: Props) => {
@@ -404,7 +405,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
               )}
             </div>
           </div>
-          <DAOstackLogo />
+          {props.noDAOstackLogo ? <></> : <DAOstackLogo />}
         </div>
       </MDBContainer>
       <PreviewDialog />
