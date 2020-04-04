@@ -8,7 +8,7 @@
     "eject": "react-scripts eject",
     "test": "react-scripts test",
     "build:app": "CI=false react-scripts --max_old_space_size=4096 build",
-    "build:assets": "copyfiles -u 2 ./src/**/*.css ./src/**/*.svg ./src/components/assets/font/**/*.* dist",
+    "build:assets": "copyfiles -u 2 ./src/**/*.css ./src/**/*.svg dist",
     "build:package": "rm -rf ./dist && tsc --build ./tsconfig.release.json && yarn build:assets",
     "package:release": "rm -rf ./package && mkdir ./package && cp -r ./dist/ ./package/dist && cp README.md package.json ./package && cp -r ./src/components ./package/src",
     "release": "yarn build:package && yarn package:release && yarn publish ./package --access public"
