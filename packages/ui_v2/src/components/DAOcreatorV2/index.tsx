@@ -325,7 +325,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
-        <div style={styles.root}>
+        <div id="creator-root">
           <MDBRow style={styles.headerTop}>
             <MDBCol size="3" />
             <MDBCol size="6" id="title" style={styles.titleContainer}>
@@ -419,15 +419,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 };
 
 const styles = {
-  root: {
-    fontFamily: "Roboto",
-    maxWidth: 734,
-    border: "1px solid #EAEDF3",
-    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.04)",
-    borderRadius: 4,
-    margin: "auto",
-    backgroundColor: "white"
-  },
   paddingContainer: {
     padding: "1%",
     height: "50px"
