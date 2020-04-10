@@ -14,8 +14,6 @@ import {
   GenesisProtocolPreset
 } from "../../../state";
 
-// TODO: support custom permissions
-// TODO: support custom addresses / versions?
 export class GenericSchemeForm extends SchemeForm<
   GenericScheme,
   {
@@ -54,7 +52,6 @@ export class GenericSchemeForm extends SchemeForm<
 
   public fromState(state: GenericScheme) {
     this.$.contractToCall.value = state.contractToCall;
-    // TODO: support multiple voting machine types
     this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
   }
 

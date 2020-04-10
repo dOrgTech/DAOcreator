@@ -2,7 +2,7 @@ import React from "react";
 import { MDBRow, MDBCol } from "mdbreact";
 
 import FormField from "../../FormField";
-import { MemberForm } from "@dorgtech/daocreator-lib";
+import { MemberForm } from "@dorgtech/daocreator-lib-experimental";
 import './styles.css';
 
 export const MemberEditor = ({ memberForm, onSubmit }: { memberForm: MemberForm; onSubmit: (event: any) => void }) => {

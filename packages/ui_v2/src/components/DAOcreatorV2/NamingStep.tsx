@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { DAOConfigForm } from "@dorgtech/daocreator-lib";
+import { DAOConfigForm } from "@dorgtech/daocreator-lib-experimental";
 import { observer } from "mobx-react";
 import DAOConfigEditor from "../commonV2/dao/DAOConfigEditor";
 import { MDBRow, MDBCol } from "mdbreact";

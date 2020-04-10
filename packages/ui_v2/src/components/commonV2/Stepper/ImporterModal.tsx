@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { DAOForm, MembersForm } from "@dorgtech/daocreator-lib";
+import { DAOForm, MembersForm } from "@dorgtech/daocreator-lib-experimental";
 import { useDropzone } from "react-dropzone";
 import {
   MDBIcon,

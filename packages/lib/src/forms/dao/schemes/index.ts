@@ -1,3 +1,3 @@
 export * from "./ContributionRewardForm";
 export * from "./GenericSchemeForm";
-export * from "./SchemeRegistrarForm";
+export * from "./SchemeFactoryForm";

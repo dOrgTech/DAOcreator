@@ -8,10 +8,10 @@ import {
   AnySchemeForm,
   GenesisProtocolForm,
   ContributionRewardForm,
-  SchemeRegistrarForm,
+  SchemeFactoryForm,
   GenericSchemeForm,
   DurationField
-} from "@dorgtech/daocreator-lib";
+} from "@dorgtech/daocreator-lib-experimental";
 
 import AdvancedEditor from "./AdvancedEditor";
 import Toggle from "./Toggle";
@@ -27,7 +27,7 @@ interface Props {
   setLoadedSpeed: (speed: DAOSpeed) => void;
 }
 
-export type FullSchemes = [ContributionRewardForm, SchemeRegistrarForm, GenericSchemeForm];
+export type FullSchemes = [ContributionRewardForm, SchemeFactoryForm, GenericSchemeForm];
 
 export type VotingMachinePresets = GenesisProtocolForm[];
 
@@ -45,7 +45,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
     DAOSpeed.Slow,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.SchemeFactory, GenesisProtocolPreset.Critical],
       [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
     ])
   ],
@@ -53,7 +53,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
     DAOSpeed.Medium,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
+      [SchemeType.SchemeFactory, GenesisProtocolPreset.Critical],
       [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
     ])
   ],
@@ -61,7 +61,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
     DAOSpeed.Fast,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
+      [SchemeType.SchemeFactory, GenesisProtocolPreset.Normal],
       [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
     ])
   ]
@@ -103,7 +103,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
 
   const [fullSchemes, setFullSchemes] = useState<FullSchemes>([
     new ContributionRewardForm(),
-    new SchemeRegistrarForm(),
+    new SchemeFactoryForm(),
     new GenericSchemeForm()
   ]);
 
@@ -111,7 +111,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
 
   const [activeSchemeTypes, setActiveSchemeTypes] = useState<SchemeType[]>([
     SchemeType.ContributionReward,
-    SchemeType.SchemeRegistrar
+    SchemeType.SchemeFactory
   ]);
 
   // Ref to stop force switching toggles from updating vm
@@ -142,7 +142,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
     };
     const activeSchemes = [
       containsType(SchemeType.ContributionReward),
-      containsType(SchemeType.SchemeRegistrar),
+      containsType(SchemeType.SchemeFactory),
       containsType(SchemeType.GenericScheme)
     ];
 

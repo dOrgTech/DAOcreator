@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import {
   AnyLogLine
 } from "../dao/Migrator/LogLineTypes";
-import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } from "@dorgtech/daocreator-lib";
+import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } from "@dorgtech/daocreator-lib-experimental";
 import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";

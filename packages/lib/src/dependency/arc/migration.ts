@@ -65,7 +65,7 @@ export const migrateDAO = async (
       return { receipt, result };
     };
 
-    const arcVersion = "0.0.1-rc.33";
+    const arcVersion = "0.1.1-rc.12";
     const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
 
     // If the user doesn't have a supported network chosen, abort
@@ -126,12 +126,14 @@ export const migrateDAO = async (
     console.log(result);
 
     return {
-      arcVersion: arcVersion,
+      arcVersion: result.arcVersion,
       name: result.name,
       Avatar: result.Avatar,
       DAOToken: result.DAOToken,
       Reputation: result.Reputation,
-      Controller: result.Controller
+      Controller: result.Controller,
+      Schemes: result.Schemes,
+      StandAloneContracts: result.StandAloneContracts
     };
   } catch (e) {
     callbacks.migrationAborted(e.message);

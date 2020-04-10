@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 import LineGraphic from "../commonV2/LineGraphic";
 import { getSimpleOptions, SimpleOption } from "../utils";
-import { DAOForm } from "@dorgtech/daocreator-lib";
+import { DAOForm } from "@dorgtech/daocreator-lib-experimental";
 
 const FirstStep: FC<DAOForm> = form => {
   const { daoName, tokenSymbol } = form.$.config.$;

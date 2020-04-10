@@ -23,10 +23,10 @@ import {
   toDAOMigrationParams,
   toJSON,
   ContributionRewardForm,
-  SchemeRegistrarForm,
+  SchemeFactoryForm,
   ProviderOrGetter,
   setWeb3Provider
-} from "@dorgtech/daocreator-lib";
+} from "@dorgtech/daocreator-lib-experimental";
 
 import NamingStep from "./NamingStep";
 import MembersStep from "./MembersStep";
@@ -161,7 +161,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       nullForm.$.config.$.tokenName.value = " token";
       nullForm.$.schemes.$ = [
         new ContributionRewardForm(),
-        new SchemeRegistrarForm()
+        new SchemeFactoryForm()
       ];
       if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
         return;

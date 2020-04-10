@@ -6,25 +6,21 @@ export interface DAOMigrationParams {
   tokenName: string;
   tokenSymbol: string;
   VotingMachinesParams: GenesisProtocolConfig[];
-  schemes: {
-    ContributionReward?: boolean;
-    UGenericScheme?: boolean;
-    SchemeRegistrar?: boolean;
-  };
-  ContributionReward?: {
-    voteParams?: number;
+  Schemes: {
+    name: string;
+    permissions: string;
+    params: any[];
+    [args: string]: any;
   }[];
-  UGenericScheme?: {
-    voteParams?: number;
-    targetContract: string;
+  StandAloneContracts: {
+    name: string;
+    fromArc: boolean;
+    params?: any[];
+    runFunctions: {
+      functionName: string;
+      params: any[];
+    }[];
   }[];
-  SchemeRegistrar?: {
-    voteRegisterParams?: number;
-    voteRemoveParams?: number;
-  }[];
-  unregisterOwner: boolean;
-  useUController: boolean;
-  useDaoCreator: boolean;
   founders: Member[];
 }
 
@@ -35,6 +31,16 @@ export interface DAOMigrationResult {
   DAOToken: Address;
   Reputation: Address;
   Controller: Address;
+  Schemes: {
+    name: string;
+    alias: string;
+    address: Address;
+  }[];
+  StandAloneContracts: {
+    name: string;
+    address: Address;
+    arcVersion?: string;
+  }[];
 }
 
 export interface DAOMigrationCallbacks {

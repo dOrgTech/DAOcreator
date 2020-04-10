@@ -2,8 +2,8 @@ import React, { FC, useState, useEffect } from "react";
 import {
   SchemesForm,
   ContributionRewardForm,
-  SchemeRegistrarForm
-} from "@dorgtech/daocreator-lib";
+  SchemeFactoryForm
+} from "@dorgtech/daocreator-lib-experimental";
 
 import SchemeEditor, { DAOSpeed } from "../commonV2/dao/Schemes/SchemeEditor";
 
@@ -31,7 +31,7 @@ const SchemesStep: FC<Props> = ({
   useEffect(() => {
     if (!loading) return;
 
-    form.$ = [new ContributionRewardForm(), new SchemeRegistrarForm()];
+    form.$ = [new ContributionRewardForm(), new SchemeFactoryForm()];
     setLoading(false);
   }, [loading, form.$]);
 

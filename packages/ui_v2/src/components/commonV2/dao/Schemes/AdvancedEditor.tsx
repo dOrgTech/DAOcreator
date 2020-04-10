@@ -14,12 +14,12 @@ import {
   AnySchemeForm,
   GenericSchemeForm,
   ContributionRewardForm,
-  SchemeRegistrarForm,
+  SchemeFactoryForm,
   SchemeType,
   SchemesForm,
   GenesisProtocolForm,
   AnyField
-} from "@dorgtech/daocreator-lib";
+} from "@dorgtech/daocreator-lib-experimental";
 import VotingMachineEditor from "../VotingMachineEditor";
 import FormField from "../../FormField";
 import { VotingMachinePresets } from "./SchemeEditor";
@@ -39,7 +39,7 @@ interface Props {
 
 const schemeTemplates: AnySchemeForm[] = [
   new ContributionRewardForm(),
-  new SchemeRegistrarForm(),
+  new SchemeFactoryForm(),
   new GenericSchemeForm()
 ];
 
@@ -101,9 +101,9 @@ const AdvancedEditor: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal, updateAdvancedForm]);
 
-  // Check that scheme of type SchemeRegistrar is active
+  // Check that scheme of type SchemeFactory is active
   useEffect(() => {
-    if (isActive[SchemeType.SchemeRegistrar]) {
+    if (isActive[SchemeType.SchemeFactory]) {
       setWarning("");
       return;
     }
@@ -231,7 +231,7 @@ const AdvancedEditor: FC<Props> = ({
                 <span>{schemeTemplates[scheme.type].description}</span>
               </MDBTooltip>
             </MDBCol>
-            {warning && scheme.type === SchemeType.SchemeRegistrar && (
+            {warning && scheme.type === SchemeType.SchemeFactory && (
               <MDBCol>
                 <span
                   style={{

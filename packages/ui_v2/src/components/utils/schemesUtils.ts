@@ -1,4 +1,4 @@
-import { SchemesForm } from "@dorgtech/daocreator-lib";
+import { SchemesForm } from "@dorgtech/daocreator-lib-experimental";
 
 export interface SimpleOption {
   text: string;
