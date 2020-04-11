@@ -4,6 +4,7 @@ import {
   LogInfo,
   LogError,
   LogTransactionResult,
+  LogMigrationComplete,
   LogMigrationAborted,
   AnyLogLine,
   LogType
@@ -138,12 +139,10 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
     const { type } = logLine;
     addFullLogLine(logLine);
 
-    const { UserApproval, Info, Error, TransactionResult, MigrationAborted } = LogType;
-
     console.log(logLine);
 
     switch (type) {
-      case UserApproval:
+      case LogType.UserApproval:
         const approvalLine = logLine as LogUserApproval;
         const { question } = approvalLine;
         switch (question) {
@@ -180,7 +179,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         }
         break;
 
-      case Info:
+      case LogType.Info:
         const infoLine = logLine as LogInfo;
         const { info } = infoLine;
         switch (true) {
@@ -228,7 +227,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         }
         break;
 
-      case Error:
+      case LogType.Error:
         const errorLine = logLine as LogError;
         const { error } = errorLine;
         switch (true) {
@@ -256,7 +255,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         }
         break;
 
-      case TransactionResult:
+      case LogType.TransactionResult:
         const txLine = logLine as LogTransactionResult;
         const { msg } = txLine;
         switch (true) {
@@ -281,7 +280,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         }
         break;
 
-      case MigrationAborted:
+      case LogType.MigrationAborted:
         const abortedLine = logLine as LogMigrationAborted;
         const abortedMsg = abortedLine.toString();
 
@@ -339,13 +338,12 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
-        // Unimplemented callback
 
         window.onbeforeunload = () => {};
+
+        addLogLine(new LogMigrationComplete(result));
         setResult(result);
         setInstallStep(STEP.Completed);
-
-        //onComplete(result); // props
       },
 
       getState: () => {

@@ -124,6 +124,7 @@ export const migrateDAO = async (
 
     const result = migration!.dao[arcVersion];
     console.log(result);
+    callbacks.migrationComplete(result);
 
     return {
       arcVersion: result.arcVersion,
