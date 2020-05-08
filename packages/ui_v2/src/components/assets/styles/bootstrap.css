@@ -126,18 +126,6 @@ abbr[title] {
   font-style: normal;
   line-height: inherit;
 }
-.daocreator-root dl,
-ol,
-ul {
-  margin-top: 0;
-  margin-bottom: 1rem;
-}
-.daocreator-root ol ol,
-ol ul,
-ul ol,
-ul ul {
-  margin-bottom: 0;
-}
 .daocreator-root dt {
   font-weight: 700;
 }
