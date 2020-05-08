@@ -60,12 +60,6 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     opts
   )
 
-  const genesisProtocol = new web3.eth.Contract(
-    utils.importAbi(`./${contractsDir}/${arcVersion}/GenesisProtocol.json`).abi,
-    GenesisProtocol,
-    opts
-  )
-
   let randomName = utils.generateRandomName()
 
   if (deploymentState.orgName !== undefined) {
@@ -173,57 +167,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     deploymentState.schemesData = '0x'
     deploymentState.schemesInitializeDataLens = []
     deploymentState.permissions = []
-    deploymentState.votingMachinesParams = []
   }
-
-  if (migrationParams.VotingMachinesParams !== undefined && migrationParams.VotingMachinesParams.length > 0) {
-    if (deploymentState.registeredGenesisProtocolParamsCount === undefined) {
-      deploymentState.registeredGenesisProtocolParamsCount = 0
-    }
-    for (deploymentState.registeredGenesisProtocolParamsCount;
-      deploymentState.registeredGenesisProtocolParamsCount < migrationParams.VotingMachinesParams.length;
-      deploymentState.registeredGenesisProtocolParamsCount++) {
-      setState(deploymentState, network)
-      if (migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].votingParamsHash !== undefined) {
-        deploymentState.votingMachinesParams.push(migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].votingParamsHash)
-        setState(deploymentState, network)
-        continue
-      }
-      let parameters = [
-        [
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].queuedVoteRequiredPercentage.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].queuedVotePeriodLimit.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].boostedVotePeriodLimit.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].preBoostedVotePeriodLimit.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].thresholdConst.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].quietEndingPeriod.toString(),
-          web3.utils.toWei(migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].proposingRepReward.toString()),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].votersReputationLossRatio.toString(),
-          web3.utils.toWei(migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].minimumDaoBounty.toString()),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].daoBountyConst.toString(),
-          migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].activationTime.toString()
-        ],
-        migrationParams.VotingMachinesParams[deploymentState.registeredGenesisProtocolParamsCount].voteOnBehalf
-      ]
-      const genesisProtocolSetParams = genesisProtocol.methods.setParameters(...parameters)
-
-      let votingMachinesParams = await genesisProtocolSetParams.call()
-      const votingMachineCheckParams = await genesisProtocol.methods.parameters(votingMachinesParams).call()
-      if (votingMachineCheckParams.minimumDaoBounty === '0') {
-        tx = (await sendTx(genesisProtocolSetParams, 'Setting GenesisProtocol parameters...')).receipt
-        await logTx(tx,
-          'GenesisProtocol parameters set. | Params Hash: ' +
-          votingMachinesParams + '\nParameters:\n' +
-          parameters.toString().replace(/,/g, ',\n')
-        )
-      }
-
-      deploymentState.votingMachinesParams.push(votingMachinesParams)
-      setState(deploymentState, network)
-    }
-  }
-  deploymentState.registeredGenesisProtocolParamsCount++
-  setState(deploymentState, network)
 
   let runFunctions = async function (object, contract) {
     if (object.runFunctions !== undefined) {
@@ -342,13 +286,32 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
       let schemeParams = [avatar.options.address]
       for (let i in scheme.params) {
         if (scheme.params[i].voteParams !== undefined) {
-          schemeParams.push(deploymentState.votingMachinesParams[scheme.params[i].voteParams])
+          let votingParameters = [
+            [
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].queuedVoteRequiredPercentage.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].queuedVotePeriodLimit.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].boostedVotePeriodLimit.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].preBoostedVotePeriodLimit.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].thresholdConst.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].quietEndingPeriod.toString(),
+              web3.utils.toWei(migrationParams.VotingMachinesParams[scheme.params[i].voteParams].proposingRepReward.toString()),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].votersReputationLossRatio.toString(),
+              web3.utils.toWei(migrationParams.VotingMachinesParams[scheme.params[i].voteParams].minimumDaoBounty.toString()),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].daoBountyConst.toString(),
+              migrationParams.VotingMachinesParams[scheme.params[i].voteParams].activationTime.toString()
+            ],
+            migrationParams.VotingMachinesParams[scheme.params[i].voteParams].voteOnBehalf,
+            '0x0000000000000000000000000000000000000000000000000000000000000000'
+          ]
+          schemeParams.push(...votingParameters)
         } else if (scheme.params[i] === 'GenesisProtocolAddress') {
           schemeParams.push(GenesisProtocol)
         } else if (scheme.params[i].StandAloneContract !== undefined) {
           schemeParams.push(deploymentState.StandAloneContracts[scheme.params[i].StandAloneContract].address)
         } else if (scheme.params[i].packageContract !== undefined) {
           schemeParams.push(arcPackage[arcVersion][scheme.params[i].packageContract])
+        } else if (scheme.params[i] === 'PackageVersion') {
+          schemeParams.push([0, 1, getArcVersionNumber(arcVersion)])
         } else if (scheme.params[i] === 'AvatarAddress') {
           schemeParams.push(avatar.options.address)
         } else {
@@ -392,36 +355,6 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     }
 
     deploymentState.schemesSet = true
-    setState(deploymentState, network)
-  }
-
-  // Special code for Competition deployment
-  if (migrationParams.Schemes) {
-    let len = migrationParams.Schemes.length
-    if (deploymentState.SchemeAfterCounter === undefined) {
-      deploymentState.SchemeAfterCounter = 0
-    }
-    for (deploymentState.SchemeAfterCounter;
-      deploymentState.SchemeAfterCounter < len; deploymentState.SchemeAfterCounter++) {
-      setState(deploymentState, network)
-      let scheme = migrationParams.Schemes[deploymentState.SchemeAfterCounter]
-
-      if (scheme.name === 'ContributionRewardExt' && scheme.useCompetition === true) {
-        let competitionAddress = scheme.params[2]
-        if (competitionAddress.StandAloneContract !== undefined) {
-          competitionAddress = deploymentState.StandAloneContracts[competitionAddress.StandAloneContract].address
-        }
-        let initCompetition = await new web3.eth.Contract(
-          utils.importAbi(`./${contractsDir}/${arcVersion}/Competition.json`).abi,
-          competitionAddress,
-          opts).methods.initialize(deploymentState.Schemes[deploymentState.SchemeAfterCounter].address)
-        tx = (await sendTx(initCompetition, `Initializing competition with ContributionRewardExt address...`)).receipt
-        await logTx(tx,
-          `Initialized competition with rewarder: ${deploymentState.Schemes[deploymentState.SchemeAfterCounter].address}.`)
-      }
-      setState(deploymentState, network)
-    }
-    deploymentState.SchemeAfterCounter++
     setState(deploymentState, network)
   }
 

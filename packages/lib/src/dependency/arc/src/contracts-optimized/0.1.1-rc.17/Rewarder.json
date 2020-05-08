@@ -1,0 +1,1 @@
+{"contractName":"Rewarder","abi":[{"constant":false,"inputs":[{"internalType":"address payable","name":"","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}],"linkReferences":{},"deployedLinkReferences":{}}

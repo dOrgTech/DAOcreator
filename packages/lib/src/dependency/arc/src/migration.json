@@ -1,7 +1,7 @@
 {
   "private": {
     "package": {
-      "0.1.1-rc.12": {
+      "0.1.1-rc.17": {
         "Package": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
         "ImplementationDirectory": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         "App": "0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B",
@@ -43,308 +43,186 @@
         "VotingMachineCallbacks": "0x0d3C71782055bD88A71b611972152d6e984EDF79",
         "Wallet": "0xEd447aCB0CEb49d77f317dD6D37CB64da7a7E7F8",
         "DAORegistryInstance": "0x05678a3797bf8dC4dE0C6B0Fd13c3C455629E02f",
-        "DAOFactoryInstance": "0x332280007303d5942dd60A945169b2b303320686"
+        "DAOFactoryInstance": "0xC3Ef4965B788cc4b905084d01F2eb7D4b6E93ABF",
+        "AdminUpgradeabilityProxy": "0xC3Ef4965B788cc4b905084d01F2eb7D4b6E93ABF"
       }
     },
     "dao": {
-      "0.1.1-rc.12": {
+      "0.1.1-rc.17": {
         "name": "My DAO",
-        "Avatar": "0x019518168df29B1cb2E06894b63DC12d83e4774A",
-        "DAOToken": "0xb5232C367925f39f90FFb210970086c71803B2D9",
-        "Reputation": "0x897689B5227eAb6B7d5ED6b3147fCB571B68E9a4",
-        "Controller": "0x6C870dD5cE6D8be4653725afdc0C0A15028AbFeB",
+        "Avatar": "0x68728fE67Fb1fBAe9076110f98E9ba3F5A00F936",
+        "DAOToken": "0xAf2606a5dCB68b3D15af4003dcd48cBDb651C010",
+        "Reputation": "0x550CF363f4d46996073B40440FF906867859d4C0",
+        "Controller": "0xeD405703e52E7f3092291C8D1855bA07780af7db",
         "Schemes": [
           {
             "name": "ContributionReward",
             "alias": "ContributionRewardAlias",
-            "address": "0x69627D7c6385DF9dA62F80a9D7070Aa52C69613A"
+            "address": "0xabB352dB65A5681c3C86E1b7B2c66214208519D0"
           },
           {
             "name": "SchemeRegistrar",
             "alias": "SchemeRegistrarAlias",
-            "address": "0xFB47562530A7e5071461Cd256722Ee371251e84b"
+            "address": "0x22bFd5aF4D6c9952b43f28959EfaC9c79AB8D4Fc"
           },
           {
             "name": "GlobalConstraintRegistrar",
             "alias": "GlobalConstraintRegistrarAlias",
-            "address": "0xf6A5D1e1791d27607c11a702ab711568616a5281"
+            "address": "0x28f4054C6Bf8bB821997B9aa4AcbB3f58298849d"
           },
           {
             "name": "UpgradeScheme",
             "alias": "UpgradeSchemeAlias",
-            "address": "0x88dACe4393AaD98eF4067a903e7f67c97887F4A5"
+            "address": "0xd4aCBBeC1F1E62B6cfEb16Dc19641c95666F170f"
           },
           {
             "name": "GenericScheme",
             "alias": "GenericSchemeAlias",
-            "address": "0x8bF42e8c5A72a864094D53Afb3B8b540bAa8C898"
-          },
-          {
-            "name": "GenericScheme",
-            "alias": "GenericSchemeAlias2",
-            "address": "0x40f0D56BEd2A96ca3A173739A92FCfF489b6aa9e"
+            "address": "0x0470573c6B260f428443e8dFe86B04460221b0B5"
           },
           {
             "name": "ContributionRewardExt",
             "alias": "ContributionRewardExt",
-            "address": "0x87D204c1C408885012ACdd66751391af86274822"
+            "address": "0x6A1E3b4dE296AC21E65908EE3B040DC4ecE32D10"
           },
           {
             "name": "SchemeFactory",
             "alias": "SchemeRegistrarAlias",
-            "address": "0xb33a3ED7576FBB43Ca2B9e1A37dE364dB5eb0AA9"
+            "address": "0xED28f78fc252a79c1682469E0f77C8fBbA0e7fd1"
           },
           {
             "name": "JoinAndQuit",
             "alias": "JoinAndQuitAlias",
-            "address": "0x40B913178EC0ae259ADd9Ec7aa4B9Af6110eb6e2"
+            "address": "0x3bCfb5dBccf35944Cb6f6A25fD39d3da717B113c"
           },
           {
             "name": "FundingRequest",
             "alias": "FundingRequestAlias",
-            "address": "0xd68Bd346CC9C7c2B9ffDdb85f41fE4d57bEe7d9a"
+            "address": "0xf41236ff6077ecdeE9e77F79f9B4682B9fB0dCe9"
           }
         ],
         "StandAloneContracts": [
           {
             "name": "Wallet",
-            "address": "0x05d1DA617069cb74B44678D6Cb48829e908266C1",
-            "arcVersion": "0.1.1-rc.12"
-          },
-          {
-            "name": "Competition",
-            "address": "0x66C795C2d0e8eef8aDe7aEb5Fc4286559443C9e7",
-            "arcVersion": "0.1.1-rc.12"
+            "address": "0xe899f7a357b3b068c48Fdc1C14EA41E2b80eF2Cd",
+            "arcVersion": "0.1.1-rc.17"
           }
         ],
-        "arcVersion": "0.1.1-rc.12"
+        "arcVersion": "0.1.1-rc.17"
       }
     }
   },
   "kovan": {},
   "rinkeby": {
     "package": {
-      "0.1.1-rc.7": {
-        "Package": "0x3b15676EA5B243545BC7b52B0dB92DdDc6F272ea",
-        "ImplementationDirectory": "0xE18B99c00ee53F305C6ff7549b64eEd2a75649BA",
-        "App": "0x4350299f06e1c7713230F1381C3cC972fe5570e7",
+      "0.1.1-rc.17": {
+        "Package": "0x3C17Bae42aFE66ddD11d66279d827F83B94dcFEe",
+        "ImplementationDirectory": "0x6336fAd2a5FD21423eB818b6F0C620e527502082",
+        "App": "0x2137B05Dd76AA9BaDF8645504b07B8f60CE69f6B",
         "GEN": "0x543Ff227F64Aa17eA132Bf9886cAb5DB55DCAddf",
-        "Agreement": "0x1a78e94F09E369Fe9A9f65b286Ae855Db1F961E7",
-        "Auction4Reputation": "0x995a0AB9510850d03AF08cDDB6c3F14e51840584",
-        "Avatar": "0xCeBA82b19e0C935f2756988368506b0400D29536",
-        "Competition": "0xE0fbCbe253D011F31B62E9603aAAb1Ed9564689A",
-        "ContinuousLocking4Reputation": "0x773fB554f533adBfEA607C7777e7F513465F28Eb",
-        "ContributionReward": "0xAD181F8144524551f2B7Bce4380f787C9473910a",
-        "ContributionRewardExt": "0x00C74cA91e6B32d732d7b589547d1330C2303529",
-        "Controller": "0x3cf976c63E0bA27FD8CA975D5b93D5cC29885bcB",
-        "ControllerUpgradeScheme": "0xa638E1Aff1905Ec3f8bd9E0256e552Ad7B7b55f3",
-        "DAOFactory": "0xbcC9B92f35Ba586317445C95a8Ebf122C99f1D53",
-        "DAORegistry": "0xb93198023110e6c19c300Cb19a6BBc98d097124B",
-        "DAOToken": "0xc1921f9f168B08D09d4F4133E435caabc11b4714",
-        "ExternalLocking4Reputation": "0x6e6940E450238a56f2BB6e3BaC1Ac211807888A8",
-        "FixedReputationAllocation": "0xA88F147A1f12c10DcA9872d5f5fF4172Acb57098",
-        "GenericScheme": "0x9d27Eb4A1703194061551c49eb149CD04995DA52",
-        "GenesisProtocol": "0xC74f5d339D1e256810e2F368C3718ca789A8b456",
-        "GlobalConstraintRegistrar": "0x922F235feef1a690094b1Bd77E5069F2CfaA6027",
-        "Locking4Reputation": "0x1563afec77006b56BFBD04D7AC00fD2FcCa34cbA",
-        "LockingEth4Reputation": "0x5B0379314BED890cB8c38F4872e39024241d3e4E",
-        "LockingToken4Reputation": "0xE252FB0397B0c5e5E652E787b330Cf1c03859F94",
-        "NectarRepAllocation": "0x4e8b85cB89E820f3E63a8393635971f22b753564",
-        "PolkaCurve": "0xaFBb1BcfE3Faf426D7402ad3075DbDF99Ace2Ef6",
-        "Redeemer": "0x650C514ba36Fd7A427460021119D652D7818EFc5",
-        "RepAllocation": "0xa69f3e8fD6cfE2a36af18e5e6931289d158623ae",
-        "Reputation": "0x7ef96f4bCfe2b2f7bB927C2D1C98d440418d8E2e",
-        "ReputationFromToken": "0x808DA2690B2a723005c87Ff41712690D5941e452",
-        "SchemeFactory": "0xA93Ac52Ac6420f37f3B231A3Ef8DFdEC3346B0B6",
-        "SchemeMock": "0x496E1DFCCcF801c369d53f6601B3D09357039185",
-        "SchemeRegistrar": "0xA54CC8f2B7dc246a4742cA9c776629018D826460",
-        "SignalScheme": "0x9DC15Bb341e2C88842cf15C02b4909552Dc93Ba7",
-        "UpgradeScheme": "0x314c6777cD6F68c27F573f23C49738f6cf825973",
-        "VoteInOrganizationScheme": "0xF49D813536A67F34B261487D1003BD8fa4072cdC",
-        "VotingMachineCallbacks": "0x26B0Ce1184dc8f8B5149A2A129D85193B2979e16",
-        "Wallet": "0x558f303EaC10Ca9AE0086D2C6bCD9F27D4a8BdEF",
-        "DAORegistryInstance": "0xa77228af1A9D92428209Cb6173d792c9c9ABe5fc",
-        "DAOFactoryInstance": "0xde1D550a3CFbf08270b5bBEa7777479219492759"
-      },
-      "0.1.1-rc.12": {
-        "Package": "0xff313C04133901bf699A7651a86572b85aa35b5D",
-        "ImplementationDirectory": "0x599eAE98556C80b8e42387dD8F508e02Dcf2B777",
-        "App": "0xb8676cd37f4D2F682221376AE551174Cc73eEAaF",
-        "GEN": "0x543Ff227F64Aa17eA132Bf9886cAb5DB55DCAddf",
-        "Agreement": "0x75078553a38b5392Bb315BBbCD86c542A1fC651c",
-        "Auction4Reputation": "0xaD3D85Fd98a0eb9fb04bafC57b25e4c10705ae62",
-        "Avatar": "0xA9c751F123730008CB791b8ab7D30FDe574A69A5",
-        "Competition": "0x009a3daD9B32a26e4511d41e56ce109e402B63F9",
-        "ContinuousLocking4Reputation": "0x37933cf695a87D5315E9C790D5AF4bdCe59b09e0",
-        "ContributionReward": "0xC810B7Cf871EF0C0DE085DC83A28a58Fd07cCA9a",
-        "ContributionRewardExt": "0x2086383dB367910b8b7E8034f94B22b1705498C7",
-        "Controller": "0x90f1Ff1612cF2866A06d6dbbdA24C55b2945d448",
-        "ControllerUpgradeScheme": "0x5DC4d75c0B905471cBfb9730F87a5410D54126Ef",
-        "DAOFactory": "0x2D060AA9d5dB49cd6A9C89E7774Aad99a3F0d0Bf",
-        "DAORegistry": "0xb93198023110e6c19c300Cb19a6BBc98d097124B",
-        "DAOToken": "0x2e6D276db5fcEc60a8789F4Ce4BeF4EBAE11079c",
-        "ExternalLocking4Reputation": "0xa472D93c3a52372eD19d0436bB630aa61e1fC3E6",
-        "FixedReputationAllocation": "0xe798cFb782ad7f79e5c08F3fefc9eCcE93DfE8fa",
-        "FundingRequest": "0xBF5e90e86f046774995Bf41C281e566a14499740",
-        "GenericScheme": "0x9F8a6B1889F013C91683889550324bDfd92A26e5",
-        "GenesisProtocol": "0xb2c00c288d4c7f953be63d42115725D546a61Aa1",
-        "GlobalConstraintRegistrar": "0x64d96695114692f5646D4FB517Ecd09401dD9244",
-        "JoinAndQuit": "0x86E77D4A73F90e1c7b1678c65B2c966701D9A85B",
-        "Locking4Reputation": "0xC94c3015453e654Bd02Ecf876aBD1CF0a83409e0",
-        "LockingEth4Reputation": "0x16533c0798D8a3167E0178361c2504d0F8df9e00",
-        "LockingToken4Reputation": "0x6026eec52c4D7160DD421945456A1f092fC186bb",
-        "NectarRepAllocation": "0x32Cf5a14E61fCDb1E099839E7A55c34eC23Eb68B",
-        "PolkaCurve": "0xCe03443fc4D9291349d8940984BB435b29d9E3D4",
-        "Redeemer": "0x5B1D64216C4F137d0eB41D50C2AbEc1C690D725e",
-        "RepAllocation": "0xF7781DC8f35CdC8fd902bfb8f146413fF48BE8dB",
-        "Reputation": "0x1667144239f3B626f7512E737e058dfE4e8f88b5",
-        "ReputationFromToken": "0x0dC5e593282720980a1e759d209769e1F49552ae",
-        "SchemeFactory": "0x80E9f5dABA6Ed6Ca75Bd3A4Fd3457924D0080F14",
-        "SchemeMock": "0x313cC7EabDBb6A66C79540E0B3A5457f40E69BFf",
-        "SchemeRegistrar": "0x97013F40fCB734276F8f96CCc9Acc26000FFb08F",
-        "SignalScheme": "0x789eAC2d7E29E9064E1cd1f61b4f47b49304bFC6",
-        "UpgradeScheme": "0xd46323726Be14b1F56d0AB8665ec936706c1418B",
-        "VoteInOrganizationScheme": "0x6eFa5Ae7fc6C847c10CA476EeeDecEeF701E91Ba",
-        "VotingMachineCallbacks": "0x59EC3731Dca0512678A5F6507d79Cf631005cAd4",
-        "Wallet": "0x040d55863EDD1454699947b3A44B8fAF25e5AaB1",
-        "DAORegistryInstance": "0xB0344a6c1b470CC12272D7B4d2A45e1973f8be98",
-        "DAOFactoryInstance": "0x565737926597B88da5B851cd2e3d7Ad7F68bAc7F"
+        "Agreement": "0x0c0Bdc2261F9c616571005009d2E99B07eE2bc24",
+        "Auction4Reputation": "0x496d0bF74c9D876ACDdd8177aE42A16046785619",
+        "Avatar": "0x7fa8E78954BA7d00C49Ac5b1671BE09CE36784D7",
+        "Competition": "0x64B611c435B5916e4ac98f52B9Bb9734bcaE6C94",
+        "ContinuousLocking4Reputation": "0x35B6bd17d5F43fA58F28fa3CCDde98eb485193cf",
+        "ContributionReward": "0xc76356Deeecc6c09eA5d12ba73D3882EFAcF80d7",
+        "ContributionRewardExt": "0xf48299ce98337e1e3402f1dAB622363fE032e1FA",
+        "Controller": "0xdEfDe21Eb9b1608DcD25A088F85c5abc13731D2c",
+        "ControllerUpgradeScheme": "0x1d4623491002fF4BDD7F4A54Fc458B68e43D4782",
+        "DAOFactory": "0x9D31FE58F21FA5bC7ac81A4De46DfAA656c8D111",
+        "DAORegistry": "0xc98a502aB154Fa942a18c6D1EF375Ec0d77F7E4A",
+        "DAOToken": "0xdaE9837d755Cf921aeFB39aeF203ebAE756d984B",
+        "ExternalLocking4Reputation": "0x45C4865Fa4b77D266FA3A4A3214276820C12175f",
+        "FixedReputationAllocation": "0x6d7Ff0C37Ad3e4A216122B6bC8834E8A5D6E7D7f",
+        "FundingRequest": "0x7084Fa2385c8830C4BE416a6dA35Bba8E4fa2dd5",
+        "GenericScheme": "0x787c23b68A4265Ab458fc8c4c78BC8fFFc6F69Ce",
+        "GenesisProtocol": "0x5118e3c6D0530c7caC8A7a7012e6287a19B02419",
+        "GlobalConstraintRegistrar": "0xE7FDf4A5B3939a56DF8F37baD204408bAc54a7bb",
+        "JoinAndQuit": "0x3bF3741Da55d578fb2Da95Ef9815762bD09c7F3D",
+        "Locking4Reputation": "0xf52fa064a4077fa1a5ec50604304715d63f2B309",
+        "LockingEth4Reputation": "0x8a942C98C56809e26C23ccfaEdB77b1311E9168B",
+        "LockingToken4Reputation": "0x4fCc925624a921cECAF1b9f5314599b7a0ad85C5",
+        "NectarRepAllocation": "0x12AFB8ACa1a731a17bEd30Dc236afF97c24161A7",
+        "PolkaCurve": "0xcBa7B9288e182d48C4d12AA3253B0E691Ec9F1B6",
+        "Redeemer": "0x28249c7654329484BA1d348839791C2ACEE773f4",
+        "RepAllocation": "0x8b57a7f514E2E63372833E27506A95643131a5c4",
+        "Reputation": "0xa677F7c0d95b911c7661a878b23497eC96e5522E",
+        "ReputationFromToken": "0x8977CcDa1Ed7992F4d36a6aacB13b97273805B0F",
+        "SchemeFactory": "0xDc0D1ae30cE235625f1d1Fd5309e004C738e5F1e",
+        "SchemeMock": "0x7740c6f82d29432cCE2b7B7fD321f602aD047a2E",
+        "SchemeRegistrar": "0x59813C9C54ddB9B3bA9Ff13dAcd67F97A747F51c",
+        "SignalScheme": "0xB2A9Df26C3B77abAcc55E76299803d5aA70ad8dc",
+        "UpgradeScheme": "0xAD1B1D2993501a2eA5E91EE085A9F8C3Cab15f2c",
+        "VoteInOrganizationScheme": "0x0E2410d348dBEce59cce36b9c05F1729041A049c",
+        "VotingMachineCallbacks": "0xcF6996342075078BD75ce674d88C0AAa85039d7e",
+        "Wallet": "0xDfF0EA0569d0B03e3c229D27B4c2583ECD300AFd",
+        "DAORegistryInstance": "0x9BF848Ad0887e875082a09F59aA08BD32dee634e",
+        "DAOFactoryInstance": "0xcCB93E6bBA518546908B8B78c3d7dCdd98146B49",
+        "AdminUpgradeabilityProxy": "0xcCB93E6bBA518546908B8B78c3d7dCdd98146B49"
       }
     },
     "dao": {
-      "0.1.1-rc.7": {
-        "name": "Loquacious Scenographer",
-        "Avatar": "0x1d96694f6FDC6071A1563b61AD2107d8fe6a77Ad",
-        "DAOToken": "0x0075E9862b51E96E7a9A172192E93380b71D5cfE",
-        "Reputation": "0xBD896ffCB0952C2a5FD6066e112298d3F96b7FB2",
-        "Controller": "0xee3715Da7d52916018b9Ab1fCaC1b37d51041372",
-        "Schemes": [
-          {
-            "name": "ContributionReward",
-            "alias": "ContributionRewardAlias",
-            "address": "0xfED22Eff385E36B229A1ad7908Db550f6bc8bB0F"
-          },
-          {
-            "name": "SchemeRegistrar",
-            "alias": "SchemeRegistrarAlias",
-            "address": "0x7129Af1abcd0DD63B82255129d446D004cDb31dA"
-          },
-          {
-            "name": "GlobalConstraintRegistrar",
-            "alias": "GlobalConstraintRegistrarAlias",
-            "address": "0xdD698b539d185fa35ecc98e62969FE99a32520c8"
-          },
-          {
-            "name": "UpgradeScheme",
-            "alias": "UpgradeSchemeAlias",
-            "address": "0x9891606111a7f51b4a34A1E1d587f258154E79c2"
-          },
-          {
-            "name": "GenericScheme",
-            "alias": "GenericSchemeAlias",
-            "address": "0x4432b13c0326f0f4CeF54E08Dcad99fE13188881"
-          },
-          {
-            "name": "GenericScheme",
-            "alias": "GenericSchemeAlias2",
-            "address": "0x75e865b74c08CC2E7c9558b1d66fAb3C6feE06c6"
-          },
-          {
-            "name": "ContributionRewardExt",
-            "alias": "ContributionRewardExt",
-            "address": "0xf798b767eE26AaA6aFCCd3B473564e24921e18b6"
-          },
-          {
-            "name": "SchemeFactory",
-            "alias": "SchemeRegistrarAlias",
-            "address": "0x66B78F08B430B0870969353bB0951743ac1BdA19"
-          }
-        ],
-        "StandAloneContracts": [
-          {
-            "name": "Wallet",
-            "address": "0xa8ddEf765e23E67a7460a9B6E788347C19Fb0d69",
-            "arcVersion": "0.1.1-rc.7"
-          },
-          {
-            "name": "Competition",
-            "address": "0x598d115dA42E90C90094C1b60302bC5470b82d9a",
-            "arcVersion": "0.1.1-rc.7"
-          }
-        ],
-        "arcVersion": "0.1.1-rc.7"
-      },
-      "0.1.1-rc.12": {
+      "0.1.1-rc.17": {
         "name": "My DAO",
-        "Avatar": "0x7775C8027a360329293e2d6D237b0Ff33b272119",
-        "DAOToken": "0xe465401416E5d25139c1C8C57d5Eb93a5c89FA5b",
-        "Reputation": "0xEd953dFa71b899E53A48e16514F3cf31a9AC38b7",
-        "Controller": "0x6371AA4dC1Dd8aD05c8E346139f8a368eA82B205",
+        "Avatar": "0x1569B20a1D9AdCB724fdD620e9655ba886786fBD",
+        "DAOToken": "0x31e57E35d5319c3041Fc9A648bBaF703C680e8F7",
+        "Reputation": "0x7f31cFcf329a526F2DA37f85A4E5369b9f565530",
+        "Controller": "0x52bce8C35886DB8E75C7F0AD4044Fb31012FEdeA",
         "Schemes": [
           {
             "name": "ContributionReward",
             "alias": "ContributionRewardAlias",
-            "address": "0x00e3180AAB0110d5E05fa585804422A49d7E8901"
+            "address": "0x0D8c64b39f17024baD65D41b55F7597D6d4dcF2B"
           },
           {
             "name": "SchemeRegistrar",
             "alias": "SchemeRegistrarAlias",
-            "address": "0xbdeF49577ADD593CC927C173350b91238139EE60"
+            "address": "0xe892d0968b17080ae57648D7B54E036BfFD3bEA8"
           },
           {
             "name": "GlobalConstraintRegistrar",
             "alias": "GlobalConstraintRegistrarAlias",
-            "address": "0xd6e52062a924b7321a0103E03F468cE1f5358F6B"
+            "address": "0xA7b3649a534699da8ecB588008f738B0bdaB4626"
           },
           {
             "name": "UpgradeScheme",
             "alias": "UpgradeSchemeAlias",
-            "address": "0x96f8d0cf4d2A5f5D9790334cC5Dcaa7BCf6469A8"
+            "address": "0x75C10837b1D05D2f1B81231184b0eb916CE44057"
           },
           {
             "name": "GenericScheme",
             "alias": "GenericSchemeAlias",
-            "address": "0x9d5a7DcaF0447d3FE3b4cC4BaCDC2A5b3F2edc85"
-          },
-          {
-            "name": "GenericScheme",
-            "alias": "GenericSchemeAlias2",
-            "address": "0xf2Dd916CdCFFe0e7E46f44c370451d04BC2a37a0"
+            "address": "0x15525d887749BE224CE1d1C92b56B2bC62a47492"
           },
           {
             "name": "ContributionRewardExt",
             "alias": "ContributionRewardExt",
-            "address": "0x2484780077666b130c9F084c9ee426ec17aD8144"
+            "address": "0x47F67d5fBc37310E61961BA5Ad730CA5B2d60EB0"
           },
           {
             "name": "SchemeFactory",
             "alias": "SchemeRegistrarAlias",
-            "address": "0xb5858795CF97B401b05A80a7d534Da774062b1d8"
+            "address": "0xaA1B46E02E7B5D3C56d599aB7Fc3f3A36F3C0860"
           },
           {
             "name": "JoinAndQuit",
             "alias": "JoinAndQuitAlias",
-            "address": "0x82ae4748d3D4842EAf3aBBDBBDaC3310103140B4"
+            "address": "0x006b7B07fAAbC6206847E76cF0D0aFDf08c037eB"
           },
           {
             "name": "FundingRequest",
             "alias": "FundingRequestAlias",
-            "address": "0xA0B627b7F60f0422bAcF5597fe4b2c1685895CeE"
+            "address": "0xB72067B59a3f0f9BB945c103B41bA46c5726D5DF"
           }
         ],
         "StandAloneContracts": [
           {
             "name": "Wallet",
-            "address": "0xfeC722397CfD616b07EDc7dFaa905914c579988E",
-            "arcVersion": "0.1.1-rc.12"
-          },
-          {
-            "name": "Competition",
-            "address": "0x1bFA43FBb81689443B4A4fBfa313DE62c5209c78",
-            "arcVersion": "0.1.1-rc.12"
+            "address": "0x18eaf7714FDCa48be4De4F417D467877e06FF079",
+            "arcVersion": "0.1.1-rc.17"
           }
         ],
-        "arcVersion": "0.1.1-rc.12"
+        "arcVersion": "0.1.1-rc.17"
       }
     }
   },

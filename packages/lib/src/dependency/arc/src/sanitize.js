@@ -223,10 +223,7 @@ addScheme(
     { $ref: 'VotingMachineAddress' },
     { $ref: 'VotingMachineParamsIndex' },
     { $ref: 'AddressOrStandAlone' }
-  ],
-  {
-    useCompetition: { type: 'boolean' }
-  }
+  ]
 )
 addScheme(
   'SchemeFactory',
