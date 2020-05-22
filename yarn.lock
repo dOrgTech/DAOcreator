@@ -1065,10 +1065,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
-"@daostack/arc-experimental@0.1.1-rc.18":
-  version "0.1.1-rc.18"
-  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.1-rc.18.tgz#35bc9d5553ecafc4a50ca2a85f21b422fe60e7f8"
-  integrity sha512-cp9c8juwfg+Lo3Cz5lYZnGwbKAV+gQ25eW0LXrIOxTHKclc9z/nz5MFT2zjxnlSN5Iy1Xot2fwyx3tiQe/DaXQ==
+"@daostack/arc-experimental@0.1.1-rc.20":
+  version "0.1.1-rc.20"
+  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.1-rc.20.tgz#1b6a17149b1d6e50ba13ff28d0401c88184dde48"
+  integrity sha512-o/uRZc/A3/QHFWIk6GJrJIIuatB3j02iMkk1/IEVTVlw7M257+cM/9gUMPU9y+pT/olYth3QrdSmNv0XqtAlwQ==
   dependencies:
     "@daostack/infra-experimental" "0.0.1-rc.16"
     "@openzeppelin/contracts-ethereum-package" "2.4.0"
@@ -1094,12 +1094,12 @@
     "@openzeppelin/upgrades" "2.5.3"
     ethereumjs-abi "^0.6.5"
 
-"@daostack/migration-experimental@0.1.1-rc.18-v0":
-  version "0.1.1-rc.18-v0"
-  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.1-rc.18-v0.tgz#4f276e3f35d730d8c790eef481d43bf76bb1b39f"
-  integrity sha512-r8+540LQmkbJECxBqs5EQEuTRiE7+PseE9S0mWxZ6uejkkUHx5ErhimSjW8+I/z143vGgDX2O2pV+I+WpKkFnw==
+"@daostack/migration-experimental@0.1.1-rc.20-v1":
+  version "0.1.1-rc.20-v1"
+  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.1-rc.20-v1.tgz#3cbd118f02c9561359a5af456957c86e1269eb96"
+  integrity sha512-Bh0SSpeYUYJ0os47LcYGW3EmSXBdm7m1wjXvHlXCWDz10G9z+PDi+ZVQXtDojZlTJa3FMbGB1H/SzMN3xsAPQA==
   dependencies:
-    "@daostack/arc-experimental" "0.1.1-rc.18"
+    "@daostack/arc-experimental" "0.1.1-rc.20"
     "@daostack/arc-hive" "0.0.1-rc.5"
     ethereumjs-wallet "^0.6.3"
     fstream "^1.0.12"

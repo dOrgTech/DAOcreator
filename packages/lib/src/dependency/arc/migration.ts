@@ -65,7 +65,7 @@ export const migrateDAO = async (
       return { receipt, result };
     };
 
-    const arcVersion = "0.1.1-rc.18";
+    const arcVersion = "0.1.1-rc.20";
     const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
 
     // If the user doesn't have a supported network chosen, abort
