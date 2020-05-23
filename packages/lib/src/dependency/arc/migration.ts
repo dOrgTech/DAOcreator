@@ -65,7 +65,7 @@ export const migrateDAO = async (
       return { receipt, result };
     };
 
-    const arcVersion = "0.0.1-rc.33";
+    const arcVersion = "0.0.1-rc.41";
     const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
 
     // If the user doesn't have a supported network chosen, abort
@@ -112,7 +112,7 @@ export const migrateDAO = async (
       getState: callbacks.getState,
       setState: callbacks.setState,
       cleanState: callbacks.cleanState,
-      optimizedAbis: true
+      optimizedAbis: false 
     });
 
     if (migration === undefined) {

@@ -212,6 +212,8 @@ async function migrateDAO({
     }
 
     if (deploymentState.Avatar === undefined) {
+      console.log("EVENTS HERE")
+      console.log(tx.events)
       deploymentState.Avatar = tx.events.NewOrg.returnValues._avatar;
       setState(deploymentState, network);
     }

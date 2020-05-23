@@ -1,0 +1,1041 @@
+{
+  "contractName": "ExternalTokenLockerMock",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "lockedTokenBalances",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_beneficiary",
+          "type": "address"
+        }
+      ],
+      "name": "lock",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_beneficiary",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.13+commit.5b0b510c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_beneficiary\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_beneficiary\",\"type\":\"address\"}],\"name\":\"lock\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedTokenBalances\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/arc/contracts/test/ExternalTokenLockerMock.sol\":\"ExternalTokenLockerMock\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/arc/contracts/test/ExternalTokenLockerMock.sol\":{\"keccak256\":\"0xccc5d1bbc0e3dca036e96eb082bfce89938ad07ba5c05e445a031f08db55ca73\",\"urls\":[\"bzz-raw://fcfb5e10b7249cf42c4e506521ef59dc38bc907d73f07e2c7e9f8e5b9d471403\",\"dweb:/ipfs/QmeNYSXZFZr7BJpuDYoGfawhjhBq4dAaNqos8HoFjbYDXP\"]},\"openzeppelin-solidity/contracts/GSN/Context.sol\":{\"keccak256\":\"0x90a3995645af7562d84b9d69363ffa5ae7217714ab61e951bf7bc450f40e4061\",\"urls\":[\"bzz-raw://216ef9d6b614db4eb46970b4e84903f2534a45572dd30a79f0041f1a5830f436\",\"dweb:/ipfs/QmNPrJ4MWKUAWzKXpUqeyKRUfosaoANZAqXgvepdrCwZAG\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0xecd8ab29d9a5771c3964d0cd1788c4a5098a0081b20fb275da850a22b1c59806\",\"urls\":[\"bzz-raw://696a75bc2c55407ce8251ccc7d19ecb1b7b2be1796a160a6524312babcc7e3d4\",\"dweb:/ipfs/QmQViKEp3y99h9uhRssE29TmjBKRnFMaoz3eJZ4eggggg2\"]}},\"version\":1}",
+  "bytecode": "0x60806040526100156001600160e01b0361006216565b600080546001600160a01b0319166001600160a01b03928316178082556040519216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610066565b3390565b610456806100756000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c80638b525d0c1161005b5780638b525d0c146100f05780638da5cb5b146101165780638f32d59b1461013a578063f2fde38b146101565761007d565b806366dfbfb41461008257806370a08231146100b0578063715018a6146100e8575b600080fd5b6100ae6004803603604081101561009857600080fd5b50803590602001356001600160a01b031661017c565b005b6100d6600480360360208110156100c657600080fd5b50356001600160a01b03166101ef565b60408051918252519081900360200190f35b6100ae61020a565b6100d66004803603602081101561010657600080fd5b50356001600160a01b03166102ad565b61011e6102bf565b604080516001600160a01b039092168252519081900360200190f35b6101426102ce565b604080519115158252519081900360200190f35b6100ae6004803603602081101561016c57600080fd5b50356001600160a01b03166102f2565b6101846102ce565b6101d5576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001600160a01b0316600090815260016020526040902055565b6001600160a01b031660009081526001602052604090205490565b6102126102ce565b610263576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b600080546040516001600160a01b03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a3600080546001600160a01b0319169055565b60016020526000908152604090205481565b6000546001600160a01b031690565b600080546001600160a01b03166102e3610357565b6001600160a01b031614905090565b6102fa6102ce565b61034b576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6103548161035b565b50565b3390565b6001600160a01b0381166103a05760405162461bcd60e51b81526004018080602001828103825260268152602001806103fc6026913960400191505060405180910390fd5b600080546040516001600160a01b03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080546001600160a01b0319166001600160a01b039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a72315820e757d4440b30e1780b4f65f96a2224b036772af99687993be332f8a01237979c64736f6c634300050d0032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061007d5760003560e01c80638b525d0c1161005b5780638b525d0c146100f05780638da5cb5b146101165780638f32d59b1461013a578063f2fde38b146101565761007d565b806366dfbfb41461008257806370a08231146100b0578063715018a6146100e8575b600080fd5b6100ae6004803603604081101561009857600080fd5b50803590602001356001600160a01b031661017c565b005b6100d6600480360360208110156100c657600080fd5b50356001600160a01b03166101ef565b60408051918252519081900360200190f35b6100ae61020a565b6100d66004803603602081101561010657600080fd5b50356001600160a01b03166102ad565b61011e6102bf565b604080516001600160a01b039092168252519081900360200190f35b6101426102ce565b604080519115158252519081900360200190f35b6100ae6004803603602081101561016c57600080fd5b50356001600160a01b03166102f2565b6101846102ce565b6101d5576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001600160a01b0316600090815260016020526040902055565b6001600160a01b031660009081526001602052604090205490565b6102126102ce565b610263576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b600080546040516001600160a01b03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a3600080546001600160a01b0319169055565b60016020526000908152604090205481565b6000546001600160a01b031690565b600080546001600160a01b03166102e3610357565b6001600160a01b031614905090565b6102fa6102ce565b61034b576040805162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6103548161035b565b50565b3390565b6001600160a01b0381166103a05760405162461bcd60e51b81526004018080602001828103825260268152602001806103fc6026913960400191505060405180910390fd5b600080546040516001600160a01b03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080546001600160a01b0319166001600160a01b039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a72315820e757d4440b30e1780b4f65f96a2224b036772af99687993be332f8a01237979c64736f6c634300050d0032",
+  "sourceMap": "90:400:30:-;;;707:12:67;-1:-1:-1;;;;;707:10:67;:12;:::i;:::-;698:6;:21;;-1:-1:-1;;;;;;698:21:67;-1:-1:-1;;;;;698:21:67;;;;;;;734:40;;767:6;;;734:40;;698:6;;734:40;90:400:30;;788:96:63;867:10;788:96;:::o;90:400:30:-;;;;;;;",
+  "deployedSourceMap": "90:400:30:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;90:400:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;225:130;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;225:130:30;;;;;;-1:-1:-1;;;;;225:130:30;;:::i;:::-;;361:127;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;361:127:30;-1:-1:-1;;;;;361:127:30;;:::i;:::-;;;;;;;;;;;;;;;;1642:137:67;;;:::i;163:55:30:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;163:55:30;-1:-1:-1;;;;;163:55:30;;:::i;857:77:67:-;;;:::i;:::-;;;;-1:-1:-1;;;;;857:77:67;;;;;;;;;;;;;;1208:92;;;:::i;:::-;;;;;;;;;;;;;;;;;;1928:107;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1928:107:67;-1:-1:-1;;;;;1928:107:67;;:::i;225:130:30:-;1061:9:67;:7;:9::i;:::-;1053:54;;;;;-1:-1:-1;;;1053:54:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;305:33:30;;;;;:19;:33;;;;;:43;225:130::o;361:127::-;-1:-1:-1;;;;;448:33:30;422:7;448:33;;;:19;:33;;;;;;;361:127::o;1642:137:67:-;1061:9;:7;:9::i;:::-;1053:54;;;;;-1:-1:-1;;;1053:54:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1740:1;1724:6;;1703:40;;-1:-1:-1;;;;;1724:6:67;;;;1703:40;;1740:1;;1703:40;1770:1;1753:19;;-1:-1:-1;;;;;;1753:19:67;;;1642:137::o;163:55:30:-;;;;;;;;;;;;;:::o;857:77:67:-;895:7;921:6;-1:-1:-1;;;;;921:6:67;857:77;:::o;1208:92::-;1248:4;1287:6;;-1:-1:-1;;;;;1287:6:67;1271:12;:10;:12::i;:::-;-1:-1:-1;;;;;1271:22:67;;1264:29;;1208:92;:::o;1928:107::-;1061:9;:7;:9::i;:::-;1053:54;;;;;-1:-1:-1;;;1053:54:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2000:28;2019:8;2000:18;:28::i;:::-;1928:107;:::o;788:96:63:-;867:10;788:96;:::o;2136:225:67:-;-1:-1:-1;;;;;2209:22:67;;2201:73;;;;-1:-1:-1;;;2201:73:67;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2310:6;;;2289:38;;-1:-1:-1;;;;;2289:38:67;;;;2310:6;;;2289:38;;;2337:6;:17;;-1:-1:-1;;;;;;2337:17:67;-1:-1:-1;;;;;2337:17:67;;;;;;;;;;2136:225::o",
+  "source": "pragma solidity 0.5.13;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\n\ncontract ExternalTokenLockerMock is Ownable {\n\n    // user => amount\n    mapping (address => uint256) public lockedTokenBalances;\n\n    function lock(uint256 _amount, address _beneficiary) public onlyOwner {\n        lockedTokenBalances[_beneficiary] = _amount;\n    }\n\n    function balanceOf(address _beneficiary) public view returns(uint256) {\n        return lockedTokenBalances[_beneficiary];\n    }\n}\n",
+  "sourcePath": "/Users/oren/daostack/arc/contracts/test/ExternalTokenLockerMock.sol",
+  "ast": {
+    "absolutePath": "/Users/oren/daostack/arc/contracts/test/ExternalTokenLockerMock.sol",
+    "exportedSymbols": {
+      "ExternalTokenLockerMock": [
+        8967
+      ]
+    },
+    "id": 8968,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8931,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".13"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:30"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 8932,
+        "nodeType": "ImportDirective",
+        "scope": 8968,
+        "sourceUnit": 20510,
+        "src": "25:63:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 8933,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 20509,
+              "src": "126:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$20509",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 8934,
+            "nodeType": "InheritanceSpecifier",
+            "src": "126:7:30"
+          }
+        ],
+        "contractDependencies": [
+          20058,
+          20509
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8967,
+        "linearizedBaseContracts": [
+          8967,
+          20509,
+          20058
+        ],
+        "name": "ExternalTokenLockerMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 8938,
+            "name": "lockedTokenBalances",
+            "nodeType": "VariableDeclaration",
+            "scope": 8967,
+            "src": "163:55:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 8937,
+              "keyType": {
+                "id": 8935,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "172:7:30",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "163:28:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 8936,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "183:7:30",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 8953,
+              "nodeType": "Block",
+              "src": "295:60:30",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 8951,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 8947,
+                        "name": "lockedTokenBalances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 8938,
+                        "src": "305:19:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 8949,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 8948,
+                        "name": "_beneficiary",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 8942,
+                        "src": "325:12:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "305:33:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 8950,
+                      "name": "_amount",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8940,
+                      "src": "341:7:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "305:43:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 8952,
+                  "nodeType": "ExpressionStatement",
+                  "src": "305:43:30"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 8954,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 8945,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 8944,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 20442,
+                  "src": "285:9:30",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "285:9:30"
+              }
+            ],
+            "name": "lock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8943,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8940,
+                  "name": "_amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8954,
+                  "src": "239:15:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8939,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "239:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8942,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8954,
+                  "src": "256:20:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8941,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "256:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "238:39:30"
+            },
+            "returnParameters": {
+              "id": 8946,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "295:0:30"
+            },
+            "scope": 8967,
+            "src": "225:130:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 8965,
+              "nodeType": "Block",
+              "src": "431:57:30",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 8961,
+                      "name": "lockedTokenBalances",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8938,
+                      "src": "448:19:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 8963,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 8962,
+                      "name": "_beneficiary",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8956,
+                      "src": "468:12:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "448:33:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 8960,
+                  "id": 8964,
+                  "nodeType": "Return",
+                  "src": "441:40:30"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 8966,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "balanceOf",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8957,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8956,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8966,
+                  "src": "380:20:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8955,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "380:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "379:22:30"
+            },
+            "returnParameters": {
+              "id": 8960,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8959,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8966,
+                  "src": "422:7:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8958,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "422:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "421:9:30"
+            },
+            "scope": 8967,
+            "src": "361:127:30",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 8968,
+        "src": "90:400:30"
+      }
+    ],
+    "src": "0:491:30"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/oren/daostack/arc/contracts/test/ExternalTokenLockerMock.sol",
+    "exportedSymbols": {
+      "ExternalTokenLockerMock": [
+        8967
+      ]
+    },
+    "id": 8968,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8931,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".13"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:30"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 8932,
+        "nodeType": "ImportDirective",
+        "scope": 8968,
+        "sourceUnit": 20510,
+        "src": "25:63:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 8933,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 20509,
+              "src": "126:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$20509",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 8934,
+            "nodeType": "InheritanceSpecifier",
+            "src": "126:7:30"
+          }
+        ],
+        "contractDependencies": [
+          20058,
+          20509
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8967,
+        "linearizedBaseContracts": [
+          8967,
+          20509,
+          20058
+        ],
+        "name": "ExternalTokenLockerMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 8938,
+            "name": "lockedTokenBalances",
+            "nodeType": "VariableDeclaration",
+            "scope": 8967,
+            "src": "163:55:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 8937,
+              "keyType": {
+                "id": 8935,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "172:7:30",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "163:28:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 8936,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "183:7:30",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 8953,
+              "nodeType": "Block",
+              "src": "295:60:30",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 8951,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 8947,
+                        "name": "lockedTokenBalances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 8938,
+                        "src": "305:19:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 8949,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 8948,
+                        "name": "_beneficiary",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 8942,
+                        "src": "325:12:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "305:33:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 8950,
+                      "name": "_amount",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8940,
+                      "src": "341:7:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "305:43:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 8952,
+                  "nodeType": "ExpressionStatement",
+                  "src": "305:43:30"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 8954,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 8945,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 8944,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 20442,
+                  "src": "285:9:30",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "285:9:30"
+              }
+            ],
+            "name": "lock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8943,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8940,
+                  "name": "_amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8954,
+                  "src": "239:15:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8939,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "239:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8942,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8954,
+                  "src": "256:20:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8941,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "256:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "238:39:30"
+            },
+            "returnParameters": {
+              "id": 8946,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "295:0:30"
+            },
+            "scope": 8967,
+            "src": "225:130:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 8965,
+              "nodeType": "Block",
+              "src": "431:57:30",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 8961,
+                      "name": "lockedTokenBalances",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8938,
+                      "src": "448:19:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 8963,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 8962,
+                      "name": "_beneficiary",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 8956,
+                      "src": "468:12:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "448:33:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 8960,
+                  "id": 8964,
+                  "nodeType": "Return",
+                  "src": "441:40:30"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 8966,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "balanceOf",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8957,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8956,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8966,
+                  "src": "380:20:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8955,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "380:7:30",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "379:22:30"
+            },
+            "returnParameters": {
+              "id": 8960,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8959,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8966,
+                  "src": "422:7:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8958,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "422:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "421:9:30"
+            },
+            "scope": 8967,
+            "src": "361:127:30",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 8968,
+        "src": "90:400:30"
+      }
+    ],
+    "src": "0:491:30"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.13+commit.5b0b510c.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.20",
+  "updatedAt": "2020-02-10T15:44:06.145Z",
+  "devdoc": {
+    "methods": {
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

@@ -1,0 +1,788 @@
+{
+  "contractName": "Debug",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_msg",
+          "type": "address"
+        }
+      ],
+      "name": "LogAddress",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_msg",
+          "type": "bool"
+        }
+      ],
+      "name": "LogBool",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "_msg",
+          "type": "bytes"
+        }
+      ],
+      "name": "LogBytes",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "_msg",
+          "type": "bytes32"
+        }
+      ],
+      "name": "LogBytes32",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "_msg",
+          "type": "int256"
+        }
+      ],
+      "name": "LogInt",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "_msg",
+          "type": "string"
+        }
+      ],
+      "name": "LogString",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_msg",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogUint",
+      "type": "event"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.13+commit.5b0b510c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_msg\",\"type\":\"address\"}],\"name\":\"LogAddress\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_msg\",\"type\":\"bool\"}],\"name\":\"LogBool\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"_msg\",\"type\":\"bytes\"}],\"name\":\"LogBytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"_msg\",\"type\":\"bytes32\"}],\"name\":\"LogBytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"_msg\",\"type\":\"int256\"}],\"name\":\"LogInt\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_msg\",\"type\":\"string\"}],\"name\":\"LogString\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_msg\",\"type\":\"uint256\"}],\"name\":\"LogUint\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"@daostack/infra/contracts/test/Debug.sol\":\"Debug\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@daostack/infra/contracts/test/Debug.sol\":{\"keccak256\":\"0xb3562df919e581e90561050c58ac28579762878b5eccdf42ff62ecc293a7504b\",\"urls\":[\"bzz-raw://f0c96a48d8ec70ec0d7ee1acf3f1bcbeaa46e9669672217a6d878d64c7855eeb\",\"dweb:/ipfs/QmTPQqs7kLydbSaXFkdAKzC5h9MBofindPewSgjTpLLT25\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a723158203f7ef9aec48b3bc9be563b6642cd4b0477768a42390bf677179597c88a5280e264736f6c634300050d0032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a723158203f7ef9aec48b3bc9be563b6642cd4b0477768a42390bf677179597c88a5280e264736f6c634300050d0032",
+  "sourceMap": "118:247:54:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;118:247:54;;;;;;;",
+  "deployedSourceMap": "118:247:54:-;;;;;",
+  "source": "pragma solidity ^0.5.11;\n/*\n    A contract you can inherit from that has some useful Events to print statements.\n*/\n\n\ncontract Debug {\n    event LogAddress(address _msg);\n    event LogInt(int _msg);\n    event LogString(string _msg);\n    event LogUint(uint256 _msg);\n    event LogBytes(bytes _msg);\n    event LogBytes32(bytes32 _msg);\n    event LogBool(bool _msg);\n}\n",
+  "sourcePath": "@daostack/infra/contracts/test/Debug.sol",
+  "ast": {
+    "absolutePath": "@daostack/infra/contracts/test/Debug.sol",
+    "exportedSymbols": {
+      "Debug": [
+        15526
+      ]
+    },
+    "id": 15527,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 15497,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".11"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:54"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 15526,
+        "linearizedBaseContracts": [
+          15526
+        ],
+        "name": "Debug",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15501,
+            "name": "LogAddress",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15500,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15499,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15501,
+                  "src": "156:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 15498,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "156:7:54",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "155:14:54"
+            },
+            "src": "139:31:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15505,
+            "name": "LogInt",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15504,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15503,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15505,
+                  "src": "188:8:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 15502,
+                    "name": "int",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "188:3:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "187:10:54"
+            },
+            "src": "175:23:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15509,
+            "name": "LogString",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15508,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15507,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15509,
+                  "src": "219:11:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 15506,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "219:6:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "218:13:54"
+            },
+            "src": "203:29:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15513,
+            "name": "LogUint",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15512,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15511,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15513,
+                  "src": "251:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 15510,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "251:7:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "250:14:54"
+            },
+            "src": "237:28:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15517,
+            "name": "LogBytes",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15516,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15515,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15517,
+                  "src": "285:10:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 15514,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "285:5:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "284:12:54"
+            },
+            "src": "270:27:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15521,
+            "name": "LogBytes32",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15520,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15519,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15521,
+                  "src": "319:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 15518,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "319:7:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "318:14:54"
+            },
+            "src": "302:31:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15525,
+            "name": "LogBool",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15524,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15523,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15525,
+                  "src": "352:9:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 15522,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "352:4:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "351:11:54"
+            },
+            "src": "338:25:54"
+          }
+        ],
+        "scope": 15527,
+        "src": "118:247:54"
+      }
+    ],
+    "src": "0:366:54"
+  },
+  "legacyAST": {
+    "absolutePath": "@daostack/infra/contracts/test/Debug.sol",
+    "exportedSymbols": {
+      "Debug": [
+        15526
+      ]
+    },
+    "id": 15527,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 15497,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".11"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:54"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 15526,
+        "linearizedBaseContracts": [
+          15526
+        ],
+        "name": "Debug",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15501,
+            "name": "LogAddress",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15500,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15499,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15501,
+                  "src": "156:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 15498,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "156:7:54",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "155:14:54"
+            },
+            "src": "139:31:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15505,
+            "name": "LogInt",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15504,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15503,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15505,
+                  "src": "188:8:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 15502,
+                    "name": "int",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "188:3:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "187:10:54"
+            },
+            "src": "175:23:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15509,
+            "name": "LogString",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15508,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15507,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15509,
+                  "src": "219:11:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 15506,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "219:6:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "218:13:54"
+            },
+            "src": "203:29:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15513,
+            "name": "LogUint",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15512,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15511,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15513,
+                  "src": "251:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 15510,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "251:7:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "250:14:54"
+            },
+            "src": "237:28:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15517,
+            "name": "LogBytes",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15516,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15515,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15517,
+                  "src": "285:10:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 15514,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "285:5:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "284:12:54"
+            },
+            "src": "270:27:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15521,
+            "name": "LogBytes32",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15520,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15519,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15521,
+                  "src": "319:12:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 15518,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "319:7:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "318:14:54"
+            },
+            "src": "302:31:54"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 15525,
+            "name": "LogBool",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 15524,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 15523,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 15525,
+                  "src": "352:9:54",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 15522,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "352:4:54",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "351:11:54"
+            },
+            "src": "338:25:54"
+          }
+        ],
+        "scope": 15527,
+        "src": "118:247:54"
+      }
+    ],
+    "src": "0:366:54"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.13+commit.5b0b510c.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.20",
+  "updatedAt": "2020-02-10T15:44:06.237Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

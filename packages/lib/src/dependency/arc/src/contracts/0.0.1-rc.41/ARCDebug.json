@@ -1,0 +1,896 @@
+{
+  "contractName": "ARCDebug",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_msg",
+          "type": "address"
+        }
+      ],
+      "name": "LogAddress",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_msg",
+          "type": "bool"
+        }
+      ],
+      "name": "LogBool",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "_msg",
+          "type": "bytes"
+        }
+      ],
+      "name": "LogBytes",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "_msg",
+          "type": "bytes32"
+        }
+      ],
+      "name": "LogBytes32",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "_msg",
+          "type": "int256"
+        }
+      ],
+      "name": "LogInt",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "_msg",
+          "type": "string"
+        }
+      ],
+      "name": "LogString",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_msg",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogUint",
+      "type": "event"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.13+commit.5b0b510c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_msg\",\"type\":\"address\"}],\"name\":\"LogAddress\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_msg\",\"type\":\"bool\"}],\"name\":\"LogBool\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"_msg\",\"type\":\"bytes\"}],\"name\":\"LogBytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"_msg\",\"type\":\"bytes32\"}],\"name\":\"LogBytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"_msg\",\"type\":\"int256\"}],\"name\":\"LogInt\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"_msg\",\"type\":\"string\"}],\"name\":\"LogString\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_msg\",\"type\":\"uint256\"}],\"name\":\"LogUint\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/oren/daostack/arc/contracts/test/ARCDebug.sol\":\"ARCDebug\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/oren/daostack/arc/contracts/test/ARCDebug.sol\":{\"keccak256\":\"0xaf17c7272b1542e94b629c833a1f1d423174cee4ff3dce6c4f5f8116f1a616bf\",\"urls\":[\"bzz-raw://0565495e26dc07284a845ce08571ee3d97b86aef3b9c7d43ab4b13a85977aba8\",\"dweb:/ipfs/QmcBEkt7dT9DspqreYAg9KnH2rHEEUkshcKyzzJFJYoUB1\"]},\"@daostack/infra/contracts/Reputation.sol\":{\"keccak256\":\"0xec21bc058552cae458e68fa91aad7219d11be2bc9710183696d828065f03d6ea\",\"urls\":[\"bzz-raw://a3262e0088c924072428cfe69d78c06e93cec3caeee410af8ab36eee2c8f8d66\",\"dweb:/ipfs/QmNhcQd2pxWXYJrMz8kVsZUfFVYUSgKjZCUcFseyBSjZiq\"]},\"@daostack/infra/contracts/libs/RealMath.sol\":{\"keccak256\":\"0x93d598d59695003ed1b7fb37e631a665151e3e79f77c650a2cf5fcdbaf010d3f\",\"urls\":[\"bzz-raw://b5baed6a9e7e6386a4fd730e9f04aa67b2c3a4349e1675df3987f9b1b4cb995c\",\"dweb:/ipfs/QmekATn7QSZ2KGV6kENUgqEVzuL1i4Y3LxWDZcY7AL72Hb\"]},\"@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol\":{\"keccak256\":\"0xad5c54c20f364aa436ec200d661216fb56794ce07e49be4428cfaeb1fb5e54c1\",\"urls\":[\"bzz-raw://a1850177fb74df2aff42f6fe9edee4c0576d8241c33b62851a70a787cb742433\",\"dweb:/ipfs/QmPrPzJBDTQXpK4nHEtpZkmfMzqr5GG425xwQQbcSaY4qi\"]},\"@daostack/infra/contracts/test/Debug.sol\":{\"keccak256\":\"0xb3562df919e581e90561050c58ac28579762878b5eccdf42ff62ecc293a7504b\",\"urls\":[\"bzz-raw://f0c96a48d8ec70ec0d7ee1acf3f1bcbeaa46e9669672217a6d878d64c7855eeb\",\"dweb:/ipfs/QmTPQqs7kLydbSaXFkdAKzC5h9MBofindPewSgjTpLLT25\"]},\"@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol\":{\"keccak256\":\"0xcaccc2b035a7407b540c8f57ba02d2e567149740a40656316b687325ce7aa0d2\",\"urls\":[\"bzz-raw://a7717de0efdd6b6495256cb9bc0592621ffb02e97433f5953a9f1607c12a4e27\",\"dweb:/ipfs/QmYFP44fPtMF37BEjBZDWbQT76UAnXFvgqLSxDGCqtrxhP\"]},\"@daostack/infra/contracts/votingMachines/AbsoluteVote.sol\":{\"keccak256\":\"0x78348cbb6bfe4b1a17ee416413090138e948d931edfaeb073ce9167d9548ddf8\",\"urls\":[\"bzz-raw://6d6b24445c0a9d749b27fd2828752b0c4df9ea0df4d22377f8e06d3a53022de5\",\"dweb:/ipfs/QmcKmuEG6wKpcMfVigDNeqANfbu7y8EgFT6QqSVpQA4Sqi\"]},\"@daostack/infra/contracts/votingMachines/GenesisProtocol.sol\":{\"keccak256\":\"0xba1e2f8ee8045c823a0073fce987f1de83de5677d29d6e0bbed34b85316ebad3\",\"urls\":[\"bzz-raw://b63f926c250c581ca4f8f4f9fecd302a82a8a043ff298a5f6cf36ad6818b7a78\",\"dweb:/ipfs/QmPkZ77v2eEMpDdWr56J49aCDsSsfQmLohKq91TKghnreF\"]},\"@daostack/infra/contracts/votingMachines/GenesisProtocolLogic.sol\":{\"keccak256\":\"0xcfb8c4927106b0781761d3f066e6bd8596adeea20be23b77f7293e22ddb2d419\",\"urls\":[\"bzz-raw://1d46bcf48928c64f6fc2a057059b08e7d02a2fdf783afcc35525d3434692fcfa\",\"dweb:/ipfs/QmR2XcnvY1ur9GNi4Rw1NgCgjsXqueeaAMcXvc8p1mRC3U\"]},\"@daostack/infra/contracts/votingMachines/IntVoteInterface.sol\":{\"keccak256\":\"0x3d7062d76057342ae99c96071052fedadb3d02e0b57cde5984faac3cdbe2a5e0\",\"urls\":[\"bzz-raw://b542082f5d3bb97485868072ca16037c4c49abdf8e14ed794b1b6e4dd8cb9dcf\",\"dweb:/ipfs/QmVg9AUNDthYbZEkdtyvFqiq5qQbFALq3jcH5kYdsFMh9g\"]},\"@daostack/infra/contracts/votingMachines/ProposalExecuteInterface.sol\":{\"keccak256\":\"0x2533e7b1e0ac8adb4c04968a4c5a02e56d1c9ae406a38c8591c36a24a3572f7c\",\"urls\":[\"bzz-raw://86c6cb4c9fae74235d2b5b602759c4459d739c1e69bf9ca39573a5f878f20106\",\"dweb:/ipfs/QmVtX6HGDGJzRs7CV9cLyNnS3egNYTcFWpCEQSDQb9YEoN\"]},\"@daostack/infra/contracts/votingMachines/QuorumVote.sol\":{\"keccak256\":\"0x6c7ec7bf2c99874878936992d4900995a5e5bd204b6a03e9cb0575c67e01da23\",\"urls\":[\"bzz-raw://d99ff48496881091eee24151303cad55cafab3c1473f12f5dc829cf1670f7b5b\",\"dweb:/ipfs/QmVruSD7GGpS5nHb83bSgv8xRbUL169g4dmAmESZqqnVsh\"]},\"@daostack/infra/contracts/votingMachines/VotingMachineCallbacksInterface.sol\":{\"keccak256\":\"0x6842ebb4c701b0c80e072745e7abf75b727a3afa343bf7aa8054491b19b932c5\",\"urls\":[\"bzz-raw://50c8af4a06d95d4ecf12560632bcdbd7a582c67d6a90ccb12aa82347fc77933d\",\"dweb:/ipfs/Qma84nrgy4hc3AJCykC231AJKTuSicMRLxVA99VJUqLrUY\"]},\"openzeppelin-solidity/contracts/GSN/Context.sol\":{\"keccak256\":\"0x90a3995645af7562d84b9d69363ffa5ae7217714ab61e951bf7bc450f40e4061\",\"urls\":[\"bzz-raw://216ef9d6b614db4eb46970b4e84903f2534a45572dd30a79f0041f1a5830f436\",\"dweb:/ipfs/QmNPrJ4MWKUAWzKXpUqeyKRUfosaoANZAqXgvepdrCwZAG\"]},\"openzeppelin-solidity/contracts/cryptography/ECDSA.sol\":{\"keccak256\":\"0xc89ea7e48ba477b1781b24ae963442fff1bb2af33b6178dad679a3fa2f5ab2de\",\"urls\":[\"bzz-raw://b736ddad8143f8f1cd13c20809d4ebce5f5a8c7725081b0b703294078bd506d1\",\"dweb:/ipfs/QmdhTWCXFCuwG9JaPMjwnhkQoDj9su8R7KMPNvD5z9KeWD\"]},\"openzeppelin-solidity/contracts/math/Math.sol\":{\"keccak256\":\"0x4b5aa451e4e8801478708f94b118a7821c0500d676255eaf89fc78c14856ce4e\",\"urls\":[\"bzz-raw://bed15b3f35ed05505efc8fb5cb01d06c52230fbcaadf4ed24a85b1ac2f15f33c\",\"dweb:/ipfs/QmS6tW81u8E4tvzVfVuqEuMCkdwAozQ6pKJPRBR4JEVmQp\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076\",\"urls\":[\"bzz-raw://31113152e1ddb78fe7a4197f247591ca894e93f916867beb708d8e747b6cc74f\",\"dweb:/ipfs/QmbZaJyXdpsYGykVhHH9qpVGQg9DGCxE2QufbCUy3daTgq\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0xecd8ab29d9a5771c3964d0cd1788c4a5098a0081b20fb275da850a22b1c59806\",\"urls\":[\"bzz-raw://696a75bc2c55407ce8251ccc7d19ecb1b7b2be1796a160a6524312babcc7e3d4\",\"dweb:/ipfs/QmQViKEp3y99h9uhRssE29TmjBKRnFMaoz3eJZ4eggggg2\"]},\"openzeppelin-solidity/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9\",\"urls\":[\"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91\",\"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc\"]},\"openzeppelin-solidity/contracts/utils/Address.sol\":{\"keccak256\":\"0x70df50e240407aa50915ad14f61b1a901fa335b37de20955b99ed647be756af0\",\"urls\":[\"bzz-raw://9404711f3206610c08ea97fa52c7b6b4d2e9d536e96fc4b7210aa7e24f796c36\",\"dweb:/ipfs/QmZDzpVzjoap13SuPEq5pVCrmdjoKVZnTsQPLKXAbynTTW\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a7231582081cabb477d6bfc65f157162bfd9810ea6e26b7078000336fd58dcedaedc38acb64736f6c634300050d0032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a7231582081cabb477d6bfc65f157162bfd9810ea6e26b7078000336fd58dcedaedc38acb64736f6c634300050d0032",
+  "sourceMap": "467:253:24:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;467:253:24;;;;;;;",
+  "deployedSourceMap": "467:253:24:-;;;;;",
+  "source": "pragma solidity 0.5.13;\n\nimport \"@daostack/infra/contracts/votingMachines/GenesisProtocol.sol\";\nimport \"@daostack/infra/contracts/votingMachines/AbsoluteVote.sol\";\nimport \"@daostack/infra/contracts/votingMachines/QuorumVote.sol\";\nimport \"@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol\";\nimport \"@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol\";\n\n/*\n    A contract you can inherit from that has some useful Events to print statements.\n*/\n\n\ncontract ARCDebug {\n    event LogAddress(address _msg);\n    event LogInt(int256 _msg);\n    event LogString(string _msg);\n    event LogUint(uint256 _msg);\n    event LogBytes(bytes _msg);\n    event LogBytes32(bytes32 _msg);\n    event LogBool(bool _msg);\n}\n",
+  "sourcePath": "/Users/oren/daostack/arc/contracts/test/ARCDebug.sol",
+  "ast": {
+    "absolutePath": "/Users/oren/daostack/arc/contracts/test/ARCDebug.sol",
+    "exportedSymbols": {
+      "ARCDebug": [
+        8675
+      ]
+    },
+    "id": 8676,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8641,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".13"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:24"
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/GenesisProtocol.sol",
+        "file": "@daostack/infra/contracts/votingMachines/GenesisProtocol.sol",
+        "id": 8642,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 17112,
+        "src": "25:70:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/AbsoluteVote.sol",
+        "file": "@daostack/infra/contracts/votingMachines/AbsoluteVote.sol",
+        "id": 8643,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 16619,
+        "src": "96:67:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/QuorumVote.sol",
+        "file": "@daostack/infra/contracts/votingMachines/QuorumVote.sol",
+        "id": 8644,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 19968,
+        "src": "164:65:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol",
+        "file": "@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol",
+        "id": 8645,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 15496,
+        "src": "230:68:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol",
+        "file": "@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol",
+        "id": 8646,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 15822,
+        "src": "299:73:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8675,
+        "linearizedBaseContracts": [
+          8675
+        ],
+        "name": "ARCDebug",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8650,
+            "name": "LogAddress",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8649,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8648,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8650,
+                  "src": "508:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8647,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "508:7:24",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "507:14:24"
+            },
+            "src": "491:31:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8654,
+            "name": "LogInt",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8653,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8652,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8654,
+                  "src": "540:11:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 8651,
+                    "name": "int256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "540:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "539:13:24"
+            },
+            "src": "527:26:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8658,
+            "name": "LogString",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8657,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8656,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8658,
+                  "src": "574:11:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 8655,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "574:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "573:13:24"
+            },
+            "src": "558:29:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8662,
+            "name": "LogUint",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8661,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8660,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8662,
+                  "src": "606:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8659,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "606:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "605:14:24"
+            },
+            "src": "592:28:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8666,
+            "name": "LogBytes",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8665,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8664,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8666,
+                  "src": "640:10:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 8663,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "640:5:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "639:12:24"
+            },
+            "src": "625:27:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8670,
+            "name": "LogBytes32",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8669,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8668,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8670,
+                  "src": "674:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 8667,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "674:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "673:14:24"
+            },
+            "src": "657:31:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8674,
+            "name": "LogBool",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8673,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8672,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8674,
+                  "src": "707:9:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 8671,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "707:4:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "706:11:24"
+            },
+            "src": "693:25:24"
+          }
+        ],
+        "scope": 8676,
+        "src": "467:253:24"
+      }
+    ],
+    "src": "0:721:24"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/oren/daostack/arc/contracts/test/ARCDebug.sol",
+    "exportedSymbols": {
+      "ARCDebug": [
+        8675
+      ]
+    },
+    "id": 8676,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 8641,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".13"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:24"
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/GenesisProtocol.sol",
+        "file": "@daostack/infra/contracts/votingMachines/GenesisProtocol.sol",
+        "id": 8642,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 17112,
+        "src": "25:70:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/AbsoluteVote.sol",
+        "file": "@daostack/infra/contracts/votingMachines/AbsoluteVote.sol",
+        "id": 8643,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 16619,
+        "src": "96:67:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/votingMachines/QuorumVote.sol",
+        "file": "@daostack/infra/contracts/votingMachines/QuorumVote.sol",
+        "id": 8644,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 19968,
+        "src": "164:65:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol",
+        "file": "@daostack/infra/contracts/test/AbsoluteVoteExecuteMock.sol",
+        "id": 8645,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 15496,
+        "src": "230:68:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol",
+        "file": "@daostack/infra/contracts/test/GenesisProtocolCallbacksMock.sol",
+        "id": 8646,
+        "nodeType": "ImportDirective",
+        "scope": 8676,
+        "sourceUnit": 15822,
+        "src": "299:73:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8675,
+        "linearizedBaseContracts": [
+          8675
+        ],
+        "name": "ARCDebug",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8650,
+            "name": "LogAddress",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8649,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8648,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8650,
+                  "src": "508:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 8647,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "508:7:24",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "507:14:24"
+            },
+            "src": "491:31:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8654,
+            "name": "LogInt",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8653,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8652,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8654,
+                  "src": "540:11:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_int256",
+                    "typeString": "int256"
+                  },
+                  "typeName": {
+                    "id": 8651,
+                    "name": "int256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "540:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "539:13:24"
+            },
+            "src": "527:26:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8658,
+            "name": "LogString",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8657,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8656,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8658,
+                  "src": "574:11:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 8655,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "574:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "573:13:24"
+            },
+            "src": "558:29:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8662,
+            "name": "LogUint",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8661,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8660,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8662,
+                  "src": "606:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8659,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "606:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "605:14:24"
+            },
+            "src": "592:28:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8666,
+            "name": "LogBytes",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8665,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8664,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8666,
+                  "src": "640:10:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 8663,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "640:5:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "639:12:24"
+            },
+            "src": "625:27:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8670,
+            "name": "LogBytes32",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8669,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8668,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8670,
+                  "src": "674:12:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 8667,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "674:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "673:14:24"
+            },
+            "src": "657:31:24"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 8674,
+            "name": "LogBool",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 8673,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8672,
+                  "indexed": false,
+                  "name": "_msg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8674,
+                  "src": "707:9:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 8671,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "707:4:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "706:11:24"
+            },
+            "src": "693:25:24"
+          }
+        ],
+        "scope": 8676,
+        "src": "467:253:24"
+      }
+    ],
+    "src": "0:721:24"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.13+commit.5b0b510c.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.20",
+  "updatedAt": "2020-02-10T15:44:06.141Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
