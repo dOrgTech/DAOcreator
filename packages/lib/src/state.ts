@@ -4,7 +4,6 @@ import {
   Member,
   Scheme,
   SchemeType,
-  GenericScheme,
   ContributionReward,
   SchemeRegistrar,
   GenesisProtocol
@@ -13,7 +12,6 @@ export {
   SchemeType,
   ContributionReward,
   SchemeRegistrar,
-  GenericScheme,
   GenesisProtocol,
   GenesisProtocolPreset,
   DAOMigrationCallbacks,
@@ -58,18 +56,6 @@ export const toDAOMigrationParams = (
           voteParams: params.VotingMachinesParams.length
         });
         params.schemes.ContributionReward = true;
-        break;
-      }
-      case SchemeType.GenericScheme: {
-        const genericScheme = scheme as GenericScheme;
-        if (!params.UGenericScheme) {
-          params.UGenericScheme = [];
-        }
-        params.UGenericScheme.push({
-          voteParams: params.VotingMachinesParams.length,
-          targetContract: genericScheme.contractToCall
-        });
-        params.schemes.UGenericScheme = true;
         break;
       }
       case SchemeType.SchemeRegistrar: {
@@ -120,85 +106,60 @@ export const fromDAOMigrationParams = (
   // schemes
   let schemes: Scheme[] = [];
 
-  Object.keys(params.schemes).forEach(type => {
-    // TODO: support multiple schemes of a single type
-    switch (type) {
-      case "ContributionReward":
-        if (params.schemes[type]) {
-          const config = params.ContributionReward
-            ? params.ContributionReward[0]
-            : undefined;
-          let index;
-
-          if (config && config.voteParams) {
-            index = config.voteParams;
-          } else {
-            index = 0;
-          }
-
-          const votingMachine = new GenesisProtocol({
-            config: params.VotingMachinesParams[index]
-          });
-          schemes.push(new ContributionReward(votingMachine));
-        }
-        break;
-      case "UGenericScheme":
-        if (params.schemes[type]) {
-          const config = params.UGenericScheme
-            ? params.UGenericScheme[0]
-            : undefined;
-          let index;
-          let address;
-
-          if (config && config.voteParams) {
-            index = config.voteParams;
-          } else {
-            index = 0;
-          }
-
-          if (config && config.targetContract) {
-            address = config.targetContract;
-          } else {
-            address = "0x0000000000000000000000000000000000000000";
-          }
-
-          const votingMachine = new GenesisProtocol({
-            config: params.VotingMachinesParams[index]
-          });
-
-          schemes.push(new GenericScheme(address, votingMachine));
-        }
-        break;
-      case "SchemeRegistrar":
-        if (params.schemes[type]) {
-          const config = params.SchemeRegistrar
-            ? params.SchemeRegistrar[0]
-            : undefined;
-          let index;
-
-          if (config) {
-            if (config.voteRegisterParams) {
-              index = config.voteRegisterParams;
-            } else if (config.voteRemoveParams) {
-              index = config.voteRemoveParams;
+  if (params.schemes) {
+    Object.keys(params.schemes).forEach(type => {
+      // TODO: support multiple schemes of a single type
+      switch (type) {
+        case "ContributionReward":
+          if (params.schemes[type]) {
+            const config = params.ContributionReward
+              ? params.ContributionReward[0]
+              : undefined;
+            let index;
+  
+            if (config && config.voteParams) {
+              index = config.voteParams;
             } else {
               index = 0;
             }
-          } else {
-            index = 0;
+  
+            const votingMachine = new GenesisProtocol({
+              config: params.VotingMachinesParams[index]
+            });
+            schemes.push(new ContributionReward(votingMachine));
           }
-
-          const votingMachine = new GenesisProtocol({
-            config: params.VotingMachinesParams[index]
-          });
-
-          schemes.push(new SchemeRegistrar(votingMachine));
-        }
-        break;
-      default:
-        break;
-    }
-  });
+          break;
+        case "SchemeRegistrar":
+          if (params.schemes[type]) {
+            const config = params.SchemeRegistrar
+              ? params.SchemeRegistrar[0]
+              : undefined;
+            let index;
+  
+            if (config) {
+              if (config.voteRegisterParams) {
+                index = config.voteRegisterParams;
+              } else if (config.voteRemoveParams) {
+                index = config.voteRemoveParams;
+              } else {
+                index = 0;
+              }
+            } else {
+              index = 0;
+            }
+  
+            const votingMachine = new GenesisProtocol({
+              config: params.VotingMachinesParams[index]
+            });
+  
+            schemes.push(new SchemeRegistrar(votingMachine));
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
   return {
     config,

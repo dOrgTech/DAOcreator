@@ -112,7 +112,7 @@ export const migrateDAO = async (
       getState: callbacks.getState,
       setState: callbacks.setState,
       cleanState: callbacks.cleanState,
-      optimizedAbis: false 
+      optimizedAbis: true
     });
 
     if (migration === undefined) {
