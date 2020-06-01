@@ -15,7 +15,15 @@ export const migrateDAO = async (
   try {
     const web3 = await getWeb3();
     const opts = await getDefaultOpts();
-    const network = await getNetworkName();
+    let network = await getNetworkName();
+
+    if (network === 'private') {
+      if (await web3.eth.net.getId() === 100) {
+        network = 'xdai'
+      } else if (await web3.eth.net.getId() === 77) {
+        network = 'sokol'
+      }
+    }
 
     const logTx = async ({ transactionHash, gasUsed }: any, msg: string) => {
       const tx = await web3.eth.getTransaction(transactionHash);
