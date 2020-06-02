@@ -1,8 +1,0 @@
-{
-  "contractName": "Address",
-  "abi": [],
-  "compiler": {
-    "name": "solc",
-    "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
-  }
-}

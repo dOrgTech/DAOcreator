@@ -8,15 +8,10 @@ export interface DAOMigrationParams {
   VotingMachinesParams: GenesisProtocolConfig[];
   schemes: {
     ContributionReward?: boolean;
-    UGenericScheme?: boolean;
     SchemeRegistrar?: boolean;
   };
   ContributionReward?: {
     voteParams?: number;
-  }[];
-  UGenericScheme?: {
-    voteParams?: number;
-    targetContract: string;
   }[];
   SchemeRegistrar?: {
     voteRegisterParams?: number;

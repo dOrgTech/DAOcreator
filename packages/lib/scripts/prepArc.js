@@ -16,7 +16,7 @@ async function copyMigrationScript() {
     "utils.js",
     "sanitize.js",
     "migration.json",
-    "contracts-optimized/0.0.1-rc.33"
+    "contracts-optimized/0.0.1-rc.41"
   ];
   const baseDir = path.dirname(require.resolve("@daostack/migration"));
   const destDir = path.join(__dirname, "../src/dependency/arc/src");

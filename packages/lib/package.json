@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-lib",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -18,7 +18,7 @@
     "jsonschema": "^1.2.5"
   },
   "devDependencies": {
-    "@daostack/migration": "0.0.1-rc.36-v5",
+    "@daostack/migration": "0.0.1-rc.41-v7",
     "@types/bn.js": "^4.11.5",
     "@types/node": "^10.12.18",
     "@types/web3": "1.0.19",
