@@ -3,8 +3,7 @@ import { Address } from "../../../dependency/web3";
 
 export enum SchemeType {
   ContributionReward,
-  SchemeRegistrar,
-  GenericScheme
+  SchemeRegistrar
 }
 
 export interface Scheme {
@@ -30,16 +29,6 @@ export class SchemeRegistrar implements Scheme {
   votingMachine: VotingMachine;
 
   constructor(votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-}
-
-export class GenericScheme implements Scheme {
-  type = SchemeType.GenericScheme;
-  permissions: string = "0x00000010";
-  votingMachine: VotingMachine;
-
-  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
     this.votingMachine = votingMachine;
   }
 }

@@ -9,7 +9,6 @@ import {
   GenesisProtocolForm,
   ContributionRewardForm,
   SchemeRegistrarForm,
-  GenericSchemeForm,
   DurationField
 } from "@dorgtech/daocreator-lib";
 
@@ -27,7 +26,7 @@ interface Props {
   setLoadedSpeed: (speed: DAOSpeed) => void;
 }
 
-export type FullSchemes = [ContributionRewardForm, SchemeRegistrarForm, GenericSchemeForm];
+export type FullSchemes = [ContributionRewardForm, SchemeRegistrarForm];
 
 export type VotingMachinePresets = GenesisProtocolForm[];
 
@@ -45,24 +44,21 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
     DAOSpeed.Slow,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Critical],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
-      [SchemeType.GenericScheme, GenesisProtocolPreset.Critical]
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical]
     ])
   ],
   [
     DAOSpeed.Medium,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Normal],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical],
-      [SchemeType.GenericScheme, GenesisProtocolPreset.Normal]
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Critical]
     ])
   ],
   [
     DAOSpeed.Fast,
     new SchemePresets([
       [SchemeType.ContributionReward, GenesisProtocolPreset.Easy],
-      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal],
-      [SchemeType.GenericScheme, GenesisProtocolPreset.Easy]
+      [SchemeType.SchemeRegistrar, GenesisProtocolPreset.Normal]
     ])
   ]
 ]);
@@ -70,7 +66,7 @@ const schemeSpeeds: SchemeSpeeds = new SchemeSpeeds([
 const initialVotingMachines = () => {
   let vms = [];
   let i = 0;
-  for (i; i < 3; i++) {
+  for (i; i < 2; i++) {
     const schemePresetMap = schemeSpeeds.get(DAOSpeed.Medium);
 
     if (schemePresetMap === undefined) throw Error("Unimplemented Scheme Speed Configuration");
@@ -103,8 +99,7 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
 
   const [fullSchemes, setFullSchemes] = useState<FullSchemes>([
     new ContributionRewardForm(),
-    new SchemeRegistrarForm(),
-    new GenericSchemeForm()
+    new SchemeRegistrarForm()
   ]);
 
   const [presetVotingMachines, setPresetVotingMachines] = useState<VotingMachinePresets>(initialVotingMachines);
@@ -143,7 +138,6 @@ const SchemeEditor: FC<Props> = ({ form, toggleCollapse, modal, setModal, loaded
     const activeSchemes = [
       containsType(SchemeType.ContributionReward),
       containsType(SchemeType.SchemeRegistrar),
-      containsType(SchemeType.GenericScheme)
     ];
 
     updateSchemes(form.$, activeSchemes);

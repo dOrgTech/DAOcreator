@@ -7,8 +7,7 @@
   "useDaoCreator": true,
   "schemes": {
     "ContributionReward": true,
-    "SchemeRegistrar": true,
-    "UGenericScheme": true
+    "SchemeRegistrar": true
   },
   "VotingMachinesParams": [
     {
@@ -80,12 +79,6 @@
     {
       "voteRegisterParams": 1,
       "voteRemoveParams": 1
-    }
-  ],
-  "UGenericScheme": [
-    {
-      "voteParams": 2,
-      "targetContract": "0xB1B7586656116D546033e3bAFF69BFcD6592225E"
     }
   ]
 }
