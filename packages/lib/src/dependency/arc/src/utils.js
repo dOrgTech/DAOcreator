@@ -13,8 +13,16 @@ const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-exports.generateRnadomName = function () {
+exports.generateRandomName = function () {
   return capitalize(randomEl(adjectives)) + ' ' + capitalize(randomEl(nouns))
+}
+
+exports.concatBytes = function (bytes1, bytes2) {
+  return bytes1 + (bytes2.slice(2))
+}
+
+exports.getBytesLength = function (bytes) {
+  return Number(bytes.slice(2).length) / 2
 }
 
 exports.importAbi = function (abiPath) {

@@ -2,7 +2,7 @@ const fs = require("fs");
 const ncp = require("ncp").ncp;
 const path = require("path");
 const rimraf = require("rimraf");
-const optimizer = require("@daostack/migration/optimize-abis");
+const optimizer = require("@daostack/migration-experimental/optimize-abis");
 
 async function optimizeABIs() {
   optimizer.initDirectory();
@@ -16,9 +16,9 @@ async function copyMigrationScript() {
     "utils.js",
     "sanitize.js",
     "migration.json",
-    "contracts-optimized/0.0.1-rc.41"
+    "contracts-optimized/0.1.1-rc.23"
   ];
-  const baseDir = path.dirname(require.resolve("@daostack/migration"));
+  const baseDir = path.dirname(require.resolve("@daostack/migration-experimental"));
   const destDir = path.join(__dirname, "../src/dependency/arc/src");
 
   // Remove all existing files in the destination directory
