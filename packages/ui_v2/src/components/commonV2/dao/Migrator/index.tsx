@@ -64,15 +64,6 @@ const Migrator: FC<IProps> = ({ migrationStates }: IProps) => {
         failed={failed === FAILED.Create}
         logLines={minimalLogLines}
       />
-
-      {/* Configure Organization */}
-      <OrganizationLine
-        type={1}
-        active={installStep === STEP.Configuring}
-        done={installStep === STEP.Completed}
-        failed={failed === FAILED.Config}
-        logLines={minimalLogLines}
-      />
     </MDBContainer>
   );
 };
