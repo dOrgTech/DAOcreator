@@ -1065,12 +1065,12 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
-"@daostack/arc-experimental@0.1.1-rc.20":
-  version "0.1.1-rc.20"
-  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.1-rc.20.tgz#1b6a17149b1d6e50ba13ff28d0401c88184dde48"
-  integrity sha512-o/uRZc/A3/QHFWIk6GJrJIIuatB3j02iMkk1/IEVTVlw7M257+cM/9gUMPU9y+pT/olYth3QrdSmNv0XqtAlwQ==
+"@daostack/arc-experimental@0.1.1-rc.23":
+  version "0.1.1-rc.23"
+  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.1-rc.23.tgz#00ac29fa1e8a3449005202dc05c42fd45158a6c8"
+  integrity sha512-b7PbrbG/JrDw2DhT+JbAAQKB9IoEp2vDoSl60vZ7dWBztw+0yYTXbY7U9Z+5nPCCvUV4DrjW6EJblluuQ9O6dg==
   dependencies:
-    "@daostack/infra-experimental" "0.0.1-rc.16"
+    "@daostack/infra-experimental" "0.1.1-rc.19"
     "@openzeppelin/contracts-ethereum-package" "2.4.0"
     "@openzeppelin/upgrades" "2.7.1"
     math "0.0.3"
@@ -1085,21 +1085,21 @@
     "@openzeppelin/upgrades" "2.5.3"
     openzeppelin-solidity "2.2.0"
 
-"@daostack/infra-experimental@0.0.1-rc.16":
-  version "0.0.1-rc.16"
-  resolved "https://registry.yarnpkg.com/@daostack/infra-experimental/-/infra-experimental-0.0.1-rc.16.tgz#efc27836008a250fc30f1c649375eb66d96836f4"
-  integrity sha512-8toFOgE8pN7yN/y+eqZS6y0b5HWJa492GecoqmU6mFIOjL3JiM1M47mhQ6BlOZQAznLZ5UAz0SVZriM2RxU9Fw==
+"@daostack/infra-experimental@0.1.1-rc.19":
+  version "0.1.1-rc.19"
+  resolved "https://registry.yarnpkg.com/@daostack/infra-experimental/-/infra-experimental-0.1.1-rc.19.tgz#f6a0186e3ac76f61f99c49522544ade8d0c957cb"
+  integrity sha512-wRJ8GJklRVzj9uYAtOVIRXfvxd6q985sdDIRLDMl2Y3BW0mhGUBUgqeWzEt6ovrnrqydFBGtRsfZ/QlIjPWj+A==
   dependencies:
-    "@openzeppelin/contracts-ethereum-package" "2.3.0"
+    "@openzeppelin/contracts-ethereum-package" "2.5.0"
     "@openzeppelin/upgrades" "2.5.3"
     ethereumjs-abi "^0.6.5"
 
-"@daostack/migration-experimental@0.1.1-rc.20-v1":
-  version "0.1.1-rc.20-v1"
-  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.1-rc.20-v1.tgz#3cbd118f02c9561359a5af456957c86e1269eb96"
-  integrity sha512-Bh0SSpeYUYJ0os47LcYGW3EmSXBdm7m1wjXvHlXCWDz10G9z+PDi+ZVQXtDojZlTJa3FMbGB1H/SzMN3xsAPQA==
+"@daostack/migration-experimental@0.1.1-rc.23-v3":
+  version "0.1.1-rc.23-v3"
+  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.1-rc.23-v3.tgz#2686c8cc330fba5272376aeacaa4c1d168a6466b"
+  integrity sha512-wFbRK/zqNB3c+iYh/nVe24NPwkVm3s70cq25gPcJ/zalOZBOh1dSXRPnaC2s7SILTPWR5GdHtdhGtWa6zI/scw==
   dependencies:
-    "@daostack/arc-experimental" "0.1.1-rc.20"
+    "@daostack/arc-experimental" "0.1.1-rc.23"
     "@daostack/arc-hive" "0.0.1-rc.5"
     ethereumjs-wallet "^0.6.3"
     fstream "^1.0.12"
@@ -2418,6 +2418,11 @@
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-ethereum-package/-/contracts-ethereum-package-2.4.0.tgz#cd98612022cadb8710c26901bc564240a19a9b40"
   integrity sha512-GC1aOgTnuNnlhdYOCKFizLCQRgYlbImWi+aJ9Lw4Yw4BSLHzfPg+XV0tgn9l+KnFAzgoUEg2aD2wmaHZBjEnSw==
+
+"@openzeppelin/contracts-ethereum-package@2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-ethereum-package/-/contracts-ethereum-package-2.5.0.tgz#cfb4b91f8132edde7e04bcd032575d4c6b544f4a"
+  integrity sha512-14CijdTyy4Y/3D3UUeFC2oW12nt1Yq1M8gFOtkuODEvSYPe3YSAKnKyhUeGf0UDNCZzwfGr15KdiFK6AoJjoSQ==
 
 "@openzeppelin/upgrades@2.5.3":
   version "2.5.3"

@@ -6,6 +6,9 @@ cache:
     - packages/ui_v1/node_modules
     - packages/lib/node_modules
 
+install:
+  - yarn --ignore-engines
+
 script:
   - npm run build
 # TODO automatically deploy npm packages to npmjs when merged to master
