@@ -132,14 +132,17 @@ export const migrateDAO = async (
 
     const result = migration!.dao[arcVersion];
     console.log(result);
+    callbacks.migrationComplete(result);
 
     return {
-      arcVersion: arcVersion,
+      arcVersion: result.arcVersion,
       name: result.name,
       Avatar: result.Avatar,
       DAOToken: result.DAOToken,
       Reputation: result.Reputation,
-      Controller: result.Controller
+      Controller: result.Controller,
+      Schemes: result.Schemes,
+      StandAloneContracts: result.StandAloneContracts
     };
   } catch (e) {
     callbacks.migrationAborted(e.message);

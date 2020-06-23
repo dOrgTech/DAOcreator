@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { AnyField, GenesisProtocolForm } from "@dorgtech/daocreator-lib";
+import { AnyField, GenesisProtocolForm } from "@dorgtech/daocreator-lib-experimental";
 import FormField from "../FormField";
 import { MDBRow } from "mdbreact";
 

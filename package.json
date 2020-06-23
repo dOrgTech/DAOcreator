@@ -4,12 +4,12 @@
   "version": "1.0.0",
   "scripts": {
     "start:v1": "lerna exec --scope @dorgtech/daocreator-ui-v1 -- yarn start",
-    "start:v2": "lerna exec --scope @dorgtech/daocreator-ui -- yarn start",
+    "start:v2": "yarn build:lib && lerna exec --scope @dorgtech/daocreator-ui-experimental -- yarn start",
     "build": "lerna exec -- yarn build",
-    "build:lib": "lerna exec --scope @dorgtech/daocreator-lib -- yarn build",
-    "release:lib": "lerna exec --scope @dorgtech/daocreator-lib -- yarn release",
+    "build:lib": "lerna exec --scope @dorgtech/daocreator-lib-experimental -- yarn build",
+    "release:lib": "lerna exec --scope @dorgtech/daocreator-lib-experimental -- yarn release",
     "release:v1": "lerna exec --scope @dorgtech/daocreator-ui-v1 -- yarn release",
-    "release:v2": "lerna exec --scope @dorgtech/daocreator-ui -- yarn release"
+    "release:v2": "lerna exec --scope @dorgtech/daocreator-ui-experimental -- yarn release"
   },
   "devDependencies": {
     "lerna": "^3.18.4"
@@ -17,9 +17,6 @@
   "workspaces": {
     "packages": [
       "./packages/*"
-    ],
-    "nohoist": [
-      "./packages/lib"
     ]
   }
 }

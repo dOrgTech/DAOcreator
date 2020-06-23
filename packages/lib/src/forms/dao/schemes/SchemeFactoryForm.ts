@@ -1,20 +1,20 @@
-import { SchemeForm } from "../../../forms/dao/SchemeForm";
-import { AnyField, GenesisProtocolForm } from "../../../forms";
+import { SchemeForm } from "../SchemeForm";
+import { AnyField, GenesisProtocolForm } from "../..";
 import {
   SchemeType,
-  SchemeRegistrar,
+  SchemeFactory,
   GenesisProtocol,
   GenesisProtocolPreset
 } from "../../../state";
 
-export class SchemeRegistrarForm extends SchemeForm<
-  SchemeRegistrar,
+export class SchemeFactoryForm extends SchemeForm<
+  SchemeFactory,
   {
     votingMachine: GenesisProtocolForm;
   }
 > {
-  constructor(form?: SchemeRegistrarForm) {
-    super(SchemeType.SchemeRegistrar, {
+  constructor(form?: SchemeFactoryForm) {
+    super(SchemeType.SchemeFactory, {
       votingMachine: form
         ? form.$.votingMachine
         : new GenesisProtocolForm({ preset: GenesisProtocolPreset.Critical })
@@ -26,12 +26,11 @@ export class SchemeRegistrarForm extends SchemeForm<
     );
   }
 
-  public toState(): SchemeRegistrar {
-    return new SchemeRegistrar(this.$.votingMachine.toState());
+  public toState(): SchemeFactory {
+    return new SchemeFactory(this.$.votingMachine.toState());
   }
 
-  public fromState(state: SchemeRegistrar) {
-    // TODO: support multiple voting machine types
+  public fromState(state: SchemeFactory) {
     this.$.votingMachine.fromState(state.votingMachine as GenesisProtocol);
   }
 

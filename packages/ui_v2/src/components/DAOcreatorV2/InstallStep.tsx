@@ -2,7 +2,7 @@ import React, { FC, Fragment } from "react";
 import Migrator from "../commonV2/dao/Migrator";
 import {
   DAOForm,
-} from "@dorgtech/daocreator-lib";
+} from "@dorgtech/daocreator-lib-experimental";
 import { MDBAlert, MDBIcon, MDBContainer, MDBTooltip } from "mdbreact";
 import './styles.css'
 

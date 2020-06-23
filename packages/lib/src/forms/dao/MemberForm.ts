@@ -10,7 +10,7 @@ import {
   nonZeroAddress,
   greaterThanOrEqual
 } from "../../forms";
-import { Member } from "../../dependency/arc";
+import { Member } from "../../state";
 import csvParse from "csv-parse";
 import csvStringify from "csv-stringify";
 

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { MembersForm } from "@dorgtech/daocreator-lib";
+import { MembersForm } from "@dorgtech/daocreator-lib-experimental";
 import { MDBRow, MDBCol, MDBBox, MDBContainer } from "mdbreact";
 
 import MembersEditor from "../commonV2/dao/Members/MembersEditor";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ProviderOrGetter } from "@dorgtech/daocreator-lib";
+import { ProviderOrGetter } from "@dorgtech/daocreator-lib-experimental";
 
 import DAOcreatorV2 from "./DAOcreatorV2/index";
 

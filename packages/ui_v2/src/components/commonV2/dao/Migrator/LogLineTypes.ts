@@ -1,8 +1,11 @@
+import { DAOMigrationResult } from '@dorgtech/daocreator-lib-experimental'
+
 export enum LogType {
   Info,
   Error,
   TransactionResult,
   UserApproval,
+  MigrationComplete,
   MigrationAborted
 }
 
@@ -55,6 +58,15 @@ export class LogUserApproval implements LogLine {
   }
 }
 
+export class LogMigrationComplete implements LogLine {
+  public type = LogType.MigrationComplete;
+  constructor(public result: DAOMigrationResult) {}
+
+  public toString() {
+    return JSON.stringify(this.result);
+  }
+}
+
 export class LogMigrationAborted implements LogLine {
   public type = LogType.MigrationAborted;
   constructor(public error: Error) {}
@@ -69,4 +81,5 @@ export type AnyLogLine =
   | LogError
   | LogTransactionResult
   | LogUserApproval
+  | LogMigrationComplete
   | LogMigrationAborted;
