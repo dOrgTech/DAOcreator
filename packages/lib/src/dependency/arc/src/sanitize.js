@@ -3,7 +3,7 @@ const Validator = require('jsonschema').Validator
 const validator = new Validator()
 
 const requiredNumber = {
-  type: 'number',
+  type: ['number', 'string'],
   required: true
 }
 
@@ -276,7 +276,7 @@ const member = {
   type: 'object',
   properties: {
     address: { $ref: 'Address', required: true },
-    tokens: { type: 'number' },
+    tokens: { type: ['number', 'string'] },
     reputation: requiredNumber
   }
 }

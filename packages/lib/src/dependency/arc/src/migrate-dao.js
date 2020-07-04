@@ -7,11 +7,17 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     network = 'mainnet'
   }
 
+  console.log(web3.eth.accounts)
+  let adminAddress = web3.eth.accounts.wallet[0].address
+
   if (network === 'private') {
     if (await web3.eth.net.getId() === 100) {
       network = 'xdai'
     } else if (await web3.eth.net.getId() === 77) {
       network = 'sokol'
+    } else {
+      web3.eth.accounts.wallet.add(web3.eth.accounts.privateKeyToAccount('0x6cbed15c793ce57650b9877cf6fa156fbef513c4e6134f022a85b1ffdd59b2a1'))
+      adminAddress = web3.eth.accounts.wallet[1].address
     }
   }
 
@@ -150,7 +156,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
         let createStandAloneProxyInstance = daoFactory.methods.createInstance(
           [0, 1, getArcVersionNumber(standAlone.arcVersion ? standAlone.arcVersion : arcVersion)],
           standAlone.name,
-          web3.eth.accounts.wallet[0].address,
+          adminAddress,
           contractInitParams
         )
         tx = (await sendTx(createStandAloneProxyInstance, `Creating ${standAlone.name} Proxy Instance...`)).receipt
@@ -194,7 +200,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     founders.map(({ reputation }) => web3.utils.toWei(reputation !== undefined ? reputation.toString() : '0'))
   ]
 
-  const initFoundersBatchSize = 20
+  const initFoundersBatchSize = 100
   const foundersBatchSize = 100
 
   if (deploymentState.schemeNames === undefined) {
@@ -264,6 +270,8 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
     setState(deploymentState, network)
   }
 
+  deploymentState.foundersToAddCount = deploymentState.foundersToAddCount === undefined ? founderAddresses.length - initFoundersBatchSize : deploymentState.foundersToAddCount
+
   if (deploymentState.Avatar === undefined) {
     let foundersInitCount = founderAddresses.length < initFoundersBatchSize ? founderAddresses.length : initFoundersBatchSize
     let tokenData = await new web3.eth.Contract(utils.importAbi(`./${contractsDir}/${arcVersion}/DAOToken.json`).abi)
@@ -288,15 +296,46 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
       ]
     )
 
+    let forgeOrgSetSchemesParams = deploymentState.foundersToAddCount <= 0 ? encodedSetSchemesParams : '0x'
+
     const forgeOrg = daoFactory.methods.forgeOrg(
       encodedForgeOrgParams,
-      encodedSetSchemesParams
+      forgeOrgSetSchemesParams
     )
 
     tx = (await sendTx(forgeOrg, 'Creating a new organization...')).receipt
     await logTx(tx, 'Created new organization.')
 
     deploymentState.Avatar = tx.events.NewOrg.returnValues._avatar
+
+    if (forgeOrgSetSchemesParams === '0x') {
+      deploymentState.foundersAdditionCounter = deploymentState.foundersAdditionCounter === undefined ? 0 : deploymentState.foundersAdditionCounter
+      while (deploymentState.foundersToAddCount > 0) {
+        let currentBatchCount = deploymentState.foundersToAddCount < foundersBatchSize ? deploymentState.foundersToAddCount : foundersBatchSize
+        tx = (await sendTx(daoFactory.methods.addFounders(
+          deploymentState.Avatar,
+          founderAddresses.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
+            deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize),
+          tokenDist.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
+            deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize),
+          repDist.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
+            deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize)
+        ), 'Adding founders...')).receipt
+        await logTx(tx, 'Finished adding founders.')
+
+        deploymentState.foundersToAddCount -= foundersBatchSize
+        deploymentState.foundersAdditionCounter++
+        setState(deploymentState, network)
+      }
+
+      const setSchemes = daoFactory.methods.setSchemes(
+        deploymentState.Avatar,
+        encodedSetSchemesParams
+      )
+
+      tx = (await sendTx(setSchemes, 'Setting DAO schemes...')).receipt
+      await logTx(tx, 'DAO schemes were set.')
+    }
 
     let schemesEvents = tx.events.SchemeInstance
     for (let i in schemesEvents) {
@@ -307,26 +346,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
           address: schemesEvents[i].returnValues._scheme
         })
     }
-    setState(deploymentState, network)
-  }
 
-  deploymentState.foundersToAddCount = deploymentState.foundersToAddCount === undefined ? founderAddresses.length - initFoundersBatchSize : deploymentState.foundersToAddCount
-  deploymentState.foundersAdditionCounter = deploymentState.foundersAdditionCounter === undefined ? 0 : deploymentState.foundersAdditionCounter
-  while (deploymentState.foundersToAddCount > 0) {
-    let currentBatchCount = deploymentState.foundersToAddCount < foundersBatchSize ? deploymentState.foundersToAddCount : foundersBatchSize
-    tx = (await sendTx(daoFactory.methods.addFounders(
-      deploymentState.Avatar,
-      founderAddresses.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
-        deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize),
-      tokenDist.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
-        deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize),
-      repDist.slice(deploymentState.foundersAdditionCounter * foundersBatchSize + initFoundersBatchSize,
-        deploymentState.foundersAdditionCounter * foundersBatchSize + currentBatchCount + initFoundersBatchSize)
-    ), 'Adding founders...')).receipt
-    await logTx(tx, 'Finished adding founders.')
-
-    deploymentState.foundersToAddCount -= foundersBatchSize
-    deploymentState.foundersAdditionCounter++
     setState(deploymentState, network)
   }
 
@@ -362,7 +382,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
         deploymentState.StandAloneContracts[i].address,
         opts
       )
-      tx = (await sendTx(standaloneContractProxy.methods.changeAdmin(deploymentState.Avatar), 'Transferring Standalone Proxy Ownership...')).receipt
+      tx = (await sendTx(standaloneContractProxy.methods.changeAdmin(deploymentState.Avatar), 'Transferring Standalone Proxy Ownership...', adminAddress, 100000)).receipt
       await logTx(tx, 'Transferred Standalone Proxy Ownership.')
     }
   }

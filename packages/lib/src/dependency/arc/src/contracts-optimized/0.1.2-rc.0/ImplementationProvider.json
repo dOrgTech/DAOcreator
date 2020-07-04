@@ -1,0 +1,1 @@
+{"contractName":"ImplementationProvider","abi":[{"inputs":[{"internalType":"string","name":"contractName","type":"string"}],"name":"getImplementation","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}],"linkReferences":{},"deployedLinkReferences":{}}
