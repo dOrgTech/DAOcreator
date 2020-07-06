@@ -1094,10 +1094,10 @@
     ethereumjs-abi "^0.6.8"
     web3-utils "^1.2.8"
 
-"@daostack/migration-experimental@0.1.2-rc.0-v0":
-  version "0.1.2-rc.0-v0"
-  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.2-rc.0-v0.tgz#d3f15ef907296f511e31d0455b71961e013aa9e2"
-  integrity sha512-znyh1ld1KN19K9tWCP5zBrHcPU6kA1gCq+jhD3fFrpVt2AFrNwmbU7sTkt32tvB6M+aMKqlnrD3LbJLuf4DhZw==
+"@daostack/migration-experimental@0.1.2-rc.0-v1":
+  version "0.1.2-rc.0-v1"
+  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.2-rc.0-v1.tgz#b04317f180a05665debe6334e6b6a15c12bc36d2"
+  integrity sha512-kYOU+GavJEt4jlT+M/l1aSwgEg6cRp4//9EzeuMV9zK1+rAh81i8mAkh2ebTsQM5ru336wPx5qjXjfap7K3/Fw==
   dependencies:
     "@daostack/arc-experimental" "0.1.2-rc.0"
     "@daostack/arc-hive" "0.0.1-rc.5"

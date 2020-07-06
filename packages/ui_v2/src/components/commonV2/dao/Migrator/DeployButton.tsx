@@ -100,6 +100,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   let dao: DAOMigrationParams;
   if (step > 2 && form instanceof DAOForm) {
     dao = toDAOMigrationParams((form as DAOForm).toState());
+    dao.StandAloneContracts = null
   }
 
   /*
