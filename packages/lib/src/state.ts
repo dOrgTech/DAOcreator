@@ -4,16 +4,14 @@ import {
   Member as ArcMember,
   ProposalScheme as ArcScheme,
   SchemeType,
-  GenericScheme,
   ContributionReward,
   SchemeFactory,
-  GenesisProtocol
+  GenesisProtocol,
 } from "./dependency/arc";
 export {
   SchemeType,
   ContributionReward,
   SchemeFactory,
-  GenericScheme,
   GenesisProtocol,
   GenesisProtocolPreset,
   DAOMigrationCallbacks,
@@ -57,20 +55,6 @@ export const toDAOMigrationParams = (
           params: [
             "GenesisProtocolAddress",
             { voteParams: params.VotingMachinesParams.length }
-          ]
-        });
-        break;
-      }
-      case SchemeType.GenericScheme: {
-        const gs = scheme as GenericScheme
-        params.Schemes.push({
-          name: "GenericScheme",
-          alias: "",
-          permissions: scheme.permissions,
-          params: [
-            "GenesisProtocolAddress",
-            { voteParams: params.VotingMachinesParams.length },
-            gs.contractToCall
           ]
         });
         break;
@@ -133,13 +117,6 @@ export const fromDAOMigrationParams = (
             config: params.VotingMachinesParams[scheme.params[1].voteParams]
           });
           schemes.push(new ContributionReward(votingMachine));
-          break;
-        }
-        case "GenericScheme": {
-          const votingMachine = new GenesisProtocol({
-            config: params.VotingMachinesParams[scheme.params[1].voteParams]
-          });
-          schemes.push(new GenericScheme(scheme.params[2], votingMachine));
           break;
         }
         case "SchemeFactory": {

@@ -3,13 +3,11 @@ import { Form } from "../../forms/Form";
 import {
   AnyField,
   requireElement,
-  GenericSchemeForm,
   ContributionRewardForm,
   SchemeFactoryForm,
   GenesisProtocolForm
 } from "../../forms";
 import {
-  GenericScheme,
   ContributionReward,
   SchemeFactory,
   SchemeType,
@@ -17,7 +15,6 @@ import {
 } from "../../state";
 
 export type AnySchemeForm =
-  | GenericSchemeForm
   | ContributionRewardForm
   | SchemeFactoryForm;
 
@@ -64,10 +61,6 @@ export class SchemesForm extends Form<Scheme[], AnySchemeForm[]> {
         case SchemeType.SchemeFactory:
           schemeForm = new SchemeFactoryForm();
           schemeForm.fromState(scheme as SchemeFactory);
-          break;
-        case SchemeType.GenericScheme:
-          schemeForm = new GenericSchemeForm();
-          schemeForm.fromState(scheme as GenericScheme);
           break;
         default:
           throw Error(`Unimplemented SchemeType ${SchemeType[scheme.type]}`);
