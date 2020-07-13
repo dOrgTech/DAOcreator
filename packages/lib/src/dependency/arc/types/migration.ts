@@ -20,7 +20,7 @@ export interface DAOMigrationParams {
       functionName: string;
       params: any[];
     }[];
-  }[];
+  }[] | null;
   founders: Member[];
 }
 

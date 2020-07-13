@@ -4,7 +4,6 @@ import { Address } from "../../../dependency/web3";
 export enum SchemeType {
   ContributionReward,
   SchemeFactory,
-  GenericScheme
 }
 
 export interface Scheme {
@@ -32,16 +31,6 @@ export class SchemeFactory implements ProposalScheme {
   votingMachine: VotingMachine;
 
   constructor(votingMachine: VotingMachine) {
-    this.votingMachine = votingMachine;
-  }
-}
-
-export class GenericScheme implements ProposalScheme {
-  type = SchemeType.GenericScheme;
-  permissions: string = "0x00000010";
-  votingMachine: VotingMachine;
-
-  constructor(public contractToCall: Address, votingMachine: VotingMachine) {
     this.votingMachine = votingMachine;
   }
 }

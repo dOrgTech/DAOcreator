@@ -100,6 +100,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   let dao: DAOMigrationParams;
   if (step > 2 && form instanceof DAOForm) {
     dao = toDAOMigrationParams((form as DAOForm).toState());
+    dao.StandAloneContracts = null
   }
 
   /*
@@ -415,11 +416,19 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
     // Getting around unimplemented callback
     if (!result) return;
 
-    const network = await getNetworkName();
+    let network = await getNetworkName();
+    if (network === 'private') {
+      if (await web3.eth.net.getId() === 100) {
+        network = 'xdai'
+      } else if (await web3.eth.net.getId() === 77) {
+        network = 'sokol'
+      }
+    }
 
     let url;
     if (network === "mainnet") url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
     else if (network === "rinkeby") url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    else if (network === "xdai") url = `https://alchemy-2-xdai.herokuapp.com/dao/${result.Avatar}`;
     else url = `/dao/${result.Avatar}`;
 
     setAlchemyURL(url);

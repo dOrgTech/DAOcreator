@@ -15,7 +15,15 @@ export const migrateDAO = async (
   try {
     const web3 = await getWeb3();
     const opts = await getDefaultOpts();
-    const network = await getNetworkName();
+    let network = await getNetworkName();
+
+    if (network === 'private') {
+      if (await web3.eth.net.getId() === 100) {
+        network = 'xdai'
+      } else if (await web3.eth.net.getId() === 77) {
+        network = 'sokol'
+      }
+    }
 
     const logTx = async ({ transactionHash, gasUsed }: any, msg: string) => {
       const tx = await web3.eth.getTransaction(transactionHash);
@@ -65,7 +73,7 @@ export const migrateDAO = async (
       return { receipt, result };
     };
 
-    const arcVersion = "0.1.1-rc.23";
+    const arcVersion = "0.1.2-rc.0";
     const getArcVersionNumber = (ver: string) => Number(ver.slice(-2));
 
     // If the user doesn't have a supported network chosen, abort

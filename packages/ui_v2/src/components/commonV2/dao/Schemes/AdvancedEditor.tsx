@@ -12,7 +12,6 @@ import {
 } from "mdbreact";
 import {
   AnySchemeForm,
-  GenericSchemeForm,
   ContributionRewardForm,
   SchemeFactoryForm,
   SchemeType,
@@ -40,7 +39,6 @@ interface Props {
 const schemeTemplates: AnySchemeForm[] = [
   new ContributionRewardForm(),
   new SchemeFactoryForm(),
-  new GenericSchemeForm()
 ];
 
 const AdvancedEditor: FC<Props> = ({
