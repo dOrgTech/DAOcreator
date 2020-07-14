@@ -1,16 +1,20 @@
 import React, { FC, useState } from "react";
+import { AnyLogLine } from "../dao/Migrator/LogLineTypes";
 import {
-  AnyLogLine
-} from "../dao/Migrator/LogLineTypes";
-import { DAOConfigForm, MembersForm, SchemesForm, DAOForm, DAOMigrationResult } from "@dorgtech/daocreator-lib-experimental";
+  DAOConfigForm,
+  MembersForm,
+  SchemesForm,
+  DAOForm,
+  DAOMigrationResult
+} from "@dorgtech/daocreator-lib-experimental";
 import { MDBBtn, MDBRow, MDBCollapse } from "mdbreact";
 import { UtilityButton } from "./UtilityButton";
 import { MembersPreview, SchemesPreview, ConfigPreview } from "./Preview";
 
 import { STEP as DAOcreatorStep } from "../../DAOcreatorV2";
 
-import { DeployButton } from '../dao/Migrator/DeployButton'
-import './styles.css';
+import { DeployButton } from "../dao/Migrator/DeployButton";
+import "./styles.css";
 
 const pencilLogo = require("../../assets/icons/pencil.svg");
 
@@ -28,7 +32,6 @@ export enum FAILED {
   Config
 }
 
-
 interface Props {
   index: number;
   form: DAOForm | DAOConfigForm | MembersForm | SchemesForm;
@@ -37,6 +40,7 @@ interface Props {
   callbacks: any;
   step: DAOcreatorStep;
   launching: boolean;
+  redirectURL?: string;
 }
 
 const ModalButton: FC<{
@@ -45,14 +49,25 @@ const ModalButton: FC<{
   setModal: (modal: boolean | string) => void; // TODO ?
 }> = ({ step, index, setModal }) => {
   if (step === 1 && index === 1) {
-    return <UtilityButton id='modal' title={"Advanced"} openModal={setModal} />;
+    return <UtilityButton id="modal" title={"Advanced"} openModal={setModal} />;
   } else if (step === 2 && index === 2) {
-    return <UtilityButton id='importCSV' title={"Import CSV"} openModal={setModal} />;
+    return (
+      <UtilityButton id="importCSV" title={"Import CSV"} openModal={setModal} />
+    );
   }
   return <></>;
 };
 
-const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching }) => {
+const Stepper: FC<Props> = ({
+  index,
+  form,
+  title,
+  Component,
+  callbacks,
+  step,
+  launching,
+  redirectURL
+}) => {
   const [installStep, setInstallStep] = useState(STEP.Waiting);
   const [daoLogs, setDaoLogs] = useState<string[][]>([]);
 
@@ -67,10 +82,14 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
   const [minimalLogLines, setMinimalLogLines] = useState<string[]>([]);
 
   // User approval component
-  const [approval, setApproval] = useState<undefined | { msg: string; response: (res: boolean) => void }>(undefined);
+  const [approval, setApproval] = useState<
+    undefined | { msg: string; response: (res: boolean) => void }
+  >(undefined);
 
   // Migration result (sans schemes), outdated if resuming
-  const [result, setResult] = useState<DAOMigrationResult | undefined>(undefined);
+  const [result, setResult] = useState<DAOMigrationResult | undefined>(
+    undefined
+  );
 
   // Alchemy url
   const [alchemyURL, setAlchemyURL] = useState("");
@@ -108,18 +127,29 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
     setDaoInfo,
     daoLogs,
     setDaoLogs,
-    setLaunching: callbacks!.setLaunching 
+    setLaunching: callbacks!.setLaunching
   };
   const StepIcon: FC<{ index: number; step: number }> = ({ index, step }) => (
-    <a id="step" role="button" href="#/" style={{ cursor: "unset", padding: "30px" }}>
+    <a
+      id="step"
+      role="button"
+      href="#/"
+      style={{ cursor: "unset", padding: "30px" }}
+    >
       <span
         className="circle"
-        style={step < index ? styles.subsequentStepIcon : step === index ? styles.currentStepIcon : styles.previousStepIcon}
+        style={
+          step < index
+            ? styles.subsequentStepIcon
+            : step === index
+            ? styles.currentStepIcon
+            : styles.previousStepIcon
+        }
       >
         {index + 1}
       </span>
       <span
-        id='label'
+        id="label"
         className="label"
         style={step === index ? styles.active : styles.noActiveLabel}
       >
@@ -158,9 +188,13 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
         className="justify-content-space-between"
       >
         <StepIcon index={index} step={step} />
-       { Preview && <Preview /> } 
+        {Preview && <Preview />}
         <div className="editStep">
-          <ModalButton step={step} index={index} setModal={callbacks.setModal} />
+          <ModalButton
+            step={step}
+            index={index}
+            setModal={callbacks.setModal}
+          />
           <MDBBtn
             hidden={step <= index}
             floating
@@ -176,9 +210,13 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
         </div>
       </MDBRow>
 
-      <MDBCollapse id={index.toString()} isOpen={step.toString()} style={styles.maxWidth}>
+      <MDBCollapse
+        id={index.toString()}
+        isOpen={step.toString()}
+        style={styles.maxWidth}
+      >
         <MDBRow
-          id='row'
+          id="row"
           className={
             index === (2 || 4) ? "justify-content-end" : "justify-content-start"
           }
@@ -187,12 +225,16 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
               ? styles.stepContent
               : index === 1
               ? styles.stepTwoContent
-              : index === 2 ?
-              styles.stepThreeContent :
-              styles.stepFourContent
+              : index === 2
+              ? styles.stepThreeContent
+              : styles.stepFourContent
           }
         >
-          <Component form={form} {...callbacks} migrationStates={migrationStates} />
+          <Component
+            form={form}
+            {...callbacks}
+            migrationStates={migrationStates}
+          />
         </MDBRow>
       </MDBCollapse>
       {step === 3 && index === 3 ? (
@@ -204,7 +246,10 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
             paddingLeft: "38.5%"
           }}
         >
-          <DeployButton migrationStates={{...migrationStates, step, form }} />
+          <DeployButton
+            redirectURL={redirectURL}
+            migrationStates={{ ...migrationStates, step, form }}
+          />
         </MDBRow>
       ) : (
         <></>
@@ -213,17 +258,16 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
   );
 };
 
-
 const styles = {
   stepContent: {
-    width: 'auto',
-    margin: '0px 5% 0px 12.5%',
-    border: '1px solid lightgray',
-    borderRadius: '6px',
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    paddingTop: '24px',
-    paddingBottom: '24px'
+    width: "auto",
+    margin: "0px 5% 0px 12.5%",
+    border: "1px solid lightgray",
+    borderRadius: "6px",
+    paddingLeft: "30px",
+    paddingRight: "30px",
+    paddingTop: "24px",
+    paddingBottom: "24px"
   },
   stepTwoContent: {
     width: "inherit",
@@ -231,20 +275,20 @@ const styles = {
     margin: "0px 5% 0px 12.5%",
     border: "1px solid lightgray",
     borderRadius: "6px",
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    paddingTop: '24px',
-    paddingBottom: '24px'
+    paddingLeft: "30px",
+    paddingRight: "30px",
+    paddingTop: "24px",
+    paddingBottom: "24px"
   },
   stepThreeContent: {
     width: "auto",
     margin: "0px 5% 0px 12.5%",
     border: "1px solid lightgray",
     borderRadius: "6px",
-    paddingTop: '24px',
-    paddingBottom: '24px',
-    paddingRight: '3px',
-    paddingLeft: '3px'
+    paddingTop: "24px",
+    paddingBottom: "24px",
+    paddingRight: "3px",
+    paddingLeft: "3px"
   },
   stepFourContent: {
     width: "auto",
@@ -252,20 +296,20 @@ const styles = {
     margin: "0px 5% 0px 12.5%",
     border: "1px solid lightgray",
     borderRadius: "6px",
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    paddingTop: '24px',
-    paddingBottom: '24px'
+    paddingLeft: "30px",
+    paddingRight: "30px",
+    paddingTop: "24px",
+    paddingBottom: "24px"
   },
   active: {
     fontWeight: 400,
-    color: '#1665D8', 
-    marginLeft: '20px'
+    color: "#1665D8",
+    marginLeft: "20px"
   },
   noActiveLabel: {
     color: "gray",
     fontWeight: 400,
-    marginLeft: '20px'
+    marginLeft: "20px"
   },
   previousStepIcon: {
     fontWeight: 400,

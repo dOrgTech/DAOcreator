@@ -6,12 +6,21 @@ import DAOcreatorV2 from "./DAOcreatorV2/index";
 interface Props {
   setWeb3Provider?: ProviderOrGetter;
   noDAOstackLogo?: Boolean;
+  redirectURL?: string;
 }
 
-const Index: React.FC<Props> = ({ setWeb3Provider, noDAOstackLogo }) => {
+const Index: React.FC<Props> = ({
+  setWeb3Provider,
+  noDAOstackLogo,
+  redirectURL
+}) => {
   return (
     <div className="daocreator-root">
-      <DAOcreatorV2 setWeb3Provider={setWeb3Provider} noDAOstackLogo={noDAOstackLogo} />
+      <DAOcreatorV2
+        setWeb3Provider={setWeb3Provider}
+        noDAOstackLogo={noDAOstackLogo}
+        redirectURL={redirectURL}
+      />
     </div>
   );
 };
