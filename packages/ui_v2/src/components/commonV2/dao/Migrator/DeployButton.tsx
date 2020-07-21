@@ -25,9 +25,10 @@ import './styles.css';
 
 interface IProps {
   migrationStates: any;
+  redirectURL?: string;
 }
 
-export const DeployButton: FC<IProps> = ({ migrationStates }) => {
+export const DeployButton: FC<IProps> = ({ migrationStates, redirectURL }) => {
   const {
     installStep,
     setInstallStep,
@@ -427,10 +428,23 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
     }
 
     let url;
-    if (network === "mainnet") url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    else if (network === "rinkeby") url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    else if (network === "xdai") url = `https://alchemy-staging-xdai.herokuapp.com/dao/${result.Avatar}`;
-    else url = `/dao/${result.Avatar}`;
+    if (network === "mainnet")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    else if (network === "rinkeby")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    else if (network === "xdai")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy-2-xdai.herokuapp.com/dao/${result.Avatar}`;
+    else
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `/dao/${result.Avatar}`;
+
 
     setAlchemyURL(url);
 

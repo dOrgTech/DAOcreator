@@ -37,6 +37,7 @@ interface Props {
   callbacks: any;
   step: DAOcreatorStep;
   launching: boolean;
+  redirectURL?: string;
 }
 
 const ModalButton: FC<{
@@ -52,7 +53,7 @@ const ModalButton: FC<{
   return <></>;
 };
 
-const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching }) => {
+const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, launching, redirectURL }) => {
   const [installStep, setInstallStep] = useState(STEP.Waiting);
   const [daoLogs, setDaoLogs] = useState<string[][]>([]);
 
@@ -204,7 +205,7 @@ const Stepper: FC<Props> = ({ index, form, title, Component, callbacks, step, la
             paddingLeft: "38.5%"
           }}
         >
-          <DeployButton migrationStates={{...migrationStates, step, form }} />
+          <DeployButton redirectURL={redirectURL} migrationStates={{...migrationStates, step, form }} />
         </MDBRow>
       ) : (
         <></>
