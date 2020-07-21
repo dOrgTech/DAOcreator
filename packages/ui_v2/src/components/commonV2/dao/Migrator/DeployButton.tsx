@@ -22,13 +22,14 @@ import {
 import { MDBBtn, MDBIcon, MDBTooltip } from "mdbreact";
 
 import { STEP } from "../../../commonV2/Stepper";
-import './styles.css';
+import "./styles.css";
 
 interface IProps {
   migrationStates: any;
+  redirectURL?: string;
 }
 
-export const DeployButton: FC<IProps> = ({ migrationStates }) => {
+export const DeployButton: FC<IProps> = ({ migrationStates, redirectURL }) => {
   const {
     installStep,
     setInstallStep,
@@ -61,10 +62,20 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
    * Callbacks
    */
   const onComplete = (
-    { arcVersion, name, Avatar, DAOToken, Reputation, Controller }: DAOMigrationResult,
+    {
+      arcVersion,
+      name,
+      Avatar,
+      DAOToken,
+      Reputation,
+      Controller
+    }: DAOMigrationResult,
     alchemyURL: string
   ) => {
-    setDaoInfo([...daoInfo, { arcVersion, name, Avatar, DAOToken, Reputation, Controller }]);
+    setDaoInfo([
+      ...daoInfo,
+      { arcVersion, name, Avatar, DAOToken, Reputation, Controller }
+    ]);
     setAlchemyAdds([...alchemyAdds, alchemyURL]);
     onStop();
   };
@@ -100,7 +111,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   let dao: DAOMigrationParams;
   if (step > 2 && form instanceof DAOForm) {
     dao = toDAOMigrationParams((form as DAOForm).toState());
-    dao.StandAloneContracts = null
+    dao.StandAloneContracts = null;
   }
 
   /*
@@ -232,7 +243,8 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         const errorLine = logLine as LogError;
         const { error } = errorLine;
         switch (true) {
-          case error === "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
+          case error ===
+            "Transaction failed: MetaMask Tx Signature: User denied transaction signature.": // Most (all?) also cause an abort so the message shown in Line reverts back to default
             // setMinimalLogLines([
             //   ...minimalLogLines,
             //   "Failed to Sign Transaction"
@@ -243,7 +255,9 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
             addMinLogLine("Failed to get address");
             break;
 
-          case error.startsWith("Transaction failed: Transaction has been reverted"):
+          case error.startsWith(
+            "Transaction failed: Transaction has been reverted"
+          ):
           case error.startsWith("Transaction failed: Error"):
             // setMinimalLogLines([...minimalLogLines, "Transaction failed"]);
             break;
@@ -288,7 +302,8 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
         setAborting(true);
 
         switch (true) {
-          case abortedMsg === "MetaMask Tx Signature: User denied transaction signature.":
+          case abortedMsg ===
+            "MetaMask Tx Signature: User denied transaction signature.":
             addMinLogLine("Failed to Sign Transaction");
             break;
 
@@ -296,7 +311,8 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
             addMinLogLine("Network request failed");
             break;
 
-          case abortedMsg === "Returned values aren't valid, did it run Out of Gas?":
+          case abortedMsg ===
+            "Returned values aren't valid, did it run Out of Gas?":
           case abortedMsg.startsWith("Transaction has been reverted"):
           case abortedMsg.startsWith("Error: "):
             addMinLogLine("Transaction failed");
@@ -317,7 +333,9 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   const getCallbacks = () => {
     const callbacks: DAOMigrationCallbacks = {
       userApproval: (msg: string): Promise<boolean> =>
-        new Promise<boolean>(resolve => addLogLine(new LogUserApproval(msg, (resp: boolean) => resolve(resp)))),
+        new Promise<boolean>(resolve =>
+          addLogLine(new LogUserApproval(msg, (resp: boolean) => resolve(resp)))
+        ),
 
       info: (msg: string) => addLogLine(new LogInfo(msg)),
 
@@ -339,7 +357,6 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
       },
 
       migrationComplete: (result: DAOMigrationResult) => {
-
         window.onbeforeunload = () => {};
 
         addLogLine(new LogMigrationComplete(result));
@@ -417,19 +434,31 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
     if (!result) return;
 
     let network = await getNetworkName();
-    if (network === 'private') {
-      if (await web3.eth.net.getId() === 100) {
-        network = 'xdai'
-      } else if (await web3.eth.net.getId() === 77) {
-        network = 'sokol'
+    if (network === "private") {
+      if ((await web3.eth.net.getId()) === 100) {
+        network = "xdai";
+      } else if ((await web3.eth.net.getId()) === 77) {
+        network = "sokol";
       }
     }
 
     let url;
-    if (network === "mainnet") url = `https://alchemy.daostack.io/dao/${result.Avatar}`;
-    else if (network === "rinkeby") url = `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
-    else if (network === "xdai") url = `https://alchemy-2-xdai.herokuapp.com/dao/${result.Avatar}`;
-    else url = `/dao/${result.Avatar}`;
+    if (network === "mainnet")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy.daostack.io/dao/${result.Avatar}`;
+    else if (network === "rinkeby")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy-staging-rinkeby.herokuapp.com/dao/${result.Avatar}`;
+    else if (network === "xdai")
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `https://alchemy-2-xdai.herokuapp.com/dao/${result.Avatar}`;
+    else
+      url = redirectURL
+        ? `${redirectURL}/dao/${result.Avatar}`
+        : `/dao/${result.Avatar}`;
 
     setAlchemyURL(url);
 
@@ -453,7 +482,11 @@ export const DeployButton: FC<IProps> = ({ migrationStates }) => {
   };
 
   return installStep !== STEP.Completed ? (
-    <MDBBtn id="installButton" disabled={installStep !== STEP.Waiting && failed === null} onClick={startInstallation}>
+    <MDBBtn
+      id="installButton"
+      disabled={installStep !== STEP.Waiting && failed === null}
+      onClick={startInstallation}
+    >
       {failed === null ? "Install Organization" : "Restart Installation"}
     </MDBBtn>
   ) : (
