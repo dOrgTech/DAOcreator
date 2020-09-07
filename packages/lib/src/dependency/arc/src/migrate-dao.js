@@ -262,7 +262,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
         }
       }
 
-      let schemeData = await new web3.eth.Contract(utils.importAbi(`./${contractsDir}/${arcVersion}/${scheme.name}.json`).abi)
+      let schemeData = await new web3.eth.Contract(utils.importAbi(`./${contractsDir}/${scheme.arcVersion ? scheme.arcVersion : arcVersion}/${scheme.name}.json`).abi)
         .methods.initialize(...schemeParams).encodeABI()
 
       deploymentState.schemeNames.push(web3.utils.fromAscii(scheme.name))
