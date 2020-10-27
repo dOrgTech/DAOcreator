@@ -1178,10 +1178,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
-"@daostack/arc-experimental@0.1.2-rc.6":
-  version "0.1.2-rc.6"
-  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.2-rc.6.tgz#1ef4947edee3c02dad9250adc98bb4bea98b961a"
-  integrity sha512-vTARTXHrarv8Eb6EquzF1KWaQDqfe5Y7ImuWR8wtFfxcFmzYZtnX3L3vckR34dtfkkZLGW0FWDvzFjm3Q0j68Q==
+"@daostack/arc-experimental@0.1.2-rc.7":
+  version "0.1.2-rc.7"
+  resolved "https://registry.yarnpkg.com/@daostack/arc-experimental/-/arc-experimental-0.1.2-rc.7.tgz#af16eede1a6ef5b6abbd6b088a056765f3794c33"
+  integrity sha512-j52zzQZgxGyHNlqmoOXKkc/aBy6vDFIeVBpMMHPnMC3SpIbsXhpxiwMDGtOilKYihIVm2zyWQAUzUVSM/g12iw==
   dependencies:
     "@daostack/infra-experimental" "0.1.1-rc.22"
     "@daostack/upgrades" "2.8.0-rc.1"
@@ -1207,12 +1207,12 @@
     ethereumjs-abi "^0.6.8"
     web3-utils "^1.2.8"
 
-"@daostack/migration-experimental@0.1.2-rc.6-v3":
-  version "0.1.2-rc.6-v3"
-  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.2-rc.6-v3.tgz#c278893c7d114956d7d81bbe660283e41efd957b"
-  integrity sha512-Ccvj3im4ZAwB5ChiW0z66qazt3+yWtwGN7FhkmOOK0fkc1YZ0JRqW0Vrorb7xwPpPE/ZniI8K4w58nlSrPGP+g==
+"@daostack/migration-experimental@0.1.2-rc.7-v1":
+  version "0.1.2-rc.7-v1"
+  resolved "https://registry.yarnpkg.com/@daostack/migration-experimental/-/migration-experimental-0.1.2-rc.7-v1.tgz#751dd12561f2ef3da687914a84480df7a8836c9b"
+  integrity sha512-j4WjCyBfSx9/PmxrSF2+RZErFqkiXFk59SVKJ7Ce7AAyBYwuXU72YywU40y1lxvZJ3tMHOgAGbzHIRWKHUVd6Q==
   dependencies:
-    "@daostack/arc-experimental" "0.1.2-rc.6"
+    "@daostack/arc-experimental" "0.1.2-rc.7"
     "@daostack/arc-hive" "0.0.1-rc.5"
     ethereumjs-wallet "^0.6.3"
     fstream "^1.0.12"
