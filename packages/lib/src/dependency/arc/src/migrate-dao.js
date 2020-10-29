@@ -288,7 +288,7 @@ async function migrateDAO ({ arcVersion, web3, spinner, confirm, opts, migration
         founderAddresses.slice(0, foundersInitCount),
         tokenDist.slice(0, foundersInitCount),
         repDist.slice(0, foundersInitCount),
-        [0, 0, getArcVersionNumber(arcVersion)]]
+        [0, 1, getArcVersionNumber(arcVersion)]]
     )
     var encodedSetSchemesParams = web3.eth.abi.encodeParameters(
       ['bytes32[]', 'bytes', 'uint256[]', 'bytes4[]', 'string'],
