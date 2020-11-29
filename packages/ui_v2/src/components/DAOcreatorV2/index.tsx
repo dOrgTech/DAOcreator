@@ -26,7 +26,6 @@ import {
   SchemeRegistrarForm,
   ProviderOrGetter,
   setWeb3Provider,
-  getNetworkName,
   getWeb3
 } from "@dorgtech/daocreator-lib";
 
