@@ -77,6 +77,7 @@ const recoveredForm: DAOForm = new DAOForm();
 interface Props {
   setWeb3Provider?: ProviderOrGetter;
   noDAOstackLogo?: Boolean;
+  redirectURL?: string;
 }
 
 const DAOcreator: React.FC<Props> = (props: Props) => {
@@ -440,6 +441,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                           launching={launching}
                           Component={Component}
                           callbacks={callbacks}
+                          redirectURL={props.redirectURL}
                         />
                       );
                     }
