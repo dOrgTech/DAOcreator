@@ -25,7 +25,9 @@ import {
   ContributionRewardForm,
   SchemeRegistrarForm,
   ProviderOrGetter,
-  setWeb3Provider
+  setWeb3Provider,
+  getNetworkName,
+  getWeb3
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -93,6 +95,8 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
   const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
+  const [currentNetwork, setCurrentNetwork] = React.useState("")
+
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -201,6 +205,27 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, [step, nextStep]);
+
+  React.useEffect(() => {
+    (async () => {
+      const web3 = await getWeb3();
+      const networkId = await web3.eth.net.getId();
+
+      switch (networkId) {
+        case 1:
+          setCurrentNetwork("Ethereum Mainnet");
+          break;
+        case 4:
+          setCurrentNetwork("Ethereum Testnet Rinkeby");
+          break;
+        case 100:
+          setCurrentNetwork("xDAI");
+          break;
+        default:
+          setCurrentNetwork("Not supported");
+      }
+    })();
+  }, []);
 
   const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
@@ -368,6 +393,25 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
           <div style={styles.divider} />
           <div className="row justify-content-center">
             <div className="col-md-12">
+            {currentNetwork && (
+                <div style={styles.networkContainer}>
+                  <p style={styles.networkLabel}>
+                    Network:{" "}
+                    <span style={styles.networkName}> {currentNetwork} </span>
+                  </p>
+                  {currentNetwork === "Not supported" ? (
+                    <p style={styles.networkMessage}>
+                      (Supported networks are Mainnet, Rinkeby and xDAI)
+                    </p>
+                  ) : currentNetwork !== "xDAI" ? (
+                    <p style={styles.networkMessage}>
+                      (Switch networks to deploy in xDAI)
+                    </p>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              )}
               {loading ? (
                 <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
                   <MDBRow className="justify-content-center">
@@ -424,6 +468,20 @@ const styles = {
     padding: "1%",
     height: "50px"
   },
+  networkLabel: {
+    color: "blue"
+  },
+  networkName: {
+    color: "blue",
+    fontWeight: "bold" as const
+  },
+  networkMessage: {
+    marginTop: -15 
+  },
+  networkContainer: { 
+    paddingTop: 10, 
+    paddingLeft: 90 
+  },
   fontStyle: {
     fontSize: "18px",
     letterSpacing: "0.6px",
@@ -432,7 +490,8 @@ const styles = {
     fontFamily: "inherit"
   },
   noPadding: {
-    paddingTop: 0
+    paddingTop: 0,
+    marginTop: -30
   },
   headerTop: {
     height: "40px"
