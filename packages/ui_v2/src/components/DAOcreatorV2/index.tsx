@@ -10,7 +10,7 @@ import {
   MDBRow,
   MDBCol,
   MDBPopover,
-  MDBPopoverBody
+  MDBPopoverBody,
 } from "mdbreact";
 
 import {
@@ -26,7 +26,7 @@ import {
   SchemeRegistrarForm,
   ProviderOrGetter,
   setWeb3Provider,
-  getWeb3
+  getWeb3,
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -39,7 +39,7 @@ import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
 import DAOstackLogo from "../commonV2/DAOstackLogo";
 
-import { handleNetworkReload } from "../web3/core";
+import { useActualNetwork } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -68,7 +68,7 @@ export enum STEP {
   Config,
   Schemes,
   Members,
-  Launch
+  Launch,
 }
 
 const daoForm = new DAOForm();
@@ -95,8 +95,8 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
   const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
-  const [currentNetwork, setCurrentNetwork] = React.useState("")
 
+  const currentNetwork = useActualNetwork();
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -148,7 +148,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
         setRecoverPreviewOpen(true);
       };
 
-      handleNetworkReload();
       previewLocalStorage();
     }
 
@@ -165,7 +164,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       nullForm.$.config.$.tokenName.value = " token";
       nullForm.$.schemes.$ = [
         new ContributionRewardForm(),
-        new SchemeRegistrarForm()
+        new SchemeRegistrarForm(),
       ];
       if (JSON.stringify(daoState) === JSON.stringify(nullForm.toState())) {
         return;
@@ -176,7 +175,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       const daoCreatorState: DAO_CREATOR_INTERFACE = {
         step,
         form: json,
-        decisionSpeed
+        decisionSpeed,
       };
 
       localStorage.setItem(DAO_CREATOR_STATE, JSON.stringify(daoCreatorState));
@@ -205,27 +204,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, [step, nextStep]);
-
-  React.useEffect(() => {
-    (async () => {
-      const web3 = await getWeb3();
-      const networkId = await web3.eth.net.getId();
-
-      switch (networkId) {
-        case 1:
-          setCurrentNetwork("Ethereum Mainnet");
-          break;
-        case 4:
-          setCurrentNetwork("Ethereum Testnet Rinkeby");
-          break;
-        case 100:
-          setCurrentNetwork("xDAI");
-          break;
-        default:
-          setCurrentNetwork("Not supported");
-      }
-    })();
-  }, []);
 
   const getDAOName = () => daoForm.$.config.$.daoName.value;
   const getDAOTokenSymbol = () => daoForm.$.config.$.tokenSymbol.value;
@@ -260,14 +238,14 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   const exportDaoParams = () => {
     const dao = toDAOMigrationParams(daoForm.toState());
     const blob = new Blob([toJSON(dao)], {
-      type: "text/plain;charset=utf-8"
+      type: "text/plain;charset=utf-8",
     });
     FileSaver.saveAs(blob, "migration-params.json");
   };
 
   const PreviewDialog = () => {
     const props = {
-      recoveredForm
+      recoveredForm,
     };
     return (
       <MDBModal isOpen={recoverPreviewOpen} fullWidth={true} maxWidth="md">
@@ -307,8 +285,8 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
         toggleCollapse: nextStep,
         getDAOName,
         getDAOTokenSymbol,
-        loadedFromModal
-      }
+        loadedFromModal,
+      },
     },
     {
       title: "Configure",
@@ -321,8 +299,8 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
         setModal: setAdvanceSchemeConfig,
         loadedFromModal,
         decisionSpeed,
-        setDecisionSpeed
-      }
+        setDecisionSpeed,
+      },
     },
     {
       title: "Add Members",
@@ -334,17 +312,17 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
         toggleCollapse: nextStep,
         setModal: setImportFile,
         step,
-        loadedFromModal
-      }
+        loadedFromModal,
+      },
     },
     {
       title: "Launch",
       form: daoForm,
       Component: InstallStep,
       callbacks: {
-        setLaunching
-      }
-    }
+        setLaunching,
+      },
+    },
   ];
 
   currentForm = steps[step].form;
@@ -393,7 +371,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
           <div style={styles.divider} />
           <div className="row justify-content-center">
             <div className="col-md-12">
-            {currentNetwork && (
+              {currentNetwork && (
                 <div style={styles.networkContainer}>
                   <p style={styles.networkLabel}>
                     Network:{" "}
@@ -467,43 +445,43 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 const styles = {
   paddingContainer: {
     padding: "1%",
-    height: "50px"
+    height: "50px",
   },
   networkLabel: {
-    color: "blue"
+    color: "blue",
   },
   networkName: {
     color: "blue",
-    fontWeight: "bold" as const
+    fontWeight: "bold" as const,
   },
   networkMessage: {
-    marginTop: -15 
+    marginTop: -15,
   },
-  networkContainer: { 
-    paddingTop: 10, 
-    paddingLeft: 90 
+  networkContainer: {
+    paddingTop: 10,
+    paddingLeft: 90,
   },
   fontStyle: {
     fontSize: "18px",
     letterSpacing: "0.6px",
     color: "#3E3F42",
     fontWeight: 400,
-    fontFamily: "inherit"
+    fontFamily: "inherit",
   },
   noPadding: {
     paddingTop: 0,
-    marginTop: -30
+    marginTop: -30,
   },
   headerTop: {
-    height: "40px"
+    height: "40px",
   },
   titleContainer: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   spinner: {
-    display: "inline-block"
+    display: "inline-block",
   },
   icon: {
     background: "white",
@@ -514,11 +492,11 @@ const styles = {
     width: "35px",
     borderRadius: "400px",
     border: "1px solid #EEF0FF",
-    margin: "14px 0px 0px 95px"
+    margin: "14px 0px 0px 95px",
   },
   divided: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   divider: {
     flexGrow: 1,
@@ -527,12 +505,12 @@ const styles = {
     padding: 0,
     margin: 0,
     width: "-webkit-fill-available",
-    borderLeft: "aqua"
+    borderLeft: "aqua",
   },
   iconColor: {
     //  color: '#536DFE !important',
-    color: "indigo accent-2 text"
-  }
+    color: "indigo accent-2 text",
+  },
 };
 
 export default DAOcreator;
