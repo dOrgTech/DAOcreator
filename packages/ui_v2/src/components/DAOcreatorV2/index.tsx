@@ -26,7 +26,6 @@ import {
   SchemeRegistrarForm,
   ProviderOrGetter,
   setWeb3Provider,
-  getWeb3,
 } from "@dorgtech/daocreator-lib";
 
 import NamingStep from "./NamingStep";
@@ -78,6 +77,7 @@ interface Props {
   setWeb3Provider?: ProviderOrGetter;
   noDAOstackLogo?: Boolean;
   redirectURL?: string;
+  networks?: string;
 }
 
 const DAOcreator: React.FC<Props> = (props: Props) => {
@@ -96,7 +96,15 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
   const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
 
-  const currentNetwork = useActualNetwork();
+  const acceptedNetworks = React.useMemo(
+    () =>
+      props.networks
+        ? props.networks.split("*")
+        : ["mainnet", "xdai", "rinkeby"],
+    [props.networks]
+  );
+
+  const currentNetwork = useActualNetwork(acceptedNetworks);
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -371,7 +379,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
           <div style={styles.divider} />
           <div className="row justify-content-center">
             <div className="col-md-12">
-              {currentNetwork && (
+              {currentNetwork ? (
                 <div style={styles.networkContainer}>
                   <p style={styles.networkLabel}>
                     Network:{" "}
@@ -379,15 +387,24 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                   </p>
                   {currentNetwork === "Not supported" ? (
                     <p style={styles.networkMessage}>
-                      (Supported networks are Mainnet, Rinkeby and xDAI)
-                    </p>
-                  ) : currentNetwork !== "xDAI" ? (
-                    <p style={styles.networkMessage}>
-                      (Switch networks to deploy in xDAI)
+                      (Supported networks are {acceptedNetworks.join(", ")})
                     </p>
                   ) : (
-                    <div />
+                    <p style={styles.networkMessage}>
+                      (Switch networks to deploy in{" "}
+                      {acceptedNetworks
+                        .filter((n) => currentNetwork != n)
+                        .join(", ")}
+                      )
+                    </p>
                   )}
+                </div>
+              ) : (
+                <div style={styles.networkContainer}>
+                  <p style={styles.networkLabel}>Please login</p>
+                  <p style={styles.networkMessage}>
+                    (Supported networks are {acceptedNetworks.join(", ")})
+                  </p>
                 </div>
               )}
               {loading ? (
