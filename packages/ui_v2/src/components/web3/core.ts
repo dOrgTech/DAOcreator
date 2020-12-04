@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
 import { getWeb3 } from "@dorgtech/daocreator-lib";
 
-export const useActualNetwork = () => {
+type Network = {
+  [id: number]: string;
+};
+
+const KNOWN_NETWORKS: Network = {
+  1: "mainnet",
+  4: "rinkeby",
+  42: "kovan",
+  100: "xdai"
+};
+
+export const useActualNetwork = (acceptedNetworks: string[]) => {
   const [actualNetwork, setCurrentNetwork] = useState<string | null>("");
   const setNetwork = async (id: number) => {
-    switch (id) {
-      case 0:
-        setCurrentNetwork(null);
-        break;
-      case 1:
-        setCurrentNetwork("mainnet");
-        break;
-      case 4:
-        setCurrentNetwork("rinkeby");
-        break;
-      case 100:
-        setCurrentNetwork("xdai");
-        break;
-      default:
-        setCurrentNetwork("Not supported");
+    const network = KNOWN_NETWORKS[id];
+    if (network && acceptedNetworks.includes(network)) {
+      setCurrentNetwork(network);
+      return;
     }
+    setCurrentNetwork("Unknown");
   };
 
   const ethereum = (window as any).ethereum;
@@ -40,7 +41,6 @@ export const useActualNetwork = () => {
   ethereum.autoRefreshOnNetworkChange = false;
 
   ethereum.on("accountsChanged", async (account: string) => {
-    console.log(ethereum.chainId);
     const network = account.length ? Number(ethereum.chainId) : 0;
     setNetwork(network);
   });

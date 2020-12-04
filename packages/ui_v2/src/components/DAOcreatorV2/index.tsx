@@ -100,11 +100,11 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     () =>
       props.networks
         ? props.networks.split("*")
-        : ["mainnet", "xdai", "rinkeby"],
+        : ["mainnet", "xdai", "rinkeby", "kovan"],
     [props.networks]
   );
 
-  const currentNetwork = useActualNetwork();
+  const currentNetwork = useActualNetwork(acceptedNetworks);
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
