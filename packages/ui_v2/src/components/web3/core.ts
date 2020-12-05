@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getWeb3 } from "@dorgtech/daocreator-lib";
 
 type Network = {
@@ -14,14 +14,17 @@ const KNOWN_NETWORKS: Network = {
 
 export const useActualNetwork = (acceptedNetworks: string[]) => {
   const [actualNetwork, setCurrentNetwork] = useState<string | null>("");
-  const setNetwork = async (id: number) => {
-    const network = KNOWN_NETWORKS[id];
-    if (network && acceptedNetworks.includes(network)) {
-      setCurrentNetwork(network);
-      return;
-    }
-    setCurrentNetwork("Unknown");
-  };
+  const setNetwork = useCallback(
+    async (id: number) => {
+      const network = KNOWN_NETWORKS[id];
+      if (network && acceptedNetworks.includes(network)) {
+        setCurrentNetwork(network);
+        return;
+      }
+      setCurrentNetwork("Unknown");
+    },
+    [acceptedNetworks]
+  );
 
   const ethereum = (window as any).ethereum;
 
@@ -36,7 +39,7 @@ export const useActualNetwork = (acceptedNetworks: string[]) => {
         setNetwork(Number(0));
       }
     })();
-  }, []);
+  }, [setNetwork]);
 
   ethereum.autoRefreshOnNetworkChange = false;
 

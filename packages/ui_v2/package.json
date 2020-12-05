@@ -1,6 +1,6 @@
 {
   "name": "@dorgtech/daocreator-ui",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "main": "./dist/index.js",
   "scripts": {
     "start": "react-scripts start",

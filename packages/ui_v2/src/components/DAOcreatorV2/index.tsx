@@ -119,7 +119,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
     if (props.setWeb3Provider) {
       setWeb3Provider(props.setWeb3Provider);
     }
-  }, []);
+  }, [props.setWeb3Provider]);
 
   // On initial load, load initial state
   React.useEffect(() => {
@@ -334,6 +334,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   ];
 
   currentForm = steps[step].form;
+  const otherNetworks = acceptedNetworks.filter(n => currentNetwork !== n);
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
@@ -389,14 +390,12 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                     <p style={styles.networkMessage}>
                       (Supported networks are {acceptedNetworks.join(", ")})
                     </p>
-                  ) : (
+                  ) : otherNetworks.length > 0 ? (
                     <p style={styles.networkMessage}>
-                      (Switch networks to deploy in{" "}
-                      {acceptedNetworks
-                        .filter(n => currentNetwork !== n)
-                        .join(", ")}
-                      )
+                      (Switch networks to deploy in {otherNetworks.join(", ")})
                     </p>
+                  ) : (
+                    <div />
                   )}
                 </div>
               ) : (
