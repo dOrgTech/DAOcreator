@@ -392,7 +392,9 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                     </p>
                   ) : otherNetworks.length > 0 ? (
                     <p style={styles.networkMessage}>
-                      (Switch networks to deploy in {otherNetworks.join(", ")})
+                      (Switch{" "}
+                      {otherNetworks.length === 1 ? "network" : "networks"} to
+                      deploy in {otherNetworks.join(", ")})
                     </p>
                   ) : (
                     <div />
