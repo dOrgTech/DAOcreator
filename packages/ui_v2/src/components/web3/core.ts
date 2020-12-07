@@ -41,20 +41,22 @@ export const useActualNetwork = (acceptedNetworks: string[]) => {
     })();
   }, [setNetwork]);
 
-  ethereum.autoRefreshOnNetworkChange = false;
+  if (ethereum) {
+    ethereum.autoRefreshOnNetworkChange = false;
 
-  ethereum.on("accountsChanged", async (account: string) => {
-    const network = account.length ? Number(ethereum.chainId) : 0;
-    setNetwork(network);
-  });
+    ethereum.on("accountsChanged", async (account: string) => {
+      const network = account.length ? Number(ethereum.chainId) : 0;
+      setNetwork(network);
+    });
 
-  ethereum.on("chainChanged", async (chainId: number) => {
-    setNetwork(Number(chainId));
-  });
+    ethereum.on("chainChanged", async (chainId: number) => {
+      setNetwork(Number(chainId));
+    });
 
-  ethereum.on("disconnect", async () => {
-    setNetwork(0);
-  });
+    ethereum.on("disconnect", async () => {
+      setNetwork(0);
+    });
+  }
 
   return actualNetwork;
 };

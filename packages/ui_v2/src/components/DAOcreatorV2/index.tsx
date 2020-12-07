@@ -404,7 +404,9 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
                 <div style={styles.networkContainer}>
                   <p style={styles.networkLabel}>Please login</p>
                   <p style={styles.networkMessage}>
-                    (Supported networks are {acceptedNetworks.join(", ")})
+                    (Supported{" "}
+                    {otherNetworks.length === 1 ? "network is" : "networks are"}{" "}
+                    {acceptedNetworks.join(", ")})
                   </p>
                 </div>
               )}
