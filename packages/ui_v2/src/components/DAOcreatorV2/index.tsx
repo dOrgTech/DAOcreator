@@ -38,7 +38,7 @@ import Stepper from "../commonV2/Stepper";
 import { ImporterModal } from "../commonV2/Stepper/ImporterModal";
 import DAOstackLogo from "../commonV2/DAOstackLogo";
 
-import { handleNetworkReload } from "../web3/core";
+import { useActualNetwork } from "../web3/core";
 import { Review } from "./Review";
 import { DAOSpeed } from "../commonV2/dao/Schemes";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -77,6 +77,7 @@ interface Props {
   setWeb3Provider?: ProviderOrGetter;
   noDAOstackLogo?: Boolean;
   redirectURL?: string;
+  networks?: string;
 }
 
 const DAOcreator: React.FC<Props> = (props: Props) => {
@@ -94,6 +95,16 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
 
   const [loadedFromModal, setLoadedFromModal] = React.useState(false);
   const [decisionSpeed, setDecisionSpeed] = React.useState(DAOSpeed.Medium);
+
+  const acceptedNetworks = React.useMemo(
+    () =>
+      props.networks
+        ? props.networks.split("*")
+        : ["mainnet", "xdai", "rinkeby", "kovan"],
+    [props.networks]
+  );
+
+  const currentNetwork = useActualNetwork(acceptedNetworks);
   let currentForm: any = daoForm.$.config;
 
   const nextStep = React.useCallback(async () => {
@@ -145,7 +156,6 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
         setRecoverPreviewOpen(true);
       };
 
-      handleNetworkReload();
       previewLocalStorage();
     }
 
@@ -324,6 +334,7 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
   ];
 
   currentForm = steps[step].form;
+  const otherNetworks = acceptedNetworks.filter(n => currentNetwork !== n);
   return (
     <>
       <MDBContainer style={styles.paddingContainer}>
@@ -369,6 +380,36 @@ const DAOcreator: React.FC<Props> = (props: Props) => {
           <div style={styles.divider} />
           <div className="row justify-content-center">
             <div className="col-md-12">
+              {currentNetwork ? (
+                <div style={styles.networkContainer}>
+                  <p style={styles.networkLabel}>
+                    Network:{" "}
+                    <span style={styles.networkName}> {currentNetwork} </span>
+                  </p>
+                  {currentNetwork === "Not supported" ? (
+                    <p style={styles.networkMessage}>
+                      (Supported networks are {acceptedNetworks.join(", ")})
+                    </p>
+                  ) : otherNetworks.length > 0 ? (
+                    <p style={styles.networkMessage}>
+                      (Switch{" "}
+                      {otherNetworks.length === 1 ? "network" : "networks"} to
+                      deploy in {otherNetworks.join(", ")})
+                    </p>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              ) : (
+                <div style={styles.networkContainer}>
+                  <p style={styles.networkLabel}>Please login</p>
+                  <p style={styles.networkMessage}>
+                    (Supported{" "}
+                    {otherNetworks.length === 1 ? "network is" : "networks are"}{" "}
+                    {acceptedNetworks.join(", ")})
+                  </p>
+                </div>
+              )}
               {loading ? (
                 <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
                   <MDBRow className="justify-content-center">
@@ -426,6 +467,20 @@ const styles = {
     padding: "1%",
     height: "50px"
   },
+  networkLabel: {
+    color: "blue"
+  },
+  networkName: {
+    color: "blue",
+    fontWeight: "bold" as const
+  },
+  networkMessage: {
+    marginTop: -15
+  },
+  networkContainer: {
+    paddingTop: 10,
+    paddingLeft: 90
+  },
   fontStyle: {
     fontSize: "18px",
     letterSpacing: "0.6px",
@@ -434,7 +489,8 @@ const styles = {
     fontFamily: "inherit"
   },
   noPadding: {
-    paddingTop: 0
+    paddingTop: 0,
+    marginTop: -30
   },
   headerTop: {
     height: "40px"

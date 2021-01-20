@@ -1,50 +1,62 @@
-/*
- * The following is covered under the lib
- */
+import { useState, useEffect, useCallback } from "react";
+import { getWeb3 } from "@dorgtech/daocreator-lib";
 
-// import Web3 from "web3";
-// let web3: Web3 | undefined = undefined; // Will hold the web3 instance
+type Network = {
+  [id: number]: string;
+};
 
-// export async function enableEthereum() {
-//   async function getAccount() {
-//     const account = await (window as any).ethereum.enable();
-//     web3 = new Web3((window as any).ethereum);
-//     const defaultAccount = account[0];
-//     web3.eth.defaultAccount = defaultAccount;
-//     return defaultAccount;
-//   }
+const KNOWN_NETWORKS: Network = {
+  1: "mainnet",
+  4: "rinkeby",
+  42: "kovan",
+  100: "xdai"
+};
 
-//   if (!web3) {
-//     try {
-//       // Request account access if needed
-//       return getAccount();
-//     } catch (error) {
-//       console.log(error);
-//       return undefined;
-//     }
-//   } else {
-//     return getAccount();
-//   }
-// }
+export const useActualNetwork = (acceptedNetworks: string[]) => {
+  const [actualNetwork, setCurrentNetwork] = useState<string | null>("");
+  const setNetwork = useCallback(
+    async (id: number) => {
+      const network = KNOWN_NETWORKS[id];
+      if (network && acceptedNetworks.includes(network)) {
+        setCurrentNetwork(network);
+        return;
+      }
+      setCurrentNetwork("Unknown");
+    },
+    [acceptedNetworks]
+  );
 
-export const handleNetworkReload = async () => {
-  try {
-    // TODO Handle network change (Only Mainnet and Rinkeby are supported)
-    (window as any).ethereum.autoRefreshOnNetworkChange = false;
+  const ethereum = (window as any).ethereum;
 
-    // Should be implemented by MetaMask soon-tm
-    (window as any).ethereum.on("chainChanged", (chainId: number) => {
-      // handle the new network
-      console.log("Current chain: " + chainId);
-      return null;
+  // Check network on render
+  useEffect(() => {
+    (async () => {
+      try {
+        const web3 = await getWeb3();
+        const networkId = await web3.eth.net.getId();
+        setNetwork(Number(networkId));
+      } catch (e) {
+        setNetwork(Number(0));
+      }
+    })();
+  }, [setNetwork]);
+
+  if (ethereum) {
+    ethereum.autoRefreshOnNetworkChange = false;
+
+    ethereum.on("accountsChanged", async (account: string) => {
+      const network = account.length ? Number(ethereum.chainId) : 0;
+      setNetwork(network);
     });
 
-    (window as any).ethereum.on("networkChanged", (networkId: string) => {
-      // networkId goes from "loading" to the network id (different to chain id)
-      console.log("Current chain: " + networkId);
-      return null;
+    ethereum.on("chainChanged", async (chainId: number) => {
+      setNetwork(Number(chainId));
     });
-  } catch (e) {
-    console.log(e);
+
+    ethereum.on("disconnect", async () => {
+      setNetwork(0);
+    });
   }
+
+  return actualNetwork;
 };

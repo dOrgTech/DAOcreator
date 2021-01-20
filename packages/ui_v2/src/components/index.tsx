@@ -7,12 +7,23 @@ interface Props {
   setWeb3Provider?: ProviderOrGetter;
   noDAOstackLogo?: Boolean;
   redirectURL?: string;
+  networks?: string;
 }
 
-const Index: React.FC<Props> = ({ setWeb3Provider, noDAOstackLogo, redirectURL }) => {
+const Index: React.FC<Props> = ({
+  setWeb3Provider,
+  noDAOstackLogo,
+  redirectURL,
+  networks,
+}) => {
   return (
     <div className="daocreator-root">
-      <DAOcreatorV2 redirectURL={redirectURL} setWeb3Provider={setWeb3Provider} noDAOstackLogo={noDAOstackLogo} />
+      <DAOcreatorV2
+        redirectURL={redirectURL}
+        setWeb3Provider={setWeb3Provider}
+        noDAOstackLogo={noDAOstackLogo}
+        networks={networks}
+      />
     </div>
   );
 };
