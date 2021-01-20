@@ -29,7 +29,7 @@ const InstallStep: FC<Props> = ({ migrationStates }: Props) => {
               <MDBTooltip domElement>
                 <div
                   onClick={() => {
-                    navigator.clipboard.writeText(address);
+                    navigator.clipboard.writeText(address.toLowerCase());
                   }}
                   style={{
                     cursor: "pointer",

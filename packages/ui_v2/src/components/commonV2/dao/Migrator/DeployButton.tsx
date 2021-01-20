@@ -459,7 +459,7 @@ export const DeployButton: FC<IProps> = ({ migrationStates, redirectURL }) => {
       return;
     }
 
-    window.open(alchemyURL);
+    window.open(alchemyURL.toLowerCase());
   };
 
   const copyDAOLogs = (logs: string[]) => {
